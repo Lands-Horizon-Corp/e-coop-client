@@ -1,0 +1,961 @@
+// just a sample entity, and what we can reuse to all entity
+Table your_table_name {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// type of users
+enum user_type {
+  "employee"
+  "owner"
+  "member"
+}
+
+// ✅
+Enum family_relationship {
+  "father"
+  "mother"
+  "son"
+  "daughter"
+  "brother"
+  "sister"
+  "husband"
+  "wife"
+  "partner"
+  "grandfather"
+  "grandmother"
+  "grandson"
+  "granddaughter"
+  "stepfather"
+  "stepmother"
+  "stepson"
+  "stepdaughter"
+  "half-brother"
+  "half-sister"
+  "foster father"
+  "foster mother"
+  "foster son"
+  "foster daughter"
+  "guardian"
+  "uncle"
+  "aunt"
+  "nephew"
+  "niece"
+  "cousin"
+  "father-in-law"
+  "mother-in-law"
+  "son-in-saw"
+  "daughter-in-law"
+  "brother-in-daw"
+  "sister-in-law"
+  "godfather"
+  "godmother"
+  "godson"
+  "goddaughter"
+  "adopted son"
+  "adopted daughter"
+  "ward"
+  "other"
+}
+
+// ✅
+enum civil_status {
+  married
+  single
+  widowed
+  divorced
+  separated
+  "civil partnership"
+}
+
+// ✅
+enum sex {
+  male
+  female
+}
+
+// ✅
+enum general_status {
+  pending
+  "for review"
+  verified
+  "not allowed"
+}
+
+// ✅
+enum feedback_type {
+  bug
+  feature
+  general
+}
+
+// ✅
+Table feedback {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  email varchar(255)
+  description varchar(4096)
+  feedback_type feedback_type [not null, default: "general"]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// ✅
+Table media {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  account_type account_type
+
+  description varchar(4096)
+  file_name varchar(255) [not null]
+  file_size integer [not null]
+  file_type varchar(255) [not null]
+  storage_key varchar(255) [not null]
+  bucket_name varchar(255) [not null]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// ✅
+enum branch_type {
+  "cooperative branch"
+  "business branch"
+  "banking branch"
+}
+
+// ✅
+Table branch {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  media_id varchar(50)
+  type branch_type [not null, default: "cooperative branch"]
+
+  // Favorite/star
+  is_main_branch boolean [not null, default: false]
+
+  name varchar(255)
+  description varchar(4096)
+  address varchar(500)
+  province varchar(255)
+  postal_code varchar(20)
+  city varchar(255)
+  email varchar(255)
+  region varchar(255)
+  barangay varchar(255)
+  contact_number varchar(15)
+  is_admin_verified boolean [default: false]
+
+  latitude decimal(10,7)
+  longitude decimal(10,7)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: branch.media_id - media.id [delete:cascade]
+
+// ✅ FOR Credential login only
+Table user {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  media_id varchar(50)
+
+  password varchar(255) [not null]
+  email varchar(255) [unique, not null]
+  user_name varchar(255) [not null, unique]
+  contact_number varchar(50) [unique, not null]
+  type user_type [not null, default: "member"]
+
+  is_email_verified boolean [not null, default: false]
+  is_contact_number_verified boolean [not null, default: false]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+
+}
+
+Ref: user.media_id - media.id [delete:cascade]
+
+//✅ Pooling of member registration
+Table member_verification {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  branch_id varchar(50)
+  member_profile_id varchar(50)
+  verified_by_user_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  status general_status [not null, default: "pending"]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_verification.branch_id - branch.id [delete:cascade, update:cascade]
+Ref: member_verification.member_profile_id - member_profile.id [delete:cascade, update:cascade]
+Ref: member_verification.verified_by_user_id - user.id [delete:cascade, update:cascade]
+
+// ✅
+Table member_profile {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  user_id varchar(50)
+  branch_id varchar(50)
+  member_type_id varchar(50)
+  member_group_id varchar(50)
+  member_gender_id varchar(50)
+  member_center_id varchar(50)
+  signature_media_id varchar(50)
+  member_occupation_id varchar(50)
+  member_classification_id varchar(50)
+  member_verified_by_employee_id varchar(50)
+  recruited_by_member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  is_closed boolean [default: false] // this indicates the member account has been closed
+  is_mutual_fund_member boolean [default: false]
+  is_micro_finance_member boolean [default: false]
+
+  first_name varchar(255) [not null]
+  middle_name varchar(255)
+  last_name varchar(255) [not null]
+  full_name varchar(255) [not null]
+  suffix varchar(50)
+  status general_status [not null, default: "pending"]
+
+  description varchar(4096)
+  notes varchar(4096)
+  contact_number varchar(255)
+  old_reference_id varchar(50) // this is not ref Id, just the old PB number
+  passbook varchar(255)
+  occupation varchar(255)
+  business_address varchar(255)
+  business_contact_number varchar(255)
+  civil_status civil_status [not null, default: "single"]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_profile.member_verified_by_employee_id > user.id [delete:restrict, update:cascade]
+Ref: member_profile.user_id - user.id [delete:restrict, update:cascade]
+Ref: member_profile.branch_id < branch.id [delete:restrict, update:cascade]
+Ref: member_profile.recruited_by_member_profile_id - member_profile.id [delete:restrict, update:cascade]
+Ref: member_profile.member_occupation_id - member_occupation.id [delete:restrict, update:cascade]
+Ref: member_profile.signature_media_id - media.id [delete:restrict, update:cascade]
+Ref: member_profile.member_gender_id - member_gender.id [delete:restrict, update:cascade]
+Ref: member_profile.member_center_id - member_center.id [delete:restrict, update:cascade]
+Ref: member_profile.member_type_id - member_type.id [delete:restrict, update:cascade]
+Ref: member_profile.member_classification_id - member_classification.id [delete:restrict, update:cascade]
+Ref: member_profile.member_group_id - member_group.id [delete:restrict, update:cascade]
+
+enum address_types {
+  "home"
+  "business address"
+  "work address"
+  "shipping address"
+  "billing address"
+  "mailing address"
+  "previous address"
+  "emergency contact address"
+  "vacation home"
+  "other..."
+}
+
+// ✅
+Table member_address {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  label varchar(255) [not null, default: "home"] // Home Address, Business Address, Home Address 2
+  city varchar(255) [not null]
+  country_code varchar(5) [not null]
+  postal_code varchar(255)
+  province_state varchar(255) //accomodates province or state
+
+  barangay varchar(255) // for ph country only
+
+  landmark varchar(255)
+  address varchar(255) [not null]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_address.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+//✅
+Table member_asset {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  media_id varchar(50)
+  member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  name varchar(255) [not null]
+  entry_date timestamp [not null]
+  description varchar(4096) [not null]
+  cost decimal [default: 0]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_asset.media_id - media.id [delete:cascade, update:cascade]
+Ref: member_asset.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+//✅
+Table member_center_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_center_id varchar(50)
+  member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_center_history.member_center_id > member_center.id [delete:restrict, update:cascade]
+Ref: member_center_history.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+//✅
+Table member_center {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  name varchar(255)
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+//✅
+Table member_classification_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  member_classification_id varchar(50)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+Ref: member_classification_history.member_classification_id > member_classification.id [delete:restrict, update:cascade]
+Ref: member_classification_history.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_classification {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  name varchar(255) [not null] // ex: Bronse, Silver, Gold
+  icon varchar(255)
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+// ✅
+Table member_close_remark {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  reason varchar(255)
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_close_remark.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_contact_reference {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  name varchar(255)
+  description varchar(4096)
+  contact_number varchar(30)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_contact_reference.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_educational_attainment {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  name varchar(255)
+  school_name varchar(255)
+  school_year integer
+  program_course varchar(255)
+  educational_attainment varchar(255) // TODO: Frontend enum dropdown - Bachelors Degree, Phd, Masteral,
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_educational_attainment.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_expense {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+
+  name varchar(255)
+  amount decimal
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+Ref: member_expense.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_gender_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  member_gender_id varchar(50)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+Ref: member_gender_history.member_gender_id > member_gender.id [delete:restrict, update:cascade]
+Ref: member_gender_history.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅ - this is maintenance table for combobox
+Table member_gender {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  name varchar(255)
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// ✅
+Table member_government_benefit {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  member_profile_id varchar(50)
+  front_media_id varchar(50)
+  back_media_id varchar(50)
+
+  country_code varchar(5)
+  description varchar(4096)
+  name varchar(255)
+  value varchar(255) [unique, not null]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_government_benefit.front_media_id - media.id [delete:cascade]
+Ref: member_government_benefit.back_media_id - media.id [delete:cascade]
+Ref: member_government_benefit.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_group_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  member_group_id varchar(50)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+Ref: member_group_history.member_group_id > member_group.id [delete:restrict,update:cascade]
+Ref: member_group_history.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_group {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  name varchar(50) [not null]
+  description varchar(4096) [not null]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+// ✅
+Table member_income {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  media_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  name varchar(255)
+  amount decimal
+  release_date timestamp
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_income.media_id > media.id [delete:cascade, update:cascade]
+Ref: member_income.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_joint_account {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  member_profile_id varchar(50)
+  picture_media_id varchar(50) [not null]
+  signature_media_id varchar(50) [not null]
+
+  description varchar(4096)
+  first_name varchar(255) [not null]
+  middle_name varchar(255)
+  last_name varchar(255) [not null]
+  full_name varchar(255) [not null]
+  suffix varchar(255)
+  birthday timestamp [not null]
+  family_relationship family_relationship [not null]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_joint_account.picture_media_id - media.id [delete:cascade, update:cascade]
+Ref: member_joint_account.signature_media_id - media.id [delete:cascade, update:cascade]
+Ref: member_joint_account.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_mutual_fund_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+
+  title varchar(255)
+  amount decimal
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_mutual_fund_history.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_occupation_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  member_profile_id varchar(50)
+  member_occupation_id varchar(50)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_occupation_history.member_occupation_id > member_occupation.id [delete:restrict, update:cascade]
+Ref: member_occupation_history.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_occupation {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  name varchar(255)
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+// ✅
+Table member_relative_account {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_profile_id varchar(50)
+  relative_member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  family_relationship family_relationship [not null]
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_relative_account.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+Ref: member_relative_account.relative_member_profile_id - member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_type_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  member_type_id varchar(50)
+  member_profile_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: member_type_history.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+Ref: member_type_history.member_type_id - member_type.id [delete:restrict, update:cascade]
+
+// ✅
+Table member_type {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  prefix varchar(255)
+  name varchar(255)
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// ✅
+Table timesheet {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  user_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  media_in_id varchar(50)
+  media_out_id varchar(50)
+
+  time_in timestamp [not null, default: `now()`]
+  time_out timestamp
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: timesheet.user_id > user.id [delete:restrict]
+Ref: timesheet.media_in_id - media.id [delete:restrict]
+Ref: timesheet.media_out_id - media.id [delete:restrict]
+
+// ✅
+Table footstep {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  account_type account_type [not null]
+  user_id varchar(50) [not null] // who did this action
+
+  module varchar(255) [not null] // where this event take place/source
+  description varchar(4096)
+  activity varchar(255) [not null] // wtf user did
+  latitude decimal(10,7)
+  longitude decimal(10,7)
+  ip_address varchar(45)
+  user_agent varchar(1000)
+  referer varchar(1000)
+  location varchar(255)
+  accept_language varchar(255)
+}
+
+Ref: footstep.user_id > user.id [delete:restrict, update:cascade]
+
+// ACCOUNTING SECTION
+
+enum generated_report_status {
+  pending
+  started
+  "in progress"
+  finished
+}
+
+Table generated_reports {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+  requested_by_user_id varchar(50)
+  media_id varchar(50)
+
+  name varchar(255) [not null]
+  description varchar(255)
+  progress decimal [default: 0]
+  password varchar(255)
+
+  status generated_report_status [default: "pending"]
+
+  started_at timestamp [not null, default: `now()`]
+  finished_at timestamp
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: generated_reports.media_id - media.id
+Ref: generated_reports.requested_by_user_id - user.id
+
+enum accounting_principle {
+  positive
+  negative
+}
+
+// pang report
+Table general_ledger_accounts_grouping {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  debit accounting_principle [not null]
+  credit accounting_principle [not null]
+  name varchar(50) [not null]
+  description varchar(255) [not null]
+
+  from_code decimal [default: 0]
+  to_code decimal [default: 0]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// pang report
+Table financial_statement_accounts_grouping {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+  icon_media_id varchar(50)
+
+  name varchar(50) [not null]
+  description varchar(255) [not null]
+
+  debit accounting_principle [not null]
+  credit accounting_principle [not null]
+
+  code decimal [not null]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: financial_statement_accounts_grouping.icon_media_id > media.id [delete:restrict, update:cascade]
+
+// Financial Statement Definition Types
+enum financial_statement_definition_types {
+  standard
+  group
+  "group title"
+  "group total"
+  "sub group title"
+  "sub group total"
+  "header total"
+}
+
+enum justify {
+  left
+  right
+  center
+}
+
+Table financial_statement_accounts_definition {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  title varchar(255)
+  types financial_statement_definition_types [not null, default: "standard"]
+  title_margin integer [default: 0]
+  exclude boolean [default: false]
+  index integer [increment]
+
+  indent integer [default: 0]
+  justify justify [default: "left"]
+
+  from_code decimal [default: 0]
+  to_code decimal [default: 0]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// TODO:
+Table general_ledger_definition {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// TODO
+Table accounts {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// Table {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  // user_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// Table {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  // user_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// Table {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  // user_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+
+// TODO: service_rating_table (only for employee)
+
+// Table {
+
+// }
+
+

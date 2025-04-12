@@ -1,0 +1,153 @@
+// Admins Accounts
+Table user {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  email varchar(50) [unique, not null]
+  password varchar(50) [not null]
+
+  firstName varchar(255)
+  middleName varchar(255)
+  lastName varchar(255)
+
+  media_id varchar(50) [ref: - media.id]
+  is_verified boolean [default: false]
+}
+
+// media resource
+Table media {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  description varchar(255)
+  file_name varchar(255) [not null]
+  file_size number [not null]
+  file_type varchar(255) [not null]
+  storage_key varchar(255) [not null]
+  bucket_name varchar(255) [not null]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+// plans
+Table subscription_plan {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  name varchar(255) [unique, not null]
+  description text
+
+  cost integer [unique, not null]
+  timespan integer [default: 1209600000] // EX: 14 Days in ms 1209600000
+
+  max_employees integer [not null, default: 3]// Coop maximum cap for their employees
+  max_members integer [not null, default: 10]// Coop maximum cap for their members
+  max_branches integer [not null, default: 1]// Coop maximum cap for their branches
+
+  discount decimal [default: 0] // %
+  yearly_discount decimal [default: 0] // %
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+// mapping of coop databases
+Table coop_db {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  name varchar(255) [unique]
+  address varchar(255)
+  description text
+
+  db_name varchar(255)
+
+  subscribed_plan_id varchar(50) [ref: > subscription_plan.id]
+  subscribed_plan_start timestamp
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+// coop user mapping
+// This servers purpose to let the backend knows where this user belongs
+Table coop_users {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  email varchar(50) [unique, not null]
+  user_name varchar(50) [unique, not null]
+  contact_number varchar(50) [unique, not null]
+  coop_db_name varchar(50)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+// migration status
+enum migration_status {
+  migrating // Migration is currently in progress
+  pending // Migration is not started yet / waiting to be migrated
+  done // Finished migration
+}
+
+// Migration History
+Table migration_history {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  coop_db_id varchar(50)
+
+  status migration_status
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+}
+
+// Tracking usage
+// Coop Usage entries Per Day ( this is system generated )
+Table coop_usage_tracking_daily {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  coop_id varchar(50) [ref: > coop_db.id]
+
+  employees integer [not null, default: 0]
+  members integer [not null, default: 0]
+  branches integer [not null, default: 0]
+
+  online_transaction integer [not null, default: 0]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: migration_history.coop_db_id - coop_db.id [delete: restrict]
+
+Table contact_number {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  first_name varchar(255) [not null]
+  last_name varchar(255) [not null]
+  email varchar(255) [not null]
+  contact_number varchar(15) [not null]
+  description varchar(4096)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}

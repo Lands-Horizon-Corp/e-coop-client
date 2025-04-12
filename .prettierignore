@@ -1,0 +1,16 @@
+*.config.js
+*.config.ts
+*.json
+*.yml
+*.yaml
+*.html
+
+# Ignore specific folders
+src/config/
+src/utils/config/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore Amplify
+amplify/

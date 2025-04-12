@@ -1,0 +1,5 @@
+{
+  "ContactNumber": "Hello {{.name}},\n\nYour verification code for e-COOP Horizon is \n{{.otp}}\nPlease enter this code to complete your registration.\nIf you did not request this code, please disregard this message. For any questions, contact our support at lands.horizon@gmail.com.\n\nThank you for choosing e-COOP!",
+  
+  "ChangePassword": "Hello {{.name}},\n\nYou requested to reset your password for your e-COOP Horizon account. Please click the link below to change your password:\n{{.eventLink}}\nIf you did not request a password reset, please disregard this message.\n\nThank you for being a valued member of e-COOP!"
+}
