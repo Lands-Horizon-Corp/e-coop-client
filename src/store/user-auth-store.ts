@@ -22,7 +22,7 @@ export const useUserAuthStore = create<UserAuthStore>((set) => ({
     setAuthStatus: (authStatus: TAuthStoreStatus) => set({ authStatus }),
 }))
 
-export const useAuthUser = <TUser extends /* IUserData */ object>() => {
+export const useAuthUser = <TUser = any /*extends IUserData */>() => {
     const { currentUser, setCurrentUser, setAuthStatus } = useUserAuthStore(
         (state) => state
     )
