@@ -1,3 +1,13 @@
+// just a sample entity, and what we can reuse to all entity
+// Table your_table_name {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+
+
 // Admins Accounts
 Table user {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
