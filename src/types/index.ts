@@ -1,5 +1,5 @@
 // export * from './auth'
 export * from './constants'
-// export * from './component'
+export * from './components'
 // export * from './qr-result'
 export * from './type-utils'
