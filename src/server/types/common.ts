@@ -27,7 +27,7 @@ export type TCivilStatus =
     | 'Separated'
     | 'N/A'
 
-export type AccountClosureReasonType =
+export type TAccountClosureReasonType =
     (typeof AccountClosureReasonTypes)[number]
 
 // TODO: This should be common user
