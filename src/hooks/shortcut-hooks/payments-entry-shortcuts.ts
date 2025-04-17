@@ -1,4 +1,4 @@
-import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
+import { useShortcut } from '@/components/use-shorcuts'
 import { IPaymentsEntry } from '@/server/types/transactions/payments-entry'
 import { PaymentsDataStore } from '@/store/transaction/payments-entry-store'
 import { useMemo } from 'react'

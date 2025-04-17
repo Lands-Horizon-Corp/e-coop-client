@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import {
@@ -12,6 +11,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib'
 import { IBaseProps } from '@/types'
+import { ReactNode } from 'react'
 
 export interface IModalProps
     extends IBaseProps,

@@ -1,9 +1,9 @@
 import { MdError } from 'react-icons/md'
 
 import { cn } from '@/lib/utils'
-import { IBaseProps } from '@/types/components'
+import { IClassProps } from '@/types/components'
 
-interface Props extends IBaseProps {
+interface Props extends IClassProps {
     errorMessage?: string | null
 }
 

@@ -1,11 +1,7 @@
 import { create } from 'zustand'
-// TODO: Update types name once created
-type IMemberResource = any
-type IPaymentsEntry = any
-type IAccountsRequest = any
-// import { IMemberResource } from '@/server/types'
-// import { IPaymentsEntry } from '@/server/types/transactions/payments-entry'
-// import { IAccountsRequest } from '@/server/types/accounts/accounts'
+import { IMemberResource } from '@/server/types'
+import { IPaymentsEntry } from '@/server/types/transactions/payments-entry'
+import { IAccountsRequest } from '@/server/types/accounts/accounts'
 
 // Payments Data
 export interface PaymentsDataStore {

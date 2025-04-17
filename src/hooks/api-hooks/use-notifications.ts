@@ -12,7 +12,9 @@ import { withCatchAsync } from '@/utils'
 import { IOperationCallbacks } from './types'
 import { serverRequestErrExtractor } from '@/helpers'
 import { INotificationResource } from '@/server/types'
+
 type Role = any
+
 interface INotificationsProps {
     userId: number
     role: Role

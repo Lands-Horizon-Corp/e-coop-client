@@ -15,14 +15,12 @@ const LayerControl = () => {
                     <TileLayer
                         attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}"
-                        // accessToken={'your token here'}
                     />
                 </LayersControl.BaseLayer>
                 <LayersControl.BaseLayer name="Mapbox Map Satellite">
                     <TileLayer
                         attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}"
-                        // accessToken={'your token here'}
                     />
                 </LayersControl.BaseLayer>
 

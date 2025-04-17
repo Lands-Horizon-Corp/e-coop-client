@@ -14,9 +14,9 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 
-import { IBaseProps } from '@/types/components'
+import { IClassProps } from '@/types/components'
 
-interface Props extends IBaseProps {}
+interface Props extends IClassProps {}
 
 const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
     const [camActive, setCamActive] = useState(false)

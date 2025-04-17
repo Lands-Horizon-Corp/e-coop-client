@@ -3,11 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 
 import {
     DropdownMenu,
+    DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { CameraIcon, RefreshIcon } from '@/components/icons'
 

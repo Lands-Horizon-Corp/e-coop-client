@@ -4,9 +4,9 @@ import { QRCodeSVG } from 'qrcode.react'
 import { QrCodeIcon } from '@/components/icons'
 
 import { cn } from '@/lib/utils'
-import { IBaseProps } from '@/types'
+import { IClassProps } from '@/types'
 
-export interface IQrCodeProps extends IBaseProps {
+export interface IQrCodeProps extends IClassProps {
     value: string
     themeResponsive?: boolean
 }

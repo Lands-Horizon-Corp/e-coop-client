@@ -20,16 +20,13 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
 } from '../ui/dropdown-menu'
-import UserAvatar from '@/components/user-avatar'
+import UserAvatar from '../user-avatar'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar'
 
 import { useAuthUser } from '@/store/user-auth-store'
 import { useTheme } from '@/providers/theme-provider'
+import { useSignOut } from '@/hooks/api-hooks/use-auth'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-
-// TODO: To add api hook
-const useSignOut: any = {}
-// import { useSignOut } from '@/hooks/api-hooks/use-auth'
 
 const AppSidebarUser = () => {
     const router = useRouter()

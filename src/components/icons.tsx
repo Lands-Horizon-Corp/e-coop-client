@@ -252,9 +252,10 @@ import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
 
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 
-import { GrMoney as CoinsStackIcon } from 'react-icons/gr'
-
-// Export section
+import {
+    GrMoney as CoinsStackIcon,
+    GrVmMaintenance as MaintenanceIcon,
+} from 'react-icons/gr'
 export {
     XIcon,
     MapIcon,
@@ -444,4 +445,5 @@ export {
     F1Icon,
     F2Icon,
     F3Icon,
+    MaintenanceIcon,
 }

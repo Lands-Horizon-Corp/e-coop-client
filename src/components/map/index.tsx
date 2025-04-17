@@ -1,12 +1,12 @@
-import axios from 'axios'
 import 'leaflet/dist/leaflet.css'
+import axios from 'axios'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
-    useMap,
-    TileLayer,
-    ZoomControl,
-    useMapEvent,
     MapContainer,
+    TileLayer,
+    useMapEvent,
+    useMap,
+    ZoomControl,
 } from 'react-leaflet'
 import debounce from 'lodash-es/debounce'
 import { useMutation } from '@tanstack/react-query'
@@ -16,13 +16,13 @@ import {
     Pin,
     TMapProps,
     TMainMapProps,
-    TMapWithClickProps,
     TCustomSearchProps,
+    TMapWithClickProps,
     TLatLngExpressionWithDesc,
 } from '@/types/components'
+import { Input } from '../ui/input'
 import LayerControl from './layer-control'
-import { Input } from '@/components/ui/input'
-import { LoadingCircleIcon, LocationPinOutlineIcon } from '@/components/icons'
+import { LoadingCircleIcon, LocationPinOutlineIcon } from '../icons'
 
 import { cn } from '@/lib'
 import logger from '@/helpers/loggers/logger'

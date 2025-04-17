@@ -1,20 +1,19 @@
 import { create } from 'zustand'
-// TODO: Set user data here once completed
-// import { IUserData } from '@/server'
+import { IUserData } from '@/server'
 
 type TAuthStoreStatus = 'loading' | 'authorized' | 'unauthorized' | 'error'
 
 interface UserAuthStore {
-    currentUser: any | null
+    currentUser: IUserData | null
     authStatus: TAuthStoreStatus
-    setCurrentUser: (newUserData: any | null) => void
+    setCurrentUser: (newUserData: IUserData | null) => void
     setAuthStatus: (status: TAuthStoreStatus) => void
 }
 
 export const useUserAuthStore = create<UserAuthStore>((set) => ({
     currentUser: null,
     authStatus: 'loading',
-    setCurrentUser: (newUserData: any | null) =>
+    setCurrentUser: (newUserData: IUserData | null) =>
         set({
             currentUser: newUserData,
             authStatus: newUserData ? 'authorized' : 'unauthorized',
@@ -22,7 +21,7 @@ export const useUserAuthStore = create<UserAuthStore>((set) => ({
     setAuthStatus: (authStatus: TAuthStoreStatus) => set({ authStatus }),
 }))
 
-export const useAuthUser = <TUser = any /*extends IUserData */>() => {
+export const useAuthUser = <TUser extends IUserData>() => {
     const { currentUser, setCurrentUser, setAuthStatus } = useUserAuthStore(
         (state) => state
     )
