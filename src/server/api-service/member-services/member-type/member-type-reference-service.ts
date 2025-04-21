@@ -1,8 +1,7 @@
 // services/member-type-service.ts
 import qs from 'query-string'
 
-import APIService from '../api-service'
-import { downloadFile } from '../../helpers'
+import APIService from '../../api-service'
 
 import { TEntityId } from '@/server/types'
 import {
@@ -11,15 +10,15 @@ import {
     IMemberTypePaginatedResource,
 } from '@/server/types/member/member-type'
 
-export default class MemberTypeService {
-    private static readonly BASE_ENDPOINT = '/member-type'
+export default class MemberTypeReferenceService {
+    private static readonly BASE_ENDPOINT = '/member-type-reference'
 
     public static async getById(
         id: TEntityId,
         preloads?: string[]
     ): Promise<IMemberTypeResource> {
         const url = qs.stringifyUrl({
-            url: `${MemberTypeService.BASE_ENDPOINT}/${id}`,
+            url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
@@ -30,7 +29,7 @@ export default class MemberTypeService {
     public static async create(data: IMemberTypeRequest, preloads?: string[]) {
         const url = qs.stringifyUrl(
             {
-                url: `${MemberTypeService.BASE_ENDPOINT}`,
+                url: `${MemberTypeReferenceService.BASE_ENDPOINT}`,
                 query: { preloads },
             },
             { skipNull: true }
@@ -45,7 +44,7 @@ export default class MemberTypeService {
     }
 
     public static async delete(id: TEntityId): Promise<void> {
-        const endpoint = `${MemberTypeService.BASE_ENDPOINT}/${id}`
+        const endpoint = `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`
         await APIService.delete<void>(endpoint)
     }
 
@@ -55,7 +54,7 @@ export default class MemberTypeService {
         preloads?: string[]
     ): Promise<IMemberTypeResource> {
         const url = qs.stringifyUrl({
-            url: `${MemberTypeService.BASE_ENDPOINT}/${id}`,
+            url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
@@ -66,17 +65,19 @@ export default class MemberTypeService {
         return response.data
     }
 
-    public static async getMemberTypes(props?: {
+    public static async getMemberTypeReferences(props?: {
+        memberTypeId: string
         sort?: string
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
     }) {
-        const { filters, preloads, pagination, sort } = props || {}
+        const { memberTypeId, filters, preloads, pagination, sort } =
+            props || {}
 
         const url = qs.stringifyUrl(
             {
-                url: `${MemberTypeService.BASE_ENDPOINT}`,
+                url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${memberTypeId}`,
                 query: {
                     sort,
                     preloads,
@@ -92,28 +93,8 @@ export default class MemberTypeService {
         return response.data
     }
 
-    public static async exportAll(): Promise<void> {
-        const url = `${MemberTypeService.BASE_ENDPOINT}/export`
-        await downloadFile(url, 'all_member_types_export.csv')
-    }
-
-    public static async exportSelected(ids: TEntityId[]): Promise<void> {
-        if (ids.length === 0) {
-            throw new Error('No member type IDs provided for export.')
-        }
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberTypeService.BASE_ENDPOINT}/export-selected`,
-                query: { ids },
-            },
-            { skipNull: true }
-        )
-
-        await downloadFile(url, 'selected_member_types_export.csv')
-    }
-
     public static async deleteMany(ids: TEntityId[]): Promise<void> {
-        const endpoint = `${MemberTypeService.BASE_ENDPOINT}/bulk-delete`
+        const endpoint = `${MemberTypeReferenceService.BASE_ENDPOINT}/bulk-delete`
         await APIService.delete<void>(endpoint, { ids })
     }
 }

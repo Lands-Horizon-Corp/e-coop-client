@@ -14,6 +14,20 @@ export interface ILongLat {
     latitude?: number // `float64` maps to `number` in TypeScript
 }
 
+/* TODO: Add to all entities that has modified by trail */
+export interface IModifiedBy {
+    createdBy?: IUserBase
+    updatedBy?: IUserBase
+    deletedBy?: IUserBase
+}
+
+/* Extend interface if gusto magka ts type neto */
+export interface IAuditable {
+    createdById?: TEntityId
+    updatedById?: TEntityId
+    deletedById?: TEntityId
+}
+
 export interface ITimeStamps {
     deletedAt?: string | null
     createdAt: string
