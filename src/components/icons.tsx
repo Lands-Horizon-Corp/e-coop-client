@@ -211,8 +211,9 @@ import {
 import {
     FaVenusMars as GendersIcon,
     FaChartPie as PieChartIcon,
-    FaBoxesStacked as BoxesStackedIcon,
     FaAddressCard as AddressCardIcon,
+    FaArrowTrendUp as ArrowTrendUpIcon,
+    FaBoxesStacked as BoxesStackedIcon,
 } from 'react-icons/fa6'
 
 import {
@@ -377,6 +378,7 @@ export {
     ChevronDownIcon,
     PDFFileFillIcon,
     BankDuoToneIcon,
+    ArrowTrendUpIcon,
     BoxesStackedIcon,
     NotificationIcon,
     ChevronsLeftIcon,

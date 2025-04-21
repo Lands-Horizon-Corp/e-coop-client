@@ -14,7 +14,9 @@ interface DataTableColumnHeaderProps<TData, TValue>
     extends React.HTMLAttributes<HTMLDivElement> {
     title: string
     table: Table<TData>
+    disableSort?: boolean
     tooltipDescription?: string
+    containerClassName?: string
     column: Column<TData, TValue>
     header: Header<TData, TValue>
 }
@@ -26,6 +28,8 @@ const DataTableColumnHeader = <TData, TValue>({
     children,
     className,
     tooltipDescription,
+    containerClassName,
+    disableSort = false,
 }: DataTableColumnHeaderProps<TData, TValue>) => {
     const { attributes, isDragging, listeners, setNodeRef, transform } =
         useSortable({
@@ -53,7 +57,12 @@ const DataTableColumnHeader = <TData, TValue>({
     return (
         <div className="inline-block w-full flex-1 space-y-1 py-2">
             <div className={cn('flex w-full items-center gap-x-2', className)}>
-                <div className="inline-flex w-full items-center justify-between gap-x-0.5">
+                <div
+                    className={cn(
+                        'inline-flex w-full items-center justify-between gap-x-1.5',
+                        containerClassName
+                    )}
+                >
                     <span
                         // size="sm"
                         style={style}
@@ -61,7 +70,10 @@ const DataTableColumnHeader = <TData, TValue>({
                         // variant="ghost"
                         {...attributes}
                         ref={setNodeRef}
-                        className="!size-fit cursor-ew-resize gap-x-2 self-start truncate p-1"
+                        className={cn(
+                            '!size-fit cursor-ew-resize gap-x-2 self-start truncate p-1',
+                            disableSort && 'pointer-events-none'
+                        )}
                     >
                         {finalTitle}
                     </span>

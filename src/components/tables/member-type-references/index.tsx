@@ -10,11 +10,12 @@ import DataTable from '@/components/data-table'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import Modal, { IModalProps } from '@/components/modals/modal'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
 import memberTypeColumns, {
-    IMemberTypeTableColumnProps,
-    memberTypeGlobalSearchTargets,
+    IMemberTypeReferenceTableColumnProps,
+    memberTypeReferenceGlobalSearchTargets,
 } from './columns'
 
 import { cn } from '@/lib'
@@ -25,15 +26,17 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '../types'
-import { IMemberTypeResource } from '@/server/types'
+import { TEntityId } from '@/server/types'
+import { IMemberTypeReferenceResource } from '@/server/types/member/member-type-reference'
+import { useFilteredPaginatedMemberTypeReferences } from '@/hooks/api-hooks/member/use-member-type'
 import MemberTypeService from '@/server/api-service/member-services/member-type/member-type-service'
-import { useFilteredPaginatedMemberTypes } from '@/hooks/api-hooks/member/use-member-type'
 
-export interface MemberTypeTableProps
-    extends TableProps<IMemberTypeResource>,
-        IMemberTypeTableColumnProps {
+export interface MemberTypeReferencesTableProps
+    extends TableProps<IMemberTypeReferenceResource>,
+        IMemberTypeReferenceTableColumnProps {
+    memberTypeId: TEntityId
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberTypeResource>,
+        IDataTableToolbarProps<IMemberTypeReferenceResource>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -44,13 +47,14 @@ export interface MemberTypeTableProps
     >
 }
 
-const MemberTypeTable = ({
+const MemberTypeReferencesTable = ({
     className,
+    memberTypeId,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: MemberTypeTableProps) => {
+}: MemberTypeReferencesTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -74,7 +78,7 @@ const MemberTypeTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberTypeResource>({
+    } = useDataTableState<IMemberTypeReferenceResource>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -89,8 +93,9 @@ const MemberTypeTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedMemberTypes({
+    } = useFilteredPaginatedMemberTypeReferences({
         pagination,
+        memberTypeId,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
@@ -139,7 +144,7 @@ const MemberTypeTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: memberTypeGlobalSearchTargets,
+                        targets: memberTypeReferenceGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -157,22 +162,6 @@ const MemberTypeTable = ({
                             ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        exportAll: MemberTypeService.exportAll,
-                        // exportAllFiltered: MemberTypeService.exportAllFiltered,
-                        exportCurrentPage: (ids) =>
-                            MemberTypeService.exportSelected(
-                                ids.map((data) => data.id)
-                            ),
-                        exportSelected: (ids) =>
-                            MemberTypeService.exportSelected(
-                                ids.map((data) => data.id)
-                            ),
-                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -193,4 +182,31 @@ const MemberTypeTable = ({
     )
 }
 
-export default MemberTypeTable
+export const MemberTypeReferencesTableModal = ({
+    title = 'View Member Type References',
+    description = '',
+    className,
+    tableProps,
+    ...props
+}: IModalProps & {
+    tableProps: MemberTypeReferencesTableProps
+}) => {
+    return (
+        <Modal
+            title={title}
+            description={description}
+            className={cn('!max-w-7xl', className)}
+            descriptionClassName="hidden"
+            {...props}
+        >
+            <div className="grid">
+                <MemberTypeReferencesTable
+                    {...tableProps}
+                    className="max-h-[90vh] min-h-[90vh] max-w-[76rem]"
+                />
+            </div>
+        </Modal>
+    )
+}
+
+export default MemberTypeReferencesTable

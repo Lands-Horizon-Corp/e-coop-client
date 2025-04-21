@@ -5,6 +5,9 @@ import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberType } from '@/hooks/api-hooks/member/use-member-type'
 import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
+import { MemberTypeReferencesTableModal } from '../../member-type-references'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { ArrowTrendUpIcon } from '@/components/icons'
 
 interface IMemberTypeTableOwnerActionProps
     extends IMemberTypeTableActionComponentProp {
@@ -17,6 +20,7 @@ const MemberTypeTableOwnerAction = ({
     onDeleteSuccess,
 }: IMemberTypeTableOwnerActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
+    const [viewReferencesTable, setViewReferencesTable] = useState(false)
     const memberType = row.original
 
     const { onOpen } = useConfirmModalStore()
@@ -41,6 +45,13 @@ const MemberTypeTableOwnerAction = ({
                     open={updateModalForm}
                     onOpenChange={setUpdateModalForm}
                 />
+                <MemberTypeReferencesTableModal
+                    open={viewReferencesTable}
+                    onOpenChange={setViewReferencesTable}
+                    tableProps={{
+                        memberTypeId: memberType.id,
+                    }}
+                />
             </div>
             <RowActionsGroup
                 onDelete={{
@@ -60,7 +71,17 @@ const MemberTypeTableOwnerAction = ({
                     isAllowed: true,
                     onClick: () => setUpdateModalForm(true),
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
+                otherActions={
+                    <>
+                        <DropdownMenuItem
+                            onClick={() => setViewReferencesTable(true)}
+                        >
+                            <ArrowTrendUpIcon className="mr-2" />
+                            Browse References
+                        </DropdownMenuItem>
+                        {/* Additional actions can be added here */}
+                    </>
+                }
             />
         </>
     )
