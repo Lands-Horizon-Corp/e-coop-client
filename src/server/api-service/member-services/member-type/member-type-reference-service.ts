@@ -3,12 +3,12 @@ import qs from 'query-string'
 
 import APIService from '../../api-service'
 
-import { TEntityId } from '@/server/types'
 import {
-    IMemberTypeRequest,
-    IMemberTypeResource,
-    IMemberTypePaginatedResource,
-} from '@/server/types/member/member-type'
+    TEntityId,
+    IMemberTypeReferenceRequest,
+    IMemberTypeReferenceResource,
+} from '@/server/types'
+import { IMemberTypePaginatedResource } from '@/server/types/member/member-type'
 
 export default class MemberTypeReferenceService {
     private static readonly BASE_ENDPOINT = '/member-type-reference'
@@ -16,17 +16,20 @@ export default class MemberTypeReferenceService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberTypeResource> {
+    ): Promise<IMemberTypeReferenceResource> {
         const url = qs.stringifyUrl({
             url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IMemberTypeResource>(url)
+        const response = await APIService.get<IMemberTypeReferenceResource>(url)
         return response.data
     }
 
-    public static async create(data: IMemberTypeRequest, preloads?: string[]) {
+    public static async create(
+        data: IMemberTypeReferenceRequest,
+        preloads?: string[]
+    ) {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberTypeReferenceService.BASE_ENDPOINT}`,
@@ -36,10 +39,10 @@ export default class MemberTypeReferenceService {
         )
 
         return (
-            await APIService.post<IMemberTypeRequest, IMemberTypeResource>(
-                url,
-                data
-            )
+            await APIService.post<
+                IMemberTypeReferenceRequest,
+                IMemberTypeReferenceResource
+            >(url, data)
         ).data
     }
 
@@ -50,17 +53,17 @@ export default class MemberTypeReferenceService {
 
     public static async update(
         id: TEntityId,
-        data: IMemberTypeRequest,
+        data: IMemberTypeReferenceRequest,
         preloads?: string[]
-    ): Promise<IMemberTypeResource> {
+    ): Promise<IMemberTypeReferenceResource> {
         const url = qs.stringifyUrl({
             url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
         const response = await APIService.put<
-            IMemberTypeRequest,
-            IMemberTypeResource
+            IMemberTypeReferenceRequest,
+            IMemberTypeReferenceResource
         >(url, data)
         return response.data
     }
