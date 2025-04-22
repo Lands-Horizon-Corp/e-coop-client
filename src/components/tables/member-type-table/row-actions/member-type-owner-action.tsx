@@ -1,13 +1,17 @@
 import { useState } from 'react'
+
+import { ArrowTrendUpIcon } from '@/components/icons'
 import { IMemberTypeTableActionComponentProp } from '../columns'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
+
+import { MemberTypeReferencesTableModal } from '../../member-type-references'
+import MemberTypeReferenceTableOwnerAction from '../../member-type-references/row-actions/member-type-reference-owner-action'
+import { MemberTypeReferenceCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-reference-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberType } from '@/hooks/api-hooks/member/use-member-type'
-import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
-import { MemberTypeReferencesTableModal } from '../../member-type-references'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { ArrowTrendUpIcon } from '@/components/icons'
 
 interface IMemberTypeTableOwnerActionProps
     extends IMemberTypeTableActionComponentProp {
@@ -20,6 +24,7 @@ const MemberTypeTableOwnerAction = ({
     onDeleteSuccess,
 }: IMemberTypeTableOwnerActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
+    const [createModalForm, setCreateModalForm] = useState(false)
     const [viewReferencesTable, setViewReferencesTable] = useState(false)
     const memberType = row.original
 
@@ -45,11 +50,29 @@ const MemberTypeTableOwnerAction = ({
                     open={updateModalForm}
                     onOpenChange={setUpdateModalForm}
                 />
+                <MemberTypeReferenceCreateUpdateFormModal
+                    formProps={{
+                        defaultValues: {
+                            memberTypeId: memberType.id,
+                        },
+                        disabledFields: ['memberTypeId'],
+                    }}
+                    open={createModalForm}
+                    onOpenChange={setCreateModalForm}
+                />
                 <MemberTypeReferencesTableModal
                     open={viewReferencesTable}
                     onOpenChange={setViewReferencesTable}
                     tableProps={{
+                        actionComponent: (props) => (
+                            <MemberTypeReferenceTableOwnerAction {...props} />
+                        ),
                         memberTypeId: memberType.id,
+                        toolbarProps: {
+                            createActionProps: {
+                                onClick: () => setCreateModalForm(true),
+                            },
+                        },
                     }}
                 />
             </div>
