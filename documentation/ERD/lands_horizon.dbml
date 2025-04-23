@@ -6,8 +6,6 @@
   // deleted_at timestamp
 // }
 
-
-
 // Admins Accounts
 Table user {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
