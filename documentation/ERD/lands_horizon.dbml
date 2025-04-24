@@ -21,6 +21,19 @@ Table user {
   is_verified boolean [default: false]
 }
 
+// ✅
+Table feedback {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  email varchar(255)
+  description text
+  feedback_type feedback_type [not null, default: "general"]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
 // media resource
 Table media {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
