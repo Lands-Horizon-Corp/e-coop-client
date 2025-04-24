@@ -1308,6 +1308,7 @@ Table account [headercolor: #00FF00] {
   index integer [default: 0]
   type account_type [not null]
 
+  is_internal boolean [default: false]
   cash_on_hand boolean [default: false]
 
   // Pang Loan
@@ -1431,6 +1432,62 @@ Table general_ledger_definition [headercolor: #00FF00] {
 
 Ref: general_ledger_definition.branch_id > branch.id [delete:cascade, update:cascade]
 Ref: general_ledger_definition.general_ledger_definition_entries_id < general_ledger_definition.id
+
+enum general_ledger_transaction_type {
+  "Daily Collection Book"
+  "Cash / Check Disbursement Book"
+  "General Journal"
+}
+
+Table general_ledger_transaction [headercolor: #8bfcf9] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  journal_voucher_number varchar(50)
+  entry_date date
+  name varchar(255)
+  description text
+
+  total_debit decimal
+  total_credit decimal
+
+  is_posted boolean [default:false]
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: general_ledger_transaction.branch_id > branch.id [delete:cascade, update:cascade]
+
+
+Table general_ledger_transaction_entry [headercolor: #8bfcf9] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  account_id varchar(50)
+  general_ledger_transaction_entry_id varchar(50)
+
+  debit decimal
+  credit decimal
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: general_ledger_transaction_entry.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: general_ledger_transaction_entry.general_ledger_transaction_entry_id > general_ledger_transaction_entry.id [delete:cascade, update:cascade]
+Ref: general_ledger_transaction_entry.account_id > account.id [delete:cascade, update:cascade]
+
 
 enum financial_statement_type {
   "Assets"
@@ -1569,7 +1626,7 @@ Ref: bank.branch_id > branch.id [delete:cascade, update:cascade]
 
 enum types_of_payment_type {
   cash
-  cheque
+  check
   "online"
 }
 
@@ -2846,6 +2903,7 @@ enum general_ledger_source {
   deposit
   journal
   payment
+  adjustment
   "journal voucher"
   "check voucher"
 }
@@ -2869,8 +2927,11 @@ Table general_accounting_ledger [headercolor: #00ff26] {
 
   transaction_reference_number varchar(50)
   reference_number varchar(50)
-  source general_ledger_source
   payment_type_id varchar(50)
+
+  source general_ledger_source
+  journal_voucher_id varchar(50)
+  adjustment_entry_id varchar(50)
 
   type_of_payment_type types_of_payment_type
 
@@ -2888,6 +2949,7 @@ Ref: general_accounting_ledger.transaction_id > transaction.id [delete:restrict,
 Ref: general_accounting_ledger.transaction_batch_id > transaction_batch.id [delete:restrict, update:cascade]
 Ref: general_accounting_ledger.payment_type_id > payment_type.id [delete:restrict, update:cascade]
 Ref: general_accounting_ledger.employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: general_accounting_ledger.adjustment_entry_id > adjustment_entry.id [delete:restrict, update:cascade]
 Ref: general_accounting_ledger.member_joint_account_id > member_joint_account.id [delete:restrict, update:cascade]
 Ref: general_accounting_ledger.account_id - account.id [delete:restrict, update:cascade]
 Ref: general_accounting_ledger.member_profile_id > member_profile.id [delete:restrict, update:cascade]
@@ -3174,6 +3236,337 @@ Table disbursement [headercolor: #00ff26] {
 
 Ref: disbursement.branch_id > branch.id [delete:cascade, update:cascade]
 
+// ACCOUNTING ENTRY CV, JV, ADJ
+
+// ✅
+Table voucher_pay_to [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  name varchar(255)
+  media_id varchar(50)
+  description varchar(255)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: voucher_pay_to.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: voucher_pay_to.media_id - media.id [delete:restrict, update:cascade]
+
+enum cash_check_voucher_status {
+  pending
+  printed
+  approved
+  released
+}
+
+//✅
+Table cash_check_voucher [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  employee_user_id varchar(50)
+  transaction_batch_id varchar(50)
+  printed_by_user_id varchar(50)
+  approved_by_user_id varchar(50)
+  released_by_user_id varchar(50)
+
+  pay_to varchar(255)
+
+  status cash_check_voucher_status
+  description text //particulars to
+  cash_voucher_number varchar(255) [unique]
+
+  total_debit decimal
+  total_credit decimal
+
+  print_count integer
+
+  printed_date timestamp
+  approved_date timestamp
+  released_date timestamp // everytime na marerelease magkakaron sa transaction batch CDV History at CASH Voucher sa LESS
+
+
+  // SIGNATURES
+  approved_by_signature_media_id varchar(50) [ref: - media.id]
+  approved_by_name varchar(255)
+  approved_by_position varchar(255)
+
+  prepared_by_signature_media_id varchar(50) [ref: - media.id]
+  prepared_by_name varchar(255)
+  prepared_by_position varchar(255)
+
+  certified_by_signature_media_id varchar(50) [ref: - media.id]
+  certified_by_name varchar(255)
+  certified_by_position varchar(255)
+
+  verified_by_signature_media_id varchar(50) [ref: - media.id]
+  verified_by_name varchar(255)
+  verified_by_position varchar(255)
+
+  check_by_signature_media_id varchar(50) [ref: - media.id]
+  check_by_name varchar(255)
+  check_by_position varchar(255)
+
+  acknowledge_by_signature_media_id varchar(50) [ref: - media.id]
+  acknowledge_by_name varchar(255)
+  acknowledge_by_position varchar(255)
+
+  noted_by_signature_media_id varchar(50) [ref: - media.id]
+  noted_by_name varchar(255)
+  noted_by_position varchar(255)
+
+  posted_by_signature_media_id varchar(50) [ref: - media.id]
+  posted_by_name varchar(255)
+  posted_by_position varchar(255)
+
+  paid_by_signature_media_id varchar(50) [ref: - media.id]
+  paid_by_name varchar(255)
+  paid_by_position varchar(255)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: cash_check_voucher.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: cash_check_voucher.employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher.printed_by_user_id > user.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher.transaction_batch_id > transaction_batch.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher.approved_by_user_id > user.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher.released_by_user_id > user.id [delete:restrict, update:cascade]
+
+//✅
+Table cash_check_voucher_entry [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  account_id varchar(50)
+  employee_user_id varchar(50)
+  transaction_batch_id varchar(50)
+  cash_check_voucher_id varchar(50)
+
+  debit decimal
+  credit decimal
+  description text
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: cash_check_voucher_entry.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: cash_check_voucher_entry.employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher_entry.cash_check_voucher_id > cash_check_voucher.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher_entry.transaction_batch_id > transaction_batch.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher_entry.account_id > account.id [delete:restrict, update:cascade]
+
+//✅
+Table cash_check_voucher_disbursement_entry [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  printed_by_user_id varchar(50)
+  approved_by_user_id varchar(50)
+  released_by_user_id varchar(50)
+
+  employee_user_id varchar(50)
+  account_id varchar(50)
+  cash_check_voucher_id varchar(50)
+  transaction_batch_id varchar(50)
+
+  pay_to varchar(255)
+  cash_check_voucher_number varchar(255)
+
+  status cash_check_voucher_status
+  description text //particulars to
+
+  amount decimal
+
+  printed_date timestamp
+  approved_date timestamp
+  released_date timestamp // everytime na marerelease magkakaron sa transaction batch CDV History at CASH Voucher sa LESS
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: cash_check_voucher_disbursement_entry.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: cash_check_voucher_disbursement_entry.employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher_disbursement_entry.account_id > account.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher_disbursement_entry.transaction_batch_id > transaction_batch.id [delete:restrict, update:cascade]
+Ref: cash_check_voucher_disbursement_entry.cash_check_voucher_id > cash_check_voucher.id [delete:restrict, update:cascade]
+
+//✅
+Table journal_voucher [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  employee_user_id varchar(50)
+  member_profile_id varchar(50) // this will be use to populate the journal voucher entry. member_profile_id entries
+
+  printed_by_user_id varchar(50)
+  approved_by_user_id varchar(50)
+  released_by_user_id varchar(50)
+
+  total_debit decimal
+  total_credit decimal
+
+  print_count integer
+  description text
+
+  printed_date timestamp
+  approved_date timestamp
+  released_date timestamp // everytime na marerelease magkakaron sa transaction batch CDV History at CASH Voucher sa LESS
+
+  // SIGNATURES
+  approved_by_signature_media_id varchar(50) [ref: - media.id]
+  approved_by_name varchar(255)
+  approved_by_position varchar(255)
+
+  prepared_by_signature_media_id varchar(50) [ref: - media.id]
+  prepared_by_name varchar(255)
+  prepared_by_position varchar(255)
+
+  certified_by_signature_media_id varchar(50) [ref: - media.id]
+  certified_by_name varchar(255)
+  certified_by_position varchar(255)
+
+  verified_by_signature_media_id varchar(50) [ref: - media.id]
+  verified_by_name varchar(255)
+  verified_by_position varchar(255)
+
+  check_by_signature_media_id varchar(50) [ref: - media.id]
+  check_by_name varchar(255)
+  check_by_position varchar(255)
+
+  acknowledge_by_signature_media_id varchar(50) [ref: - media.id]
+  acknowledge_by_name varchar(255)
+  acknowledge_by_position varchar(255)
+
+  noted_by_signature_media_id varchar(50) [ref: - media.id]
+  noted_by_name varchar(255)
+  noted_by_position varchar(255)
+
+  posted_by_signature_media_id varchar(50) [ref: - media.id]
+  posted_by_name varchar(255)
+  posted_by_position varchar(255)
+
+  paid_by_signature_media_id varchar(50) [ref: - media.id]
+  paid_by_name varchar(255)
+  paid_by_position varchar(255)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: journal_voucher.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: journal_voucher.employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: journal_voucher.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+//✅
+// DAPAT NAGREREFLECT SA GENERAL ACCOUNTING LEDGER
+Table journal_voucher_entry [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  account_id varchar(50)
+  member_profile_id varchar(50) // autopopulate here if the journal_voucher.member_profile_id has id
+  employee_user_id varchar(50)
+  journal_voucher_id varchar(50)
+
+  description text
+  debit decimal
+  credit decimal
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: journal_voucher_entry.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: journal_voucher_entry.employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: journal_voucher_entry.journal_voucher_id > journal_voucher.id [delete:restrict, update:cascade]
+Ref: journal_voucher_entry.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+Ref: journal_voucher_entry.account_id > account.id [delete:restrict, update:cascade]
+
+//✅
+// DIREKTANG ADJUST TO ACCOUNTING LEDGER
+Table adjustment_entry [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  signature_media_id varchar(50) [ref: - media.id]
+  account_id varchar(50)
+  member_profile_id varchar(50) // autopopulate here if the journal_voucher.member_profile_id has id
+  employee_user_id varchar(50)
+  payment_type_id varchar(50)
+  type_of_payment_type payment_type
+
+  description text
+  reference_number varchar(255)
+  entry_date date
+
+  debit decimal
+  credit decimal
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: adjustment_entry.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: adjustment_entry.employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: adjustment_entry.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+Ref: adjustment_entry.account_id > account.id [delete:restrict, update:cascade]
+Ref: adjustment_entry.payment_type_id > payment_type.id [delete:restrict, update:cascade]
+
+// GL/FS
+// Table [headercolor: #8bfcf9] {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  // branch_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
 // Table [headercolor: #8bfcf9] {
   // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3293,19 +3686,3 @@ Ref: disbursement.branch_id > branch.id [delete:cascade, update:cascade]
 // }
 
 // // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
-
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
-
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
-
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
-
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
-
