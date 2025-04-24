@@ -1308,6 +1308,8 @@ Table account [headercolor: #00FF00] {
   index integer [default: 0]
   type account_type [not null]
 
+  cash_on_hand boolean [default: false]
+
   // Pang Loan
   computation_type computation_type // For loan
 
