@@ -1395,6 +1395,31 @@ Ref: account.general_ledger_definition_id > financial_statement_definition.id
 Ref: account.member_type_id - member_type.id [delete:restrict, update:restrict]
 Ref: account.computation_sheet_id - computation_sheet.id [delete:restrict, update:restrict]
 
+// ✅
+Table account_tag [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  account_id varchar(50)
+
+  name varchar(50)
+  description text
+  category tag_category
+  color varchar(20)
+  icon varchar(20)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: account_tag.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: account_tag.account_id > account.id [delete:set null, update:cascade]
+
 enum general_ledger_type {
   "Assets"
   "Liabilities, Equity & Reserves"
@@ -1439,7 +1464,7 @@ enum general_ledger_transaction_type {
   "General Journal"
 }
 
-Table general_ledger_transaction [headercolor: #8bfcf9] {
+Table general_ledger_transaction [headercolor: #ff0000] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   branch_id varchar(50)
@@ -1465,7 +1490,7 @@ Table general_ledger_transaction [headercolor: #8bfcf9] {
 Ref: general_ledger_transaction.branch_id > branch.id [delete:cascade, update:cascade]
 
 
-Table general_ledger_transaction_entry [headercolor: #8bfcf9] {
+Table general_ledger_transaction_entry [headercolor: #ff0000] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   branch_id varchar(50)
@@ -2898,6 +2923,31 @@ Ref: transaction.account_id - account.id [delete:restrict, update:cascade]
 Ref: transaction.member_profile_id > member_profile.id [delete:restrict, update:cascade]
 Ref: transaction.employee_user_id > user.id [delete:restrict, update:cascade]
 
+// ✅
+Table transaction_tag [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  transaction_id varchar(50)
+
+  name varchar(50)
+  description text
+  category tag_category
+  color varchar(20)
+  icon varchar(20)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: transaction_tag.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: transaction_tag.transaction_id > transaction.id [delete:set null, update:cascade]
+
 enum general_ledger_source {
   withdraw
   deposit
@@ -2932,7 +2982,6 @@ Table general_accounting_ledger [headercolor: #00ff26] {
   source general_ledger_source
   journal_voucher_id varchar(50)
   adjustment_entry_id varchar(50)
-
   type_of_payment_type types_of_payment_type
 
   credit decimal
@@ -2953,6 +3002,33 @@ Ref: general_accounting_ledger.adjustment_entry_id > adjustment_entry.id [delete
 Ref: general_accounting_ledger.member_joint_account_id > member_joint_account.id [delete:restrict, update:cascade]
 Ref: general_accounting_ledger.account_id - account.id [delete:restrict, update:cascade]
 Ref: general_accounting_ledger.member_profile_id > member_profile.id [delete:restrict, update:cascade]
+
+// ✅
+Table general_accounting_ledger_tag [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  general_accounting_ledger_id varchar(50)
+
+  name varchar(50)
+  description text
+  category tag_category
+  color varchar(20)
+  icon varchar(20)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: general_accounting_ledger_tag.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: general_accounting_ledger_tag.general_accounting_ledger_id > general_accounting_ledger.id [delete:set null, update:cascade]
+
+
 
 // ✅
 Table check_entry [headercolor: #00ff26] {
@@ -3346,6 +3422,31 @@ Ref: cash_check_voucher.transaction_batch_id > transaction_batch.id [delete:rest
 Ref: cash_check_voucher.approved_by_user_id > user.id [delete:restrict, update:cascade]
 Ref: cash_check_voucher.released_by_user_id > user.id [delete:restrict, update:cascade]
 
+// ✅
+Table cash_check_voucher_tag [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  cash_check_voucher_id varchar(50)
+
+  name varchar(50)
+  description text
+  category tag_category
+  color varchar(20)
+  icon varchar(20)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: cash_check_voucher_tag.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: cash_check_voucher_tag.cash_check_voucher_id > cash_check_voucher.id [delete:set null, update:cascade]
+
 //✅
 Table cash_check_voucher_entry [headercolor: #00ff26] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
@@ -3488,6 +3589,31 @@ Ref: journal_voucher.branch_id > branch.id [delete:cascade, update:cascade]
 Ref: journal_voucher.employee_user_id > user.id [delete:restrict, update:cascade]
 Ref: journal_voucher.member_profile_id > member_profile.id [delete:restrict, update:cascade]
 
+// ✅
+Table journal_voucher_tag [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  journal_voucher_id varchar(50)
+
+  name varchar(50)
+  description text
+  category tag_category
+  color varchar(20)
+  icon varchar(20)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: journal_voucher_tag.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: journal_voucher_tag.journal_voucher_id > journal_voucher.id [delete:set null, update:cascade]
+
 //✅
 // DAPAT NAGREREFLECT SA GENERAL ACCOUNTING LEDGER
 Table journal_voucher_entry [headercolor: #00ff26] {
@@ -3553,111 +3679,96 @@ Ref: adjustment_entry.member_profile_id > member_profile.id [delete:restrict, up
 Ref: adjustment_entry.account_id > account.id [delete:restrict, update:cascade]
 Ref: adjustment_entry.payment_type_id > payment_type.id [delete:restrict, update:cascade]
 
-// GL/FS
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+// ✅
+Table adjustment_entry_tag [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
 
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
+  adjustment_entry_id varchar(50)
 
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  name varchar(50)
+  description text
+  category tag_category
+  color varchar(20)
+  icon varchar(20)
 
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
 
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
+Ref: adjustment_entry_tag.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: adjustment_entry_tag.adjustment_entry_id > adjustment_entry.id [delete:set null, update:cascade]
 
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+enum tag_category {
+  accounting
+  voucher
+  "cash / check voucher"
+  "journal voucher"
+  "adjustment"
+  "transaction"
+  "general acconting ledger"
+}
 
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+// ✅
+Table tag_template [headercolor: #00ff26] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
 
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
+  name varchar(50)
+  description text
+  category tag_category
+  color varchar(20)
+  icon varchar(20)
 
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
 
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+Ref: tag_template.branch_id > branch.id [delete:cascade, update:cascade]
 
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
+// LOAN START
 
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
+Table loan [headercolor: #ff0000] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
 
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
 
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
+Ref: loan.branch_id > branch.id [delete:cascade, update:cascade]
 
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
+Table loan_ledger [headercolor: #ff0000] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
 
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
 
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
+Ref: loan_ledger.branch_id > branch.id [delete:cascade, update:cascade]
 
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
-
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
-
-// Table [headercolor: #8bfcf9] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
-
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
-
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
-
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
-
-// Table [headercolor: #8bfcf9] {
+// Table [headercolor: #ff0000] {
   // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   // branch_id varchar(50)
@@ -3672,7 +3783,97 @@ Ref: adjustment_entry.payment_type_id > payment_type.id [delete:restrict, update
 
 // // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
 
-// Table [headercolor: #8bfcf9] {
+// Table [headercolor: #ff0000] {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  // branch_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+
+// Table [headercolor: #ff0000] {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  // branch_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+
+// Table [headercolor: #ff0000] {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  // branch_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+
+// Table [headercolor: #ff0000] {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  // branch_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+
+// Table [headercolor: #ff0000] {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  // branch_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+
+// Table [headercolor: #ff0000] {
+  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  // branch_id varchar(50)
+  // created_by_id varchar(50) [ref: - user.id]
+  // updated_by_id varchar(50) [ref: - user.id]
+  // deleted_by_id varchar(50) [ref: - user.id]
+
+  // created_at timestamp [not null, default: `now()`]
+  // updated_at timestamp [not null, default: `now()`]
+  // deleted_at timestamp
+// }
+
+// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
+
+// Table [headercolor: #ff0000] {
   // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   // branch_id varchar(50)
