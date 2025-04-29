@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import GenderService from '@/server/api-service/gender-service'
+import GenderService from '@/api-service/gender-service'
 
 import {
     IAPIHook,
@@ -16,7 +16,7 @@ import {
     IGenderRequest,
     IGenderResource,
     IGenderPaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 export const useCreateGender = ({
     showMessage = true,

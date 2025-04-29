@@ -16,7 +16,7 @@ import MemberEducationalAttainmentHistoryTable from '../tables/members-table/mem
 
 import { cn } from '@/lib'
 import { ReactNode } from 'react'
-import { TEntityId } from '@/server'
+import { TEntityId } from '@/types'
 import { IClassProps } from '@/types'
 import MemberGenderHistoryTable from '../tables/members-table/member-histories/gender-history'
 import MemberMutualFundsHistoryTable from '../tables/members-table/member-histories/mutualfunds-history'

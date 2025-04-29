@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import AuthService from '@/server/api-service/auth-service'
+import AuthService from '@/api-service/auth-service'
 
 import {
     IUserData,
@@ -17,7 +17,7 @@ import {
     ISignUpRequest,
     IChangePasswordRequest,
     IForgotPasswordRequest,
-} from '@/server/types'
+} from '@/types/coop-types'
 import { IOperationCallbacks } from './types'
 
 // Loader for Auth Preloading

@@ -10,7 +10,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IGenderResource } from '@/server/types'
+import { IGenderResource } from '@/types/coop-types'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 
 export const genderGlobalSearchTargets: IGlobalSearchTargets<IGenderResource>[] =

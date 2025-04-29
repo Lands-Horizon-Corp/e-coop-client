@@ -8,7 +8,7 @@ import { ImageIcon, TrashIcon } from '@/components/icons'
 import { SignaturePickerUploaderModal } from '@/components/signature/signature-picker-uploader'
 
 import { formatBytes } from '@/helpers'
-import { IMediaResource, TEntityId } from '@/server'
+import { IMediaResource, TEntityId } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 
 export interface SignatureUploadField {

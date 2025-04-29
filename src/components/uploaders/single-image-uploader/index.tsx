@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { cn } from '@/lib'
 import { formatBytes } from '@/helpers'
-import { IMediaResource } from '@/server'
+import { IMediaResource } from '@/types'
 import { IClassProps } from '@/types'
 import { useCamera } from '@/hooks/use-camera'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'

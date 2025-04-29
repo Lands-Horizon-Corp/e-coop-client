@@ -15,7 +15,7 @@ import {
     IMemberEducationalAttainmentRequest,
     IMemberEducationalAttainmentResource,
     TEntityId,
-} from '@/server/types'
+} from '@/types/coop-types'
 import { cn } from '@/lib/utils'
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'

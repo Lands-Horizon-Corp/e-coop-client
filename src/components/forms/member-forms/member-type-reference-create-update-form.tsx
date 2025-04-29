@@ -20,7 +20,7 @@ import {
     useCreateMemberTypeReference,
     useUpdateMemberTypeReference,
 } from '@/hooks/api-hooks/member/use-member-type'
-import { IMemberTypeReferenceRequest, TEntityId } from '@/server/types'
+import { IMemberTypeReferenceRequest, TEntityId } from '@/types/coop-types'
 import { createMemberTypeReferenceSchema } from '@/validations/member/member-type-reference-schema'
 
 type TMemberTypeReferenceForm = z.infer<typeof createMemberTypeReferenceSchema>

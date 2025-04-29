@@ -5,7 +5,7 @@ import PageContainer from '@/components/containers/page-container'
 import EnsureOwnerCompany from '@/pages/owner/components/ensure-company'
 import { MemberCreateUpdateFormModal } from '@/components/forms/member-forms/member-create-update-form'
 
-import { ICompanyResource } from '@/server'
+import { ICompanyResource } from '@/types'
 import MembersTableOwnerAction from '@/components/tables/members-table/row-actions/members-table-owner-action'
 
 const OwnerViewMembersPage = () => {

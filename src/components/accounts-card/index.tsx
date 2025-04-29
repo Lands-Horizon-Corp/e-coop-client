@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import {
     IAccountingLedgerResource,
     TransactionSource,
-} from '@/server/types/accounts/accounting-ledger'
+} from '@/types/coop-types/accounts/accounting-ledger'
 import {
     Accordion,
     AccordionContent,

@@ -10,7 +10,7 @@ import { HandCoinsIcon } from '@/components/icons'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberExpensesResource } from '@/server'
+import { IMemberExpensesResource } from '@/types'
 import { formatNumber, toReadableDate } from '@/utils'
 
 interface Props extends IClassProps {

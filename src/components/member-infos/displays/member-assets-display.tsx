@@ -3,7 +3,7 @@ import SectionTitle from '../section-title'
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMemberAssetsResource } from '@/server'
+import { IMemberAssetsResource } from '@/types'
 import { BoxesStackedIcon } from '@/components/icons'
 import {
     Accordion,

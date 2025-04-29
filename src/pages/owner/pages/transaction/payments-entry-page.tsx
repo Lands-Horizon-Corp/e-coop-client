@@ -15,7 +15,7 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
 
-import { IAccountingLedgerResource } from '@/server/types/accounts/accounting-ledger'
+import { IAccountingLedgerResource } from '@/types/coop-types/accounts/accounting-ledger'
 
 import MemberPicker from '@/components/pickers/member-picker'
 
@@ -39,7 +39,7 @@ import {
     IPaymentsEntry,
     IPaymentsEntryRequest,
     TRANSACTION_TYPE,
-} from '@/server/types/transactions/payments-entry'
+} from '@/types/coop-types/transactions/payments-entry'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import usePaymentsShortcuts from '@/hooks/shortcut-hooks/payments-entry-shortcuts'
@@ -49,7 +49,7 @@ import {
     ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import { useCreateCheckClearing } from '@/hooks/api-hooks/transactions/use-check-clearing'
-import { ICheckClearingRequest } from '@/server/types/transactions/check-clearing'
+import { ICheckClearingRequest } from '@/types/coop-types/transactions/check-clearing'
 import { useGenerateOfficialReceipt } from '@/hooks/api-hooks/transactions/use-generate-official-receipt'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'

@@ -8,7 +8,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import SingleImageUploaderModal from '@/components/single-image-uploader/single-image-uploader-modal'
 
 import { IClassProps } from '@/types'
-import { IBranchResource } from '@/server/types'
+import { IBranchResource } from '@/types/coop-types'
 import { useUpdateBranchProfilePicture } from '@/hooks/api-hooks/use-branch'
 
 interface Props extends IClassProps {

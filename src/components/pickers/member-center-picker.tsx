@@ -14,7 +14,7 @@ import { abbreviateUUID } from '@/utils/formatting-utils'
 import { useFilteredPaginatedMemberCenters } from '@/hooks/api-hooks/member/use-member-center'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 
-import { IMemberCenterResource, TEntityId } from '@/server/types'
+import { IMemberCenterResource, TEntityId } from '@/types/coop-types'
 import {
     IMemberCenterCreateUpdateFormProps,
     MemberCenterCreateUpdateFormModal,

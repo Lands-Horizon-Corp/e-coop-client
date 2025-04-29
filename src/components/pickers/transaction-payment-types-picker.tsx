@@ -11,10 +11,10 @@ import {
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
 import useFilterState from '@/hooks/use-filter-state'
-import { TEntityId } from '@/server/types'
+import { TEntityId } from '@/types/coop-types'
 
 import { useFilteredPaginatedTransactionPaymentTypes } from '@/hooks/api-hooks/transactions/use-transaction-payment-types'
-import { ITransactionPaymentTypesResource } from '@/server/types/transactions/transaction-payment-types'
+import { ITransactionPaymentTypesResource } from '@/types/coop-types/transactions/transaction-payment-types'
 import React from 'react'
 import { DEFAULT_TRANSACTION_TYPE } from '@/validations/transactions/payments-entry'
 import useIsFocused from '../ui/use-isFocused'

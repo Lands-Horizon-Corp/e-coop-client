@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { PICKERS_SELECT_PAGE_SIZE } from '@/constants'
-import { TEntityId, IMemberOccupationResource } from '@/server/types'
+import { TEntityId, IMemberOccupationResource } from '@/types/coop-types'
 import { useFilteredPaginatedMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
 import {
     IMemberOccupationCreateUpdateFormProps,

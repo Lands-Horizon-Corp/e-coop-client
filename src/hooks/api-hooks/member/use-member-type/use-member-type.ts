@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberTypeService from '@/server/api-service/member-services/member-type/member-type-service'
+import MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 
 import {
     IAPIHook,
@@ -21,7 +21,7 @@ import {
     IMemberTypeRequest,
     IMemberTypeResource,
     IMemberTypePaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 export const memberTypeLoader = (
     memberTypeId: TEntityId,

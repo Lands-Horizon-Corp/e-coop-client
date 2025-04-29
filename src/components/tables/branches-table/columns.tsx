@@ -17,7 +17,7 @@ import DataTableMultiSelectFilter from '@/components/data-table/data-table-filte
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IBranchResource, ICompanyResource } from '@/server/types'
+import { IBranchResource, ICompanyResource } from '@/types/coop-types'
 
 type RootType = IBranchResource
 

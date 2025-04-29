@@ -25,9 +25,9 @@ import TransactionPaymentTypesTableColumns, {
 } from './columns'
 
 import { useFilteredPaginatedTransactionPaymentTypes } from '@/hooks/api-hooks/transactions/use-transaction-payment-types'
-import { TableProps } from '../../types'
-import { ITransactionPaymentTypesResource } from '@/server/types/transactions/transaction-payment-types'
-import TransactionPaymentTypesService from '@/server/api-service/transactions/transaction-payment-types'
+import { TableProps } from '@/types'
+import { ITransactionPaymentTypesResource } from '@/types/coop-types/transactions/transaction-payment-types'
+import TransactionPaymentTypesService from '@/api-service/transactions/transaction-payment-types'
 
 export interface ITransactionPaymentTypesTableProps
     extends TableProps<ITransactionPaymentTypesResource>,

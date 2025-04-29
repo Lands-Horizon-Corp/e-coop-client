@@ -7,7 +7,7 @@ import ImageDisplay from '@/components/image-display'
 import ActionTooltip from '@/components/action-tooltip'
 import SingleImageUploaderModal from '@/components/single-image-uploader/single-image-uploader-modal'
 
-import { IMediaResource, TEntityId } from '@/server'
+import { IMediaResource, TEntityId } from '@/types'
 
 export interface AvatarUploadFieldProps {
     id?: string

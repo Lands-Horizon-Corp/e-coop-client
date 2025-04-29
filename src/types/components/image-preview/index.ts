@@ -1,5 +1,5 @@
 import { MutableRefObject } from 'react'
-import { IMediaResource } from '@/server/types'
+import { IMediaResource } from '@/types/coop-types'
 
 export interface ImagePreviewProps {
     hideCloseButton?: boolean

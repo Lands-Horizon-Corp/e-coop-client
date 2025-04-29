@@ -18,7 +18,8 @@ import { ChevronDownIcon } from '../icons'
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
-import { TAccountClosureReasonType, AccountClosureReasonTypes } from '@/server'
+import { TAccountClosureReasonType } from '@/types'
+import { AccountClosureReasons } from '@/constants'
 
 interface Props {
     id?: string
@@ -36,7 +37,7 @@ const AccountClosureReasonCombobox = ({
     className,
     disabled = false,
     placeholder = 'Select Closure Reason...',
-    closureReasons = AccountClosureReasonTypes as unknown as TAccountClosureReasonType[],
+    closureReasons = AccountClosureReasons as unknown as TAccountClosureReasonType[],
     onChange,
     ...other
 }: Props) => {

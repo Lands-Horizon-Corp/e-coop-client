@@ -16,10 +16,10 @@ import {
     IFeedbackRequest,
     IFeedbackResource,
     IFeedbackPaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 import { withCatchAsync, toBase64 } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import FeedbackService from '@/server/api-service/feedback-service'
+import FeedbackService from '@/api-service/feedback-service'
 
 // Only used by path preloader
 export const feedbackLoader = (feedbackId: TEntityId) =>

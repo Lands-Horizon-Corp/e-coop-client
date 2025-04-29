@@ -16,13 +16,13 @@ import FeedbackColumns, {
     IFeedbackTableColumnProps,
 } from './column'
 
-import { TableProps } from '../types'
-import { IFeedbackResource } from '@/server/types'
+import { TableProps } from '@/types'
+import { IFeedbackResource } from '@/types/coop-types'
 
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import FeedbackService from '@/server/api-service/feedback-service'
+import FeedbackService from '@/api-service/feedback-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'

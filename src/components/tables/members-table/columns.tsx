@@ -18,7 +18,7 @@ import DataTableMultiSelectFilter from '@/components/data-table/data-table-filte
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { TAccountStatus, IMemberResource } from '@/server/types'
+import { TAccountStatus, IMemberResource } from '@/types/coop-types'
 
 export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberResource>[] =
     [

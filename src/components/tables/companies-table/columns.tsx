@@ -19,7 +19,7 @@ import DataTableMultiSelectFilter from '@/components/data-table/data-table-filte
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { ICompanyResource } from '@/server/types'
+import { ICompanyResource } from '@/types/coop-types'
 
 export const companyGlobalSearchTargets: IGlobalSearchTargets<ICompanyResource>[] =
     [

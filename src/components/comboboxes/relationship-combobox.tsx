@@ -18,7 +18,8 @@ import { ChevronDownIcon } from '../icons'
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
-import { FAMILY_RELATIONSHIP, TRelationship } from '@/server' // Assuming this is where your type and const are
+import { TRelationship } from '@/types' // Assuming this is where your type and const are
+import { FAMILY_RELATIONSHIP } from '@/constants'
 
 interface Props {
     id?: string

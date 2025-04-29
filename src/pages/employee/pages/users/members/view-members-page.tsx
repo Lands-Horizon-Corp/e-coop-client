@@ -6,7 +6,7 @@ import EnsureOwnerCompany from '@/pages/owner/components/ensure-company'
 import { MemberCreateUpdateFormModal } from '@/components/forms/member-forms/member-create-update-form'
 import MembersTableEmployeeAction from '@/components/tables/members-table/row-actions/members-table-employee-action'
 
-import { ICompanyResource } from '@/server'
+import { ICompanyResource } from '@/types'
 
 const OwnerViewMembersPage = () => {
     const [createModal, setCreateModal] = useState(false)

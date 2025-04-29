@@ -1,4 +1,4 @@
-import { IUserData } from '@/server/types'
+import { IUserData } from '@/types/coop-types'
 import VerifyContactBar from './verify-contact-bar'
 import { useRouterState } from '@tanstack/react-router'
 

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { IMemberResource } from '@/server/types'
-import { IPaymentsEntry } from '@/server/types/transactions/payments-entry'
-import { IAccountsRequest } from '@/server/types/accounts/accounts'
+import { IMemberResource } from '@/types/coop-types'
+import { IPaymentsEntry } from '@/types/coop-types/transactions/payments-entry'
+import { IAccountsRequest } from '@/types/coop-types/accounts/accounts'
 
 // Payments Data
 export interface PaymentsDataStore {

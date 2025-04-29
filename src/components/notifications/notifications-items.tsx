@@ -10,7 +10,7 @@ import { CheckIcon, OptionsIcon, TrashIcon } from '../icons'
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
-import { INotificationResource, TEntityId } from '@/server/types'
+import { INotificationResource, TEntityId } from '@/types/coop-types'
 import NotificationTypeComponent from '../notification-type'
 
 interface INotificationsItemsProps {

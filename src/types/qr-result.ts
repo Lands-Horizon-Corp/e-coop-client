@@ -1,4 +1,4 @@
-import { IQrMemberIdDataResource } from '@/server/types'
+import { IQrMemberIdDataResource } from '@/types/coop-types'
 
 // Type of QR content identifier
 export type TQrContentType = 'member-id'

@@ -1,6 +1,6 @@
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { cn } from '@/lib'
-import { IAccountsRequest } from '@/server/types/accounts/accounts'
+import { IAccountsRequest } from '@/types/coop-types/accounts/accounts'
 import { IForm } from '@/types/components'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'

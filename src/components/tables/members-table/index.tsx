@@ -22,12 +22,12 @@ import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import MemberService from '@/server/api-service/member-services/member-service'
+import MemberService from '@/api-service/member-services/member-service'
 import { useFilteredPaginatedMembers } from '@/hooks/api-hooks/member/use-member'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../types'
-import { IMemberResource } from '@/server/types'
+import { TableProps } from '@/types'
+import { IMemberResource } from '@/types/coop-types'
 
 export interface MembersTableProps
     extends TableProps<IMemberResource>,

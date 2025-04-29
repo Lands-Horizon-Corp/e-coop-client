@@ -17,7 +17,7 @@ import { CheckIcon, CloseIcon } from '@/components/icons'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import { IUserData } from '@/server'
+import { IUserData } from '@/types'
 import { userNameSchema } from '@/validations/common'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateAccountUsername } from '@/hooks/api-hooks/use-account'

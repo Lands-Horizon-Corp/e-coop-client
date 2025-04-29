@@ -32,7 +32,7 @@ import { useCreateCompany } from '@/hooks/api-hooks/use-company'
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
 import { contactNumberSchema } from '@/validations/common'
-import { ICompanyRequest, ICompanyResource } from '@/server/types'
+import { ICompanyRequest, ICompanyResource } from '@/types/coop-types'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 interface CompanyCreateFormProps

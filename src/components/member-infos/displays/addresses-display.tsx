@@ -4,7 +4,7 @@ import { MapMarkedIcon } from '@/components/icons'
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMemberAddressResource } from '@/server'
+import { IMemberAddressResource } from '@/types'
 
 interface Props extends IClassProps {
     addresses?: IMemberAddressResource[]

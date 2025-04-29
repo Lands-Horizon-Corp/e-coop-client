@@ -25,7 +25,7 @@ import CompanyLogo from '@/components/company-profile/company-logo'
 import CompanyAcceptBar from '@/pages/admin/components/company-accept-bar'
 
 import { toReadableDate } from '@/utils'
-import { IOwnerResource } from '@/server/types'
+import { IOwnerResource } from '@/types/coop-types'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { companyLoader, useDeleteCompany } from '@/hooks/api-hooks/use-company'

@@ -15,7 +15,7 @@ import { CompanyEditFormModal } from '@/components/forms/company-forms/company-e
 import EnsureOwnerCompany from '../../components/ensure-company'
 import CompanyDeleteModalContent from '../../components/company-delete-modal-description'
 
-import { ICompanyResource } from '@/server'
+import { ICompanyResource } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteCompany } from '@/hooks/api-hooks/use-company'
 

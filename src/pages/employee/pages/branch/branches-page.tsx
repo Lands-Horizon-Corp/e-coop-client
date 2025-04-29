@@ -4,7 +4,7 @@ import { BranchCreateFormModal } from '@/components/forms'
 import PageContainer from '@/components/containers/page-container'
 import OwnerBranchesTable from '@/components/tables/branches-table/owner-branches-table'
 
-import { ICompanyResource, TEntityId } from '@/server'
+import { ICompanyResource, TEntityId } from '@/types'
 import { useUserAuthStore } from '@/store/user-auth-store'
 
 const OwnerCompanyBranchesPage = () => {

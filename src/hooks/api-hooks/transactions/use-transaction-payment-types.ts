@@ -3,8 +3,8 @@ import { toBase64, withCatchAsync } from '@/utils'
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
-    IOperationCallbacks,
     IAPIPreloads,
+    IOperationCallbacks,
     IFilterPaginatedHookProps,
     IQueryProps,
 } from '../types'
@@ -12,9 +12,9 @@ import {
     ITransactionPaymentTypePaginatedResource,
     ITransactionPaymentTypesRequest,
     ITransactionPaymentTypesResource,
-} from '@/server/types/transactions/transaction-payment-types'
-import TransactionPaymentTypesService from '@/server/api-service/transactions/transaction-payment-types'
-import { TEntityId } from '@/server/types'
+} from '@/types/coop-types/transactions/transaction-payment-types'
+import TransactionPaymentTypesService from '@/api-service/transactions/transaction-payment-types'
+import { TEntityId } from '@/types/coop-types'
 
 export const useFilteredPaginatedTransactionPaymentTypes = ({
     sort,

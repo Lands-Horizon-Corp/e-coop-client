@@ -3,16 +3,16 @@ import { useQuery } from '@tanstack/react-query'
 
 import {
     TEntityId,
-    IMemberCenterHistoryPaginatedResource,
-    IMemberClassificationHistoryPaginatedResource,
-    IMemberEducationalAttainmentHistoryPaginatedResource,
     IMemberTypeHistoryPaginatedResource,
     IMemberGenderHistoryPaginatedResource,
+    IMemberCenterHistoryPaginatedResource,
     IMemberMutualFundsHistoryPaginatedResource,
-} from '@/server'
+    IMemberClassificationHistoryPaginatedResource,
+    IMemberEducationalAttainmentHistoryPaginatedResource,
+} from '@/types'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberCenterHistoryService from '@/server/api-service/member-services/member-history-services'
+import MemberCenterHistoryService from '@/api-service/member-services/member-history-services'
 
 import { IAPIFilteredPaginatedHook, IQueryProps } from '../types'
 

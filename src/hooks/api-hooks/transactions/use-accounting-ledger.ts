@@ -6,7 +6,7 @@ import { serverRequestErrExtractor } from '@/helpers'
 import {
     IAccountingLedgerPaginatedResource,
     IAccountingLedgerResource,
-} from '@/server/types/accounts/accounting-ledger'
+} from '@/types/coop-types/accounts/accounting-ledger'
 import {
     IAPIHook,
     IAPIPreloads,
@@ -14,8 +14,8 @@ import {
     IOperationCallbacks,
     IQueryProps,
 } from '../types'
-import { TEntityId } from '@/server'
-import AccountingLedgerService from '@/server/api-service/transactions/accounting-ledger-service'
+import { TEntityId } from '@/types'
+import AccountingLedgerService from '@/api-service/transactions/accounting-ledger-service'
 
 export const useCreateAccountingLedger = ({
     preloads = [],

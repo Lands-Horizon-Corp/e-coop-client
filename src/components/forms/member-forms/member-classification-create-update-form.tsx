@@ -24,7 +24,7 @@ import {
     IMemberClassificationRequest,
     IMemberClassificationResource,
     TEntityId,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 type TMemberClassificationForm = z.infer<typeof memberClassificationSchema>
 

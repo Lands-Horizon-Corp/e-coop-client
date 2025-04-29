@@ -18,7 +18,7 @@ import {
     PAGINATION_INITIAL_INDEX,
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
-import { ICompanyResource, TEntityId } from '@/server/types'
+import { ICompanyResource, TEntityId } from '@/types/coop-types'
 import useFilterState from '@/hooks/use-filter-state'
 
 interface Props {

@@ -14,7 +14,7 @@ import { DetailsIcon, HandCoinsIcon, PieChartIcon, UserTagIcon } from '../icons'
 import { cn } from '@/lib'
 import { IBaseProps } from '@/types'
 import { useBranch } from '@/hooks/api-hooks/use-branch'
-import { IMemberProfileResource, TEntityId } from '@/server'
+import { IMemberProfileResource, TEntityId } from '@/types'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 interface Props extends IBaseProps {

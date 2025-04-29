@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { IMediaResource } from '@/server/types'
+import { IMediaResource } from '@/types/coop-types'
 
 interface ImagePreviewState {
     isOpen: boolean

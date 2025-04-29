@@ -17,7 +17,7 @@ import useFilterState from '@/hooks/use-filter-state'
 import { TFilterObject } from '@/contexts/filter-context'
 
 import { IClassProps } from '@/types'
-import { IMemberTypeResource, TEntityId } from '@/server/types'
+import { IMemberTypeResource, TEntityId } from '@/types/coop-types'
 
 interface MemberTypeSelectProps extends IClassProps {
     value?: TEntityId

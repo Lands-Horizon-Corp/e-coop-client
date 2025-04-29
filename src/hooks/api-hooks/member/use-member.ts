@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberService from '@/server/api-service/member-services/member-service'
+import MemberService from '@/api-service/member-services/member-service'
 
 import {
     TEntityId,
@@ -17,7 +17,7 @@ import {
     IMemberResource,
     IMemberPaginatedResource,
     IMemberRequestNoPassword,
-} from '@/server/types'
+} from '@/types/coop-types'
 import {
     IAPIHook,
     IQueryProps,

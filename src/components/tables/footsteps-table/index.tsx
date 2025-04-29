@@ -17,9 +17,9 @@ import footstepColumns, {
 } from './columns'
 
 import { cn } from '@/lib'
-import { TableProps } from '../types'
-import { IFootstepResource } from '@/server/types'
-import FootstepService from '@/server/api-service/footstep-service'
+import { TableProps } from '@/types'
+import { IFootstepResource } from '@/types/coop-types'
+import FootstepService from '@/api-service/footstep-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 
 import { usePagination } from '@/hooks/use-pagination'

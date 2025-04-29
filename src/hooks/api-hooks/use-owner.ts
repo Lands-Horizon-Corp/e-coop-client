@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import OwnerService from '@/server/api-service/owner-service'
+import OwnerService from '@/api-service/owner-service'
 
 import {
     IAPIPreloads,
@@ -17,7 +17,7 @@ import {
     IOwnerPaginatedResource,
     IBranchPaginatedResource,
     TEntityId,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 // Load Specific owner by ID
 export const useOwner = ({

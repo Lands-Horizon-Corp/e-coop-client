@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button'
 import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
-import { TEntityId } from '@/server'
+import { TEntityId } from '@/types'
 
 import useFilterState from '@/hooks/use-filter-state'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedAccounts } from '@/hooks/api-hooks/accounting/use-accounting'
-import { IAccountsResource } from '@/server/types/accounts/accounts'
+import { IAccountsResource } from '@/types/coop-types/accounts/accounts'
 
 interface Props {
     value?: TEntityId

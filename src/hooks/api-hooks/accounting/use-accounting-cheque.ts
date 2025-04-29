@@ -3,18 +3,18 @@ import { toBase64, withCatchAsync } from '@/utils'
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
-    IOperationCallbacks,
     IAPIPreloads,
-    IFilterPaginatedHookProps,
     IQueryProps,
+    IOperationCallbacks,
+    IFilterPaginatedHookProps,
 } from '../types'
 import {
-    IChequePaginatedResource,
     IChequeResource,
     IChequeResponse,
-} from '@/server/types/cheque'
-import ChequeService from '@/server/api-service/accounting-services/accounting-cheque'
-import { TEntityId } from '@/server/types'
+    IChequePaginatedResource,
+} from '@/types/coop-types/cheque'
+import { TEntityId } from '@/types/coop-types'
+import ChequeService from '@/api-service/accounting-services/accounting-cheque'
 
 export const useFilteredPaginatedCheques = ({
     sort,

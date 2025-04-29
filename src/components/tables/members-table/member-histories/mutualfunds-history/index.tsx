@@ -23,9 +23,12 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../../../types'
+import { TableProps } from '@/types'
 import { PAGE_SIZES_SMALL } from '@/constants'
-import { IMemberMutualFundsHistoryResource, TEntityId } from '@/server/types'
+import {
+    IMemberMutualFundsHistoryResource,
+    TEntityId,
+} from '@/types/coop-types'
 import { useMemberMutualFundsHistory } from '@/hooks/api-hooks/member/use-member-history'
 
 export interface MemberMutualFundsHistoryTableProps

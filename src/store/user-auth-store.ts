@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { IUserData } from '@/server'
+import { IUserData } from '@/types'
 
 type TAuthStoreStatus = 'loading' | 'authorized' | 'unauthorized' | 'error'
 

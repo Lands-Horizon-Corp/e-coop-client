@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import BankService from '@/server/api-service/bank-service'
+import BankService from '@/api-service/bank-service'
 
 import {
     IAPIHook,
@@ -15,8 +15,8 @@ import {
     IBankPaginatedResource,
     IBankRequest,
     IBankResponse,
-} from '@/server/types/bank'
-import { TEntityId } from '@/server'
+} from '@/types/coop-types/bank'
+import { TEntityId } from '@/types'
 
 export const useCreateBank = ({
     showMessage = true,

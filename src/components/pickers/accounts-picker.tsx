@@ -11,8 +11,8 @@ import {
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
 import useFilterState from '@/hooks/use-filter-state'
-import { TEntityId } from '@/server/types'
-import { IAccountsResource } from '@/server/types/accounts/accounts'
+import { TEntityId } from '@/types/coop-types'
+import { IAccountsResource } from '@/types/coop-types/accounts/accounts'
 import { useFilteredPaginatedAccounts } from '@/hooks/api-hooks/accounting/use-accounting'
 import useIsFocused from '../ui/use-isFocused'
 import { useShortcut } from '../use-shorcuts'

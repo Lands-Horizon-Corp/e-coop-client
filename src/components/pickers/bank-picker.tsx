@@ -11,8 +11,8 @@ import {
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
 import useFilterState from '@/hooks/use-filter-state'
-import { TEntityId } from '@/server/types'
-import { IBankResponse } from '@/server/types/bank'
+import { TEntityId } from '@/types/coop-types'
+import { IBankResponse } from '@/types/coop-types/bank'
 import { useFilteredPaginatedBanks } from '@/hooks/api-hooks/use-bank'
 import { useShortcut } from '../use-shorcuts'
 import useIsFocused from '../ui/use-isFocused'

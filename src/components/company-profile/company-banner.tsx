@@ -7,7 +7,7 @@ import { CalendarIcon, LocationPinIcon, TelephoneIcon } from '../icons'
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { ICompanyResource } from '@/server'
+import { ICompanyResource } from '@/types'
 
 interface Props extends IClassProps {
     company: ICompanyResource

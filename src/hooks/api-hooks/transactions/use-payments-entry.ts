@@ -1,5 +1,5 @@
-import PaymentsEntryService from '@/server/api-service/transactions/payments-entry-service'
-import { IPaymentsEntryRequest } from '@/server/types/transactions/payments-entry'
+import PaymentsEntryService from '@/api-service/transactions/payments-entry-service'
+import { IPaymentsEntryRequest } from '@/types/coop-types/transactions/payments-entry'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 

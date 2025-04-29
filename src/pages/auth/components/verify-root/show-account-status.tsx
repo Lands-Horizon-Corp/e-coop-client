@@ -6,7 +6,7 @@ import { WarningCircleIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { HELP_CONTACT } from '@/constants'
-import { IUserData } from '@/server/types'
+import { IUserData } from '@/types/coop-types'
 import { getUsersAccountTypeRedirectPage } from '@/helpers'
 
 interface Props {

@@ -34,7 +34,7 @@ import { useUpdateCompany } from '@/hooks/api-hooks/use-company'
 
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
-import { ICompanyResource, TEntityId } from '@/server/types'
+import { ICompanyResource, TEntityId } from '@/types/coop-types'
 
 type TCompanyBasicInfo = Omit<ICompanyResource, 'owner' | 'media' | 'branches'>
 

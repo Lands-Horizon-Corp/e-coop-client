@@ -7,7 +7,7 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 import ImageDisplay from '@/components/image-display'
-import { IMemberJointAccountsResource } from '@/server'
+import { IMemberJointAccountsResource } from '@/types'
 import SectionTitle from '../section-title'
 import { HandShakeHeartIcon } from '@/components/icons'
 

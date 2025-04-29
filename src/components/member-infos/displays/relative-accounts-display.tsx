@@ -7,7 +7,7 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 
-import { IMemberRelativeAccountsResource } from '@/server'
+import { IMemberRelativeAccountsResource } from '@/types'
 import ImageDisplay from '@/components/image-display'
 import CopyTextButton from '@/components/copy-text-button'
 import SectionTitle from '../section-title'

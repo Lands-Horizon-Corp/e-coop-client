@@ -1,5 +1,5 @@
-import CheckClearingService from '@/server/api-service/transactions/check-clearing-service'
-import { ICheckClearingRequest } from '@/server/types/transactions/check-clearing'
+import CheckClearingService from '@/api-service/transactions/check-clearing-service'
+import { ICheckClearingRequest } from '@/types/coop-types/transactions/check-clearing'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 

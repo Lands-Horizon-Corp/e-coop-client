@@ -7,7 +7,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IAccountingLedgerResource } from '@/server/types/accounts/accounting-ledger'
+import { IAccountingLedgerResource } from '@/types/coop-types/accounts/accounting-ledger'
 
 export const accountingLedgerGlobalSearchTargets: IGlobalSearchTargets<IAccountingLedgerResource>[] =
     [

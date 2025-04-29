@@ -11,7 +11,7 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IMemberClassificationResource } from '@/server/types'
+import { IMemberClassificationResource } from '@/types/coop-types'
 
 export const memberClassificationGlobalSearchTargets: IGlobalSearchTargets<IMemberClassificationResource>[] =
     [

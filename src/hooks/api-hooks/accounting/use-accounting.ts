@@ -3,18 +3,18 @@ import { toBase64, withCatchAsync } from '@/utils'
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import {
-    IOperationCallbacks,
-    IAPIPreloads,
-    IFilterPaginatedHookProps,
     IQueryProps,
+    IAPIPreloads,
+    IOperationCallbacks,
+    IFilterPaginatedHookProps,
 } from '../types'
+import { TEntityId } from '@/types'
 import {
     IAccountsPaginatedResource,
     IAccountsRequest,
     IAccountsResource,
-} from '@/server/types/accounts/accounts'
-import AccountsService from '@/server/api-service/accounting-services/accounts-service'
-import { TEntityId } from '@/server'
+} from '@/types/coop-types/accounts/accounts'
+import AccountsService from '@/api-service/accounting-services/accounts-service'
 
 export const useFilteredPaginatedAccounts = ({
     sort,

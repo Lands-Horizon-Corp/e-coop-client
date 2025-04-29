@@ -19,7 +19,7 @@ import {
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib'
-import { IUserData } from '@/server'
+import { IUserData } from '@/types'
 import { otpSchema } from '@/validations'
 import UseCooldown from '@/hooks/use-cooldown'
 import {

@@ -9,7 +9,7 @@ import {
 
 import SectionTitle from '../section-title'
 import { UsersAddIcon } from '@/components/icons'
-import { IMemberRecruitsResource } from '@/server'
+import { IMemberRecruitsResource } from '@/types'
 import ImageDisplay from '@/components/image-display'
 import CopyTextButton from '@/components/copy-text-button'
 import { toReadableDate } from '@/utils'

@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import BranchService from '@/server/api-service/branch-service'
+import BranchService from '@/api-service/branch-service'
 
 import {
     TEntityId,
@@ -16,7 +16,7 @@ import {
     IBranchRequest,
     IBranchResource,
     IBranchPaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 import {
     IAPIHook,
     IQueryProps,

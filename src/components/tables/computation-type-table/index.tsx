@@ -19,7 +19,7 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../types'
+import { TableProps } from '@/types'
 import AccountsComputationTypeTableColumns, {
     accountComputationTypeGlobalSearchTargets,
     IAccountsComputationTypeTableColumnProps,
@@ -28,9 +28,9 @@ import AccountsComputationTypeTableColumns, {
 import {
     dummyAccountComputationTypeData,
     IAccountsComputationTypeResource,
-} from '@/server/types/accounts/computation-type'
+} from '@/types/coop-types/accounts/computation-type'
 import { useFilteredPaginatedComputationTypes } from '@/hooks/api-hooks/accounting/use-computation-type'
-import ComputationTypeService from '@/server/api-service/accounting-services/computation-type-service'
+import ComputationTypeService from '@/api-service/accounting-services/computation-type-service'
 
 export interface AccountsComputationTypeTableProps
     extends TableProps<IAccountsComputationTypeResource>,

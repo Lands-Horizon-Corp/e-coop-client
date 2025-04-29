@@ -30,7 +30,7 @@ import {
     IPaymentsEntry,
     IPaymentsEntryRequest,
     TRANSACTION_TYPE,
-} from '@/server/types/transactions/payments-entry'
+} from '@/types/coop-types/transactions/payments-entry'
 import { TPaymentFormValues } from './payments-entry-form'
 
 import {
@@ -45,7 +45,7 @@ import {
 } from '@/components/ui/table'
 import { useCallback, useState } from 'react'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
-import { IBankResponse } from '@/server/types/bank'
+import { IBankResponse } from '@/types/coop-types/bank'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
     base64ImagetoFile,

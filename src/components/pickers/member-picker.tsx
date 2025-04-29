@@ -14,7 +14,7 @@ import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedMembers } from '@/hooks/api-hooks/member/use-member'
 
-import { IMemberResource, TEntityId } from '@/server/types'
+import { IMemberResource, TEntityId } from '@/types/coop-types'
 
 import { useMemberPickerStore } from '@/store/use-member-picker-state-store'
 import { useShortcut } from '../use-shorcuts'

@@ -5,7 +5,7 @@ import { IChildProps } from '@/types'
 import { useAuthUser } from '@/store/user-auth-store'
 import { useOwnerCompany } from '@/hooks/api-hooks/use-owner'
 import { IOperationCallbacks } from '@/hooks/api-hooks/types'
-import { ICompanyResource, IOwnerResource, TEntityId } from '@/server'
+import { ICompanyResource, IOwnerResource, TEntityId } from '@/types'
 
 interface Props extends IChildProps, IOperationCallbacks<ICompanyResource> {
     disabled?: boolean

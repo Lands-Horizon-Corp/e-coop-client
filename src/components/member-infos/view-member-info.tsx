@@ -21,7 +21,7 @@ import MemberGovernmentBenefits from './member-government-benefits-info'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberProfileResource, TEntityId } from '@/server'
+import { IMemberProfileResource, TEntityId } from '@/types'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 

@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import ProfileService from '@/server/api-service/profile-service'
+import ProfileService from '@/api-service/profile-service'
 
 import {
     IUserData,
@@ -13,7 +13,7 @@ import {
     IChangeUsernameRequest,
     IAccountSettingRequest,
     IChangeContactNumberRequest,
-} from '@/server/types'
+} from '@/types/coop-types'
 import { IOperationCallbacks } from './types'
 
 // Hook: Upload Profile Picture

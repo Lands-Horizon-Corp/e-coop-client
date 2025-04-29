@@ -18,11 +18,11 @@ import branchColumns, {
 
 import { cn } from '@/lib'
 import useFilterState from '@/hooks/use-filter-state'
-import BranchService from '@/server/api-service/branch-service'
+import BranchService from '@/api-service/branch-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 
-import { TableProps } from '../types'
-import { IBranchResource } from '@/server/types'
+import { TableProps } from '@/types'
+import { IBranchResource } from '@/types/coop-types'
 
 import { usePagination } from '@/hooks/use-pagination'
 import { useFilteredPaginatedBranch } from '@/hooks/api-hooks/use-branch'

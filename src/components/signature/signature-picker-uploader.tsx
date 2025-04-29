@@ -7,7 +7,7 @@ import FileItem from '../uploaders/file-item'
 import Modal, { IModalProps } from '../modals/modal'
 import LoadingSpinner from '../spinners/loading-spinner'
 
-import { IMediaResource } from '@/server'
+import { IMediaResource } from '@/types'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
 
 interface Props {

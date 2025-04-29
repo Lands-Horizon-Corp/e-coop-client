@@ -8,7 +8,7 @@ import {
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
-import { ICompanyResource } from '@/server'
+import { ICompanyResource } from '@/types'
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {

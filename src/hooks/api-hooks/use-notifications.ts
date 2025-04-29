@@ -11,7 +11,7 @@ import {
 import { withCatchAsync } from '@/utils'
 import { IOperationCallbacks } from './types'
 import { serverRequestErrExtractor } from '@/helpers'
-import { INotificationResource } from '@/server/types'
+import { INotificationResource } from '@/types/coop-types'
 
 type Role = any
 

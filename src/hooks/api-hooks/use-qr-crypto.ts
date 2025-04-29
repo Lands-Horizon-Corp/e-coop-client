@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import { IMutationProps, IOperationCallbacks } from './types'
-import QrCryptoService from '@/server/api-service/qr-crypto-service'
+import QrCryptoService from '@/api-service/qr-crypto-service'
 
 export const useQrDecryptData = <TResult = unknown>({
     showMessage,

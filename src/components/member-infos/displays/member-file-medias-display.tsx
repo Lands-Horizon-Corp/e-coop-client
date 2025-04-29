@@ -19,7 +19,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMediaResource, TEntityId } from '@/server'
+import { IMediaResource, TEntityId } from '@/types'
 import { downloadFile, formatBytes } from '@/helpers'
 import { usePagination } from '@/hooks/use-pagination'
 import { useMemberMedias } from '@/hooks/api-hooks/member/use-member'

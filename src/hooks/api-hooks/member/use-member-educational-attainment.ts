@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberEducationalAttainmentService from '@/server/api-service/member-services/member-educational-attainment-service'
+import MemberEducationalAttainmentService from '@/api-service/member-services/member-educational-attainment-service'
 
 import {
     IAPIHook,
@@ -22,7 +22,7 @@ import {
     IMemberEducationalAttainmentRequest,
     IMemberEducationalAttainmentResource,
     IMemberEducationalAttainmentPaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 export const memberEducationalAttainmentLoader = (
     attainmentId: TEntityId,

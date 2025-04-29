@@ -10,7 +10,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { ITransactionPaymentTypesResource } from '@/server/types/transactions/transaction-payment-types'
+import { ITransactionPaymentTypesResource } from '@/types/coop-types/transactions/transaction-payment-types'
 
 export const transactionTypeGlobalSearchTargets: IGlobalSearchTargets<ITransactionPaymentTypesResource>[] =
     [

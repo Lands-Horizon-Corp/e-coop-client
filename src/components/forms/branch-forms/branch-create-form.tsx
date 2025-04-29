@@ -28,7 +28,7 @@ import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
 import { contactNumberSchema } from '@/validations/common'
 import { useCreateBranch } from '@/hooks/api-hooks/use-branch'
-import { IBranchResource, ICompanyRequest } from '@/server/types'
+import { IBranchResource, ICompanyRequest } from '@/types/coop-types'
 
 type TBranchBasicInfo = Partial<ICompanyRequest>
 

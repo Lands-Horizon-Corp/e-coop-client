@@ -2,7 +2,7 @@ import MemberIncomeDisplay from './displays/member-income-display'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberProfileResource, TEntityId } from '@/server'
+import { IMemberProfileResource, TEntityId } from '@/types'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import MemberAssetsDisplay from './displays/member-assets-display'
 import MemberExpensesDisplay from './displays/member-expenses-display'

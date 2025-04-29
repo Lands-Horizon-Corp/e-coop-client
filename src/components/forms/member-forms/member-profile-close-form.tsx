@@ -19,7 +19,7 @@ import { Form, FormControl, FormItem } from '@/components/ui/form'
 import AccountClosureReasonCombobox from '@/components/comboboxes/closure-reasons-combobox'
 
 import { cn } from '@/lib'
-import { TEntityId } from '@/server'
+import { TEntityId } from '@/types'
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
 import useConfirmModalStore from '@/store/confirm-modal-store'

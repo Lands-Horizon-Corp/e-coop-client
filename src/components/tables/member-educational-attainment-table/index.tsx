@@ -25,9 +25,9 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../types'
-import { IMemberEducationalAttainmentResource } from '@/server/types'
-import MemberEducationalAttainmentService from '@/server/api-service/member-services/member-educational-attainment-service'
+import { TableProps } from '@/types'
+import { IMemberEducationalAttainmentResource } from '@/types/coop-types'
+import MemberEducationalAttainmentService from '@/api-service/member-services/member-educational-attainment-service'
 import { useFilteredPaginatedMemberEducationalAttainments } from '@/hooks/api-hooks/member/use-member-educational-attainment'
 
 export interface MemberEducationalAttainmentTableProps

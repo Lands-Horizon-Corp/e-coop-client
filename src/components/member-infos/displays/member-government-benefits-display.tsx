@@ -10,7 +10,7 @@ import ImageDisplay from '@/components/image-display'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberGovernmentBenefitsResource } from '@/server'
+import { IMemberGovernmentBenefitsResource } from '@/types'
 import { toReadableDate } from '@/utils'
 interface IGovernmentCardDisplay
     extends IClassProps,

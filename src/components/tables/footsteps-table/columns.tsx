@@ -10,7 +10,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils/date-utils'
-import { IFootstepResource, IUserBase } from '@/server/types'
+import { IFootstepResource, IUserBase } from '@/types/coop-types'
 
 export const footstepGlobalSearchTargets: IGlobalSearchTargets<IFootstepResource>[] =
     [

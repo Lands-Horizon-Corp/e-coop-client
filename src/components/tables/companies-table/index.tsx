@@ -20,14 +20,14 @@ import companyColumns, {
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import CompanyService from '@/server/api-service/company-service'
+import CompanyService from '@/api-service/company-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useFilteredPaginatedCompanies } from '@/hooks/api-hooks/use-company'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../types'
-import { ICompanyResource } from '@/server/types'
+import { TableProps } from '@/types'
+import { ICompanyResource } from '@/types/coop-types'
 
 export interface CompaniesTableProps
     extends TableProps<ICompanyResource>,

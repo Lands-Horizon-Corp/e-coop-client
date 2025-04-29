@@ -12,7 +12,7 @@ import {
 } from './icons'
 
 import { cn } from '@/lib'
-import { IMediaResource } from '@/server'
+import { IMediaResource } from '@/types'
 import { IClassProps } from '@/types'
 import { getFileCategory } from '@/helpers'
 

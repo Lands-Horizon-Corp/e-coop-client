@@ -12,7 +12,7 @@ import {
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IBranchResource } from '@/server'
+import { IBranchResource } from '@/types'
 
 interface Props extends IClassProps {
     branch: IBranchResource

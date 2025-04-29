@@ -1,5 +1,5 @@
 import { useShortcut } from '@/components/use-shorcuts'
-import { IPaymentsEntry } from '@/server/types/transactions/payments-entry'
+import { IPaymentsEntry } from '@/types/coop-types/transactions/payments-entry'
 import { PaymentsDataStore } from '@/store/transaction/payments-entry-store'
 import { useMemo } from 'react'
 

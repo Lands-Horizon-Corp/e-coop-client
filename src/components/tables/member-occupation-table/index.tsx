@@ -18,11 +18,11 @@ import useDatableFilterState from '@/hooks/use-filter-state'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import MemberOccupationService from '@/server/api-service/member-services/member-occupation-service'
+import MemberOccupationService from '@/api-service/member-services/member-occupation-service'
 import { useFilteredPaginatedMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
 
-import { TableProps } from '../types'
-import { IMemberOccupationResource } from '@/server/types'
+import { TableProps } from '@/types'
+import { IMemberOccupationResource } from '@/types/coop-types'
 
 import memberOccupationColumns, {
     IMemberOccupationTableColumnProps,

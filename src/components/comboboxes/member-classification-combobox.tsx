@@ -23,7 +23,7 @@ import {
     MemberClassificationCreateUpdateFormModal,
 } from '../forms/member-forms/member-classification-create-update-form'
 
-import { TEntityId, IMemberClassificationResource } from '@/server/types'
+import { TEntityId, IMemberClassificationResource } from '@/types/coop-types'
 import { useFilteredPaginatedMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
 
 export interface IMemberClassificationComboboxCreateProps

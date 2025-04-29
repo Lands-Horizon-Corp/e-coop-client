@@ -8,14 +8,14 @@ import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sort
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { usePagination } from '@/hooks/use-pagination'
 import { cn } from '@/lib'
-import { IAccountsResource } from '@/server/types/accounts/accounts'
+import { IAccountsResource } from '@/types/coop-types/accounts/accounts'
 import {
     useReactTable,
     getCoreRowModel,
     getSortedRowModel,
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { TableProps } from '../types'
+import { TableProps } from '@/types'
 import useDatableFilterState from '@/hooks/use-filter-state'
 
 import accountTableColumns, {
@@ -24,7 +24,7 @@ import accountTableColumns, {
 } from './columns'
 import { useQueryClient } from '@tanstack/react-query'
 import { useFilteredPaginatedAccounts } from '@/hooks/api-hooks/accounting/use-accounting'
-import AccountsService from '@/server/api-service/accounting-services/accounts-service'
+import AccountsService from '@/api-service/accounting-services/accounts-service'
 
 export interface AccountsTableProps
     extends TableProps<IAccountsResource>,

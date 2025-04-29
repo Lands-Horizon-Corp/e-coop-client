@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import FootstepService from '@/server/api-service/footstep-service'
+import FootstepService from '@/api-service/footstep-service'
 
 import { IFilterPaginatedHookProps } from './types'
-import { IFootstepPaginatedResource } from '@/server/types'
+import { IFootstepPaginatedResource } from '@/types/coop-types'
 
 export const useFilteredPaginatedFootsteps = ({
     sort,

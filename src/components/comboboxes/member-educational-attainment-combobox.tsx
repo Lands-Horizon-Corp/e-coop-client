@@ -21,7 +21,10 @@ import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { MemberEducationalAttainmentCreateUpdateFormModal } from '../forms/member-forms/member-educational-attainment-create-update-form'
 
-import { TEntityId, IMemberEducationalAttainmentResource } from '@/server/types'
+import {
+    TEntityId,
+    IMemberEducationalAttainmentResource,
+} from '@/types/coop-types'
 import { useFilteredPaginatedMemberEducationalAttainments } from '@/hooks/api-hooks/member/use-member-educational-attainment'
 import { IMemberEducationalAttainmentCreateUpdateFormProps } from '../forms/member-forms/member-educational-attainment-create-update-form'
 

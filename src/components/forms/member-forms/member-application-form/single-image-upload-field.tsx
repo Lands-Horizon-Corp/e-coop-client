@@ -7,7 +7,7 @@ import { ImageIcon, TrashIcon } from '@/components/icons'
 import { SingleImageUploaderModal } from '@/components/uploaders/single-image-uploader'
 
 import { formatBytes } from '@/helpers'
-import { IMediaResource, TEntityId } from '@/server'
+import { IMediaResource, TEntityId } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 import { IconType } from 'react-icons/lib'
 

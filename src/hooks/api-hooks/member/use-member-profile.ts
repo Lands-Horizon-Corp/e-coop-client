@@ -4,13 +4,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 
-import { IMemberCloseRemarkRequest, TEntityId } from '@/server'
 import {
     IMemberProfileRequest,
     IMemberProfileResource,
-} from '@/server/types/member/member-profile'
+} from '@/types/coop-types/member/member-profile'
+import { IMemberCloseRemarkRequest, TEntityId } from '@/types'
 import { IAPIHook, IMutationProps, IQueryProps } from '../types'
-import MemberProfileService from '@/server/api-service/member-services/member-profile-service'
+import MemberProfileService from '@/api-service/member-services/member-profile-service'
 
 export const useCreateMemberProfile = ({
     showMessage = true,

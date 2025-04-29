@@ -9,7 +9,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IFeedbackResource } from '@/server/types'
+import { IFeedbackResource } from '@/types/coop-types'
 
 export const FeedbackGlobalSearchTargets: IGlobalSearchTargets<IFeedbackResource>[] =
     [

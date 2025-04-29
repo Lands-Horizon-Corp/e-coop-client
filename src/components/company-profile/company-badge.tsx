@@ -2,7 +2,7 @@ import { BadgeCheckFillIcon, BadgeQuestionFillIcon } from '../icons'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { ICompanyResource } from '@/server'
+import { ICompanyResource } from '@/types'
 
 interface Props extends IClassProps {
     company: ICompanyResource

@@ -1,8 +1,8 @@
-import { IGenerateORNumberResource } from '@/server/types/transactions/generate-or-number'
+import { IGenerateORNumberResource } from '@/types/coop-types/transactions/generate-or-number'
 import { IAPIHook } from '../types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { withCatchAsync } from '@/utils'
-import OfficialReceiptService from '@/server/api-service/transactions/generate-or-number-service'
+import OfficialReceiptService from '@/api-service/transactions/generate-or-number-service'
 import { toast } from 'sonner'
 
 export const useGenerateOfficialReceipt = ({

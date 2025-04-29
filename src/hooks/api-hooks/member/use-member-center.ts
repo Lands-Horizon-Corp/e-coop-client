@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberCenterService from '@/server/api-service/member-services/member-center-service'
+import MemberCenterService from '@/api-service/member-services/member-center-service'
 
 import {
     IAPIHook,
@@ -21,7 +21,7 @@ import {
     IMemberCenterRequest,
     IMemberCenterResource,
     IMemberCenterPaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 export const memberCenterLoader = (
     memberCenterId: TEntityId,

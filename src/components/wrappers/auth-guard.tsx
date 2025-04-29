@@ -11,9 +11,9 @@ import {
 } from '@/components/icons'
 
 import { cn } from '@/lib'
-import { IUserData } from '@/server/types'
+import { IUserData } from '@/types/coop-types'
 import { IBaseProps, TPageType } from '@/types'
-import { TAccountType } from '@/server/types'
+import { TAccountType } from '@/types/coop-types'
 import { useUserAuthStore } from '@/store/user-auth-store'
 import { isUserHasUnverified, isUserUnverified } from '@/helpers'
 

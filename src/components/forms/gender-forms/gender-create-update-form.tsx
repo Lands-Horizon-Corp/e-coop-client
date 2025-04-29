@@ -17,7 +17,7 @@ import { createGenderSchema } from '@/validations/form-validation/gender-schema'
 
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
-import { IGenderRequest, IGenderResource, TEntityId } from '@/server/types'
+import { IGenderRequest, IGenderResource, TEntityId } from '@/types/coop-types'
 
 type TGenderFormValues = z.infer<typeof createGenderSchema>
 

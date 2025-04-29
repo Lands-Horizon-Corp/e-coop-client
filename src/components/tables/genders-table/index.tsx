@@ -20,14 +20,14 @@ import genderTableColumns, {
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import GenderService from '@/server/api-service/gender-service'
+import GenderService from '@/api-service/gender-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/use-gender'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../types'
-import { IGenderResource } from '@/server/types'
+import { TableProps } from '@/types'
+import { IGenderResource } from '@/types/coop-types'
 
 export interface GenderTableProps
     extends TableProps<IGenderResource>,

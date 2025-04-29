@@ -37,7 +37,7 @@ import { signUpSchema } from '@/validations/form-validation/sign-up-schema'
 
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
-import { ISignUpRequest, IUserData } from '@/server'
+import { ISignUpRequest, IUserData } from '@/types'
 import { useSignUp } from '@/hooks/api-hooks/use-auth'
 
 type TSignUpForm = z.infer<typeof signUpSchema>

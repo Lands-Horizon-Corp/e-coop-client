@@ -5,7 +5,7 @@ import PageContainer from '@/components/containers/page-container'
 
 import EnsureOwnerCompany from '../../../components/ensure-company'
 
-import { ICompanyResource, TEntityId } from '@/server'
+import { ICompanyResource, TEntityId } from '@/types'
 import { useUserAuthStore } from '@/store/user-auth-store'
 import OwnerBranchesTable from '@/components/tables/branches-table/owner-branches-table'
 

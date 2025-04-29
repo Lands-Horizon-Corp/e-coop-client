@@ -1,4 +1,5 @@
 export * from './map'
 export * from './form'
+export * from './table'
 export * from './commons'
 export * from './image-preview'

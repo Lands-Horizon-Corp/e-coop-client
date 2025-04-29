@@ -6,8 +6,8 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 
-import { IMediaResource, TEntityId } from '@/server/types'
-import MediaService from '@/server/api-service/media-service'
+import { IMediaResource, TEntityId } from '@/types/coop-types'
+import MediaService from '@/api-service/media-service'
 
 const UploadPage = () => {
     const [files, setFiles] = useState<File[]>([])

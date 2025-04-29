@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 
-import { ICompanyResource } from '@/server'
+import { ICompanyResource } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useApproveCompany } from '@/hooks/api-hooks/use-company'
 import LoadingSpinner from '@/components/spinners/loading-spinner'

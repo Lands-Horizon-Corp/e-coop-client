@@ -22,7 +22,7 @@ import {
     TEntityId,
     IMemberOccupationRequest,
     IMemberOccupationResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 export const createMemberOccupationSchema = z.object({
     name: z.string().min(1, { message: 'Name is required' }).trim(),

@@ -24,9 +24,9 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../types'
-import { IMemberCenterResource } from '@/server/types'
-import MemberCenterService from '@/server/api-service/member-services/member-center-service'
+import { TableProps } from '@/types'
+import { IMemberCenterResource } from '@/types/coop-types'
+import MemberCenterService from '@/api-service/member-services/member-center-service'
 import { useFilteredPaginatedMemberCenters } from '@/hooks/api-hooks/member/use-member-center'
 
 export interface MemberCenterTableProps

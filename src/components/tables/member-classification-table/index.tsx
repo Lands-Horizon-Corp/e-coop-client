@@ -24,9 +24,9 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '../types'
-import { IMemberClassificationResource } from '@/server/types'
-import MemberClassificationService from '@/server/api-service/member-services/member-classification-service'
+import { TableProps } from '@/types'
+import { IMemberClassificationResource } from '@/types/coop-types'
+import MemberClassificationService from '@/api-service/member-services/member-classification-service'
 import { useFilteredPaginatedMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
 
 const MemberClassificationTable = ({

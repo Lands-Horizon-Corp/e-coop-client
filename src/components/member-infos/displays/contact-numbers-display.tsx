@@ -11,7 +11,7 @@ import { TelephoneIcon } from '@/components/icons'
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMemberContactNumberReferencesResource } from '@/server'
+import { IMemberContactNumberReferencesResource } from '@/types'
 
 interface Props extends IClassProps {
     contactNumbers?: IMemberContactNumberReferencesResource[]

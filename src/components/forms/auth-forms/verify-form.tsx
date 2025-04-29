@@ -24,7 +24,7 @@ import ResendVerifyContactButton from '../../../pages/auth/components/resend-ver
 import { cn } from '@/lib/utils'
 import { otpSchema } from '@/validations'
 
-import { IUserData } from '@/server/types'
+import { IUserData } from '@/types/coop-types'
 import { IForm } from '@/types/components'
 import { useVerify } from '@/hooks/api-hooks/use-auth'
 

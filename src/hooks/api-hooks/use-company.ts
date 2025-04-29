@@ -22,8 +22,8 @@ import {
     ICompanyRequest,
     ICompanyResource,
     ICompanyPaginatedResource,
-} from '@/server/types'
-import CompanyService from '@/server/api-service/company-service'
+} from '@/types/coop-types'
+import CompanyService from '@/api-service/company-service'
 
 // Only used by path preloader
 export const companyLoader = (

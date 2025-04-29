@@ -33,7 +33,7 @@ import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
 import { useUpdateBranch } from '@/hooks/api-hooks/use-branch'
-import { IBranchRequest, IBranchResource, TEntityId } from '@/server/types'
+import { IBranchRequest, IBranchResource, TEntityId } from '@/types/coop-types'
 
 type TBranchBasicInfo = Omit<
     IBranchRequest,

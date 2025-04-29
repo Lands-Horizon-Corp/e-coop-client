@@ -18,7 +18,7 @@ import BranchLogo from '@/pages/admin/components/branch-logo'
 
 import { toReadableDate } from '@/utils'
 
-import { ICompanyResource } from '@/server/types'
+import { ICompanyResource } from '@/types/coop-types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { branchLoader, useDeleteBranch } from '@/hooks/api-hooks/use-branch'
 

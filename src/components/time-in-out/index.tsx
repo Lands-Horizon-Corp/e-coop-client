@@ -10,7 +10,7 @@ import TimeInCounter from '@/components/time-in-out/time-in-counter'
 import RealtimeTimeText from '@/components/time-in-out/realtime-time-text'
 
 import { cn } from '@/lib/utils'
-import { IUserData } from '@/server/types'
+import { IUserData } from '@/types/coop-types'
 import { IBaseProps } from '@/types/components'
 
 export type TTImeInEntry = {

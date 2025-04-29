@@ -7,7 +7,7 @@ import {
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
-import { IBranchResource } from '@/server'
+import { IBranchResource } from '@/types'
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {

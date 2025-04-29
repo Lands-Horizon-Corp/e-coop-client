@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import { TAccountType } from '@/server/types'
+import { TAccountType } from '@/types/coop-types'
 import UseCooldown from '@/hooks/use-cooldown'
 import { useForgotPassword } from '@/hooks/api-hooks/use-auth'
 

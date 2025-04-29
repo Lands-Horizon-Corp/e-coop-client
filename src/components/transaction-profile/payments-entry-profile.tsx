@@ -2,7 +2,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ArrowUpRight, UserX } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { BadgeCheckFillIcon, Image2Icon } from '../icons'
-import { IMemberResource } from '@/server'
+import { IMemberResource } from '@/types'
 import CopyTextButton from '@/components/copy-text-button'
 import { ImagePreviewData } from '@/store/image-preview-store'
 

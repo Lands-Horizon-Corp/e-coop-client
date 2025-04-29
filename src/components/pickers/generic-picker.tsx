@@ -12,7 +12,7 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib'
-import { TEntityId } from '@/server'
+import { TEntityId } from '@/types'
 import { useInternalState } from '@/hooks/use-internal-state'
 
 interface GenericPickerProps<T extends { id: TEntityId }> extends IModalProps {

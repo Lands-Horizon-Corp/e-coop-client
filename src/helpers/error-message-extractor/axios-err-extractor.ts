@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 
 import { TErrorMessageExtractor } from '.'
-import { IErrorResponse } from '@/server/types'
+import { IErrorResponse } from '@/types/coop-types'
 import { axiosErrorMessageExtractor } from '@/helpers/axios-error-extractor'
 
 export const axiosErrExtractor: TErrorMessageExtractor = [

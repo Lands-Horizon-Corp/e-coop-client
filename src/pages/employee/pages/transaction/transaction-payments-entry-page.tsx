@@ -45,13 +45,13 @@ import PaymentsEntryProfile from '@/components/transaction-profile/payments-entr
 import CurrentPaymentsEntryList from '@/components/ledger/payments-entry/current-payment-entry'
 import TransactionPaymentEntryFormModal from '@/components/forms/transactions-forms/payments-entry-form'
 
-import { IAccountingLedgerResource } from '@/server/types/accounts/accounting-ledger'
+import { IAccountingLedgerResource } from '@/types/coop-types/accounts/accounting-ledger'
 import {
     IPaymentsEntry,
     IPaymentsEntryRequest,
     TRANSACTION_TYPE,
-} from '@/server/types/transactions/payments-entry'
-import { ICheckClearingRequest } from '@/server/types/transactions/check-clearing'
+} from '@/types/coop-types/transactions/payments-entry'
+import { ICheckClearingRequest } from '@/types/coop-types/transactions/check-clearing'
 import { toast } from 'sonner'
 import { Form } from '@/components/ui/form'
 

@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberClassificationService from '@/server/api-service/member-services/member-classification-service'
+import MemberClassificationService from '@/api-service/member-services/member-classification-service'
 
 import {
     IAPIHook,
@@ -22,7 +22,7 @@ import {
     IMemberClassificationRequest,
     IMemberClassificationResource,
     IMemberClassificationPaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 export const memberClassificationLoader = (
     classificationId: TEntityId,

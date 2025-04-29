@@ -14,7 +14,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { cn } from '@/lib/utils'
 import { IClassProps } from '@/types'
 import { IForm } from '@/types/components'
-import { IMemberCenterRequest, TEntityId } from '@/server/types'
+import { IMemberCenterRequest, TEntityId } from '@/types/coop-types'
 import {
     useCreateMemberCenter,
     useUpdateMemberCenter,

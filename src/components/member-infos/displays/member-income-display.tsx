@@ -3,7 +3,7 @@ import { WalletIcon } from '@/components/icons'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberIncomeResource } from '@/server'
+import { IMemberIncomeResource } from '@/types'
 import { formatNumber, toReadableDate } from '@/utils'
 import {
     Accordion,

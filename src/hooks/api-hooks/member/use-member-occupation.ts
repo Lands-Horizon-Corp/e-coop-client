@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberOccupationService from '@/server/api-service/member-services/member-occupation-service'
+import MemberOccupationService from '@/api-service/member-services/member-occupation-service'
 
 import {
     IAPIHook,
@@ -22,7 +22,7 @@ import {
     IMemberOccupationRequest,
     IMemberOccupationResource,
     IMemberOccupationPaginatedResource,
-} from '@/server/types'
+} from '@/types/coop-types'
 
 export const memberOccupationLoader = (
     occupationId: TEntityId,

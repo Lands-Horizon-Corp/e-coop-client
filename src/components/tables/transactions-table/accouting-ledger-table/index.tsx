@@ -20,8 +20,8 @@ import {
     IAccountingLedgerRequest,
     IAccountingLedgerResource,
     IAccountingLedgerPaginatedResource,
-} from '@/server/types/accounts/accounting-ledger'
-import { TableProps } from '../../types'
+} from '@/types/coop-types/accounts/accounting-ledger'
+import { TableProps } from '@/types'
 import { RefetchOptions, QueryObserverResult } from '@tanstack/react-query'
 
 export interface IAccountingLedgerRequestTableProps

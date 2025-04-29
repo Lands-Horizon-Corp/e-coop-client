@@ -82,7 +82,7 @@ import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import logger from '@/helpers/loggers/logger'
 import { philippinesCards } from '@/constants'
-import { TEntityId, TRelationship } from '@/server'
+import { TEntityId, TRelationship } from '@/types'
 
 type TMemberProfileForm = z.infer<typeof createMemberProfileSchema>
 

@@ -4,7 +4,7 @@ import { DetailsIcon } from '@/components/icons'
 import CopyTextButton from '@/components/copy-text-button'
 
 import { toReadableDate } from '@/utils'
-import { IMemberDescriptionResource } from '@/server'
+import { IMemberDescriptionResource } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 
 interface Props {

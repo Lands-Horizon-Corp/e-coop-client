@@ -16,13 +16,13 @@ import branchColumns, {
     branchesGlobalSearchTargets,
 } from './columns'
 
-import { TableProps } from '../types'
-import { IBranchResource, TEntityId } from '@/server/types'
+import { TableProps } from '@/types'
+import { IBranchResource, TEntityId } from '@/types/coop-types'
 
 import { cn } from '@/lib'
 import useFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
-import BranchService from '@/server/api-service/branch-service'
+import BranchService from '@/api-service/branch-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { useOwnerPaginatedBranch } from '@/hooks/api-hooks/use-owner'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'

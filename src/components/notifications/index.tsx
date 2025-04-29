@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { cn } from '@/lib'
-import { INotificationResource, TEntityId } from '@/server/types'
+import { INotificationResource, TEntityId } from '@/types/coop-types'
 
 import { Button } from '../ui/button'
 import NotificationsItems from './notifications-items'

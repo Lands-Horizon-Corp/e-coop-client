@@ -7,7 +7,7 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IMemberTypeHistory } from '@/server/types'
+import { IMemberTypeHistory } from '@/types/coop-types'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 
 export interface IMemberTypeHistoryColumnProps {
