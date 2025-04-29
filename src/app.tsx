@@ -5,10 +5,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import createRouter from '@/root-route';
-import { ThemeProvider } from '@/providers/theme-provider';
-import PageContainer from './components/containers/page-container';
-import LoadingSpinner from './components/spinners/loading-spinner';
-
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
 
 declare module '@tanstack/react-router' {
@@ -32,9 +28,9 @@ const App = () => {
 
     if (!isAllowed || isChecking)
         return (
-            <PageContainer className="w-dvh h-dvh items-center justify-center gap-y-4 text-muted-foreground/70">
+            <div className="w-dvh h-dvh items-center justify-center gap-y-4 text-muted-foreground/70">
                 {isChecking ? (
-                    <LoadingSpinner />
+                    <p>Checking</p>
                 ) : (
                     <>
                         <img src={SpySvg} alt="Spy" className="size-36" />
@@ -45,14 +41,12 @@ const App = () => {
                         </p>
                     </>
                 )}
-            </PageContainer>
+            </div>
         );
 
     return (
         <QueryClientProvider client={queryClient}>
-            <ThemeProvider>
-                <RouterProvider router={createRouter(queryClient)} />
-            </ThemeProvider>
+            <RouterProvider router={createRouter(queryClient)} />
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     );
