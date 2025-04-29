@@ -10,7 +10,7 @@ export * from './accounts/accounts'
 export * from './accounts/computation-type'
 export * from './accounts/accounting-ledger'
 
-export * from "./cheque"
+export * from './cheque'
 
 /* for trnsaction */
 export * from './transactions/check-clearing'

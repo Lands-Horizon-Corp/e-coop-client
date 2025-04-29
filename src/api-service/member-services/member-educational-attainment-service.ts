@@ -117,7 +117,10 @@ export default class MemberEducationalAttainmentService {
 
     public static async exportAll(): Promise<void> {
         const url = `${MemberEducationalAttainmentService.BASE_ENDPOINT}/export`
-        await downloadFileService(url, 'all_member_educational_attainments_export.csv')
+        await downloadFileService(
+            url,
+            'all_member_educational_attainments_export.csv'
+        )
     }
 
     public static async exportAllFiltered(filters?: string): Promise<void> {

@@ -128,7 +128,10 @@ export default class MemberClassificationService {
             },
             { skipNull: true }
         )
-        await downloadFileService(url, 'filtered_member_classifications_export.csv')
+        await downloadFileService(
+            url,
+            'filtered_member_classifications_export.csv'
+        )
     }
 
     public static async exportSelected(ids: TEntityId[]): Promise<void> {
@@ -137,7 +140,10 @@ export default class MemberClassificationService {
         }
         const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
         const url = `${MemberClassificationService.BASE_ENDPOINT}/export-selected?${query}`
-        await downloadFileService(url, 'selected_member_classifications_export.csv')
+        await downloadFileService(
+            url,
+            'selected_member_classifications_export.csv'
+        )
     }
 
     public static async deleteMany(ids: TEntityId[]): Promise<void> {

@@ -41,8 +41,7 @@ export type TCivilStatus =
     | 'Separated'
     | 'N/A'
 
-export type TAccountClosureReasonType =
-    (typeof AccountClosureReasons)[number]
+export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]
 
 // TODO: This should be common user
 export interface IUserBase extends ITimeStamps, ILongLat {

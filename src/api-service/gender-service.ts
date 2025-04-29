@@ -121,6 +121,9 @@ export default class GenderService {
 
     public static async exportCurrentPage(page: number): Promise<void> {
         const url = `${GenderService.BASE_ENDPOINT}/export-current-page/${page}`
-        await downloadFileService(url, `current_page_genders_${page}_export.xlsx`)
+        await downloadFileService(
+            url,
+            `current_page_genders_${page}_export.xlsx`
+        )
     }
 }
