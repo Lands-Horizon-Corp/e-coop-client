@@ -1,7 +1,7 @@
-import { ITimeStamps, TEntityId } from '../common'
-import { IMemberProfileResource } from './member-profile'
+import { ITimeStamps, TEntityId } from '../../common'
+import { IMemberProfile } from './member-profile'
 
-export interface IMemberAddressResource extends ITimeStamps {
+export interface IMemberAddress extends ITimeStamps {
     id: TEntityId
     membersProfileId: TEntityId
     postalCode: string
@@ -9,7 +9,7 @@ export interface IMemberAddressResource extends ITimeStamps {
     city: string
     barangay: string
     label: string
-    membersProfile?: IMemberProfileResource
+    membersProfile?: IMemberProfile
 }
 
 export interface IMemberAddressRequest {

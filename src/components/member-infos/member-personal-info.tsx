@@ -9,12 +9,12 @@ import { DetailsIcon, NoteIcon, StoreIcon, UserIcon } from '../icons'
 import { cn } from '@/lib'
 import { IBaseProps } from '@/types'
 import { toReadableDate } from '@/utils'
-import { IMemberProfileResource, TEntityId } from '@/types'
+import { IMemberProfile, TEntityId } from '@/types'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 interface Props extends IBaseProps {
     profileId: TEntityId
-    defaultData?: IMemberProfileResource
+    defaultData?: IMemberProfile
 }
 
 const MemberPersonalInfo = ({ profileId, className, defaultData }: Props) => {

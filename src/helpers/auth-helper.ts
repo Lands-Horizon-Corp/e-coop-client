@@ -1,4 +1,4 @@
-// import { IUserData } from '@/types/coop-types'
+// import { IUserData } from '@/types'
 
 // TODO: Import User Interface and use it here
 export const getUsersAccountTypeRedirectPage = (

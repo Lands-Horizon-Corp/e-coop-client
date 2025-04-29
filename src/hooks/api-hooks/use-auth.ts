@@ -17,7 +17,7 @@ import {
     ISignUpRequest,
     IChangePasswordRequest,
     IForgotPasswordRequest,
-} from '@/types/coop-types'
+} from '@/types'
 import { IOperationCallbacks } from './types'
 
 // Loader for Auth Preloading

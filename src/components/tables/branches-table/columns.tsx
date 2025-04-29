@@ -17,9 +17,9 @@ import DataTableMultiSelectFilter from '@/components/data-table/data-table-filte
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IBranchResource, ICompanyResource } from '@/types/coop-types'
+import { IBranch, ICompanyResource } from '@/types'
 
-type RootType = IBranchResource
+type RootType = IBranch
 
 export const branchesGlobalSearchTargets: IGlobalSearchTargets<RootType>[] = [
     { field: 'name', displayText: 'Name' },
@@ -29,7 +29,7 @@ export const branchesGlobalSearchTargets: IGlobalSearchTargets<RootType>[] = [
 ]
 
 export interface IBranchTableActionComponentProp {
-    row: Row<IBranchResource>
+    row: Row<IBranch>
 }
 
 export interface IBranchesTableColumnProps {
@@ -38,7 +38,7 @@ export interface IBranchesTableColumnProps {
 
 const branchesTableColumns = (
     opts?: IBranchesTableColumnProps
-): ColumnDef<IBranchResource>[] => {
+): ColumnDef<IBranch>[] => {
     return [
         {
             id: 'select',

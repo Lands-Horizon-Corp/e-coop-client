@@ -1,18 +1,18 @@
-import { TEntityId } from '../common'
+import { TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberProfileResource } from './member-profile'
-import { IMemberClassificationResource } from './member-classification'
+import { IMemberProfile } from './member-profile'
+import { IMemberClassification } from './member-classification'
 
-export interface IMemberClassificationHistoryResource {
+export interface IMemberClassificationHistory {
     id: TEntityId
     createdAt: string
     updatedAt: string
     deletedAt: string
     memberProfileId: TEntityId
     memberClassificationId: TEntityId
-    memberProfile?: IMemberProfileResource
-    memberClassification?: IMemberClassificationResource
+    memberProfile?: IMemberProfile
+    memberClassification?: IMemberClassification
 }
 
-export interface IMemberClassificationHistoryPaginatedResource
-    extends IPaginatedResult<IMemberClassificationHistoryResource> {}
+export interface IMemberClassificationHistoryPaginated
+    extends IPaginatedResult<IMemberClassificationHistory> {}

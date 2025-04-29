@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { IBaseProps } from '@/types/components'
+import { IBaseProps } from '@/types'
 
 const AuthPageWrapper = ({ className, children }: IBaseProps) => {
     return (

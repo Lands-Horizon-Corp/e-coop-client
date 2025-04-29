@@ -1,9 +1,6 @@
 import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-    IAccountingLedgerResource,
-    TransactionSource,
-} from '@/types/coop-types/accounts/accounting-ledger'
+import { IAccountingLedgerResource, TransactionSource } from '@/types'
 import {
     Accordion,
     AccordionContent,

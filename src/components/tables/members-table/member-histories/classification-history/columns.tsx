@@ -7,16 +7,16 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IMemberClassificationHistoryResource } from '@/types/coop-types'
+import { IMemberClassificationHistory } from '@/types'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 
 export interface IMemberClassificationHistoryColumnProps {
     actionComponent?: (props: {
-        row: IMemberClassificationHistoryResource
+        row: IMemberClassificationHistory
     }) => ReactNode
 }
 
-export const memberClassificationHistoryGlobalSearchTargets: IGlobalSearchTargets<IMemberClassificationHistoryResource>[] =
+export const memberClassificationHistoryGlobalSearchTargets: IGlobalSearchTargets<IMemberClassificationHistory>[] =
     [
         {
             field: 'memberClassification.name',
@@ -29,7 +29,7 @@ export const memberClassificationHistoryGlobalSearchTargets: IGlobalSearchTarget
     ]
 
 const memberClassificationHistoryColumns =
-    (): ColumnDef<IMemberClassificationHistoryResource>[] => [
+    (): ColumnDef<IMemberClassificationHistory>[] => [
         {
             id: 'memberClassificationName',
             accessorKey: 'memberClassification.name',
@@ -56,7 +56,7 @@ const memberClassificationHistoryColumns =
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberClassificationHistoryResource>
+                        <TextFilter<IMemberClassificationHistory>
                             defaultMode="contains"
                             field="memberClassification.description"
                             displayText="Description"
@@ -76,7 +76,7 @@ const memberClassificationHistoryColumns =
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberClassificationHistoryResource>
+                        <DateFilter<IMemberClassificationHistory>
                             displayText="Date Created"
                             field="createdAt"
                         />

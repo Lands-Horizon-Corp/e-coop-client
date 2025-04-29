@@ -9,7 +9,7 @@ import SingleImageUploaderModal from '@/components/single-image-uploader/single-
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IUserData } from '@/types/coop-types'
+import { IUserData } from '@/types'
 import { useUploadAccountProfilePicture } from '@/hooks/api-hooks/use-account'
 
 interface Props extends IClassProps {

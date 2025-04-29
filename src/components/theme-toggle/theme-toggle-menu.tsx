@@ -7,7 +7,7 @@ import {
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
-import { IBaseProps } from '@/types/components'
+import { IBaseProps } from '@/types'
 import { useTheme } from '@/providers/theme-provider'
 import { MoonIcon, SunIcon, SunMoonIcon } from '@/components/icons'
 

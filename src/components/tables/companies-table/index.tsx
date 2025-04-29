@@ -27,7 +27,7 @@ import { useFilteredPaginatedCompanies } from '@/hooks/api-hooks/use-company'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { ICompanyResource } from '@/types/coop-types'
+import { ICompanyResource } from '@/types'
 
 export interface CompaniesTableProps
     extends TableProps<ICompanyResource>,

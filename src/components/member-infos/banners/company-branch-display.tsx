@@ -2,12 +2,12 @@ import ImageDisplay from '@/components/image-display'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IBranchResource, ICompanyResource } from '@/types'
+import { IBranch, ICompanyResource } from '@/types'
 import { MapMarkedIcon, OpenExternalLinkIcon } from '@/components/icons'
 import OpenExternalMap from '@/components/map/open-external-map'
 
 interface Props extends IClassProps {
-    branch?: IBranchResource
+    branch?: IBranch
     company?: ICompanyResource
 }
 

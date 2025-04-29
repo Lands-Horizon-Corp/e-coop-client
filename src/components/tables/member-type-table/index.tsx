@@ -25,15 +25,15 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IMemberTypeResource } from '@/types/coop-types'
+import { IMemberType } from '@/types'
 import MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 import { useFilteredPaginatedMemberTypes } from '@/hooks/api-hooks/member/use-member-type'
 
 export interface MemberTypeTableProps
-    extends TableProps<IMemberTypeResource>,
+    extends TableProps<IMemberType>,
         IMemberTypeTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberTypeResource>,
+        IDataTableToolbarProps<IMemberType>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -74,7 +74,7 @@ const MemberTypeTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberTypeResource>({
+    } = useDataTableState<IMemberType>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

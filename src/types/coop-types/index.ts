@@ -1,7 +1,6 @@
 /* User Types */
 export * from './owner'
 export * from './admin'
-export * from './employee'
 
 export * from './bank'
 
@@ -55,7 +54,6 @@ export * from './role'
 export * from './media'
 export * from './gender'
 export * from './branch'
-export * from './common'
 export * from './company'
 export * from './contact'
 export * from './feedback'

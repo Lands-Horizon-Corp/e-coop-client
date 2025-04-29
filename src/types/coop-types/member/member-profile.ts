@@ -1,48 +1,50 @@
-import {
-    IMemberExpensesRequest,
-    IMemberExpensesResource,
-} from './member-expenses'
+import { IMemberExpensesRequest, IMemberExpenses } from './member-expenses'
 import {
     IMemberDescriptionRequest,
-    IMemberDescriptionResource,
+    IMemberDescription,
 } from './member-description'
 import {
     IMemberJointAccountsRequest,
-    IMemberJointAccountsResource,
+    IMemberJointAccounts,
 } from './member-joint-accounts'
 import {
     IMemberRelativeAccountsRequest,
-    IMemberRelativeAccountsResource,
+    IMemberRelativeAccounts,
 } from './member-relative-accounts'
 import {
     IMemberGovernmentBenefitsRequest,
-    IMemberGovernmentBenefitsResource,
+    IMemberGovernmentBenefits,
 } from './member-government-benefits'
-import { IMediaResource } from '../media'
-import { IMemberResource } from './member'
+import { IMedia } from '../media'
+import { IMember } from './member'
 import {
     IMemberContactNumberReferencesRequest,
-    IMemberContactNumberReferencesResource,
+    IMemberContactNumberReferences,
 } from './member-contact-number-references'
-import { IBranchResource } from '../branch'
+import { IBranch } from '../branch'
 import { IEmployeeResource } from '../employee'
-import { IMemberTypeResource } from './member-type'
-import { IMemberWalletResource } from './member-wallet'
-import { IMemberGenderResource } from './member-gender'
-import { IMemberCenterResource } from './member-center'
-import { IMemberRecruitsResource } from './member-recruits'
-import { IMemberOccupationResource } from './member-occupation'
+import { IMemberType } from './member-type'
+import { IMemberWallet } from './member-wallet'
+import { IMemberGender } from './member-gender'
+import { IMemberCenter } from './member-center'
+import { IMemberRecruits } from './member-recruits'
+import { IMemberOccupation } from './member-occupation'
 import {
     IMemberCloseRemarkRequest,
-    IMemberCloseRemarkResource,
+    IMemberCloseRemark,
 } from './member-close-remark'
-import { IMemberClassificationResource } from './member-classification'
-import { IMemberIncomeRequest, IMemberIncomeResource } from './member-income'
-import { IMemberAssetsRequest, IMemberAssetsResource } from './member-assets'
-import { IMemberAddressRequest, IMemberAddressResource } from './member-address'
-import { ITimeStamps, TAccountStatus, TCivilStatus, TEntityId } from '../common'
-import { IMemberMutualFundsHistoryResource } from './member-mutual-funds-history'
-import { IMemberEducationalAttainmentResource } from './member-educational-attainment'
+import { IMemberClassification } from './member-classification'
+import { IMemberIncomeRequest, IMemberIncome } from './member-income'
+import { IMemberAssetsRequest, IMemberAssets } from './member-assets'
+import { IMemberAddressRequest, IMemberAddress } from './member-address'
+import {
+    ITimeStamps,
+    TAccountStatus,
+    TCivilStatus,
+    TEntityId,
+} from '../../common'
+import { IMemberMutualFundsHistory } from './member-mutual-funds-history'
+import { IMemberEducationalAttainment } from './member-educational-attainment'
 
 export interface IMemberProfileRequest {
     id?: TEntityId
@@ -69,7 +71,7 @@ export interface IMemberProfileRequest {
     isMicroFinanceMember: boolean
 
     mediaId?: TEntityId
-    media?: IMediaResource //This is just for form media display, not actually needed in backend
+    media?: IMedia //This is just for form media display, not actually needed in backend
 
     memberId?: TEntityId
     branchId?: TEntityId
@@ -91,7 +93,7 @@ export interface IMemberProfileRequest {
     memberContactNumberReferences: IMemberContactNumberReferencesRequest[]
 }
 
-export interface IMemberProfileResource extends ITimeStamps {
+export interface IMemberProfile extends ITimeStamps {
     id: TEntityId
     oldReferenceId?: string
     passbookNumber?: string
@@ -115,57 +117,57 @@ export interface IMemberProfileResource extends ITimeStamps {
     isMicroFinanceMember: boolean
 
     occupationId?: TEntityId
-    occupation?: IMemberOccupationResource
+    occupation?: IMemberOccupation
 
     recruitedByMemberProfileId?: TEntityId
-    recruitedByMemberProfile?: IMemberProfileResource
+    recruitedByMemberProfile?: IMemberProfile
 
     mediaId?: TEntityId
-    media?: IMediaResource
+    media?: IMedia
 
     memberId?: TEntityId
-    member?: IMemberResource
+    member?: IMember
 
     memberTypeId?: TEntityId
-    memberType?: IMemberTypeResource
+    memberType?: IMemberType
 
     memberClassificationId?: TEntityId
-    memberClassification?: IMemberClassificationResource
+    memberClassification?: IMemberClassification
 
     memberGenderId?: TEntityId
-    memberGender?: IMemberGenderResource
+    memberGender?: IMemberGender
 
     verifiedByEmployeeId?: TEntityId
     verifiedByEmployee?: IEmployeeResource
 
     branchId?: TEntityId
-    branch?: IBranchResource
+    branch?: IBranch
 
     memberCenterId?: TEntityId
-    memberCenter?: IMemberCenterResource
+    memberCenter?: IMemberCenter
 
     signatureMediaId?: TEntityId
-    signatureMedia?: IMediaResource
+    signatureMedia?: IMedia
 
     memberEducationalAttainmentId?: TEntityId
-    memberEducationalAttainment?: IMemberEducationalAttainmentResource
+    memberEducationalAttainment?: IMemberEducationalAttainment
 
-    memberAssets?: IMemberAssetsResource[]
-    memberIncome?: IMemberIncomeResource[]
-    memberWallets?: IMemberWalletResource[] // ano to desu
-    memberAddresses?: IMemberAddressResource[]
-    memberRecruits?: IMemberRecruitsResource[]
-    memberExpenses?: IMemberExpensesResource[]
-    memberDescriptions?: IMemberDescriptionResource[]
-    memberCloseRemarks?: IMemberCloseRemarkResource[]
-    memberJointAccounts?: IMemberJointAccountsResource[]
-    memberRelativeAccounts?: IMemberRelativeAccountsResource[]
-    memberGovernmentBenefits?: IMemberGovernmentBenefitsResource[]
-    memberMutualFundsHistory?: IMemberMutualFundsHistoryResource[]
-    memberContactNumberReferences?: IMemberContactNumberReferencesResource[]
+    memberAssets?: IMemberAssets[]
+    memberIncome?: IMemberIncome[]
+    memberWallets?: IMemberWallet[] // ano to desu
+    memberAddresses?: IMemberAddress[]
+    memberRecruits?: IMemberRecruits[]
+    memberExpenses?: IMemberExpenses[]
+    memberDescriptions?: IMemberDescription[]
+    memberCloseRemarks?: IMemberCloseRemark[]
+    memberJointAccounts?: IMemberJointAccounts[]
+    memberRelativeAccounts?: IMemberRelativeAccounts[]
+    memberGovernmentBenefits?: IMemberGovernmentBenefits[]
+    memberMutualFundsHistory?: IMemberMutualFundsHistory[]
+    memberContactNumberReferences?: IMemberContactNumberReferences[]
 }
 
 export type IMemberProfilePicker = Pick<
-    IMemberProfileResource,
+    IMemberProfile,
     'id' | 'oldReferenceId' | 'passbookNumber' | 'notes' | 'description'
 >

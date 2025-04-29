@@ -4,13 +4,13 @@ import FileTypeIcon from '../ui/file-type'
 import { DotMediumIcon, TrashIcon } from '../icons'
 
 import { formatBytes } from '@/helpers'
-import { IMediaResource } from '@/types'
+import { IMedia } from '@/types'
 import { AspectRatio } from '../ui/aspect-ratio'
 import ImageDisplay from '../image-display'
 
 interface FileItemProps {
     file?: File
-    media?: IMediaResource
+    media?: IMedia
     uploadDetails?: {
         isUploading?: boolean
         eta?: string

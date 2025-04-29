@@ -17,7 +17,7 @@ import branchColumns, {
 } from './columns'
 
 import { TableProps } from '@/types'
-import { IBranchResource, TEntityId } from '@/types/coop-types'
+import { IBranch, TEntityId } from '@/types'
 
 import { cn } from '@/lib'
 import useFilterState from '@/hooks/use-filter-state'
@@ -29,10 +29,10 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 export interface BranchesTableProps
-    extends TableProps<IBranchResource>,
+    extends TableProps<IBranch>,
         IBranchesTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IBranchResource>,
+        IDataTableToolbarProps<IBranch>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -73,7 +73,7 @@ const OwnerBranchesTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IBranchResource>({
+    } = useDataTableState<IBranch>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

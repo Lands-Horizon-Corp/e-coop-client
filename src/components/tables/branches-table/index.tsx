@@ -22,7 +22,7 @@ import BranchService from '@/api-service/branch-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 
 import { TableProps } from '@/types'
-import { IBranchResource } from '@/types/coop-types'
+import { IBranch } from '@/types'
 
 import { usePagination } from '@/hooks/use-pagination'
 import { useFilteredPaginatedBranch } from '@/hooks/api-hooks/use-branch'
@@ -30,10 +30,10 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 export interface BranchesTableProps
-    extends TableProps<IBranchResource>,
+    extends TableProps<IBranch>,
         IBranchesTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IBranchResource>,
+        IDataTableToolbarProps<IBranch>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -73,7 +73,7 @@ const BranchesTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IBranchResource>({
+    } = useDataTableState<IBranch>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

@@ -6,7 +6,7 @@ import { serverRequestErrExtractor } from '@/helpers'
 import FootstepService from '@/api-service/footstep-service'
 
 import { IFilterPaginatedHookProps } from './types'
-import { IFootstepPaginatedResource } from '@/types/coop-types'
+import { IFootstepPaginated } from '@/types'
 
 export const useFilteredPaginatedFootsteps = ({
     sort,
@@ -15,7 +15,7 @@ export const useFilteredPaginatedFootsteps = ({
     mode = 'self',
     pagination = { pageSize: 10, pageIndex: 1 },
 }: { mode?: 'team' | 'self' } & IFilterPaginatedHookProps) => {
-    return useQuery<IFootstepPaginatedResource, string>({
+    return useQuery<IFootstepPaginated, string>({
         queryKey: [
             'footstep',
             'resource-query',

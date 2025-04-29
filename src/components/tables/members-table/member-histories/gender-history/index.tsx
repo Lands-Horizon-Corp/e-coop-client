@@ -24,15 +24,15 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IMemberGenderHistoryResource, TEntityId } from '@/types/coop-types'
+import { IMemberGenderHistory, TEntityId } from '@/types'
 import { useMemberGenderHistory } from '@/hooks/api-hooks/member/use-member-history'
 import { PAGE_SIZES_SMALL } from '@/constants'
 
 export interface MemberGenderHistoryTableProps
-    extends TableProps<IMemberGenderHistoryResource>,
+    extends TableProps<IMemberGenderHistory>,
         IMemberGenderHistoryColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberGenderHistoryResource>,
+        IDataTableToolbarProps<IMemberGenderHistory>,
         | 'table'
         | 'actionComponent'
         | 'refreshActionProps'
@@ -68,7 +68,7 @@ const MemberGenderHistoryTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberGenderHistoryResource>({
+    } = useDataTableState<IMemberGenderHistory>({
         defaultColumnOrder: columns.map((c) => c.id!),
     })
 

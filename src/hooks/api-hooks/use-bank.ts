@@ -11,11 +11,7 @@ import {
     IOperationCallbacks,
     IAPIFilteredPaginatedHook,
 } from './types'
-import {
-    IBankPaginatedResource,
-    IBankRequest,
-    IBankResponse,
-} from '@/types/coop-types/bank'
+import { IBankPaginatedResource, IBankRequest, IBankResponse } from '@/types'
 import { TEntityId } from '@/types'
 
 export const useCreateBank = ({

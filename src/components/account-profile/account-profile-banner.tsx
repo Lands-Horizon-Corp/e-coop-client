@@ -10,7 +10,7 @@ import {
 import AccountQr from './account-qr'
 import UserProfilePicture from './profile-picture'
 
-import { IUserData } from '@/types/coop-types'
+import { IUserData } from '@/types'
 
 const AccountProfileBanner = ({
     currentUser,

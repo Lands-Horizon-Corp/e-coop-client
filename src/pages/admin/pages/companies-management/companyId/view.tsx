@@ -25,14 +25,14 @@ import CompanyLogo from '@/components/company-profile/company-logo'
 import CompanyAcceptBar from '@/pages/admin/components/company-accept-bar'
 
 import { toReadableDate } from '@/utils'
-import { IOwnerResource } from '@/types/coop-types'
+import { IOwner } from '@/types'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { companyLoader, useDeleteCompany } from '@/hooks/api-hooks/use-company'
 import CompanyBadge from '@/components/company-profile/company-badge'
 import CompanyDescription from '@/components/company-profile/company-description'
 
-const CompanyOwnerSection = ({ owner }: { owner: IOwnerResource }) => {
+const CompanyOwnerSection = ({ owner }: { owner: IOwner }) => {
     const AccountBadge = useMemo(() => {
         switch (owner.status) {
             case 'Verified':

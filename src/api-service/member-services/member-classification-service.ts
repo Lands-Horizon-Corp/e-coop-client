@@ -6,8 +6,8 @@ import { downloadFileService } from '@/helpers'
 import {
     TEntityId,
     IMemberClassificationRequest,
-    IMemberClassificationResource,
-    IMemberClassificationPaginatedResource,
+    IMemberClassification,
+    IMemberClassificationPaginated,
 } from '@/types'
 
 export default class MemberClassificationService {
@@ -16,7 +16,7 @@ export default class MemberClassificationService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberClassificationResource> {
+    ): Promise<IMemberClassification> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberClassificationService.BASE_ENDPOINT}/${id}`,
@@ -25,14 +25,11 @@ export default class MemberClassificationService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IMemberClassificationResource>(
-            url,
-            {
-                headers: {
-                    Authorization: `Bearer YOUR_TOKEN`,
-                },
-            }
-        )
+        const response = await APIService.get<IMemberClassification>(url, {
+            headers: {
+                Authorization: `Bearer YOUR_TOKEN`,
+            },
+        })
 
         return response.data
     }
@@ -40,7 +37,7 @@ export default class MemberClassificationService {
     public static async create(
         data: IMemberClassificationRequest,
         preloads?: string[]
-    ): Promise<IMemberClassificationResource> {
+    ): Promise<IMemberClassification> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberClassificationService.BASE_ENDPOINT}`,
@@ -51,7 +48,7 @@ export default class MemberClassificationService {
 
         const response = await APIService.post<
             IMemberClassificationRequest,
-            IMemberClassificationResource
+            IMemberClassification
         >(url, data)
         return response.data
     }
@@ -60,7 +57,7 @@ export default class MemberClassificationService {
         id: TEntityId,
         data: IMemberClassificationRequest,
         preloads?: string[]
-    ): Promise<IMemberClassificationResource> {
+    ): Promise<IMemberClassification> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberClassificationService.BASE_ENDPOINT}/${id}`,
@@ -71,7 +68,7 @@ export default class MemberClassificationService {
 
         const response = await APIService.put<
             IMemberClassificationRequest,
-            IMemberClassificationResource
+            IMemberClassification
         >(url, data, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`,
@@ -95,7 +92,7 @@ export default class MemberClassificationService {
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
-    } = {}): Promise<IMemberClassificationPaginatedResource> {
+    } = {}): Promise<IMemberClassificationPaginated> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberClassificationService.BASE_ENDPOINT}`,
@@ -111,7 +108,7 @@ export default class MemberClassificationService {
         )
 
         const response =
-            await APIService.get<IMemberClassificationPaginatedResource>(url)
+            await APIService.get<IMemberClassificationPaginated>(url)
         return response.data
     }
 

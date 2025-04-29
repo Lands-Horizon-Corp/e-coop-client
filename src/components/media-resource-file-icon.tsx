@@ -12,12 +12,12 @@ import {
 } from './icons'
 
 import { cn } from '@/lib'
-import { IMediaResource } from '@/types'
+import { IMedia } from '@/types'
 import { IClassProps } from '@/types'
 import { getFileCategory } from '@/helpers'
 
 interface Props {
-    media: IMediaResource
+    media: IMedia
 }
 
 export const getMediaResourceFileIcon = ({ media }: Props): IconType => {
@@ -49,7 +49,7 @@ const MediaResourceFileIcon = ({
     media,
     className,
     iconClassName,
-}: { media: IMediaResource; iconClassName?: string } & IClassProps) => {
+}: { media: IMedia; iconClassName?: string } & IClassProps) => {
     const category = getFileCategory(media.fileName, media.fileType)
 
     switch (category) {

@@ -24,15 +24,15 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IMemberCenterHistoryResource, TEntityId } from '@/types/coop-types'
+import { IMemberCenterHistory, TEntityId } from '@/types'
 import { useMemberCenterHistory } from '@/hooks/api-hooks/member/use-member-history'
 import { PAGE_SIZES_SMALL } from '@/constants'
 
 export interface MemberCenterHistoryTableProps
-    extends TableProps<IMemberCenterHistoryResource>,
+    extends TableProps<IMemberCenterHistory>,
         IMemberCenterHistoryColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberCenterHistoryResource>,
+        IDataTableToolbarProps<IMemberCenterHistory>,
         | 'table'
         | 'actionComponent'
         | 'refreshActionProps'
@@ -68,7 +68,7 @@ const MemberCenterHistoryTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberCenterHistoryResource>({
+    } = useDataTableState<IMemberCenterHistory>({
         defaultColumnOrder: columns.map((c) => c.id!),
     })
 

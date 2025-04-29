@@ -7,7 +7,7 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 
-import { IMemberRelativeAccountsResource } from '@/types'
+import { IMemberRelativeAccounts } from '@/types'
 import ImageDisplay from '@/components/image-display'
 import CopyTextButton from '@/components/copy-text-button'
 import SectionTitle from '../section-title'
@@ -15,7 +15,7 @@ import { FamilyIcon } from '@/components/icons'
 import { toReadableDate } from '@/utils'
 
 interface Props {
-    relativeAccounts?: IMemberRelativeAccountsResource[]
+    relativeAccounts?: IMemberRelativeAccounts[]
 }
 
 const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {

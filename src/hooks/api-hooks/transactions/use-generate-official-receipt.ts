@@ -1,4 +1,4 @@
-import { IGenerateORNumberResource } from '@/types/coop-types/transactions/generate-or-number'
+import { IGenerateORNumberResource } from '@/types'
 import { IAPIHook } from '../types'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { withCatchAsync } from '@/utils'

@@ -21,7 +21,7 @@ import AccountClosureReasonCombobox from '@/components/comboboxes/closure-reason
 import { cn } from '@/lib'
 import { TEntityId } from '@/types'
 import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useCloseMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import { memberCreateCloseRemarksSchema } from '@/validations/member/member-close-remark-schema'

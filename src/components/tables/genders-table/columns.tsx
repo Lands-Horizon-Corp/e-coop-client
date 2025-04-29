@@ -10,17 +10,16 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IGenderResource } from '@/types/coop-types'
+import { IGender } from '@/types'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 
-export const genderGlobalSearchTargets: IGlobalSearchTargets<IGenderResource>[] =
-    [
-        { field: 'name', displayText: 'Name' },
-        { field: 'description', displayText: 'Description' },
-    ]
+export const genderGlobalSearchTargets: IGlobalSearchTargets<IGender>[] = [
+    { field: 'name', displayText: 'Name' },
+    { field: 'description', displayText: 'Description' },
+]
 
 export interface IGenderTableActionComponentProp {
-    row: Row<IGenderResource>
+    row: Row<IGender>
 }
 
 export interface IGenderTableColumnProps {
@@ -29,7 +28,7 @@ export interface IGenderTableColumnProps {
 
 const genderTableColumns = (
     opts?: IGenderTableColumnProps
-): ColumnDef<IGenderResource>[] => {
+): ColumnDef<IGender>[] => {
     return [
         {
             id: 'select',
@@ -66,10 +65,7 @@ const genderTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<IGenderResource>
-                            displayText="Name"
-                            field="name"
-                        />
+                        <TextFilter<IGender> displayText="Name" field="name" />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
@@ -91,7 +87,7 @@ const genderTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IGenderResource>
+                        <TextFilter<IGender>
                             displayText="Description"
                             field="description"
                         />
@@ -116,7 +112,7 @@ const genderTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IGenderResource>
+                        <DateFilter<IGender>
                             displayText="Date Created"
                             field="createdAt"
                         />

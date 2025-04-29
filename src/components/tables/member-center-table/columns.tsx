@@ -11,16 +11,16 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IMemberCenterResource } from '@/types/coop-types'
+import { IMemberCenter } from '@/types'
 
-export const memberCenterGlobalSearchTargets: IGlobalSearchTargets<IMemberCenterResource>[] =
+export const memberCenterGlobalSearchTargets: IGlobalSearchTargets<IMemberCenter>[] =
     [
         { field: 'name', displayText: 'Name' },
         { field: 'description', displayText: 'Description' },
     ]
 
 export interface IMemberCenterTableActionComponentProp {
-    row: Row<IMemberCenterResource>
+    row: Row<IMemberCenter>
 }
 
 export interface IMemberCenterTableColumnProps {
@@ -31,7 +31,7 @@ export interface IMemberCenterTableColumnProps {
 
 const memberCenterTableColumns = (
     opts?: IMemberCenterTableColumnProps
-): ColumnDef<IMemberCenterResource>[] => {
+): ColumnDef<IMemberCenter>[] => {
     return [
         {
             id: 'select',
@@ -68,7 +68,7 @@ const memberCenterTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberCenterResource>
+                        <TextFilter<IMemberCenter>
                             displayText="Name"
                             field="name"
                         />
@@ -92,7 +92,7 @@ const memberCenterTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberCenterResource>
+                        <TextFilter<IMemberCenter>
                             displayText="Description"
                             field="description"
                         />
@@ -116,7 +116,7 @@ const memberCenterTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberCenterResource>
+                        <DateFilter<IMemberCenter>
                             displayText="Date Created"
                             field="createdAt"
                         />

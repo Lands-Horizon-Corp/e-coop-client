@@ -19,15 +19,15 @@ import {
 import {
     TEntityId,
     IMemberCenterRequest,
-    IMemberCenterResource,
-    IMemberCenterPaginatedResource,
-} from '@/types/coop-types'
+    IMemberCenter,
+    IMemberCenterPaginated,
+} from '@/types'
 
 export const memberCenterLoader = (
     memberCenterId: TEntityId,
     preloads: string[] = []
 ) =>
-    queryOptions<IMemberCenterResource>({
+    queryOptions<IMemberCenter>({
         queryKey: ['member-center', 'loader', memberCenterId],
         queryFn: async () => {
             const data = await MemberCenterService.getById(
@@ -44,12 +44,10 @@ export const useCreateMemberCenter = ({
     showMessage = true,
     onSuccess,
     onError,
-}:
-    | undefined
-    | (IAPIHook<IMemberCenterResource, string> & IQueryProps) = {}) => {
+}: undefined | (IAPIHook<IMemberCenter, string> & IQueryProps) = {}) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IMemberCenterResource, string, IMemberCenterRequest>({
+    return useMutation<IMemberCenter, string, IMemberCenterRequest>({
         mutationKey: ['member-center', 'create'],
         mutationFn: async (data) => {
             const [error, newMemberCenter] = await withCatchAsync(
@@ -87,7 +85,7 @@ export const useUpdateMemberCenter = ({
     preloads = [],
     onSuccess,
     onError,
-}: IAPIHook<IMemberCenterResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberCenter, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
@@ -170,9 +168,9 @@ export const useFilteredPaginatedMemberCenters = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IMemberCenterPaginatedResource, string> &
+}: IAPIFilteredPaginatedHook<IMemberCenterPaginated, string> &
     IQueryProps = {}) => {
-    return useQuery<IMemberCenterPaginatedResource, string>({
+    return useQuery<IMemberCenterPaginated, string>({
         queryKey: [
             'member-center',
             'resource-query',

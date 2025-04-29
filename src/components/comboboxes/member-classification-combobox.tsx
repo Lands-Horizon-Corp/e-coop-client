@@ -23,7 +23,7 @@ import {
     MemberClassificationCreateUpdateFormModal,
 } from '../forms/member-forms/member-classification-create-update-form'
 
-import { TEntityId, IMemberClassificationResource } from '@/types/coop-types'
+import { TEntityId, IMemberClassification } from '@/types'
 import { useFilteredPaginatedMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
 
 export interface IMemberClassificationComboboxCreateProps
@@ -38,7 +38,7 @@ interface Props {
     className?: string
     placeholder?: string
     memberClassificationCreateProps?: IMemberClassificationComboboxCreateProps
-    onChange?: (selected: IMemberClassificationResource) => void
+    onChange?: (selected: IMemberClassification) => void
 }
 
 const MemberClassificationCombobox = ({

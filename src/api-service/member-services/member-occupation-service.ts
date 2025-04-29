@@ -5,9 +5,9 @@ import { downloadFileService } from '@/helpers'
 
 import {
     TEntityId,
+    IMemberOccupation,
     IMemberOccupationRequest,
-    IMemberOccupationResource,
-    IMemberOccupationPaginatedResource,
+    IMemberOccupationPaginated,
 } from '@/types'
 
 export default class MemberOccupationService {
@@ -16,7 +16,7 @@ export default class MemberOccupationService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberOccupationResource> {
+    ): Promise<IMemberOccupation> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberOccupationService.BASE_ENDPOINT}/${id}`,
@@ -25,7 +25,7 @@ export default class MemberOccupationService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IMemberOccupationResource>(url, {
+        const response = await APIService.get<IMemberOccupation>(url, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`,
             },
@@ -37,7 +37,7 @@ export default class MemberOccupationService {
     public static async create(
         data: IMemberOccupationRequest,
         preloads?: string[]
-    ): Promise<IMemberOccupationResource> {
+    ): Promise<IMemberOccupation> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberOccupationService.BASE_ENDPOINT}`,
@@ -48,7 +48,7 @@ export default class MemberOccupationService {
 
         const response = await APIService.post<
             IMemberOccupationRequest,
-            IMemberOccupationResource
+            IMemberOccupation
         >(url, data)
         return response.data
     }
@@ -57,7 +57,7 @@ export default class MemberOccupationService {
         id: TEntityId,
         data: IMemberOccupationRequest,
         preloads?: string[]
-    ): Promise<IMemberOccupationResource> {
+    ): Promise<IMemberOccupation> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberOccupationService.BASE_ENDPOINT}/${id}`,
@@ -68,7 +68,7 @@ export default class MemberOccupationService {
 
         const response = await APIService.put<
             IMemberOccupationRequest,
-            IMemberOccupationResource
+            IMemberOccupation
         >(url, data, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`,
@@ -92,7 +92,7 @@ export default class MemberOccupationService {
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
-    } = {}): Promise<IMemberOccupationPaginatedResource> {
+    } = {}): Promise<IMemberOccupationPaginated> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberOccupationService.BASE_ENDPOINT}`,
@@ -107,8 +107,7 @@ export default class MemberOccupationService {
             { skipNull: true }
         )
 
-        const response =
-            await APIService.get<IMemberOccupationPaginatedResource>(url)
+        const response = await APIService.get<IMemberOccupationPaginated>(url)
         return response.data
     }
 

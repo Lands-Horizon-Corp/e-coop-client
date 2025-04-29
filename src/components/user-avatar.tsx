@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
-import { IBaseProps } from '@/types/components'
+import { IBaseProps } from '@/types'
 
 interface Props extends IBaseProps {
     src: string

@@ -26,17 +26,17 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { TEntityId } from '@/types/coop-types'
-import { IMemberTypeReferenceResource } from '@/types/coop-types/member/member-type-reference'
+import { TEntityId } from '@/types'
+import { IMemberTypeReference } from '@/types'
 import { useFilteredPaginatedMemberTypeReferences } from '@/hooks/api-hooks/member/use-member-type'
 import MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 
 export interface MemberTypeReferencesTableProps
-    extends TableProps<IMemberTypeReferenceResource>,
+    extends TableProps<IMemberTypeReference>,
         IMemberTypeReferenceTableColumnProps {
     memberTypeId: TEntityId
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberTypeReferenceResource>,
+        IDataTableToolbarProps<IMemberTypeReference>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -78,7 +78,7 @@ const MemberTypeReferencesTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberTypeReferenceResource>({
+    } = useDataTableState<IMemberTypeReference>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

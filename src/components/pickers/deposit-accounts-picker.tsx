@@ -13,7 +13,7 @@ import useFilterState from '@/hooks/use-filter-state'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedAccounts } from '@/hooks/api-hooks/accounting/use-accounting'
-import { IAccountsResource } from '@/types/coop-types/accounts/accounts'
+import { IAccountsResource } from '@/types'
 
 interface Props {
     value?: TEntityId

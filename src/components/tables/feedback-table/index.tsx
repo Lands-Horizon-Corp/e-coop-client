@@ -17,7 +17,7 @@ import FeedbackColumns, {
 } from './column'
 
 import { TableProps } from '@/types'
-import { IFeedbackResource } from '@/types/coop-types'
+import { IFeedback } from '@/types'
 
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
@@ -27,7 +27,7 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-const data: IFeedbackResource[] = [
+const data: IFeedback[] = [
     {
         id: '0194b533-6840-7cad-87d9-1421e172b38f',
         email: 'user1@example.com',
@@ -71,10 +71,10 @@ const data: IFeedbackResource[] = [
 ]
 
 export interface FeedbackTableProps
-    extends TableProps<IFeedbackResource>,
+    extends TableProps<IFeedback>,
         IFeedbackTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IFeedbackResource>,
+        IDataTableToolbarProps<IFeedback>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -113,7 +113,7 @@ const FeedBackTable = ({
         createHandleRowSelectionChange,
         columnVisibility,
         setColumnVisibility,
-    } = useDataTableState<IFeedbackResource>({
+    } = useDataTableState<IFeedback>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

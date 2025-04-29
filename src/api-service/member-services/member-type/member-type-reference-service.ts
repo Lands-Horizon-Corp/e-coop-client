@@ -6,9 +6,9 @@ import APIService from '../../api-service'
 import {
     TEntityId,
     IMemberTypeReferenceRequest,
-    IMemberTypeReferenceResource,
+    IMemberTypeReference,
 } from '@/types'
-import { IMemberTypePaginatedResource } from '@/types'
+import { IMemberTypePaginated } from '@/types'
 
 export default class MemberTypeReferenceService {
     private static readonly BASE_ENDPOINT = '/member-type-reference'
@@ -16,13 +16,13 @@ export default class MemberTypeReferenceService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberTypeReferenceResource> {
+    ): Promise<IMemberTypeReference> {
         const url = qs.stringifyUrl({
             url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IMemberTypeReferenceResource>(url)
+        const response = await APIService.get<IMemberTypeReference>(url)
         return response.data
     }
 
@@ -41,7 +41,7 @@ export default class MemberTypeReferenceService {
         return (
             await APIService.post<
                 IMemberTypeReferenceRequest,
-                IMemberTypeReferenceResource
+                IMemberTypeReference
             >(url, data)
         ).data
     }
@@ -55,7 +55,7 @@ export default class MemberTypeReferenceService {
         id: TEntityId,
         data: IMemberTypeReferenceRequest,
         preloads?: string[]
-    ): Promise<IMemberTypeReferenceResource> {
+    ): Promise<IMemberTypeReference> {
         const url = qs.stringifyUrl({
             url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
@@ -63,7 +63,7 @@ export default class MemberTypeReferenceService {
 
         const response = await APIService.put<
             IMemberTypeReferenceRequest,
-            IMemberTypeReferenceResource
+            IMemberTypeReference
         >(url, data)
         return response.data
     }
@@ -92,7 +92,7 @@ export default class MemberTypeReferenceService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IMemberTypePaginatedResource>(url)
+        const response = await APIService.get<IMemberTypePaginated>(url)
         return response.data
     }
 

@@ -7,31 +7,29 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IMemberMutualFundsHistoryResource } from '@/types/coop-types'
+import { IMemberMutualFundsHistory } from '@/types'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 
 export interface IMemberMutualFundsHistoryColumnProps {
-    actionComponent?: (props: {
-        row: IMemberMutualFundsHistoryResource
-    }) => ReactNode
+    actionComponent?: (props: { row: IMemberMutualFundsHistory }) => ReactNode
 }
 
-export const memberMutualFundsHistoryGlobalSearchTargets: IGlobalSearchTargets<IMemberMutualFundsHistoryResource>[] =
+export const memberMutualFundsHistoryGlobalSearchTargets: IGlobalSearchTargets<IMemberMutualFundsHistory>[] =
     [
         { field: 'description', displayText: 'Description' },
         { field: 'amount', displayText: 'Amount' },
     ]
 
 const memberMutualFundsHistoryColumns =
-    (): ColumnDef<IMemberMutualFundsHistoryResource>[] => [
+    (): ColumnDef<IMemberMutualFundsHistory>[] => [
         {
             id: 'description',
             accessorKey: 'description',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberMutualFundsHistoryResource>
+                        <TextFilter<IMemberMutualFundsHistory>
                             defaultMode="contains"
                             field="description"
                             displayText="Description"
@@ -49,7 +47,7 @@ const memberMutualFundsHistoryColumns =
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Amount">
                     <ColumnActions {...props}>
-                        <NumberFilter<IMemberMutualFundsHistoryResource>
+                        <NumberFilter<IMemberMutualFundsHistory>
                             field="amount"
                             displayText="Amount"
                         />
@@ -66,7 +64,7 @@ const memberMutualFundsHistoryColumns =
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberMutualFundsHistoryResource>
+                        <DateFilter<IMemberMutualFundsHistory>
                             displayText="Date Created"
                             field="createdAt"
                         />

@@ -11,10 +11,9 @@ import {
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
 import useFilterState from '@/hooks/use-filter-state'
-import { TEntityId } from '@/types/coop-types'
 
 import { useFilteredPaginatedTransactionPaymentTypes } from '@/hooks/api-hooks/transactions/use-transaction-payment-types'
-import { ITransactionPaymentTypesResource } from '@/types/coop-types/transactions/transaction-payment-types'
+import { TEntityId, ITransactionPaymentTypes } from '@/types'
 import React from 'react'
 import { DEFAULT_TRANSACTION_TYPE } from '@/validations/transactions/payments-entry'
 import useIsFocused from '../ui/use-isFocused'
@@ -25,9 +24,7 @@ interface Props {
     placeholder?: string
     disabled?: boolean
     leftIcon?: React.ReactNode
-    onSelect?: (
-        selectedTransactionType: ITransactionPaymentTypesResource
-    ) => void
+    onSelect?: (selectedTransactionType: ITransactionPaymentTypes) => void
     defaultValue?: string
 }
 
@@ -39,7 +36,7 @@ const TransactionPaymentTypesPicker = ({
 }: Props) => {
     const [pickerState, setPickerState] = useState(false)
     const [selectedTransactionType, setSelectedTransactionType] =
-        useState<ITransactionPaymentTypesResource>()
+        useState<ITransactionPaymentTypes>()
 
     const { isFocused, ref } = useIsFocused()
 

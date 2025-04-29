@@ -27,13 +27,13 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IGenderResource } from '@/types/coop-types'
+import { IGender } from '@/types'
 
 export interface GenderTableProps
-    extends TableProps<IGenderResource>,
+    extends TableProps<IGender>,
         IGenderTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IGenderResource>,
+        IDataTableToolbarProps<IGender>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -74,7 +74,7 @@ const GenderTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IGenderResource>({
+    } = useDataTableState<IGender>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

@@ -9,7 +9,7 @@ import SingleImageUploaderModal from '@/components/single-image-uploader/single-
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { ICompanyResource } from '@/types/coop-types'
+import { ICompanyResource } from '@/types'
 import { useUpdateCompanyProfilePicture } from '@/hooks/api-hooks/use-company'
 
 interface Props extends IClassProps {

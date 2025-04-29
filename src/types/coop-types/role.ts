@@ -1,4 +1,4 @@
-import { TEntityId } from './common'
+import { TEntityId } from '../common'
 
 export interface IRolesRequest {
     name: string
@@ -19,7 +19,7 @@ export interface IRolesRequest {
     deleteGender?: boolean
 }
 
-export interface IRolesResource {
+export interface IRoles {
     id: TEntityId
     name: string
     description?: string

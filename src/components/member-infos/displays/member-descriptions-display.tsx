@@ -4,11 +4,11 @@ import { DetailsIcon } from '@/components/icons'
 import CopyTextButton from '@/components/copy-text-button'
 
 import { toReadableDate } from '@/utils'
-import { IMemberDescriptionResource } from '@/types'
+import { IMemberDescription } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 
 interface Props {
-    descriptions?: IMemberDescriptionResource[]
+    descriptions?: IMemberDescription[]
 }
 
 const MemberDescriptionDisplays = ({ descriptions }: Props) => {

@@ -14,7 +14,7 @@ import { abbreviateUUID } from '@/utils/formatting-utils'
 import { useFilteredPaginatedMemberCenters } from '@/hooks/api-hooks/member/use-member-center'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 
-import { IMemberCenterResource, TEntityId } from '@/types/coop-types'
+import { IMemberCenter, TEntityId } from '@/types'
 import {
     IMemberCenterCreateUpdateFormProps,
     MemberCenterCreateUpdateFormModal,
@@ -31,7 +31,7 @@ export interface IMemberCenterPickerProps {
     disabled?: boolean
     placeholder?: string
     createProps?: IMemberCenterCreateUpdateFormProps
-    onSelect?: (selectedMemberCenter: IMemberCenterResource) => void
+    onSelect?: (selectedMemberCenter: IMemberCenter) => void
 }
 
 const MemberCenterPicker = ({

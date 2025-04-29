@@ -25,7 +25,7 @@ import {
     useCreateMember,
     useUpdateMember,
 } from '@/hooks/api-hooks/member/use-member'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import {
     createMemberAccountSchema,
     updateMemberAccountSchema,

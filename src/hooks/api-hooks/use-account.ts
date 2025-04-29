@@ -7,13 +7,13 @@ import ProfileService from '@/api-service/profile-service'
 
 import {
     IUserData,
-    IMediaResource,
+    IMedia,
     INewPasswordRequest,
     IChangeEmailRequest,
     IChangeUsernameRequest,
     IAccountSettingRequest,
     IChangeContactNumberRequest,
-} from '@/types/coop-types'
+} from '@/types'
 import { IOperationCallbacks } from './types'
 
 // Hook: Upload Profile Picture
@@ -24,7 +24,7 @@ export const useUploadAccountProfilePicture = ({
 }: { invalidateCurrentUser?: boolean } & IOperationCallbacks<IUserData>) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IUserData, string, IMediaResource>({
+    return useMutation<IUserData, string, IMedia>({
         mutationKey: ['account', 'profile'],
         mutationFn: async (data) => {
             const [error, response] = await withCatchAsync(

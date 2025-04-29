@@ -1,6 +1,6 @@
-import { ITimeStamps, TEntityId } from './common'
-import { IMediaResource } from './media'
-import { IMemberResource } from './member/member'
+import { ITimeStamps, TEntityId } from '../common'
+import { IMedia } from './media'
+import { IMember } from './member/member'
 import { ICompanyResource } from './company'
 import { IEmployeeResource } from './employee'
 import { IPaginatedResult } from './paginated-result'
@@ -18,7 +18,7 @@ export interface IBranchRequest {
     companyId?: TEntityId
 }
 
-export interface IBranchResource extends ITimeStamps {
+export interface IBranch extends ITimeStamps {
     id: TEntityId
     name: string
     address?: string
@@ -29,11 +29,10 @@ export interface IBranchResource extends ITimeStamps {
     companyId?: TEntityId
     contactNumber: string
     isAdminVerified: boolean
-    media?: IMediaResource
+    media?: IMedia
     company?: ICompanyResource
     employees?: IEmployeeResource[]
-    members?: IMemberResource[]
+    members?: IMember[]
 }
 
-export interface IBranchPaginatedResource
-    extends IPaginatedResult<IBranchResource> {}
+export interface IBranchPaginated extends IPaginatedResult<IBranch> {}

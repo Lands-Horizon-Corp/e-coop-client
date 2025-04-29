@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { cn } from '@/lib'
 import { formatBytes } from '@/helpers'
-import { IMediaResource } from '@/types'
+import { IMedia } from '@/types'
 import { IClassProps } from '@/types'
 import { useCamera } from '@/hooks/use-camera'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
@@ -27,7 +27,7 @@ import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
 type TUploadSource = 'file' | 'capture'
 
 interface ISingleImageUploaderProps extends IClassProps {
-    onSuccess?: (media: IMediaResource) => void
+    onSuccess?: (media: IMedia) => void
 }
 
 const SingleImageUploader = ({

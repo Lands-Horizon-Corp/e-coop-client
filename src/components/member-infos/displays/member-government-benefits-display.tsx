@@ -10,11 +10,11 @@ import ImageDisplay from '@/components/image-display'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberGovernmentBenefitsResource } from '@/types'
+import { IMemberGovernmentBenefits } from '@/types'
 import { toReadableDate } from '@/utils'
 interface IGovernmentCardDisplay
     extends IClassProps,
-        IMemberGovernmentBenefitsResource {}
+        IMemberGovernmentBenefits {}
 
 export const GovernmentCardDisplay = ({
     name,
@@ -96,7 +96,7 @@ export const GovernmentCardDisplay = ({
 }
 
 interface Props extends IClassProps {
-    governmentBenefits?: IMemberGovernmentBenefitsResource[]
+    governmentBenefits?: IMemberGovernmentBenefits[]
 }
 
 const MemberGovernmentBenefitsDisplay = ({

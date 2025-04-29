@@ -8,7 +8,7 @@ import { ImageIcon, TrashIcon } from '@/components/icons'
 import { SignaturePickerUploaderModal } from '@/components/signature/signature-picker-uploader'
 
 import { formatBytes } from '@/helpers'
-import { IMediaResource, TEntityId } from '@/types'
+import { IMedia, TEntityId } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 
 export interface SignatureUploadField {
@@ -17,8 +17,8 @@ export interface SignatureUploadField {
     value?: TEntityId
     DisplayIcon?: IconType
     placeholder?: string
-    mediaImage?: IMediaResource | undefined
-    onChange?: (media: IMediaResource | undefined) => void
+    mediaImage?: IMedia | undefined
+    onChange?: (media: IMedia | undefined) => void
 }
 
 export const SignatureUploadField = forwardRef<

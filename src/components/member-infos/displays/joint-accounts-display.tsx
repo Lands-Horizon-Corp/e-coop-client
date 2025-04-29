@@ -7,12 +7,12 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 import ImageDisplay from '@/components/image-display'
-import { IMemberJointAccountsResource } from '@/types'
+import { IMemberJointAccounts } from '@/types'
 import SectionTitle from '../section-title'
 import { HandShakeHeartIcon } from '@/components/icons'
 
 interface Props {
-    jointAccounts?: IMemberJointAccountsResource[]
+    jointAccounts?: IMemberJointAccounts[]
 }
 
 const JointAccountsDisplay = ({ jointAccounts }: Props) => {

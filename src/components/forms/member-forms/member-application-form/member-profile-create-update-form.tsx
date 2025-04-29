@@ -31,7 +31,7 @@ import BranchPicker, {
     IBranchPickerCreateProps,
 } from '@/components/pickers/branch-picker'
 import { Input } from '@/components/ui/input'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import { Button } from '@/components/ui/button'
 import TextEditor from '@/components/text-editor'
 import { Textarea } from '@/components/ui/textarea'

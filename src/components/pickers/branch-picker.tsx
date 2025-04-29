@@ -17,7 +17,7 @@ import { useFilteredPaginatedBranch } from '@/hooks/api-hooks/use-branch'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 
 import logger from '@/helpers/loggers/logger'
-import { IBranchResource, TEntityId } from '@/types/coop-types'
+import { IBranch, TEntityId } from '@/types'
 
 export interface IBranchPickerCreateProps
     extends Pick<
@@ -30,7 +30,7 @@ export interface IBranchPickerProps {
     disabled?: boolean
     placeholder?: string
     createProps?: IBranchPickerCreateProps
-    onSelect?: (selectedBranch: IBranchResource) => void
+    onSelect?: (selectedBranch: IBranch) => void
 }
 
 const BranchPicker = ({

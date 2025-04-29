@@ -25,7 +25,7 @@ import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sort
 
 import { TableProps } from '@/types'
 import { PAGE_SIZES_SMALL } from '@/constants'
-import { IMemberTypeHistory, TEntityId } from '@/types/coop-types'
+import { IMemberTypeHistory, TEntityId } from '@/types'
 import { useMemberTypeHistory } from '@/hooks/api-hooks/member/use-member-history'
 
 export interface MemberTypeHistoryTableProps

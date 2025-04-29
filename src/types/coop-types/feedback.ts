@@ -1,4 +1,4 @@
-import { TEntityId } from './common'
+import { TEntityId } from '../common'
 import { IPaginatedResult } from './paginated-result'
 
 export interface IFeedbackRequest {
@@ -7,7 +7,8 @@ export interface IFeedbackRequest {
     feedbackType: string
 }
 
-export interface IFeedbackResource {
+// TODO: this noted to be part of coop lands
+export interface IFeedback {
     id: TEntityId
     email: string
     description: string
@@ -17,4 +18,4 @@ export interface IFeedbackResource {
 }
 
 export interface IFeedbackPaginatedResource
-    extends IPaginatedResult<IFeedbackResource> {}
+    extends IPaginatedResult<IFeedback> {}

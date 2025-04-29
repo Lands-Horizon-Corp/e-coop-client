@@ -4,12 +4,12 @@ import MemberGovernmentBenefitsDisplay from './displays/member-government-benefi
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberProfileResource, TEntityId } from '@/types'
+import { IMemberProfile, TEntityId } from '@/types'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 interface Props extends IClassProps {
     profileId: TEntityId
-    defaultData?: IMemberProfileResource
+    defaultData?: IMemberProfile
 }
 
 const MemberGovernmentBenefits = ({

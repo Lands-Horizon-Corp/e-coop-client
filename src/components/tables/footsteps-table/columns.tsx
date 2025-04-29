@@ -10,21 +10,20 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils/date-utils'
-import { IFootstepResource, IUserBase } from '@/types/coop-types'
+import { IFootstep, IUserBase } from '@/types'
 
-export const footstepGlobalSearchTargets: IGlobalSearchTargets<IFootstepResource>[] =
-    [
-        { field: 'description', displayText: 'Description' },
-        { field: 'activity', displayText: 'Activity' },
-        { field: 'module', displayText: 'Module' },
-        { field: 'admin.firstName', displayText: 'Admin' },
-        { field: 'employee.firstName', displayText: 'Employee' },
-        { field: 'owner.firstName', displayText: 'Owner' },
-        { field: 'member.firstName', displayText: 'Member' },
-    ]
+export const footstepGlobalSearchTargets: IGlobalSearchTargets<IFootstep>[] = [
+    { field: 'description', displayText: 'Description' },
+    { field: 'activity', displayText: 'Activity' },
+    { field: 'module', displayText: 'Module' },
+    { field: 'admin.firstName', displayText: 'Admin' },
+    { field: 'employee.firstName', displayText: 'Employee' },
+    { field: 'owner.firstName', displayText: 'Owner' },
+    { field: 'member.firstName', displayText: 'Member' },
+]
 
 export interface IFootstepTableActionComponentProp {
-    row: Row<IFootstepResource>
+    row: Row<IFootstep>
 }
 
 export interface IFootstepTableColumnProps {
@@ -33,7 +32,7 @@ export interface IFootstepTableColumnProps {
 
 const footstepTableColumns = (
     opts?: IFootstepTableColumnProps
-): ColumnDef<IFootstepResource>[] => {
+): ColumnDef<IFootstep>[] => {
     const displayUserMediaAndName = (user?: IUserBase) => {
         if (!user) {
             return <span className="italic text-foreground/40">No data</span>
@@ -189,7 +188,7 @@ const footstepTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IFootstepResource>
+                        <DateFilter<IFootstep>
                             displayText="Date Created"
                             field="createdAt"
                         />

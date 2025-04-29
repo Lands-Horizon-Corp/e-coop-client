@@ -1,5 +1,5 @@
-import { IMemberProfileResource } from './member-profile'
-import { ITimeStamps, TEntityId, TRelationship } from '../common'
+import { IMemberProfile } from './member-profile'
+import { ITimeStamps, TEntityId, TRelationship } from '../../common'
 
 export interface IMemberRelativeAccountsRequest {
     id?: TEntityId
@@ -7,16 +7,16 @@ export interface IMemberRelativeAccountsRequest {
     relativeProfileMemberId: TEntityId
     familyRelationship: string
     description: string
-    memberProfile?: IMemberProfileResource
-    relativeProfileMemberProfile?: IMemberProfileResource
+    memberProfile?: IMemberProfile
+    relativeProfileMemberProfile?: IMemberProfile
 }
 
-export interface IMemberRelativeAccountsResource extends ITimeStamps {
+export interface IMemberRelativeAccounts extends ITimeStamps {
     id: TEntityId
     membersProfileId: TEntityId
     relativeProfileMemberId: TEntityId
     familyRelationship: TRelationship
     description: string
-    memberProfile?: IMemberProfileResource
-    relativeProfileMemberProfile?: IMemberProfileResource
+    memberProfile?: IMemberProfile
+    relativeProfileMemberProfile?: IMemberProfile
 }

@@ -10,9 +10,9 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { ITransactionPaymentTypesResource } from '@/types/coop-types/transactions/transaction-payment-types'
+import { ITransactionPaymentTypes } from '@/types'
 
-export const transactionTypeGlobalSearchTargets: IGlobalSearchTargets<ITransactionPaymentTypesResource>[] =
+export const transactionTypeGlobalSearchTargets: IGlobalSearchTargets<ITransactionPaymentTypes>[] =
     [
         { field: 'name', displayText: 'Name' },
         { field: 'description', displayText: 'Description' },
@@ -20,7 +20,7 @@ export const transactionTypeGlobalSearchTargets: IGlobalSearchTargets<ITransacti
     ]
 
 export interface ITransactionPaymentTypesTableActionComponentProp {
-    row: Row<ITransactionPaymentTypesResource>
+    row: Row<ITransactionPaymentTypes>
 }
 
 export interface ITransactionPaymentTypesTableColumnProps {
@@ -31,7 +31,7 @@ export interface ITransactionPaymentTypesTableColumnProps {
 
 const TransactionPaymentTypesTableColumns = (
     opts?: ITransactionPaymentTypesTableColumnProps
-): ColumnDef<ITransactionPaymentTypesResource>[] => {
+): ColumnDef<ITransactionPaymentTypes>[] => {
     return [
         {
             id: 'select',
@@ -75,7 +75,7 @@ const TransactionPaymentTypesTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransactionPaymentTypesResource>
+                        <TextFilter<ITransactionPaymentTypes>
                             displayText="Name"
                             field="name"
                         />
@@ -98,7 +98,7 @@ const TransactionPaymentTypesTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransactionPaymentTypesResource>
+                        <TextFilter<ITransactionPaymentTypes>
                             displayText="Description"
                             field="description"
                         />
@@ -121,7 +121,7 @@ const TransactionPaymentTypesTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Cheque ID">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransactionPaymentTypesResource>
+                        <TextFilter<ITransactionPaymentTypes>
                             displayText="Cheque ID"
                             field="chequeId"
                         />
@@ -144,7 +144,7 @@ const TransactionPaymentTypesTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<ITransactionPaymentTypesResource>
+                        <DateFilter<ITransactionPaymentTypes>
                             displayText="Date Created"
                             field="createdAt"
                         />
@@ -167,7 +167,7 @@ const TransactionPaymentTypesTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Last Updated">
                     <ColumnActions {...props}>
-                        <DateFilter<ITransactionPaymentTypesResource>
+                        <DateFilter<ITransactionPaymentTypes>
                             displayText="Last Updated"
                             field="updatedAt"
                         />

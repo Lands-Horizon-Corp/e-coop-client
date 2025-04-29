@@ -7,11 +7,11 @@ import FileItem from '../uploaders/file-item'
 import Modal, { IModalProps } from '../modals/modal'
 import LoadingSpinner from '../spinners/loading-spinner'
 
-import { IMediaResource } from '@/types'
+import { IMedia } from '@/types'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
 
 interface Props {
-    onSignatureUpload: (signatureMedia: IMediaResource) => void
+    onSignatureUpload: (signatureMedia: IMedia) => void
 }
 
 const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {

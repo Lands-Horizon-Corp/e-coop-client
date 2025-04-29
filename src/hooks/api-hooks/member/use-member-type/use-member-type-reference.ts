@@ -7,13 +7,13 @@ import {
     IMutationProps,
     IAPIFilteredPaginatedHook,
 } from '../../types'
-import { TEntityId } from '@/types'
 import { toBase64, withCatchAsync } from '@/utils'
 import {
-    IMemberTypeReferenceRequest,
-    IMemberTypeReferenceResource,
+    TEntityId,
+    IMemberTypeReference,
     IMemberTypeReferencePaginatedResource,
-} from '@/types/coop-types/member/member-type-reference'
+    IMemberTypeReferenceRequest,
+} from '@/types'
 import { serverRequestErrExtractor } from '@/helpers'
 import MemberTypeReferenceService from '@/api-service/member-services/member-type/member-type-reference-service'
 
@@ -24,12 +24,11 @@ export const useCreateMemberTypeReference = ({
     onError,
 }:
     | undefined
-    | (IAPIHook<IMemberTypeReferenceResource, string> &
-          IMutationProps) = {}) => {
+    | (IAPIHook<IMemberTypeReference, string> & IMutationProps) = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberTypeReferenceResource,
+        IMemberTypeReference,
         string,
         IMemberTypeReferenceRequest
     >({
@@ -71,7 +70,7 @@ export const useUpdateMemberTypeReference = ({
     preloads = ['Owner', 'Media', 'Owner.Media'],
     onSuccess,
     onError,
-}: IAPIHook<IMemberTypeReferenceResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberTypeReference, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<

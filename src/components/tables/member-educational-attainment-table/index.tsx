@@ -26,15 +26,15 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IMemberEducationalAttainmentResource } from '@/types/coop-types'
+import { IMemberEducationalAttainment } from '@/types'
 import MemberEducationalAttainmentService from '@/api-service/member-services/member-educational-attainment-service'
 import { useFilteredPaginatedMemberEducationalAttainments } from '@/hooks/api-hooks/member/use-member-educational-attainment'
 
 export interface MemberEducationalAttainmentTableProps
-    extends TableProps<IMemberEducationalAttainmentResource>,
+    extends TableProps<IMemberEducationalAttainment>,
         IMemberEducationalAttainmentTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberEducationalAttainmentResource>,
+        IDataTableToolbarProps<IMemberEducationalAttainment>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -75,7 +75,7 @@ const MemberEducationalAttainmentTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberEducationalAttainmentResource>({
+    } = useDataTableState<IMemberEducationalAttainment>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

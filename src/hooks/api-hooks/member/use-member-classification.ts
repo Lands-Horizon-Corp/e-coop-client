@@ -20,15 +20,15 @@ import {
 import {
     TEntityId,
     IMemberClassificationRequest,
-    IMemberClassificationResource,
-    IMemberClassificationPaginatedResource,
-} from '@/types/coop-types'
+    IMemberClassification,
+    IMemberClassificationPaginated,
+} from '@/types'
 
 export const memberClassificationLoader = (
     classificationId: TEntityId,
     preloads: string[] = []
 ) =>
-    queryOptions<IMemberClassificationResource>({
+    queryOptions<IMemberClassification>({
         queryKey: ['member-classification', 'loader', classificationId],
         queryFn: async () => {
             const data = await MemberClassificationService.getById(
@@ -45,11 +45,11 @@ export const useCreateMemberClassification = ({
     showMessage = true,
     onSuccess,
     onError,
-}: IAPIHook<IMemberClassificationResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberClassification, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberClassificationResource,
+        IMemberClassification,
         string,
         IMemberClassificationRequest
     >({
@@ -93,11 +93,11 @@ export const useUpdateMemberClassification = ({
     showMessage = true,
     onSuccess,
     onError,
-}: IAPIHook<IMemberClassificationResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberClassification, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberClassificationResource,
+        IMemberClassification,
         string,
         { classificationId: TEntityId; data: IMemberClassificationRequest }
     >({
@@ -180,11 +180,8 @@ export const useFilteredPaginatedMemberClassifications = ({
     filterPayload,
     preloads = [],
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<
-    IMemberClassificationPaginatedResource,
-    string
-> = {}) => {
-    return useQuery<IMemberClassificationPaginatedResource, string>({
+}: IAPIFilteredPaginatedHook<IMemberClassificationPaginated, string> = {}) => {
+    return useQuery<IMemberClassificationPaginated, string>({
         queryKey: [
             'member-classification',
             'resource-query',

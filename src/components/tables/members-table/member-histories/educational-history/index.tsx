@@ -24,18 +24,15 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import {
-    IMemberEducationalAttainmentHistoryResource,
-    TEntityId,
-} from '@/types/coop-types'
+import { IMemberEducationalAttainmentHistory, TEntityId } from '@/types'
 import { PAGE_SIZES_SMALL } from '@/constants'
 import { useMemberEducationalAttainmentHistory } from '@/hooks/api-hooks/member/use-member-history'
 
 export interface MemberEducationalAttainmentHistoryTableProps
-    extends TableProps<IMemberEducationalAttainmentHistoryResource>,
+    extends TableProps<IMemberEducationalAttainmentHistory>,
         IMemberEducationalAttainmentHistoryColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberEducationalAttainmentHistoryResource>,
+        IDataTableToolbarProps<IMemberEducationalAttainmentHistory>,
         | 'table'
         | 'actionComponent'
         | 'refreshActionProps'
@@ -74,7 +71,7 @@ const MemberEducationalAttainmentHistoryTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberEducationalAttainmentHistoryResource>({
+    } = useDataTableState<IMemberEducationalAttainmentHistory>({
         defaultColumnOrder: columns.map((c) => c.id!),
     })
 

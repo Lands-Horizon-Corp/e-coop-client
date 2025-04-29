@@ -3,12 +3,7 @@ import qs from 'query-string'
 import APIService from './api-service'
 import { downloadFileService } from '@/helpers'
 
-import {
-    TEntityId,
-    IGenderRequest,
-    IGenderResource,
-    IGenderPaginatedResource,
-} from '@/types'
+import { TEntityId, IGenderRequest, IGender, IGenderPaginated } from '@/types'
 
 /**
  * Service class to handle CRUD operations for genders.
@@ -16,17 +11,15 @@ import {
 export default class GenderService {
     private static readonly BASE_ENDPOINT = '/gender'
 
-    public static async getAll(): Promise<IGenderResource[]> {
-        const response = await APIService.get<IGenderResource[]>(
+    public static async getAll(): Promise<IGender[]> {
+        const response = await APIService.get<IGender[]>(
             GenderService.BASE_ENDPOINT
         )
         return response.data
     }
 
-    public static async create(
-        genderData: IGenderRequest
-    ): Promise<IGenderResource> {
-        const response = await APIService.post<IGenderRequest, IGenderResource>(
+    public static async create(genderData: IGenderRequest): Promise<IGender> {
+        const response = await APIService.post<IGenderRequest, IGender>(
             GenderService.BASE_ENDPOINT,
             genderData
         )
@@ -41,23 +34,23 @@ export default class GenderService {
     public static async update(
         id: TEntityId,
         genderData: IGenderRequest
-    ): Promise<IGenderResource> {
+    ): Promise<IGender> {
         const endpoint = `${GenderService.BASE_ENDPOINT}/${id}`
-        const response = await APIService.put<IGenderRequest, IGenderResource>(
+        const response = await APIService.put<IGenderRequest, IGender>(
             endpoint,
             genderData
         )
         return response.data
     }
 
-    public static async getById(id: TEntityId): Promise<IGenderResource> {
+    public static async getById(id: TEntityId): Promise<IGender> {
         const url = qs.stringifyUrl(
             {
                 url: `${GenderService.BASE_ENDPOINT}/${id}`,
             },
             { skipNull: true }
         )
-        const response = await APIService.get<IGenderResource>(url)
+        const response = await APIService.get<IGender>(url)
         return response.data
     }
 
@@ -66,7 +59,7 @@ export default class GenderService {
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
-    }): Promise<IGenderPaginatedResource> {
+    }): Promise<IGenderPaginated> {
         const { filters, preloads, pagination, sort } = props || {}
 
         const url = qs.stringifyUrl(
@@ -83,7 +76,7 @@ export default class GenderService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IGenderPaginatedResource>(url)
+        const response = await APIService.get<IGenderPaginated>(url)
         return response.data
     }
 

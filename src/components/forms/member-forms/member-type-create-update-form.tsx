@@ -13,8 +13,8 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
-import { IMemberTypeRequest, TEntityId } from '@/types/coop-types'
+import { IForm } from '@/types'
+import { IMemberTypeRequest, TEntityId } from '@/types'
 import {
     useCreateMemberType,
     useUpdateMemberType,

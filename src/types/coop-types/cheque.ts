@@ -1,4 +1,4 @@
-import { ITimeStamps, TEntityId } from './common'
+import { ITimeStamps, TEntityId } from '../common'
 import { IPaginatedResult } from './paginated-result'
 
 export interface IChequeResponse {

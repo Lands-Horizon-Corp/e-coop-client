@@ -5,11 +5,7 @@ import APIService from '../../api-service'
 import { downloadFileService } from '@/helpers'
 
 import { TEntityId } from '@/types'
-import {
-    IMemberTypeRequest,
-    IMemberTypeResource,
-    IMemberTypePaginatedResource,
-} from '@/types'
+import { IMemberTypeRequest, IMemberType, IMemberTypePaginated } from '@/types'
 
 export default class MemberTypeService {
     private static readonly BASE_ENDPOINT = '/member-type'
@@ -17,13 +13,13 @@ export default class MemberTypeService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberTypeResource> {
+    ): Promise<IMemberType> {
         const url = qs.stringifyUrl({
             url: `${MemberTypeService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IMemberTypeResource>(url)
+        const response = await APIService.get<IMemberType>(url)
         return response.data
     }
 
@@ -37,10 +33,7 @@ export default class MemberTypeService {
         )
 
         return (
-            await APIService.post<IMemberTypeRequest, IMemberTypeResource>(
-                url,
-                data
-            )
+            await APIService.post<IMemberTypeRequest, IMemberType>(url, data)
         ).data
     }
 
@@ -53,16 +46,16 @@ export default class MemberTypeService {
         id: TEntityId,
         data: IMemberTypeRequest,
         preloads?: string[]
-    ): Promise<IMemberTypeResource> {
+    ): Promise<IMemberType> {
         const url = qs.stringifyUrl({
             url: `${MemberTypeService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.put<
-            IMemberTypeRequest,
-            IMemberTypeResource
-        >(url, data)
+        const response = await APIService.put<IMemberTypeRequest, IMemberType>(
+            url,
+            data
+        )
         return response.data
     }
 
@@ -88,7 +81,7 @@ export default class MemberTypeService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IMemberTypePaginatedResource>(url)
+        const response = await APIService.get<IMemberTypePaginated>(url)
         return response.data
     }
 

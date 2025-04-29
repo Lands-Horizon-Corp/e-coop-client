@@ -1,4 +1,4 @@
-import { ITimeStamps, TEntityId } from './common'
+import { ITimeStamps, TEntityId } from '../common'
 import { IPaginatedResult } from './paginated-result'
 
 export interface IGenderRequest {
@@ -6,11 +6,10 @@ export interface IGenderRequest {
     description?: string
 }
 
-export interface IGenderResource extends ITimeStamps {
+export interface IGender extends ITimeStamps {
     id: TEntityId
     name: string
     description: string
 }
 
-export interface IGenderPaginatedResource
-    extends IPaginatedResult<IGenderResource> {}
+export interface IGenderPaginated extends IPaginatedResult<IGender> {}

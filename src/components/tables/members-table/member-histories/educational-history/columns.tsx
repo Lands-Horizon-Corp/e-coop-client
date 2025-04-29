@@ -7,16 +7,16 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IMemberEducationalAttainmentHistoryResource } from '@/types/coop-types'
+import { IMemberEducationalAttainmentHistory } from '@/types'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 
 export interface IMemberEducationalAttainmentHistoryColumnProps {
     actionComponent?: (props: {
-        row: IMemberEducationalAttainmentHistoryResource
+        row: IMemberEducationalAttainmentHistory
     }) => ReactNode
 }
 
-export const memberEducationalAttainmentHistoryGlobalSearchTargets: IGlobalSearchTargets<IMemberEducationalAttainmentHistoryResource>[] =
+export const memberEducationalAttainmentHistoryGlobalSearchTargets: IGlobalSearchTargets<IMemberEducationalAttainmentHistory>[] =
     [
         {
             field: 'memberEducationalAttainment.name',
@@ -29,7 +29,7 @@ export const memberEducationalAttainmentHistoryGlobalSearchTargets: IGlobalSearc
     ]
 
 const memberEducationalAttainmentHistoryColumns =
-    (): ColumnDef<IMemberEducationalAttainmentHistoryResource>[] => [
+    (): ColumnDef<IMemberEducationalAttainmentHistory>[] => [
         {
             id: 'memberProfileId',
             accessorKey: 'memberEducationalAttainment.name',
@@ -59,7 +59,7 @@ const memberEducationalAttainmentHistoryColumns =
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberEducationalAttainmentHistoryResource>
+                        <TextFilter<IMemberEducationalAttainmentHistory>
                             defaultMode="contains"
                             field="memberEducationalAttainment.description"
                             displayText="Description"
@@ -81,7 +81,7 @@ const memberEducationalAttainmentHistoryColumns =
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberEducationalAttainmentHistoryResource>
+                        <DateFilter<IMemberEducationalAttainmentHistory>
                             displayText="Date Created"
                             field="createdAt"
                         />

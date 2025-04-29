@@ -24,7 +24,7 @@ import VerifyContactBar from '../verify-notice/verify-contact-bar'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib'
-import { IUserData } from '@/types/coop-types'
+import { IUserData } from '@/types'
 import { emailSchema } from '@/validations/common'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateAccountEmail } from '@/hooks/api-hooks/use-account'

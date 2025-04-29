@@ -14,7 +14,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 
-import { IClassProps } from '@/types/components'
+import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {}
 

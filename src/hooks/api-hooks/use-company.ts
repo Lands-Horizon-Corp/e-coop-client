@@ -22,7 +22,7 @@ import {
     ICompanyRequest,
     ICompanyResource,
     ICompanyPaginatedResource,
-} from '@/types/coop-types'
+} from '@/types'
 import CompanyService from '@/api-service/company-service'
 
 // Only used by path preloader

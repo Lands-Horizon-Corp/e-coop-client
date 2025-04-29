@@ -1,6 +1,6 @@
-import { IMediaResource } from '@/types/coop-types'
+import { IMedia } from '@/types'
 
-export const sampleMediaResourceList: IMediaResource[] = [
+export const sampleMediaResourceList: IMedia[] = [
     {
         id: '7f76efd0-940a-42f9-afa9-8644453e20aa',
         fileName: 'sample-image.png',

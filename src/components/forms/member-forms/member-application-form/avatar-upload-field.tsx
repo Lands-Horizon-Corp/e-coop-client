@@ -7,7 +7,7 @@ import ImageDisplay from '@/components/image-display'
 import ActionTooltip from '@/components/action-tooltip'
 import SingleImageUploaderModal from '@/components/single-image-uploader/single-image-uploader-modal'
 
-import { IMediaResource, TEntityId } from '@/types'
+import { IMedia, TEntityId } from '@/types'
 
 export interface AvatarUploadFieldProps {
     id?: string
@@ -15,8 +15,8 @@ export interface AvatarUploadFieldProps {
     value?: TEntityId
     placeholder?: string
     description?: string
-    mediaImage?: IMediaResource | undefined
-    onChange?: (media: IMediaResource | undefined) => void
+    mediaImage?: IMedia | undefined
+    onChange?: (media: IMedia | undefined) => void
 }
 
 export const AvatarUploadField = forwardRef<
@@ -36,7 +36,7 @@ export const AvatarUploadField = forwardRef<
                 open={uploaderModal}
                 onOpenChange={setUploaderModal}
                 singleImageUploadProps={{
-                    onUploadComplete: (media: IMediaResource) => {
+                    onUploadComplete: (media: IMedia) => {
                         toast.success(
                             `Avatar Uploaded ${media.fileName} with ID: ${media.id}`
                         )

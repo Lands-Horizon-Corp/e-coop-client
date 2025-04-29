@@ -1,6 +1,6 @@
-import { ITimeStamps, TEntityId } from './common'
+import { ITimeStamps, TEntityId } from '../common'
 
-export interface IMediaResource extends ITimeStamps {
+export interface IMedia extends ITimeStamps {
     id: TEntityId
     fileName: string
     fileSize: number

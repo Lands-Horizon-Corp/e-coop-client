@@ -11,7 +11,7 @@ import {
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
 import useFilterState from '@/hooks/use-filter-state'
-import { IMemberProfilePicker, TEntityId } from '@/types/coop-types'
+import { IMemberProfilePicker, TEntityId } from '@/types'
 // import { useMemberProfilesPicker } from '@/hooks/api-hooks/member/use-member-profiles-picker'
 
 const dummyMemberProfiles: IMemberProfilePicker[] = [

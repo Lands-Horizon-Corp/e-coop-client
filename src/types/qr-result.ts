@@ -1,4 +1,4 @@
-import { IQrMemberIdDataResource } from '@/types/coop-types'
+import { IQrMemberIdData } from '@/types'
 
 // Type of QR content identifier
 export type TQrContentType = 'member-id'
@@ -11,6 +11,6 @@ export type IQrScanResult<T = unknown> = {
 
 // The decoded QR result specifically for a Member ID
 export interface IQrMemberIdDecodedResult
-    extends IQrScanResult<IQrMemberIdDataResource> {
+    extends IQrScanResult<IQrMemberIdData> {
     type: 'member-id'
 }

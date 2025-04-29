@@ -2,7 +2,7 @@ import React from 'react'
 import { CheckIcon, ErrorIcon, WarningIcon } from '../icons'
 
 import { cn } from '@/lib'
-import { TNotification } from '@/types/coop-types'
+import { TNotification } from '@/types'
 
 interface NotificationTypeProps {
     type: TNotification

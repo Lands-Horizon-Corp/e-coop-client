@@ -1,6 +1,6 @@
-import { IMediaResource } from '../media'
-import { ITimeStamps, TEntityId } from '../common'
-import { IMemberProfileResource } from './member-profile'
+import { IMedia } from '../media'
+import { ITimeStamps, TEntityId } from '../../common'
+import { IMemberProfile } from './member-profile'
 
 export interface IMemberJointAccountsRequest {
     id?: TEntityId
@@ -13,15 +13,15 @@ export interface IMemberJointAccountsRequest {
     description: string
     familyRelationship?: string
     membersProfileId?: TEntityId
-    membersProfile?: IMemberProfileResource
+    membersProfile?: IMemberProfile
 
     mediaId?: TEntityId
-    media?: IMediaResource
+    media?: IMedia
     signatureMediaId?: TEntityId
-    signatureMedia?: IMediaResource
+    signatureMedia?: IMedia
 }
 
-export interface IMemberJointAccountsResource extends ITimeStamps {
+export interface IMemberJointAccounts extends ITimeStamps {
     id: TEntityId
 
     lastName: string
@@ -32,10 +32,10 @@ export interface IMemberJointAccountsResource extends ITimeStamps {
     description: string
     familyRelationship?: string
     membersProfileId: TEntityId
-    membersProfile: IMemberProfileResource
+    membersProfile: IMemberProfile
 
     mediaId?: TEntityId
-    media?: IMediaResource
+    media?: IMedia
     signatureMediaId?: TEntityId
-    signatureMedia?: IMediaResource
+    signatureMedia?: IMedia
 }

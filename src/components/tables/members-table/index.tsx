@@ -27,13 +27,13 @@ import { useFilteredPaginatedMembers } from '@/hooks/api-hooks/member/use-member
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IMemberResource } from '@/types/coop-types'
+import { IMember } from '@/types'
 
 export interface MembersTableProps
-    extends TableProps<IMemberResource>,
+    extends TableProps<IMember>,
         IMembersTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberResource>,
+        IDataTableToolbarProps<IMember>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -74,7 +74,7 @@ const MembersTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberResource>({
+    } = useDataTableState<IMember>({
         defaultColumnVisibility: {
             isEmailVerified: false,
             isContactVerified: false,

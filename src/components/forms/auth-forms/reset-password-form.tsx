@@ -16,7 +16,7 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
-import { IAuthForm } from '@/types/components'
+import { IAuthForm } from '@/types'
 import { useChangePassword } from '@/hooks/api-hooks/use-auth'
 import { ResetPasswordSchema } from '@/validations/form-validation/reset-password-schema'
 

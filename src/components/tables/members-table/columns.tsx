@@ -18,19 +18,18 @@ import DataTableMultiSelectFilter from '@/components/data-table/data-table-filte
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { TAccountStatus, IMemberResource } from '@/types/coop-types'
+import { TAccountStatus, IMember } from '@/types'
 
-export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberResource>[] =
-    [
-        { field: 'name', displayText: 'Name' },
-        { field: 'address', displayText: 'Address' },
-        { field: 'Owner.username', displayText: 'Owner' },
-        { field: 'contactNumber', displayText: 'Contact' },
-        { field: 'isAdminVerified', displayText: 'Verify Status' },
-    ]
+export const memberGlobalSearchTargets: IGlobalSearchTargets<IMember>[] = [
+    { field: 'name', displayText: 'Name' },
+    { field: 'address', displayText: 'Address' },
+    { field: 'Owner.username', displayText: 'Owner' },
+    { field: 'contactNumber', displayText: 'Contact' },
+    { field: 'isAdminVerified', displayText: 'Verify Status' },
+]
 
 export interface IMemberTableActionComponentProp {
-    row: Row<IMemberResource>
+    row: Row<IMember>
 }
 
 export interface IMembersTableColumnProps {
@@ -39,7 +38,7 @@ export interface IMembersTableColumnProps {
 
 const membersTableColumns = (
     opts?: IMembersTableColumnProps
-): ColumnDef<IMemberResource>[] => {
+): ColumnDef<IMember>[] => {
     return [
         {
             id: 'select',
@@ -231,7 +230,7 @@ const membersTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Contact Number">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberResource>
+                        <TextFilter<IMember>
                             displayText="Contact"
                             field="contactNumber"
                         />
@@ -262,7 +261,7 @@ const membersTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Email">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberResource>
+                        <TextFilter<IMember>
                             displayText="Email"
                             field="email"
                         />
@@ -294,10 +293,7 @@ const membersTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Status">
                     <ColumnActions {...props}>
-                        <DataTableMultiSelectFilter<
-                            IMemberResource,
-                            TAccountStatus
-                        >
+                        <DataTableMultiSelectFilter<IMember, TAccountStatus>
                             mode="equal"
                             field="status"
                             dataType="text"
@@ -363,7 +359,7 @@ const membersTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Email Verified">
                     <ColumnActions {...props}>
-                        <DataTableMultiSelectFilter<IMemberResource, boolean>
+                        <DataTableMultiSelectFilter<IMember, boolean>
                             mode="equal"
                             dataType="boolean"
                             field="isEmailVerified"
@@ -403,7 +399,7 @@ const membersTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Contact Verified">
                     <ColumnActions {...props}>
-                        <DataTableMultiSelectFilter<IMemberResource, boolean>
+                        <DataTableMultiSelectFilter<IMember, boolean>
                             mode="equal"
                             dataType="boolean"
                             field="isContactVerified"
@@ -443,7 +439,7 @@ const membersTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberResource>
+                        <DateFilter<IMember>
                             displayText="Date Created"
                             field="createdAt"
                         />

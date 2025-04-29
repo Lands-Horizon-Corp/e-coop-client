@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { IClassProps } from '@/types/components'
+import { IClassProps } from '@/types'
 import { format } from 'date-fns'
 import { useCallback, useEffect, useState } from 'react'
 

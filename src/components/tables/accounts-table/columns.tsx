@@ -11,7 +11,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IAccountsResource } from '@/types/coop-types/accounts/accounts'
+import { IAccountsResource } from '@/types'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 
 export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccountsResource>[] =

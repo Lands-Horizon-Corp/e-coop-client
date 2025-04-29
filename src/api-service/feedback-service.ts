@@ -6,7 +6,7 @@ import { downloadFileService } from '@/helpers'
 import {
     TEntityId,
     IFeedbackRequest,
-    IFeedbackResource,
+    IFeedback,
     IFeedbackPaginatedResource,
 } from '@/types'
 
@@ -19,23 +19,23 @@ export default class FeedbackService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IFeedbackResource> {
+    ): Promise<IFeedback> {
         const url = qs.stringifyUrl({
             url: `${FeedbackService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IFeedbackResource>(url)
+        const response = await APIService.get<IFeedback>(url)
         return response.data
     }
 
     public static async create(
         feedbackData: IFeedbackRequest
-    ): Promise<IFeedbackResource> {
-        const response = await APIService.post<
-            IFeedbackRequest,
-            IFeedbackResource
-        >(FeedbackService.BASE_ENDPOINT, feedbackData)
+    ): Promise<IFeedback> {
+        const response = await APIService.post<IFeedbackRequest, IFeedback>(
+            FeedbackService.BASE_ENDPOINT,
+            feedbackData
+        )
         return response.data
     }
 

@@ -12,10 +12,10 @@ import {
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IBranchResource } from '@/types'
+import { IBranch } from '@/types'
 
 interface Props extends IClassProps {
-    branch: IBranchResource
+    branch: IBranch
 }
 
 const InfoItem = ({

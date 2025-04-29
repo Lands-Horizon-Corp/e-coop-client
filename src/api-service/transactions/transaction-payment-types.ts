@@ -1,8 +1,8 @@
 import {
     TEntityId,
     ITransactionPaymentTypesRequest,
-    ITransactionPaymentTypesResource,
-    ITransactionPaymentTypePaginatedResource,
+    ITransactionPaymentTypes,
+    ITransactionPaymentTypePaginated,
 } from '@/types'
 import qs from 'query-string'
 import APIService from '../api-service'
@@ -67,12 +67,12 @@ export default class TransactionPaymentTypesService {
     public static async create(
         transactionTypeData: ITransactionPaymentTypesRequest,
         preloads?: string[]
-    ): Promise<ITransactionPaymentTypesResource> {
+    ): Promise<ITransactionPaymentTypes> {
         const url = this.buildUrl('', { preloads })
         return this.makeRequest(() =>
             APIService.post<
                 ITransactionPaymentTypesRequest,
-                ITransactionPaymentTypesResource
+                ITransactionPaymentTypes
             >(url, transactionTypeData)
         )
     }
@@ -92,12 +92,12 @@ export default class TransactionPaymentTypesService {
         id: TEntityId,
         transactionTypeData: ITransactionPaymentTypesRequest,
         preloads?: string[]
-    ): Promise<ITransactionPaymentTypesResource> {
+    ): Promise<ITransactionPaymentTypes> {
         const url = this.buildUrl(`/${id}`, { preloads })
         return this.makeRequest(() =>
             APIService.put<
                 ITransactionPaymentTypesRequest,
-                ITransactionPaymentTypesResource
+                ITransactionPaymentTypes
             >(url, transactionTypeData)
         )
     }
@@ -119,7 +119,7 @@ export default class TransactionPaymentTypesService {
         const url = this.buildUrl(``, { filters, preloads, pagination, sort })
 
         return this.makeRequest(() =>
-            APIService.get<ITransactionPaymentTypePaginatedResource>(url)
+            APIService.get<ITransactionPaymentTypePaginated>(url)
         )
     }
 

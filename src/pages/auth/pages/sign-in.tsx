@@ -8,7 +8,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import SignInForm from '@/components/forms/auth-forms/sign-in-form'
 import AuthPageWrapper from '../components/auth-page-wrapper'
 
-import { IUserData } from '@/types/coop-types'
+import { IUserData } from '@/types'
 import { isUserHasUnverified } from '@/helpers'
 import { useUserAuthStore } from '@/store/user-auth-store'
 

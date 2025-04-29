@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { PICKERS_SELECT_PAGE_SIZE } from '@/constants'
-import { TEntityId, IMemberOccupationResource } from '@/types/coop-types'
+import { TEntityId, IMemberOccupation } from '@/types'
 import { useFilteredPaginatedMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
 import {
     IMemberOccupationCreateUpdateFormProps,
@@ -40,7 +40,7 @@ interface Props {
     className?: string
     placeholder?: string
     memberOccupationComboboxCreateProps?: IMemberOccupationComboboxCreateProps
-    onChange?: (selected: IMemberOccupationResource) => void
+    onChange?: (selected: IMemberOccupation) => void
 }
 
 const MemberOccupationCombobox = ({

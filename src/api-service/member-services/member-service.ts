@@ -5,12 +5,12 @@ import APIService from '../api-service'
 import { downloadFileService } from '@/helpers'
 
 import {
+    IMedia,
+    IMember,
     TEntityId,
     IMediaRequest,
     IMemberRequest,
-    IMemberResource,
     IMemberPaginatedResource,
-    IMediaResource,
 } from '@/types'
 
 export default class MemberService {
@@ -19,13 +19,13 @@ export default class MemberService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberResource> {
+    ): Promise<IMember> {
         const url = qs.stringifyUrl({
             url: `${MemberService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IMemberResource>(url, {
+        const response = await APIService.get<IMember>(url, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`, // Replace with actual token if needed
             },
@@ -35,7 +35,7 @@ export default class MemberService {
     }
 
     public static async getMedias(id: TEntityId) {
-        const response = await APIService.get<IMediaResource[]>(
+        const response = await APIService.get<IMedia[]>(
             `${this.BASE_ENDPOINT}/${id}/medias`
         )
         return response.data
@@ -50,9 +50,7 @@ export default class MemberService {
             { skipNull: true }
         )
 
-        return (
-            await APIService.post<IMemberRequest, IMemberResource>(url, data)
-        ).data
+        return (await APIService.post<IMemberRequest, IMember>(url, data)).data
     }
 
     public static async delete(id: TEntityId): Promise<void> {
@@ -69,7 +67,7 @@ export default class MemberService {
                   confirmPassword?: string
               }),
         preloads?: string[]
-    ): Promise<IMemberResource> {
+    ): Promise<IMember> {
         const url = qs.stringifyUrl({
             url: `${MemberService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
@@ -81,7 +79,7 @@ export default class MemberService {
                   password?: string
                   confirmPassword?: string
               }),
-            IMemberResource
+            IMember
         >(url, memberData, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`, // Replace with actual token if needed
@@ -156,14 +154,14 @@ export default class MemberService {
         id: TEntityId,
         data: IMediaRequest,
         preloads: string[] = ['Media']
-    ): Promise<IMemberResource> {
+    ): Promise<IMember> {
         const preloadParams =
             preloads
                 ?.map((preload) => `preloads=${encodeURIComponent(preload)}`)
                 .join('&') || ''
         const separator = preloadParams ? '?' : ''
         const endpoint = `${MemberService.BASE_ENDPOINT}/profile-picture/${id}${separator}${preloadParams}`
-        const response = await APIService.post<IMediaRequest, IMemberResource>(
+        const response = await APIService.post<IMediaRequest, IMember>(
             endpoint,
             data
         )

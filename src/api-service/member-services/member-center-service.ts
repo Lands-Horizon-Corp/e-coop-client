@@ -6,9 +6,9 @@ import { downloadFileService } from '@/helpers'
 
 import {
     TEntityId,
+    IMemberCenter,
     IMemberCenterRequest,
-    IMemberCenterResource,
-    IMemberCenterPaginatedResource,
+    IMemberCenterPaginated,
 } from '@/types'
 
 export default class MemberCenterService {
@@ -17,13 +17,13 @@ export default class MemberCenterService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberCenterResource> {
+    ): Promise<IMemberCenter> {
         const url = qs.stringifyUrl({
             url: `${MemberCenterService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IMemberCenterResource>(url)
+        const response = await APIService.get<IMemberCenter>(url)
         return response.data
     }
 
@@ -40,7 +40,7 @@ export default class MemberCenterService {
         )
 
         return (
-            await APIService.post<IMemberCenterRequest, IMemberCenterResource>(
+            await APIService.post<IMemberCenterRequest, IMemberCenter>(
                 url,
                 data
             )
@@ -56,7 +56,7 @@ export default class MemberCenterService {
         id: TEntityId,
         data: IMemberCenterRequest,
         preloads?: string[]
-    ): Promise<IMemberCenterResource> {
+    ): Promise<IMemberCenter> {
         const url = qs.stringifyUrl({
             url: `${MemberCenterService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
@@ -64,7 +64,7 @@ export default class MemberCenterService {
 
         const response = await APIService.put<
             IMemberCenterRequest,
-            IMemberCenterResource
+            IMemberCenter
         >(url, data)
         return response.data
     }
@@ -91,8 +91,7 @@ export default class MemberCenterService {
             { skipNull: true }
         )
 
-        const response =
-            await APIService.get<IMemberCenterPaginatedResource>(url)
+        const response = await APIService.get<IMemberCenterPaginated>(url)
         return response.data
     }
 

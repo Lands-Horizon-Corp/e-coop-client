@@ -1,5 +1,5 @@
 import { IMediaRequest } from './media'
-import { TAccountType, IUserBase } from './common'
+import { TAccountType, IUserBase } from '../common'
 
 export interface IUserData extends IUserBase {
     accountType: TAccountType

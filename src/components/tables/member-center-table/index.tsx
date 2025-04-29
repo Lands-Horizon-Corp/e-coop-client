@@ -25,15 +25,15 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IMemberCenterResource } from '@/types/coop-types'
+import { IMemberCenter } from '@/types'
 import MemberCenterService from '@/api-service/member-services/member-center-service'
 import { useFilteredPaginatedMemberCenters } from '@/hooks/api-hooks/member/use-member-center'
 
 export interface MemberCenterTableProps
-    extends TableProps<IMemberCenterResource>,
+    extends TableProps<IMemberCenter>,
         IMemberCenterTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberCenterResource>,
+        IDataTableToolbarProps<IMemberCenter>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -74,7 +74,7 @@ const MemberCenterTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberCenterResource>({
+    } = useDataTableState<IMemberCenter>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

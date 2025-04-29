@@ -1,15 +1,15 @@
-import { ITimeStamps, TEntityId } from '../common'
+import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberGenderResource } from './member-gender'
-import { IMemberProfileResource } from './member-profile'
+import { IMemberGender } from './member-gender'
+import { IMemberProfile } from './member-profile'
 
-export interface IMemberGenderHistoryResource extends ITimeStamps {
+export interface IMemberGenderHistory extends ITimeStamps {
     id: TEntityId
     memberProfileId: TEntityId
     memberGenderId: TEntityId
-    memberProfile?: IMemberProfileResource
-    memberGender?: IMemberGenderResource
+    memberProfile?: IMemberProfile
+    memberGender?: IMemberGender
 }
 
-export interface IMemberGenderHistoryPaginatedResource
-    extends IPaginatedResult<IMemberGenderHistoryResource> {}
+export interface IMemberGenderHistoryPaginated
+    extends IPaginatedResult<IMemberGenderHistory> {}

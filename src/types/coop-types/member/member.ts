@@ -1,10 +1,10 @@
 import { IMediaRequest } from '../media'
-import { IRolesResource } from '../role'
-import { IGenderResource } from '../gender'
-import { IFootstepResource } from '../footstep'
+import { IRoles } from '../role'
+import { IGender } from '../gender'
+import { IFootstep } from '../footstep'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberProfileResource } from './member-profile'
-import { IUserBase, TAccountStatus, TEntityId } from '../common'
+import { IMemberProfile } from './member-profile'
+import { IUserBase, TAccountStatus, TEntityId } from '../../common'
 
 export interface IMemberRequest {
     username: string
@@ -33,7 +33,8 @@ export interface IMemberRequestNoPassword
     confirmPassword?: string
 }
 
-export interface IMemberResource extends IUserBase {
+// TODO
+export interface IMember extends IUserBase {
     id: TEntityId
     accountType: 'Member'
 
@@ -43,14 +44,13 @@ export interface IMemberResource extends IUserBase {
     isContactVerified: boolean
     isSkipVerification: boolean
 
-    role?: IRolesResource
-    gender?: IGenderResource
+    role?: IRoles
+    gender?: IGender
 
     status: TAccountStatus
 
-    footsteps?: IFootstepResource[]
-    memberProfile?: IMemberProfileResource
+    footsteps?: IFootstep[]
+    memberProfile?: IMemberProfile
 }
 
-export interface IMemberPaginatedResource
-    extends IPaginatedResult<IMemberResource> {}
+export interface IMemberPaginatedResource extends IPaginatedResult<IMember> {}

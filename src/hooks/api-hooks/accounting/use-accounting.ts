@@ -13,7 +13,7 @@ import {
     IAccountsPaginatedResource,
     IAccountsRequest,
     IAccountsResource,
-} from '@/types/coop-types/accounts/accounts'
+} from '@/types'
 import AccountsService from '@/api-service/accounting-services/accounts-service'
 
 export const useFilteredPaginatedAccounts = ({

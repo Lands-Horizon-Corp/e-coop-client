@@ -20,13 +20,13 @@ import {
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
 import useFilterState from '@/hooks/use-filter-state'
-import { IOwnerResource, TEntityId } from '@/types/coop-types'
+import { IOwner, TEntityId } from '@/types'
 
 interface Props {
     value?: TEntityId
     placeholder?: string
     disabled?: boolean
-    onSelect?: (selectedOwner: IOwnerResource) => void
+    onSelect?: (selectedOwner: IOwner) => void
 }
 
 const OwnerPicker = ({ value, disabled, placeholder, onSelect }: Props) => {

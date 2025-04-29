@@ -2,7 +2,7 @@ import qs from 'query-string'
 
 import APIService from './api-service'
 
-import { IContactResource, IContactRequest, TEntityId } from '@/types'
+import { IContact, IContactRequest, TEntityId } from '@/types'
 
 /**
  * Service class to handle CRUD operations for contacts.
@@ -10,8 +10,8 @@ import { IContactResource, IContactRequest, TEntityId } from '@/types'
 export default class ContactService {
     private static readonly BASE_ENDPOINT = '/contacts'
 
-    public static async getAll(): Promise<IContactResource[]> {
-        const response = await APIService.get<IContactResource[]>(
+    public static async getAll(): Promise<IContact[]> {
+        const response = await APIService.get<IContact[]>(
             ContactService.BASE_ENDPOINT
         )
         return response.data
@@ -19,11 +19,11 @@ export default class ContactService {
 
     public static async create(
         contactData: IContactRequest
-    ): Promise<IContactResource> {
-        const response = await APIService.post<
-            IContactRequest,
-            IContactResource
-        >(ContactService.BASE_ENDPOINT, contactData)
+    ): Promise<IContact> {
+        const response = await APIService.post<IContactRequest, IContact>(
+            ContactService.BASE_ENDPOINT,
+            contactData
+        )
         return response.data
     }
 
@@ -35,19 +35,19 @@ export default class ContactService {
     public static async update(
         id: TEntityId,
         contactData: IContactRequest
-    ): Promise<IContactResource> {
+    ): Promise<IContact> {
         const endpoint = `${ContactService.BASE_ENDPOINT}/${id}`
-        const response = await APIService.put<
-            IContactRequest,
-            IContactResource
-        >(endpoint, contactData)
+        const response = await APIService.put<IContactRequest, IContact>(
+            endpoint,
+            contactData
+        )
         return response.data
     }
 
     public static async getById(
         id: TEntityId,
         preloads?: string
-    ): Promise<IContactResource> {
+    ): Promise<IContact> {
         const url = qs.stringifyUrl(
             {
                 url: `${ContactService.BASE_ENDPOINT}/${id}`,
@@ -55,7 +55,7 @@ export default class ContactService {
             },
             { skipNull: true }
         )
-        const response = await APIService.get<IContactResource>(url)
+        const response = await APIService.get<IContact>(url)
         return response.data
     }
 }

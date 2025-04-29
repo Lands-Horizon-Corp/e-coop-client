@@ -5,10 +5,12 @@ import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 
 import {
+    TEntityId,
+    IMemberProfile,
     IMemberProfileRequest,
-    IMemberProfileResource,
-} from '@/types/coop-types/member/member-profile'
-import { IMemberCloseRemarkRequest, TEntityId } from '@/types'
+    IMemberCloseRemarkRequest,
+} from '@/types'
+
 import { IAPIHook, IMutationProps, IQueryProps } from '../types'
 import MemberProfileService from '@/api-service/member-services/member-profile-service'
 
@@ -17,12 +19,10 @@ export const useCreateMemberProfile = ({
     preloads = ['Media'],
     onSuccess,
     onError,
-}:
-    | undefined
-    | (IAPIHook<IMemberProfileResource, string> & IQueryProps) = {}) => {
+}: undefined | (IAPIHook<IMemberProfile, string> & IQueryProps) = {}) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IMemberProfileResource, string, IMemberProfileRequest>({
+    return useMutation<IMemberProfile, string, IMemberProfileRequest>({
         mutationKey: ['member-profile', 'create'],
         mutationFn: async (data) => {
             const [error, newMember] = await withCatchAsync(
@@ -40,7 +40,7 @@ export const useCreateMemberProfile = ({
                 queryKey: ['member', 'resource-query'],
             })
 
-            queryClient.setQueryData<IMemberProfileResource>(
+            queryClient.setQueryData<IMemberProfile>(
                 ['member-profile', newMember.id],
                 newMember
             )
@@ -67,9 +67,9 @@ export const useMemberProfile = ({
     onError,
     onSuccess,
     ...opts
-}: { profileId: TEntityId } & IAPIHook<IMemberProfileResource, string> &
-    IQueryProps<IMemberProfileResource>) => {
-    return useQuery<IMemberProfileResource, string>({
+}: { profileId: TEntityId } & IAPIHook<IMemberProfile, string> &
+    IQueryProps<IMemberProfile>) => {
+    return useQuery<IMemberProfile, string>({
         queryKey: ['member-profile', profileId],
         queryFn: async () => {
             const [error, data] = await withCatchAsync(
@@ -95,13 +95,11 @@ export const useUpdateMemberProfile = ({
     preloads = ['Media'],
     onSuccess,
     onError,
-}:
-    | undefined
-    | (IAPIHook<IMemberProfileResource, string> & IMutationProps) = {}) => {
+}: undefined | (IAPIHook<IMemberProfile, string> & IMutationProps) = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberProfileResource,
+        IMemberProfile,
         string,
         { id: TEntityId; data: IMemberProfileRequest }
     >({
@@ -122,7 +120,7 @@ export const useUpdateMemberProfile = ({
                 queryKey: ['member', 'resource-query'],
             })
 
-            queryClient.setQueryData<IMemberProfileResource>(
+            queryClient.setQueryData<IMemberProfile>(
                 ['member-profile', updatedMember.id],
                 updatedMember
             )
@@ -148,11 +146,11 @@ export const useCloseMemberProfile = ({
     onSuccess,
     onError,
     ...other
-}: IAPIHook<IMemberProfileResource, string> & IMutationProps = {}) => {
+}: IAPIHook<IMemberProfile, string> & IMutationProps = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberProfileResource,
+        IMemberProfile,
         string,
         { profileId: TEntityId; data: IMemberCloseRemarkRequest[] }
     >({
@@ -173,7 +171,7 @@ export const useCloseMemberProfile = ({
                 queryKey: ['member', 'resource-query'],
             })
 
-            queryClient.setQueryData<IMemberProfileResource>(
+            queryClient.setQueryData<IMemberProfile>(
                 ['member-profile', closedMember.id],
                 closedMember
             )

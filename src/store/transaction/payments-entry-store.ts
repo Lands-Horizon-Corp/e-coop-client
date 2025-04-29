@@ -1,17 +1,15 @@
 import { create } from 'zustand'
-import { IMemberResource } from '@/types/coop-types'
-import { IPaymentsEntry } from '@/types/coop-types/transactions/payments-entry'
-import { IAccountsRequest } from '@/types/coop-types/accounts/accounts'
+import { IMember, IAccountsRequest, IPaymentsEntry } from '@/types'
 
 // Payments Data
 export interface PaymentsDataStore {
-    selectedMember: IMemberResource | null
+    selectedMember: IMember | null
     ORNumber: string
     selectedPayments: IPaymentsEntry[]
     selectedAccounts: IAccountsRequest | null
     focusTypePayment: string | null
 
-    setSelectedMember: (member: IMemberResource | null) => void
+    setSelectedMember: (member: IMember | null) => void
     setORNumber: (orNumber: string) => void
     setSelectedPayments: (payments: IPaymentsEntry[]) => void
     setSelectedAccounts: (accounts: IAccountsRequest | null) => void

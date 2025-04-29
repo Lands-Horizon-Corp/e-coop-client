@@ -12,27 +12,24 @@ import {
     IQueryProps,
 } from './types'
 import {
-    IOwnerResource,
+    IOwner,
     ICompanyResource,
     IOwnerPaginatedResource,
-    IBranchPaginatedResource,
+    IBranchPaginated,
     TEntityId,
-} from '@/types/coop-types'
+} from '@/types'
 
 // Load Specific owner by ID
 export const useOwner = ({
     ownerId,
     onError,
     preloads = ['Media'],
-}: Omit<
-    IOperationCallbacks<IOwnerResource, string> & IAPIPreloads,
-    'onSuccess'
-> & {
+}: Omit<IOperationCallbacks<IOwner, string> & IAPIPreloads, 'onSuccess'> & {
     ownerId: TEntityId
 }) => {
     const queryClient = useQueryClient()
 
-    return useQuery<IOwnerResource>({
+    return useQuery<IOwner>({
         queryKey: ['owner', ownerId],
         queryFn: async () => {
             const [error, data] = await withCatchAsync(
@@ -103,7 +100,7 @@ export const useOwnerPaginatedBranch = ({
     preloads = ['Media'],
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IFilterPaginatedHookProps & IQueryProps & { ownerId: TEntityId }) => {
-    return useQuery<IBranchPaginatedResource, string>({
+    return useQuery<IBranchPaginated, string>({
         queryKey: ['branch', 'resource-query', filterPayload, pagination, sort],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(

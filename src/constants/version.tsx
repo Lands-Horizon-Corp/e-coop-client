@@ -1,7 +1,7 @@
 import { FaBug } from 'react-icons/fa'
 import { TbGrowth } from 'react-icons/tb'
 
-import { SoftwareUpdates, UpdateStatus } from '@/types/constants'
+import { SoftwareUpdates, UpdateStatus } from '@/types'
 
 export const softwareUpdates: SoftwareUpdates = {
     name: 'e-Coop Beta',

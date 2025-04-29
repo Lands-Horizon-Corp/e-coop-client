@@ -25,7 +25,7 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import { IMemberClassificationResource } from '@/types/coop-types'
+import { IMemberClassification } from '@/types'
 import MemberClassificationService from '@/api-service/member-services/member-classification-service'
 import { useFilteredPaginatedMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
 
@@ -35,10 +35,10 @@ const MemberClassificationTable = ({
     defaultFilter,
     onSelectData,
     actionComponent,
-}: TableProps<IMemberClassificationResource> &
+}: TableProps<IMemberClassification> &
     IMemberClassificationTableColumnProps & {
         toolbarProps?: Omit<
-            IDataTableToolbarProps<IMemberClassificationResource>,
+            IDataTableToolbarProps<IMemberClassification>,
             | 'table'
             | 'refreshActionProps'
             | 'globalSearchProps'
@@ -71,7 +71,7 @@ const MemberClassificationTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberClassificationResource>({
+    } = useDataTableState<IMemberClassification>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

@@ -4,12 +4,12 @@ import qs from 'query-string'
 import APIService from '../api-service'
 import {
     TEntityId,
-    IMemberTypeHistoryPaginatedResource,
-    IMemberGenderHistoryPaginatedResource,
-    IMemberCenterHistoryPaginatedResource,
-    IMemberMutualFundsHistoryPaginatedResource,
-    IMemberClassificationHistoryPaginatedResource,
-    IMemberEducationalAttainmentHistoryPaginatedResource,
+    IMemberTypeHistoryPaginated,
+    IMemberGenderHistoryPaginated,
+    IMemberCenterHistoryPaginated,
+    IMemberMutualFundsHistoryPaginated,
+    IMemberClassificationHistoryPaginated,
+    IMemberEducationalAttainmentHistoryPaginated,
 } from '@/types'
 
 export default class MemberHistoryService {
@@ -42,7 +42,7 @@ export default class MemberHistoryService {
         )
 
         const response =
-            await APIService.get<IMemberCenterHistoryPaginatedResource>(url)
+            await APIService.get<IMemberCenterHistoryPaginated>(url)
         return response.data
     }
 
@@ -73,9 +73,7 @@ export default class MemberHistoryService {
         )
 
         const response =
-            await APIService.get<IMemberClassificationHistoryPaginatedResource>(
-                url
-            )
+            await APIService.get<IMemberClassificationHistoryPaginated>(url)
         return response.data
     }
 
@@ -106,7 +104,7 @@ export default class MemberHistoryService {
         )
 
         const response =
-            await APIService.get<IMemberEducationalAttainmentHistoryPaginatedResource>(
+            await APIService.get<IMemberEducationalAttainmentHistoryPaginated>(
                 url
             )
         return response.data
@@ -138,8 +136,7 @@ export default class MemberHistoryService {
             { skipNull: true }
         )
 
-        const response =
-            await APIService.get<IMemberTypeHistoryPaginatedResource>(url)
+        const response = await APIService.get<IMemberTypeHistoryPaginated>(url)
         return response.data
     }
 
@@ -170,7 +167,7 @@ export default class MemberHistoryService {
         )
 
         const response =
-            await APIService.get<IMemberGenderHistoryPaginatedResource>(url)
+            await APIService.get<IMemberGenderHistoryPaginated>(url)
         return response.data
     }
 
@@ -201,9 +198,7 @@ export default class MemberHistoryService {
         )
 
         const response =
-            await APIService.get<IMemberMutualFundsHistoryPaginatedResource>(
-                url
-            )
+            await APIService.get<IMemberMutualFundsHistoryPaginated>(url)
         return response.data
     }
 }

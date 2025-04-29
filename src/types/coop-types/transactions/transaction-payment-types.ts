@@ -1,4 +1,4 @@
-import { ITimeStamps, TEntityId } from '../common'
+import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
 
 export interface ITransactionPaymentTypesRequest {
@@ -8,12 +8,12 @@ export interface ITransactionPaymentTypesRequest {
     chequeId: TEntityId
 }
 
-export interface ITransactionPaymentTypesResource extends ITimeStamps {
+export interface ITransactionPaymentTypes extends ITimeStamps {
     id: TEntityId
     name: string
     description: TEntityId
     chequeId: TEntityId
 }
 
-export interface ITransactionPaymentTypePaginatedResource
-    extends IPaginatedResult<ITransactionPaymentTypesResource> {}
+export interface ITransactionPaymentTypePaginated
+    extends IPaginatedResult<ITransactionPaymentTypes> {}

@@ -18,7 +18,7 @@ import footstepColumns, {
 
 import { cn } from '@/lib'
 import { TableProps } from '@/types'
-import { IFootstepResource } from '@/types/coop-types'
+import { IFootstep } from '@/types'
 import FootstepService from '@/api-service/footstep-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 
@@ -29,10 +29,10 @@ import { useFilteredPaginatedFootsteps } from '@/hooks/api-hooks/use-footstep'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 export interface FootstepTableProps
-    extends TableProps<IFootstepResource>,
+    extends TableProps<IFootstep>,
         IFootstepTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IFootstepResource>,
+        IDataTableToolbarProps<IFootstep>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -74,7 +74,7 @@ const FootstepTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IFootstepResource>({
+    } = useDataTableState<IFootstep>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

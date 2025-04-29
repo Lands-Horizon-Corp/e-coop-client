@@ -1,11 +1,11 @@
-import { IOwnerResource } from './owner'
-import { IAdminResource } from './admin'
-import { IMemberResource } from './member/member'
+import { IOwner } from './owner'
+import { IAdmin } from './admin'
+import { IMember } from './member/member'
 import { IEmployeeResource } from './employee'
-import { TAccountType, TEntityId } from './common'
+import { TAccountType, TEntityId } from '../common'
 import { IPaginatedResult } from './paginated-result'
 
-export interface IFootstepResource {
+export interface IFootstep {
     id: TEntityId
     createdAt: string
     updatedAt: string
@@ -21,14 +21,13 @@ export interface IFootstepResource {
     isDeleted: boolean
 
     adminId?: TEntityId
-    admin?: IAdminResource
+    admin?: IAdmin
     employeeId?: TEntityId
     employee?: IEmployeeResource
     ownerId?: TEntityId
-    owner?: IOwnerResource
+    owner?: IOwner
     memberId?: TEntityId
-    member?: IMemberResource
+    member?: IMember
 }
 
-export interface IFootstepPaginatedResource
-    extends IPaginatedResult<IFootstepResource> {}
+export interface IFootstepPaginated extends IPaginatedResult<IFootstep> {}

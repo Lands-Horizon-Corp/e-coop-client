@@ -32,9 +32,7 @@ import { cn } from '@/lib'
 import { contactNumberSchema } from '@/validations/common'
 import { useUpdateCompany } from '@/hooks/api-hooks/use-company'
 
-import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
-import { ICompanyResource, TEntityId } from '@/types/coop-types'
+import { IClassProps, IForm, ICompanyResource, TEntityId } from '@/types'
 
 type TCompanyBasicInfo = Omit<ICompanyResource, 'owner' | 'media' | 'branches'>
 

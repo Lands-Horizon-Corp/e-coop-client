@@ -3,7 +3,7 @@ import qs from 'query-string'
 import APIService from './api-service'
 import { downloadFileService } from '@/helpers'
 
-import { IFootstepPaginatedResource, TEntityId } from '@/types'
+import { IFootstepPaginated, TEntityId } from '@/types'
 
 /**
  * Service class to handle CRUD operations for footsteps.
@@ -34,7 +34,7 @@ export default class FootstepService {
             },
             { skipNull: true }
         )
-        const response = await APIService.get<IFootstepPaginatedResource>(url)
+        const response = await APIService.get<IFootstepPaginated>(url)
         return response.data
     }
 
@@ -76,7 +76,7 @@ export default class FootstepService {
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
-    }): Promise<IFootstepPaginatedResource> {
+    }): Promise<IFootstepPaginated> {
         const { filters, preloads, pagination, sort } = props || {}
 
         const url = qs.stringifyUrl(
@@ -93,7 +93,7 @@ export default class FootstepService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IFootstepPaginatedResource>(url)
+        const response = await APIService.get<IFootstepPaginated>(url)
         return response.data
     }
 
@@ -103,7 +103,7 @@ export default class FootstepService {
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
-    }): Promise<IFootstepPaginatedResource> {
+    }): Promise<IFootstepPaginated> {
         const { filters, preloads, pagination, sort } = props || {}
 
         const url = qs.stringifyUrl(
@@ -120,7 +120,7 @@ export default class FootstepService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IFootstepPaginatedResource>(url)
+        const response = await APIService.get<IFootstepPaginated>(url)
         return response.data
     }
 }

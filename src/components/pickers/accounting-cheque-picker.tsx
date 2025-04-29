@@ -11,8 +11,7 @@ import {
     PAGINATION_INITIAL_PAGE_SIZE,
 } from '@/constants'
 import useFilterState from '@/hooks/use-filter-state'
-import { TEntityId } from '@/types/coop-types'
-import { IChequeResource } from '@/types/coop-types/cheque'
+import { TEntityId, IChequeResource } from '@/types'
 import { useFilteredPaginatedCheques } from '@/hooks/api-hooks/accounting/use-accounting-cheque'
 
 interface Props {

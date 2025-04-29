@@ -12,7 +12,7 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import {
     useCreateMemberClassification,
     useUpdateMemberClassification,
@@ -22,9 +22,9 @@ import { memberClassificationSchema } from '@/validations/member/member-classifi
 import { IClassProps } from '@/types'
 import {
     IMemberClassificationRequest,
-    IMemberClassificationResource,
+    IMemberClassification,
     TEntityId,
-} from '@/types/coop-types'
+} from '@/types'
 
 type TMemberClassificationForm = z.infer<typeof memberClassificationSchema>
 
@@ -32,7 +32,7 @@ export interface IMemberClassificationCreateUpdateFormProps
     extends IClassProps,
         IForm<
             Partial<IMemberClassificationRequest>,
-            IMemberClassificationResource,
+            IMemberClassification,
             string
         > {
     memberClassificationId?: TEntityId

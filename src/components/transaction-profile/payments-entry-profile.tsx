@@ -2,12 +2,12 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ArrowUpRight, UserX } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { BadgeCheckFillIcon, Image2Icon } from '../icons'
-import { IMemberResource } from '@/types'
+import { IMember } from '@/types'
 import CopyTextButton from '@/components/copy-text-button'
 import { ImagePreviewData } from '@/store/image-preview-store'
 
 type PaymentsEntryProfileProps = {
-    profile: IMemberResource | null
+    profile: IMember | null
     onOpen: (image: ImagePreviewData) => void
 }
 

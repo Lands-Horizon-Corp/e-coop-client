@@ -9,17 +9,16 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IFeedbackResource } from '@/types/coop-types'
+import { IFeedback } from '@/types'
 
-export const FeedbackGlobalSearchTargets: IGlobalSearchTargets<IFeedbackResource>[] =
-    [
-        { field: 'email', displayText: 'email' },
-        { field: 'feedbackType', displayText: 'feedbackType' },
-        { field: 'description', displayText: 'description' },
-    ]
+export const FeedbackGlobalSearchTargets: IGlobalSearchTargets<IFeedback>[] = [
+    { field: 'email', displayText: 'email' },
+    { field: 'feedbackType', displayText: 'feedbackType' },
+    { field: 'description', displayText: 'description' },
+]
 
 export interface IFeedBackTableActionComponentProp {
-    row: Row<IFeedbackResource>
+    row: Row<IFeedback>
 }
 
 export interface IFeedbackTableColumnProps {
@@ -28,7 +27,7 @@ export interface IFeedbackTableColumnProps {
 
 const AdminCompaniesFeedbackTableColumns = (
     opts: IFeedbackTableColumnProps
-): ColumnDef<IFeedbackResource>[] => {
+): ColumnDef<IFeedback>[] => {
     return [
         {
             id: 'select',

@@ -19,7 +19,7 @@ import {
     TCustomSearchProps,
     TMapWithClickProps,
     TLatLngExpressionWithDesc,
-} from '@/types/components'
+} from '@/types'
 import { Input } from '../ui/input'
 import LayerControl from './layer-control'
 import { LoadingCircleIcon, LocationPinOutlineIcon } from '../icons'

@@ -27,7 +27,7 @@ import {
 } from '@/validations/common'
 
 import { cn } from '@/lib'
-import { IUserData } from '@/types/coop-types'
+import { IUserData } from '@/types'
 import { useUpdateAccountSettings } from '@/hooks/api-hooks/use-account'
 
 const AccountSettingsFormSchema = z.object({

@@ -10,7 +10,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IAccountsComputationTypeResource } from '@/types/coop-types/accounts/computation-type'
+import { IAccountsComputationTypeResource } from '@/types'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 
 export const accountComputationTypeGlobalSearchTargets: IGlobalSearchTargets<IAccountsComputationTypeResource>[] =

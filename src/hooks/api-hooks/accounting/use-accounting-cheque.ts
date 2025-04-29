@@ -9,11 +9,11 @@ import {
     IFilterPaginatedHookProps,
 } from '../types'
 import {
+    TEntityId,
     IChequeResource,
     IChequeResponse,
     IChequePaginatedResource,
-} from '@/types/coop-types/cheque'
-import { TEntityId } from '@/types/coop-types'
+} from '@/types'
 import ChequeService from '@/api-service/accounting-services/accounting-cheque'
 
 export const useFilteredPaginatedCheques = ({

@@ -3,12 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 
 import {
     TEntityId,
-    IMemberTypeHistoryPaginatedResource,
-    IMemberGenderHistoryPaginatedResource,
-    IMemberCenterHistoryPaginatedResource,
-    IMemberMutualFundsHistoryPaginatedResource,
-    IMemberClassificationHistoryPaginatedResource,
-    IMemberEducationalAttainmentHistoryPaginatedResource,
+    IMemberTypeHistoryPaginated,
+    IMemberGenderHistoryPaginated,
+    IMemberCenterHistoryPaginated,
+    IMemberMutualFundsHistoryPaginated,
+    IMemberClassificationHistoryPaginated,
+    IMemberEducationalAttainmentHistoryPaginated,
 } from '@/types'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
@@ -24,9 +24,9 @@ export const useMemberCenterHistory = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IMemberCenterHistoryPaginatedResource, string> &
+}: IAPIFilteredPaginatedHook<IMemberCenterHistoryPaginated, string> &
     IQueryProps & { profileId: TEntityId }) => {
-    return useQuery<IMemberCenterHistoryPaginatedResource, string>({
+    return useQuery<IMemberCenterHistoryPaginated, string>({
         queryKey: [
             'member-center-history',
             'resource-query',
@@ -74,12 +74,9 @@ export const useMemberClassificationHistory = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<
-    IMemberClassificationHistoryPaginatedResource,
-    string
-> &
+}: IAPIFilteredPaginatedHook<IMemberClassificationHistoryPaginated, string> &
     IQueryProps & { profileId: TEntityId }) => {
-    return useQuery<IMemberClassificationHistoryPaginatedResource, string>({
+    return useQuery<IMemberClassificationHistoryPaginated, string>({
         queryKey: [
             'member-center-history',
             'resource-query',
@@ -128,14 +125,11 @@ export const useMemberEducationalAttainmentHistory = ({
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<
-    IMemberEducationalAttainmentHistoryPaginatedResource,
+    IMemberEducationalAttainmentHistoryPaginated,
     string
 > &
     IQueryProps & { profileId: TEntityId }) => {
-    return useQuery<
-        IMemberEducationalAttainmentHistoryPaginatedResource,
-        string
-    >({
+    return useQuery<IMemberEducationalAttainmentHistoryPaginated, string>({
         queryKey: [
             'member-center-history',
             'resource-query',
@@ -185,9 +179,9 @@ export const useMemberTypeHistory = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IMemberTypeHistoryPaginatedResource, string> &
+}: IAPIFilteredPaginatedHook<IMemberTypeHistoryPaginated, string> &
     IQueryProps & { profileId: TEntityId }) => {
-    return useQuery<IMemberTypeHistoryPaginatedResource, string>({
+    return useQuery<IMemberTypeHistoryPaginated, string>({
         queryKey: [
             'member-center-history',
             'resource-query',
@@ -235,9 +229,9 @@ export const useMemberGenderHistory = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IMemberGenderHistoryPaginatedResource, string> &
+}: IAPIFilteredPaginatedHook<IMemberGenderHistoryPaginated, string> &
     IQueryProps & { profileId: TEntityId }) => {
-    return useQuery<IMemberGenderHistoryPaginatedResource, string>({
+    return useQuery<IMemberGenderHistoryPaginated, string>({
         queryKey: [
             'member-center-history',
             'resource-query',
@@ -285,12 +279,9 @@ export const useMemberMutualFundsHistory = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<
-    IMemberMutualFundsHistoryPaginatedResource,
-    string
-> &
+}: IAPIFilteredPaginatedHook<IMemberMutualFundsHistoryPaginated, string> &
     IQueryProps & { profileId: TEntityId }) => {
-    return useQuery<IMemberMutualFundsHistoryPaginatedResource, string>({
+    return useQuery<IMemberMutualFundsHistoryPaginated, string>({
         queryKey: [
             'member-center-history',
             'resource-query',

@@ -1,6 +1,6 @@
-import { IMediaResource } from '../media'
-import { ITimeStamps, TEntityId } from '../common'
-import { IMemberProfileResource } from './member-profile'
+import { IMedia } from '../media'
+import { ITimeStamps, TEntityId } from '../../common'
+import { IMemberProfile } from './member-profile'
 
 export interface IMemberGovernmentBenefitsRequest {
     id?: TEntityId
@@ -12,7 +12,7 @@ export interface IMemberGovernmentBenefitsRequest {
     backMediaId?: TEntityId
 }
 
-export interface IMemberGovernmentBenefitsResource extends ITimeStamps {
+export interface IMemberGovernmentBenefits extends ITimeStamps {
     id: TEntityId
     membersProfileId: TEntityId
     country: string
@@ -21,7 +21,7 @@ export interface IMemberGovernmentBenefitsResource extends ITimeStamps {
     value: string
     frontMediaId?: TEntityId
     backMediaId?: TEntityId
-    membersProfile?: IMemberProfileResource
-    frontMedia?: IMediaResource
-    backMedia?: IMediaResource
+    membersProfile?: IMemberProfile
+    frontMedia?: IMedia
+    backMedia?: IMedia
 }

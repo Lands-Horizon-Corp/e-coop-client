@@ -5,11 +5,11 @@ import APIService from './api-service'
 import { downloadFileService } from '@/helpers'
 
 import {
+    IBranch,
     TEntityId,
     IMediaRequest,
     IBranchRequest,
-    IBranchResource,
-    IBranchPaginatedResource,
+    IBranchPaginated,
 } from '@/types'
 
 /**
@@ -21,7 +21,7 @@ export default class BranchService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IBranchResource> {
+    ): Promise<IBranch> {
         const url = qs.stringifyUrl(
             {
                 url: `${BranchService.BASE_ENDPOINT}/${id}`,
@@ -32,7 +32,7 @@ export default class BranchService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IBranchResource>(url, {
+        const response = await APIService.get<IBranch>(url, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`,
             },
@@ -44,7 +44,7 @@ export default class BranchService {
     public static async create(
         branchData: IBranchRequest,
         preloads?: string[]
-    ): Promise<IBranchResource> {
+    ): Promise<IBranch> {
         const url = qs.stringifyUrl(
             {
                 url: `${BranchService.BASE_ENDPOINT}`,
@@ -55,7 +55,7 @@ export default class BranchService {
             { skipNull: true }
         )
 
-        const response = await APIService.post<IBranchRequest, IBranchResource>(
+        const response = await APIService.post<IBranchRequest, IBranch>(
             url,
             branchData
         )
@@ -71,7 +71,7 @@ export default class BranchService {
         id: TEntityId,
         branchData: IBranchRequest,
         preloads?: string[]
-    ): Promise<IBranchResource> {
+    ): Promise<IBranch> {
         const url = qs.stringifyUrl(
             {
                 url: `${BranchService.BASE_ENDPOINT}/${id}`,
@@ -82,7 +82,7 @@ export default class BranchService {
             { skipNull: true }
         )
 
-        const response = await APIService.put<IBranchRequest, IBranchResource>(
+        const response = await APIService.put<IBranchRequest, IBranch>(
             url,
             branchData,
             {
@@ -99,7 +99,7 @@ export default class BranchService {
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
         sort?: string
-    }): Promise<IBranchPaginatedResource> {
+    }): Promise<IBranchPaginated> {
         const { filters, preloads, pagination, sort } = props || {}
 
         const url = qs.stringifyUrl(
@@ -116,7 +116,7 @@ export default class BranchService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IBranchPaginatedResource>(url)
+        const response = await APIService.get<IBranchPaginated>(url)
         return response.data
     }
 
@@ -162,9 +162,9 @@ export default class BranchService {
         await APIService.delete<void>(endpoint, payload)
     }
 
-    public static async verify(id: TEntityId): Promise<IBranchResource> {
+    public static async verify(id: TEntityId): Promise<IBranch> {
         const endpoint = `${BranchService.BASE_ENDPOINT}/verify/${id}`
-        const response = await APIService.post<void, IBranchResource>(endpoint)
+        const response = await APIService.post<void, IBranch>(endpoint)
         return response.data
     }
 
@@ -172,7 +172,7 @@ export default class BranchService {
         id: TEntityId,
         data: IMediaRequest,
         preloads: string[] = ['Media']
-    ): Promise<IBranchResource> {
+    ): Promise<IBranch> {
         const url = qs.stringifyUrl(
             {
                 url: `${BranchService.BASE_ENDPOINT}/profile-picture/${id}`,
@@ -183,7 +183,7 @@ export default class BranchService {
             { skipNull: true }
         )
 
-        const response = await APIService.post<IMediaRequest, IBranchResource>(
+        const response = await APIService.post<IMediaRequest, IBranch>(
             url,
             data
         )

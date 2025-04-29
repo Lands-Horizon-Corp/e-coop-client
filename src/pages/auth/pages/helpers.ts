@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { TAccountStatus } from '@/types/coop-types'
+import { TAccountStatus } from '@/types'
 
 export const toastAccountStatus = (accountStatus: TAccountStatus) => {
     switch (accountStatus) {

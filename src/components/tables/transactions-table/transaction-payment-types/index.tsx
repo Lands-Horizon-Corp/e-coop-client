@@ -26,14 +26,14 @@ import TransactionPaymentTypesTableColumns, {
 
 import { useFilteredPaginatedTransactionPaymentTypes } from '@/hooks/api-hooks/transactions/use-transaction-payment-types'
 import { TableProps } from '@/types'
-import { ITransactionPaymentTypesResource } from '@/types/coop-types/transactions/transaction-payment-types'
+import { ITransactionPaymentTypes } from '@/types'
 import TransactionPaymentTypesService from '@/api-service/transactions/transaction-payment-types'
 
 export interface ITransactionPaymentTypesTableProps
-    extends TableProps<ITransactionPaymentTypesResource>,
+    extends TableProps<ITransactionPaymentTypes>,
         ITransactionPaymentTypesTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<ITransactionPaymentTypesResource>,
+        IDataTableToolbarProps<ITransactionPaymentTypes>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -71,7 +71,7 @@ const TransactionPaymentTypesTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<ITransactionPaymentTypesResource>({
+    } = useDataTableState<ITransactionPaymentTypes>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

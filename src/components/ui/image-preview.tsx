@@ -44,7 +44,7 @@ import {
     ImagePreviewPanelProps,
     ImagePreviewActionProps,
     ImagePreviewButtonActionProps,
-} from '@/types/components/image-preview'
+} from '@/types'
 import { Dialog, DialogContent, DialogTitle } from './dialog'
 
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>

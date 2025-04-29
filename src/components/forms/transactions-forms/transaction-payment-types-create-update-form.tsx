@@ -19,9 +19,9 @@ import {
 import { TransactionTypeRequestSchema } from '@/validations/transactions/transaction-type-schema'
 
 import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import { TEntityId } from '@/types'
-import { ITransactionPaymentTypesRequest } from '@/types/coop-types/transactions/transaction-payment-types'
+import { ITransactionPaymentTypesRequest } from '@/types'
 import AccountingChequePicker from '@/components/pickers/accounting-cheque-picker'
 
 type TTransactionTypeFormValues = z.infer<typeof TransactionTypeRequestSchema>

@@ -13,7 +13,7 @@ import {
     FormControl,
     FormMessage,
 } from '@/components/ui/form'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import { Button } from '@/components/ui/button'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -40,7 +40,7 @@ import {
     IPaymentsEntry,
     IPaymentsEntryRequest,
     TRANSACTION_TYPE,
-} from '@/types/coop-types/transactions/payments-entry'
+} from '@/types'
 import { IClassProps } from '@/types'
 import { Separator } from '@/components/ui/separator'
 import { AccountsIcon, MoneyIcon } from '@/components/icons'
@@ -58,7 +58,7 @@ import { toast } from 'sonner'
 import { useCreatePaymentEntry } from '@/hooks/api-hooks/transactions/use-payments-entry'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { IGenerateORNumberResource } from '@/types/coop-types/transactions/generate-or-number'
+import { IGenerateORNumberResource } from '@/types'
 import { RefetchOptions, QueryObserverResult } from '@tanstack/react-query'
 
 const CHECK_BANK_LIST = ['trans-pay-002', 'trans-pay-003']

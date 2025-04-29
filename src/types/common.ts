@@ -1,4 +1,4 @@
-import { IMediaResource } from './media'
+import { IMedia } from './coop-types/media'
 import { AccountClosureReasons, FAMILY_RELATIONSHIP } from '@/constants'
 
 export type TEntityId = string
@@ -61,12 +61,12 @@ export interface IUserBase extends ITimeStamps, ILongLat {
     description?: string
 
     mediaId?: number
-    media?: IMediaResource
+    media?: IMedia
 
     genderId?: number
 
     //TODO: Add sex
-    // gender?: IGenderResource
+    // gender?: IGender
 
     status: TAccountStatus
 

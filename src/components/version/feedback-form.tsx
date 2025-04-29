@@ -23,7 +23,7 @@ import { LoadingCircleIcon } from '@/components/icons'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { cn } from '@/lib/utils'
-import { UpdateStatus } from '@/types/constants'
+import { UpdateStatus } from '@/types'
 import { FeedbackFormSchema } from './validations'
 import { useCreateFeedback } from '@/hooks/api-hooks/use-feedback'
 

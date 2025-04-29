@@ -3,7 +3,7 @@ import qs from 'query-string'
 import APIService from './api-service'
 import { downloadFileService } from '@/helpers'
 
-import { IUserBase, IAdminResource, TEntityId } from '@/types'
+import { IUserBase, IAdmin, TEntityId } from '@/types'
 
 /**
  * Service class to handle CRUD operations for admins.
@@ -14,18 +14,18 @@ export default class AdminService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IAdminResource> {
+    ): Promise<IAdmin> {
         const url = qs.stringifyUrl({
             url: `${AdminService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IAdminResource>(url)
+        const response = await APIService.get<IAdmin>(url)
         return response.data
     }
 
-    public static async create(adminData: IUserBase): Promise<IAdminResource> {
-        const response = await APIService.post<IUserBase, IAdminResource>(
+    public static async create(adminData: IUserBase): Promise<IAdmin> {
+        const response = await APIService.post<IUserBase, IAdmin>(
             AdminService.BASE_ENDPOINT,
             adminData
         )
@@ -36,7 +36,7 @@ export default class AdminService {
         id: TEntityId,
         adminData: IUserBase,
         preloads?: string[]
-    ): Promise<IAdminResource> {
+    ): Promise<IAdmin> {
         const url = qs.stringifyUrl(
             {
                 url: `${AdminService.BASE_ENDPOINT}/${id}`,
@@ -45,10 +45,7 @@ export default class AdminService {
             { skipNull: true }
         )
 
-        const response = await APIService.put<IUserBase, IAdminResource>(
-            url,
-            adminData
-        )
+        const response = await APIService.put<IUserBase, IAdmin>(url, adminData)
         return response.data
     }
 
@@ -62,7 +59,7 @@ export default class AdminService {
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
-    }): Promise<IAdminResource[]> {
+    }): Promise<IAdmin[]> {
         const { filters, preloads, pagination, sort } = props || {}
 
         const url = qs.stringifyUrl(
@@ -79,13 +76,13 @@ export default class AdminService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IAdminResource[]>(url)
+        const response = await APIService.get<IAdmin[]>(url)
         return response.data
     }
 
-    public static async verify(id: TEntityId): Promise<IAdminResource> {
+    public static async verify(id: TEntityId): Promise<IAdmin> {
         const endpoint = `${AdminService.BASE_ENDPOINT}/verify/${id}`
-        const response = await APIService.post<void, IAdminResource>(endpoint)
+        const response = await APIService.post<void, IAdmin>(endpoint)
         return response.data
     }
 

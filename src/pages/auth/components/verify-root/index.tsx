@@ -5,8 +5,7 @@ import StepIndicator from '@/components/steps-indicator'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import VerifyForm from '@/components/forms/auth-forms/verify-form'
 
-import { IUserData } from '@/types'
-import { IBaseProps } from '@/types/components'
+import { IUserData, IBaseProps } from '@/types'
 import { useUserAuthStore } from '@/store/user-auth-store'
 import { useSkipUserContactVerification } from '@/hooks/api-hooks/use-auth'
 

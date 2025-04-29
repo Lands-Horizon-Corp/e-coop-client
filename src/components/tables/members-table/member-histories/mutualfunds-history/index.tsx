@@ -25,17 +25,14 @@ import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sort
 
 import { TableProps } from '@/types'
 import { PAGE_SIZES_SMALL } from '@/constants'
-import {
-    IMemberMutualFundsHistoryResource,
-    TEntityId,
-} from '@/types/coop-types'
+import { IMemberMutualFundsHistory, TEntityId } from '@/types'
 import { useMemberMutualFundsHistory } from '@/hooks/api-hooks/member/use-member-history'
 
 export interface MemberMutualFundsHistoryTableProps
-    extends TableProps<IMemberMutualFundsHistoryResource>,
+    extends TableProps<IMemberMutualFundsHistory>,
         IMemberMutualFundsHistoryColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberMutualFundsHistoryResource>,
+        IDataTableToolbarProps<IMemberMutualFundsHistory>,
         | 'table'
         | 'actionComponent'
         | 'refreshActionProps'
@@ -71,7 +68,7 @@ const MemberMutualFundsHistoryTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberMutualFundsHistoryResource>({
+    } = useDataTableState<IMemberMutualFundsHistory>({
         defaultColumnOrder: columns.map((c) => c.id!),
     })
 

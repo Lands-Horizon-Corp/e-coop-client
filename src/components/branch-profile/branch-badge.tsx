@@ -2,10 +2,10 @@ import { BadgeCheckFillIcon, BadgeQuestionFillIcon } from '../icons'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IBranchResource } from '@/types'
+import { IBranch } from '@/types'
 
 interface Props extends IClassProps {
-    branch: IBranchResource
+    branch: IBranch
 }
 
 const BranchBadge = ({ branch, className }: Props) => {

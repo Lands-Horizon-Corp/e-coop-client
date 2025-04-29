@@ -1,6 +1,5 @@
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { cn } from '@/lib'
-import { IForm } from '@/types/components'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
@@ -15,16 +14,19 @@ import {
 } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
 import { Separator } from '@/components/ui/separator'
-import { IClassProps } from '@/types'
 import { AccountsComputationTypeRequestSchema } from '@/validations/accounting/computation-type-schema'
-import { IAccountsComputationTypeRequest } from '@/types/coop-types/accounts/computation-type'
 import {
     useCreateComputationType,
     useUpdateComputationType,
 } from '@/hooks/api-hooks/accounting/use-computation-type'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import FormErrorMessage from '@/components/ui/form-error-message'
-import { TEntityId } from '@/types'
+import {
+    IForm,
+    TEntityId,
+    IClassProps,
+    IAccountsComputationTypeRequest,
+} from '@/types'
 
 type TComputationTypeCreateForm = z.infer<
     typeof AccountsComputationTypeRequestSchema

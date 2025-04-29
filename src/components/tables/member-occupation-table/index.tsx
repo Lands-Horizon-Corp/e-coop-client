@@ -22,7 +22,7 @@ import MemberOccupationService from '@/api-service/member-services/member-occupa
 import { useFilteredPaginatedMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
 
 import { TableProps } from '@/types'
-import { IMemberOccupationResource } from '@/types/coop-types'
+import { IMemberOccupation } from '@/types'
 
 import memberOccupationColumns, {
     IMemberOccupationTableColumnProps,
@@ -30,10 +30,10 @@ import memberOccupationColumns, {
 } from './columns'
 
 export interface MemberOccupationTableProps
-    extends TableProps<IMemberOccupationResource>,
+    extends TableProps<IMemberOccupation>,
         IMemberOccupationTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberOccupationResource>,
+        IDataTableToolbarProps<IMemberOccupation>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -71,7 +71,7 @@ const MemberOccupationTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberOccupationResource>({
+    } = useDataTableState<IMemberOccupation>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })

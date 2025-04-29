@@ -1,7 +1,7 @@
-import { TEntityId } from './common'
-import { IMediaResource } from './media'
-import { IOwnerResource } from './owner'
-import { IBranchResource } from './branch'
+import { TEntityId } from '../common'
+import { IMedia } from './media'
+import { IOwner } from './owner'
+import { IBranch } from './branch'
 import { IPaginatedResult } from './paginated-result'
 
 export interface ICompanyRequest {
@@ -18,6 +18,7 @@ export interface ICompanyRequest {
     isAdminVerified?: boolean
 }
 
+// TODO: This will be the ICoop
 export interface ICompanyResource {
     id: TEntityId
     name: string
@@ -27,9 +28,9 @@ export interface ICompanyResource {
     latitude?: number
     contactNumber: string
     isAdminVerified: boolean
-    owner?: IOwnerResource
-    media?: IMediaResource
-    branches?: IBranchResource[]
+    owner?: IOwner
+    media?: IMedia
+    branches?: IBranch[]
     createdAt: string
     updatedAt: string
 }

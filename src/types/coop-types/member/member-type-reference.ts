@@ -1,7 +1,7 @@
-import { IMemberTypeResource } from './member-type'
+import { IMemberType } from './member-type'
 import { IPaginatedResult } from '../paginated-result'
 import { IAccountsResource } from '../accounts/accounts'
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
 export interface IMemberTypeReferenceRequest {
     id?: TEntityId
@@ -19,12 +19,12 @@ export interface IMemberTypeReferenceRequest {
 }
 
 // TODO: Add IModifiedBy once user is updated
-export interface IMemberTypeReferenceResource extends ITimeStamps, IAuditable {
+export interface IMemberTypeReference extends ITimeStamps, IAuditable {
     id: TEntityId
     accountId?: TEntityId
     account?: IAccountsResource
     memberTypeId?: TEntityId
-    memberType?: IMemberTypeResource
+    memberType?: IMemberType
     maintainingBalance?: number
     description?: string
     interestRate?: number
@@ -37,4 +37,4 @@ export interface IMemberTypeReferenceResource extends ITimeStamps, IAuditable {
 }
 
 export interface IMemberTypeReferencePaginatedResource
-    extends IPaginatedResult<IMemberTypeReferenceResource> {}
+    extends IPaginatedResult<IMemberTypeReference> {}

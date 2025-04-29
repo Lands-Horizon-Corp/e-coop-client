@@ -1,6 +1,6 @@
-import { TEntityId } from './common'
+import { TEntityId } from '../common'
 
-export interface IContactResource {
+export interface IContact {
     id: TEntityId
     first_name: string
     last_name: string

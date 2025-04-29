@@ -17,13 +17,13 @@ import { MemberProfileCreateUpdateFormModal } from '@/components/forms/member-fo
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberProfileResource } from '@/types'
+import { IMemberProfile } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import ImageDisplay from '@/components/image-display'
 import { useImagePreview } from '@/store/image-preview-store'
 
 interface Props extends IClassProps {
-    memberProfile: IMemberProfileResource
+    memberProfile: IMemberProfile
 }
 
 const MemberInfoBanner = ({ className, memberProfile }: Props) => {

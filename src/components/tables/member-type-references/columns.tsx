@@ -9,13 +9,13 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IMemberTypeReferenceResource } from '@/types/coop-types'
+import { IMemberTypeReference } from '@/types'
 
-export const memberTypeReferenceGlobalSearchTargets: IGlobalSearchTargets<IMemberTypeReferenceResource>[] =
+export const memberTypeReferenceGlobalSearchTargets: IGlobalSearchTargets<IMemberTypeReference>[] =
     [{ field: 'description', displayText: 'Description' }]
 
 export interface IMemberTypeReferencesTableActionComponentProp {
-    row: Row<IMemberTypeReferenceResource>
+    row: Row<IMemberTypeReference>
 }
 
 export interface IMemberTypeReferenceTableColumnProps {
@@ -26,7 +26,7 @@ export interface IMemberTypeReferenceTableColumnProps {
 
 const memberTypeReferenceTableColumns = (
     opts?: IMemberTypeReferenceTableColumnProps
-): ColumnDef<IMemberTypeReferenceResource>[] => {
+): ColumnDef<IMemberTypeReference>[] => {
     return [
         {
             id: 'select',
@@ -63,7 +63,7 @@ const memberTypeReferenceTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberTypeReferenceResource>
+                        <TextFilter<IMemberTypeReference>
                             displayText="Description"
                             field="description"
                         />
@@ -87,7 +87,7 @@ const memberTypeReferenceTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Interest Rate">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberTypeReferenceResource>
+                        <TextFilter<IMemberTypeReference>
                             displayText="Interest Rate"
                             field="interestRate"
                         />
@@ -110,7 +110,7 @@ const memberTypeReferenceTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Minimum Balance">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberTypeReferenceResource>
+                        <TextFilter<IMemberTypeReference>
                             displayText="Minimum Balance"
                             field="minimumBalance"
                         />
@@ -144,7 +144,7 @@ const memberTypeReferenceTableColumns = (
                     header: (props) => (
                         <DataTableColumnHeader {...props} title="Min. Balance">
                             <ColumnActions {...props}>
-                                <TextFilter<IMemberTypeReferenceResource>
+                                <TextFilter<IMemberTypeReference>
                                     displayText="Active Minimum Balance"
                                     field="activeMemberMinimumBalance"
                                 />
@@ -163,7 +163,7 @@ const memberTypeReferenceTableColumns = (
                     header: (props) => (
                         <DataTableColumnHeader {...props} title="Ratio">
                             <ColumnActions {...props}>
-                                <TextFilter<IMemberTypeReferenceResource>
+                                <TextFilter<IMemberTypeReference>
                                     displayText="Ratio"
                                     field="Ratio"
                                 />

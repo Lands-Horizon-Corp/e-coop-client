@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useState } from 'react'
 
 import { TTImeInEntry } from '.'
 import { getTimeDifference } from './utils'
-import { IClassProps } from '@/types/components'
+import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {
     timeEntry: TTImeInEntry

@@ -1,17 +1,17 @@
-import { TEntityId } from './common'
-import { IMediaResource } from './media'
+import { TEntityId } from '../common'
+import { IMedia } from './media'
 
 export interface ITimeInRequest {
     timeIn: Date
-    mediaIn: IMediaResource
+    mediaIn: IMedia
 }
 
 export interface ITimeOutRequest {
     timeOut: Date
-    mediaOut: IMediaResource
+    mediaOut: IMedia
 }
 
-export interface ITimesheetResource {
+export interface ITimesheet {
     id: TEntityId
     employeeId: number
     timeIn: Date
@@ -20,6 +20,6 @@ export interface ITimesheetResource {
     mediaOutId?: number
     createdAt: Date
     updatedAt: Date
-    mediaIn?: IMediaResource
-    mediaOut?: IMediaResource
+    mediaIn?: IMedia
+    mediaOut?: IMedia
 }

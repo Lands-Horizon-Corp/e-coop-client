@@ -28,9 +28,7 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import { cn } from '@/lib/utils'
 import { signInSchema } from '@/validations'
 
-import { IUserData } from '@/types'
-import { IForm } from '@/types/components'
-import { IClassProps } from '@/types/components'
+import { IForm, IClassProps, IUserData } from '@/types'
 import { useSignIn } from '@/hooks/api-hooks/use-auth'
 
 type TSignIn = z.infer<typeof signInSchema>

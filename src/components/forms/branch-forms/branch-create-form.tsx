@@ -24,17 +24,15 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib'
-import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
+import { IForm, IClassProps, IBranch, ICompanyRequest } from '@/types'
 import { contactNumberSchema } from '@/validations/common'
 import { useCreateBranch } from '@/hooks/api-hooks/use-branch'
-import { IBranchResource, ICompanyRequest } from '@/types/coop-types'
 
 type TBranchBasicInfo = Partial<ICompanyRequest>
 
 export interface BranchCreateFormProps
     extends IClassProps,
-        IForm<TBranchBasicInfo, IBranchResource, string> {}
+        IForm<TBranchBasicInfo, IBranch, string> {}
 
 const BranchBasicInfoFormSchema = z.object({
     name: z.string().min(1, 'Branch name is required'),

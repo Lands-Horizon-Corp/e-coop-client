@@ -1,4 +1,4 @@
-import { ITimeStamps, TEntityId } from '../common'
+import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
 
 export interface IMemberTypeRequest {
@@ -7,7 +7,7 @@ export interface IMemberTypeRequest {
     description: string
 }
 
-export interface IMemberTypeResource extends ITimeStamps {
+export interface IMemberType extends ITimeStamps {
     id: TEntityId
 
     name: string
@@ -15,5 +15,4 @@ export interface IMemberTypeResource extends ITimeStamps {
     prefix: string
 }
 
-export interface IMemberTypePaginatedResource
-    extends IPaginatedResult<IMemberTypeResource> {}
+export interface IMemberTypePaginated extends IPaginatedResult<IMemberType> {}

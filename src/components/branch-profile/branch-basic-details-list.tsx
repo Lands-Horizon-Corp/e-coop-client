@@ -7,11 +7,11 @@ import {
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
-import { IBranchResource } from '@/types'
+import { IBranch } from '@/types'
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {
-    branch: IBranchResource
+    branch: IBranch
 }
 
 const BranchBasicDetailsList = ({ branch, className }: Props) => {

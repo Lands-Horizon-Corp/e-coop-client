@@ -8,7 +8,7 @@ import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sort
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { usePagination } from '@/hooks/use-pagination'
 import { cn } from '@/lib'
-import { IAccountsResource } from '@/types/coop-types/accounts/accounts'
+import { IAccountsResource } from '@/types'
 import {
     useReactTable,
     getCoreRowModel,

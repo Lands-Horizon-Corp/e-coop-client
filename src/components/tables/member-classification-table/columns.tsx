@@ -11,16 +11,16 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IMemberClassificationResource } from '@/types/coop-types'
+import { IMemberClassification } from '@/types'
 
-export const memberClassificationGlobalSearchTargets: IGlobalSearchTargets<IMemberClassificationResource>[] =
+export const memberClassificationGlobalSearchTargets: IGlobalSearchTargets<IMemberClassification>[] =
     [
         { field: 'name', displayText: 'Name' },
         { field: 'description', displayText: 'Description' },
     ]
 
 export interface IMemberClassificationTableActionComponentProp {
-    row: Row<IMemberClassificationResource>
+    row: Row<IMemberClassification>
 }
 
 export interface IMemberClassificationTableColumnProps {
@@ -31,7 +31,7 @@ export interface IMemberClassificationTableColumnProps {
 
 const memberClassificationTableColumns = (
     opts?: IMemberClassificationTableColumnProps
-): ColumnDef<IMemberClassificationResource>[] => {
+): ColumnDef<IMemberClassification>[] => {
     return [
         {
             id: 'select',
@@ -68,7 +68,7 @@ const memberClassificationTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberClassificationResource>
+                        <TextFilter<IMemberClassification>
                             displayText="Name"
                             field="name"
                         />
@@ -93,7 +93,7 @@ const memberClassificationTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberClassificationResource>
+                        <TextFilter<IMemberClassification>
                             displayText="Description"
                             field="description"
                         />
@@ -118,7 +118,7 @@ const memberClassificationTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberClassificationResource>
+                        <DateFilter<IMemberClassification>
                             displayText="Date Created"
                             field="createdAt"
                         />

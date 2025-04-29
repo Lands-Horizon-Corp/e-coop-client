@@ -3,7 +3,7 @@ import SectionTitle from '../section-title'
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMemberAssetsResource } from '@/types'
+import { IMemberAssets } from '@/types'
 import { BoxesStackedIcon } from '@/components/icons'
 import {
     Accordion,
@@ -14,7 +14,7 @@ import {
 import RawDescription from './raw-description'
 
 interface Props extends IClassProps {
-    assets?: IMemberAssetsResource[]
+    assets?: IMemberAssets[]
 }
 
 const MemberAssetsDisplay = ({ assets, className }: Props) => {

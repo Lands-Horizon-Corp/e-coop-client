@@ -1,14 +1,14 @@
-import { ITimeStamps, TEntityId } from '../common'
+import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberProfileResource } from './member-profile'
+import { IMemberProfile } from './member-profile'
 
-export interface IMemberMutualFundsHistoryResource extends ITimeStamps {
+export interface IMemberMutualFundsHistory extends ITimeStamps {
     id: TEntityId
     membersProfileId: TEntityId
     description: string
     amount: number
-    membersProfile?: IMemberProfileResource
+    membersProfile?: IMemberProfile
 }
 
-export interface IMemberMutualFundsHistoryPaginatedResource
-    extends IPaginatedResult<IMemberMutualFundsHistoryResource> {}
+export interface IMemberMutualFundsHistoryPaginated
+    extends IPaginatedResult<IMemberMutualFundsHistory> {}

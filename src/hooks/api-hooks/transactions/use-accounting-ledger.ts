@@ -4,17 +4,17 @@ import { toast } from 'sonner'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import {
-    IAccountingLedgerPaginatedResource,
+    TEntityId,
     IAccountingLedgerResource,
-} from '@/types/coop-types/accounts/accounting-ledger'
+    IAccountingLedgerPaginatedResource,
+} from '@/types'
 import {
     IAPIHook,
-    IAPIPreloads,
-    IFilterPaginatedHookProps,
-    IOperationCallbacks,
     IQueryProps,
+    IAPIPreloads,
+    IOperationCallbacks,
+    IFilterPaginatedHookProps,
 } from '../types'
-import { TEntityId } from '@/types'
 import AccountingLedgerService from '@/api-service/transactions/accounting-ledger-service'
 
 export const useCreateAccountingLedger = ({

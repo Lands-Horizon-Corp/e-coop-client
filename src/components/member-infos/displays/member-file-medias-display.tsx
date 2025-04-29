@@ -19,7 +19,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMediaResource, TEntityId } from '@/types'
+import { IMedia, TEntityId } from '@/types'
 import { downloadFile, formatBytes } from '@/helpers'
 import { usePagination } from '@/hooks/use-pagination'
 import { useMemberMedias } from '@/hooks/api-hooks/member/use-member'
@@ -30,7 +30,7 @@ interface Props extends IClassProps {
     memberId?: TEntityId
 }
 
-const FileMediaColumns = (): ColumnDef<IMediaResource>[] => {
+const FileMediaColumns = (): ColumnDef<IMedia>[] => {
     return [
         {
             id: 'mediaId',
@@ -194,7 +194,7 @@ const FileMediaColumns = (): ColumnDef<IMediaResource>[] => {
 const FilesTableView = ({
     files,
     className,
-}: { files: IMediaResource[] } & IClassProps) => {
+}: { files: IMedia[] } & IClassProps) => {
     const { pagination, setPagination } = usePagination()
     const { tableSorting, setTableSorting } = useDataTableSorting()
 
@@ -208,7 +208,7 @@ const FilesTableView = ({
         columnVisibility,
         setColumnVisibility,
         rowSelectionState,
-    } = useDataTableState<IMediaResource>({
+    } = useDataTableState<IMedia>({
         defaultColumnVisibility: {
             isEmailVerified: false,
             isContactVerified: false,

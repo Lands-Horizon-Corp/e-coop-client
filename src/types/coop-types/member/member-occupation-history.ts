@@ -1,11 +1,11 @@
-import { ITimeStamps, TEntityId } from '../common'
-import { IMemberProfileResource } from './member-profile'
-import { IMemberOccupationResource } from './member-occupation'
+import { ITimeStamps, TEntityId } from '../../common'
+import { IMemberProfile } from './member-profile'
+import { IMemberOccupation } from './member-occupation'
 
-export interface IMemberOccupationHistoryResource extends ITimeStamps {
+export interface IMemberOccupationHistory extends ITimeStamps {
     id: TEntityId
     memberProfileId: TEntityId
     memberOccupationId: TEntityId
-    memberProfile?: IMemberProfileResource
-    memberOccupation?: IMemberOccupationResource
+    memberProfile?: IMemberProfile
+    memberOccupation?: IMemberOccupation
 }

@@ -1,10 +1,10 @@
-import { IUserBase } from './common'
-import { IRolesResource } from './role'
-import { IFootstepResource } from './footstep'
+import { IUserBase } from '../common'
+import { IRoles } from './role'
+import { IFootstep } from './footstep'
 
-export interface IAdminResource extends IUserBase {
+export interface IAdmin extends IUserBase {
     accountType: 'Admin'
     description?: string
-    role?: IRolesResource
-    footsteps?: IFootstepResource[]
+    role?: IRoles
+    footsteps?: IFootstep[]
 }

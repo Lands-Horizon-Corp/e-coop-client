@@ -1,7 +1,7 @@
 import { Progress } from '@/components/ui/progress'
 
 import { cn } from '@/lib/utils'
-import { IClassProps } from '@/types/components'
+import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {
     totalSteps: number

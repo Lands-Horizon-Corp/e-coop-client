@@ -11,21 +11,16 @@ import {
     IOperationCallbacks,
     IAPIFilteredPaginatedHook,
 } from './types'
-import {
-    TEntityId,
-    IGenderRequest,
-    IGenderResource,
-    IGenderPaginatedResource,
-} from '@/types/coop-types'
+import { TEntityId, IGenderRequest, IGender, IGenderPaginated } from '@/types'
 
 export const useCreateGender = ({
     showMessage = true,
     onError,
     onSuccess,
-}: IAPIHook<IGenderResource, string> & IQueryProps = {}) => {
+}: IAPIHook<IGender, string> & IQueryProps = {}) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IGenderResource, string, IGenderRequest>({
+    return useMutation<IGender, string, IGenderRequest>({
         mutationKey: ['gender', 'create'],
         mutationFn: async (data) => {
             const [error, newGender] = await withCatchAsync(
@@ -60,11 +55,11 @@ export const useCreateGender = ({
 export const useUpdateGender = ({
     onError,
     onSuccess,
-}: IOperationCallbacks<IGenderResource, string> = {}) => {
+}: IOperationCallbacks<IGender, string> = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IGenderResource,
+        IGender,
         string,
         { genderId: TEntityId; data: IGenderRequest }
     >({
@@ -140,9 +135,8 @@ export const useFilteredPaginatedGenders = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IGenderPaginatedResource, string> &
-    IQueryProps = {}) => {
-    return useQuery<IGenderPaginatedResource, string>({
+}: IAPIFilteredPaginatedHook<IGenderPaginated, string> & IQueryProps = {}) => {
+    return useQuery<IGenderPaginated, string>({
         queryKey: ['gender', 'resource-query', filterPayload, pagination, sort],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(

@@ -11,16 +11,16 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IMemberEducationalAttainmentResource } from '@/types/coop-types'
+import { IMemberEducationalAttainment } from '@/types'
 
-export const memberEducationalAttainmentGlobalSearchTargets: IGlobalSearchTargets<IMemberEducationalAttainmentResource>[] =
+export const memberEducationalAttainmentGlobalSearchTargets: IGlobalSearchTargets<IMemberEducationalAttainment>[] =
     [
         { field: 'name', displayText: 'Name' },
         { field: 'description', displayText: 'Description' },
     ]
 
 export interface IMemberEducationalAttainmentTableActionComponentProp {
-    row: Row<IMemberEducationalAttainmentResource>
+    row: Row<IMemberEducationalAttainment>
 }
 
 export interface IMemberEducationalAttainmentTableColumnProps {
@@ -31,7 +31,7 @@ export interface IMemberEducationalAttainmentTableColumnProps {
 
 const memberEducationalAttainmentTableColumns = (
     opts?: IMemberEducationalAttainmentTableColumnProps
-): ColumnDef<IMemberEducationalAttainmentResource>[] => {
+): ColumnDef<IMemberEducationalAttainment>[] => {
     return [
         {
             id: 'select',
@@ -68,7 +68,7 @@ const memberEducationalAttainmentTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberEducationalAttainmentResource>
+                        <TextFilter<IMemberEducationalAttainment>
                             displayText="Name"
                             field="name"
                         />
@@ -93,7 +93,7 @@ const memberEducationalAttainmentTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberEducationalAttainmentResource>
+                        <TextFilter<IMemberEducationalAttainment>
                             displayText="Description"
                             field="description"
                         />
@@ -118,7 +118,7 @@ const memberEducationalAttainmentTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberEducationalAttainmentResource>
+                        <DateFilter<IMemberEducationalAttainment>
                             displayText="Date Created"
                             field="createdAt"
                         />

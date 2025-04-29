@@ -19,15 +19,15 @@ import {
 import {
     TEntityId,
     IMemberTypeRequest,
-    IMemberTypeResource,
-    IMemberTypePaginatedResource,
-} from '@/types/coop-types'
+    IMemberType,
+    IMemberTypePaginated,
+} from '@/types'
 
 export const memberTypeLoader = (
     memberTypeId: TEntityId,
     preloads: string[] = []
 ) =>
-    queryOptions<IMemberTypeResource>({
+    queryOptions<IMemberType>({
         queryKey: ['member-type', 'loader', memberTypeId],
         queryFn: async () => {
             const data = await MemberTypeService.getById(memberTypeId, preloads)
@@ -41,10 +41,10 @@ export const useCreateMemberType = ({
     showMessage = true,
     onSuccess,
     onError,
-}: undefined | (IAPIHook<IMemberTypeResource, string> & IQueryProps) = {}) => {
+}: undefined | (IAPIHook<IMemberType, string> & IQueryProps) = {}) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IMemberTypeResource, string, IMemberTypeRequest>({
+    return useMutation<IMemberType, string, IMemberTypeRequest>({
         mutationKey: ['member-type', 'create'],
         mutationFn: async (data) => {
             const [error, newMemberType] = await withCatchAsync(
@@ -82,7 +82,7 @@ export const useUpdateMemberType = ({
     preloads = ['Owner', 'Media', 'Owner.Media'],
     onSuccess,
     onError,
-}: IAPIHook<IMemberTypeResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberType, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
@@ -165,9 +165,9 @@ export const useFilteredPaginatedMemberTypes = ({
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IMemberTypePaginatedResource, string> &
+}: IAPIFilteredPaginatedHook<IMemberTypePaginated, string> &
     IQueryProps = {}) => {
-    return useQuery<IMemberTypePaginatedResource, string>({
+    return useQuery<IMemberTypePaginated, string>({
         queryKey: [
             'member-type',
             'resource-query',

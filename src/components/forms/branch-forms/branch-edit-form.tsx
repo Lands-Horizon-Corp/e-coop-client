@@ -30,10 +30,8 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib'
-import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
 import { useUpdateBranch } from '@/hooks/api-hooks/use-branch'
-import { IBranchRequest, IBranchResource, TEntityId } from '@/types/coop-types'
+import { IForm, IClassProps, IBranchRequest, IBranch, TEntityId } from '@/types'
 
 type TBranchBasicInfo = Omit<
     IBranchRequest,
@@ -48,7 +46,7 @@ type TBranchBasicInfo = Omit<
 
 interface BranchEditFormProps
     extends IClassProps,
-        IForm<TBranchBasicInfo, IBranchResource, string> {
+        IForm<TBranchBasicInfo, IBranch, string> {
     branchId: TEntityId
 }
 

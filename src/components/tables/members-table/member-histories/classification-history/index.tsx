@@ -24,18 +24,15 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
 import { TableProps } from '@/types'
-import {
-    IMemberClassificationHistoryResource,
-    TEntityId,
-} from '@/types/coop-types'
+import { IMemberClassificationHistory, TEntityId } from '@/types'
 import { useMemberClassificationHistory } from '@/hooks/api-hooks/member/use-member-history'
 import { PAGE_SIZES_SMALL } from '@/constants'
 
 export interface MemberClassificationHistoryTableProps
-    extends TableProps<IMemberClassificationHistoryResource>,
+    extends TableProps<IMemberClassificationHistory>,
         IMemberClassificationHistoryColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberClassificationHistoryResource>,
+        IDataTableToolbarProps<IMemberClassificationHistory>,
         | 'table'
         | 'actionComponent'
         | 'refreshActionProps'
@@ -71,7 +68,7 @@ const MemberClassificationHistoryTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberClassificationHistoryResource>({
+    } = useDataTableState<IMemberClassificationHistory>({
         defaultColumnOrder: columns.map((c) => c.id!),
     })
 

@@ -7,7 +7,7 @@ import { ImageIcon, TrashIcon } from '@/components/icons'
 import { SingleImageUploaderModal } from '@/components/uploaders/single-image-uploader'
 
 import { formatBytes } from '@/helpers'
-import { IMediaResource, TEntityId } from '@/types'
+import { IMedia, TEntityId } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 import { IconType } from 'react-icons/lib'
 
@@ -17,8 +17,8 @@ export interface SingleImageUploadFieldProps {
     value?: TEntityId
     DisplayIcon?: IconType
     placeholder?: string
-    mediaImage?: IMediaResource | undefined
-    onChange?: (media: IMediaResource | undefined) => void
+    mediaImage?: IMedia | undefined
+    onChange?: (media: IMedia | undefined) => void
     uploaderModalTitle?: string
     uploaderModalDescription?: string
 }
@@ -50,7 +50,7 @@ export const SingleImageUploadField = forwardRef<
                     open={uploaderModal}
                     onOpenChange={setUploaderModal}
                     singleImageUploaderProp={{
-                        onSuccess: (media: IMediaResource) => {
+                        onSuccess: (media: IMedia) => {
                             toast.success(
                                 `Image Uploaded ${media.fileName} with ID: ${media.id}`
                             )

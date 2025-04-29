@@ -6,14 +6,14 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 
-import { IMediaResource, TEntityId } from '@/types/coop-types'
+import { IMedia, TEntityId } from '@/types'
 import MediaService from '@/api-service/media-service'
 
 const UploadPage = () => {
     const [files, setFiles] = useState<File[]>([])
     const [loading, setLoading] = useState(false)
     const [progress, setProgress] = useState<number[]>([])
-    const [medias, setMedias] = useState<IMediaResource[]>([])
+    const [medias, setMedias] = useState<IMedia[]>([])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -69,7 +69,7 @@ const UploadPage = () => {
         )
     }
 
-    const renderMedia = (media: IMediaResource) => {
+    const renderMedia = (media: IMedia) => {
         const { url, fileType, fileName } = media
 
         if (fileType.startsWith('image')) {

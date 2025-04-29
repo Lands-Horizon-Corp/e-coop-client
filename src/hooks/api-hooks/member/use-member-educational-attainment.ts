@@ -20,15 +20,15 @@ import {
 import {
     TEntityId,
     IMemberEducationalAttainmentRequest,
-    IMemberEducationalAttainmentResource,
-    IMemberEducationalAttainmentPaginatedResource,
-} from '@/types/coop-types'
+    IMemberEducationalAttainment,
+    IMemberEducationalAttainmentPaginated,
+} from '@/types'
 
 export const memberEducationalAttainmentLoader = (
     attainmentId: TEntityId,
     preloads: string[] = []
 ) =>
-    queryOptions<IMemberEducationalAttainmentResource>({
+    queryOptions<IMemberEducationalAttainment>({
         queryKey: ['member-educational-attainment', 'loader', attainmentId],
         queryFn: async () => {
             const data = await MemberEducationalAttainmentService.getById(
@@ -45,11 +45,11 @@ export const useCreateMemberEducationalAttainment = ({
     showMessage = true,
     onSuccess,
     onError,
-}: IAPIHook<IMemberEducationalAttainmentResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberEducationalAttainment, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberEducationalAttainmentResource,
+        IMemberEducationalAttainment,
         string,
         IMemberEducationalAttainmentRequest
     >({
@@ -94,11 +94,11 @@ export const useUpdateMemberEducationalAttainment = ({
     showMessage = true,
     onSuccess,
     onError,
-}: IAPIHook<IMemberEducationalAttainmentResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberEducationalAttainment, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberEducationalAttainmentResource,
+        IMemberEducationalAttainment,
         string,
         { attainmentId: TEntityId; data: IMemberEducationalAttainmentRequest }
     >({
@@ -192,10 +192,10 @@ export const useFilteredPaginatedMemberEducationalAttainments = ({
     preloads = [],
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<
-    IMemberEducationalAttainmentPaginatedResource,
+    IMemberEducationalAttainmentPaginated,
     string
 > = {}) => {
-    return useQuery<IMemberEducationalAttainmentPaginatedResource, string>({
+    return useQuery<IMemberEducationalAttainmentPaginated, string>({
         queryKey: [
             'member-educational-attainment',
             'resource-query',

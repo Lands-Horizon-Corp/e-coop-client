@@ -11,7 +11,7 @@ import {
 import { withCatchAsync } from '@/utils'
 import { IOperationCallbacks } from './types'
 import { serverRequestErrExtractor } from '@/helpers'
-import { INotificationResource } from '@/types/coop-types'
+import { INotification } from '@/types'
 
 type Role = any
 
@@ -40,13 +40,13 @@ const handleSuccess = <TDataSuccess>(
 export const useNotifications = ({
     userId,
     role,
-}: INotificationsProps): UseQueryResult<INotificationResource[], string> => {
-    return useQuery<INotificationResource[], string>({
+}: INotificationsProps): UseQueryResult<INotification[], string> => {
+    return useQuery<INotification[], string>({
         queryKey: ['admin-notifications', userId, role],
         queryFn: async () => {
             // Replace with actual API call
             const [error, result] = await withCatchAsync(
-                new Promise<INotificationResource[]>((resolve) => {
+                new Promise<INotification[]>((resolve) => {
                     resolve([])
                 })
             )
@@ -64,7 +64,7 @@ export const useNotifications = ({
 export const useMarkasReadNotifications = ({
     onSuccess,
     onError,
-}: IOperationCallbacks<INotificationResource, string>) => {
+}: IOperationCallbacks<INotification, string>) => {
     const queryClient = useQueryClient()
 
     return useMutation<void, string, number>({

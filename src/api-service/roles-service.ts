@@ -1,5 +1,5 @@
 import APIService from './api-service'
-import { IRolesResource, IRolesRequest, TEntityId } from '@/types'
+import { IRoles, IRolesRequest, TEntityId } from '@/types'
 
 /**
  * Service class to handle CRUD operations for roles.
@@ -7,17 +7,15 @@ import { IRolesResource, IRolesRequest, TEntityId } from '@/types'
 export default class RoleService {
     private static readonly BASE_ENDPOINT = '/role'
 
-    public static async getAll(): Promise<IRolesResource[]> {
-        const response = await APIService.get<IRolesResource[]>(
+    public static async getAll(): Promise<IRoles[]> {
+        const response = await APIService.get<IRoles[]>(
             RoleService.BASE_ENDPOINT
         )
         return response.data
     }
 
-    public static async create(
-        roleData: IRolesRequest
-    ): Promise<IRolesResource> {
-        const response = await APIService.post<IRolesRequest, IRolesResource>(
+    public static async create(roleData: IRolesRequest): Promise<IRoles> {
+        const response = await APIService.post<IRolesRequest, IRoles>(
             RoleService.BASE_ENDPOINT,
             roleData
         )
@@ -32,18 +30,18 @@ export default class RoleService {
     public static async update(
         id: TEntityId,
         roleData: IRolesRequest
-    ): Promise<IRolesResource> {
+    ): Promise<IRoles> {
         const endpoint = `${RoleService.BASE_ENDPOINT}/${id}`
-        const response = await APIService.put<IRolesRequest, IRolesResource>(
+        const response = await APIService.put<IRolesRequest, IRoles>(
             endpoint,
             roleData
         )
         return response.data
     }
 
-    public static async getById(id: TEntityId): Promise<IRolesResource> {
+    public static async getById(id: TEntityId): Promise<IRoles> {
         const endpoint = `${RoleService.BASE_ENDPOINT}/${id}`
-        const response = await APIService.get<IRolesResource>(endpoint)
+        const response = await APIService.get<IRoles>(endpoint)
         return response.data
     }
 }

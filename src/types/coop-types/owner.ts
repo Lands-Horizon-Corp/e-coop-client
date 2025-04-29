@@ -1,14 +1,15 @@
 import { ICompanyResource } from './company'
-import { IFootstepResource } from './footstep'
-import { IUserBase, TAccountType } from './common'
+import { IFootstep } from './footstep'
+import { IUserBase, TAccountType } from '../common'
 import { IPaginatedResult } from './paginated-result'
-import { IMediaRequest, IMediaResource } from './media'
+import { IMediaRequest, IMedia } from './media'
 
-export interface IOwnerResource extends IUserBase {
+// TODO: To remove
+export interface IOwner extends IUserBase {
     accountType: 'Owner'
-    media?: IMediaResource
+    media?: IMedia
     companies?: ICompanyResource[]
-    footsteps?: IFootstepResource[]
+    footsteps?: IFootstep[]
 }
 
 export interface IOwnerRequest {
@@ -29,5 +30,4 @@ export interface IOwnerRequest {
     contactTemplate?: string
 }
 
-export interface IOwnerPaginatedResource
-    extends IPaginatedResult<IOwnerResource> {}
+export interface IOwnerPaginatedResource extends IPaginatedResult<IOwner> {}

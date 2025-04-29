@@ -20,15 +20,15 @@ import {
 import {
     TEntityId,
     IMemberOccupationRequest,
-    IMemberOccupationResource,
-    IMemberOccupationPaginatedResource,
-} from '@/types/coop-types'
+    IMemberOccupation,
+    IMemberOccupationPaginated,
+} from '@/types'
 
 export const memberOccupationLoader = (
     occupationId: TEntityId,
     preloads: string[] = []
 ) =>
-    queryOptions<IMemberOccupationResource>({
+    queryOptions<IMemberOccupation>({
         queryKey: ['member-occupation', 'loader', occupationId],
         queryFn: async () => {
             const data = await MemberOccupationService.getById(
@@ -45,14 +45,10 @@ export const useCreateMemberOccupation = ({
     showMessage = true,
     onSuccess,
     onError,
-}: IAPIHook<IMemberOccupationResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberOccupation, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
-    return useMutation<
-        IMemberOccupationResource,
-        string,
-        IMemberOccupationRequest
-    >({
+    return useMutation<IMemberOccupation, string, IMemberOccupationRequest>({
         mutationKey: ['member-occupation', 'create'],
         mutationFn: async (data) => {
             const [error, newOccupation] = await withCatchAsync(
@@ -89,11 +85,11 @@ export const useUpdateMemberOccupation = ({
     showMessage = true,
     onSuccess,
     onError,
-}: IAPIHook<IMemberOccupationResource, string> & IMutationProps) => {
+}: IAPIHook<IMemberOccupation, string> & IMutationProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberOccupationResource,
+        IMemberOccupation,
         string,
         { occupationId: TEntityId; data: IMemberOccupationRequest }
     >({
@@ -172,11 +168,8 @@ export const useFilteredPaginatedMemberOccupations = ({
     filterPayload,
     preloads = [],
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<
-    IMemberOccupationPaginatedResource,
-    string
-> = {}) => {
-    return useQuery<IMemberOccupationPaginatedResource, string>({
+}: IAPIFilteredPaginatedHook<IMemberOccupationPaginated, string> = {}) => {
+    return useQuery<IMemberOccupationPaginated, string>({
         queryKey: [
             'member-occupation',
             'resource-query',

@@ -9,11 +9,11 @@ import SingleImageUploaderModal from '@/components/single-image-uploader/single-
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IBranchResource } from '@/types/coop-types'
+import { IBranch } from '@/types'
 import { useUpdateBranchProfilePicture } from '@/hooks/api-hooks/use-branch'
 
 interface Props extends IClassProps {
-    branch: IBranchResource
+    branch: IBranch
     imageDisplayClassName?: string
     disableUploadButton?: boolean
     uploadButtonClassName?: string

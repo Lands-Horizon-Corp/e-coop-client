@@ -11,16 +11,16 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IMemberOccupationResource } from '@/types/coop-types'
+import { IMemberOccupation } from '@/types'
 
-export const memberOccupationGlobalSearchTargets: IGlobalSearchTargets<IMemberOccupationResource>[] =
+export const memberOccupationGlobalSearchTargets: IGlobalSearchTargets<IMemberOccupation>[] =
     [
         { field: 'name', displayText: 'Name' },
         { field: 'description', displayText: 'Description' },
     ]
 
 export interface IMemberOccupationTableActionComponentProp {
-    row: Row<IMemberOccupationResource>
+    row: Row<IMemberOccupation>
 }
 
 export interface IMemberOccupationTableColumnProps {
@@ -31,7 +31,7 @@ export interface IMemberOccupationTableColumnProps {
 
 const memberOccupationColumns = (
     opts?: IMemberOccupationTableColumnProps
-): ColumnDef<IMemberOccupationResource>[] => {
+): ColumnDef<IMemberOccupation>[] => {
     return [
         {
             id: 'select',
@@ -68,7 +68,7 @@ const memberOccupationColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberOccupationResource>
+                        <TextFilter<IMemberOccupation>
                             displayText="Name"
                             field="name"
                         />
@@ -92,7 +92,7 @@ const memberOccupationColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberOccupationResource>
+                        <TextFilter<IMemberOccupation>
                             displayText="Description"
                             field="description"
                         />
@@ -116,7 +116,7 @@ const memberOccupationColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberOccupationResource>
+                        <DateFilter<IMemberOccupation>
                             displayText="Date Created"
                             field="createdAt"
                         />

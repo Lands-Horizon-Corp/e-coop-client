@@ -21,13 +21,13 @@ import MemberGovernmentBenefits from './member-government-benefits-info'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { IMemberProfileResource, TEntityId } from '@/types'
+import { IMemberProfile, TEntityId } from '@/types'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
-    defaultMemberProfile?: IMemberProfileResource
+    defaultMemberProfile?: IMemberProfile
 }
 
 const memberInfoTabs: {
@@ -37,7 +37,7 @@ const memberInfoTabs: {
     Component: (
         props: IClassProps & {
             profileId: TEntityId
-            defaultData?: IMemberProfileResource
+            defaultData?: IMemberProfile
         }
     ) => ReactNode
 }[] = [

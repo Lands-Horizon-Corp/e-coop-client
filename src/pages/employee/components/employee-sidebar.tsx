@@ -42,7 +42,7 @@ import AppSidebarItem from '@/components/app-sidebar/app-sidebar-item'
 import { flatSidebarGroupItem } from '@/components/app-sidebar/app-sidebar-utils'
 import AppSidebarQruickNavigate from '@/components/app-sidebar/app-sidebar-quick-navigate'
 
-import { IBaseProps } from '@/types/components'
+import { IBaseProps } from '@/types'
 import logger from '@/helpers/loggers/logger'
 
 const employeeSidebarGroupItems: INavGroupItem[] = [

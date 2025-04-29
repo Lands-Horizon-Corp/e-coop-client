@@ -1,18 +1,18 @@
-import { ITimeStamps, TEntityId } from '../common'
+import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberOccupationHistoryResource } from './member-occupation-history'
+import { IMemberOccupationHistory } from './member-occupation-history'
 
 export interface IMemberOccupationRequest {
     name: string
     description: string
 }
 
-export interface IMemberOccupationResource extends ITimeStamps {
+export interface IMemberOccupation extends ITimeStamps {
     id: TEntityId
     name: string
     description: string
-    history?: IMemberOccupationHistoryResource[]
+    history?: IMemberOccupationHistory[]
 }
 
-export interface IMemberOccupationPaginatedResource
-    extends IPaginatedResult<IMemberOccupationResource> {}
+export interface IMemberOccupationPaginated
+    extends IPaginatedResult<IMemberOccupation> {}

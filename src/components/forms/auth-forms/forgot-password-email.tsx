@@ -24,8 +24,7 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
-import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
+import { IForm, IClassProps } from '@/types'
 import { userAccountTypeSchema } from '@/validations/common'
 import { useForgotPassword } from '@/hooks/api-hooks/use-auth'
 

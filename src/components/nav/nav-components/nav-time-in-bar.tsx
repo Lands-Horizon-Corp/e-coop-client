@@ -15,8 +15,8 @@ import TimeInCounter from '@/components/time-in-out/time-in-counter'
 import TimeInTimeOut, { TTImeInEntry } from '@/components/time-in-out'
 
 import { cn } from '@/lib/utils'
-import { IUserData } from '@/types/coop-types'
-import { IClassProps } from '@/types/components'
+import { IUserData } from '@/types'
+import { IClassProps } from '@/types'
 import { randomEndOfDayQuoute, randomStartOfDayQuoute } from '@/constants'
 
 interface Props extends IClassProps {

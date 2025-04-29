@@ -2,7 +2,7 @@ import { AxiosError } from 'axios'
 import { useQuery } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
-import { IUserData } from '@/types/coop-types'
+import { IUserData } from '@/types'
 import { useUserAuthStore } from '@/store/user-auth-store'
 import AuthService from '@/api-service/auth-service'
 

@@ -13,12 +13,12 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import {
     IMemberEducationalAttainmentRequest,
-    IMemberEducationalAttainmentResource,
+    IMemberEducationalAttainment,
     TEntityId,
-} from '@/types/coop-types'
+} from '@/types'
 import { cn } from '@/lib/utils'
 import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import {
     useCreateMemberEducationalAttainment,
     useUpdateMemberEducationalAttainment,
@@ -37,7 +37,7 @@ export interface IMemberEducationalAttainmentCreateUpdateFormProps
     extends IClassProps,
         IForm<
             Partial<IMemberEducationalAttainmentRequest>,
-            IMemberEducationalAttainmentResource,
+            IMemberEducationalAttainment,
             string
         > {
     memberEducationalAttainmentId?: TEntityId

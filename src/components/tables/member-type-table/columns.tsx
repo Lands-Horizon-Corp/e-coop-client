@@ -11,9 +11,9 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
-import { IMemberTypeResource } from '@/types/coop-types'
+import { IMemberType } from '@/types'
 
-export const memberTypeGlobalSearchTargets: IGlobalSearchTargets<IMemberTypeResource>[] =
+export const memberTypeGlobalSearchTargets: IGlobalSearchTargets<IMemberType>[] =
     [
         { field: 'name', displayText: 'Name' },
         { field: 'description', displayText: 'Description' },
@@ -21,7 +21,7 @@ export const memberTypeGlobalSearchTargets: IGlobalSearchTargets<IMemberTypeReso
     ]
 
 export interface IMemberTypeTableActionComponentProp {
-    row: Row<IMemberTypeResource>
+    row: Row<IMemberType>
 }
 
 export interface IMemberTypeTableColumnProps {
@@ -30,7 +30,7 @@ export interface IMemberTypeTableColumnProps {
 
 const memberTypeTableColumns = (
     opts?: IMemberTypeTableColumnProps
-): ColumnDef<IMemberTypeResource>[] => {
+): ColumnDef<IMemberType>[] => {
     return [
         {
             id: 'select',
@@ -67,7 +67,7 @@ const memberTypeTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberTypeResource>
+                        <TextFilter<IMemberType>
                             displayText="Name"
                             field="name"
                         />
@@ -91,7 +91,7 @@ const memberTypeTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Prefix">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberTypeResource>
+                        <TextFilter<IMemberType>
                             displayText="Prefix"
                             field="prefix"
                         />
@@ -114,7 +114,7 @@ const memberTypeTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<IMemberTypeResource>
+                        <TextFilter<IMemberType>
                             displayText="Description"
                             field="description"
                         />
@@ -137,7 +137,7 @@ const memberTypeTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IMemberTypeResource>
+                        <DateFilter<IMemberType>
                             displayText="Date Created"
                             field="createdAt"
                         />

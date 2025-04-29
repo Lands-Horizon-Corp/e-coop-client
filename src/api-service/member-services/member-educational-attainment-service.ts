@@ -6,8 +6,8 @@ import { downloadFileService } from '@/helpers'
 import {
     TEntityId,
     IMemberEducationalAttainmentRequest,
-    IMemberEducationalAttainmentResource,
-    IMemberEducationalAttainmentPaginatedResource,
+    IMemberEducationalAttainment,
+    IMemberEducationalAttainmentPaginated,
 } from '@/types'
 
 export default class MemberEducationalAttainmentService {
@@ -16,7 +16,7 @@ export default class MemberEducationalAttainmentService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberEducationalAttainmentResource> {
+    ): Promise<IMemberEducationalAttainment> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}/${id}`,
@@ -25,12 +25,14 @@ export default class MemberEducationalAttainmentService {
             { skipNull: true }
         )
 
-        const response =
-            await APIService.get<IMemberEducationalAttainmentResource>(url, {
+        const response = await APIService.get<IMemberEducationalAttainment>(
+            url,
+            {
                 headers: {
                     Authorization: `Bearer YOUR_TOKEN`,
                 },
-            })
+            }
+        )
 
         return response.data
     }
@@ -38,7 +40,7 @@ export default class MemberEducationalAttainmentService {
     public static async create(
         data: IMemberEducationalAttainmentRequest,
         preloads?: string[]
-    ): Promise<IMemberEducationalAttainmentResource> {
+    ): Promise<IMemberEducationalAttainment> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}`,
@@ -49,7 +51,7 @@ export default class MemberEducationalAttainmentService {
 
         const response = await APIService.post<
             IMemberEducationalAttainmentRequest,
-            IMemberEducationalAttainmentResource
+            IMemberEducationalAttainment
         >(url, data)
         return response.data
     }
@@ -58,7 +60,7 @@ export default class MemberEducationalAttainmentService {
         id: TEntityId,
         data: IMemberEducationalAttainmentRequest,
         preloads?: string[]
-    ): Promise<IMemberEducationalAttainmentResource> {
+    ): Promise<IMemberEducationalAttainment> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}/${id}`,
@@ -69,7 +71,7 @@ export default class MemberEducationalAttainmentService {
 
         const response = await APIService.put<
             IMemberEducationalAttainmentRequest,
-            IMemberEducationalAttainmentResource
+            IMemberEducationalAttainment
         >(url, data, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`,
@@ -93,7 +95,7 @@ export default class MemberEducationalAttainmentService {
         filters?: string
         preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
-    } = {}): Promise<IMemberEducationalAttainmentPaginatedResource> {
+    } = {}): Promise<IMemberEducationalAttainmentPaginated> {
         const url = qs.stringifyUrl(
             {
                 url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}`,
@@ -109,9 +111,7 @@ export default class MemberEducationalAttainmentService {
         )
 
         const response =
-            await APIService.get<IMemberEducationalAttainmentPaginatedResource>(
-                url
-            )
+            await APIService.get<IMemberEducationalAttainmentPaginated>(url)
         return response.data
     }
 

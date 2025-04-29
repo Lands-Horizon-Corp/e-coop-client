@@ -13,11 +13,11 @@ import MemberService from '@/api-service/member-services/member-service'
 import {
     TEntityId,
     IMemberRequest,
-    IMediaResource,
-    IMemberResource,
+    IMedia,
+    IMember,
     IMemberPaginatedResource,
     IMemberRequestNoPassword,
-} from '@/types/coop-types'
+} from '@/types'
 import {
     IAPIHook,
     IQueryProps,
@@ -29,7 +29,7 @@ export const memberLoader = (
     memberId: TEntityId,
     preloads: string[] = ['Media']
 ) =>
-    queryOptions<IMemberResource>({
+    queryOptions<IMember>({
         queryKey: ['member', 'loader', memberId],
         queryFn: async () => {
             const data = await MemberService.getById(memberId, preloads)
@@ -43,10 +43,10 @@ export const useCreateMember = ({
     preloads = ['Media'],
     onSuccess,
     onError,
-}: undefined | (IAPIHook<IMemberResource, string> & IQueryProps) = {}) => {
+}: undefined | (IAPIHook<IMember, string> & IQueryProps) = {}) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IMemberResource, string, IMemberRequest>({
+    return useMutation<IMember, string, IMemberRequest>({
         mutationKey: ['member', 'create'],
         mutationFn: async (data) => {
             const [error, newMember] = await withCatchAsync(
@@ -84,11 +84,11 @@ export const useUpdateMember = ({
     preloads = ['Media'],
     onSuccess,
     onError,
-}: IAPIHook<IMemberResource, string> & IQueryProps) => {
+}: IAPIHook<IMember, string> & IQueryProps) => {
     const queryClient = useQueryClient()
 
     return useMutation<
-        IMemberResource,
+        IMember,
         string,
         {
             id: TEntityId
@@ -167,9 +167,9 @@ export const useMemberMedias = ({
     onSuccess,
     showMessage,
     ...other
-}: { memberId: TEntityId } & IQueryProps<IMediaResource[]> &
-    Omit<IAPIHook<IMediaResource[], string>, 'preloads'>) => {
-    return useQuery<IMediaResource[], string>({
+}: { memberId: TEntityId } & IQueryProps<IMedia[]> &
+    Omit<IAPIHook<IMedia[], string>, 'preloads'>) => {
+    return useQuery<IMedia[], string>({
         queryKey: ['member', memberId, 'medias'],
         queryFn: async () => {
             const [error, data] = await withCatchAsync(

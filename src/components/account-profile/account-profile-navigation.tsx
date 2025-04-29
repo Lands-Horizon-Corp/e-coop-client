@@ -9,7 +9,7 @@ import {
     AccountSettingIcon,
     TransactionListIcon,
 } from '@/components/icons'
-import { TAccountType, IUserData } from '@/types/coop-types'
+import { TAccountType, IUserData } from '@/types'
 
 const PATHS: {
     hash: string

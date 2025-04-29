@@ -4,11 +4,11 @@ import APIService from './api-service'
 import { downloadFileService } from '@/helpers'
 
 import {
+    IOwner,
     TEntityId,
     IOwnerRequest,
-    IOwnerResource,
     IOwnerPaginatedResource,
-    IBranchPaginatedResource,
+    IBranchPaginated,
     ICompanyResource,
 } from '@/types'
 
@@ -21,20 +21,18 @@ export default class OwnerService {
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IOwnerResource> {
+    ): Promise<IOwner> {
         const url = qs.stringifyUrl({
             url: `${OwnerService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.get<IOwnerResource>(url)
+        const response = await APIService.get<IOwner>(url)
         return response.data
     }
 
-    public static async create(
-        ownerData: IOwnerRequest
-    ): Promise<IOwnerResource> {
-        const response = await APIService.post<IOwnerRequest, IOwnerResource>(
+    public static async create(ownerData: IOwnerRequest): Promise<IOwner> {
+        const response = await APIService.post<IOwnerRequest, IOwner>(
             OwnerService.BASE_ENDPOINT,
             ownerData
         )
@@ -45,13 +43,13 @@ export default class OwnerService {
         id: TEntityId,
         ownerData: IOwnerRequest,
         preloads?: string[]
-    ): Promise<IOwnerResource> {
+    ): Promise<IOwner> {
         const url = qs.stringifyUrl({
             url: `${OwnerService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
 
-        const response = await APIService.put<IOwnerRequest, IOwnerResource>(
+        const response = await APIService.put<IOwnerRequest, IOwner>(
             url,
             ownerData
         )
@@ -100,9 +98,9 @@ export default class OwnerService {
         return response.data
     }
 
-    public static async verify(id: TEntityId): Promise<IOwnerResource> {
+    public static async verify(id: TEntityId): Promise<IOwner> {
         const endpoint = `${OwnerService.BASE_ENDPOINT}/verify/${id}`
-        const response = await APIService.post<void, IOwnerResource>(endpoint)
+        const response = await APIService.post<void, IOwner>(endpoint)
         return response.data
     }
 
@@ -133,7 +131,7 @@ export default class OwnerService {
             { skipNull: true }
         )
 
-        const response = await APIService.get<IBranchPaginatedResource>(url)
+        const response = await APIService.get<IBranchPaginated>(url)
         return response.data
     }
 

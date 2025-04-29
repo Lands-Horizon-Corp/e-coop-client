@@ -28,9 +28,9 @@ import {
 
 import {
     IPaymentsEntry,
-    IPaymentsEntryRequest,
     TRANSACTION_TYPE,
-} from '@/types/coop-types/transactions/payments-entry'
+    IPaymentsEntryRequest,
+} from '@/types'
 import { TPaymentFormValues } from './payments-entry-form'
 
 import {
@@ -45,7 +45,7 @@ import {
 } from '@/components/ui/table'
 import { useCallback, useState } from 'react'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
-import { IBankResponse } from '@/types/coop-types/bank'
+import { IBankResponse } from '@/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
     base64ImagetoFile,
@@ -61,7 +61,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import FileTypeIcon from '@/components/ui/file-type'
 import { useCreatePaymentEntry } from '@/hooks/api-hooks/transactions/use-payments-entry'
-import { IForm } from '@/types/components'
+import { IForm } from '@/types'
 import { IClassProps } from '@/types'
 
 type TCheckClearingFormValues = z.infer<typeof TCheckClearingSchema>

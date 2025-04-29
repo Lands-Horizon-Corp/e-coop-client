@@ -1,10 +1,10 @@
-import { TEntityId } from './common'
+import { TEntityId } from '../common'
 
 export type TNotificationPriority = 'low' | 'medium' | 'high'
 
 export type TNotification = 'success' | 'error' | 'warning' | 'info'
 
-export interface INotificationResource {
+export interface INotification {
     id: TEntityId
     type: TNotification
     message: string

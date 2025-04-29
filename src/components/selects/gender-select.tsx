@@ -15,7 +15,7 @@ import { IClassProps } from '@/types'
 import useFilterState from '@/hooks/use-filter-state'
 import { PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { TFilterObject } from '@/contexts/filter-context'
-import { IGenderResource, TEntityId } from '@/types/coop-types'
+import { IGender, TEntityId } from '@/types'
 
 import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/use-gender'
 import {
@@ -38,7 +38,7 @@ interface GenderSelectProps extends IClassProps {
     placeholder?: string
     filter?: TFilterObject
     createGenderProps?: IGenderSelectCreateProps
-    onChange?: (selectedGender: IGenderResource) => void
+    onChange?: (selectedGender: IGender) => void
 }
 
 const GenderSelect = ({

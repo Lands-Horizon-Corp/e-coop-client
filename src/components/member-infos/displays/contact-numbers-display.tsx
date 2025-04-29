@@ -11,10 +11,10 @@ import { TelephoneIcon } from '@/components/icons'
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMemberContactNumberReferencesResource } from '@/types'
+import { IMemberContactNumberReferences } from '@/types'
 
 interface Props extends IClassProps {
-    contactNumbers?: IMemberContactNumberReferencesResource[]
+    contactNumbers?: IMemberContactNumberReferences[]
 }
 
 const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {

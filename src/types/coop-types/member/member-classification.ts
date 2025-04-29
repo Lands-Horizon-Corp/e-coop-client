@@ -1,12 +1,12 @@
-import { ITimeStamps, TEntityId } from '../common'
+import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberClassificationHistoryResource } from './member-classification-history'
+import { IMemberClassificationHistory } from './member-classification-history'
 
-export interface IMemberClassificationResource extends ITimeStamps {
+export interface IMemberClassification extends ITimeStamps {
     id: TEntityId
     name: string
     description: string
-    history?: IMemberClassificationHistoryResource[]
+    history?: IMemberClassificationHistory[]
 }
 
 export interface IMemberClassificationRequest {
@@ -14,5 +14,5 @@ export interface IMemberClassificationRequest {
     description: string
 }
 
-export interface IMemberClassificationPaginatedResource
-    extends IPaginatedResult<IMemberClassificationResource> {}
+export interface IMemberClassificationPaginated
+    extends IPaginatedResult<IMemberClassification> {}

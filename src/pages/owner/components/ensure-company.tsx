@@ -5,7 +5,7 @@ import { IChildProps } from '@/types'
 import { useAuthUser } from '@/store/user-auth-store'
 import { useOwnerCompany } from '@/hooks/api-hooks/use-owner'
 import { IOperationCallbacks } from '@/hooks/api-hooks/types'
-import { ICompanyResource, IOwnerResource, TEntityId } from '@/types'
+import { ICompanyResource, IOwner, TEntityId } from '@/types'
 
 interface Props extends IChildProps, IOperationCallbacks<ICompanyResource> {
     disabled?: boolean
@@ -16,7 +16,7 @@ const EnsureOwnerCompany = ({
     onSuccess,
     disabled = false,
 }: Props) => {
-    const { currentUser } = useAuthUser<IOwnerResource>()
+    const { currentUser } = useAuthUser<IOwner>()
 
     const { data, isPending } = useOwnerCompany({
         ownerId: currentUser?.id as TEntityId,

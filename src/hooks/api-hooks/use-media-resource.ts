@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { IOperationCallbacks } from './types'
-import { IMediaResource } from '@/types/coop-types'
+import { IMedia } from '@/types'
 import { serverRequestErrExtractor } from '@/helpers'
 import MediaService from '@/api-service/media-service'
 
@@ -15,8 +15,8 @@ export const useSinglePictureUpload = ({
 }: {
     onUploadProgressChange?: (progress: number) => void
     onUploadETAChange?: (eta: string) => void
-} & IOperationCallbacks<IMediaResource, string>) => {
-    return useMutation<IMediaResource, string, File>({
+} & IOperationCallbacks<IMedia, string>) => {
+    return useMutation<IMedia, string, File>({
         mutationKey: ['upload-media-photo'],
         mutationFn: async (fileImage) => {
             if (!fileImage) {

@@ -9,12 +9,12 @@ import {
     IFilterPaginatedHookProps,
 } from '../types'
 import {
-    IAccountsComputationTypePaginatedResource,
+    TEntityId,
     IAccountsComputationTypeRequest,
     IAccountsComputationTypeResource,
-} from '@/types/coop-types/accounts/computation-type'
+    IAccountsComputationTypePaginatedResource,
+} from '@/types'
 import ComputationTypeService from '@/api-service/accounting-services/computation-type-service'
-import { TEntityId } from '@/types/coop-types'
 
 export const useFilteredPaginatedComputationTypes = ({
     sort,

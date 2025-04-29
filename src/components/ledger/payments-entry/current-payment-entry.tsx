@@ -6,7 +6,7 @@ import {
     ReceiptIcon,
     TrashIcon,
 } from '@/components/icons'
-import { IPaymentsEntry } from '@/types/coop-types/transactions/payments-entry'
+import { IPaymentsEntry } from '@/types'
 import { ReceiptTextIcon, FileTextIcon } from 'lucide-react'
 
 import {

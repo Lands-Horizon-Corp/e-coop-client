@@ -2,11 +2,7 @@ import qs from 'query-string'
 
 import APIService from '../api-service'
 
-import {
-    TEntityId,
-    IMemberProfileRequest,
-    IMemberProfileResource,
-} from '@/types'
+import { TEntityId, IMemberProfileRequest, IMemberProfile } from '@/types'
 import { IMemberCloseRemarkRequest } from '@/types'
 
 export interface IMemberProfilePickerParams {
@@ -31,22 +27,22 @@ export default class MemberProfileService {
         )
 
         return (
-            await APIService.post<
-                IMemberProfileRequest,
-                IMemberProfileResource
-            >(url, data)
+            await APIService.post<IMemberProfileRequest, IMemberProfile>(
+                url,
+                data
+            )
         ).data
     }
 
     public static async getById(
         id: TEntityId,
         preloads?: string[]
-    ): Promise<IMemberProfileResource> {
+    ): Promise<IMemberProfile> {
         const url = qs.stringifyUrl({
             url: `${MemberProfileService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
         })
-        const response = await APIService.get<IMemberProfileResource>(url)
+        const response = await APIService.get<IMemberProfile>(url)
         return response.data
     }
 
@@ -54,7 +50,7 @@ export default class MemberProfileService {
         id: TEntityId,
         memberData: IMemberProfileRequest,
         preloads?: string[]
-    ): Promise<IMemberProfileResource> {
+    ): Promise<IMemberProfile> {
         const url = qs.stringifyUrl({
             url: `${MemberProfileService.BASE_ENDPOINT}/${id}`,
             query: { preloads },
@@ -62,7 +58,7 @@ export default class MemberProfileService {
 
         const response = await APIService.put<
             IMemberProfileRequest,
-            IMemberProfileResource
+            IMemberProfile
         >(url, memberData, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`, // Replace with actual token if needed
@@ -83,7 +79,7 @@ export default class MemberProfileService {
 
         const response = await APIService.put<
             IMemberCloseRemarkRequest[],
-            IMemberProfileResource
+            IMemberProfile
         >(url, closeRemark, {
             headers: {
                 Authorization: `Bearer YOUR_TOKEN`, // Replace with actual token if needed

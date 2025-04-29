@@ -14,16 +14,16 @@ import {
 import {
     TEntityId,
     IFeedbackRequest,
-    IFeedbackResource,
+    IFeedback,
     IFeedbackPaginatedResource,
-} from '@/types/coop-types'
+} from '@/types'
 import { withCatchAsync, toBase64 } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import FeedbackService from '@/api-service/feedback-service'
 
 // Only used by path preloader
 export const feedbackLoader = (feedbackId: TEntityId) =>
-    queryOptions<IFeedbackResource>({
+    queryOptions<IFeedback>({
         queryKey: ['feedback', 'loader', feedbackId],
         queryFn: async () => {
             const data = await FeedbackService.getById(feedbackId, ['User'])
@@ -39,8 +39,8 @@ export const useFeedback = ({
     onError,
     onSuccess,
 }: { feedbackId: TEntityId } & IAPIPreloads &
-    IOperationCallbacks<IFeedbackResource, string>) => {
-    return useQuery<IFeedbackResource, string>({
+    IOperationCallbacks<IFeedback, string>) => {
+    return useQuery<IFeedback, string>({
         queryKey: ['feedback', feedbackId],
         queryFn: async () => {
             const [error, data] = await withCatchAsync(
@@ -65,7 +65,7 @@ export const useFeedback = ({
 export const useCreateFeedback = ({
     onError,
     onSuccess,
-}: IOperationCallbacks<IFeedbackResource>) => {
+}: IOperationCallbacks<IFeedback>) => {
     const queryClient = useQueryClient()
 
     return useMutation<void, string, IFeedbackRequest>({

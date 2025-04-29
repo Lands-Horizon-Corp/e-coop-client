@@ -24,7 +24,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib'
-import { IUserData } from '@/types/coop-types'
+import { IUserData } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { contactNumberSchema } from '@/validations/common'
 import { useUpdateAccountContactNumber } from '@/hooks/api-hooks/use-account'

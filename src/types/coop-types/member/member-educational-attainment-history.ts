@@ -1,16 +1,15 @@
-import { ITimeStamps, TEntityId } from '../common'
+import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberProfileResource } from './member-profile'
-import { IMemberEducationalAttainmentResource } from './member-educational-attainment'
+import { IMemberProfile } from './member-profile'
+import { IMemberEducationalAttainment } from './member-educational-attainment'
 
-export interface IMemberEducationalAttainmentHistoryResource
-    extends ITimeStamps {
+export interface IMemberEducationalAttainmentHistory extends ITimeStamps {
     id: TEntityId
     memberProfileId: TEntityId
     memberEducationalAttainmentId: TEntityId
-    memberProfile?: IMemberProfileResource
-    memberEducationalAttainment?: IMemberEducationalAttainmentResource
+    memberProfile?: IMemberProfile
+    memberEducationalAttainment?: IMemberEducationalAttainment
 }
 
-export interface IMemberEducationalAttainmentHistoryPaginatedResource
-    extends IPaginatedResult<IMemberEducationalAttainmentHistoryResource> {}
+export interface IMemberEducationalAttainmentHistoryPaginated
+    extends IPaginatedResult<IMemberEducationalAttainmentHistory> {}

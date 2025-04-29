@@ -16,14 +16,14 @@ import { useCreateGender, useUpdateGender } from '@/hooks/api-hooks/use-gender'
 import { createGenderSchema } from '@/validations/form-validation/gender-schema'
 
 import { IClassProps } from '@/types'
-import { IForm } from '@/types/components'
-import { IGenderRequest, IGenderResource, TEntityId } from '@/types/coop-types'
+import { IForm } from '@/types'
+import { IGenderRequest, IGender, TEntityId } from '@/types'
 
 type TGenderFormValues = z.infer<typeof createGenderSchema>
 
 export interface IGenderFormProps
     extends IClassProps,
-        IForm<Partial<IGenderRequest>, IGenderResource, string> {
+        IForm<Partial<IGenderRequest>, IGender, string> {
     genderId?: TEntityId
 }
 
