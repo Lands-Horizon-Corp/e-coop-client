@@ -3812,6 +3812,7 @@ enum loan_amortization_type {
   none
 }
 
+// this is where all loan application is stored
 Table loan_transaction [headercolor: #ff0000] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3822,6 +3823,9 @@ Table loan_transaction [headercolor: #ff0000] {
 
   transaction_batch_id varchar(50)
   official_receipt_number varchar(255)
+  loan_purpose_id varchar(50)
+
+  loan_status_id varchar(50)
 
   // mode of payments
   mode_of_payment loan_mode_of_payment
@@ -3852,6 +3856,8 @@ Table loan_transaction [headercolor: #ff0000] {
 
   account_id varchar(50)
   member_profile_id varchar(50)
+  member_joint_account_id varchar(50) // ka may ari nang account yung gumamit/nag transact
+  signature_media_id varchar(50) // Signature kung sino man nag apply nang loan
 
   // Clearance Analysis
   mount_to_be_closed decimal
@@ -3863,6 +3869,58 @@ Table loan_transaction [headercolor: #ff0000] {
   exclude_holiday boolean [default:false]
   exclude_saturday boolean [default:false]
 
+  // Remarks / Terms & Condition
+  remarks_other_terms text
+  remarks_payroll_deduction boolean [default: false]
+  record_of_loan_payments_or_loan_status varchar(255)
+
+  collateral_offered text
+
+  // LOAN APPRAISED VALUE - this is Other/jewelry tab in old coop
+  appraised_value decimal
+  appraised_value_description text
+
+  printed_date timestamp
+  approved_date timestamp
+  released_date timestamp // everytime na marerelease magkakaron sa transaction batch CDV History at CASH Voucher sa LESS
+
+  // SIGNATURES
+  approved_by_signature_media_id varchar(50) [ref: - media.id]
+  approved_by_name varchar(255)
+  approved_by_position varchar(255)
+
+  prepared_by_signature_media_id varchar(50) [ref: - media.id]
+  prepared_by_name varchar(255)
+  prepared_by_position varchar(255)
+
+  certified_by_signature_media_id varchar(50) [ref: - media.id]
+  certified_by_name varchar(255)
+  certified_by_position varchar(255)
+
+  verified_by_signature_media_id varchar(50) [ref: - media.id]
+  verified_by_name varchar(255)
+  verified_by_position varchar(255)
+
+  check_by_signature_media_id varchar(50) [ref: - media.id]
+  check_by_name varchar(255)
+  check_by_position varchar(255)
+
+  acknowledge_by_signature_media_id varchar(50) [ref: - media.id]
+  acknowledge_by_name varchar(255)
+  acknowledge_by_position varchar(255)
+
+  noted_by_signature_media_id varchar(50) [ref: - media.id]
+  noted_by_name varchar(255)
+  noted_by_position varchar(255)
+
+  posted_by_signature_media_id varchar(50) [ref: - media.id]
+  posted_by_name varchar(255)
+  posted_by_position varchar(255)
+
+  paid_by_signature_media_id varchar(50) [ref: - media.id]
+  paid_by_name varchar(255)
+  paid_by_position varchar(255)
+
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
   deleted_at timestamp
@@ -3873,6 +3931,8 @@ Ref: loan_transaction.transaction_batch_id > transaction_batch.id [delete:restri
 Ref: loan_transaction.comaker_deposit_member_accounting_ledger_id > member_accounting_ledger.id [delete:restrict, update:cascade]
 Ref: loan_transaction.comaker_collateral_id > collateral.id [delete:restrict, update:cascade]
 Ref: loan_transaction.previous_loan_id - loan_transaction.id [delete:restrict, update:cascade]
+Ref: loan_transaction.loan_purpose_id > loan_purpose.id [delete:restrict, update:cascade]
+Ref: loan_transaction.loan_status_id > loan_status.id [delete:restrict, update:cascade]
 
 Table loan_clearance_analysis [headercolor: #ff0000] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
@@ -3888,7 +3948,7 @@ Table loan_clearance_analysis [headercolor: #ff0000] {
   regular_deduction_amount decimal
 
   balances_description text
-  balancces_amount decimal
+  balances_amount decimal
   balances_count integer
 
   created_at timestamp [not null, default: `now()`]
@@ -3992,6 +4052,66 @@ Table loan_tag [headercolor: #00ff26] {
 Ref: loan_tag.branch_id > branch.id [delete:cascade, update:cascade]
 Ref: loan_tag.loan_transaction_id > loan_transaction.id [delete:cascade, update:cascade]
 
+Table loan_terms_and_condition_suggested_payment [headercolor: #ff0000] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  loan_transaction_id varchar(50)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: loan_terms_and_condition_suggested_payment.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: loan_terms_and_condition_suggested_payment.loan_transaction_id > loan_transaction.id [delete:restrict, update:cascade]
+// Ref: loan_terms_and_condition_suggested_payment.account_id > account.id [delete:restrict, update:cascade]
+
+Table loan_terms_and_condition_amount_receipt [headercolor: #ff0000] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  loan_transaction_id varchar(50) // payment sa account na ito
+
+  account_id varchar(50) // payment sa account na ito
+  amount decimal //
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: loan_terms_and_condition_amount_receipt.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: loan_terms_and_condition_amount_receipt.loan_transaction_id > loan_transaction.id [delete:cascade, update:cascade]
+Ref: loan_terms_and_condition_amount_receipt.account_id > account.id [delete:cascade, update:cascade]
+
+// NOTE: This is maintenance table that wwwould reflect to all loan entry/application
+Table loan_purpose [headercolor: #ff0000] {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
+  branch_id varchar(50)
+  created_by_id varchar(50) [ref: - user.id]
+  updated_by_id varchar(50) [ref: - user.id]
+  deleted_by_id varchar(50) [ref: - user.id]
+
+  description text
+  icon varchar(255)
+
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  deleted_at timestamp
+}
+
+Ref: loan_purpose.branch_id > branch.id [delete:cascade, update:cascade]
+
 Table loan_ledger [headercolor: #ff0000] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -4007,7 +4127,8 @@ Table loan_ledger [headercolor: #ff0000] {
 
 Ref: loan_ledger.branch_id > branch.id [delete:cascade, update:cascade]
 
-// Table [headercolor: #ff0000] {
+
+// Table [headercolor: #00ff00] {
   // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   // branch_id varchar(50)
@@ -4022,22 +4143,7 @@ Ref: loan_ledger.branch_id > branch.id [delete:cascade, update:cascade]
 
 // // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
 
-// Table [headercolor: #ff0000] {
-  // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
-
-  // branch_id varchar(50)
-  // created_by_id varchar(50) [ref: - user.id]
-  // updated_by_id varchar(50) [ref: - user.id]
-  // deleted_by_id varchar(50) [ref: - user.id]
-
-  // created_at timestamp [not null, default: `now()`]
-  // updated_at timestamp [not null, default: `now()`]
-  // deleted_at timestamp
-// }
-
-// // Ref: .branch_id > branch.id [delete:cascade, update:cascade]
-
-// Table [headercolor: #ff0000] {
+// Table [headercolor: #00ff00] {
   // id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   // branch_id varchar(50)
