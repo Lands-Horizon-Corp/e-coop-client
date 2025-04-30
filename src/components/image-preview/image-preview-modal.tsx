@@ -93,6 +93,7 @@ const ImagePreviewModal = () => {
         setScale(1)
         setFlipScale('')
     }
+    const scrollIntoView = useRef<HTMLDivElement>(null)
 
     const handleSelect = useCallback(() => {
         if (api) {
@@ -100,7 +101,14 @@ const ImagePreviewModal = () => {
             setFocusIndex(selectedIndex)
             handleResetActionState()
         }
-    }, [api, setFocusIndex])
+        if (scrollIntoView.current) {
+            scrollIntoView.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest',
+            })
+        }
+    }, [api, setFocusIndex, scrollIntoView])
 
     const scrollToIndex = useCallback(
         (index: number) => {
@@ -179,6 +187,7 @@ const ImagePreviewModal = () => {
                                         focusIndex={focusIndex}
                                         Images={Images}
                                         scrollToIndex={scrollToIndex}
+                                        scrollIntoView={scrollIntoView}
                                     />
                                 )}
                             </ResizablePanel>

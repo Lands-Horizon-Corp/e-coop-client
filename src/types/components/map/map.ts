@@ -37,10 +37,6 @@ export interface TMainMapProps extends Partial<MapContainerProps> {
     mapContainerClassName?: string
 }
 
-export interface TMapProps {
-    handleMapCreated?: (map: L.Map) => void
-}
-
 export interface TMapWithClickProps {
     onLocationFound: (latLng: LatLngExpression) => void
 }
