@@ -50,8 +50,6 @@ const AccountingChequePicker = ({
             showMessage: false,
         })
 
-    console.log('value', value)
-
     return (
         <>
             <GenericPicker

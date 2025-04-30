@@ -451,7 +451,6 @@ const CheckClearingForm = ({
                         label="Upload Check Image"
                         render={({ field }) => (
                             <FileUploader
-                                defaultPhotos={field.value}
                                 className="max-h-42 min-h-10 w-full"
                                 maxFiles={1}
                                 accept={{

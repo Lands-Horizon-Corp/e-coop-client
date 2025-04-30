@@ -64,7 +64,7 @@ const Signature = ({
     const [, setCurrentFile] = useState<FileWithPath | null>()
     const [trimmedData, setTrimmedData] = useState<string | null>('')
     const [isFullScreenMode, setIsFullScreenMode] = useState(false)
-
+    const [isSignaturePadisEmpty, setSignatureIsEmpty] = useState(true)
     const imageRef = useRef<HTMLImageElement | null>(null)
     const camRef = useRef<Webcam>(null)
 
@@ -86,6 +86,7 @@ const Signature = ({
         setCurrentFile(null)
         setTrimmedData(null)
         handleClearCanvas()
+        setSignatureIsEmpty(true)
         onSignatureChange?.(undefined)
     }
 
@@ -106,10 +107,12 @@ const Signature = ({
             const trimmedData = signatureRef.current
                 .getTrimmedCanvas()
                 .toDataURL('image/png')
+
             const convertedData = dataUrlToFile(
                 trimmedData,
                 `SIGNATURE_PAD_SIGN_${format(new Date(), 'yyyyMMdd_HHmmss')}`
             )
+            setSignatureIsEmpty(false)
             setTrimmedData(trimmedData)
             setFile(convertedData)
             onSignatureChange?.(convertedData)
@@ -191,18 +194,6 @@ const Signature = ({
         body.removeAttribute('data-scroll-locked')
     }
 
-    useEffect(() => {
-        const body = document.body
-
-        if (isFullScreenMode) {
-            applyScrollLock(body)
-        } else {
-            removeScrollLock(body)
-        }
-
-        return () => removeScrollLock(body)
-    }, [isFullScreenMode])
-
     const onKeyPress = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             setIsFullScreenMode(false)
@@ -210,12 +201,18 @@ const Signature = ({
     }
 
     useEffect(() => {
+        const body = document.body
+        if (isFullScreenMode) {
+            applyScrollLock(body)
+        } else {
+            removeScrollLock(body)
+        }
         document.addEventListener('keydown', onKeyPress)
-
         return () => {
+            removeScrollLock(body)
             document.removeEventListener('keydown', onKeyPress)
         }
-    }, [])
+    }, [isFullScreenMode])
 
     const isCurrentMode = (mode: SignatureModeType) => {
         return mode === currentMode ? 'bg-secondary' : ''
@@ -226,7 +223,7 @@ const Signature = ({
             className={cn(
                 'h-fit max-w-xl rounded-lg border bg-background/90 p-4 text-xs backdrop-blur-sm',
                 isFullScreenMode
-                    ? 'fixed inset-0 left-0 top-0 z-50 h-screen w-screen max-w-none bg-background/90 backdrop-blur-sm'
+                    ? 'fixed inset-0 left-0 top-0 z-[9999] h-screen w-screen max-w-none bg-background/90 backdrop-blur-sm'
                     : '',
                 className
             )}
@@ -390,17 +387,18 @@ const Signature = ({
                         Clear
                     </Button>
                 )}
-                {currentMode === SignatureModes.DRAW && (
-                    <>
-                        <Button
-                            className="text-xs"
-                            size={'sm'}
-                            onClick={handleGetSignatureTrimmedData}
-                        >
-                            render
-                        </Button>
-                    </>
-                )}
+                {currentMode === SignatureModes.DRAW &&
+                    isSignaturePadisEmpty && (
+                        <>
+                            <Button
+                                className="text-xs"
+                                size={'sm'}
+                                onClick={handleGetSignatureTrimmedData}
+                            >
+                                render
+                            </Button>
+                        </>
+                    )}
                 {currentMode === SignatureModes.CAPTURE && (
                     <Button
                         className="text-xs"
