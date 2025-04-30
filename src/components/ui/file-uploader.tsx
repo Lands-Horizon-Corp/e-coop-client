@@ -1,6 +1,6 @@
 import { formatBytes } from '@/helpers'
 import { cn } from '@/lib'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
     DropzoneOptions,
     FileRejection,
@@ -12,13 +12,13 @@ import { toast } from 'sonner'
 import { Button } from './button'
 import FileTypeIcon from './file-type'
 import { TrashIcon } from '../icons'
+import { ScrollArea } from './scroll-area'
 
 interface FileUploaderProps extends DropzoneOptions {
     className?: string
     itemClassName?: string
     onFileChange?: (file: File[]) => void
     selectedPhotos?: (selectedPhoto: string) => void
-    defaultPhotos?: string
 }
 
 const FileUploader = ({
@@ -26,7 +26,6 @@ const FileUploader = ({
     onFileChange,
     selectedPhotos,
     itemClassName,
-    defaultPhotos,
     ...props
 }: FileUploaderProps) => {
     const [hasError, setHasError] = useState(false)
@@ -67,12 +66,7 @@ const FileUploader = ({
         [onFileChange, handleFilesChange, selectedPhotos]
     )
 
-    const {
-        getRootProps,
-        getInputProps,
-        acceptedFiles: files,
-        open,
-    } = useDropzone({
+    const { getRootProps, getInputProps, open } = useDropzone({
         onDrop,
         onError: (error) => {
             toast.error(error.message)
@@ -81,21 +75,11 @@ const FileUploader = ({
         noClick: true,
     })
 
-    useEffect(() => {
-        setUploadedFiles(files)
-    }, [files])
-
     const handleDeleteFile = (index: number) => () => {
         setUploadedFiles((prevFiles) =>
             prevFiles.filter((_, idx) => idx !== index)
         )
     }
-
-    useEffect(() => {
-        if (!defaultPhotos) {
-            setUploadedFiles([])
-        }
-    }, [defaultPhotos])
 
     const openFile = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         e.preventDefault()
@@ -103,11 +87,11 @@ const FileUploader = ({
     }
 
     return (
-        <div className="w-full">
+        <div className="max-h-fit w-full">
             <div
                 {...getRootProps()}
                 className={cn(
-                    'mb-2 flex h-full min-h-64 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-800/30 p-2 pb-4 text-sm dark:bg-background',
+                    'mb-2 flex h-full max-h-64 min-h-64 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-800/30 p-2 pb-4 text-sm dark:bg-background',
                     className
                 )}
                 aria-label="File upload area"
@@ -134,16 +118,18 @@ const FileUploader = ({
                     Select Files
                 </Button>
             </div>
-            <div className={cn('w-full space-y-2', itemClassName)}>
-                {!hasError &&
-                    uploadedFiles.map((file, idx) => (
-                        <UploadedFileItem
-                            key={idx}
-                            file={file}
-                            onDelete={handleDeleteFile(idx)}
-                        />
-                    ))}
-            </div>
+            <ScrollArea className="max-h-64 overflow-auto">
+                <div className={cn('w-full space-y-2', itemClassName)}>
+                    {!hasError &&
+                        uploadedFiles.map((file, idx) => (
+                            <UploadedFileItem
+                                key={idx}
+                                file={file}
+                                onDelete={handleDeleteFile(idx)}
+                            />
+                        ))}
+                </div>
+            </ScrollArea>
         </div>
     )
 }
