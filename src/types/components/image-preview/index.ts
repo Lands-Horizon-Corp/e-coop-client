@@ -32,6 +32,7 @@ export interface ImagePreviewPanelProps {
     Images: IMedia[]
     focusIndex: number
     scrollToIndex: (index: number) => void
+    scrollIntoView: React.RefObject<HTMLDivElement>
 }
 
 export interface DownloadProps
