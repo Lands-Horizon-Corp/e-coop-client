@@ -35,20 +35,12 @@ const developersRoute = createRoute({
         () => import('@/pages/landing/pages/developers')
     ),
 })
-const imageDetailRoute = createRoute({
-    getParentRoute: () => landingRoute, // Sets `landingRoute` as the parent route
-    path: `image/:id`, // Dynamic path with `id` parameter
-    component: lazyRouteComponent(
-        () => import('@/components/image-preview/image-details')
-    ),
-})
 
 const LandingRoute = landingRoute.addChildren([
     aboutRoute,
     contactRoute,
     developersRoute,
     landingIndexRoute,
-    imageDetailRoute,
 ])
 
 export default LandingRoute
