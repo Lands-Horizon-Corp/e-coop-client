@@ -9,9 +9,9 @@ export interface ISubscriptionPlan extends ITimeStamps, IAuditable {
     cost: number
     timespan: number
 
-    max_members: number
     max_branches: number
     max_employees: number
+    max_members_per_branch: number
 
     discount: number
     yearly_discount: number
@@ -26,9 +26,9 @@ export interface ISubscriptionPlanRequest {
     cost: number
     timespan: number
 
-    max_members: number
     max_branches: number
     max_employees: number
+    max_members_per_branch: number
 
     discount: number
     yearly_discount: number
