@@ -1,41 +1,51 @@
 import { IMedia } from '../media'
-import { ITimeStamps, TEntityId } from '../../common'
+import { IBranch } from '../branch'
 import { IMemberProfile } from './member-profile'
+import { IAuditable, ITimeStamps, TEntityId, TRelationship } from '../../common'
 
-export interface IMemberJointAccountsRequest {
+// LATEST FROM ERD
+export interface IMemberJointAccountRequest {
     id?: TEntityId
 
-    lastName: string
-    middleName?: string
-    firstName: string
-    suffix?: string
+    branch_id: TEntityId
+    picture_media_id: TEntityId
+    member_profile_id: TEntityId
+    signature_media_id: TEntityId
 
     description: string
-    familyRelationship?: string
-    membersProfileId?: TEntityId
-    membersProfile?: IMemberProfile
 
-    mediaId?: TEntityId
-    media?: IMedia
-    signatureMediaId?: TEntityId
-    signatureMedia?: IMedia
+    first_name: string
+    middle_name?: string
+    last_name: string
+    suffix?: string
+
+    birthday: string
+    family_relationship: TRelationship
 }
 
-export interface IMemberJointAccounts extends ITimeStamps {
+// LATEST FROM ERD
+export interface IMemberJointAccount extends ITimeStamps, IAuditable {
     id: TEntityId
 
-    lastName: string
-    middleName?: string
-    firstName: string
-    suffix?: string
+    branch_id: TEntityId
+    branch: IBranch
+
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
+
+    picture_media_id: TEntityId
+    picture_media: IMedia
+
+    signature_media_id: TEntityId
+    signature_media: IMedia
 
     description: string
-    familyRelationship?: string
-    membersProfileId: TEntityId
-    membersProfile: IMemberProfile
 
-    mediaId?: TEntityId
-    media?: IMedia
-    signatureMediaId?: TEntityId
-    signatureMedia?: IMedia
+    first_name: string
+    middle_name?: string
+    last_name: string
+    suffix?: string
+
+    birthday: string
+    family_relationship: TRelationship
 }

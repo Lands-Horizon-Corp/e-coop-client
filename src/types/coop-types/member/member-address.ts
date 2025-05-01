@@ -1,22 +1,35 @@
-import { ITimeStamps, TEntityId } from '../../common'
 import { IMemberProfile } from './member-profile'
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
-export interface IMemberAddress extends ITimeStamps {
+// LATEST FROM ERD
+export interface IMemberAddress extends ITimeStamps, IAuditable {
     id: TEntityId
-    membersProfileId: TEntityId
-    postalCode: string
-    province: string
-    city: string
-    barangay: string
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
+
     label: string
-    membersProfile?: IMemberProfile
+    city: string
+    country_code: string
+    postal_code: string
+    province_state: string
+    barangay: string
+
+    landmark: string
+    address: string
 }
 
+// LATEST FROM ERD
 export interface IMemberAddressRequest {
     id?: TEntityId
-    postalCode: string
-    province: string
-    city: string
-    barangay: string
+    member_profile_id: TEntityId
+
     label: string
+    city: string
+    country_code: string
+    postal_code: string
+    province_state: string
+    barangay: string
+
+    landmark: string
+    address: string
 }

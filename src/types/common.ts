@@ -1,11 +1,14 @@
 import { AccountClosureReasons, FAMILY_RELATIONSHIP } from '@/constants'
 import { IUserBase } from './auth/user'
+import { IBranch } from './coop-types'
 
 export type TEntityId = string
 
-export type TAccountType = 'Member' | 'Employee' | 'Admin' | 'Owner'
-
-export type TAccountStatus = 'Pending' | 'Verified' | 'Not Allowed'
+export type TGeneralStatus =
+    | 'pending'
+    | 'for review'
+    | 'verified'
+    | 'not allowed'
 
 export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number]
 
@@ -24,6 +27,12 @@ export interface IAuditable {
 
     deleted_by_id?: TEntityId
     deleted_by?: IUserBase
+}
+
+/* Only use this for entity that has branch_id */
+export interface IIDentity {
+    branch_id: TEntityId
+    branch: IBranch
 }
 
 export interface ITimeStamps {

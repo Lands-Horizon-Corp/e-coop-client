@@ -1,8 +1,8 @@
-import { IMediaRequest } from './media'
-import { TAccountType, IUserBase } from '../common'
+import { IMediaRequest } from '../coop-types/media'
+import { TUserType, IUserBase } from '.'
 
 export interface IUserData extends IUserBase {
-    accountType: TAccountType
+    accountType: TUserType
 }
 
 export interface IChangePasswordRequest {
@@ -14,7 +14,7 @@ export interface IChangePasswordRequest {
 
 export interface IForgotPasswordRequest {
     key: string
-    accountType: TAccountType
+    accountType: TUserType
     emailTemplate?: string
     contactTemplate?: string
 }
@@ -31,11 +31,9 @@ export interface ISignInRequest {
     email?: string
     username?: string
     password: string
-    accountType: TAccountType
 }
 
 export interface ISignUpRequest {
-    accountType: TAccountType
     username: string
     firstName: string
     lastName: string

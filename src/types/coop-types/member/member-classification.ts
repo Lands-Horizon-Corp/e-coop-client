@@ -1,15 +1,21 @@
-import { ITimeStamps, TEntityId } from '../../common'
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberClassificationHistory } from './member-classification-history'
 
-export interface IMemberClassification extends ITimeStamps {
+// LATEST FROM ERD
+export interface IMemberClassification extends ITimeStamps, IAuditable {
     id: TEntityId
+
     name: string
+    icon: string
     description: string
-    history?: IMemberClassificationHistory[]
+
+    // history?: IMemberClassificationHistory[]
 }
 
+// LATEST FROM ERD
 export interface IMemberClassificationRequest {
+    id?: TEntityId
+
     name: string
     description: string
 }
