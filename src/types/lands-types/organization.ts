@@ -62,11 +62,7 @@ export interface IOrganizationRequest {
 
     cover_media_id?: TEntityId
 
-    organization_key: string
     subscription_plan_id: TEntityId
-
-    subscription_start_date: string
-    subscription_end_date: string
 
     database_host?: string
     database_port?: string

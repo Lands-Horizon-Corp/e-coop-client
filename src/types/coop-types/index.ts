@@ -1,7 +1,3 @@
-/* User Types */
-export * from './owner'
-export * from './admin'
-
 export * from './bank'
 
 /* for accounts */
@@ -18,7 +14,6 @@ export * from './transactions/generate-or-number'
 export * from './transactions/transaction-payment-types'
 
 /* Member Related Types */
-export * from './member/member'
 export * from './member/member-assets'
 export * from './member/member-center'
 export * from './member/member-wallet'
@@ -41,7 +36,7 @@ export * from './member/member-center-history'
 export * from './member/member-mutual-funds-history'
 export * from './member/member-classification'
 export * from './member/member-classification-history'
-export * from './member/member-contact-number-references'
+export * from './member/member-contact-references'
 export * from './member/member-educational-attainment'
 export * from './member/member-educational-attainment-history'
 export * from './member/member-occupation'
@@ -49,18 +44,13 @@ export * from './member/member-occupation-history'
 
 /* Other Types */
 export * from './api'
-export * from './auth'
 export * from './role'
 export * from './media'
 export * from './gender'
 export * from './branch'
-export * from './company'
 export * from './contact'
-export * from './feedback'
 export * from './footstep'
 export * from './timesheet'
-export * from './notification'
-export * from './member/member'
 export * from './paginated-result'
 
 export * from './qr-crypto-type'

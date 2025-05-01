@@ -12,7 +12,7 @@ import AuthService from '@/api-service/auth-service'
 
 import {
     IUserData,
-    TAccountType,
+    TUserType,
     ISignInRequest,
     ISignUpRequest,
     IChangePasswordRequest,
@@ -122,7 +122,7 @@ export const useForgotPassword = ({
     | IOperationCallbacks<
           {
               key: string
-              accountType: TAccountType
+              accountType: TUserType
           },
           string
       >
@@ -130,7 +130,7 @@ export const useForgotPassword = ({
     return useMutation<
         {
             key: string
-            accountType: TAccountType
+            accountType: TUserType
         },
         string,
         IForgotPasswordRequest

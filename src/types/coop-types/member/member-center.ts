@@ -1,19 +1,19 @@
-import { ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberCenterHistory } from './member-center-history'
+import { ITimeStamps, TEntityId, IAuditable } from '../../common'
 
+// LATEST FROM ERD
 export interface IMemberCenterRequest {
     id?: TEntityId
     name: string
     description: string
-    history?: IMemberCenterHistory[]
 }
 
-export interface IMemberCenter extends ITimeStamps {
+// LATEST FROM ERD
+export interface IMemberCenter extends ITimeStamps, IAuditable {
     id: TEntityId
+
     name: string
     description: string
-    history?: IMemberCenterHistory[]
 }
 
 export interface IMemberCenterPaginated

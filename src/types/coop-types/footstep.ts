@@ -1,33 +1,27 @@
-import { IOwner } from './owner'
-import { IAdmin } from './admin'
-import { IMember } from './member/member'
-import { IEmployeeResource } from './employee'
-import { TAccountType, TEntityId } from '../common'
+import { IAuditable } from './../common'
+import { IUserBase, TUserType } from '../auth'
+import { ITimeStamps, TEntityId } from '../common'
 import { IPaginatedResult } from './paginated-result'
 
-export interface IFootstep {
+export interface IFootstep extends ITimeStamps, IAuditable {
     id: TEntityId
-    createdAt: string
-    updatedAt: string
-    deletedAt: string
+    branch_id: TEntityId | null
 
-    accountType: TAccountType
+    user_type: TUserType
+    user_id: TEntityId
+    user: IUserBase
+
     module: string
-    description: string
+    description: string | null
     activity: string
-    latitude?: number
-    longitude?: number
-    timestamp: string
-    isDeleted: boolean
 
-    adminId?: TEntityId
-    admin?: IAdmin
-    employeeId?: TEntityId
-    employee?: IEmployeeResource
-    ownerId?: TEntityId
-    owner?: IOwner
-    memberId?: TEntityId
-    member?: IMember
+    latitude: number | null
+    longitude: number | null
+    ip_address: string | null
+    user_agent: string | null
+    referer: string | null
+    location: string | null
+    accept_language: string | null
 }
 
 export interface IFootstepPaginated extends IPaginatedResult<IFootstep> {}

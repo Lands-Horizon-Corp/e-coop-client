@@ -1,22 +1,32 @@
+import { IBranch } from '../branch'
 import { IMemberProfile } from './member-profile'
-import { ITimeStamps, TEntityId, TRelationship } from '../../common'
+import { IAuditable, ITimeStamps, TEntityId, TRelationship } from '../../common'
 
+// FROM LATEST ERD
 export interface IMemberRelativeAccountsRequest {
     id?: TEntityId
-    membersProfileId?: TEntityId
-    relativeProfileMemberId: TEntityId
-    familyRelationship: string
+
+    branch_id: TEntityId
+    member_profile_id: TEntityId
+    relative_member_profile_id: TEntityId
+
+    family_relationship: TRelationship
     description: string
-    memberProfile?: IMemberProfile
-    relativeProfileMemberProfile?: IMemberProfile
 }
 
-export interface IMemberRelativeAccounts extends ITimeStamps {
+// FROM LATEST ERD
+export interface IMemberRelativeAccounts extends ITimeStamps, IAuditable {
     id: TEntityId
-    membersProfileId: TEntityId
-    relativeProfileMemberId: TEntityId
-    familyRelationship: TRelationship
+
+    branch_id: TEntityId
+    branch: IBranch
+
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
+
+    relative_member_profile_id: TEntityId
+    relative_member_profile: IMemberProfile
+
+    family_relationship: TRelationship
     description: string
-    memberProfile?: IMemberProfile
-    relativeProfileMemberProfile?: IMemberProfile
 }

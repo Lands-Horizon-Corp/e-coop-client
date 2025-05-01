@@ -1,15 +1,15 @@
 import { create } from 'zustand'
-import { IMember, IAccountsRequest, IPaymentsEntry } from '@/types'
+import { IUserBase, IAccountsRequest, IPaymentsEntry } from '@/types'
 
 // Payments Data
 export interface PaymentsDataStore {
-    selectedMember: IMember | null
+    selectedMember: IUserBase | null
     ORNumber: string
     selectedPayments: IPaymentsEntry[]
     selectedAccounts: IAccountsRequest | null
     focusTypePayment: string | null
 
-    setSelectedMember: (member: IMember | null) => void
+    setSelectedMember: (member: IUserBase | null) => void
     setORNumber: (orNumber: string) => void
     setSelectedPayments: (payments: IPaymentsEntry[]) => void
     setSelectedAccounts: (accounts: IAccountsRequest | null) => void

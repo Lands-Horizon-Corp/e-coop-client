@@ -68,7 +68,7 @@ export interface IAccountsRequest {
     accountingDefault?: TAccountingDefault
 }
 
-export interface IAccountsResource extends ITimeStamps {
+export interface IAccountResource extends ITimeStamps {
     id: TEntityId
     companyId: TEntityId
     accountCode: string
@@ -102,4 +102,4 @@ export interface IAccountsResource extends ITimeStamps {
 }
 
 export interface IAccountsPaginatedResource
-    extends IPaginatedResult<IAccountsResource> {}
+    extends IPaginatedResult<IAccountResource> {}

@@ -1,39 +1,52 @@
+import { IBranch } from '../branch'
 import { IMemberType } from './member-type'
 import { IPaginatedResult } from '../paginated-result'
-import { IAccountsResource } from '../accounts/accounts'
+import { IAccountResource } from '../accounts/accounts'
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
+// LATEST FROM ERD
 export interface IMemberTypeReferenceRequest {
     id?: TEntityId
-    accountId: TEntityId
-    memberTypeId: TEntityId
-    maintainingBalance?: number
-    description?: string
-    interestRate?: number
-    minimumBalance?: number
-    charges?: number
-    activeMemberMinimumBalance?: number
-    activeMemberRatio?: number
-    otherInterestOnSavingComputationMinimumBalance?: number
-    otherInterestOnSavingComputationInterestRate?: number
+
+    branch_id: TEntityId
+    account_id: TEntityId
+    member_type_id: TEntityId
+
+    charges: number
+    description: string
+    interest_rate: number
+    minimum_balance: number
+    maintaining_balance: number
+    active_member_ratio: number
+    active_member_minimum_balance: number
+
+    other_interest_on_saving_computation_minimum_balance: number
+    other_interest_on_saving_computation_interest_rate: number
 }
 
-// TODO: Add IModifiedBy once user is updated
+// LATEST FROM ERD
 export interface IMemberTypeReference extends ITimeStamps, IAuditable {
     id: TEntityId
-    accountId?: TEntityId
-    account?: IAccountsResource
-    memberTypeId?: TEntityId
-    memberType?: IMemberType
-    maintainingBalance?: number
-    description?: string
-    interestRate?: number
-    minimumBalance?: number
-    charges?: number
-    activeMemberMinimumBalance?: number
-    activeMemberRatio?: number
-    otherInterestOnSavingComputationMinimumBalance?: number
-    otherInterestOnSavingComputationInterestRate?: number
+
+    branch_id: TEntityId
+    branch: IBranch
+
+    account_id: TEntityId
+    account: IAccountResource
+
+    member_type_id: TEntityId
+    member_type: IMemberType
+
+    maintaining_balance: number
+    description: string
+    interest_rate: number
+    minimum_balance: number
+    charges: number
+    active_member_minimum_balance: number
+    active_member_ratio: number
+
+    other_interest_on_saving_computation_minimum_balance: number
+    other_interest_on_saving_computation_interest_rate: number
 }
 
 export interface IMemberTypeReferencePaginatedResource

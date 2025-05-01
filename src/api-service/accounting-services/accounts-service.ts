@@ -1,7 +1,7 @@
 import {
     TEntityId,
     IAccountsRequest,
-    IAccountsResource,
+    IAccountResource,
     IAccountsPaginatedResource,
 } from '@/types'
 import qs from 'query-string'
@@ -85,10 +85,10 @@ export default class AccountsService {
     public static async create(
         accountsData: IAccountsRequest,
         preloads?: string[]
-    ): Promise<IAccountsResource> {
+    ): Promise<IAccountResource> {
         const url = this.buildUrl('', { preloads })
         return this.makeRequest(() =>
-            APIService.post<IAccountsRequest, IAccountsResource>(
+            APIService.post<IAccountsRequest, IAccountResource>(
                 url,
                 accountsData
             )
@@ -110,13 +110,10 @@ export default class AccountsService {
         id: TEntityId,
         accountData: IAccountsRequest,
         preloads?: string[]
-    ): Promise<IAccountsResource> {
+    ): Promise<IAccountResource> {
         const url = this.buildUrl(`/${id}`, { preloads })
         return this.makeRequest(() =>
-            APIService.put<IAccountsRequest, IAccountsResource>(
-                url,
-                accountData
-            )
+            APIService.put<IAccountsRequest, IAccountResource>(url, accountData)
         )
     }
 

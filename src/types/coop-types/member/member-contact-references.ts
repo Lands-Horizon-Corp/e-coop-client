@@ -1,26 +1,23 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
-import { IBranch } from '../branch'
 import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
-export interface IMemberExpensesRequest {
+export interface IMemberContactReferenceRequest {
     id?: TEntityId
+
     name: string
-    date: string
-    amount: number
     description: string
+    contactNumber: string
 }
 
 // LATEST FROM ERD
-export interface IMemberExpenses extends ITimeStamps, IAuditable {
+export interface IMemberContactReferences extends ITimeStamps, IAuditable {
     id: TEntityId
+
     member_profile_id: TEntityId
     member_profile: IMemberProfile
 
-    branch_id: TEntityId
-    branch: IBranch
-
     name: string
-    amount: number
     description: string
+    contactNumber: string
 }
