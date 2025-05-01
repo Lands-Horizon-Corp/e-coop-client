@@ -94,3 +94,5 @@ export const AccountClosureReasons = [
     'Shifting Personal Values or Priorities',
     'Formation of a New, More Suitable Cooperative',
 ] as const
+
+export const FEEDBACK_TYPE = ['bug', 'feature-request', 'general'] as const

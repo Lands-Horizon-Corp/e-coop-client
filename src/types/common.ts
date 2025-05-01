@@ -1,5 +1,5 @@
-import { IMedia } from './coop-types/media'
 import { AccountClosureReasons, FAMILY_RELATIONSHIP } from '@/constants'
+import { IUserBase } from './auth/user'
 
 export type TEntityId = string
 
@@ -14,24 +14,22 @@ export interface ILongLat {
     latitude?: number // `float64` maps to `number` in TypeScript
 }
 
-/* TODO: Add to all entities that has modified by trail */
-export interface IModifiedBy {
-    createdBy?: IUserBase
-    updatedBy?: IUserBase
-    deletedBy?: IUserBase
-}
-
 /* Extend interface if gusto magka ts type neto */
 export interface IAuditable {
-    createdById?: TEntityId
-    updatedById?: TEntityId
-    deletedById?: TEntityId
+    created_by_id?: TEntityId
+    created_by?: IUserBase
+
+    updated_by_id?: TEntityId
+    updated_by?: IUserBase
+
+    deleted_by_id?: TEntityId
+    deleted_by?: IUserBase
 }
 
 export interface ITimeStamps {
-    deletedAt?: string | null
-    createdAt: string
-    updatedAt?: string
+    deleted_at?: string | null
+    created_at: string
+    updated_at?: string
 }
 
 export type TCivilStatus =
@@ -42,35 +40,3 @@ export type TCivilStatus =
     | 'N/A'
 
 export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]
-
-// TODO: This should be common user
-export interface IUserBase extends ITimeStamps, ILongLat {
-    id: TEntityId
-
-    firstName: string
-    lastName: string
-    middleName?: string
-    fullName: string // concat & returned by server
-    birthDate: string
-
-    email: string
-    contactNumber: string
-    permanentAddress?: string
-
-    username: string
-    description?: string
-
-    mediaId?: number
-    media?: IMedia
-
-    genderId?: number
-
-    //TODO: Add sex
-    // gender?: IGender
-
-    status: TAccountStatus
-
-    isEmailVerified: boolean
-    isContactVerified: boolean
-    isSkipVerification: boolean
-}
