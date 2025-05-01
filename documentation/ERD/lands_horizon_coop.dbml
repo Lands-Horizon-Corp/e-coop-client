@@ -92,7 +92,7 @@ Table media [headercolor: #00FF00] {
   deleted_by_id varchar(50) [ref: - user.id]
   branch_id varchar(50)
 
-  account_type account_type
+  user_type user_type
 
   description text
   file_name varchar(255) [not null]
@@ -115,7 +115,7 @@ enum branch_type {
   "banking branch"
 }
 
-// ✅ 
+// ✅
 Table user [headercolor: #00FF00] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
   created_by_id varchar(50) [ref: - user.id]
@@ -445,7 +445,7 @@ Table member_educational_attainment [headercolor: #00FF00] {
   deleted_by_id varchar(50) [ref: - user.id]
   branch_id varchar(50)
 
-  name varchar(255)
+  name varchar(255) [not null]
   school_name varchar(255)
   school_year integer
   program_course varchar(255)
@@ -791,7 +791,7 @@ Table footstep [headercolor: #00FF00] {
   deleted_at timestamp
   branch_id varchar(50)
 
-  account_type account_type [not null]
+  user_type user_type [not null]
   user_id varchar(50) [not null] // who did this action
 
   module varchar(255) [not null] // where this event take place/source
