@@ -115,7 +115,7 @@ enum branch_type {
   "banking branch"
 }
 
-// ✅ FOR Credential login only
+// ✅ 
 Table user [headercolor: #00FF00] {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
   created_by_id varchar(50) [ref: - user.id]
