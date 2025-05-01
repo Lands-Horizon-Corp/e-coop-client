@@ -1,27 +1,39 @@
 import { IMedia } from '../media'
-import { ITimeStamps, TEntityId } from '../../common'
 import { IMemberProfile } from './member-profile'
+import { ITimeStamps, TEntityId } from '../../common'
 
+// LATEST FROM ERD
 export interface IMemberGovernmentBenefitsRequest {
-    id?: TEntityId
-    country: string
+    id: TEntityId
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
+
+    front_media_id: TEntityId
+    front_media: IMedia
+
+    back_media_id: TEntityId
+    back_media: IMedia
+
     name: string
-    description: string
+    country_code: string
     value: string
-    frontMediaId?: TEntityId
-    backMediaId?: TEntityId
+    description: string
 }
 
+// LATEST FROM ERD
 export interface IMemberGovernmentBenefits extends ITimeStamps {
     id: TEntityId
-    membersProfileId: TEntityId
-    country: string
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
+
+    front_media_id: TEntityId
+    front_media: IMedia
+
+    back_media_id: TEntityId
+    back_media: IMedia
+
     name: string
-    description: string
+    country_code: string
     value: string
-    frontMediaId?: TEntityId
-    backMediaId?: TEntityId
-    membersProfile?: IMemberProfile
-    frontMedia?: IMedia
-    backMedia?: IMedia
+    description: string
 }

@@ -13,8 +13,6 @@ export interface IAuthUser {
     reports?: IGeneratedReport[]
 }
 
-// sign in
-// sign up
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps {
     // coop | lands

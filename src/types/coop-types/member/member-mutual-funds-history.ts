@@ -1,13 +1,21 @@
-import { ITimeStamps, TEntityId } from '../../common'
-import { IPaginatedResult } from '../paginated-result'
+import { IBranch } from '../branch'
 import { IMemberProfile } from './member-profile'
+import { IPaginatedResult } from '../paginated-result'
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
-export interface IMemberMutualFundsHistory extends ITimeStamps {
+// LATEST FROM ERD
+export interface IMemberMutualFundsHistory extends ITimeStamps, IAuditable {
     id: TEntityId
-    membersProfileId: TEntityId
-    description: string
+
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
+
+    branch_id: TEntityId
+    branch: IBranch
+
+    title: string
     amount: number
-    membersProfile?: IMemberProfile
+    description: string
 }
 
 export interface IMemberMutualFundsHistoryPaginated
