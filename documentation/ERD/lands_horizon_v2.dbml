@@ -177,8 +177,13 @@ Table migration_history {
   deleted_at timestamp
 }
 
-Table organization_usage_tracking_daily {
-  id varchar(50) [pk, unique, default: `uuid_generate_v4()`]
+Ref: migration_history.organization_id > organization.id [delete: restrict]
+
+// Tracking usage
+// Coop Usage entries Per Day ( this is system generated )
+Table organization_daily_usage {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
   organization_id varchar(50) [ref: > organization.id]
   date date [not null, default: `current_date`]
 
@@ -204,8 +209,10 @@ Table organization_usage_tracking_daily {
   deleted_at timestamp
 }
 
-Table contact_number {
-  id varchar(50) [pk, unique, default: `uuid_generate_v4()`]
+// ✅
+Table contact_us {
+  id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
+
   first_name varchar(255) [not null]
   last_name varchar(255) [not null]
   email varchar(255) [not null]
