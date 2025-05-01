@@ -1,5 +1,5 @@
 import z from 'zod'
-import { entityIdSchema, mediaResourceSchema } from '@/validations/common'
+import { entityIdSchema, mediaSchema } from '@/validations/common'
 
 export const memberJointAccountsSchema = z.object({
     id: entityIdSchema.optional(),
@@ -13,7 +13,7 @@ export const memberJointAccountsSchema = z.object({
 
     // new properties
     mediaId: entityIdSchema.optional(),
-    media: mediaResourceSchema.optional(),
+    media: mediaSchema.optional(),
     signatureMediaId: entityIdSchema.optional(),
-    signatureMedia: mediaResourceSchema.optional(),
+    signatureMedia: mediaSchema.optional(),
 })
