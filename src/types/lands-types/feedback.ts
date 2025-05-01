@@ -5,6 +5,16 @@ import { IMedia, IPaginatedResult } from '../coop-types'
 
 export type TFeedbackType = (typeof FEEDBACK_TYPE)[number]
 
+export interface IFeedbackRequest {
+    media_id?: TEntityId
+
+    email: string
+    name: string
+    feedback_type: TFeedbackType
+
+    description: string
+}
+
 export interface IFeedback extends ITimeStamps {
     id: TEntityId
 

@@ -1,5 +1,5 @@
 import z from 'zod'
-import { entityIdSchema, mediaResourceSchema } from '@/validations/common'
+import { entityIdSchema, mediaSchema } from '@/validations/common'
 
 export const memberGovernmentBenefits = z.object({
     id: entityIdSchema.optional(),
@@ -8,7 +8,7 @@ export const memberGovernmentBenefits = z.object({
     description: z.string().min(1, 'Description is required'),
     value: z.string().min(1, 'Value is required'),
     frontMediaId: entityIdSchema.optional(),
-    frontMediaResource: mediaResourceSchema.optional(),
-    backMediaResource: mediaResourceSchema.optional(),
+    frontMediaResource: mediaSchema.optional(),
+    backMediaResource: mediaSchema.optional(),
     backMediaId: entityIdSchema.optional(),
 })
