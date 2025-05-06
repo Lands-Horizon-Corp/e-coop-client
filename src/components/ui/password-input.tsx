@@ -6,11 +6,16 @@ import { Input, InputProps } from '@/components/ui/input'
 
 import { cn } from '@/lib/utils'
 
-interface Props extends Omit<InputProps, 'type'> {}
+interface Props extends Omit<InputProps, 'type'> {
+    defaultVisibility?: boolean
+}
 
 const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
-    ({ className, disabled, ...props }: Props, ref) => {
-        const [visible, setVisible] = useState(false)
+    (
+        { className, disabled, defaultVisibility = false, ...props }: Props,
+        ref
+    ) => {
+        const [visible, setVisible] = useState(defaultVisibility)
 
         const VisibilityIcon = visible ? FiEye : FiEyeOff
 

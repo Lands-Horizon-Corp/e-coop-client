@@ -62,7 +62,7 @@ const FeedbackForm = () => {
                     className="space-y-3"
                 >
                     <FormField
-                        name="feedbackType"
+                        name="feedback_type"
                         control={feedbackForm.control}
                         render={({ field }) => (
                             <FormItem>

@@ -3,23 +3,15 @@ import { Navigate, useRouter } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
+import { BadgeExclamationFillIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import {
-    BadgeMinusFillIcon,
-    BadgeCheckFillIcon,
-    BadgeExclamationFillIcon,
-} from '@/components/icons'
 
-import { cn } from '@/lib'
-import { IUserData } from '@/types'
-import { IBaseProps, TPageType } from '@/types'
-import { TAccountType } from '@/types'
-import { useUserAuthStore } from '@/store/user-auth-store'
-import { isUserHasUnverified, isUserUnverified } from '@/helpers'
+import { useAuthStore } from '@/store/user-auth-store'
+import { TUserType, IBaseProps, TPageType, IUserBase } from '@/types'
 
 interface Props extends IBaseProps {
     pageType?: TPageType
-    allowedAccountTypes?: TAccountType[]
+    allowedAccountTypes?: TUserType[]
 }
 
 const AuthGuard = ({
@@ -28,7 +20,7 @@ const AuthGuard = ({
     pageType = 'AUTHENTICATED',
 }: Props) => {
     const router = useRouter()
-    const { currentUser, authStatus } = useUserAuthStore()
+    const { currentAuth, authStatus } = useAuthStore()
 
     if (pageType === 'AUTHENTICATED') {
         if (authStatus === 'loading')
@@ -38,7 +30,7 @@ const AuthGuard = ({
                 </div>
             )
 
-        if (authStatus === 'error' && !currentUser)
+        if (authStatus === 'error' && !currentAuth)
             return (
                 <div className="relative flex h-screen w-full items-center justify-center">
                     <p>
@@ -48,47 +40,18 @@ const AuthGuard = ({
                 </div>
             )
 
-        if (!currentUser) return <Navigate to={'/auth/sign-in' as string} />
+        if (!currentAuth.user)
+            return <Navigate to={'/auth/sign-in' as string} />
 
-        if (
-            !currentUser.isSkipVerification &&
-            currentUser.status !== 'Not Allowed' &&
-            isUserHasUnverified(currentUser)
-        ) {
+        if (currentAuth.user.type === 'ban') {
             return (
                 <BannerContainer>
                     <AccountInfoContent
-                        currentUser={currentUser}
-                        infoTitle="Verification Required"
-                        infoDescription="It looks like you have unverified contacts or your account status is still pending. For security reasons, please verify your contact information to access all features."
+                        currentUser={currentAuth.user}
+                        infoTitle="Not Allowed"
+                        infoDescription="It looks like your account has been banned. If you think this is a mistake, please talk your cooperative admin/staff for assistance."
                     />
                     <Button
-                        className="rounded-full"
-                        onClick={() =>
-                            router.navigate({ to: '/auth/verify' as string })
-                        }
-                    >
-                        Verify Now
-                    </Button>
-                </BannerContainer>
-            )
-        }
-
-        if (
-            (currentUser &&
-                !allowedAccountTypes.includes(currentUser?.accountType)) ||
-            isUserUnverified(currentUser)
-        )
-            return (
-                <BannerContainer>
-                    <AccountInfoContent
-                        infoTitle="Restricted"
-                        currentUser={currentUser}
-                        infoDescription="Sorry but your account type is restricted in accessing
-                        this page"
-                    />
-                    <Button
-                        variant="outline"
                         className="rounded-full"
                         onClick={() => router.history.back()}
                     >
@@ -96,9 +59,28 @@ const AuthGuard = ({
                     </Button>
                 </BannerContainer>
             )
+        }
+
+        if (!allowedAccountTypes.includes(currentAuth.user.type)) {
+            return (
+                <BannerContainer>
+                    <AccountInfoContent
+                        currentUser={currentAuth.user}
+                        infoTitle="Not Allowed"
+                        infoDescription="It looks like your account is not allowed on this page."
+                    />
+                    <Button
+                        className="rounded-full"
+                        onClick={() => router.history.back()}
+                    >
+                        Go Back
+                    </Button>
+                </BannerContainer>
+            )
+        }
     }
 
-    return <>{children}</>
+    return children
 }
 
 const BannerContainer = ({ children }: { children?: ReactNode }) => {
@@ -116,27 +98,16 @@ const AccountInfoContent = ({
 }: {
     infoTitle: string
     infoDescription: string
-    currentUser: IUserData
+    currentUser: IUserBase
 }) => {
     return (
         <>
             <UserAvatar
-                src={currentUser.media?.downloadURL ?? ''}
-                fallback={currentUser.username.charAt(0) ?? '-'}
+                src={currentUser.media?.download_url ?? ''}
+                fallback={currentUser.user_name.charAt(0) ?? '-'}
                 className="size-36 border-4 text-2xl font-medium"
             />
-            {currentUser.status === 'Pending' && (
-                <BadgeMinusFillIcon className="size-8 text-amber-500" />
-            )}
-            {currentUser.status === 'Verified' && (
-                <BadgeCheckFillIcon
-                    className={cn(
-                        'size-8 text-primary',
-                        isUserHasUnverified(currentUser) && 'text-amber-500'
-                    )}
-                />
-            )}
-            {currentUser.status === 'Not Allowed' && (
+            {currentUser.type === 'ban' && (
                 <BadgeExclamationFillIcon className="size-8 text-rose-400" />
             )}
             <p className="text-xl font-medium">{infoTitle}</p>

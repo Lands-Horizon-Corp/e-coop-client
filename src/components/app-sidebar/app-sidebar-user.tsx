@@ -33,15 +33,20 @@ const AppSidebarUser = () => {
 
     const { onOpen } = useConfirmModalStore()
     const { setTheme, resolvedTheme } = useTheme()
-    const { currentUser, setCurrentUser } = useAuthUser()
+    const {
+        currentAuth: { user },
+        resetAuth,
+    } = useAuthUser()
 
     const { mutate: handleSignout } = useSignOut({
         onSuccess: () => {
-            setCurrentUser(null)
+            resetAuth()
             router.navigate({ to: '/auth/sign-in' as string })
             toast.success('Signed Out')
         },
     })
+
+    if (!user) return null
 
     return (
         <SidebarMenu>
@@ -50,18 +55,16 @@ const AppSidebarUser = () => {
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton className="size-fit p-4">
                             <UserAvatar
-                                src={currentUser?.media?.downloadURL ?? ''}
-                                fallback={
-                                    currentUser?.username?.charAt(0) ?? '-'
-                                }
+                                src={user.media?.download_url ?? ''}
+                                fallback={user.user_name?.charAt(0) ?? '-'}
                                 className="size-9 rounded-[4rem] duration-150 ease-in-out"
                             />
                             <div className="grid flex-1 text-left text-sm leading-tight">
                                 <span className="truncate font-semibold">
-                                    {`${currentUser.firstName} ${currentUser.middleName} ${currentUser.lastName}`}
+                                    {`${user.first_name} ${user.middle_name} ${user.last_name}`}
                                 </span>
                                 <span className="truncate text-xs">
-                                    {currentUser.email}
+                                    {user.email}
                                 </span>
                             </div>
                             <ChevronsUpDownIcon className="ml-auto size-4" />

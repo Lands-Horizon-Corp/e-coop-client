@@ -15,12 +15,11 @@ import TimeInCounter from '@/components/time-in-out/time-in-counter'
 import TimeInTimeOut, { TTImeInEntry } from '@/components/time-in-out'
 
 import { cn } from '@/lib/utils'
-import { IUserData } from '@/types'
-import { IClassProps } from '@/types'
+import { IClassProps, IEmployee } from '@/types'
 import { randomEndOfDayQuoute, randomStartOfDayQuoute } from '@/constants'
 
 interface Props extends IClassProps {
-    currentUser: IUserData | null
+    currentUser: IEmployee | null
 }
 
 const NavTimeInBar = ({ className, currentUser }: Props) => {
@@ -66,7 +65,7 @@ const NavTimeInBar = ({ className, currentUser }: Props) => {
                     {!loading && (
                         <>
                             {/* <UserAvatar
-                                src={currentUser.media?.downloadURL ?? ''}
+                                src={currentUser.media?.download_url ?? ''}
                                 fallback={currentUser.username.charAt(0) ?? '-'}
                             /> */}
                             {!timeInEntry && <span>Time-in</span>}

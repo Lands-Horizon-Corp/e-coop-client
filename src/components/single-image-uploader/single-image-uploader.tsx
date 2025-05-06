@@ -11,7 +11,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { IMedia } from '@/types'
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 
 export interface ISingleImageUploadProps {
     defaultImage?: string

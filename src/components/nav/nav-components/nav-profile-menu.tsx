@@ -15,25 +15,28 @@ import { LogoutIcon, UserIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { useSignOut } from '@/hooks/api-hooks/use-auth'
-import { useUserAuthStore } from '@/store/user-auth-store'
-import { getUsersAccountTypeRedirectPage } from '@/helpers'
+import { useAuthStore } from '@/store/user-auth-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 const NavProfileMenu = () => {
     const router = useRouter()
     const { onOpen } = useConfirmModalStore()
-    const { currentUser, setCurrentUser } = useUserAuthStore()
+    const {
+        currentAuth: { user },
+        authStatus,
+        resetAuth,
+    } = useAuthStore()
 
     const { mutate: handleSignout, isPending } = useSignOut({
         onSuccess: () => {
             router.navigate({ to: '/auth/sign-in' as string })
 
-            setCurrentUser(null)
+            resetAuth()
             toast.success('Signed out')
         },
     })
 
-    if (!currentUser) return null
+    if (!user || authStatus !== 'authorized') return null
 
     return (
         <DropdownMenu>
@@ -49,22 +52,19 @@ const NavProfileMenu = () => {
                         <UserAvatar
                             className="size-full"
                             fallbackClassName="bg-transparent"
-                            src={currentUser.media?.downloadURL ?? ''}
-                            fallback={currentUser.username.charAt(0) ?? '-'}
+                            src={user.media?.download_url ?? ''}
+                            fallback={user.user_name.charAt(0) ?? '-'}
                         />
                     )}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuLabel>{currentUser.username}</DropdownMenuLabel>
+                <DropdownMenuLabel>{user.user_name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={() => {
-                        const userProfileUrl =
-                            getUsersAccountTypeRedirectPage(currentUser) +
-                            '/profile'
                         router.navigate({
-                            to: userProfileUrl,
+                            to: '/account' as string,
                             hash: 'account-settings',
                         })
                     }}

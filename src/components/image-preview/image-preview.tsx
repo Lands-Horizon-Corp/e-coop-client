@@ -260,7 +260,7 @@ export const ImageContainer = ({
 
     return (
         <div className="relative overflow-hidden rounded-lg">
-            <p className="py-1 text-xs">{media.fileName}</p>
+            <p className="py-1 text-xs">{media.file_name}</p>
             <div className="flex items-center justify-center">
                 <img
                     className="h-full w-full cursor-pointer overflow-hidden rounded-lg object-cover"
@@ -298,9 +298,9 @@ export const ImageContainer = ({
                 <div className="py-2 text-end">
                     <p className="text-xs">
                         {dimensions.height}x{dimensions?.width}{' '}
-                        {formatBytes(media.fileSize)}
+                        {formatBytes(media.file_size)}
                     </p>
-                    <p className="text-xs">{formatDate(media.createdAt)}</p>
+                    <p className="text-xs">{formatDate(media.created_at)}</p>
                 </div>
             </div>
         </div>

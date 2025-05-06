@@ -4,23 +4,27 @@ import { useRouter } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 
 import { useSignOut } from '@/hooks/api-hooks/use-auth'
-import { useUserAuthStore } from '@/store/user-auth-store'
+import { useAuthStore } from '@/store/user-auth-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 const NavSignOut = () => {
     const router = useRouter()
     const { onOpen } = useConfirmModalStore()
-    const { authStatus, currentUser, setCurrentUser } = useUserAuthStore()
+    const {
+        authStatus,
+        currentAuth: { user },
+        resetAuth,
+    } = useAuthStore()
 
     const { mutate: handleSignout, isPending: isSigningOut } = useSignOut({
         onSuccess: () => {
-            setCurrentUser(null)
+            resetAuth()
             router.navigate({ to: '/auth/sign-in' as string })
             toast.success('Signed out')
         },
     })
 
-    if (authStatus === 'unauthorized' || !currentUser) return null
+    if (authStatus === 'unauthorized' || !user) return null
 
     return (
         <Button

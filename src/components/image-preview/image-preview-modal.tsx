@@ -44,9 +44,9 @@ const ImagePreviewModal = () => {
     } = ImagePreviewData
 
     const [downloadImage, setDownloadImage] = useState<DownloadProps>({
-        fileName: Images?.[0]?.fileName ?? '',
+        fileName: Images?.[0]?.file_name ?? '',
         fileUrl: Images?.[0]?.url ?? '',
-        fileType: Images?.[0]?.fileType ?? '',
+        fileType: Images?.[0]?.file_type ?? '',
     })
 
     const options: CarouselOptions = {
@@ -127,9 +127,9 @@ const ImagePreviewModal = () => {
                 const ImageToDownload = Images[focusIndex]
                 if (!ImageToDownload) return
                 setDownloadImage({
-                    fileName: ImageToDownload.fileName || '',
+                    fileName: ImageToDownload.file_name || '',
                     fileUrl: ImageToDownload.url || '',
-                    fileType: ImageToDownload.fileType || '',
+                    fileType: ImageToDownload.file_type || '',
                 })
                 if (imageRef.current) {
                     imageRef.current.src = ImageToDownload.url
