@@ -41,25 +41,25 @@ class Logger {
             }
         }
 
-        if (this.isDevelopment) {
-            this.log = console.log.bind(console)
-            this.warn = console.warn.bind(console)
-            this.error = console.error.bind(console)
-            this.info = console.info.bind(console)
-            this.debug = console.debug.bind(console)
-        } else {
-            this.log = () => {}
-            this.warn = () => {}
-            this.error = () => {}
-            this.info = () => {}
-            this.debug = () => {}
+        // if (this.isDevelopment) {
+        this.log = console.log.bind(console)
+        this.warn = console.warn.bind(console)
+        this.error = console.error.bind(console)
+        this.info = console.info.bind(console)
+        this.debug = console.debug.bind(console)
+        // } else {
+        //     this.log = () => {}
+        //     this.warn = () => {}
+        //     this.error = () => {}
+        //     this.info = () => {}
+        //     this.debug = () => {}
 
-            console.log = () => {}
-            console.warn = () => {}
-            console.error = () => {}
-            console.info = () => {}
-            console.debug = () => {}
-        }
+        //     console.log = () => {}
+        //     console.warn = () => {}
+        //     console.error = () => {}
+        //     console.info = () => {}
+        //     console.debug = () => {}
+        // }
     }
 
     public static getInstance(): Logger {

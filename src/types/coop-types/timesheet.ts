@@ -1,4 +1,4 @@
-import { TEntityId } from '../common'
+import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IMedia } from './media'
 
 export interface ITimeInRequest {
@@ -11,15 +11,13 @@ export interface ITimeOutRequest {
     mediaOut: IMedia
 }
 
-export interface ITimesheet {
+export interface ITimesheet extends ITimeStamps, IAuditable {
     id: TEntityId
     employeeId: number
     timeIn: Date
     timeOut?: Date
     mediaInId?: number
     mediaOutId?: number
-    createdAt: Date
-    updatedAt: Date
     mediaIn?: IMedia
     mediaOut?: IMedia
 }

@@ -1,41 +1,56 @@
-import {
-    useQuery,
-    useMutation,
-    queryOptions,
-    useQueryClient,
-} from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import AuthService from '@/api-service/auth-service'
+import * as AuthService from '@/api-service/auth-service'
 
 import {
-    IUserData,
-    TUserType,
+    IUserBase,
+    IAuthContext,
     ISignInRequest,
     ISignUpRequest,
     IChangePasswordRequest,
     IForgotPasswordRequest,
 } from '@/types'
-import { IOperationCallbacks } from './types'
+import { IAPIHook, IOperationCallbacks, IQueryProps } from './types'
 
-// Loader for Auth Preloading
-export const authLoader = () =>
-    queryOptions<IUserData>({
-        queryKey: ['auth', 'current-user'],
+// Get auth context (Full: user, org, branch, etc...)
+export const useAuthContext = ({
+    onSuccess,
+    onError,
+    retry = 0,
+    showMessage,
+    ...others
+}: IAPIHook<IAuthContext> & IQueryProps<IAuthContext> = {}) => {
+    return useQuery<IAuthContext, string>({
+        queryKey: ['current-auth'],
         queryFn: async () => {
-            return await AuthService.currentUser()
-        },
-        retry: 0,
-    })
+            const [error, data] = await withCatchAsync(
+                AuthService.currentAuth()
+            )
 
-// Hook: Get Current User
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                onError?.(errorMessage, error)
+                throw errorMessage
+            }
+
+            onSuccess?.(data)
+            return data
+        },
+        retry,
+        ...others,
+    })
+}
+
+// Get Current User
 export const useCurrentUser = ({
     onError,
     onSuccess,
-}: IOperationCallbacks<IUserData>) => {
-    return useQuery<IUserData, string>({
+}: IOperationCallbacks<IUserBase>) => {
+    return useQuery<IUserBase, string>({
         queryKey: ['current-user'],
         queryFn: async () => {
             const [error, data] = await withCatchAsync(
@@ -56,14 +71,14 @@ export const useCurrentUser = ({
     })
 }
 
-// Hook: Sign In
+// Sign In
 export const useSignIn = ({
     onError,
     onSuccess,
-}: IOperationCallbacks<IUserData, string>) => {
+}: IOperationCallbacks<IAuthContext, string>) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IUserData, string, ISignInRequest>({
+    return useMutation<IAuthContext, string, ISignInRequest>({
         mutationKey: ['auth', 'signin'],
         mutationFn: async (credentials) => {
             const [error, data] = await withCatchAsync(
@@ -88,12 +103,16 @@ export const useSignIn = ({
     })
 }
 
-// Hook: Sign Up
+// Sign Up
 export const useSignUp = ({
     onError,
     onSuccess,
-}: IOperationCallbacks<IUserData, string> | undefined = {}) => {
-    return useMutation<IUserData, string, ISignUpRequest>({
+}: IOperationCallbacks<IAuthContext, string> | undefined = {}) => {
+    return useMutation<
+        IAuthContext & { user: NonNullable<IUserBase> },
+        string,
+        ISignUpRequest
+    >({
         mutationKey: ['auth', 'signup'],
         mutationFn: async (newUser) => {
             const [error, data] = await withCatchAsync(
@@ -114,23 +133,21 @@ export const useSignUp = ({
     })
 }
 
-// Hook: Forgot Password
+// Forgot Password
 export const useForgotPassword = ({
     onError,
     onSuccess,
 }:
     | IOperationCallbacks<
           {
-              key: string
-              accountType: TUserType
+              email: string
           },
           string
       >
     | undefined = {}) => {
     return useMutation<
         {
-            key: string
-            accountType: TUserType
+            email: string
         },
         string,
         IForgotPasswordRequest
@@ -156,7 +173,7 @@ export const useForgotPassword = ({
     })
 }
 
-// Hook: Change Password
+// Change Password
 export const useChangePassword = ({
     onError,
     onSuccess,
@@ -181,7 +198,7 @@ export const useChangePassword = ({
     })
 }
 
-// Hook: Sign Out
+// Sign Out
 export const useSignOut = ({
     onError,
     onSuccess,
@@ -211,41 +228,15 @@ export const useSignOut = ({
     })
 }
 
-export const useCheckResetId = ({
-    resetId,
-    onError,
-    onSuccess,
-}: { resetId: string } & IOperationCallbacks<boolean>) => {
-    return useQuery<null | boolean, string>({
-        queryKey: ['password-reset-link', resetId],
-        queryFn: async () => {
-            const [error] = await withCatchAsync(
-                AuthService.checkResetLink(resetId)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                toast.message(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            onSuccess?.(true)
-            return true
-        },
-        initialData: null,
-    })
-}
-
 export const useVerify = ({
     verifyMode,
     onSuccess,
     onError,
 }: { verifyMode: 'email' | 'mobile' } & IOperationCallbacks<
-    IUserData,
+    IUserBase,
     string
 >) => {
-    return useMutation<IUserData, string, { otp: string }>({
+    return useMutation<IUserBase, string, { otp: string }>({
         mutationKey: ['verify', verifyMode],
         mutationFn: async (data) => {
             try {
@@ -284,14 +275,14 @@ export const useSendUserContactOTPVerification = ({
         mutationFn: async () => {
             try {
                 if (verifyMode === 'email') {
-                    await AuthService.sendEmailVerification()
+                    await AuthService.requestEmailVerification()
                     toast.success('OTP Resent to your email')
                     onSuccess?.()
                     return
                 }
 
                 if (verifyMode === 'mobile') {
-                    await AuthService.sendContactVerification()
+                    await AuthService.requestContactNumberVerification()
                     toast.success('OTP Resent to your mobile')
                     onSuccess?.()
                     return
@@ -308,27 +299,32 @@ export const useSendUserContactOTPVerification = ({
     })
 }
 
-export const useSkipUserContactVerification = ({
-    onSuccess,
+export const useCheckResetId = ({
+    resetId,
     onError,
-}: undefined | IOperationCallbacks<IUserData, string> = {}) => {
-    return useMutation<IUserData, string>({
-        mutationKey: ['auth', 'skip-verify'],
-        mutationFn: async () => {
-            const [error, response] = await withCatchAsync(
-                AuthService.skipVerification()
+    onSuccess,
+    showMessage,
+    initialData = false,
+    ...others
+}: { resetId: string } & IAPIHook<boolean> & IQueryProps<boolean>) => {
+    return useQuery<boolean, string>({
+        queryKey: ['password-reset-link', resetId],
+        queryFn: async () => {
+            const [error] = await withCatchAsync(
+                AuthService.checkResetLink(resetId)
             )
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(errorMessage)
+                if (showMessage) toast.message(errorMessage)
                 onError?.(errorMessage)
                 throw errorMessage
             }
 
-            onSuccess?.(response)
-
-            return response
+            onSuccess?.(true)
+            return true
         },
+        initialData,
+        ...others,
     })
 }
