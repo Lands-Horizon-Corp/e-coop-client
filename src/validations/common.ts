@@ -80,7 +80,7 @@ export const civilStatusSchema = z.enum([
 
 export const entityIdSchema = z.coerce.string().uuid('Invalid Id')
 
-export const mediaResourceSchema = z.object({
+export const mediaSchema = z.object({
     id: entityIdSchema,
     fileName: z.string(),
     fileSize: z.number(),

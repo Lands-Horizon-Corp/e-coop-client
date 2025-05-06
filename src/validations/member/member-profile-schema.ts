@@ -5,7 +5,7 @@ import { memberAssetsSchema } from './member-assets-schema'
 import { memberIncomeSchema } from './member-income-schema'
 import { memberAddressSchema } from './member-address-schema'
 import { memberExpensesSchema } from './member-expenses-schema'
-import { entityIdSchema, mediaResourceSchema } from '../common'
+import { entityIdSchema, mediaSchema } from '../common'
 import { memberDescriptionSchema } from './member-description-schema'
 import { memberCloseRemarkSchema } from './member-close-remark-schema'
 import { memberGovernmentBenefits } from './member-government-benefits'
@@ -47,10 +47,10 @@ export const createMemberProfileSchema = z.object({
 
     mediaId: entityIdSchema.optional(),
     memberId: entityIdSchema.optional(),
-    media: mediaResourceSchema.optional(),
+    media: mediaSchema.optional(),
 
     signatureMediaId: entityIdSchema.optional(),
-    signatureMedia: mediaResourceSchema.optional(),
+    signatureMedia: mediaSchema.optional(),
 
     memberTypeId: z
         .string()
