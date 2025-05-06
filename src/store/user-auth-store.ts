@@ -12,7 +12,7 @@ interface UserAuthStore {
     resetAuth: (defaultAuthContextValue?: IAuthContext) => void
 }
 
-export const useUserAuthStore = create<UserAuthStore>((set) => ({
+export const useAuthStore = create<UserAuthStore>((set) => ({
     currentAuth: {
         user: undefined,
         branch: undefined,
