@@ -43,7 +43,7 @@ import { flatSidebarGroupItem } from '@/components/app-sidebar/app-sidebar-utils
 import AppSidebarQruickNavigate from '@/components/app-sidebar/app-sidebar-quick-navigate'
 
 import { IBaseProps } from '@/types'
-import { useAuthUserWithBranchAndOrg } from '@/store/user-auth-store'
+import { useAuthUserWithBranch } from '@/store/user-auth-store'
 
 const SidebarGroupItems = (orgName: string): INavGroupItem[] => {
     return [
@@ -66,7 +66,7 @@ const CoopSidebar = (props: IBaseProps) => {
 
     const {
         currentAuth: { organization },
-    } = useAuthUserWithBranchAndOrg()
+    } = useAuthUserWithBranch()
 
     const sidebarRoutes = useMemo(() => {
         return SidebarGroupItems(organization.name)
