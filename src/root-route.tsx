@@ -3,7 +3,6 @@ import { createRouter } from '@tanstack/react-router';
 import { createRootRouteWithContext } from '@tanstack/react-router';
 
 import AuthRoute from '@/pages/auth/route';
-import TestRoute from '@/pages/test-pages/route';
 import LandingRoute from '@/pages/landing/route';
 
 import RootLayout from '@/pages/root-layout';
@@ -17,7 +16,6 @@ export type TRouterContext = {
 export const rootRoute = createRootRouteWithContext<TRouterContext>()();
 
 const routeTree = rootRoute.addChildren([
-    TestRoute,
     AuthRoute,
     LandingRoute,
     practiceLandingRoute,

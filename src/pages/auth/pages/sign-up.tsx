@@ -1,22 +1,23 @@
 import { useRouter } from '@tanstack/react-router'
 
+import { useAuthStore } from '@/store/user-auth-store'
 import GuestGuard from '@/components/wrappers/guest-guard'
 import { SignUpForm } from '@/components/forms/auth-forms'
-import { useUserAuthStore } from '@/store/user-auth-store'
 import AuthPageWrapper from '../components/auth-page-wrapper'
 
 const SignUpPage = () => {
     const router = useRouter()
-    const { setCurrentUser } = useUserAuthStore()
+    const { setCurrentAuth } = useAuthStore()
 
     return (
         <GuestGuard>
             <div className="flex min-h-full flex-col items-center justify-center">
                 <AuthPageWrapper>
                     <SignUpForm
-                        onSuccess={(userData) => {
-                            setCurrentUser(userData)
-                            router.navigate({ to: '/auth/verify' })
+                        className="max-w-5xl"
+                        onSuccess={(authContext) => {
+                            setCurrentAuth(authContext)
+                            router.navigate({ to: '/onboarding' as string })
                         }}
                     />
                 </AuthPageWrapper>

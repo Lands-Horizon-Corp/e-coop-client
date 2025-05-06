@@ -37,11 +37,11 @@ const signInRoute = createRoute({
     validateSearch: zodSearchValidator(SignInPageSearchSchema),
 })
 
-const verifyRoute = createRoute({
-    getParentRoute: () => authRoute,
-    path: 'verify',
-    component: lazyRouteComponent(() => import('@/pages/auth/pages/verify')),
-})
+// const verifyRoute = createRoute({
+//     getParentRoute: () => authRoute,
+//     path: 'verify',
+//     component: lazyRouteComponent(() => import('@/pages/auth/pages/verify')),
+// })
 
 const forgotPasswordRoute = createRoute({
     getParentRoute: () => authRoute,
@@ -59,7 +59,7 @@ const passwordResetRoute = createRoute({
 const AuthRoute = authRoute.addChildren([
     signUpRoute,
     signInRoute,
-    verifyRoute,
+    // verifyRoute,
     forgotPasswordRoute,
     passwordResetRoute,
 ])

@@ -1,8 +1,6 @@
 import z from 'zod'
-import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { Link } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
@@ -28,10 +26,8 @@ import { PhoneInput } from '@/components/contact-input/contact-input'
 import { contactFormSchema } from '@/pages/landing/validations/contact-form'
 
 import { cn } from '@/lib/utils'
-import { withCatchAsync } from '@/utils'
 import UseCooldown from '@/hooks/use-cooldown'
-import { serverRequestErrExtractor } from '@/helpers'
-import ContactService from '@/api-service/contact-service'
+import { useCreateContactUs } from '@/hooks/api-hooks/use-contact-us'
 
 type TContact = z.infer<typeof contactFormSchema>
 
@@ -58,26 +54,10 @@ const ContactPage = () => {
         counterInterval: 1000,
     })
 
-    const { mutate: sendContactMessage, isPending } = useMutation<
-        void,
-        string,
-        TContact
-    >({
-        mutationKey: ['send-contact-message'],
-        mutationFn: async (contact: TContact) => {
-            if (!contact) return
-
-            const [error] = await withCatchAsync(ContactService.create(contact))
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(errorMessage)
-                return
-            }
-
+    const { mutate: sendContactMessage, isPending } = useCreateContactUs({
+        onSuccess: () => {
             startCooldown()
             form.reset()
-            toast.success(`Message was Already Sent!`)
         },
     })
 
@@ -107,7 +87,7 @@ const ContactPage = () => {
                         >
                             <div className="flex flex-col gap-[26px] md:flex-row">
                                 <FormField
-                                    name="firstName"
+                                    name="first_name"
                                     control={form.control}
                                     render={({ field }) => (
                                         <FormItem className="">
@@ -135,7 +115,7 @@ const ContactPage = () => {
                                     )}
                                 />
                                 <FormField
-                                    name="lastName"
+                                    name="last_name"
                                     control={form.control}
                                     render={({ field }) => (
                                         <FormItem className="">
@@ -193,7 +173,7 @@ const ContactPage = () => {
                                 )}
                             />
                             <FormField
-                                name="contactNumber"
+                                name="contact_number"
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem className="">

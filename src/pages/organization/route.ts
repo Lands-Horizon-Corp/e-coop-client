@@ -5,17 +5,15 @@ import { rootRoute } from '@/root-route'
 const organizationRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: 'organization',
-    component: lazyRouteComponent(() => import('@/pages/member/layout')),
+    component: lazyRouteComponent(() => import('./layout')),
 })
 
 const memberLandingRoute = createRoute({
     getParentRoute: () => organizationRoute,
     path: '/$organization_name',
-    component: lazyRouteComponent(() => import('@/pages/member/pages')),
+    // component: lazyRouteComponent(() => import('@/pages/member/pages')),
 })
 
-const OrganizationRoute = organizationRoute.addChildren([
-    memberLandingRoute,
-])
+const OrganizationRoute = organizationRoute.addChildren([memberLandingRoute])
 
 export default OrganizationRoute

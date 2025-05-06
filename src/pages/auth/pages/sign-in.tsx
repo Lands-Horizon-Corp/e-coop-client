@@ -1,67 +1,44 @@
-import { toast } from 'sonner'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
+import { useSearch } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter, useSearch } from '@tanstack/react-router'
 
 import GuestGuard from '@/components/wrappers/guest-guard'
+import AuthPageWrapper from '../components/auth-page-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import SignInForm from '@/components/forms/auth-forms/sign-in-form'
-import AuthPageWrapper from '../components/auth-page-wrapper'
 
-import { IUserData } from '@/types'
-import { isUserHasUnverified } from '@/helpers'
-import { useUserAuthStore } from '@/store/user-auth-store'
+import { IAuthContext } from '@/types'
+import { useAuthStore } from '@/store/user-auth-store'
 
 const SignInPage = () => {
-    const router = useRouter()
     const queryClient = useQueryClient()
 
-    const { currentUser, authStatus, setCurrentUser } = useUserAuthStore()
+    const { authStatus, currentAuth, setCurrentAuth } = useAuthStore()
 
     const prefilledValues = useSearch({ from: '/auth/sign-in' })
 
     const onSignInSuccess = useCallback(
-        (userData: IUserData) => {
-            setCurrentUser(userData)
-
-            const { status } = userData
-
+        (userData: IAuthContext) => {
+            setCurrentAuth(userData)
             queryClient.setQueryData(['current-user'], userData)
-
-            if (status === 'Not Allowed') {
-                toast.error(
-                    'Your account has been canceled, and you can no longer log in.'
-                )
-                router.navigate({ to: '/auth/verify' })
-                return
-            }
-
-            if (!userData.isSkipVerification && isUserHasUnverified(userData)) {
-                toast.warning('Your account is pending approval')
-                router.navigate({ to: '/auth/verify' })
-                return
-            }
         },
-        [queryClient, router, setCurrentUser]
+        [queryClient, setCurrentAuth]
     )
-
-    useEffect(() => {
-        if (!currentUser) return
-        onSignInSuccess(currentUser)
-    }, [currentUser, onSignInSuccess])
 
     return (
         <GuestGuard>
-            <div className="flex min-h-full flex-col items-center justify-center">
+            <div className="flex min-h-full w-full flex-col items-center justify-center">
                 <AuthPageWrapper>
-                    {!currentUser && (
+                    {authStatus !== 'authorized' && (
                         <SignInForm
-                            defaultValues={prefilledValues}
+                            className="w-full max-w-lg"
                             onSuccess={onSignInSuccess}
+                            defaultValues={prefilledValues}
                         />
                     )}
-                    {currentUser && <LoadingSpinner />}
-                    {authStatus === 'loading' && <LoadingSpinner />}
+                    {(authStatus === 'loading' || currentAuth.user) && (
+                        <LoadingSpinner />
+                    )}
                 </AuthPageWrapper>
             </div>
         </GuestGuard>
