@@ -22,7 +22,7 @@ import { formatBytes } from '@/helpers'
 import { IMedia } from '@/types'
 import { IClassProps } from '@/types'
 import { useCamera } from '@/hooks/use-camera'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 
 type TUploadSource = 'file' | 'capture'
 

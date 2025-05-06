@@ -88,7 +88,8 @@ export const mediaSchema = z.object({
     storageKey: z.string(),
     url: z.string().optional().default(''),
     bucketName: z.string(),
-    createdAt: z.string(),
-    updatedAt: z.string().optional(),
-    downloadURL: z.string(),
+    created_at: z.string(),
+    updated_at: z.string().optional(),
+    deleted_at: z.string().optional(),
+    download_url: z.string(),
 })

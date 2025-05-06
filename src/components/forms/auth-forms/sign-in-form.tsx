@@ -7,35 +7,26 @@ import {
     Form,
     FormItem,
     FormField,
-    FormLabel,
     FormControl,
     FormMessage,
 } from '@/components/ui/form'
-import {
-    Select,
-    SelectItem,
-    SelectValue,
-    SelectContent,
-    SelectTrigger,
-} from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
-import EcoopLogo from '@/components/ecoop-logo'
 import { Button } from '@/components/ui/button'
 import PasswordInput from '@/components/ui/password-input'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 import { signInSchema } from '@/validations'
 
-import { IForm, IClassProps, IUserData } from '@/types'
+import { IForm, IClassProps, IAuthContext } from '@/types'
 import { useSignIn } from '@/hooks/api-hooks/use-auth'
 
 type TSignIn = z.infer<typeof signInSchema>
 
 interface ISignInFormProps
     extends IClassProps,
-        IForm<Partial<TSignIn>, IUserData, string> {}
+        IForm<Partial<TSignIn>, IAuthContext, string> {}
 
 const SignInForm = ({
     readOnly,
@@ -52,8 +43,7 @@ const SignInForm = ({
         mode: 'onChange',
         defaultValues: {
             password: '',
-            key: '',
-            accountType: 'Member',
+            email: '',
             ...defaultValues,
         },
     })
@@ -62,36 +52,25 @@ const SignInForm = ({
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit((data) => mutate(data))}
-                className={cn(
-                    'flex w-full flex-col gap-y-4 sm:w-[390px]',
-                    className
-                )}
+                className={cn('flex w-full flex-col gap-y-4', className)}
             >
-                <div className="flex items-center justify-center gap-x-2 py-4 font-medium">
-                    <EcoopLogo className="size-24" />
-                    <p className="text-xl">Login to your account</p>
+                <div className="flex items-center gap-x-2 py-4 font-medium">
+                    <p className="text-lg font-medium md:text-5xl">Sign In</p>
                 </div>
-
                 <fieldset
                     disabled={isPending || readOnly}
                     className="space-y-3"
                 >
                     <FormField
                         control={form.control}
-                        name="key"
+                        name="email"
                         render={({ field }) => (
                             <FormItem className="space-y-1">
-                                <FormLabel
-                                    htmlFor={field.name}
-                                    className="w-full max-w-[90px] text-right font-medium"
-                                >
-                                    Key
-                                </FormLabel>
                                 <FormControl>
                                     <Input
                                         {...field}
                                         id={field.name}
-                                        placeholder="Email, contact, or username"
+                                        placeholder="Email Address"
                                         autoComplete="off"
                                     />
                                 </FormControl>
@@ -104,12 +83,6 @@ const SignInForm = ({
                         name="password"
                         render={({ field }) => (
                             <FormItem className="space-y-1">
-                                <FormLabel
-                                    htmlFor="password-field"
-                                    className="w-full max-w-[90px] text-right font-medium"
-                                >
-                                    Password
-                                </FormLabel>
                                 <FormControl>
                                     <PasswordInput
                                         {...field}
@@ -122,57 +95,21 @@ const SignInForm = ({
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="accountType"
-                        render={({ field }) => (
-                            <FormItem className="space-y-1">
-                                <FormLabel
-                                    htmlFor="account-type"
-                                    className="w-full max-w-[90px] text-right font-medium"
-                                >
-                                    Account Type
-                                </FormLabel>
-                                <Select
-                                    name={field.name}
-                                    defaultValue={field.value}
-                                    onValueChange={field.onChange}
-                                >
-                                    <FormControl id="account-type">
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Choose type" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="Member">
-                                            Member
-                                        </SelectItem>
-                                        <SelectItem value="Owner">
-                                            Owner
-                                        </SelectItem>
-                                        <SelectItem value="Admin">
-                                            Admin
-                                        </SelectItem>
-                                        <SelectItem value="Employee">
-                                            Employee
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </FormItem>
-                        )}
-                    />
                 </fieldset>
                 <div className="mt-6 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={error} />
-                    <Button type="submit" disabled={isPending || readOnly}>
+                    <Button
+                        type="submit"
+                        className="w-full max-w-xl rounded-3xl"
+                        disabled={isPending || readOnly}
+                    >
                         {isPending ? <LoadingSpinner /> : 'Login'}
                     </Button>
                     <Link
-                        className="text-sm text-primary"
+                        className="mt-4 text-sm text-muted-foreground hover:text-foreground hover:underline"
                         to={'/auth/forgot-password' as string}
                         search={{
-                            key: form.getValues('key'),
-                            accountType: form.getValues('accountType'),
+                            email: form.getValues('email'),
                         }}
                     >
                         Forgot Password

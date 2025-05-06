@@ -8,7 +8,7 @@ import Modal, { IModalProps } from '../modals/modal'
 import LoadingSpinner from '../spinners/loading-spinner'
 
 import { IMedia } from '@/types'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media-resource'
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 
 interface Props {
     onSignatureUpload: (signatureMedia: IMedia) => void

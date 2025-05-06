@@ -13,12 +13,12 @@ const FormErrorMessage = ({ className, errorMessage }: Props) => {
     return (
         <span
             className={cn(
-                'flex items-center gap-x-2 rounded-md bg-destructive/10 p-2 py-2 text-sm text-orange-600 dark:bg-destructive/40',
+                'flex items-start gap-x-2 rounded-md border border-red-400/20 bg-destructive/10 p-2 py-2 text-sm text-red-500 dark:bg-rose-400/10 dark:text-red-400',
                 className
             )}
         >
-            <MdError className="size-4" />
-            {errorMessage}
+            <MdError className="my-1 size-4" />
+            <p className="w-full">{errorMessage}</p>
         </span>
     )
 }

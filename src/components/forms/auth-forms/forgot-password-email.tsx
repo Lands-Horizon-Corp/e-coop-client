@@ -4,19 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
     Form,
-    FormControl,
-    FormField,
     FormItem,
-    FormLabel,
+    FormField,
+    FormControl,
     FormMessage,
 } from '@/components/ui/form'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
+
 import { KeyIcon } from '@/components/icons'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -25,12 +18,10 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 import { IForm, IClassProps } from '@/types'
-import { userAccountTypeSchema } from '@/validations/common'
 import { useForgotPassword } from '@/hooks/api-hooks/use-auth'
 
 const forgotPasswordFormSchema = z.object({
-    key: z.string().min(1, 'Please provide Email, Number or Email'),
-    accountType: userAccountTypeSchema,
+    email: z.string().min(1, 'Please provide Email, Number or Email'),
 })
 
 export type TForgotPasswordEmail = z.infer<typeof forgotPasswordFormSchema>
@@ -51,8 +42,7 @@ const ForgotPasswordEmail = ({
         reValidateMode: 'onChange',
         mode: 'onChange',
         defaultValues: {
-            key: '',
-            accountType: 'Admin',
+            email: '',
             ...defaultValues,
         },
     })
@@ -94,66 +84,20 @@ const ForgotPasswordEmail = ({
                     className="space-y-4"
                 >
                     <FormField
-                        name="key"
+                        name="email"
                         control={form.control}
                         render={({ field }) => (
                             <FormItem className="space-y-1">
-                                <FormLabel
-                                    htmlFor={field.name}
-                                    className="w-full text-right font-medium"
-                                >
-                                    Key
-                                </FormLabel>
                                 <FormControl>
                                     <div className="flex-1 space-y-2">
                                         <Input
                                             {...field}
                                             id={field.name}
                                             autoComplete="off"
-                                            placeholder="Enter email or contact"
+                                            placeholder="Email address"
                                         />
                                     </div>
                                 </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="accountType"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    htmlFor="account-type"
-                                    className="w-full max-w-[90px] text-right font-medium"
-                                >
-                                    Account Type
-                                </FormLabel>
-                                <Select
-                                    name={field.name}
-                                    defaultValue={field.value}
-                                    onValueChange={field.onChange}
-                                >
-                                    <FormControl>
-                                        <SelectTrigger id="account-type">
-                                            <SelectValue placeholder="Choose type" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="Member">
-                                            Member
-                                        </SelectItem>
-                                        <SelectItem value="Owner">
-                                            Owner
-                                        </SelectItem>
-                                        <SelectItem value="Admin">
-                                            Admin
-                                        </SelectItem>
-                                        <SelectItem value="Employee">
-                                            Employee
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -162,8 +106,12 @@ const ForgotPasswordEmail = ({
 
                 <div className="mt-4 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={error} />
-                    <Button type="submit" disabled={isLoading || readOnly}>
-                        {isLoading ? <LoadingSpinner /> : 'Confirm Email'}
+                    <Button
+                        type="submit"
+                        disabled={isLoading || readOnly}
+                        className="w-full max-w-xl rounded-3xl"
+                    >
+                        {isLoading ? <LoadingSpinner /> : 'Send Code to Email'}
                     </Button>
                 </div>
             </form>

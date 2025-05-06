@@ -10,7 +10,7 @@ import TimeInCounter from '@/components/time-in-out/time-in-counter'
 import RealtimeTimeText from '@/components/time-in-out/realtime-time-text'
 
 import { cn } from '@/lib/utils'
-import { IUserData } from '@/types'
+import { IUserBase } from '@/types'
 import { IBaseProps } from '@/types'
 
 export type TTImeInEntry = {
@@ -19,7 +19,7 @@ export type TTImeInEntry = {
 }
 
 interface Props extends IBaseProps {
-    currentUser: IUserData
+    currentUser: IUserBase
     timeEntry?: TTImeInEntry
     message?: string
     onTimeInEntry: (timeEntry: TTImeInEntry) => void

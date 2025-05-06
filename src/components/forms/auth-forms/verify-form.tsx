@@ -24,12 +24,12 @@ import ResendVerifyContactButton from '@/components/auth/resend-verify-button'
 import { cn } from '@/lib/utils'
 import { otpSchema } from '@/validations'
 
-import { IForm, IUserData } from '@/types'
+import { IForm, IUserBase } from '@/types'
 import { useVerify } from '@/hooks/api-hooks/use-auth'
 
 type TVerifyForm = z.infer<typeof otpSchema>
 
-interface Props extends IForm<TVerifyForm, IUserData> {
+interface Props extends IForm<TVerifyForm, IUserBase> {
     verifyMode: 'mobile' | 'email'
     onSkip?: () => void
 }

@@ -7,15 +7,17 @@ import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
 import NavProfileMenu from '@/components/nav/nav-components/nav-profile-menu'
 
 import { cn } from '@/lib'
-import { useUserAuthStore } from '@/store/user-auth-store'
+import { useAuthStore } from '@/store/user-auth-store'
 
-import { IClassProps } from '@/types'
+import { IClassProps, IEmployee } from '@/types'
 
 const UserNav = ({
     homeUrl,
     className,
 }: { homeUrl?: `/${string}` } & IClassProps) => {
-    const { currentUser } = useUserAuthStore()
+    const {
+        currentAuth: { user },
+    } = useAuthStore()
     return (
         <RootNav
             className={cn(
@@ -28,10 +30,9 @@ const UserNav = ({
                 <PageBreadCrumb homeUrl={homeUrl} className="hidden md:block" />
             </NavContainer>
             <NavContainer className="pointer-events-auto">
-                {currentUser &&
-                    ['Admin', 'Employee'].includes(currentUser.accountType) && (
-                        <NavTimeInBar currentUser={currentUser} />
-                    )}
+                {user && ['employee'].includes(user.type) && (
+                    <NavTimeInBar currentUser={user as IEmployee} />
+                )}
                 <NavProfileMenu />
                 <NavThemeToggle />
             </NavContainer>

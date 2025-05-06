@@ -2,10 +2,10 @@ import { Link } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 
-import { useUserAuthStore } from '@/store/user-auth-store'
+import { useAuthStore } from '@/store/user-auth-store'
 
 const NavSignIn = () => {
-    const { authStatus } = useUserAuthStore()
+    const { authStatus } = useAuthStore()
 
     if (authStatus === 'authorized') return null
 

@@ -35,7 +35,7 @@ const FileItem = ({
                     <div className="size-12">
                         <AspectRatio ratio={1 / 1}>
                             <ImageDisplay
-                                src={media.downloadURL}
+                                src={media.download_url}
                                 className="size-full rounded-none object-cover"
                             />
                         </AspectRatio>
@@ -47,10 +47,10 @@ const FileItem = ({
                 )}
                 <div className="flex-grow space-y-2">
                     <p className="text-xs font-semibold">
-                        {media?.fileName ?? file?.name ?? ''}
+                        {media?.file_name ?? file?.name ?? ''}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                        {formatBytes(media?.fileSize ?? file?.size ?? 1)}
+                        {formatBytes(media?.file_size ?? file?.size ?? 1)}
                     </p>
                 </div>
                 <Button

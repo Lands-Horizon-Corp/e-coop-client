@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const getMediaResourceFileIcon = ({ media }: Props): IconType => {
-    const category = getFileCategory(media.fileName, media.fileType)
+    const category = getFileCategory(media.file_name, media.file_type)
 
     switch (category) {
         case 'pdf':
@@ -50,7 +50,7 @@ const MediaResourceFileIcon = ({
     className,
     iconClassName,
 }: { media: IMedia; iconClassName?: string } & IClassProps) => {
-    const category = getFileCategory(media.fileName, media.fileType)
+    const category = getFileCategory(media.file_name, media.file_type)
 
     switch (category) {
         case 'pdf':

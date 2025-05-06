@@ -72,9 +72,9 @@ export const AccountRequestSchema = z.object({
 })
 
 export const AccountResourceSchema = AccountRequestSchema.extend({
-    createdAt: z.string(),
-    updatedAt: z.string(),
-    deletedAt: z.string().nullable().optional(),
+    created_at: z.string(),
+    created_by: z.string(),
+    deleted_at: z.string().nullable().optional(),
 })
 
 export const AccountPaginatedResourceSchema = z.object({
