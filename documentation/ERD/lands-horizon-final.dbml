@@ -79,6 +79,7 @@ enum user_type {
   owner
   employee
   member
+  ban
 }
 
 // 🔑

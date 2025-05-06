@@ -25,7 +25,7 @@ export type IAccountingLedgerRequest = {
     lineNumber?: number | null
     transactionTypeId: string
     createdBy: TEntityId
-    createdAt: string
+    created_at: string
 }
 
 export interface IAccountingLedgerResource extends ITimeStamps {

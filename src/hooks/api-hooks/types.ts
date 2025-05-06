@@ -1,8 +1,12 @@
 import { TSortingState } from '@/hooks/use-sorting-state'
 
-export interface IOperationCallbacks<TDataSuccess = unknown, TError = unknown> {
+export interface IOperationCallbacks<
+    TDataSuccess = unknown,
+    TError = unknown,
+    TRawError = unknown,
+> {
     onSuccess?: (data: TDataSuccess) => void
-    onError?: (error: TError) => void
+    onError?: (error: TError, rawError?: TRawError) => void
 }
 
 export interface IFilterPaginatedHookProps extends IAPIPreloads {
@@ -19,6 +23,8 @@ export interface IQueryProps<T = unknown> {
     enabled?: boolean
     initialData?: T
     showMessage?: boolean
+    retry?: number
+    refetchOnWindowFocus?: boolean
 }
 
 export interface IMutationProps {
