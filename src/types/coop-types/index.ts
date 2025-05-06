@@ -44,11 +44,10 @@ export * from './member/member-occupation-history'
 
 /* Other Types */
 export * from './api'
-export * from './role'
+// export * from './role'
 export * from './media'
 export * from './gender'
 export * from './branch'
-export * from './contact'
 export * from './footstep'
 export * from './timesheet'
 export * from './paginated-result'

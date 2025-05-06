@@ -1,9 +1,4 @@
 import { IMediaRequest } from '../coop-types/media'
-import { TUserType, IUserBase } from '.'
-
-export interface IUserData extends IUserBase {
-    accountType: TUserType
-}
 
 export interface IChangePasswordRequest {
     otp?: string
@@ -13,8 +8,7 @@ export interface IChangePasswordRequest {
 }
 
 export interface IForgotPasswordRequest {
-    key: string
-    accountType: TUserType
+    email: string
     emailTemplate?: string
     contactTemplate?: string
 }
@@ -28,22 +22,23 @@ export interface ISendContactNumberVerificationRequest {
 }
 
 export interface ISignInRequest {
-    email?: string
-    username?: string
+    email: string
     password: string
 }
 
 export interface ISignUpRequest {
-    username: string
-    firstName: string
-    lastName: string
-    middleName?: string
+    user_name: string
+    first_name: string
+    last_name: string
+    middle_name?: string
+    full_name: string
+    suffix?: string
+
     email: string
+    contact_number: string
     password: string
-    confirmPassword: string
-    birthDate: Date
-    contactNumber: string
-    permanentAddress: string
+
+    birthdate: Date
     media?: IMediaRequest
 
     emailTemplate?: string

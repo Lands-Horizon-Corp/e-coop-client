@@ -1,9 +1,11 @@
-import { AxiosResponse } from 'axios'
 import APIService from './api-service'
 
 import { getSMSContent, getEmailContent } from '@/lib'
 import {
-    IUserData,
+    IBranch,
+    IUserBase,
+    IAuthContext,
+    IOrganization,
     ISignUpRequest,
     ISignInRequest,
     INewPasswordRequest,
@@ -15,115 +17,102 @@ import {
     ISendContactNumberVerificationRequest,
 } from '@/types'
 
-export default class AuthService extends APIService {
-    private static readonly BASE_ENDPOINT = '/auth'
+const BASE_ENDPOINT = '/authentication'
 
-    // GET - /auth/current-user
-    public static async currentUser(): Promise<IUserData> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/current-user`
-        return (await AuthService.get<IUserData>(endpoint)).data
-    }
+export const currentAuth = async () => {
+    const endpoint = `${BASE_ENDPOINT}/current`
+    return (await APIService.get<IAuthContext>(endpoint)).data
+}
 
-    // POST - /auth/signup
-    public static async signUp(data: ISignUpRequest): Promise<IUserData> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/signup`
-        data.emailTemplate = getEmailContent('otp')
-        data.contactTemplate = getSMSContent('contactNumber')
-        return (
-            await AuthService.post<ISignUpRequest, IUserData>(endpoint, data)
-        ).data
-    }
+export const currentAuthOrg = async () => {
+    const endpoint = `${BASE_ENDPOINT}/current/org`
+    return (await APIService.get<IOrganization>(endpoint)).data
+}
 
-    // POST - /auth/signin
-    public static async signIn(data: ISignInRequest): Promise<IUserData> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/signin`
-        return (
-            await AuthService.post<ISignInRequest, IUserData>(endpoint, data)
-        ).data
-    }
+export const currentAuthBranch = async () => {
+    const endpoint = `${BASE_ENDPOINT}/current/branch`
+    return (await APIService.get<IBranch>(endpoint)).data
+}
 
-    // POST - /auth/signout
-    public static async signOut(): Promise<void> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/signout`
-        await AuthService.post(endpoint)
-    }
+export const currentUser = async () => {
+    const endpoint = `${BASE_ENDPOINT}/current/user`
+    return (await APIService.get<IUserBase>(endpoint)).data
+}
 
-    // POST - /auth/forgot-password
-    public static async forgotPassword(
-        data: IForgotPasswordRequest
-    ): Promise<void> {
-        data.emailTemplate = getEmailContent('changePassword')
-        data.contactTemplate = getSMSContent('changePassword')
-        const endpoint = `${AuthService.BASE_ENDPOINT}/forgot-password`
-        await AuthService.post<IForgotPasswordRequest, void>(endpoint, data)
-    }
+export const signUp = async (data: ISignUpRequest) => {
+    const endpoint = `${BASE_ENDPOINT}/register`
+    data.emailTemplate = getEmailContent('otp')
+    data.contactTemplate = getSMSContent('contactNumber')
+    return (
+        await APIService.post<
+            ISignUpRequest,
+            IAuthContext & { user: NonNullable<IUserBase> }
+        >(endpoint, data)
+    ).data
+}
 
-    // POST - /auth/change-password
-    public static async changePassword(
-        data: IChangePasswordRequest
-    ): Promise<void> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/change-password`
-        await AuthService.post<IChangePasswordRequest, void>(endpoint, data)
-    }
+export const signIn = async (data: ISignInRequest) => {
+    const endpoint = `${BASE_ENDPOINT}/login`
+    return (await APIService.post<ISignInRequest, IAuthContext>(endpoint, data))
+        .data
+}
 
-    // GET - /auth/verify-reset-link/${resetId}
-    public static async checkResetLink(resetId: string): Promise<void> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/verify-reset-link/${resetId}`
-        await AuthService.get<void>(endpoint)
-    }
+export const signOut = async () => {
+    const endpoint = `${BASE_ENDPOINT}/logout`
+    await APIService.post(endpoint)
+}
 
-    // POST - /auth/send-email-verification
-    public static async sendEmailVerification(): Promise<void> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/send-email-verification`
-        const data: ISendEmailVerificationRequest = {
-            emailTemplate: getEmailContent('otp'),
-        }
-        await AuthService.post<ISendEmailVerificationRequest>(endpoint, data)
-    }
+// SENDS OTP
+export const forgotPassword = async (data: IForgotPasswordRequest) => {
+    data.emailTemplate = getEmailContent('changePassword')
+    data.contactTemplate = getSMSContent('changePassword')
+    const endpoint = `${BASE_ENDPOINT}/forgot-password`
+    await APIService.post<IForgotPasswordRequest, void>(endpoint, data)
+}
 
-    // POST - /auth/verify-email
-    public static async verifyEmail(
-        data: IVerifyEmailRequest
-    ): Promise<AxiosResponse<IUserData>> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/verify-email`
-        return await AuthService.post<IVerifyEmailRequest, IUserData>(
-            endpoint,
-            data
-        )
-    }
+// CHANGES PASSWORD + WITH OTP
+export const changePassword = async (data: IChangePasswordRequest) => {
+    const endpoint = `${BASE_ENDPOINT}/change-password`
+    await APIService.post<IChangePasswordRequest, void>(endpoint, data)
+}
 
-    // POST - /auth/send-contact-number-verification
-    public static async sendContactVerification(): Promise<void> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/send-contact-number-verification`
-        const data: ISendContactNumberVerificationRequest = {
-            contactTemplate: getSMSContent('contactNumber'),
-        }
-        await AuthService.post<ISendContactNumberVerificationRequest>(
-            endpoint,
-            data
-        )
+export const requestContactNumberVerification = async () => {
+    const endpoint = `${BASE_ENDPOINT}/request-contact-number-verification`
+    const data: ISendContactNumberVerificationRequest = {
+        contactTemplate: getSMSContent('contactNumber'),
     }
+    await APIService.post<ISendContactNumberVerificationRequest>(endpoint, data)
+}
 
-    // POST - /auth/verify-contact
-    public static async verifyContactNumber(
-        data: IVerifyContactNumberRequest
-    ): Promise<AxiosResponse<IUserData>> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/verify-contact-number`
-        return await AuthService.post<IVerifyContactNumberRequest, IUserData>(
-            endpoint,
-            data
-        )
-    }
+export const verifyContactNumber = async (
+    data: IVerifyContactNumberRequest
+) => {
+    const endpoint = `${BASE_ENDPOINT}/verify-contact-number-verification`
+    return await APIService.post<IVerifyContactNumberRequest, IUserBase>(
+        endpoint,
+        data
+    )
+}
 
-    // POST - /auth/skip-verification
-    public static async skipVerification(): Promise<IUserData> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/skip-verification`
-        return (await AuthService.post<void, IUserData>(endpoint)).data
+export const requestEmailVerification = async () => {
+    const endpoint = `${BASE_ENDPOINT}/request-email-verification`
+    const data: ISendEmailVerificationRequest = {
+        emailTemplate: getEmailContent('otp'),
     }
+    await APIService.post<ISendEmailVerificationRequest>(endpoint, data)
+}
 
-    // POST - /auth/new-password
-    public static async newPassword(data: INewPasswordRequest): Promise<void> {
-        const endpoint = `${AuthService.BASE_ENDPOINT}/new-password`
-        await AuthService.post<INewPasswordRequest>(endpoint, data)
-    }
+export const verifyEmail = async (data: IVerifyEmailRequest) => {
+    const endpoint = `${BASE_ENDPOINT}/verify-email-verification`
+    return await APIService.post<IVerifyEmailRequest, IUserBase>(endpoint, data)
+}
+
+export const checkResetLink = async (resetId: string) => {
+    const endpoint = `${BASE_ENDPOINT}/verify-reset-link/${resetId}`
+    await APIService.get<void>(endpoint)
+}
+
+export const newPassword = async (data: INewPasswordRequest) => {
+    const endpoint = `${BASE_ENDPOINT}/`
+    await APIService.post<INewPasswordRequest>(endpoint, data)
 }

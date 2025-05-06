@@ -2,7 +2,7 @@ import { IUserBase } from '../auth/user'
 import { IPaginatedResult } from '../coop-types'
 import { ITimeStamps, TEntityId } from '../common'
 
-export type TNotificationType =
+export type INotificationType =
     | 'success'
     | 'warning'
     | 'info'
@@ -20,7 +20,7 @@ export interface INotification extends ITimeStamps {
     description: string
     is_viewed: boolean
 
-    notification_type: TNotificationType
+    notification_type: INotificationType
 }
 
 export interface INotificationPaginated
