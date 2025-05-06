@@ -12,7 +12,7 @@ interface UserAuthStore {
     resetAuth: (defaultAuthContextValue?: IAuthContext) => void
 }
 
-export const useUserAuthStore = create<UserAuthStore>((set) => ({
+export const useAuthStore = create<UserAuthStore>((set) => ({
     currentAuth: {
         user: undefined,
         branch: undefined,
@@ -53,9 +53,7 @@ export const useUserAuthStore = create<UserAuthStore>((set) => ({
 // USE only kapag sure ka na user ay existing
 // ideal usage is in onboarding, since we dont care if nag eexist ang branch or organization sa authContext
 export const useAuthUser = <TUser = IUserBase>() => {
-    const { currentAuth, authStatus, ...rest } = useUserAuthStore(
-        (state) => state
-    )
+    const { currentAuth, authStatus, ...rest } = useAuthStore((state) => state)
 
     if (
         !currentAuth.user ||
