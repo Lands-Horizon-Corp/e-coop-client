@@ -16,7 +16,9 @@
         "lint": "eslint .",
         "preview": "vite preview",
         "fc": "prettier . -c",
+        "fcf": "prettier -c",
         "fw": "prettier . -w",
+        "fwf": "prettier -w",
         "build": "tsc -b && vite build",
         "verify-code": "eslint . && prettier . -c && tsc -b && vite build"
     },
