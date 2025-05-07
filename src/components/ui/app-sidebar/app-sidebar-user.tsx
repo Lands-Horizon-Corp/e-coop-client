@@ -9,7 +9,7 @@ import {
     SunMoonIcon,
     QuestionIcon,
     ChevronsUpDownIcon,
-} from '../icons'
+} from '@/components/icons'
 import {
     DropdownMenu,
     DropdownMenuSub,
@@ -19,9 +19,9 @@ import {
     DropdownMenuTrigger,
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
-} from '../ui/dropdown-menu'
-import UserAvatar from '../user-avatar'
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar'
+} from '../dropdown-menu'
+import UserAvatar from '@/components/user-avatar'
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../sidebar'
 
 import { useAuthUser } from '@/store/user-auth-store'
 import { useTheme } from '@/providers/theme-provider'

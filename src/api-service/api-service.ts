@@ -17,18 +17,12 @@ export default class APIService {
     })
 
     private static getDefaultUrl(): string {
-        const environment =
-            import.meta.env.VITE_HORIZON_CORP_ENVIRONMENT ||
-            process.env.HORIZON_CORP_ENVIRONMENT
-        switch (environment) {
-            case 'local':
-            case 'development':
-            case 'staging':
-            case 'production':
-                return 'http://localhost:8080/api/v1/'
-            default:
-                return 'http://localhost:8080/api/v1/'
-        }
+        const baseUrl =
+            import.meta.env.VITE_API_BASE_URL || process.env.VITE_API_BASE_URL
+
+        if (!baseUrl) return 'http://localhost:8000/api/v1/'
+
+        return baseUrl?.endsWith('/') ? baseUrl : `${baseUrl}/`
     }
 
     public static getHttpClient(): AxiosInstance {
