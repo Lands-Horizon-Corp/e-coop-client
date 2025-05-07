@@ -3,9 +3,14 @@ import { useRouter } from '@tanstack/react-router'
 import { useAuthStore } from '@/store/user-auth-store'
 import GuestGuard from '@/components/wrappers/guest-guard'
 import { SignUpForm } from '@/components/forms/auth-forms'
-import AuthPageWrapper from '../components/auth-page-wrapper'
+import AuthPageWrapper from './-components/auth-page-wrapper'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
-const SignUpPage = () => {
+export const Route = createLazyFileRoute('/auth/sign-up')({
+    component: SignUpPage,
+})
+
+function SignUpPage() {
     const router = useRouter()
     const { setCurrentAuth } = useAuthStore()
 
@@ -25,5 +30,3 @@ const SignUpPage = () => {
         </GuestGuard>
     )
 }
-
-export default SignUpPage

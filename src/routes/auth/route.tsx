@@ -1,11 +1,26 @@
-import { Outlet } from '@tanstack/react-router'
+import {
+    createFileRoute,
+    lazyRouteComponent,
+    Outlet,
+    redirect,
+} from '@tanstack/react-router'
 
 import AuthNav from '@/components/nav/navs/auth-nav'
 import AuthFooter from '@/components/footers/auth-footer'
 
-const AuthLayout = () => {
+export const Route = createFileRoute('/auth')({
+    component: RouteComponent,
+    beforeLoad: ({ location }) => {
+        if (location.pathname === '/auth' || location.pathname === '/auth/')
+            throw redirect({ to: '/auth/sign-in' })
+    },
+    notFoundComponent: lazyRouteComponent(
+        () => import('@/routes/auth/-components/not-found')
+    ),
+})
+
+function RouteComponent() {
     return (
-        // <div className="grid min-h-[100dvh] grid-rows-[1fr_auto]">
         <div className="flex">
             <AuthNav />
             <main className="flex w-full flex-1 items-center">
@@ -22,5 +37,3 @@ const AuthLayout = () => {
         </div>
     )
 }
-
-export default AuthLayout

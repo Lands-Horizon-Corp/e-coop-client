@@ -1,19 +1,22 @@
 import { useState } from 'react';
 import SpySvg from '../src/assets/spy.svg';
-import { RouterProvider } from '@tanstack/react-router';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import createRouter from '@/root-route';
+import { routeTree } from './routeTree.gen';
+
 import { ThemeProvider } from '@/providers/theme-provider';
 import PageContainer from './components/containers/page-container';
 import LoadingSpinner from './components/spinners/loading-spinner';
 
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
 
+const router = createRouter({ routeTree });
+
 declare module '@tanstack/react-router' {
     interface Register {
-        router: ReturnType<typeof createRouter>;
+        router: typeof router;
     }
 }
 
@@ -51,7 +54,7 @@ const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider>
-                <RouterProvider router={createRouter(queryClient)} />
+                <RouterProvider router={router} />
             </ThemeProvider>
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

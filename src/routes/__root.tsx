@@ -1,16 +1,20 @@
-import { AxiosError } from 'axios'
-import { Outlet } from '@tanstack/react-router'
+import { Toaster } from 'sonner'
+import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
-import { Toaster } from '@/components/ui/sonner'
 import CookieConsent from '@/components/cookie-consent'
 import ConfirmModal from '@/components/modals/confirm-modal'
 import ConnectionProvider from '@/providers/connection-provider'
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
-
 import { useAuthStore } from '@/store/user-auth-store'
 import { useAuthContext } from '@/hooks/api-hooks/use-auth'
+import { AxiosError } from 'axios'
 
-const RootLayout = () => {
+export const Route = createRootRoute({
+    component: RootLayout,
+})
+
+function RootLayout() {
     const { setAuthStatus, resetAuth } = useAuthStore()
 
     useAuthContext({
@@ -39,8 +43,7 @@ const RootLayout = () => {
             <CookieConsent />
             <ImagePreviewModal />
             <ConfirmModal />
+            <TanStackRouterDevtools />
         </div>
     )
 }
-
-export default RootLayout

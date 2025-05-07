@@ -6,12 +6,13 @@ import GuestGuard from '@/components/wrappers/guest-guard'
 import ForgotPasswordEmail, {
     TForgotPasswordEmail,
 } from '@/components/forms/auth-forms/forgot-password-email'
-import AuthPageWrapper from '../components/auth-page-wrapper'
+import AuthPageWrapper from './-components/auth-page-wrapper'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { EmailCheckIcon, ArrowLeftIcon } from '@/components/icons'
 import ResendPasswordResetLinkButton from '@/components/forms/auth-forms/resend-password-reset-link-button'
 
 import useLoadingErrorState from '@/hooks/use-loading-error-state'
+import { createFileRoute } from '@tanstack/react-router'
 
 const ForgotPasswordPage = () => {
     const router = useRouter()
@@ -78,5 +79,9 @@ const ForgotPasswordPage = () => {
         </GuestGuard>
     )
 }
+
+export const Route = createFileRoute('/auth/forgot-password')({
+    component: ForgotPasswordPage,
+})
 
 export default ForgotPasswordPage

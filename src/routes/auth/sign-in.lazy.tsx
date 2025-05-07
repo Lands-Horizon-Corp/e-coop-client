@@ -3,14 +3,19 @@ import { useSearch } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import GuestGuard from '@/components/wrappers/guest-guard'
-import AuthPageWrapper from '../components/auth-page-wrapper'
+import AuthPageWrapper from './-components/auth-page-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import SignInForm from '@/components/forms/auth-forms/sign-in-form'
 
 import { IAuthContext } from '@/types'
 import { useAuthStore } from '@/store/user-auth-store'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
-const SignInPage = () => {
+export const Route = createLazyFileRoute('/auth/sign-in')({
+    component: SignInPage,
+})
+
+function SignInPage() {
     const queryClient = useQueryClient()
 
     const { authStatus, currentAuth, setCurrentAuth } = useAuthStore()
@@ -44,5 +49,3 @@ const SignInPage = () => {
         </GuestGuard>
     )
 }
-
-export default SignInPage

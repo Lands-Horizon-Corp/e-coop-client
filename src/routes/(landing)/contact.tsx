@@ -1,6 +1,6 @@
 import z from 'zod'
 import { useForm } from 'react-hook-form'
-import { Link } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
@@ -23,7 +23,7 @@ import { Textarea } from '@/components/ui/textarea'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { PhoneInput } from '@/components/contact-input/contact-input'
-import { contactFormSchema } from '@/pages/landing/validations/contact-form'
+import { contactFormSchema } from '@/routes/(landing)/-validations/contact-form'
 
 import { cn } from '@/lib/utils'
 import UseCooldown from '@/hooks/use-cooldown'
@@ -316,5 +316,9 @@ const ContactPage = () => {
         </div>
     )
 }
+
+export const Route = createFileRoute('/(landing)/contact')({
+    component: ContactPage,
+})
 
 export default ContactPage

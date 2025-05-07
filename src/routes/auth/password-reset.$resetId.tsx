@@ -1,6 +1,6 @@
 import z from 'zod'
 import { useState } from 'react'
-import { useParams, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
 
 import { GoArrowLeft } from 'react-icons/go'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { KeyIcon } from '@/components/icons'
 import GuestGuard from '@/components/wrappers/guest-guard'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import AuthPageWrapper from '@/pages/auth/components/auth-page-wrapper'
+import AuthPageWrapper from '@/routes/auth/-components/auth-page-wrapper'
 import ResetPasswordForm from '@/components/forms/auth-forms/reset-password-form'
 
 import { useCheckResetId } from '@/hooks/api-hooks/use-auth'
@@ -17,7 +17,11 @@ export const PasswordResetPagePathSchema = z.object({
     resetId: z.string({ required_error: 'Missing Reset Link' }),
 })
 
-const PasswordResetPage = () => {
+export const Route = createFileRoute('/auth/password-reset/$resetId')({
+    component: PasswordResetPage,
+})
+
+function PasswordResetPage() {
     const router = useRouter()
     const pathParams = useParams({ from: '/auth/password-reset/$resetId' })
     const [done, setDone] = useState(false)
@@ -107,5 +111,3 @@ const PasswordResetPage = () => {
         </GuestGuard>
     )
 }
-
-export default PasswordResetPage

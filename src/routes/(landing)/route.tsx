@@ -1,4 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import bg_element_1 from '@/assets/images/landing-page/bg_element_1.webp'
 import bg_element_2 from '@/assets/images/landing-page/bg_element_2.webp'
@@ -32,11 +33,14 @@ const PublicLayout = () => {
                     <Outlet />
                     <Footer />
                 </main>
-
                 <VersionAndFeedBack />
             </div>
         </>
     )
 }
+
+export const Route = createFileRoute('/(landing)')({
+    component: PublicLayout,
+})
 
 export default PublicLayout
