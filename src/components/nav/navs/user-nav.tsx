@@ -2,7 +2,7 @@ import RootNav from '@/components/nav/root-nav'
 import NavContainer from '@/components/nav/nav-container'
 import PageBreadCrumb from '@/components/pages-breadcrumbs'
 import NavTimeInBar from '../nav-components/nav-time-in-bar'
-import AppSidebarToggle from '@/components/app-sidebar/app-sidebar-toggle'
+import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
 import NavProfileMenu from '@/components/nav/nav-components/nav-profile-menu'
 
