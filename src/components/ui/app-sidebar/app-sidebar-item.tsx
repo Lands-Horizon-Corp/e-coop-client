@@ -2,19 +2,20 @@ import React from 'react'
 import { VariantProps } from 'class-variance-authority'
 import { useLocation, useRouter } from '@tanstack/react-router'
 
+import { ChevronRightIcon } from '@/components/icons'
+
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from '../ui/collapsible'
+} from '../collapsible'
 import {
     SidebarMenuSub,
     SidebarMenuItem,
     SidebarMenuButton,
     sidebarMenuButtonVariants,
-} from '../ui/sidebar'
-import { ChevronRightIcon } from '../icons'
-import { TooltipContent } from '../ui/tooltip'
+} from '../sidebar'
+import { TooltipContent } from '../tooltip'
 import { sidebarRouteMatcher } from './app-sidebar-utils'
 
 import { cn } from '@/lib'

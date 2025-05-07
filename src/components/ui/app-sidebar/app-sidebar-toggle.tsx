@@ -1,6 +1,6 @@
-import { Button } from '../ui/button'
-import { SidebarLeftIcon } from '../icons'
-import { useSidebar } from '../ui/sidebar'
+import { Button } from '../button'
+import { useSidebar } from '../sidebar'
+import { SidebarLeftIcon } from '@/components/icons'
 
 const AppSidebarToggle = () => {
     const { toggleSidebar } = useSidebar()
