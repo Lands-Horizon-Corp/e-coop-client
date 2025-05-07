@@ -20,7 +20,7 @@ export default class APIService {
         const baseUrl =
             import.meta.env.VITE_API_BASE_URL || process.env.VITE_API_BASE_URL
 
-        if (!baseUrl) return 'http://localhost:8000/api/v1/'
+        if (!baseUrl) return 'http://localhost:8000/api/'
 
         return baseUrl?.endsWith('/') ? baseUrl : `${baseUrl}/`
     }
