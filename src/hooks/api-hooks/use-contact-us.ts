@@ -5,7 +5,7 @@ import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import { createContactUs } from '@/api-service/contact-us-service'
 
-import { IAPIHook, IMutationProps } from './types'
+import { IAPIHook, IMutationProps } from '../../types/api-hooks-types'
 import { IContactUs, IContactUsRequest } from '@/types'
 
 export const useCreateContactUs = ({

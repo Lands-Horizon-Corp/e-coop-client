@@ -1,6 +1,7 @@
 import { IMedia } from './media'
 import { IPaginatedResult } from './paginated-result'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IOrganization } from '../lands-types'
 
 export interface IBranchRequest {
     id?: TEntityId
@@ -32,6 +33,9 @@ export interface IBranchRequest {
 // Resource
 export interface IBranch extends ITimeStamps, IAuditable {
     id: TEntityId
+
+    organization_id: TEntityId
+    organization: IOrganization
 
     media_id: string | null
     media: IMedia

@@ -1,13 +1,20 @@
-import { IBranch } from '../branch'
-import { ITimeStamps, TEntityId } from '../../common'
+import { IPaginatedResult } from '../paginated-result'
+import { IBaseEntityMeta, TEntityId } from '../../common'
 
 // LATEST FROM ERD
-export interface IMemberGender extends ITimeStamps {
+export interface IMemberGender extends IBaseEntityMeta {
     id: TEntityId
-
-    branch_id: TEntityId
-    branch: IBranch
 
     name: string
     description: string
 }
+
+export interface IMemberGenderRequest {
+    id?: TEntityId
+
+    name: string
+    description: string
+}
+
+export interface IMemberGenderPaginated
+    extends IPaginatedResult<IMemberGender> {}

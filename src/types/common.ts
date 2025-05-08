@@ -1,6 +1,7 @@
 import { AccountClosureReasons, FAMILY_RELATIONSHIP } from '@/constants'
 import { IUserBase } from './auth/user'
 import { IBranch } from './coop-types'
+import { IOrganization } from './lands-types'
 
 export type TEntityId = string
 
@@ -34,6 +35,20 @@ export interface IIDentity {
     branch_id: TEntityId
     branch: IBranch
 }
+
+/* Identity of the entity */
+export interface IOrgBranchIdentity {
+    organization_id: TEntityId
+    organization: IOrganization
+    branch_id: TEntityId
+    branch: IBranch
+}
+
+/* Use this only if entity has timestamps, auditable, and has org and branch */
+export interface IBaseEntityMeta
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {}
 
 export interface ITimeStamps {
     deleted_at?: string | null
