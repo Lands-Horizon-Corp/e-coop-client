@@ -9,6 +9,7 @@ import { useAuthContext } from '@/hooks/api-hooks/use-auth'
 import ConfirmModal from '@/components/modals/confirm-modal'
 import ConnectionProvider from '@/providers/connection-provider'
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
+import { useNatsConnect } from '@/hooks/use-pubsub'
 
 export const Route = createRootRoute({
     component: RootLayout,
@@ -34,6 +35,8 @@ function RootLayout() {
         },
         refetchOnWindowFocus: false,
     })
+
+    useNatsConnect()
 
     return (
         <div className="relative">
