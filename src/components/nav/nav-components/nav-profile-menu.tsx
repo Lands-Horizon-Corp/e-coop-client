@@ -65,7 +65,6 @@ const NavProfileMenu = () => {
                     onClick={() => {
                         router.navigate({
                             to: '/account' as string,
-                            hash: 'account-settings',
                         })
                     }}
                 >
