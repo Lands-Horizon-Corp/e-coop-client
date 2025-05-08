@@ -343,7 +343,7 @@ Table user_organization {
   deleted_at timestamp
 
   indexes {
-    (organization_id, branch_id) [name: 'organization_branch']
+    (organization_id, branch_id) [name: 'organization_branch', unique]
   }
 
 }
