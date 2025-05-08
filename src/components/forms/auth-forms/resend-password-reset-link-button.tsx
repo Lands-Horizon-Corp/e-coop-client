@@ -4,7 +4,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import UseCooldown from '@/hooks/use-cooldown'
 import { useForgotPassword } from '@/hooks/api-hooks/use-auth'
 
-type TSentTo = { email: string }
+type TSentTo = { key: string }
 
 interface Props {
     duration: number

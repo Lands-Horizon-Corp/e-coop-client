@@ -21,7 +21,7 @@ import { IForm, IClassProps } from '@/types'
 import { useForgotPassword } from '@/hooks/api-hooks/use-auth'
 
 const forgotPasswordFormSchema = z.object({
-    email: z.string().min(1, 'Please provide Email, Number or Email'),
+    key: z.string().min(1, 'Please provide Email, Number or Email'),
 })
 
 export type TForgotPasswordEmail = z.infer<typeof forgotPasswordFormSchema>
@@ -42,7 +42,7 @@ const ForgotPasswordEmail = ({
         reValidateMode: 'onChange',
         mode: 'onChange',
         defaultValues: {
-            email: '',
+            key: '',
             ...defaultValues,
         },
     })
@@ -84,7 +84,7 @@ const ForgotPasswordEmail = ({
                     className="space-y-4"
                 >
                     <FormField
-                        name="email"
+                        name="key"
                         control={form.control}
                         render={({ field }) => (
                             <FormItem className="space-y-1">

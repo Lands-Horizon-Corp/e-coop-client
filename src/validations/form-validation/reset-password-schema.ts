@@ -5,13 +5,14 @@ import { passwordSchema } from '@/validations/common'
 
 export const ResetPasswordSchema = z
     .object({
-        newPassword: passwordSchema,
-        confirmPassword: z
+        new_password: passwordSchema,
+        confirm_password: z
             .string({ required_error: 'Confirm password' })
             .min(PASSWORD_MIN_LENGTH, `Password doesn't match`),
     })
     .refine(
-        ({ newPassword, confirmPassword }) => newPassword === confirmPassword,
+        ({ new_password, confirm_password }) =>
+            new_password === confirm_password,
         {
             message: "Password doesn't match",
             path: ['confirm_password'],

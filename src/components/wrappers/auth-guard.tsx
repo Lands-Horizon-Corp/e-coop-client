@@ -7,18 +7,14 @@ import { BadgeExclamationFillIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { useAuthStore } from '@/store/user-auth-store'
-import { TUserType, IBaseProps, TPageType, IUserBase } from '@/types'
+import { IBaseProps, TPageType, IUserBase } from '@/types'
 
 interface Props extends IBaseProps {
     pageType?: TPageType
-    allowedAccountTypes?: TUserType[]
+    allowNoRole?: boolean
 }
 
-const AuthGuard = ({
-    children,
-    allowedAccountTypes = [],
-    pageType = 'AUTHENTICATED',
-}: Props) => {
+const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     const router = useRouter()
     const { currentAuth, authStatus } = useAuthStore()
 
@@ -30,7 +26,7 @@ const AuthGuard = ({
                 </div>
             )
 
-        if (authStatus === 'error' && !currentAuth)
+        if (authStatus === 'error' && !currentAuth.user)
             return (
                 <div className="relative flex h-screen w-full items-center justify-center">
                     <p>
@@ -61,23 +57,23 @@ const AuthGuard = ({
             )
         }
 
-        if (!allowedAccountTypes.includes(currentAuth.user.type)) {
-            return (
-                <BannerContainer>
-                    <AccountInfoContent
-                        currentUser={currentAuth.user}
-                        infoTitle="Not Allowed"
-                        infoDescription="It looks like your account is not allowed on this page."
-                    />
-                    <Button
-                        className="rounded-full"
-                        onClick={() => router.history.back()}
-                    >
-                        Go Back
-                    </Button>
-                </BannerContainer>
-            )
-        }
+        // if (!allowedAccountTypes.includes(currentAuth.user.type) || allowNoRole) {
+        //     return (
+        //         <BannerContainer>
+        //             <AccountInfoContent
+        //                 currentUser={currentAuth.user}
+        //                 infoTitle="Not Allowed"
+        //                 infoDescription="It looks like your account is not allowed on this page."
+        //             />
+        //             <Button
+        //                 className="rounded-full"
+        //                 onClick={() => router.history.back()}
+        //             >
+        //                 Go Back
+        //             </Button>
+        //         </BannerContainer>
+        //     )
+        // }
     }
 
     return children

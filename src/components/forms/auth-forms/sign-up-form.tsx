@@ -219,7 +219,7 @@ const SignUpForm = ({
                                         id={field.name}
                                         defaultVisibility
                                         placeholder="+8 Character Password"
-                                        autoComplete="gender-description"
+                                        autoComplete="new-password"
                                     />
                                     <ValueChecklistMeter
                                         value={field.value}

@@ -19,6 +19,11 @@ import { cn } from '@/lib/utils'
 import { IAuthForm } from '@/types'
 import { useChangePassword } from '@/hooks/api-hooks/use-auth'
 import { ResetPasswordSchema } from '@/validations/form-validation/reset-password-schema'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import {
+    ChecklistTemplate,
+    ValueChecklistMeter,
+} from '@/components/value-checklist-indicator'
 
 type TResetPasswordForm = z.infer<typeof ResetPasswordSchema>
 
@@ -30,7 +35,7 @@ const ResetPasswordForm = ({
     resetId,
     readOnly,
     className,
-    defaultValues = { newPassword: '', confirmPassword: '' },
+    defaultValues = { new_password: '', confirm_password: '' },
     onError,
     onSuccess,
 }: Props) => {
@@ -56,12 +61,13 @@ const ResetPasswordForm = ({
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit((data) =>
-                    changePassword({ ...data, resetId })
+                    changePassword({ ...data, resetId: resetId })
                 )}
                 className={cn(
                     'flex w-full flex-col gap-y-4 sm:w-[390px]',
                     className
                 )}
+                autoComplete="off"
             >
                 <div className="flex flex-col items-center gap-y-4 py-4 text-center">
                     <div className="relative p-8">
@@ -79,31 +85,34 @@ const ResetPasswordForm = ({
                     disabled={isPending || readOnly}
                     className="space-y-4"
                 >
-                    <FormField
+                    <FormFieldWrapper
                         control={form.control}
-                        name="newPassword"
+                        name="new_password"
                         render={({ field }) => (
-                            <FormItem className="min-w-[277px]">
-                                <FormLabel
-                                    htmlFor={field.name}
-                                    className="font-medium"
-                                >
-                                    Password
-                                </FormLabel>
-                                <FormControl>
-                                    <PasswordInput
-                                        {...field}
-                                        id={field.name}
-                                        placeholder="Password"
-                                        autoComplete="no"
-                                    />
-                                </FormControl>
+                            <FormItem>
+                                <PasswordInput
+                                    {...field}
+                                    id={field.name}
+                                    placeholder="+8 Character Password"
+                                />
+                                <ValueChecklistMeter
+                                    value={field.value}
+                                    hideOnComplete
+                                    checkList={ChecklistTemplate[
+                                        'password-checklist'
+                                    ].concat([
+                                        {
+                                            regex: /^.{0,50}$/,
+                                            text: 'No more than 50 characters',
+                                        },
+                                    ])}
+                                />
                             </FormItem>
                         )}
                     />
                     <FormField
                         control={form.control}
-                        name="confirmPassword"
+                        name="confirm_password"
                         render={({ field }) => (
                             <FormItem className="min-w-[277px]">
                                 <FormLabel
@@ -116,7 +125,6 @@ const ResetPasswordForm = ({
                                     <PasswordInput
                                         {...field}
                                         id={field.name}
-                                        autoComplete="false"
                                         placeholder="Confirm Password"
                                     />
                                 </FormControl>

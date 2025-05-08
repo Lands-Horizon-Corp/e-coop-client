@@ -43,7 +43,7 @@ const SignInForm = ({
         mode: 'onChange',
         defaultValues: {
             password: '',
-            email: '',
+            key: '',
             ...defaultValues,
         },
     })
@@ -63,7 +63,7 @@ const SignInForm = ({
                 >
                     <FormField
                         control={form.control}
-                        name="email"
+                        name="key"
                         render={({ field }) => (
                             <FormItem className="space-y-1">
                                 <FormControl>
@@ -109,7 +109,7 @@ const SignInForm = ({
                         className="mt-4 text-sm text-muted-foreground hover:text-foreground hover:underline"
                         to={'/auth/forgot-password' as string}
                         search={{
-                            email: form.getValues('email'),
+                            key: form.getValues('key'),
                         }}
                     >
                         Forgot Password
