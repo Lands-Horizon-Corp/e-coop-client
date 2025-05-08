@@ -1,7 +1,7 @@
 import { IQrMemberIdData } from '@/types'
 
 // Type of QR content identifier
-export type TQrContentType = 'member-id'
+export type TQrContentType = 'member-id' | 'user-id'
 
 // Raw JSON-parsed QR scan result
 export type IQrScanResult<T = unknown> = {
