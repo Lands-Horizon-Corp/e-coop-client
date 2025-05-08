@@ -16,9 +16,9 @@ class Logger {
             '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'
         )
 
-        this.isDevelopment =
-            typeof import.meta.env !== 'undefined' &&
-            import.meta.env.VITE_CLIENT_APP_ENV === 'development'
+        this.isDevelopment = ['development', 'local'].includes(
+            import.meta.env.VITE_HORIZON_CORP_ENVIRONMENT
+        )
 
         if (typeof document !== 'undefined' && !this.isDevelopment) {
             document.addEventListener('contextmenu', (event) =>
@@ -41,25 +41,25 @@ class Logger {
             }
         }
 
-        // if (this.isDevelopment) {
-        this.log = console.log.bind(console)
-        this.warn = console.warn.bind(console)
-        this.error = console.error.bind(console)
-        this.info = console.info.bind(console)
-        this.debug = console.debug.bind(console)
-        // } else {
-        //     this.log = () => {}
-        //     this.warn = () => {}
-        //     this.error = () => {}
-        //     this.info = () => {}
-        //     this.debug = () => {}
+        if (this.isDevelopment) {
+            this.log = console.log.bind(console)
+            this.warn = console.warn.bind(console)
+            this.error = console.error.bind(console)
+            this.info = console.info.bind(console)
+            this.debug = console.debug.bind(console)
+        } else {
+            this.log = () => {}
+            this.warn = () => {}
+            this.error = () => {}
+            this.info = () => {}
+            this.debug = () => {}
 
-        //     console.log = () => {}
-        //     console.warn = () => {}
-        //     console.error = () => {}
-        //     console.info = () => {}
-        //     console.debug = () => {}
-        // }
+            console.log = () => {}
+            console.warn = () => {}
+            console.error = () => {}
+            console.info = () => {}
+            console.debug = () => {}
+        }
     }
 
     public static getInstance(): Logger {

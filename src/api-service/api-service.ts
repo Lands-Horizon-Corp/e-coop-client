@@ -6,6 +6,7 @@ import axios, {
 } from 'axios'
 
 import { IRequestParams } from '@/types'
+import { API_URL } from '@/constants/envs'
 
 export default class APIService {
     private static httpClient: AxiosInstance = axios.create({
@@ -17,12 +18,7 @@ export default class APIService {
     })
 
     private static getDefaultUrl(): string {
-        const baseUrl =
-            import.meta.env.VITE_API_BASE_URL || process.env.VITE_API_BASE_URL
-
-        if (!baseUrl) return 'http://localhost:8000/api/v1/'
-
-        return baseUrl?.endsWith('/') ? baseUrl : `${baseUrl}/`
+        return API_URL?.endsWith('/') ? API_URL : `${API_URL}/`
     }
 
     public static getHttpClient(): AxiosInstance {
