@@ -5,7 +5,7 @@ import { withCatchAsync } from '@/utils'
 import { uploadMedia } from '@/api-service/media-service'
 
 import { IMedia } from '@/types'
-import { IOperationCallbacks } from './types'
+import { IOperationCallbacks } from '../../types/api-hooks-types'
 import { serverRequestErrExtractor } from '@/helpers'
 
 export const useSinglePictureUpload = ({

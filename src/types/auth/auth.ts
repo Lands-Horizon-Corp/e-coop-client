@@ -1,28 +1,16 @@
 import { IMediaRequest } from '../coop-types/media'
 
 export interface IChangePasswordRequest {
-    otp?: string
-    resetId?: string
-    newPassword: string
-    confirmPassword: string
+    new_password: string
+    confirm_password: string
 }
 
 export interface IForgotPasswordRequest {
-    email: string
-    emailTemplate?: string
-    contactTemplate?: string
-}
-
-export interface ISendEmailVerificationRequest {
-    emailTemplate?: string
-}
-
-export interface ISendContactNumberVerificationRequest {
-    contactTemplate?: string
+    key: string
 }
 
 export interface ISignInRequest {
-    email: string
+    key: string
     password: string
 }
 
@@ -40,9 +28,6 @@ export interface ISignUpRequest {
 
     birthdate: Date
     media?: IMediaRequest
-
-    emailTemplate?: string
-    contactTemplate?: string
 }
 
 export interface IVerifyEmailRequest {
@@ -75,10 +60,10 @@ export interface IChangeEmailRequest {
 
 export interface IChangeContactNumberRequest {
     password: string
-    contactNumber: string
+    contact_number: string
 }
 
 export interface IChangeUsernameRequest {
     password: string
-    username: string
+    user_name: string
 }

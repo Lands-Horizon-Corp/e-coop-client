@@ -13,7 +13,11 @@ import {
     IChangePasswordRequest,
     IForgotPasswordRequest,
 } from '@/types'
-import { IAPIHook, IOperationCallbacks, IQueryProps } from './types'
+import {
+    IAPIHook,
+    IOperationCallbacks,
+    IQueryProps,
+} from '../../types/api-hooks-types'
 
 // Get auth context (Full: user, org, branch, etc...)
 export const useAuthContext = ({
@@ -140,14 +144,14 @@ export const useForgotPassword = ({
 }:
     | IOperationCallbacks<
           {
-              email: string
+              key: string
           },
           string
       >
     | undefined = {}) => {
     return useMutation<
         {
-            email: string
+            key: string
         },
         string,
         IForgotPasswordRequest
@@ -177,12 +181,16 @@ export const useForgotPassword = ({
 export const useChangePassword = ({
     onError,
     onSuccess,
-}: undefined | IOperationCallbacks<void> = {}) => {
-    return useMutation<void, string, IChangePasswordRequest>({
+}: IOperationCallbacks<void> = {}) => {
+    return useMutation<
+        void,
+        string,
+        IChangePasswordRequest & { resetId: string }
+    >({
         mutationKey: ['auth', 'change-password'],
         mutationFn: async (data) => {
             const [error] = await withCatchAsync(
-                AuthService.changePassword(data)
+                AuthService.changePassword(data.resetId, data)
             )
 
             if (error) {
@@ -304,7 +312,6 @@ export const useCheckResetId = ({
     onError,
     onSuccess,
     showMessage,
-    initialData = false,
     ...others
 }: { resetId: string } & IAPIHook<boolean> & IQueryProps<boolean>) => {
     return useQuery<boolean, string>({
@@ -324,7 +331,7 @@ export const useCheckResetId = ({
             onSuccess?.(true)
             return true
         },
-        initialData,
+        initialData: undefined,
         ...others,
     })
 }

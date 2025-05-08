@@ -24,7 +24,7 @@ export const useAuthStore = create<UserAuthStore>((set) => ({
     setCurrentAuth: (newAuth: IAuthContext) =>
         set({
             currentAuth: newAuth,
-            authStatus: newAuth ? 'authorized' : 'unauthorized',
+            authStatus: newAuth.user ? 'authorized' : 'unauthorized',
         }),
     updateCurrentAuth: (partialAuth) => {
         set((state) => ({
