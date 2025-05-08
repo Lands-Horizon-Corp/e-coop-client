@@ -95,4 +95,4 @@ export const AccountClosureReasons = [
     'Formation of a New, More Suitable Cooperative',
 ] as const
 
-export const FEEDBACK_TYPE = ['bug', 'feature-request', 'general'] as const
+export const FEEDBACK_TYPE = ['bug', 'feature', 'general'] as const
