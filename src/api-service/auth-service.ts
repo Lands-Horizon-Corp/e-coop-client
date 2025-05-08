@@ -1,6 +1,6 @@
 import APIService from './api-service'
 
-import { getSMSContent, getEmailContent } from '@/lib'
+import { getSMSContent } from '@/lib'
 import {
     IBranch,
     IUserBase,
@@ -13,8 +13,6 @@ import {
     IForgotPasswordRequest,
     IChangePasswordRequest,
     IVerifyContactNumberRequest,
-    ISendEmailVerificationRequest,
-    ISendContactNumberVerificationRequest,
 } from '@/types'
 
 const BASE_ENDPOINT = '/authentication'
@@ -41,8 +39,6 @@ export const currentUser = async () => {
 
 export const signUp = async (data: ISignUpRequest) => {
     const endpoint = `${BASE_ENDPOINT}/register`
-    data.emailTemplate = getEmailContent('otp')
-    data.contactTemplate = getSMSContent('contactNumber')
     return (
         await APIService.post<
             ISignUpRequest,
@@ -64,15 +60,16 @@ export const signOut = async () => {
 
 // SENDS OTP
 export const forgotPassword = async (data: IForgotPasswordRequest) => {
-    data.emailTemplate = getEmailContent('changePassword')
-    data.contactTemplate = getSMSContent('changePassword')
     const endpoint = `${BASE_ENDPOINT}/forgot-password`
     await APIService.post<IForgotPasswordRequest, void>(endpoint, data)
 }
 
 // CHANGES PASSWORD + WITH OTP
-export const changePassword = async (data: IChangePasswordRequest) => {
-    const endpoint = `${BASE_ENDPOINT}/change-password`
+export const changePassword = async (
+    resetId: string,
+    data: IChangePasswordRequest
+) => {
+    const endpoint = `${BASE_ENDPOINT}/change-password/${resetId}`
     await APIService.post<IChangePasswordRequest, void>(endpoint, data)
 }
 
@@ -96,9 +93,7 @@ export const verifyContactNumber = async (
 
 export const requestEmailVerification = async () => {
     const endpoint = `${BASE_ENDPOINT}/request-email-verification`
-    const data: ISendEmailVerificationRequest = {
-        emailTemplate: getEmailContent('otp'),
-    }
+    const data: ISendEmailVerificationRequest = {}
     await APIService.post<ISendEmailVerificationRequest>(endpoint, data)
 }
 

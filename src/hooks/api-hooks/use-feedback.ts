@@ -19,7 +19,7 @@ import {
     IAPIPreloads,
     IOperationCallbacks,
     IFilterPaginatedHookProps,
-} from './types'
+} from '../../types/api-hooks-types'
 import {
     TEntityId,
     IFeedback,

@@ -36,10 +36,15 @@ export interface IUserBase extends ITimeStamps, IAuditable {
     email: string
     is_email_verified?: boolean
 
-    type: TUserType
+    type?: TUserType
 
     contact_number: string
     is_contact_verified?: boolean
+
+    qr_code: {
+        qr_code: 'NAHJ2bue0pd4xO44bnLr+SN2NilpOOppFc9Rff/iJqNFaPV7RwK+k/nZJq9SO7YKFqCrdncctIpDGwGycbcN2Tc0IOuljuNgbL5T3vq36Amp6YNqvdt+3EEM+y2nESjTRo8IJiBTboeNoHcK6mpvXyeeF5Cq8LV7sH//Jepve0xK/iNs8I8ZmDBG1PGS7VY//l5F/YdIXH/aVl8aeuvOAqJov2yGgApcAZ+qpkbQjdYy66HTgjjRc7vFmJZT99aq7USrmlN2PPY/UcMWFO3+mJTNaSw55Je5hGPp6j2Tfwm7Vs7egD5mMRIPkDPBPq1AKQmR7ax9L1/7pYzXZS8YKgD3sYpIPJMORlCWkIKR28JEn5ep/78fFrs+fBytRJbMT+KJ'
+        type: ''
+    }
 }
 
 export interface IOwner extends IUserBase {
