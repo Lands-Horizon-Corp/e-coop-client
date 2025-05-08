@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 import GuestGuard from '@/components/wrappers/guest-guard'
@@ -12,7 +12,6 @@ import { EmailCheckIcon, ArrowLeftIcon } from '@/components/icons'
 import ResendPasswordResetLinkButton from '@/components/forms/auth-forms/resend-password-reset-link-button'
 
 import useLoadingErrorState from '@/hooks/use-loading-error-state'
-import { createFileRoute } from '@tanstack/react-router'
 
 const ForgotPasswordPage = () => {
     const router = useRouter()

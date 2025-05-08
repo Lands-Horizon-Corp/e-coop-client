@@ -8,435 +8,504 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as AuthRouteImport } from './routes/auth/route';
-import { Route as AccountRouteImport } from './routes/account/route';
-import { Route as landingRouteImport } from './routes/(landing)/route';
-import { Route as landingIndexImport } from './routes/(landing)/index';
-import { Route as AuthPasswordResetImport } from './routes/auth/password-reset';
-import { Route as AuthForgotPasswordImport } from './routes/auth/forgot-password';
-import { Route as landingDevelopersImport } from './routes/(landing)/developers';
-import { Route as landingContactImport } from './routes/(landing)/contact';
-import { Route as landingAboutImport } from './routes/(landing)/about';
-import { Route as OrgOrgnameRouteImport } from './routes/org/$orgname.route';
-import { Route as AuthPasswordResetResetIdImport } from './routes/auth/password-reset.$resetId';
-import { Route as OrgOrgnameBranchBranchnameRouteImport } from './routes/org/$orgname.branch.$branchname/route';
-import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './routes/org/$orgname.branch.$branchname/(common)/dashboard';
+import { Route as rootRoute } from './routes/__root'
+import { Route as OnboardingRouteImport } from './routes/onboarding/route'
+import { Route as AuthRouteImport } from './routes/auth/route'
+import { Route as AccountRouteImport } from './routes/account/route'
+import { Route as landingRouteImport } from './routes/(landing)/route'
+import { Route as landingIndexImport } from './routes/(landing)/index'
+import { Route as AuthForgotPasswordImport } from './routes/auth/forgot-password'
+import { Route as landingDevelopersImport } from './routes/(landing)/developers'
+import { Route as landingContactImport } from './routes/(landing)/contact'
+import { Route as landingAboutImport } from './routes/(landing)/about'
+import { Route as OrgOrgnameRouteImport } from './routes/org/$orgname.route'
+import { Route as AuthPasswordResetResetIdImport } from './routes/auth/password-reset.$resetId'
+import { Route as AccountVerifyEmailImport } from './routes/account/verify/email'
+import { Route as AccountVerifyContactImport } from './routes/account/verify/contact'
+import { Route as OrgOrgnameBranchBranchnameRouteImport } from './routes/org/$orgname.branch.$branchname/route'
+import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './routes/org/$orgname.branch.$branchname/(common)/dashboard'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderImport } from './routes/org/$orgname.branch.$branchname/(maintenance)/member/member-gender'
 
 // Create Virtual Routes
 
-const AuthSignUpLazyImport = createFileRoute('/auth/sign-up')();
-const AuthSignInLazyImport = createFileRoute('/auth/sign-in')();
+const AuthSignUpLazyImport = createFileRoute('/auth/sign-up')()
+const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
 
 // Create/Update Routes
 
+const OnboardingRouteRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthRouteRoute = AuthRouteImport.update({
-    id: '/auth',
-    path: '/auth',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AccountRouteRoute = AccountRouteImport.update({
-    id: '/account',
-    path: '/account',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const landingRouteRoute = landingRouteImport.update({
-    id: '/(landing)',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/(landing)',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const landingIndexRoute = landingIndexImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => landingRouteRoute,
-} as any);
+  id: '/',
+  path: '/',
+  getParentRoute: () => landingRouteRoute,
+} as any)
 
 const AuthSignUpLazyRoute = AuthSignUpLazyImport.update({
-    id: '/sign-up',
-    path: '/sign-up',
-    getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() => import('./routes/auth/sign-up.lazy').then((d) => d.Route));
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRouteRoute,
+} as any).lazy(() => import('./routes/auth/sign-up.lazy').then((d) => d.Route))
 
 const AuthSignInLazyRoute = AuthSignInLazyImport.update({
-    id: '/sign-in',
-    path: '/sign-in',
-    getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route));
-
-const AuthPasswordResetRoute = AuthPasswordResetImport.update({
-    id: '/password-reset',
-    path: '/password-reset',
-    getParentRoute: () => AuthRouteRoute,
-} as any);
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => AuthRouteRoute,
+} as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route))
 
 const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
-    id: '/forgot-password',
-    path: '/forgot-password',
-    getParentRoute: () => AuthRouteRoute,
-} as any);
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 
 const landingDevelopersRoute = landingDevelopersImport.update({
-    id: '/developers',
-    path: '/developers',
-    getParentRoute: () => landingRouteRoute,
-} as any);
+  id: '/developers',
+  path: '/developers',
+  getParentRoute: () => landingRouteRoute,
+} as any)
 
 const landingContactRoute = landingContactImport.update({
-    id: '/contact',
-    path: '/contact',
-    getParentRoute: () => landingRouteRoute,
-} as any);
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => landingRouteRoute,
+} as any)
 
 const landingAboutRoute = landingAboutImport.update({
-    id: '/about',
-    path: '/about',
-    getParentRoute: () => landingRouteRoute,
-} as any);
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => landingRouteRoute,
+} as any)
 
 const OrgOrgnameRouteRoute = OrgOrgnameRouteImport.update({
-    id: '/org/$orgname',
-    path: '/org/$orgname',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/org/$orgname',
+  path: '/org/$orgname',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthPasswordResetResetIdRoute = AuthPasswordResetResetIdImport.update({
-    id: '/$resetId',
-    path: '/$resetId',
-    getParentRoute: () => AuthPasswordResetRoute,
-} as any);
+  id: '/password-reset/$resetId',
+  path: '/password-reset/$resetId',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AccountVerifyEmailRoute = AccountVerifyEmailImport.update({
+  id: '/verify/email',
+  path: '/verify/email',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+
+const AccountVerifyContactRoute = AccountVerifyContactImport.update({
+  id: '/verify/contact',
+  path: '/verify/contact',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
 
 const OrgOrgnameBranchBranchnameRouteRoute =
-    OrgOrgnameBranchBranchnameRouteImport.update({
-        id: '/branch/$branchname',
-        path: '/branch/$branchname',
-        getParentRoute: () => OrgOrgnameRouteRoute,
-    } as any);
+  OrgOrgnameBranchBranchnameRouteImport.update({
+    id: '/branch/$branchname',
+    path: '/branch/$branchname',
+    getParentRoute: () => OrgOrgnameRouteRoute,
+  } as any)
 
 const OrgOrgnameBranchBranchnamecommonDashboardRoute =
-    OrgOrgnameBranchBranchnamecommonDashboardImport.update({
-        id: '/(common)/dashboard',
-        path: '/dashboard',
-        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any);
+  OrgOrgnameBranchBranchnamecommonDashboardImport.update({
+    id: '/(common)/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+
+const OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderImport.update({
+    id: '/(maintenance)/member/member-gender',
+    path: '/member/member-gender',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
-    interface FileRoutesByPath {
-        '/(landing)': {
-            id: '/(landing)';
-            path: '/';
-            fullPath: '/';
-            preLoaderRoute: typeof landingRouteImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/account': {
-            id: '/account';
-            path: '/account';
-            fullPath: '/account';
-            preLoaderRoute: typeof AccountRouteImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/auth': {
-            id: '/auth';
-            path: '/auth';
-            fullPath: '/auth';
-            preLoaderRoute: typeof AuthRouteImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/org/$orgname': {
-            id: '/org/$orgname';
-            path: '/org/$orgname';
-            fullPath: '/org/$orgname';
-            preLoaderRoute: typeof OrgOrgnameRouteImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/(landing)/about': {
-            id: '/(landing)/about';
-            path: '/about';
-            fullPath: '/about';
-            preLoaderRoute: typeof landingAboutImport;
-            parentRoute: typeof landingRouteImport;
-        };
-        '/(landing)/contact': {
-            id: '/(landing)/contact';
-            path: '/contact';
-            fullPath: '/contact';
-            preLoaderRoute: typeof landingContactImport;
-            parentRoute: typeof landingRouteImport;
-        };
-        '/(landing)/developers': {
-            id: '/(landing)/developers';
-            path: '/developers';
-            fullPath: '/developers';
-            preLoaderRoute: typeof landingDevelopersImport;
-            parentRoute: typeof landingRouteImport;
-        };
-        '/auth/forgot-password': {
-            id: '/auth/forgot-password';
-            path: '/forgot-password';
-            fullPath: '/auth/forgot-password';
-            preLoaderRoute: typeof AuthForgotPasswordImport;
-            parentRoute: typeof AuthRouteImport;
-        };
-        '/auth/password-reset': {
-            id: '/auth/password-reset';
-            path: '/password-reset';
-            fullPath: '/auth/password-reset';
-            preLoaderRoute: typeof AuthPasswordResetImport;
-            parentRoute: typeof AuthRouteImport;
-        };
-        '/auth/sign-in': {
-            id: '/auth/sign-in';
-            path: '/sign-in';
-            fullPath: '/auth/sign-in';
-            preLoaderRoute: typeof AuthSignInLazyImport;
-            parentRoute: typeof AuthRouteImport;
-        };
-        '/auth/sign-up': {
-            id: '/auth/sign-up';
-            path: '/sign-up';
-            fullPath: '/auth/sign-up';
-            preLoaderRoute: typeof AuthSignUpLazyImport;
-            parentRoute: typeof AuthRouteImport;
-        };
-        '/(landing)/': {
-            id: '/(landing)/';
-            path: '/';
-            fullPath: '/';
-            preLoaderRoute: typeof landingIndexImport;
-            parentRoute: typeof landingRouteImport;
-        };
-        '/auth/password-reset/$resetId': {
-            id: '/auth/password-reset/$resetId';
-            path: '/$resetId';
-            fullPath: '/auth/password-reset/$resetId';
-            preLoaderRoute: typeof AuthPasswordResetResetIdImport;
-            parentRoute: typeof AuthPasswordResetImport;
-        };
-        '/org/$orgname/branch/$branchname': {
-            id: '/org/$orgname/branch/$branchname';
-            path: '/branch/$branchname';
-            fullPath: '/org/$orgname/branch/$branchname';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
-            parentRoute: typeof OrgOrgnameRouteImport;
-        };
-        '/org/$orgname/branch/$branchname/(common)/dashboard': {
-            id: '/org/$orgname/branch/$branchname/(common)/dashboard';
-            path: '/dashboard';
-            fullPath: '/org/$orgname/branch/$branchname/dashboard';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardImport;
-            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
-        };
+  interface FileRoutesByPath {
+    '/(landing)': {
+      id: '/(landing)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof landingRouteImport
+      parentRoute: typeof rootRoute
     }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/org/$orgname': {
+      id: '/org/$orgname'
+      path: '/org/$orgname'
+      fullPath: '/org/$orgname'
+      preLoaderRoute: typeof OrgOrgnameRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/(landing)/about': {
+      id: '/(landing)/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof landingAboutImport
+      parentRoute: typeof landingRouteImport
+    }
+    '/(landing)/contact': {
+      id: '/(landing)/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof landingContactImport
+      parentRoute: typeof landingRouteImport
+    }
+    '/(landing)/developers': {
+      id: '/(landing)/developers'
+      path: '/developers'
+      fullPath: '/developers'
+      preLoaderRoute: typeof landingDevelopersImport
+      parentRoute: typeof landingRouteImport
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInLazyImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpLazyImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/(landing)/': {
+      id: '/(landing)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof landingIndexImport
+      parentRoute: typeof landingRouteImport
+    }
+    '/account/verify/contact': {
+      id: '/account/verify/contact'
+      path: '/verify/contact'
+      fullPath: '/account/verify/contact'
+      preLoaderRoute: typeof AccountVerifyContactImport
+      parentRoute: typeof AccountRouteImport
+    }
+    '/account/verify/email': {
+      id: '/account/verify/email'
+      path: '/verify/email'
+      fullPath: '/account/verify/email'
+      preLoaderRoute: typeof AccountVerifyEmailImport
+      parentRoute: typeof AccountRouteImport
+    }
+    '/auth/password-reset/$resetId': {
+      id: '/auth/password-reset/$resetId'
+      path: '/password-reset/$resetId'
+      fullPath: '/auth/password-reset/$resetId'
+      preLoaderRoute: typeof AuthPasswordResetResetIdImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/org/$orgname/branch/$branchname': {
+      id: '/org/$orgname/branch/$branchname'
+      path: '/branch/$branchname'
+      fullPath: '/org/$orgname/branch/$branchname'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+      parentRoute: typeof OrgOrgnameRouteImport
+    }
+    '/org/$orgname/branch/$branchname/(common)/dashboard': {
+      id: '/org/$orgname/branch/$branchname/(common)/dashboard'
+      path: '/dashboard'
+      fullPath: '/org/$orgname/branch/$branchname/dashboard'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/member/member-gender': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/member/member-gender'
+      path: '/member/member-gender'
+      fullPath: '/org/$orgname/branch/$branchname/member/member-gender'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
+  }
 }
 
 // Create and export the route tree
 
 interface landingRouteRouteChildren {
-    landingAboutRoute: typeof landingAboutRoute;
-    landingContactRoute: typeof landingContactRoute;
-    landingDevelopersRoute: typeof landingDevelopersRoute;
-    landingIndexRoute: typeof landingIndexRoute;
+  landingAboutRoute: typeof landingAboutRoute
+  landingContactRoute: typeof landingContactRoute
+  landingDevelopersRoute: typeof landingDevelopersRoute
+  landingIndexRoute: typeof landingIndexRoute
 }
 
 const landingRouteRouteChildren: landingRouteRouteChildren = {
-    landingAboutRoute: landingAboutRoute,
-    landingContactRoute: landingContactRoute,
-    landingDevelopersRoute: landingDevelopersRoute,
-    landingIndexRoute: landingIndexRoute,
-};
-
-const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
-    landingRouteRouteChildren
-);
-
-interface AuthPasswordResetRouteChildren {
-    AuthPasswordResetResetIdRoute: typeof AuthPasswordResetResetIdRoute;
+  landingAboutRoute: landingAboutRoute,
+  landingContactRoute: landingContactRoute,
+  landingDevelopersRoute: landingDevelopersRoute,
+  landingIndexRoute: landingIndexRoute,
 }
 
-const AuthPasswordResetRouteChildren: AuthPasswordResetRouteChildren = {
-    AuthPasswordResetResetIdRoute: AuthPasswordResetResetIdRoute,
-};
+const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
+  landingRouteRouteChildren,
+)
 
-const AuthPasswordResetRouteWithChildren =
-    AuthPasswordResetRoute._addFileChildren(AuthPasswordResetRouteChildren);
+interface AccountRouteRouteChildren {
+  AccountVerifyContactRoute: typeof AccountVerifyContactRoute
+  AccountVerifyEmailRoute: typeof AccountVerifyEmailRoute
+}
+
+const AccountRouteRouteChildren: AccountRouteRouteChildren = {
+  AccountVerifyContactRoute: AccountVerifyContactRoute,
+  AccountVerifyEmailRoute: AccountVerifyEmailRoute,
+}
+
+const AccountRouteRouteWithChildren = AccountRouteRoute._addFileChildren(
+  AccountRouteRouteChildren,
+)
 
 interface AuthRouteRouteChildren {
-    AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute;
-    AuthPasswordResetRoute: typeof AuthPasswordResetRouteWithChildren;
-    AuthSignInLazyRoute: typeof AuthSignInLazyRoute;
-    AuthSignUpLazyRoute: typeof AuthSignUpLazyRoute;
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthSignInLazyRoute: typeof AuthSignInLazyRoute
+  AuthSignUpLazyRoute: typeof AuthSignUpLazyRoute
+  AuthPasswordResetResetIdRoute: typeof AuthPasswordResetResetIdRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-    AuthForgotPasswordRoute: AuthForgotPasswordRoute,
-    AuthPasswordResetRoute: AuthPasswordResetRouteWithChildren,
-    AuthSignInLazyRoute: AuthSignInLazyRoute,
-    AuthSignUpLazyRoute: AuthSignUpLazyRoute,
-};
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthSignInLazyRoute: AuthSignInLazyRoute,
+  AuthSignUpLazyRoute: AuthSignUpLazyRoute,
+  AuthPasswordResetResetIdRoute: AuthPasswordResetResetIdRoute,
+}
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-    AuthRouteRouteChildren
-);
+  AuthRouteRouteChildren,
+)
 
 interface OrgOrgnameBranchBranchnameRouteRouteChildren {
-    OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
+  OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute
 }
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
-    {
-        OrgOrgnameBranchBranchnamecommonDashboardRoute:
-            OrgOrgnameBranchBranchnamecommonDashboardRoute,
-    };
+  {
+    OrgOrgnameBranchBranchnamecommonDashboardRoute:
+      OrgOrgnameBranchBranchnamecommonDashboardRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute,
+  }
 
 const OrgOrgnameBranchBranchnameRouteRouteWithChildren =
-    OrgOrgnameBranchBranchnameRouteRoute._addFileChildren(
-        OrgOrgnameBranchBranchnameRouteRouteChildren
-    );
+  OrgOrgnameBranchBranchnameRouteRoute._addFileChildren(
+    OrgOrgnameBranchBranchnameRouteRouteChildren,
+  )
 
 interface OrgOrgnameRouteRouteChildren {
-    OrgOrgnameBranchBranchnameRouteRoute: typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren;
+  OrgOrgnameBranchBranchnameRouteRoute: typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
 }
 
 const OrgOrgnameRouteRouteChildren: OrgOrgnameRouteRouteChildren = {
-    OrgOrgnameBranchBranchnameRouteRoute:
-        OrgOrgnameBranchBranchnameRouteRouteWithChildren,
-};
+  OrgOrgnameBranchBranchnameRouteRoute:
+    OrgOrgnameBranchBranchnameRouteRouteWithChildren,
+}
 
 const OrgOrgnameRouteRouteWithChildren = OrgOrgnameRouteRoute._addFileChildren(
-    OrgOrgnameRouteRouteChildren
-);
+  OrgOrgnameRouteRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
-    '/': typeof landingIndexRoute;
-    '/account': typeof AccountRouteRoute;
-    '/auth': typeof AuthRouteRouteWithChildren;
-    '/org/$orgname': typeof OrgOrgnameRouteRouteWithChildren;
-    '/about': typeof landingAboutRoute;
-    '/contact': typeof landingContactRoute;
-    '/developers': typeof landingDevelopersRoute;
-    '/auth/forgot-password': typeof AuthForgotPasswordRoute;
-    '/auth/password-reset': typeof AuthPasswordResetRouteWithChildren;
-    '/auth/sign-in': typeof AuthSignInLazyRoute;
-    '/auth/sign-up': typeof AuthSignUpLazyRoute;
-    '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute;
-    '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren;
-    '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
+  '/': typeof landingIndexRoute
+  '/account': typeof AccountRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRouteRoute
+  '/org/$orgname': typeof OrgOrgnameRouteRouteWithChildren
+  '/about': typeof landingAboutRoute
+  '/contact': typeof landingContactRoute
+  '/developers': typeof landingDevelopersRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInLazyRoute
+  '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/account/verify/contact': typeof AccountVerifyContactRoute
+  '/account/verify/email': typeof AccountVerifyEmailRoute
+  '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
+  '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
+  '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/member/member-gender': typeof OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute
 }
 
 export interface FileRoutesByTo {
-    '/account': typeof AccountRouteRoute;
-    '/auth': typeof AuthRouteRouteWithChildren;
-    '/org/$orgname': typeof OrgOrgnameRouteRouteWithChildren;
-    '/about': typeof landingAboutRoute;
-    '/contact': typeof landingContactRoute;
-    '/developers': typeof landingDevelopersRoute;
-    '/auth/forgot-password': typeof AuthForgotPasswordRoute;
-    '/auth/password-reset': typeof AuthPasswordResetRouteWithChildren;
-    '/auth/sign-in': typeof AuthSignInLazyRoute;
-    '/auth/sign-up': typeof AuthSignUpLazyRoute;
-    '/': typeof landingIndexRoute;
-    '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute;
-    '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren;
-    '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
+  '/account': typeof AccountRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRouteRoute
+  '/org/$orgname': typeof OrgOrgnameRouteRouteWithChildren
+  '/about': typeof landingAboutRoute
+  '/contact': typeof landingContactRoute
+  '/developers': typeof landingDevelopersRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInLazyRoute
+  '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/': typeof landingIndexRoute
+  '/account/verify/contact': typeof AccountVerifyContactRoute
+  '/account/verify/email': typeof AccountVerifyEmailRoute
+  '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
+  '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
+  '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/member/member-gender': typeof OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute
 }
 
 export interface FileRoutesById {
-    __root__: typeof rootRoute;
-    '/(landing)': typeof landingRouteRouteWithChildren;
-    '/account': typeof AccountRouteRoute;
-    '/auth': typeof AuthRouteRouteWithChildren;
-    '/org/$orgname': typeof OrgOrgnameRouteRouteWithChildren;
-    '/(landing)/about': typeof landingAboutRoute;
-    '/(landing)/contact': typeof landingContactRoute;
-    '/(landing)/developers': typeof landingDevelopersRoute;
-    '/auth/forgot-password': typeof AuthForgotPasswordRoute;
-    '/auth/password-reset': typeof AuthPasswordResetRouteWithChildren;
-    '/auth/sign-in': typeof AuthSignInLazyRoute;
-    '/auth/sign-up': typeof AuthSignUpLazyRoute;
-    '/(landing)/': typeof landingIndexRoute;
-    '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute;
-    '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren;
-    '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
+  __root__: typeof rootRoute
+  '/(landing)': typeof landingRouteRouteWithChildren
+  '/account': typeof AccountRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRouteRoute
+  '/org/$orgname': typeof OrgOrgnameRouteRouteWithChildren
+  '/(landing)/about': typeof landingAboutRoute
+  '/(landing)/contact': typeof landingContactRoute
+  '/(landing)/developers': typeof landingDevelopersRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInLazyRoute
+  '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/(landing)/': typeof landingIndexRoute
+  '/account/verify/contact': typeof AccountVerifyContactRoute
+  '/account/verify/email': typeof AccountVerifyEmailRoute
+  '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
+  '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
+  '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/member/member-gender': typeof OrgOrgnameBranchBranchnamemaintenanceMemberMemberGenderRoute
 }
 
 export interface FileRouteTypes {
-    fileRoutesByFullPath: FileRoutesByFullPath;
-    fullPaths:
-        | '/'
-        | '/account'
-        | '/auth'
-        | '/org/$orgname'
-        | '/about'
-        | '/contact'
-        | '/developers'
-        | '/auth/forgot-password'
-        | '/auth/password-reset'
-        | '/auth/sign-in'
-        | '/auth/sign-up'
-        | '/auth/password-reset/$resetId'
-        | '/org/$orgname/branch/$branchname'
-        | '/org/$orgname/branch/$branchname/dashboard';
-    fileRoutesByTo: FileRoutesByTo;
-    to:
-        | '/account'
-        | '/auth'
-        | '/org/$orgname'
-        | '/about'
-        | '/contact'
-        | '/developers'
-        | '/auth/forgot-password'
-        | '/auth/password-reset'
-        | '/auth/sign-in'
-        | '/auth/sign-up'
-        | '/'
-        | '/auth/password-reset/$resetId'
-        | '/org/$orgname/branch/$branchname'
-        | '/org/$orgname/branch/$branchname/dashboard';
-    id:
-        | '__root__'
-        | '/(landing)'
-        | '/account'
-        | '/auth'
-        | '/org/$orgname'
-        | '/(landing)/about'
-        | '/(landing)/contact'
-        | '/(landing)/developers'
-        | '/auth/forgot-password'
-        | '/auth/password-reset'
-        | '/auth/sign-in'
-        | '/auth/sign-up'
-        | '/(landing)/'
-        | '/auth/password-reset/$resetId'
-        | '/org/$orgname/branch/$branchname'
-        | '/org/$orgname/branch/$branchname/(common)/dashboard';
-    fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/account'
+    | '/auth'
+    | '/onboarding'
+    | '/org/$orgname'
+    | '/about'
+    | '/contact'
+    | '/developers'
+    | '/auth/forgot-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
+    | '/account/verify/contact'
+    | '/account/verify/email'
+    | '/auth/password-reset/$resetId'
+    | '/org/$orgname/branch/$branchname'
+    | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/member/member-gender'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/account'
+    | '/auth'
+    | '/onboarding'
+    | '/org/$orgname'
+    | '/about'
+    | '/contact'
+    | '/developers'
+    | '/auth/forgot-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
+    | '/'
+    | '/account/verify/contact'
+    | '/account/verify/email'
+    | '/auth/password-reset/$resetId'
+    | '/org/$orgname/branch/$branchname'
+    | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/member/member-gender'
+  id:
+    | '__root__'
+    | '/(landing)'
+    | '/account'
+    | '/auth'
+    | '/onboarding'
+    | '/org/$orgname'
+    | '/(landing)/about'
+    | '/(landing)/contact'
+    | '/(landing)/developers'
+    | '/auth/forgot-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
+    | '/(landing)/'
+    | '/account/verify/contact'
+    | '/account/verify/email'
+    | '/auth/password-reset/$resetId'
+    | '/org/$orgname/branch/$branchname'
+    | '/org/$orgname/branch/$branchname/(common)/dashboard'
+    | '/org/$orgname/branch/$branchname/(maintenance)/member/member-gender'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-    landingRouteRoute: typeof landingRouteRouteWithChildren;
-    AccountRouteRoute: typeof AccountRouteRoute;
-    AuthRouteRoute: typeof AuthRouteRouteWithChildren;
-    OrgOrgnameRouteRoute: typeof OrgOrgnameRouteRouteWithChildren;
+  landingRouteRoute: typeof landingRouteRouteWithChildren
+  AccountRouteRoute: typeof AccountRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  OnboardingRouteRoute: typeof OnboardingRouteRoute
+  OrgOrgnameRouteRoute: typeof OrgOrgnameRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-    landingRouteRoute: landingRouteRouteWithChildren,
-    AccountRouteRoute: AccountRouteRoute,
-    AuthRouteRoute: AuthRouteRouteWithChildren,
-    OrgOrgnameRouteRoute: OrgOrgnameRouteRouteWithChildren,
-};
+  landingRouteRoute: landingRouteRouteWithChildren,
+  AccountRouteRoute: AccountRouteRouteWithChildren,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  OnboardingRouteRoute: OnboardingRouteRoute,
+  OrgOrgnameRouteRoute: OrgOrgnameRouteRouteWithChildren,
+}
 
 export const routeTree = rootRoute
-    ._addFileChildren(rootRouteChildren)
-    ._addFileTypes<FileRouteTypes>();
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -447,6 +516,7 @@ export const routeTree = rootRoute
         "/(landing)",
         "/account",
         "/auth",
+        "/onboarding",
         "/org/$orgname"
       ]
     },
@@ -460,16 +530,23 @@ export const routeTree = rootRoute
       ]
     },
     "/account": {
-      "filePath": "account/route.tsx"
+      "filePath": "account/route.tsx",
+      "children": [
+        "/account/verify/contact",
+        "/account/verify/email"
+      ]
     },
     "/auth": {
       "filePath": "auth/route.tsx",
       "children": [
         "/auth/forgot-password",
-        "/auth/password-reset",
         "/auth/sign-in",
-        "/auth/sign-up"
+        "/auth/sign-up",
+        "/auth/password-reset/$resetId"
       ]
+    },
+    "/onboarding": {
+      "filePath": "onboarding/route.tsx"
     },
     "/org/$orgname": {
       "filePath": "org/$orgname.route.tsx",
@@ -493,13 +570,6 @@ export const routeTree = rootRoute
       "filePath": "auth/forgot-password.tsx",
       "parent": "/auth"
     },
-    "/auth/password-reset": {
-      "filePath": "auth/password-reset.tsx",
-      "parent": "/auth",
-      "children": [
-        "/auth/password-reset/$resetId"
-      ]
-    },
     "/auth/sign-in": {
       "filePath": "auth/sign-in.lazy.tsx",
       "parent": "/auth"
@@ -512,19 +582,32 @@ export const routeTree = rootRoute
       "filePath": "(landing)/index.tsx",
       "parent": "/(landing)"
     },
+    "/account/verify/contact": {
+      "filePath": "account/verify/contact.tsx",
+      "parent": "/account"
+    },
+    "/account/verify/email": {
+      "filePath": "account/verify/email.tsx",
+      "parent": "/account"
+    },
     "/auth/password-reset/$resetId": {
       "filePath": "auth/password-reset.$resetId.tsx",
-      "parent": "/auth/password-reset"
+      "parent": "/auth"
     },
     "/org/$orgname/branch/$branchname": {
       "filePath": "org/$orgname.branch.$branchname/route.tsx",
       "parent": "/org/$orgname",
       "children": [
-        "/org/$orgname/branch/$branchname/(common)/dashboard"
+        "/org/$orgname/branch/$branchname/(common)/dashboard",
+        "/org/$orgname/branch/$branchname/(maintenance)/member/member-gender"
       ]
     },
     "/org/$orgname/branch/$branchname/(common)/dashboard": {
       "filePath": "org/$orgname.branch.$branchname/(common)/dashboard.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/member/member-gender": {
+      "filePath": "org/$orgname.branch.$branchname/(maintenance)/member/member-gender.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     }
   }

@@ -16,9 +16,12 @@ export const Route = createRootRoute({
 })
 
 function RootLayout() {
-    const { setAuthStatus, resetAuth } = useAuthStore()
+    const { setAuthStatus, setCurrentAuth, resetAuth } = useAuthStore()
 
     useAuthContext({
+        onSuccess(authorizationContext) {
+            setCurrentAuth(authorizationContext)
+        },
         onError(_error, rawError) {
             if (rawError instanceof AxiosError && rawError.status === 401) {
                 resetAuth()

@@ -10,12 +10,14 @@ import SignInForm from '@/components/forms/auth-forms/sign-in-form'
 import { IAuthContext } from '@/types'
 import { useAuthStore } from '@/store/user-auth-store'
 import { createLazyFileRoute } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/auth/sign-in')({
     component: SignInPage,
 })
 
 function SignInPage() {
+    const router = useRouter()
     const queryClient = useQueryClient()
 
     const { authStatus, currentAuth, setCurrentAuth } = useAuthStore()
@@ -26,8 +28,9 @@ function SignInPage() {
         (userData: IAuthContext) => {
             setCurrentAuth(userData)
             queryClient.setQueryData(['current-user'], userData)
+            router.navigate({ to: '/onboarding' })
         },
-        [queryClient, setCurrentAuth]
+        [queryClient, router, setCurrentAuth]
     )
 
     return (
