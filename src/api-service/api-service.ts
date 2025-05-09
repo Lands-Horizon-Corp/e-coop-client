@@ -66,6 +66,15 @@ export default class APIService {
         return APIService.httpClient.post<R>(url, data, { params, ...config })
     }
 
+    public static async patch<D = unknown, R = unknown>(
+        url: string,
+        data?: D,
+        params?: IRequestParams,
+        config?: AxiosRequestConfig
+    ): Promise<AxiosResponse<R>> {
+        return APIService.httpClient.patch<R>(url, data, { params, ...config })
+    }
+
     public static async put<D = unknown, R = unknown>(
         url: string,
         data?: D,

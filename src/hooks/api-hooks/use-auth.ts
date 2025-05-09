@@ -15,6 +15,7 @@ import {
 } from '@/types'
 import {
     IAPIHook,
+    IMutationProps,
     IOperationCallbacks,
     IQueryProps,
 } from '../../types/api-hooks-types'
@@ -277,7 +278,8 @@ export const useSendUserContactOTPVerification = ({
     verifyMode,
     onSuccess,
     onError,
-}: { verifyMode: 'email' | 'mobile' } & IOperationCallbacks<void, string>) => {
+}: { verifyMode: 'email' | 'mobile' } & IAPIHook<void, string> &
+    IMutationProps) => {
     return useMutation<void, string>({
         mutationKey: ['auth', 'send-contact-verification', verifyMode],
         mutationFn: async () => {
