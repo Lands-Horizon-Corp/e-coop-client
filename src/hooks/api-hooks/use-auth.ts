@@ -274,6 +274,35 @@ export const useVerify = ({
     })
 }
 
+export const useCheckResetId = ({
+    resetId,
+    onError,
+    onSuccess,
+    showMessage,
+    ...others
+}: { resetId: string } & IAPIHook<boolean> & IQueryProps<boolean>) => {
+    return useQuery<boolean, string>({
+        queryKey: ['password-reset-link', resetId],
+        queryFn: async () => {
+            const [error] = await withCatchAsync(
+                AuthService.checkResetLink(resetId)
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.message(errorMessage)
+                onError?.(errorMessage)
+                throw errorMessage
+            }
+
+            onSuccess?.(true)
+            return true
+        },
+        initialData: undefined,
+        ...others,
+    })
+}
+
 export const useSendUserContactOTPVerification = ({
     verifyMode,
     onSuccess,
@@ -306,34 +335,5 @@ export const useSendUserContactOTPVerification = ({
                 throw errorMessage
             }
         },
-    })
-}
-
-export const useCheckResetId = ({
-    resetId,
-    onError,
-    onSuccess,
-    showMessage,
-    ...others
-}: { resetId: string } & IAPIHook<boolean> & IQueryProps<boolean>) => {
-    return useQuery<boolean, string>({
-        queryKey: ['password-reset-link', resetId],
-        queryFn: async () => {
-            const [error] = await withCatchAsync(
-                AuthService.checkResetLink(resetId)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.message(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            onSuccess?.(true)
-            return true
-        },
-        initialData: undefined,
-        ...others,
     })
 }
