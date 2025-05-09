@@ -1,7 +1,5 @@
 import { IMedia } from '../coop-types'
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
-
-export type TUserType = 'owner' | 'employee' | 'member' | 'ban'
+import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
 
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps, IAuditable {

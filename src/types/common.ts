@@ -1,9 +1,11 @@
-import { AccountClosureReasons, FAMILY_RELATIONSHIP } from '@/constants'
-import { IUserBase } from './auth/user'
 import { IBranch } from './coop-types'
+import { IUserBase } from './auth/user'
 import { IOrganization } from './lands-types'
+import { AccountClosureReasons, FAMILY_RELATIONSHIP } from '@/constants'
 
 export type TEntityId = string
+
+export type TUserType = 'owner' | 'employee' | 'member' | 'ban'
 
 export type TGeneralStatus =
     | 'pending'
@@ -39,9 +41,10 @@ export interface IIDentity {
 /* Identity of the entity */
 export interface IOrgBranchIdentity {
     organization_id: TEntityId
-    organization: IOrganization
+    organization?: IOrganization
+
     branch_id: TEntityId
-    branch: IBranch
+    branch?: IBranch
 }
 
 /* Use this only if entity has timestamps, auditable, and has org and branch */

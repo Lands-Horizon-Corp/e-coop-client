@@ -8,7 +8,7 @@ import {
     IUserSettingsPhotoUpdateRequest,
 } from '@/types'
 
-const BASE_ENDPOINT = '/user'
+const BASE_ENDPOINT = '/settings'
 
 export const updateUserSettingsGeneral = async (
     data: IUserSettingsGeneralRequest
