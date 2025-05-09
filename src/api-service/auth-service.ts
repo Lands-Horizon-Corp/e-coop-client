@@ -1,6 +1,6 @@
 import APIService from './api-service'
 
-import { getSMSContent, getEmailContent } from '@/lib'
+import { getSMSContent } from '@/lib'
 import {
     IBranch,
     IUserBase,
@@ -13,8 +13,6 @@ import {
     IForgotPasswordRequest,
     IChangePasswordRequest,
     IVerifyContactNumberRequest,
-    ISendEmailVerificationRequest,
-    ISendContactNumberVerificationRequest,
 } from '@/types'
 
 const BASE_ENDPOINT = '/authentication'
