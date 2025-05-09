@@ -5,20 +5,19 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import TextEditor from '@/components/text-editor'
 import { Separator } from '@/components/ui/separator'
+import { VerifiedPatchIcon } from '@/components/icons'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib/utils'
-
-import { IForm, IUserBase } from '@/types'
-import { IClassProps } from '@/types'
-import { TEntityId } from '@/types'
 import { userSettingsGeneralSchema } from '@/validations/user-settings'
 import { useUpdateUserSettingsGeneral } from '@/hooks/api-hooks/use-user-settings'
-import { VerifiedPatchIcon } from '@/components/icons'
-import { PhoneInput } from '@/components/contact-input/contact-input'
+
+import { IForm, IUserBase, IClassProps, TEntityId } from '@/types'
 
 type TAccountGeneralFormValues = z.infer<typeof userSettingsGeneralSchema>
 
@@ -43,6 +42,7 @@ const AccountGeneralForm = ({
         defaultValues: {
             user_name: '',
             email: '',
+            description: '',
             ...defaultValues,
         },
     })
@@ -82,6 +82,19 @@ const AccountGeneralForm = ({
                                     {...field}
                                     id={field.name}
                                     placeholder="Username"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="description"
+                            label="Bio / About"
+                            render={({ field }) => (
+                                <TextEditor
+                                    {...field}
+                                    textEditorClassName="w-full !max-w-none"
+                                    placeholder="Write short description about yourself"
                                     disabled={isDisabled(field.name)}
                                 />
                             )}
