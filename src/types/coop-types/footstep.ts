@@ -1,7 +1,14 @@
-import { IAuditable } from './../common'
-import { IUserBase, TUserType } from '../auth'
-import { ITimeStamps, TEntityId } from '../common'
+import { IUserBase } from '../auth'
+/**
+ * {DataTypeHere} - Note: used for usual data type declaration.
+ * {(OneDataType|AnotherDataType)} - Note: used for cases where data type could be either of the two.
+ * {DataType[]} - Note: used for an array of DataType instances.
+ * {?DataTypeHere} - Note: used for data types which could be the data type mentioned or null.
+ * {DataTypeHere} [parameterNameHere] - Note: used for optional parameters.
+ * {Object.<KeyDataType, ValueDataType>} - Note: used for an object with KeyDataType keys and ValueDataType values
+ */
 import { IPaginatedResult } from './paginated-result'
+import { ITimeStamps, TEntityId, IAuditable, TUserType } from '../common'
 
 export interface IFootstep extends ITimeStamps, IAuditable {
     id: TEntityId
