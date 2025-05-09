@@ -1,12 +1,16 @@
 import { ReactNode } from 'react'
 import { Navigate, useRouter } from '@tanstack/react-router'
 
+import {
+    ShieldExclamationIcon,
+    BadgeExclamationFillIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
-import { BadgeExclamationFillIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { useAuthStore } from '@/store/user-auth-store'
+
 import { IBaseProps, TPageType, IUserBase } from '@/types'
 
 interface Props extends IBaseProps {
@@ -28,10 +32,11 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
 
         if (authStatus === 'error' && !currentAuth.user)
             return (
-                <div className="relative flex h-screen w-full items-center justify-center">
+                <div className="relative flex h-screen w-full flex-col items-center justify-center gap-y-4 text-muted-foreground">
+                    <ShieldExclamationIcon className="size-16" />
                     <p>
-                        Sorry, There&apos;s an unexpected problem, try
-                        refreshing the page.
+                        Sorry we cannot load your authorization, try refreshing
+                        the page. If the error persist try again later.
                     </p>
                 </div>
             )

@@ -109,6 +109,7 @@ import {
     HiOutlineChevronRight as ChevronRightIcon,
     HiOutlineQuestionMarkCircle as QuestionIcon,
     HiOutlineChatBubbleOvalLeft as MessagesIcon,
+    HiShieldExclamation as ShieldExclamationIcon,
     HiOutlineChevronDoubleLeft as ChevronsLeftIcon,
     HiOutlineArrowRightEndOnRectangle as LogoutIcon,
     HiOutlineChevronDoubleRight as ChevronsRightIcon,
@@ -247,6 +248,7 @@ import { GrPowerReset as PowerResetIcon } from 'react-icons/gr'
 
 import {
     VscError as ErrorIcon,
+    VscBracketError as BracketErrorIcon,
     VscCommentDraft as CommentDashedIcon,
     VscLocation as LocationPinOutlineIcon,
 } from 'react-icons/vsc'
@@ -382,6 +384,7 @@ export {
     ChevronDownIcon,
     PDFFileFillIcon,
     BankDuoToneIcon,
+    BracketErrorIcon,
     ArrowTrendUpIcon,
     BoxesStackedIcon,
     NotificationIcon,
@@ -437,6 +440,7 @@ export {
     FlipVerticalLineIcon,
     BadgeExclamationIcon,
     DocumentFileFillIcon,
+    ShieldExclamationIcon,
     BadgeQuestionFillIcon,
     LocationPinOutlineIcon,
     QuestionCircleFillIcon,
