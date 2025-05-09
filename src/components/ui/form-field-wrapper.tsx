@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/form'
 
 import { cn } from '@/lib/utils'
+import { ReactNode } from 'react'
 
 export interface FormFieldWrapperProps<
     T extends FieldValues = FieldValues,
@@ -20,7 +21,7 @@ export interface FormFieldWrapperProps<
     isDisabled?: boolean
     hideFieldMessage?: boolean
 
-    label?: string
+    label?: string | ReactNode
     description?: string
 
     className?: string
