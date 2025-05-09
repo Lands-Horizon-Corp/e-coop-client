@@ -49,3 +49,8 @@ export const updateUserSettingsPhoto = async (
     >(`${BASE_ENDPOINT}/photo`, data)
     return res.data
 }
+
+export const requestContactNumberVerification = async () => {
+    const endpoint = `${BASE_ENDPOINT}/request-contact-number-verification`
+    await APIService.post(endpoint)
+}

@@ -88,7 +88,7 @@ const AccountSettingsSidebar = (prop: Props) => {
                 Quick Links
             </p>
             <p className="cursor-pointer text-sm text-muted-foreground duration-200 ease-in hover:text-foreground">
-                <Link to="/onboarding">Onboarding</Link>{' '}
+                <Link to={'/onboarding' as string}>Onboarding</Link>{' '}
                 <ArrowRightIcon className="inline" />
             </p>
             <p className="cursor-pointer text-sm text-muted-foreground duration-200 ease-in hover:text-foreground">

@@ -1,18 +1,7 @@
-import { IBranch, IMedia } from '../coop-types'
-import { IOrganization } from '../lands-types/organization'
+import { IMedia } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
-import { IGeneratedReport } from '../lands-types/generated-report'
 
 export type TUserType = 'owner' | 'employee' | 'member' | 'ban'
-
-// api/v1/authentication/current
-export interface IAuthContext<TUser = IUserBase | undefined> {
-    user?: TUser
-    organization?: IOrganization
-    branch?: IBranch
-    reports: IGeneratedReport[]
-    role: string[]
-}
 
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps, IAuditable {
