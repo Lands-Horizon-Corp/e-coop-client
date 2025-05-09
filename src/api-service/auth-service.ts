@@ -7,7 +7,6 @@ import {
     IOrganization,
     ISignUpRequest,
     ISignInRequest,
-    INewPasswordRequest,
     IVerifyEmailRequest,
     IForgotPasswordRequest,
     IChangePasswordRequest,
@@ -63,7 +62,7 @@ export const forgotPassword = async (data: IForgotPasswordRequest) => {
     await APIService.post<IForgotPasswordRequest, void>(endpoint, data)
 }
 
-// CHANGES PASSWORD + WITH OTP
+// CHANGES PASSWORD + reset ID
 export const changePassword = async (
     resetId: string,
     data: IChangePasswordRequest
@@ -72,37 +71,34 @@ export const changePassword = async (
     await APIService.post<IChangePasswordRequest, void>(endpoint, data)
 }
 
-export const requestContactNumberVerification = async () => {
-    const endpoint = `${BASE_ENDPOINT}/request-contact-number-verification`
-    await APIService.post(endpoint)
-}
-
-export const verifyContactNumber = async (
-    data: IVerifyContactNumberRequest
-) => {
-    const endpoint = `${BASE_ENDPOINT}/verify-contact-number-verification`
-    return await APIService.post<IVerifyContactNumberRequest, IUserBase>(
-        endpoint,
-        data
-    )
-}
-
-export const requestEmailVerification = async () => {
-    const endpoint = `${BASE_ENDPOINT}/request-email-verification`
-    await APIService.post(endpoint)
-}
-
-export const verifyEmail = async (data: IVerifyEmailRequest) => {
-    const endpoint = `${BASE_ENDPOINT}/verify-email-verification`
-    return await APIService.post<IVerifyEmailRequest, IUserBase>(endpoint, data)
-}
-
 export const checkResetLink = async (resetId: string) => {
     const endpoint = `${BASE_ENDPOINT}/verify-reset-link/${resetId}`
     await APIService.get<void>(endpoint)
 }
 
-export const newPassword = async (data: INewPasswordRequest) => {
-    const endpoint = `${BASE_ENDPOINT}/`
-    await APIService.post<INewPasswordRequest>(endpoint, data)
+// request for verification codes
+export const requestContactNumberVerification = async () => {
+    const endpoint = `${BASE_ENDPOINT}/apply-contact-number`
+    await APIService.post(endpoint)
+}
+
+export const requestEmailVerification = async () => {
+    const endpoint = `${BASE_ENDPOINT}/apply-email`
+    await APIService.post(endpoint)
+}
+
+// verify
+export const verifyEmail = async (data: IVerifyEmailRequest) => {
+    const endpoint = `${BASE_ENDPOINT}/verify-contact-number`
+    return await APIService.post<IVerifyEmailRequest, IUserBase>(endpoint, data)
+}
+
+export const verifyContactNumber = async (
+    data: IVerifyContactNumberRequest
+) => {
+    const endpoint = `${BASE_ENDPOINT}/verify-email`
+    return await APIService.post<IVerifyContactNumberRequest, IUserBase>(
+        endpoint,
+        data
+    )
 }

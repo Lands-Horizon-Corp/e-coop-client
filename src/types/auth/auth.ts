@@ -1,4 +1,16 @@
+import { IUserBase } from './user'
+import { IBranch } from '../coop-types'
 import { IMediaRequest } from '../coop-types/media'
+import { IGeneratedReport, IOrganization } from '../lands-types'
+
+// returned by /authentication/current
+export interface IAuthContext<TUser = IUserBase | undefined> {
+    user?: TUser
+    organization?: IOrganization
+    branch?: IBranch
+    reports: IGeneratedReport[]
+    role: string[]
+}
 
 export interface IChangePasswordRequest {
     new_password: string
@@ -30,40 +42,12 @@ export interface ISignUpRequest {
     media?: IMediaRequest
 }
 
+// FOR Verification
+
 export interface IVerifyEmailRequest {
     otp: string
 }
 
 export interface IVerifyContactNumberRequest {
     otp: string
-}
-
-export interface INewPasswordRequest {
-    NewPassword: string
-    ConfirmPassword: string
-    PreviousPassword: string
-}
-
-export interface IAccountSettingRequest {
-    birthDate: Date
-    lastName: string
-    firstName: string
-    middleName?: string
-    description?: string
-    permanentAddress: string
-}
-
-export interface IChangeEmailRequest {
-    password: string
-    email: string
-}
-
-export interface IChangeContactNumberRequest {
-    password: string
-    contact_number: string
-}
-
-export interface IChangeUsernameRequest {
-    password: string
-    user_name: string
 }
