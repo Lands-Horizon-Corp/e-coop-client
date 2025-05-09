@@ -17,11 +17,13 @@ import {
 import {
     GoDotFill as DotBigIcon,
     GoArrowLeft as ArrowLeftIcon,
+    GoArrowRight as ArrowRightIcon,
     GoSearch as MagnifyingGlassIcon,
 } from 'react-icons/go'
 
 import {
     IoIosClose as XIcon,
+    IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
     IoIosFunnel as FunnelFilledIcon,
 } from 'react-icons/io'
@@ -275,6 +277,7 @@ export {
     UserIcon,
     MoonIcon,
     DrawIcon,
+    GearIcon,
     MoneyIcon,
     EmptyIcon,
     MinusIcon,
@@ -349,6 +352,7 @@ export {
     IoIosCodeIcon,
     TelephoneIcon,
     FolderFillIcon,
+    ArrowRightIcon,
     CoinsStackIcon,
     PencilFillIcon,
     SmallBrushIcon,

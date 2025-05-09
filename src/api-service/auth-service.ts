@@ -1,6 +1,5 @@
 import APIService from './api-service'
 
-import { getSMSContent } from '@/lib'
 import {
     IBranch,
     IUserBase,
@@ -75,10 +74,7 @@ export const changePassword = async (
 
 export const requestContactNumberVerification = async () => {
     const endpoint = `${BASE_ENDPOINT}/request-contact-number-verification`
-    const data: ISendContactNumberVerificationRequest = {
-        contactTemplate: getSMSContent('contactNumber'),
-    }
-    await APIService.post<ISendContactNumberVerificationRequest>(endpoint, data)
+    await APIService.post(endpoint)
 }
 
 export const verifyContactNumber = async (
@@ -93,8 +89,7 @@ export const verifyContactNumber = async (
 
 export const requestEmailVerification = async () => {
     const endpoint = `${BASE_ENDPOINT}/request-email-verification`
-    const data: ISendEmailVerificationRequest = {}
-    await APIService.post<ISendEmailVerificationRequest>(endpoint, data)
+    await APIService.post(endpoint)
 }
 
 export const verifyEmail = async (data: IVerifyEmailRequest) => {
