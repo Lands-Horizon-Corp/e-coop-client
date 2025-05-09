@@ -1,6 +1,5 @@
-import { TUserType } from '../auth/user'
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IPaginatedResult } from '../coop-types'
+import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
 
 // Invitation Code Resource
 export interface IInvitationCode extends ITimeStamps, IAuditable {
