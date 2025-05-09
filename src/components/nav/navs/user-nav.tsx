@@ -30,7 +30,7 @@ const UserNav = ({
                 <PageBreadCrumb homeUrl={homeUrl} className="hidden md:block" />
             </NavContainer>
             <NavContainer className="pointer-events-auto">
-                {user && ['employee'].includes(user.type) && (
+                {user && user.type === 'employee' && (
                     <NavTimeInBar currentUser={user as IEmployee} />
                 )}
                 <NavProfileMenu />
