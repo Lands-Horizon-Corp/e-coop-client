@@ -41,9 +41,9 @@ const AccountSettingsSidebar = (prop: Props) => {
                     <Button
                         size="icon"
                         variant="ghost"
-                        className="absolute right-5 top-14 rounded-full"
+                        className="group absolute right-5 top-8 rounded-full text-muted-foreground hover:text-foreground"
                     >
-                        <GearIcon className="size-8" />
+                        <GearIcon className="size-8 delay-150 duration-300 ease-out group-hover:rotate-45" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

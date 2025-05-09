@@ -93,7 +93,7 @@ const AccountGeneralForm = ({
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
-                                    textEditorClassName="w-full !max-w-none"
+                                    textEditorClassName="w-full !max-w-full"
                                     placeholder="Write short description about yourself"
                                     disabled={isDisabled(field.name)}
                                 />

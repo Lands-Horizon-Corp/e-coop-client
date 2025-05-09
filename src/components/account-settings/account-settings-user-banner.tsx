@@ -8,7 +8,7 @@ const AccountSettingsUserBanner = () => {
     return (
         <div className="flex items-center gap-x-4 rounded-2xl p-4">
             <ImageDisplay
-                className="size-16 rounded-full"
+                className="size-12 rounded-full sm:size-16"
                 fallbackClassName=""
                 src={user.media?.download_url}
             />

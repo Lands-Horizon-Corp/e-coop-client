@@ -6,7 +6,7 @@ import NavProfileMenu from '../nav-components/nav-profile-menu'
 
 const OnboardingNav = () => {
     return (
-        <RootNav className="pointer-events-none fixed w-full">
+        <RootNav className="pointer-events-none fixed w-full bg-popover/70 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-none">
             <NavEcoopLogo className="pointer-events-auto" />
             <NavContainer />
             <NavContainer className="pointer-events-auto">
