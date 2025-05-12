@@ -12,32 +12,28 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import genderTableColumns, {
-    IGenderTableColumnProps,
-    genderGlobalSearchTargets,
-} from './columns'
-
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import {
-    exportAll,
-    deleteMany,
-    exportSelected,
-} from '@/api-service/member-services/member-gender-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member-gender'
+import * as MemberOccupationService from '@/api-service/member-services/member-occupation-service'
+import { useFilteredPaginatedMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
 
 import { TableProps } from '@/types'
-import { IMemberGender } from '@/types'
+import { IMemberOccupation } from '@/types'
 
-export interface GenderTableProps
-    extends TableProps<IMemberGender>,
-        IGenderTableColumnProps {
+import memberOccupationColumns, {
+    IMemberOccupationTableColumnProps,
+    memberOccupationGlobalSearchTargets,
+} from './columns'
+
+export interface MemberOccupationTableProps
+    extends TableProps<IMemberOccupation>,
+        IMemberOccupationTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberGender>,
+        IDataTableToolbarProps<IMemberOccupation>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -48,23 +44,20 @@ export interface GenderTableProps
     >
 }
 
-const GenderTable = ({
+const MemberOccupationTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: GenderTableProps) => {
+}: MemberOccupationTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
-        () =>
-            genderTableColumns({
-                actionComponent,
-            }),
+        () => memberOccupationColumns({ actionComponent }),
         [actionComponent]
     )
 
@@ -78,7 +71,7 @@ const GenderTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberGender>({
+    } = useDataTableState<IMemberOccupation>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -93,7 +86,7 @@ const GenderTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedGenders({
+    } = useFilteredPaginatedMemberOccupations({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -103,7 +96,7 @@ const GenderTable = ({
 
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -143,7 +136,7 @@ const GenderTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: genderGlobalSearchTargets,
+                        targets: memberOccupationGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -153,10 +146,15 @@ const GenderTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['gender', 'resource-query'],
+                                queryKey: [
+                                    'member-occupation',
+                                    'resource-query',
+                                ],
                             }),
                         onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
+                            MemberOccupationService.deleteManyMemberOccupation(
+                                selectedData.map((item) => item.id)
+                            ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -164,11 +162,16 @@ const GenderTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll: exportAll,
+                        exportAll:
+                            MemberOccupationService.exportAllMemberOccupation,
                         exportCurrentPage: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            MemberOccupationService.exportSelectedMemberOccupation(
+                                ids.map((item) => item.id)
+                            ),
                         exportSelected: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            MemberOccupationService.exportSelectedMemberOccupation(
+                                ids.map((item) => item.id)
+                            ),
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
@@ -190,4 +193,4 @@ const GenderTable = ({
     )
 }
 
-export default GenderTable
+export default MemberOccupationTable

@@ -49,5 +49,5 @@ export interface IMemberTypeReference extends ITimeStamps, IAuditable {
     other_interest_on_saving_computation_interest_rate: number
 }
 
-export interface IMemberTypeReferencePaginatedResource
+export interface IMemberTypeReferencePaginated
     extends IPaginatedResult<IMemberTypeReference> {}

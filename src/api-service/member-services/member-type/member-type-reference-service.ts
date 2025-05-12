@@ -1,103 +1,103 @@
-// services/member-type-service.ts
 import qs from 'query-string'
-
 import APIService from '../../api-service'
 
 import {
     TEntityId,
-    IMemberTypeReferenceRequest,
     IMemberTypeReference,
+    IMemberTypeReferenceRequest,
+    IMemberTypeReferencePaginated,
 } from '@/types'
-import { IMemberTypePaginated } from '@/types'
 
-export default class MemberTypeReferenceService {
-    private static readonly BASE_ENDPOINT = '/member-type-reference'
+const BASE_ENDPOINT = '/member-type-reference'
 
-    public static async getById(
-        id: TEntityId,
-        preloads?: string[]
-    ): Promise<IMemberTypeReference> {
-        const url = qs.stringifyUrl({
-            url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
+export const getMemberTypeReferenceById = async (
+    id: TEntityId,
+    preloads?: string[]
+): Promise<IMemberTypeReference> => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}`,
+        query: { preloads },
+    })
+
+    const response = await APIService.get<IMemberTypeReference>(url)
+    return response.data
+}
+
+export const createMemberTypeReference = async (
+    data: IMemberTypeReferenceRequest,
+    preloads?: string[]
+): Promise<IMemberTypeReference> => {
+    const url = qs.stringifyUrl(
+        {
+            url: BASE_ENDPOINT,
             query: { preloads },
-        })
+        },
+        { skipNull: true }
+    )
 
-        const response = await APIService.get<IMemberTypeReference>(url)
-        return response.data
-    }
+    const response = await APIService.post<
+        IMemberTypeReferenceRequest,
+        IMemberTypeReference
+    >(url, data)
 
-    public static async create(
-        data: IMemberTypeReferenceRequest,
-        preloads?: string[]
-    ) {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberTypeReferenceService.BASE_ENDPOINT}`,
-                query: { preloads },
+    return response.data
+}
+
+export const deleteMemberTypeReference = async (
+    id: TEntityId
+): Promise<void> => {
+    const endpoint = `${BASE_ENDPOINT}/${id}`
+    await APIService.delete<void>(endpoint)
+}
+
+export const updateMemberTypeReference = async (
+    id: TEntityId,
+    data: IMemberTypeReferenceRequest,
+    preloads?: string[]
+): Promise<IMemberTypeReference> => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}`,
+        query: { preloads },
+    })
+
+    const response = await APIService.put<
+        IMemberTypeReferenceRequest,
+        IMemberTypeReference
+    >(url, data)
+
+    return response.data
+}
+
+export const getPaginatedMemberTypeReferences = async (props?: {
+    memberTypeId: string
+    sort?: string
+    filters?: string
+    preloads?: string[]
+    pagination?: { pageIndex: number; pageSize: number }
+}): Promise<IMemberTypeReferencePaginated> => {
+    const { memberTypeId, filters, preloads, pagination, sort } = props || {}
+
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/${memberTypeId}`,
+            query: {
+                sort,
+                preloads,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
             },
-            { skipNull: true }
-        )
+        },
+        { skipNull: true }
+    )
 
-        return (
-            await APIService.post<
-                IMemberTypeReferenceRequest,
-                IMemberTypeReference
-            >(url, data)
-        ).data
-    }
+    const response = await APIService.get<IMemberTypeReferencePaginated>(url)
+    return response.data
+}
 
-    public static async delete(id: TEntityId): Promise<void> {
-        const endpoint = `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`
-        await APIService.delete<void>(endpoint)
-    }
-
-    public static async update(
-        id: TEntityId,
-        data: IMemberTypeReferenceRequest,
-        preloads?: string[]
-    ): Promise<IMemberTypeReference> {
-        const url = qs.stringifyUrl({
-            url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${id}`,
-            query: { preloads },
-        })
-
-        const response = await APIService.put<
-            IMemberTypeReferenceRequest,
-            IMemberTypeReference
-        >(url, data)
-        return response.data
-    }
-
-    public static async getMemberTypeReferences(props?: {
-        memberTypeId: string
-        sort?: string
-        filters?: string
-        preloads?: string[]
-        pagination?: { pageIndex: number; pageSize: number }
-    }) {
-        const { memberTypeId, filters, preloads, pagination, sort } =
-            props || {}
-
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberTypeReferenceService.BASE_ENDPOINT}/${memberTypeId}`,
-                query: {
-                    sort,
-                    preloads,
-                    filter: filters,
-                    pageIndex: pagination?.pageIndex,
-                    pageSize: pagination?.pageSize,
-                },
-            },
-            { skipNull: true }
-        )
-
-        const response = await APIService.get<IMemberTypePaginated>(url)
-        return response.data
-    }
-
-    public static async deleteMany(ids: TEntityId[]): Promise<void> {
-        const endpoint = `${MemberTypeReferenceService.BASE_ENDPOINT}/bulk-delete`
-        await APIService.delete<void>(endpoint, { ids })
-    }
+export const deleteManyMemberTypeReferences = async (
+    ids: TEntityId[]
+): Promise<void> => {
+    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
+    await APIService.delete<void>(endpoint, { ids })
 }

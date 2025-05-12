@@ -12,32 +12,27 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import genderTableColumns, {
-    IGenderTableColumnProps,
-    genderGlobalSearchTargets,
+import memberTypeColumns, {
+    IMemberTypeTableColumnProps,
+    memberTypeGlobalSearchTargets,
 } from './columns'
 
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import {
-    exportAll,
-    deleteMany,
-    exportSelected,
-} from '@/api-service/member-services/member-gender-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member-gender'
 
-import { TableProps } from '@/types'
-import { IMemberGender } from '@/types'
+import { TableProps, IMemberType } from '@/types'
+import { useFilteredPaginatedMemberTypes } from '@/hooks/api-hooks/member/use-member-type'
+import * as MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 
-export interface GenderTableProps
-    extends TableProps<IMemberGender>,
-        IGenderTableColumnProps {
+export interface MemberTypeTableProps
+    extends TableProps<IMemberType>,
+        IMemberTypeTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberGender>,
+        IDataTableToolbarProps<IMemberType>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -48,13 +43,13 @@ export interface GenderTableProps
     >
 }
 
-const GenderTable = ({
+const MemberTypeTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: GenderTableProps) => {
+}: MemberTypeTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -62,7 +57,7 @@ const GenderTable = ({
 
     const columns = useMemo(
         () =>
-            genderTableColumns({
+            memberTypeColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -78,7 +73,7 @@ const GenderTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberGender>({
+    } = useDataTableState<IMemberType>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -93,7 +88,7 @@ const GenderTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedGenders({
+    } = useFilteredPaginatedMemberTypes({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -135,7 +130,7 @@ const GenderTable = ({
         <FilterContext.Provider value={filterState}>
             <div
                 className={cn(
-                    'flex h-full flex-col gap-y-2',
+                    'relative z-0 flex h-full flex-col gap-y-2',
                     className,
                     !isScrollable && 'h-fit !max-h-none'
                 )}
@@ -143,7 +138,7 @@ const GenderTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: genderGlobalSearchTargets,
+                        targets: memberTypeGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -153,10 +148,12 @@ const GenderTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['gender', 'resource-query'],
+                                queryKey: ['member-type', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
+                            MemberTypeService.deleteManyMemberTypes(
+                                selectedData.map((data) => data.id)
+                            ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -164,11 +161,16 @@ const GenderTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll: exportAll,
+                        exportAll: MemberTypeService.exportAllMemberTypes,
+                        // exportAllFiltered: MemberTypeService.exportAllFiltered,
                         exportCurrentPage: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            MemberTypeService.exportSelectedMemberTypes(
+                                ids.map((data) => data.id)
+                            ),
                         exportSelected: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            MemberTypeService.exportSelectedMemberTypes(
+                                ids.map((data) => data.id)
+                            ),
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
@@ -180,9 +182,9 @@ const GenderTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
-                    className="mb-2"
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
+                    className={cn('mb-2', isScrollable && 'flex-1')}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
@@ -190,4 +192,4 @@ const GenderTable = ({
     )
 }
 
-export default GenderTable
+export default MemberTypeTable

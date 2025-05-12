@@ -12,49 +12,42 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import genderTableColumns, {
-    IGenderTableColumnProps,
-    genderGlobalSearchTargets,
+import memberClassificationColumns, {
+    IMemberClassificationTableColumnProps,
+    memberClassificationGlobalSearchTargets,
 } from './columns'
 
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import {
-    exportAll,
-    deleteMany,
-    exportSelected,
-} from '@/api-service/member-services/member-gender-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member-gender'
 
 import { TableProps } from '@/types'
-import { IMemberGender } from '@/types'
+import { IMemberClassification } from '@/types'
+import * as MemberClassificationService from '@/api-service/member-services/member-classification-service'
+import { useFilteredPaginatedMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
 
-export interface GenderTableProps
-    extends TableProps<IMemberGender>,
-        IGenderTableColumnProps {
-    toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberGender>,
-        | 'table'
-        | 'refreshActionProps'
-        | 'globalSearchProps'
-        | 'scrollableProps'
-        | 'filterLogicProps'
-        | 'exportActionProps'
-        | 'deleteActionProps'
-    >
-}
-
-const GenderTable = ({
+const MemberClassificationTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: GenderTableProps) => {
+}: TableProps<IMemberClassification> &
+    IMemberClassificationTableColumnProps & {
+        toolbarProps?: Omit<
+            IDataTableToolbarProps<IMemberClassification>,
+            | 'table'
+            | 'refreshActionProps'
+            | 'globalSearchProps'
+            | 'scrollableProps'
+            | 'filterLogicProps'
+            | 'exportActionProps'
+            | 'deleteActionProps'
+        >
+    }) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -62,7 +55,7 @@ const GenderTable = ({
 
     const columns = useMemo(
         () =>
-            genderTableColumns({
+            memberClassificationColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -78,7 +71,7 @@ const GenderTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberGender>({
+    } = useDataTableState<IMemberClassification>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -93,7 +86,7 @@ const GenderTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedGenders({
+    } = useFilteredPaginatedMemberClassifications({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -143,7 +136,7 @@ const GenderTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: genderGlobalSearchTargets,
+                        targets: memberClassificationGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -153,10 +146,15 @@ const GenderTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['gender', 'resource-query'],
+                                queryKey: [
+                                    'member-classification',
+                                    'resource-query',
+                                ],
                             }),
                         onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
+                            MemberClassificationService.deleteManyMemberClassifications(
+                                selectedData.map((data) => data.id)
+                            ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -164,11 +162,17 @@ const GenderTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll: exportAll,
+                        exportAll:
+                            MemberClassificationService.exportAllMemberClassifications,
+                        // exportAllFiltered: MemberClassificationService.exportAllFiltered,
                         exportCurrentPage: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            MemberClassificationService.exportSelectedMemberClassifications(
+                                ids.map((data) => data.id)
+                            ),
                         exportSelected: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            MemberClassificationService.exportSelectedMemberClassifications(
+                                ids.map((data) => data.id)
+                            ),
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
@@ -190,4 +194,4 @@ const GenderTable = ({
     )
 }
 
-export default GenderTable
+export default MemberClassificationTable

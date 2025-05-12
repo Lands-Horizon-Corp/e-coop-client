@@ -1,5 +1,5 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Form } from '@/components/ui/form'
@@ -12,68 +12,77 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
+import { IClassProps, IForm } from '@/types/components'
+import { IMemberTypeRequest, TEntityId } from '@/types'
 import {
-    useCreateGender,
-    useUpdateGender,
-} from '@/hooks/api-hooks/member/use-member-gender'
-import { createGenderSchema } from '@/validations/member/member-gender-schema'
+    useCreateMemberType,
+    useUpdateMemberType,
+} from '@/hooks/api-hooks/member/use-member-type'
+import { createMemberTypeSchema } from '@/validations/member/member-type-schema'
 
-import { IForm } from '@/types'
-import { IClassProps } from '@/types'
-import { IMemberGenderRequest, IMemberGender, TEntityId } from '@/types'
+type TMemberTypeForm = z.infer<typeof createMemberTypeSchema>
 
-type TGenderFormValues = z.infer<typeof createGenderSchema>
-
-export interface IMemberGenderFormProps
+export interface IMemberTypeCreateUpdateFormProps
     extends IClassProps,
-        IForm<Partial<IMemberGenderRequest>, IMemberGender, string> {
-    genderId?: TEntityId
+        IForm<Partial<IMemberTypeRequest>, unknown, string> {
+    memberTypeId?: TEntityId
 }
 
-const MemberGenderCreateUpdateForm = ({
-    genderId,
+const MemberTypeCreateUpdateForm = ({
+    memberTypeId,
     readOnly,
     className,
     defaultValues,
-    disabledFields,
     onError,
     onSuccess,
-}: IMemberGenderFormProps) => {
-    const form = useForm<TGenderFormValues>({
-        resolver: zodResolver(createGenderSchema),
+}: IMemberTypeCreateUpdateFormProps) => {
+    const isUpdateMode = Boolean(memberTypeId)
+
+    const form = useForm<TMemberTypeForm>({
+        resolver: zodResolver(createMemberTypeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
             name: '',
+            prefix: '',
             description: '',
             ...defaultValues,
         },
     })
 
-    const createMutation = useCreateGender({ onSuccess, onError })
-    const updateMutation = useUpdateGender({ onSuccess, onError })
+    // Create hook (for create mode)
+    const {
+        error: createError,
+        isPending: isCreating,
+        mutate: createMemberType,
+    } = useCreateMemberType({ onSuccess, onError })
 
-    const onSubmit = form.handleSubmit((formData) => {
-        if (genderId) {
-            updateMutation.mutate({ genderId, data: formData })
+    // Update hook (for update mode)
+    const {
+        error: updateError,
+        isPending: isUpdating,
+        mutate: updateMemberType,
+    } = useUpdateMemberType({ onSuccess, onError })
+
+    const onSubmit = (formData: TMemberTypeForm) => {
+        if (isUpdateMode && memberTypeId) {
+            updateMemberType({ memberTypeId, data: formData })
         } else {
-            createMutation.mutate(formData)
+            createMemberType(formData)
         }
-    })
+    }
 
-    const { error, isPending } = genderId ? updateMutation : createMutation
-
-    const isDisabled = (field: Path<TGenderFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    // Combine any errors from both operations
+    const combinedError = createError || updateError
 
     return (
         <Form {...form}>
             <form
-                onSubmit={onSubmit}
+                onSubmit={form.handleSubmit(onSubmit)}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isCreating || isUpdating || readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -85,9 +94,28 @@ const MemberGenderCreateUpdateForm = ({
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    placeholder="Gender Name"
-                                    autoComplete="gender-name"
-                                    disabled={isDisabled(field.name)}
+                                    placeholder="Member Type Name"
+                                    autoComplete="member-type-name"
+                                    disabled={
+                                        isCreating || isUpdating || readOnly
+                                    }
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="prefix"
+                            label="Prefix"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    placeholder="Prefix"
+                                    autoComplete="member-type-prefix"
+                                    disabled={
+                                        isCreating || isUpdating || readOnly
+                                    }
                                 />
                             )}
                         />
@@ -101,14 +129,18 @@ const MemberGenderCreateUpdateForm = ({
                                     {...field}
                                     id={field.name}
                                     placeholder="Description"
-                                    autoComplete="gender-description"
-                                    disabled={isDisabled(field.name)}
+                                    autoComplete="member-type-description"
+                                    disabled={
+                                        isCreating || isUpdating || readOnly
+                                    }
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
-                <FormErrorMessage errorMessage={error} />
+
+                <FormErrorMessage errorMessage={combinedError} />
+
                 <div>
                     <Separator className="my-2 sm:my-4" />
                     <div className="flex items-center justify-end gap-x-2">
@@ -122,12 +154,12 @@ const MemberGenderCreateUpdateForm = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPending}
+                            disabled={isCreating || isUpdating}
                             className="w-full self-end px-8 sm:w-fit"
                         >
-                            {isPending ? (
+                            {isCreating || isUpdating ? (
                                 <LoadingSpinner />
-                            ) : genderId ? (
+                            ) : isUpdateMode ? (
                                 'Update'
                             ) : (
                                 'Create'
@@ -140,14 +172,14 @@ const MemberGenderCreateUpdateForm = ({
     )
 }
 
-export const MemberGenderCreateUpdateFormModal = ({
-    title = 'Create Gender',
-    description = 'Fill out the form to add a new gender.',
+export const MemberTypeCreateUpdateFormModal = ({
+    title = 'Create Member Type',
+    description = 'Fill out the form to add a new member type.',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IMemberGenderFormProps, 'className'>
+    formProps?: Omit<IMemberTypeCreateUpdateFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -156,15 +188,9 @@ export const MemberGenderCreateUpdateFormModal = ({
             className={cn('', className)}
             {...props}
         >
-            <MemberGenderCreateUpdateForm
-                {...formProps}
-                onSuccess={(createdData) => {
-                    formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
-                }}
-            />
+            <MemberTypeCreateUpdateForm {...formProps} />
         </Modal>
     )
 }
 
-export default MemberGenderCreateUpdateForm
+export default MemberTypeCreateUpdateForm
