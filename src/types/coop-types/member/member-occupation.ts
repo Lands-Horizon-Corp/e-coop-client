@@ -8,8 +8,7 @@ export interface IMemberOccupationRequest {
     name: string
     description: string
 
-    branch_id: TEntityId
-    branch: IBranch
+    // branch_id: TEntityId
 }
 
 // LATEST FROM ERD

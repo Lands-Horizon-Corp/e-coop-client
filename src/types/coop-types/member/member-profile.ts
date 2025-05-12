@@ -24,6 +24,7 @@ import { IMemberAddressRequest } from './member-address'
 import { IMemberClassification } from './member-classification'
 import { IMemberCloseRemarkRequest } from './member-close-remark'
 import { IMemberContactReferenceRequest } from './member-contact-references'
+import { IPaginatedResult } from '../paginated-result'
 
 export interface IMemberProfileRequest {
     id?: TEntityId
@@ -150,6 +151,9 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
     // memberContactNumberReferences?: IMemberContactNumberReferences[]
 }
+
+export interface IMemberProfilePaginated
+    extends IPaginatedResult<IMemberProfile> {}
 
 export type IMemberProfilePicker = Pick<
     IMemberProfile,

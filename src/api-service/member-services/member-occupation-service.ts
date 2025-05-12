@@ -10,135 +10,152 @@ import {
     IMemberOccupationPaginated,
 } from '@/types'
 
-export default class MemberOccupationService {
-    private static readonly BASE_ENDPOINT = '/member-occupation'
+const BASE_ENDPOINT = '/member-occupation'
 
-    public static async getById(
-        id: TEntityId,
-        preloads?: string[]
-    ): Promise<IMemberOccupation> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberOccupationService.BASE_ENDPOINT}/${id}`,
-                query: { preloads },
+export const getMemberOccupationById = async (
+    id: TEntityId,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/${id}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IMemberOccupation>(url, {
+        headers: {
+            Authorization: `Bearer YOUR_TOKEN`,
+        },
+    })
+
+    return response.data
+}
+
+export const createMemberOccupation = async (
+    data: IMemberOccupationRequest,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.post<
+        IMemberOccupationRequest,
+        IMemberOccupation
+    >(url, data)
+    return response.data
+}
+
+export const updateMemberOccupation = async (
+    id: TEntityId,
+    data: IMemberOccupationRequest,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/${id}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.put<
+        IMemberOccupationRequest,
+        IMemberOccupation
+    >(url, data, {
+        headers: {
+            Authorization: `Bearer YOUR_TOKEN`,
+        },
+    })
+    return response.data
+}
+
+export const removeMemberOccupation = async (id: TEntityId) => {
+    const endpoint = `${BASE_ENDPOINT}/${id}`
+    await APIService.delete(endpoint)
+}
+
+export const getAllMemberOccupation = async ({
+    preloads,
+}: {
+    preloads?: string[]
+} = {}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}`,
+            query: {
+                preloads,
             },
-            { skipNull: true }
-        )
+        },
+        { skipNull: true }
+    )
 
-        const response = await APIService.get<IMemberOccupation>(url, {
-            headers: {
-                Authorization: `Bearer YOUR_TOKEN`,
+    const response = await APIService.get<IMemberOccupation[]>(url)
+    return response.data
+}
+
+export const getPaginatedMemberOccupation = async ({
+    filters,
+    preloads,
+    pagination,
+    sort,
+}: {
+    sort?: string
+    filters?: string
+    preloads?: string[]
+    pagination?: { pageIndex: number; pageSize: number }
+} = {}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/paginated`,
+            query: {
+                sort,
+                preloads,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
             },
-        })
+        },
+        { skipNull: true }
+    )
 
-        return response.data
+    const response = await APIService.get<IMemberOccupationPaginated>(url)
+    return response.data
+}
+
+export const exportAllMemberOccupation = async () => {
+    const url = `${BASE_ENDPOINT}/export`
+    await downloadFileService(url, 'all_member_occupations_export.csv')
+}
+
+export const exportAllFilteredMemberOccupation = async (filters?: string) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/export-search`,
+            query: { filters },
+        },
+        { skipNull: true }
+    )
+    await downloadFileService(url, 'filtered_member_occupations_export.csv')
+}
+
+export const exportSelectedMemberOccupation = async (ids: TEntityId[]) => {
+    if (ids.length === 0) {
+        throw new Error('No member occupation IDs provided for export.')
     }
+    const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
+    const url = `${BASE_ENDPOINT}/export-selected?${query}`
+    await downloadFileService(url, 'selected_member_occupations_export.csv')
+}
 
-    public static async create(
-        data: IMemberOccupationRequest,
-        preloads?: string[]
-    ): Promise<IMemberOccupation> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberOccupationService.BASE_ENDPOINT}`,
-                query: { preloads },
-            },
-            { skipNull: true }
-        )
-
-        const response = await APIService.post<
-            IMemberOccupationRequest,
-            IMemberOccupation
-        >(url, data)
-        return response.data
-    }
-
-    public static async update(
-        id: TEntityId,
-        data: IMemberOccupationRequest,
-        preloads?: string[]
-    ): Promise<IMemberOccupation> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberOccupationService.BASE_ENDPOINT}/${id}`,
-                query: { preloads },
-            },
-            { skipNull: true }
-        )
-
-        const response = await APIService.put<
-            IMemberOccupationRequest,
-            IMemberOccupation
-        >(url, data, {
-            headers: {
-                Authorization: `Bearer YOUR_TOKEN`,
-            },
-        })
-        return response.data
-    }
-
-    public static async delete(id: TEntityId): Promise<void> {
-        const endpoint = `${MemberOccupationService.BASE_ENDPOINT}/${id}`
-        await APIService.delete(endpoint)
-    }
-
-    public static async getMemberOccupations({
-        filters,
-        preloads,
-        pagination,
-        sort,
-    }: {
-        sort?: string
-        filters?: string
-        preloads?: string[]
-        pagination?: { pageIndex: number; pageSize: number }
-    } = {}): Promise<IMemberOccupationPaginated> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberOccupationService.BASE_ENDPOINT}`,
-                query: {
-                    sort,
-                    preloads,
-                    filter: filters,
-                    pageIndex: pagination?.pageIndex,
-                    pageSize: pagination?.pageSize,
-                },
-            },
-            { skipNull: true }
-        )
-
-        const response = await APIService.get<IMemberOccupationPaginated>(url)
-        return response.data
-    }
-
-    public static async exportAll(): Promise<void> {
-        const url = `${MemberOccupationService.BASE_ENDPOINT}/export`
-        await downloadFileService(url, 'all_member_occupations_export.csv')
-    }
-
-    public static async exportAllFiltered(filters?: string): Promise<void> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberOccupationService.BASE_ENDPOINT}/export-search`,
-                query: { filters },
-            },
-            { skipNull: true }
-        )
-        await downloadFileService(url, 'filtered_member_occupations_export.csv')
-    }
-
-    public static async exportSelected(ids: TEntityId[]): Promise<void> {
-        if (ids.length === 0) {
-            throw new Error('No member occupation IDs provided for export.')
-        }
-        const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-        const url = `${MemberOccupationService.BASE_ENDPOINT}/export-selected?${query}`
-        await downloadFileService(url, 'selected_member_occupations_export.csv')
-    }
-
-    public static async deleteMany(ids: TEntityId[]): Promise<void> {
-        const endpoint = `${MemberOccupationService.BASE_ENDPOINT}/bulk-delete`
-        const payload = { ids }
-        await APIService.delete<void>(endpoint, payload)
-    }
+export const deleteManyMemberOccupation = async (ids: TEntityId[]) => {
+    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
+    const payload = { ids }
+    await APIService.delete<void>(endpoint, payload)
 }

@@ -4,7 +4,7 @@ import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
 export interface IMemberTypeRequest {
     id?: TEntityId
-    branch_id: IBranch // IDK if this should be optional
+    branch_id?: IBranch // IDK if this should be optional and server auto add this?
 
     name: string
     prefix: string

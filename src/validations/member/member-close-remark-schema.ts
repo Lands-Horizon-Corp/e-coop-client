@@ -11,9 +11,9 @@ export const memberCloseRemarkSchema = z.object({
 })
 
 export const memberCreateCloseRemarkSchema = z.object({
-    membersProfileId: entityIdSchema,
+    member_profile_id: entityIdSchema,
+    reason: z.enum(AccountClosureReasons).default('Inactive Membership'),
     description: z.string().min(1, 'Description/Reason is required'),
-    category: z.enum(AccountClosureReasons).default('Inactive Membership'),
 })
 
 export const memberCreateCloseRemarksSchema = z.object({
