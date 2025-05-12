@@ -24,8 +24,9 @@ const settingsNavItems = [
     { name: 'General', path: '/account' },
     { name: 'Profile', path: '/account/profile' },
     { name: 'Security', path: '/account/security' },
-    { name: 'verify email', path: '/account/verify/email' },
-    { name: 'verify contact', path: '/account/verify/contact' },
+    { name: 'Verify Email', path: '/account/verify/email' },
+    { name: 'Verify Contact', path: '/account/verify/contact' },
+    { name: 'Account QR', path: '/account/qr' },
 ]
 
 const AccountSettingsSidebar = (prop: Props) => {

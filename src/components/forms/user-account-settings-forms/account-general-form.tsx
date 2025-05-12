@@ -18,6 +18,7 @@ import { userSettingsGeneralSchema } from '@/validations/user-settings'
 import { useUpdateUserSettingsGeneral } from '@/hooks/api-hooks/use-user-settings'
 
 import { IForm, IUserBase, IClassProps, TEntityId } from '@/types'
+import useActionSecurityStore from '@/store/action-security-store'
 
 type TAccountGeneralFormValues = z.infer<typeof userSettingsGeneralSchema>
 
@@ -53,8 +54,15 @@ const AccountGeneralForm = ({
         showMessage: true,
     })
 
+    const { onOpenSecurityAction } = useActionSecurityStore()
+
     const onSubmit = form.handleSubmit((formData) => {
-        updateMutation.mutate(formData)
+        onOpenSecurityAction({
+            title: 'Protected Action',
+            description:
+                'This action carries significant impact and requires your password for verification.',
+            onSuccess: () => updateMutation.mutate(formData),
+        })
     })
 
     const { error, isPending } = updateMutation

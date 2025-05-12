@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 import { userSettingsProfileSchema } from '@/validations/user-settings'
 import { useUpdateUserSettingsProfile } from '@/hooks/api-hooks/use-user-settings'
 import { IClassProps, IForm, IUserBase } from '@/types'
+import useActionSecurityStore from '@/store/action-security-store'
 
 type TAccountProfileFormValues = z.infer<typeof userSettingsProfileSchema>
 
@@ -48,8 +49,15 @@ const AccountProfileForm = ({
         showMessage: true,
     })
 
+    const { onOpenSecurityAction } = useActionSecurityStore()
+
     const onSubmit = form.handleSubmit((formData) => {
-        updateMutation.mutate(formData)
+        onOpenSecurityAction({
+            title: 'Protected Action',
+            description:
+                'This action carries significant impact and requires your password for verification.',
+            onSuccess: () => updateMutation.mutate(formData),
+        })
     })
 
     const { error, isPending } = updateMutation
