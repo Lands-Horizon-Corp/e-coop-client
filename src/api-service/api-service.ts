@@ -99,7 +99,7 @@ export default class APIService {
         params?: IRequestParams,
         config?: AxiosRequestConfig
     ): Promise<AxiosResponse<R>> {
-        return APIService.httpClient.put<R>(url, formData, {
+        return APIService.httpClient.post<R>(url, formData, {
             params,
             headers: {
                 'Content-Type': 'multipart/form-data',

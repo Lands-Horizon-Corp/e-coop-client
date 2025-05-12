@@ -13,7 +13,7 @@ export const uploadMedia = async (
     formData.append('file', file)
 
     const response = await APIService.uploadFile<IMedia>(
-        `${BASE_ENDPOINT}/upload`,
+        `${BASE_ENDPOINT}`,
         formData,
         {},
         {
