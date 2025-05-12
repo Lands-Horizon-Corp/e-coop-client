@@ -5,147 +5,165 @@ import { downloadFileService } from '@/helpers'
 
 import {
     TEntityId,
-    IMemberClassificationRequest,
     IMemberClassification,
+    IMemberClassificationRequest,
     IMemberClassificationPaginated,
 } from '@/types'
 
-export default class MemberClassificationService {
-    private static readonly BASE_ENDPOINT = '/member-classification'
+const BASE_ENDPOINT = '/member-classification'
 
-    public static async getById(
-        id: TEntityId,
-        preloads?: string[]
-    ): Promise<IMemberClassification> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberClassificationService.BASE_ENDPOINT}/${id}`,
-                query: { preloads },
+export const getMemberClassificationById = async (
+    id: TEntityId,
+    preloads?: string[]
+): Promise<IMemberClassification> => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/${id}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IMemberClassification>(url, {
+        headers: {
+            Authorization: `Bearer YOUR_TOKEN`, // Replace if needed
+        },
+    })
+    return response.data
+}
+
+export const createMemberClassification = async (
+    data: IMemberClassificationRequest,
+    preloads?: string[]
+): Promise<IMemberClassification> => {
+    const url = qs.stringifyUrl(
+        {
+            url: BASE_ENDPOINT,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.post<
+        IMemberClassificationRequest,
+        IMemberClassification
+    >(url, data)
+    return response.data
+}
+
+export const updateMemberClassification = async (
+    id: TEntityId,
+    data: IMemberClassificationRequest,
+    preloads?: string[]
+): Promise<IMemberClassification> => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/${id}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.put<
+        IMemberClassificationRequest,
+        IMemberClassification
+    >(url, data, {
+        headers: {
+            Authorization: `Bearer YOUR_TOKEN`, // Replace if needed
+        },
+    })
+    return response.data
+}
+
+export const deleteMemberClassification = async (
+    id: TEntityId
+): Promise<void> => {
+    const endpoint = `${BASE_ENDPOINT}/${id}`
+    await APIService.delete(endpoint)
+}
+
+export const getMemberClassifications = async ({
+    preloads,
+}: {
+    preloads?: string[]
+} = {}): Promise<IMemberClassification[]> => {
+    const url = qs.stringifyUrl(
+        {
+            url: BASE_ENDPOINT,
+            query: {
+                preloads,
             },
-            { skipNull: true }
-        )
+        },
+        { skipNull: true }
+    )
 
-        const response = await APIService.get<IMemberClassification>(url, {
-            headers: {
-                Authorization: `Bearer YOUR_TOKEN`,
+    const response = await APIService.get<IMemberClassification[]>(url)
+    return response.data
+}
+
+export const getPaginatedMemberClassifications = async ({
+    sort,
+    filters,
+    preloads,
+    pagination,
+}: {
+    sort?: string
+    filters?: string
+    preloads?: string[]
+    pagination?: { pageIndex: number; pageSize: number }
+} = {}): Promise<IMemberClassificationPaginated> => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/paginated`,
+            query: {
+                sort,
+                preloads,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
             },
-        })
+        },
+        { skipNull: true }
+    )
 
-        return response.data
+    const response = await APIService.get<IMemberClassificationPaginated>(url)
+    return response.data
+}
+
+export const exportAllMemberClassifications = async (): Promise<void> => {
+    const url = `${BASE_ENDPOINT}/export`
+    await downloadFileService(url, 'all_member_classifications_export.csv')
+}
+
+export const exportFilteredMemberClassifications = async (
+    filters?: string
+): Promise<void> => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/export-search`,
+            query: { filters },
+        },
+        { skipNull: true }
+    )
+    await downloadFileService(url, 'filtered_member_classifications_export.csv')
+}
+
+export const exportSelectedMemberClassifications = async (
+    ids: TEntityId[]
+): Promise<void> => {
+    if (ids.length === 0) {
+        throw new Error('No member classification IDs provided for export.')
     }
 
-    public static async create(
-        data: IMemberClassificationRequest,
-        preloads?: string[]
-    ): Promise<IMemberClassification> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberClassificationService.BASE_ENDPOINT}`,
-                query: { preloads },
-            },
-            { skipNull: true }
-        )
+    const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
+    const url = `${BASE_ENDPOINT}/export-selected?${query}`
 
-        const response = await APIService.post<
-            IMemberClassificationRequest,
-            IMemberClassification
-        >(url, data)
-        return response.data
-    }
+    await downloadFileService(url, 'selected_member_classifications_export.csv')
+}
 
-    public static async update(
-        id: TEntityId,
-        data: IMemberClassificationRequest,
-        preloads?: string[]
-    ): Promise<IMemberClassification> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberClassificationService.BASE_ENDPOINT}/${id}`,
-                query: { preloads },
-            },
-            { skipNull: true }
-        )
-
-        const response = await APIService.put<
-            IMemberClassificationRequest,
-            IMemberClassification
-        >(url, data, {
-            headers: {
-                Authorization: `Bearer YOUR_TOKEN`,
-            },
-        })
-        return response.data
-    }
-
-    public static async delete(id: TEntityId): Promise<void> {
-        const endpoint = `${MemberClassificationService.BASE_ENDPOINT}/${id}`
-        await APIService.delete(endpoint)
-    }
-
-    public static async getMemberClassifications({
-        filters,
-        preloads,
-        pagination,
-        sort,
-    }: {
-        sort?: string
-        filters?: string
-        preloads?: string[]
-        pagination?: { pageIndex: number; pageSize: number }
-    } = {}): Promise<IMemberClassificationPaginated> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberClassificationService.BASE_ENDPOINT}`,
-                query: {
-                    sort,
-                    preloads,
-                    filter: filters,
-                    pageIndex: pagination?.pageIndex,
-                    pageSize: pagination?.pageSize,
-                },
-            },
-            { skipNull: true }
-        )
-
-        const response =
-            await APIService.get<IMemberClassificationPaginated>(url)
-        return response.data
-    }
-
-    public static async exportAll(): Promise<void> {
-        const url = `${MemberClassificationService.BASE_ENDPOINT}/export`
-        await downloadFileService(url, 'all_member_classifications_export.csv')
-    }
-
-    public static async exportAllFiltered(filters?: string): Promise<void> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberClassificationService.BASE_ENDPOINT}/export-search`,
-                query: { filters },
-            },
-            { skipNull: true }
-        )
-        await downloadFileService(
-            url,
-            'filtered_member_classifications_export.csv'
-        )
-    }
-
-    public static async exportSelected(ids: TEntityId[]): Promise<void> {
-        if (ids.length === 0) {
-            throw new Error('No member classification IDs provided for export.')
-        }
-        const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-        const url = `${MemberClassificationService.BASE_ENDPOINT}/export-selected?${query}`
-        await downloadFileService(
-            url,
-            'selected_member_classifications_export.csv'
-        )
-    }
-
-    public static async deleteMany(ids: TEntityId[]): Promise<void> {
-        const endpoint = `${MemberClassificationService.BASE_ENDPOINT}/bulk-delete`
-        const payload = { ids }
-        await APIService.delete<void>(endpoint, payload)
-    }
+export const deleteManyMemberClassifications = async (
+    ids: TEntityId[]
+): Promise<void> => {
+    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
+    await APIService.delete<void>(endpoint, { ids })
 }

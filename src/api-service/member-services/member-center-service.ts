@@ -1,4 +1,4 @@
-// services/member-type-service.ts
+// services/member-center-service.ts
 import qs from 'query-string'
 
 import APIService from '../api-service'
@@ -11,112 +11,124 @@ import {
     IMemberCenterPaginated,
 } from '@/types'
 
-export default class MemberCenterService {
-    private static readonly BASE_ENDPOINT = '/member-type'
+const BASE_ENDPOINT = '/member-type'
 
-    public static async getById(
-        id: TEntityId,
-        preloads?: string[]
-    ): Promise<IMemberCenter> {
-        const url = qs.stringifyUrl({
-            url: `${MemberCenterService.BASE_ENDPOINT}/${id}`,
+export const getMemberCenterById = async (
+    id: TEntityId,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}`,
+        query: { preloads },
+    })
+
+    const response = await APIService.get<IMemberCenter>(url)
+    return response.data
+}
+
+export const createMemberCenter = async (
+    data: IMemberCenterRequest,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: BASE_ENDPOINT,
             query: { preloads },
-        })
+        },
+        { skipNull: true }
+    )
 
-        const response = await APIService.get<IMemberCenter>(url)
-        return response.data
-    }
+    const response = await APIService.post<IMemberCenterRequest, IMemberCenter>(
+        url,
+        data
+    )
+    return response.data
+}
 
-    public static async create(
-        data: IMemberCenterRequest,
-        preloads?: string[]
-    ) {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberCenterService.BASE_ENDPOINT}`,
-                query: { preloads },
-            },
-            { skipNull: true }
-        )
+export const deleteMemberCenter = async (id: TEntityId) => {
+    const endpoint = `${BASE_ENDPOINT}/${id}`
+    await APIService.delete<void>(endpoint)
+}
 
-        return (
-            await APIService.post<IMemberCenterRequest, IMemberCenter>(
-                url,
-                data
-            )
-        ).data
-    }
+export const updateMemberCenter = async (
+    id: TEntityId,
+    data: IMemberCenterRequest,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}`,
+        query: { preloads },
+    })
 
-    public static async delete(id: TEntityId): Promise<void> {
-        const endpoint = `${MemberCenterService.BASE_ENDPOINT}/${id}`
-        await APIService.delete<void>(endpoint)
-    }
+    const response = await APIService.put<IMemberCenterRequest, IMemberCenter>(
+        url,
+        data
+    )
+    return response.data
+}
 
-    public static async update(
-        id: TEntityId,
-        data: IMemberCenterRequest,
-        preloads?: string[]
-    ): Promise<IMemberCenter> {
-        const url = qs.stringifyUrl({
-            url: `${MemberCenterService.BASE_ENDPOINT}/${id}`,
+// ✅ Corrected: getAll should only support preloads
+export const getAllMemberCenters = async (preloads?: string[]) => {
+    const url = qs.stringifyUrl(
+        {
+            url: BASE_ENDPOINT,
             query: { preloads },
-        })
+        },
+        { skipNull: true }
+    )
 
-        const response = await APIService.put<
-            IMemberCenterRequest,
-            IMemberCenter
-        >(url, data)
-        return response.data
-    }
+    const response = await APIService.get<IMemberCenter[]>(url)
+    return response.data
+}
 
-    public static async getMemberCenters(props?: {
-        sort?: string
-        filters?: string
-        preloads?: string[]
-        pagination?: { pageIndex: number; pageSize: number }
-    }) {
-        const { filters, preloads, pagination, sort } = props || {}
+export const getPaginatedMemberCenters = async (props?: {
+    sort?: string
+    filters?: string
+    preloads?: string[]
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const { filters, preloads, pagination, sort } = props || {}
 
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberCenterService.BASE_ENDPOINT}`,
-                query: {
-                    sort,
-                    preloads,
-                    filter: filters,
-                    pageIndex: pagination?.pageIndex,
-                    pageSize: pagination?.pageSize,
-                },
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/paginated`,
+            query: {
+                sort,
+                preloads,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
             },
-            { skipNull: true }
-        )
+        },
+        { skipNull: true }
+    )
 
-        const response = await APIService.get<IMemberCenterPaginated>(url)
-        return response.data
+    const response = await APIService.get<IMemberCenterPaginated>(url)
+    return response.data
+}
+
+export const exportAllMemberCenters = async () => {
+    const url = `${BASE_ENDPOINT}/export`
+    await downloadFileService(url, 'all_member_types_export.csv')
+}
+
+export const exportSelectedMemberCenters = async (ids: TEntityId[]) => {
+    if (ids.length === 0) {
+        throw new Error('No member type IDs provided for export.')
     }
 
-    public static async exportAll(): Promise<void> {
-        const url = `${MemberCenterService.BASE_ENDPOINT}/export`
-        await downloadFileService(url, 'all_member_types_export.csv')
-    }
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/export-selected`,
+            query: { ids },
+        },
+        { skipNull: true }
+    )
 
-    public static async exportSelected(ids: TEntityId[]): Promise<void> {
-        if (ids.length === 0) {
-            throw new Error('No member type IDs provided for export.')
-        }
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberCenterService.BASE_ENDPOINT}/export-selected`,
-                query: { ids },
-            },
-            { skipNull: true }
-        )
+    await downloadFileService(url, 'selected_member_types_export.csv')
+}
 
-        await downloadFileService(url, 'selected_member_types_export.csv')
-    }
-
-    public static async deleteMany(ids: TEntityId[]): Promise<void> {
-        const endpoint = `${MemberCenterService.BASE_ENDPOINT}/bulk-delete`
-        await APIService.delete<void>(endpoint, { ids })
-    }
+export const deleteManyMemberCenters = async (ids: TEntityId[]) => {
+    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
+    await APIService.delete<void>(endpoint, { ids })
 }
