@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as AuthService from '@/api-service/auth-service'
+import * as AuthService from '@/api-service/security-services/auth-service'
 
 import {
     IUserBase,

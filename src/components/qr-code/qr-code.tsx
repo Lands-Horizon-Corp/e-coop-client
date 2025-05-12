@@ -13,6 +13,8 @@ export interface IQrCodeProps extends IClassProps {
 
 const QrCode = forwardRef<HTMLDivElement, IQrCodeProps>(
     ({ value, className }, qrRef) => {
+        if (!value) return
+
         return (
             <div
                 ref={qrRef}
