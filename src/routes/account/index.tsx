@@ -1,6 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { Label } from '@/components/ui/label'
+import AccountProfilePicture from '@/components/account-settings/account-profile-picture'
 import AccountGeneralForm from '@/components/forms/user-account-settings-forms/account-general-form'
+
 import { useAuthUser } from '@/store/user-auth-store'
 
 export const Route = createFileRoute('/account/')({
@@ -13,7 +16,11 @@ function RouteComponent() {
     } = useAuthUser()
 
     return (
-        <div>
+        <div className="space-y-4">
+            <div>
+                <Label>Profile Photo</Label>
+                <AccountProfilePicture user={user} />
+            </div>
             <AccountGeneralForm defaultValues={user} />
         </div>
     )

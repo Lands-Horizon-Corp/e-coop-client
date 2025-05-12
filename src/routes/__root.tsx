@@ -10,6 +10,7 @@ import ConfirmModal from '@/components/modals/confirm-modal'
 import ConnectionProvider from '@/providers/connection-provider'
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
 import { useNatsConnect } from '@/hooks/use-pubsub'
+import { ActionSecurityProvider } from '@/providers/action-security-provider'
 
 export const Route = createRootRoute({
     component: RootLayout,
@@ -50,6 +51,7 @@ function RootLayout() {
             <ImagePreviewModal />
             <ConfirmModal />
             <TanStackRouterDevtools />
+            <ActionSecurityProvider />
         </div>
     )
 }
