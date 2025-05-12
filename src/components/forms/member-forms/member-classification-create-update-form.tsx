@@ -1,5 +1,5 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Form } from '@/components/ui/form'
@@ -12,35 +12,44 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
+import { IForm } from '@/types/components'
 import {
-    useCreateGender,
-    useUpdateGender,
-} from '@/hooks/api-hooks/member/use-member-gender'
-import { createGenderSchema } from '@/validations/member/member-gender-schema'
+    useCreateMemberClassification,
+    useUpdateMemberClassification,
+} from '@/hooks/api-hooks/member/use-member-classification'
+import { memberClassificationSchema } from '@/validations/member/member-classification'
 
-import { IForm } from '@/types'
-import { IClassProps } from '@/types'
-import { IMemberGenderRequest, IMemberGender, TEntityId } from '@/types'
+import {
+    TEntityId,
+    IClassProps,
+    IMemberClassification,
+    IMemberClassificationRequest,
+} from '@/types'
 
-type TGenderFormValues = z.infer<typeof createGenderSchema>
+type TMemberClassificationForm = z.infer<typeof memberClassificationSchema>
 
-export interface IMemberGenderFormProps
+export interface IMemberClassificationCreateUpdateFormProps
     extends IClassProps,
-        IForm<Partial<IMemberGenderRequest>, IMemberGender, string> {
-    genderId?: TEntityId
+        IForm<
+            Partial<IMemberClassificationRequest>,
+            IMemberClassification,
+            string
+        > {
+    memberClassificationId?: TEntityId
 }
 
-const MemberGenderCreateUpdateForm = ({
-    genderId,
+const MemberClassificationCreateUpdateForm = ({
     readOnly,
     className,
     defaultValues,
-    disabledFields,
+    memberClassificationId,
     onError,
     onSuccess,
-}: IMemberGenderFormProps) => {
-    const form = useForm<TGenderFormValues>({
-        resolver: zodResolver(createGenderSchema),
+}: IMemberClassificationCreateUpdateFormProps) => {
+    const isUpdateMode = Boolean(memberClassificationId)
+
+    const form = useForm<TMemberClassificationForm>({
+        resolver: zodResolver(memberClassificationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -50,44 +59,53 @@ const MemberGenderCreateUpdateForm = ({
         },
     })
 
-    const createMutation = useCreateGender({ onSuccess, onError })
-    const updateMutation = useUpdateGender({ onSuccess, onError })
+    const {
+        error: createError,
+        isPending: isCreating,
+        mutate: createMemberClassification,
+    } = useCreateMemberClassification({ onSuccess, onError })
 
-    const onSubmit = form.handleSubmit((formData) => {
-        if (genderId) {
-            updateMutation.mutate({ genderId, data: formData })
+    const {
+        error: updateError,
+        isPending: isUpdating,
+        mutate: updateMemberClassification,
+    } = useUpdateMemberClassification({ onSuccess, onError })
+
+    const onSubmit = (formData: TMemberClassificationForm) => {
+        if (isUpdateMode && memberClassificationId) {
+            updateMemberClassification({
+                classificationId: memberClassificationId,
+                data: formData,
+            })
         } else {
-            createMutation.mutate(formData)
+            createMemberClassification(formData)
         }
-    })
+    }
 
-    const { error, isPending } = genderId ? updateMutation : createMutation
-
-    const isDisabled = (field: Path<TGenderFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const combinedError = createError || updateError
 
     return (
         <Form {...form}>
             <form
-                onSubmit={onSubmit}
+                onSubmit={form.handleSubmit(onSubmit)}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isCreating || isUpdating || readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
                             name="name"
-                            label="Name"
+                            label="Name *"
                             render={({ field }) => (
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    placeholder="Gender Name"
-                                    autoComplete="gender-name"
-                                    disabled={isDisabled(field.name)}
+                                    placeholder="Member Classification Name"
+                                    autoComplete="member-classification-name"
+                                    disabled={isCreating || isUpdating}
                                 />
                             )}
                         />
@@ -100,15 +118,17 @@ const MemberGenderCreateUpdateForm = ({
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    placeholder="Description"
-                                    autoComplete="gender-description"
-                                    disabled={isDisabled(field.name)}
+                                    placeholder="Description *"
+                                    autoComplete="member-classification-description"
+                                    disabled={isCreating || isUpdating}
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
-                <FormErrorMessage errorMessage={error} />
+
+                <FormErrorMessage errorMessage={combinedError} />
+
                 <div>
                     <Separator className="my-2 sm:my-4" />
                     <div className="flex items-center justify-end gap-x-2">
@@ -122,12 +142,12 @@ const MemberGenderCreateUpdateForm = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPending}
+                            disabled={isCreating || isUpdating}
                             className="w-full self-end px-8 sm:w-fit"
                         >
-                            {isPending ? (
+                            {isCreating || isUpdating ? (
                                 <LoadingSpinner />
-                            ) : genderId ? (
+                            ) : isUpdateMode ? (
                                 'Update'
                             ) : (
                                 'Create'
@@ -140,14 +160,14 @@ const MemberGenderCreateUpdateForm = ({
     )
 }
 
-export const MemberGenderCreateUpdateFormModal = ({
-    title = 'Create Gender',
-    description = 'Fill out the form to add a new gender.',
+export const MemberClassificationCreateUpdateFormModal = ({
+    title = 'Create Member Classification',
+    description = 'Fill out the form to add a new member classification.',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IMemberGenderFormProps, 'className'>
+    formProps?: Omit<IMemberClassificationCreateUpdateFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -156,15 +176,9 @@ export const MemberGenderCreateUpdateFormModal = ({
             className={cn('', className)}
             {...props}
         >
-            <MemberGenderCreateUpdateForm
-                {...formProps}
-                onSuccess={(createdData) => {
-                    formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
-                }}
-            />
+            <MemberClassificationCreateUpdateForm {...formProps} />
         </Modal>
     )
 }
 
-export default MemberGenderCreateUpdateForm
+export default MemberClassificationCreateUpdateForm

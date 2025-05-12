@@ -17,7 +17,7 @@ import { PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { TFilterObject } from '@/contexts/filter-context'
 import { IMemberGender, TEntityId } from '@/types'
 
-import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-memer-gender'
+import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member-gender'
 import {
     IMemberGenderFormProps,
     MemberGenderCreateUpdateFormModal,

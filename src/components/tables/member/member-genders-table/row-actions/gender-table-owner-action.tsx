@@ -3,7 +3,7 @@ import { IGenderTableActionComponentProp } from '../columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useDeleteGender } from '@/hooks/api-hooks/member/use-memer-gender'
+import { useDeleteGender } from '@/hooks/api-hooks/member/use-member-gender'
 import { MemberGenderCreateUpdateFormModal } from '@/components/forms/member-forms/member-gender-create-update-form'
 
 interface IGenderTableActionProps extends IGenderTableActionComponentProp {

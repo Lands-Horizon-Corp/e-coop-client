@@ -4,7 +4,6 @@ import {
     getSortedRowModel,
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
 import DataTableToolbar, {
@@ -12,32 +11,28 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import genderTableColumns, {
-    IGenderTableColumnProps,
-    genderGlobalSearchTargets,
+import footstepColumns, {
+    IFootstepTableColumnProps,
+    footstepGlobalSearchTargets,
 } from './columns'
 
 import { cn } from '@/lib'
+import { TableProps } from '@/types'
+import { IFootstep } from '@/types'
+import * as FootstepService from '@/api-service/footstep-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import {
-    exportAll,
-    deleteMany,
-    exportSelected,
-} from '@/api-service/member-services/member-gender-service'
-import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import { useFilteredPaginatedFootsteps } from '@/hooks/api-hooks/use-footstep'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member-gender'
 
-import { TableProps } from '@/types'
-import { IMemberGender } from '@/types'
-
-export interface GenderTableProps
-    extends TableProps<IMemberGender>,
-        IGenderTableColumnProps {
+export interface FootstepTableProps
+    extends TableProps<IFootstep>,
+        IFootstepTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberGender>,
+        IDataTableToolbarProps<IFootstep>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -46,23 +41,24 @@ export interface GenderTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
+    mode?: 'self' | 'team'
 }
 
-const GenderTable = ({
+const FootstepTable = ({
+    mode,
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: GenderTableProps) => {
-    const queryClient = useQueryClient()
+}: FootstepTableProps) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            genderTableColumns({
+            footstepColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -78,7 +74,7 @@ const GenderTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberGender>({
+    } = useDataTableState<IFootstep>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -93,7 +89,8 @@ const GenderTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedGenders({
+    } = useFilteredPaginatedFootsteps({
+        mode,
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -143,20 +140,12 @@ const GenderTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: genderGlobalSearchTargets,
+                        targets: footstepGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
-                    }}
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['gender', 'resource-query'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -164,11 +153,16 @@ const GenderTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll: exportAll,
+                        exportAll: FootstepService.exportAll,
+                        exportAllFiltered: FootstepService.exportAllFiltered,
                         exportCurrentPage: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            FootstepService.exportSelected(
+                                ids.map((data) => data.id)
+                            ),
                         exportSelected: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                            FootstepService.exportSelected(
+                                ids.map((data) => data.id)
+                            ),
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
@@ -180,9 +174,9 @@ const GenderTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
-                    className="mb-2"
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
+                    className="mb-2"
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
@@ -190,4 +184,4 @@ const GenderTable = ({
     )
 }
 
-export default GenderTable
+export default FootstepTable
