@@ -8,12 +8,12 @@ import {
     IUserSettingsPhotoUpdateRequest,
 } from '@/types'
 
-const BASE_ENDPOINT = '/settings'
+const BASE_ENDPOINT = '/profile'
 
 export const updateUserSettingsGeneral = async (
     data: IUserSettingsGeneralRequest
 ) => {
-    const res = await APIService.patch<IUserSettingsGeneralRequest, IUserBase>(
+    const res = await APIService.put<IUserSettingsGeneralRequest, IUserBase>(
         `${BASE_ENDPOINT}/general`,
         data
     )
@@ -23,7 +23,7 @@ export const updateUserSettingsGeneral = async (
 export const updateUserSettingsProfile = async (
     data: IUserSettingsProfileRequest
 ) => {
-    const res = await APIService.patch<IUserSettingsProfileRequest, IUserBase>(
+    const res = await APIService.put<IUserSettingsProfileRequest, IUserBase>(
         `${BASE_ENDPOINT}/profile`,
         data
     )
@@ -33,7 +33,7 @@ export const updateUserSettingsProfile = async (
 export const updateUserSettingsSecurity = async (
     data: IUserSettingsSecurityRequest
 ) => {
-    const res = await APIService.patch<IUserSettingsSecurityRequest, IUserBase>(
+    const res = await APIService.put<IUserSettingsSecurityRequest, IUserBase>(
         `${BASE_ENDPOINT}/security`,
         data
     )
@@ -43,9 +43,9 @@ export const updateUserSettingsSecurity = async (
 export const updateUserSettingsPhoto = async (
     data: IUserSettingsPhotoUpdateRequest
 ) => {
-    const res = await APIService.patch<
+    const res = await APIService.put<
         IUserSettingsPhotoUpdateRequest,
         IUserBase
-    >(`${BASE_ENDPOINT}/photo`, data)
+    >(`${BASE_ENDPOINT}/profile-picture`, data)
     return res.data
 }
