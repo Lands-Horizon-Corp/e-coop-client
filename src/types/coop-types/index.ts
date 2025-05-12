@@ -51,4 +51,4 @@ export * from './footstep'
 export * from './timesheet'
 export * from './paginated-result'
 
-export * from './qr-crypto-type'
+export * from '../qr-crypto-type'
