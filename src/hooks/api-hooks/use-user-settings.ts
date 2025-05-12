@@ -12,9 +12,9 @@ import { serverRequestErrExtractor } from '@/helpers'
 
 import {
     IAPIHook,
+    IUserBase,
     IMutationProps,
     IUserSettingsGeneralRequest,
-    IUserBase,
     IUserSettingsProfileRequest,
     IUserSettingsSecurityRequest,
     IUserSettingsPhotoUpdateRequest,
@@ -69,6 +69,7 @@ export const useUpdateUserSettingsProfile = ({
         },
     })
 }
+
 export const useUpdateUserSettingsSecurity = ({
     onError,
     onSuccess,
