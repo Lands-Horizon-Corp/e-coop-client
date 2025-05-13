@@ -22,10 +22,7 @@ import { cn } from '@/lib'
 import { IUserBase } from '@/types'
 import { otpSchema } from '@/validations'
 import UseCooldown from '@/hooks/use-cooldown'
-import {
-    useSendUserContactOTPVerification,
-    useVerify,
-} from '@/hooks/api-hooks/use-auth'
+import { useOTPVerification, useVerify } from '@/hooks/api-hooks/use-auth'
 import { BadgeQuestionFillIcon } from '@/components/icons'
 
 type TVerifyMode = 'email' | 'mobile'
@@ -157,7 +154,7 @@ const ResendCode = ({
     })
 
     const { mutate: resendOtpVerification, isPending: isResending } =
-        useSendUserContactOTPVerification({
+        useOTPVerification({
             verifyMode,
             onSuccess: () => startCooldown(),
         })

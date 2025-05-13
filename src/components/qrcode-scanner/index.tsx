@@ -54,9 +54,8 @@ const QrCodeScanner = <TData, TErr = string>({
                         return err
                     },
                 })
-
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (e) {
+                console.log(e)
                 toast.error('Invalid QR')
                 onErrorDecode?.('Invalid QR code content' as TErr)
             }

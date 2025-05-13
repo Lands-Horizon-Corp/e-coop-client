@@ -3,7 +3,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib'
 import UseCooldown from '@/hooks/use-cooldown'
-import { useSendUserContactOTPVerification } from '@/hooks/api-hooks/use-auth'
+import { useOTPVerification } from '@/hooks/api-hooks/use-auth'
 
 interface Props {
     verifyMode: 'email' | 'mobile'
@@ -22,7 +22,7 @@ const ResendVerifyContactButton = ({
     })
 
     const { mutate: resendOtpVerification, isPending: isResending } =
-        useSendUserContactOTPVerification({
+        useOTPVerification({
             verifyMode,
             onSuccess: () => {
                 startCooldown()

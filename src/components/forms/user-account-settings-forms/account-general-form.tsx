@@ -19,6 +19,7 @@ import { useUpdateUserSettingsGeneral } from '@/hooks/api-hooks/use-user-setting
 
 import { IForm, IUserBase, IClassProps, TEntityId } from '@/types'
 import useActionSecurityStore from '@/store/action-security-store'
+import { useEffect } from 'react'
 
 type TAccountGeneralFormValues = z.infer<typeof userSettingsGeneralSchema>
 
@@ -48,9 +49,16 @@ const AccountGeneralForm = ({
         },
     })
 
-    const updateMutation = useUpdateUserSettingsGeneral({
+    const {
+        mutate: update,
+        error,
+        isPending,
+    } = useUpdateUserSettingsGeneral({
         onError,
-        onSuccess,
+        onSuccess: (userData) => {
+            form.reset(defaultValues)
+            onSuccess?.(userData)
+        },
         showMessage: true,
     })
 
@@ -61,14 +69,16 @@ const AccountGeneralForm = ({
             title: 'Protected Action',
             description:
                 'This action carries significant impact and requires your password for verification.',
-            onSuccess: () => updateMutation.mutate(formData),
+            onSuccess: () => update(formData),
         })
     })
 
-    const { error, isPending } = updateMutation
-
     const isDisabled = (field: Path<TAccountGeneralFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    useEffect(() => {
+        form.reset(defaultValues)
+    }, [defaultValues, form])
 
     return (
         <Form {...form}>
