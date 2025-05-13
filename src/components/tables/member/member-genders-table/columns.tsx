@@ -19,16 +19,18 @@ export const genderGlobalSearchTargets: IGlobalSearchTargets<IMemberGender>[] =
         { field: 'description', displayText: 'Description' },
     ]
 
-export interface IGenderTableActionComponentProp {
+export interface IMemberGenderTableActionComponentProp {
     row: Row<IMemberGender>
 }
 
-export interface IGenderTableColumnProps {
-    actionComponent?: (props: IGenderTableActionComponentProp) => ReactNode
+export interface IMemberGenderTableColumnProps {
+    actionComponent?: (
+        props: IMemberGenderTableActionComponentProp
+    ) => ReactNode
 }
 
-const genderTableColumns = (
-    opts?: IGenderTableColumnProps
+const MemberGenderTableColumns = (
+    opts?: IMemberGenderTableColumnProps
 ): ColumnDef<IMemberGender>[] => {
     return [
         {
@@ -138,4 +140,4 @@ const genderTableColumns = (
     ]
 }
 
-export default genderTableColumns
+export default MemberGenderTableColumns

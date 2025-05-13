@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { IGenderTableActionComponentProp } from '../columns'
+import { IMemberGenderTableActionComponentProp } from '../columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteGender } from '@/hooks/api-hooks/member/use-member-gender'
 import { MemberGenderCreateUpdateFormModal } from '@/components/forms/member-forms/member-gender-create-update-form'
 
-interface IGenderTableActionProps extends IGenderTableActionComponentProp {
+interface IMemberGenderTableActionProps
+    extends IMemberGenderTableActionComponentProp {
     onGenderUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const GenderTableOwnerAction = ({
+const MemberGenderTableOwnerAction = ({
     row,
     onDeleteSuccess,
-}: IGenderTableActionProps) => {
+}: IMemberGenderTableActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
     const gender = row.original
 
@@ -63,4 +64,4 @@ const GenderTableOwnerAction = ({
     )
 }
 
-export default GenderTableOwnerAction
+export default MemberGenderTableOwnerAction

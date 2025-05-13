@@ -1,3 +1,4 @@
+import { TUserType } from '@/types'
 import { IconType } from 'react-icons/lib'
 
 export type TNavItemType = 'dropdown' | 'item'
@@ -8,6 +9,9 @@ export interface INavItemBase {
     depth?: number
     isSub?: boolean
     icon?: IconType
+    userType: TUserType[]
+    shortDescription?: string
+    longDescription?: string
 }
 
 export interface INavItemSingle extends INavItemBase {
@@ -23,6 +27,7 @@ export type INavItem = INavItemDropdown | INavItemSingle
 
 export interface INavGroupItem {
     title: string
+    userType: TUserType[]
     navItems: INavItem[]
 }
 
