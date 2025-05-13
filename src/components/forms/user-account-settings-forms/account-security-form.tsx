@@ -20,6 +20,7 @@ import { userSettingsSecuritySchema } from '@/validations/user-settings'
 import { useUpdateUserSettingsSecurity } from '@/hooks/api-hooks/use-user-settings'
 
 import { IClassProps, IForm, IUserBase } from '@/types'
+import { useEffect } from 'react'
 
 type TAccountSecurityFormValues = z.infer<typeof userSettingsSecuritySchema>
 
@@ -49,7 +50,9 @@ const AccountSecurityForm = ({
 
     const updateMutation = useUpdateUserSettingsSecurity({
         onError,
-        onSuccess,
+        onSuccess: (newUserData) => {
+            onSuccess?.(newUserData)
+        },
         showMessage: true,
     })
 
@@ -61,6 +64,10 @@ const AccountSecurityForm = ({
 
     const isDisabled = (field: Path<TAccountSecurityFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    useEffect(() => {
+        form.reset(defaultValues)
+    }, [defaultValues, form])
 
     return (
         <Form {...form}>

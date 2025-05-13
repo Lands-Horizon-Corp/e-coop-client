@@ -1,6 +1,6 @@
 import { IMedia } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
-import { IQrScanResult } from '../qr-result'
+import { IQrScanResult } from '../qr/qr-result'
 
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps, IAuditable {
@@ -29,7 +29,7 @@ export interface IUserBase extends ITimeStamps, IAuditable {
     contact_number: string
     is_contact_verified?: boolean
 
-    qr_code: IQrScanResult<string, 'user-id'>
+    qr_code: IQrScanResult<string, 'user-qr'>
 }
 
 export interface IOwner extends IUserBase {

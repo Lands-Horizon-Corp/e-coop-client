@@ -1,4 +1,4 @@
-import { TEntityId } from './common'
+import { TEntityId } from '../common'
 
 // DECODED DATA RESPONDED BY THE SERVER
 

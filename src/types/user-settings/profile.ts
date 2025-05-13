@@ -9,5 +9,5 @@ export interface IUserSettingsProfileRequest {
 
 export interface IUserSettingsPhotoUpdateRequest {
     // ID of uploaded media
-    id: TEntityId
+    media_id: TEntityId
 }

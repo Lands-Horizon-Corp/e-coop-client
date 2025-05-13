@@ -40,7 +40,13 @@ const ActionSecurityModal = () => {
         mutate: verifyPassword,
         isPending,
         error,
-    } = useVerifyPassword({ onSuccess })
+    } = useVerifyPassword({
+        onSuccess: () => {
+            onClose()
+            onSuccess()
+            form.reset({ password: '' })
+        },
+    })
 
     return (
         <Modal

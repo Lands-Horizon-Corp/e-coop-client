@@ -92,7 +92,10 @@ const AccountSettingsSidebar = (prop: Props) => {
                 <Link to={'/onboarding' as string}>Onboarding</Link>{' '}
                 <ArrowRightIcon className="inline" />
             </p>
-            <p className="cursor-pointer text-sm text-muted-foreground duration-200 ease-in hover:text-foreground">
+            <p
+                onClick={() => router.history.back()}
+                className="cursor-pointer text-sm text-muted-foreground duration-200 ease-in hover:text-foreground"
+            >
                 Back
                 <ArrowRightIcon className="inline" />
             </p>

@@ -11,10 +11,12 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
+import useActionSecurityStore from '@/store/action-security-store'
 import { userSettingsProfileSchema } from '@/validations/user-settings'
 import { useUpdateUserSettingsProfile } from '@/hooks/api-hooks/use-user-settings'
+
 import { IClassProps, IForm, IUserBase } from '@/types'
-import useActionSecurityStore from '@/store/action-security-store'
+import { useEffect } from 'react'
 
 type TAccountProfileFormValues = z.infer<typeof userSettingsProfileSchema>
 
@@ -45,7 +47,9 @@ const AccountProfileForm = ({
 
     const updateMutation = useUpdateUserSettingsProfile({
         onError,
-        onSuccess,
+        onSuccess: (newData) => {
+            onSuccess?.(newData)
+        },
         showMessage: true,
     })
 
@@ -64,6 +68,10 @@ const AccountProfileForm = ({
 
     const isDisabled = (field: Path<TAccountProfileFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    useEffect(() => {
+        form.reset(defaultValues)
+    }, [defaultValues, form])
 
     return (
         <Form {...form}>

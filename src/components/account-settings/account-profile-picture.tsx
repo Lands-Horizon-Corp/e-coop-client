@@ -36,7 +36,9 @@ const AccountProfilePicture = ({ user, className, onUploadSuccess }: Props) => {
                 singleImageUploadProps={{
                     defaultFileName: `user-${user.id}`,
                     onUploadComplete: (newMediaResource) => {
-                        updateUserProfilePicture(newMediaResource)
+                        updateUserProfilePicture({
+                            media_id: newMediaResource.id,
+                        })
                         toggleModal(false)
                     },
                 }}
