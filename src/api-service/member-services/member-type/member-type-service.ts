@@ -67,7 +67,20 @@ export const deleteMemberType = async (id: TEntityId): Promise<void> => {
     await APIService.delete<void>(endpoint)
 }
 
-export const getMemberTypes = async ({
+export const getAllMemberTypes = async (preloads?: string[]) => {
+    const url = qs.stringifyUrl(
+        {
+            url: BASE_ENDPOINT,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IMemberType[]>(url)
+    return response.data
+}
+
+export const getPaginatedMemberTypes = async ({
     sort,
     filters,
     preloads,

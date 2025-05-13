@@ -28,10 +28,14 @@ import { IMemberContactReferenceRequest } from './member-contact-references'
 
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
+// Should Only use by employee
 export interface IMemberProfileQuickCreateRequest {
     id?: TEntityId
     oldReferenceId?: string
     passbookNumber?: string
+
+    organization_id: TEntityId
+    branch_id: TEntityId
 
     firstName: string
     middleName?: string
@@ -106,6 +110,12 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
 
     user_id: TEntityId
     user: IUserBase
+
+    media_id?: TEntityId
+    media?: IMedia
+
+    signature_id?: TEntityId
+    signature?: IMedia
 
     member_type_id: TEntityId
     member_type: IMemberType

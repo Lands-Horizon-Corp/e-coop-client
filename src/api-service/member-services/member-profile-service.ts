@@ -5,11 +5,32 @@ import {
     TEntityId,
     IMemberProfile,
     IMemberProfileRequest,
-    IMemberCloseRemarkRequest,
     IMemberProfilePaginated,
+    IMemberCloseRemarkRequest,
+    IMemberProfileQuickCreateRequest,
 } from '@/types'
+import { downloadFileService } from '@/helpers'
 
 const BASE_ENDPOINT = '/member-profile'
+
+export const quickCreateMemberProfile = async (
+    data: IMemberProfileQuickCreateRequest,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: BASE_ENDPOINT,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.post<
+        IMemberProfileQuickCreateRequest,
+        IMemberProfile
+    >(url, data)
+    return response.data
+}
 
 export const createMemberProfile = async (
     data: IMemberProfileRequest,
@@ -85,6 +106,12 @@ export const closeMemberProfileAccount = async (
     return response.data
 }
 
+export const deleteMany = async (ids: TEntityId[]) => {
+    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
+    const payload = { ids }
+    await APIService.delete<void>(endpoint, payload)
+}
+
 export const getAllMemberProfile = async (preloads?: string[]) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}`,
@@ -122,4 +149,31 @@ export const getPaginatedMemberProfile = async ({
 
     const response = await APIService.get<IMemberProfilePaginated>(url)
     return response.data
+}
+
+export const exportAll = async () => {
+    const url = `${BASE_ENDPOINT}/export`
+    await downloadFileService(url, 'all_members_export.csv')
+}
+
+export const exportAllFiltered = async (filters?: string) => {
+    const filterQuery = filters ? `filter=${encodeURIComponent(filters)}` : ''
+    const url = `${BASE_ENDPOINT}/export-search${filterQuery ? `?${filterQuery}` : ''}`
+    await downloadFileService(url, 'filtered_members_export.csv')
+}
+
+export const exportSelected = async (ids: TEntityId[]) => {
+    if (ids.length === 0) {
+        throw new Error('No member IDs provided for export.')
+    }
+
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/export-selected`,
+            query: { ids },
+        },
+        { skipNull: true }
+    )
+
+    await downloadFileService(url, 'selected_members_export.csv')
 }
