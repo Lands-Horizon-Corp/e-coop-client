@@ -17,6 +17,7 @@ import { IBranch } from '../branch'
 import { IMemberType } from './member-type'
 import { IMemberGender } from './member-gender'
 import { IMemberCenter } from './member-center'
+import { IPaginatedResult } from '../paginated-result'
 import { IMemberIncomeRequest } from './member-income'
 import { IMemberAssetsRequest } from './member-assets'
 import { IMemberOccupation } from './member-occupation'
@@ -24,7 +25,31 @@ import { IMemberAddressRequest } from './member-address'
 import { IMemberClassification } from './member-classification'
 import { IMemberCloseRemarkRequest } from './member-close-remark'
 import { IMemberContactReferenceRequest } from './member-contact-references'
-import { IPaginatedResult } from '../paginated-result'
+
+// Mini Create Only use for quick creation of member profile
+// Ideal because of ease of creation
+export interface IMemberProfileQuickCreateRequest {
+    id?: TEntityId
+    oldReferenceId?: string
+    passbookNumber?: string
+
+    firstName: string
+    middleName?: string
+    lastName: string
+    suffix?: string
+    member_gender_id?: TEntityId
+
+    civilStatus: TCivilStatus
+    occupationId?: TEntityId
+
+    status: 'Pending' | 'Verified' | 'Not Allowed'
+
+    is_mutual_fund_member: boolean
+    is_micro_finance_member: boolean
+
+    member_type_id?: TEntityId
+    member_classification_id?: TEntityId
+}
 
 export interface IMemberProfileRequest {
     id?: TEntityId
