@@ -11,6 +11,8 @@ import {
     IForgotPasswordRequest,
     IChangePasswordRequest,
     IVerifyContactNumberRequest,
+    IVerificationPasswordRequest,
+    IVerification,
 } from '@/types'
 
 const BASE_ENDPOINT = '/authentication'
@@ -89,16 +91,29 @@ export const requestEmailVerification = async () => {
 
 // verify
 export const verifyEmail = async (data: IVerifyEmailRequest) => {
-    const endpoint = `${BASE_ENDPOINT}/verify-contact-number`
+    const endpoint = `${BASE_ENDPOINT}/verify-email`
     return await APIService.post<IVerifyEmailRequest, IUserBase>(endpoint, data)
 }
 
 export const verifyContactNumber = async (
     data: IVerifyContactNumberRequest
 ) => {
-    const endpoint = `${BASE_ENDPOINT}/verify-email`
+    const endpoint = `${BASE_ENDPOINT}/verify-contact-number`
     return await APIService.post<IVerifyContactNumberRequest, IUserBase>(
         endpoint,
         data
     )
+}
+
+// VERIFY WITH (pass)
+
+export const verifyWithPassword = async (
+    verificationData: IVerificationPasswordRequest
+) => {
+    const endpoint = `${BASE_ENDPOINT}/verify-with-password`
+    const response = await APIService.post<
+        IVerificationPasswordRequest,
+        IVerification
+    >(endpoint, verificationData)
+    return response.data
 }

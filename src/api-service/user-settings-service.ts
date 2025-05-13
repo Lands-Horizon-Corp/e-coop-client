@@ -34,7 +34,7 @@ export const updateUserSettingsSecurity = async (
     data: IUserSettingsSecurityRequest
 ) => {
     const res = await APIService.put<IUserSettingsSecurityRequest, IUserBase>(
-        `${BASE_ENDPOINT}/security`,
+        `${BASE_ENDPOINT}/password`,
         data
     )
     return res.data
