@@ -3,8 +3,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import { MemberOccupationCreateUpdateFormModal } from '@/components/forms/member-forms/member-occupation-create-update-form'
-import MemberOccupationTable from '@/components/tables/footsteps-table/member/member-occupation-table'
-import MemberOccupationTableOwnerAction from '@/components/tables/footsteps-table/member/member-occupation-table/row-actions/member-occupation-table-owner-action'
+import MemberOccupationTable from '@/components/tables/member/member-occupation-table'
+import MemberOccupationTableOwnerAction from '@/components/tables/member/member-occupation-table/row-actions/member-occupation-table-owner-action'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation'
