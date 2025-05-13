@@ -22,6 +22,7 @@ import {
     HandCoinsIcon,
     UserShieldIcon,
     MaintenanceIcon,
+    Users3Icon,
     // NotificationIcon,
     // GraduationCapIcon,
     // BuildingBranchIcon,
@@ -147,6 +148,13 @@ export const generateSidebarGroups = (
                             url: `/member-types`,
                             type: 'item',
                             icon: UserCogIcon,
+                            userType: ['employee'],
+                        },
+                        {
+                            title: 'Member Group',
+                            url: `/member-group`,
+                            type: 'item',
+                            icon: Users3Icon,
                             userType: ['employee'],
                         },
                         {
