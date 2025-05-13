@@ -3,13 +3,13 @@ import { AxiosError } from 'axios'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
+import { useNatsConnect } from '@/hooks/use-pubsub'
 import { useAuthStore } from '@/store/user-auth-store'
 import CookieConsent from '@/components/cookie-consent'
 import { useAuthContext } from '@/hooks/api-hooks/use-auth'
 import ConfirmModal from '@/components/modals/confirm-modal'
 import ConnectionProvider from '@/providers/connection-provider'
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
-import { useNatsConnect } from '@/hooks/use-pubsub'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
 
 export const Route = createRootRoute({
