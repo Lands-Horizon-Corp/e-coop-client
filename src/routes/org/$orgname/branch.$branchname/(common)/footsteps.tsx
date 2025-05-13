@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(common)/footstep'
+    '/org/$orgname/branch/$branchname/(common)/footsteps'
 )({
     component: RouteComponent,
 })

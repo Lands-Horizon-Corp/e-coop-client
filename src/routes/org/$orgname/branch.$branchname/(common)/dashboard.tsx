@@ -7,7 +7,5 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    return (
-        <div>Hello "/org/$orgname/branch/$branchname/(common)/dashboard"!</div>
-    )
+    return <div>Hello !</div>
 }
