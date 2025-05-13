@@ -90,6 +90,7 @@ export const useUpdateUserSettingsSecurity = ({
             }
 
             onSuccess?.(response)
+            if (showMessage) toast.success('Password Saved')
             return response
         },
     })

@@ -303,7 +303,7 @@ export const useCheckResetId = ({
     })
 }
 
-export const useSendUserContactOTPVerification = ({
+export const useOTPVerification = ({
     verifyMode,
     onSuccess,
     onError,

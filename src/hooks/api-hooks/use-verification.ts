@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { verifyWithPassword } from '@/api-service/security-services/verification-service'
+import { verifyWithPassword } from '@/api-service/security-services/auth-service'
 
 import { IAPIHook, IVerificationPasswordRequest, IVerification } from '@/types'
 
