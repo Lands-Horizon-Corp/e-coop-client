@@ -67,7 +67,6 @@ export const updateMemberCenter = async (
     return response.data
 }
 
-// ✅ Corrected: getAll should only support preloads
 export const getAllMemberCenters = async (preloads?: string[]) => {
     const url = qs.stringifyUrl(
         {

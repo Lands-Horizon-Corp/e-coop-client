@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { withCatchAsync } from '@/utils'
+import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberProfileService from '@/api-service/member-services/member-profile-service'
 
@@ -12,6 +12,8 @@ import {
     IMutationProps,
     IMemberProfile,
     IMemberProfileRequest,
+    IMemberProfilePaginated,
+    IAPIFilteredPaginatedHook,
     IMemberCloseRemarkRequest,
 } from '@/types'
 
@@ -195,5 +197,45 @@ export const useCloseMemberProfile = ({
             return closedMember
         },
         ...other,
+    })
+}
+
+export const useFilteredPaginatedMemberProfile = ({
+    sort,
+    enabled,
+    filterPayload,
+    preloads = [],
+    showMessage = true,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<IMemberProfile, string> & IQueryProps = {}) => {
+    return useQuery<IMemberProfilePaginated, string>({
+        queryKey: ['gender', 'resource-query', filterPayload, pagination, sort],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberProfileService.getPaginatedMemberProfile({
+                    preloads,
+                    pagination,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
+        enabled,
+        retry: 1,
     })
 }

@@ -159,6 +159,31 @@ export const useDeleteMemberType = ({
     })
 }
 
+export const useMemberTypes = ({
+    enabled,
+    showMessage = true,
+}: IAPIHook<IMemberType[], string> & IQueryProps = {}) => {
+    return useQuery<IMemberType[], string>({
+        queryKey: ['member-types', 'resource-query', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberTypeService.getAllMemberTypes()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
+
 export const useFilteredPaginatedMemberTypes = ({
     sort,
     enabled,
@@ -178,7 +203,7 @@ export const useFilteredPaginatedMemberTypes = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberTypeService.getMemberTypes({
+                MemberTypeService.getPaginatedMemberTypes({
                     preloads,
                     pagination,
                     sort: sort && toBase64(sort),
