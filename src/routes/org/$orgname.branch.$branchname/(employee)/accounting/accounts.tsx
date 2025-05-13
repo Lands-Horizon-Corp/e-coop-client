@@ -1,15 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
-  '/org/$orgname/branch/$branchname/(employee)/accounting/accounts',
+    '/org/$orgname/branch/$branchname/(employee)/accounting/accounts'
 )({
-  component: RouteComponent,
+    component: RouteComponent,
 })
 
 function RouteComponent() {
-  return (
-    <div>
-      Hello "/org/$orgname/branch/$branchname/(employee)/accounting/accounts"!
-    </div>
-  )
+    return (
+        <div>
+            Hello
+            "/org/$orgname/branch/$branchname/(employee)/accounting/accounts"!
+        </div>
+    )
 }

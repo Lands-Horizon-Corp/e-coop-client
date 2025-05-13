@@ -6,8 +6,11 @@ import VerifyForm from '@/components/forms/auth-forms/verify-form'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { BadgeCheckFillIcon, BadgeQuestionFillIcon } from '@/components/icons'
 
+import { useSubscribe } from '@/hooks/use-pubsub'
 import { useAuthUser } from '@/store/user-auth-store'
-import { useSendUserContactOTPVerification } from '@/hooks/api-hooks/use-auth'
+import { useOTPVerification } from '@/hooks/api-hooks/use-auth'
+
+import { IUserBase } from '@/types'
 
 export const Route = createFileRoute('/account/verify/contact')({
     component: RouteComponent,
@@ -15,13 +18,17 @@ export const Route = createFileRoute('/account/verify/contact')({
 
 function RouteComponent() {
     const {
-        updateCurrentAuth,
         currentAuth: { user },
+        updateCurrentAuth,
     } = useAuthUser()
+
+    useSubscribe<IUserBase>(`user.update.${user.id}`, (newUserData) => {
+        updateCurrentAuth({ user: newUserData })
+    })
 
     const [verifying, setVerifying] = useState(false)
 
-    const { mutate: sendcode, isPending } = useSendUserContactOTPVerification({
+    const { mutate: sendcode, isPending } = useOTPVerification({
         verifyMode: 'mobile',
         onSuccess: () => {
             setVerifying(true)

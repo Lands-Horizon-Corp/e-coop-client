@@ -2,7 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import AccountQr from '@/components/account-settings/account-qr'
 
+import { useSubscribe } from '@/hooks/use-pubsub'
 import { useAuthUser } from '@/store/user-auth-store'
+
+import { IUserBase } from '@/types'
 
 export const Route = createFileRoute('/account/qr')({
     component: RouteComponent,
@@ -11,7 +14,12 @@ export const Route = createFileRoute('/account/qr')({
 function RouteComponent() {
     const {
         currentAuth: { user },
+        updateCurrentAuth,
     } = useAuthUser()
+
+    useSubscribe<IUserBase>(`user.update.${user.id}`, (newUserData) => {
+        updateCurrentAuth({ user: newUserData })
+    })
 
     return (
         <div className="space-y-4">
@@ -23,7 +31,7 @@ function RouteComponent() {
                 <div className="space-y-1 text-center">
                     <AccountQr
                         className="!h-64 !w-64"
-                        accountQrPayload={user.qr_code.data}
+                        accountQrPayload={JSON.stringify(user.qr_code)}
                     />
                     <p>Account QR</p>
                 </div>
