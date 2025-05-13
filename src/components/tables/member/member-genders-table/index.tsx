@@ -12,8 +12,8 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import genderTableColumns, {
-    IGenderTableColumnProps,
+import MemberGenderTableColumns, {
+    IMemberGenderTableColumnProps,
     genderGlobalSearchTargets,
 } from './columns'
 
@@ -33,9 +33,9 @@ import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member
 import { TableProps } from '@/types'
 import { IMemberGender } from '@/types'
 
-export interface GenderTableProps
+export interface MemberGenderTableProps
     extends TableProps<IMemberGender>,
-        IGenderTableColumnProps {
+        IMemberGenderTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberGender>,
         | 'table'
@@ -48,13 +48,13 @@ export interface GenderTableProps
     >
 }
 
-const GenderTable = ({
+const MemberGenderTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: GenderTableProps) => {
+}: MemberGenderTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -62,7 +62,7 @@ const GenderTable = ({
 
     const columns = useMemo(
         () =>
-            genderTableColumns({
+            MemberGenderTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -190,4 +190,4 @@ const GenderTable = ({
     )
 }
 
-export default GenderTable
+export default MemberGenderTable
