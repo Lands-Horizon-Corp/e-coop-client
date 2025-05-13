@@ -791,12 +791,14 @@ Table member_profile {
   branch_id varchar(50)
   organization_id varchar(50)
 
+  media_id varchar(50)
+  signature_media_id varchar(50)
+
   user_id varchar(50)
   member_type_id varchar(50)
   member_group_id varchar(50)
   member_gender_id varchar(50)
   member_center_id varchar(50)
-  signature_media_id varchar(50)
   member_occupation_id varchar(50)
   member_classification_id varchar(50)
   member_verified_by_employee_user_id varchar(50)
@@ -813,7 +815,7 @@ Table member_profile {
   first_name varchar(255) [not null]
   middle_name varchar(255)
   last_name varchar(255) [not null]
-  full_name varchar(255) [not null] // TODO: Index
+  full_name varchar(255) [not null] 
   suffix varchar(50)
   status general_status [not null, default: "pending"]
 
@@ -838,12 +840,13 @@ Table member_profile {
 
 }
 
-Ref: member_profile.member_verified_by_employee_user_id > user.id [delete:restrict, update:cascade]
+Ref: member_profile.member_verified_by_employee_user_id > user.id [delete:set null, update:cascade]
 Ref: member_profile.user_id - user.id [delete:restrict, update:cascade]
+Ref: member_profile.media_id - media.id [delete:set null, update:cascade]
+Ref: member_profile.signature_media_id - media.id [delete:set null, update:cascade]
 Ref: member_profile.branch_id < branch.id [delete:restrict, update:cascade]
 Ref: member_profile.recruited_by_member_profile_id - member_profile.id [delete:restrict, update:cascade]
 Ref: member_profile.member_occupation_id - member_occupation.id [delete:restrict, update:cascade]
-Ref: member_profile.signature_media_id - media.id [delete:restrict, update:cascade]
 Ref: member_profile.member_gender_id - member_gender.id [delete:restrict, update:cascade]
 Ref: member_profile.member_center_id - member_center.id [delete:restrict, update:cascade]
 Ref: member_profile.member_type_id - member_type.id [delete:restrict, update:cascade]
