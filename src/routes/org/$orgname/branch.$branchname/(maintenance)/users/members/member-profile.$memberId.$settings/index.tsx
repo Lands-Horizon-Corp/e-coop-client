@@ -1,4 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
+import PageContainer from '@/components/containers/page-container'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/'
@@ -7,10 +8,9 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    return (
-        <div>
-            Hello
-            "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/"!
-        </div>
-    )
+    const { memberId: _id, settings: _set } = useParams({
+        from: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/',
+    })
+
+    return <PageContainer></PageContainer>
 }

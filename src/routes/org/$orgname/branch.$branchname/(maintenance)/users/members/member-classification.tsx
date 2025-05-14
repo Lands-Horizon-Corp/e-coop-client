@@ -14,6 +14,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
     const [modalState, setModalState] = useState(false)
+
     return (
         <PageContainer>
             <MemberClassificationCreateUpdateFormModal
