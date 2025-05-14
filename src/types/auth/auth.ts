@@ -1,15 +1,12 @@
 import { IUserBase } from './user'
-import { IBranch } from '../coop-types'
 import { IMediaRequest } from '../coop-types/media'
-import { IGeneratedReport, IOrganization } from '../lands-types'
+import { IGeneratedReport, IUserOrganization } from '../lands-types'
 
 // returned by /authentication/current
 export interface IAuthContext<TUser = IUserBase | undefined> {
     user?: TUser
-    organization?: IOrganization
-    branch?: IBranch
+    user_organization?: IUserOrganization | null
     reports: IGeneratedReport[]
-    role: string[]
 }
 
 export interface IChangePasswordRequest {
