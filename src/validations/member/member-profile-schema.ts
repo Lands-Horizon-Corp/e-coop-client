@@ -5,10 +5,15 @@ import { memberAssetsSchema } from './member-assets-schema'
 import { memberIncomeSchema } from './member-income-schema'
 import { memberAddressSchema } from './member-address-schema'
 import { memberExpensesSchema } from './member-expenses-schema'
-import { entityIdSchema, mediaSchema } from '../common'
 import { memberDescriptionSchema } from './member-description-schema'
 import { memberCloseRemarkSchema } from './member-close-remark-schema'
 import { memberGovernmentBenefits } from './member-government-benefits'
+import {
+    civilStatusSchema,
+    entityIdSchema,
+    generalStatusSchema,
+    mediaSchema,
+} from '../common'
 import { memberJointAccountsSchema } from './member-joint-accounts-schema'
 import { memberRelativeAccountsSchema } from './member-relative-accounts-schema'
 import { memberContactReferencesSchema } from './member-contact-number-references-schema'
@@ -61,7 +66,7 @@ export const createMemberProfileSchema = z.object({
     memberClassificationId: entityIdSchema.optional(),
     memberEducationalAttainmentId: entityIdSchema.optional(),
 
-    memberAddresses: z
+    member_addresses: z
         .array(memberAddressSchema)
         .min(1, 'Must provide at least 1 address'),
 
@@ -77,4 +82,31 @@ export const createMemberProfileSchema = z.object({
     memberJointAccounts: z.array(memberJointAccountsSchema).optional(),
     memberGovernmentBenefits: z.array(memberGovernmentBenefits).optional(),
     memberRelativeAccounts: z.array(memberRelativeAccountsSchema).optional(),
+})
+
+export const quickCreateMemberProfileSchema = z.object({
+    old_reference_id: z.string().optional(),
+    passbook: z.string().optional(),
+
+    organization_id: entityIdSchema,
+    branch_id: entityIdSchema,
+
+    first_name: z.string().min(1, 'First name is required'),
+    middle_name: z.string().optional(),
+    last_name: z.string().min(1, 'Last name is required'),
+    full_name: z.string().optional(),
+    suffix: z.string().max(15).optional(),
+    birth_date: z.string().max(15).optional(),
+    member_gender_id: entityIdSchema.optional(),
+
+    civil_status: civilStatusSchema,
+    occupation_id: entityIdSchema.optional(),
+
+    status: generalStatusSchema.default('verified'),
+
+    is_mutual_fund_member: z.boolean().default(false),
+    is_micro_finance_member: z.boolean().default(false),
+
+    member_type_id: entityIdSchema,
+    member_classification_id: entityIdSchema,
 })

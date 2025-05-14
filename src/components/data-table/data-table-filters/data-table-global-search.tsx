@@ -30,7 +30,7 @@ const DataTableGlobalSearch = <T,>({
     defaultMode,
     ...otherProps
 }: IGlobalSearchProps<T>) => {
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(true)
     const { filters, setFilter, bulkSetFilter } = useFilter<
         unknown,
         KeysOfOrString<T>
@@ -48,14 +48,7 @@ const DataTableGlobalSearch = <T,>({
     if (targets.length === 0) return
 
     return (
-        <div className="flex items-center gap-x-1">
-            <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => setVisible((prev) => !prev)}
-            >
-                <MagnifyingGlassIcon />
-            </Button>
+        <div className="flex items-center gap-x-1.5 p-1">
             {visible && targets.length > 0 && (
                 <ActionTooltip
                     side="bottom"
@@ -63,7 +56,7 @@ const DataTableGlobalSearch = <T,>({
                 >
                     <span className="relative">
                         <DebouncedInput
-                            className="min-w-[200px] text-xs animate-in fade-in-75"
+                            className="min-w-[300px] rounded-lg bg-popover text-xs animate-in fade-in-75 focus-visible:ring-muted"
                             value={filterVal.value}
                             placeholder={
                                 otherProps.placeHolder ??
@@ -83,16 +76,20 @@ const DataTableGlobalSearch = <T,>({
                         <Button
                             variant="ghost"
                             className="p-.5 absolute right-2 top-1/2 size-fit -translate-y-1/2 rounded-full"
-                            onClick={() => {
-                                setFilter(accessorKey)
-                                bulkSetFilter(targets)
-                            }}
+                            onClick={() => setVisible(false)}
                         >
                             <XIcon className="size-4" />
                         </Button>
                     </span>
                 </ActionTooltip>
             )}
+            <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => setVisible((prev) => !prev)}
+            >
+                <MagnifyingGlassIcon />
+            </Button>
         </div>
     )
 }

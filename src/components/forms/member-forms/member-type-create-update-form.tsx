@@ -13,18 +13,18 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 import { IClassProps, IForm } from '@/types/components'
-import { IMemberTypeRequest, TEntityId } from '@/types'
+import { IMemberType, IMemberTypeRequest, TEntityId } from '@/types'
 import {
     useCreateMemberType,
     useUpdateMemberType,
 } from '@/hooks/api-hooks/member/use-member-type'
 import { createMemberTypeSchema } from '@/validations/member/member-type-schema'
 
-type TMemberTypeForm = z.infer<typeof createMemberTypeSchema>
+export type TMemberTypeForm = z.infer<typeof createMemberTypeSchema>
 
 export interface IMemberTypeCreateUpdateFormProps
     extends IClassProps,
-        IForm<Partial<IMemberTypeRequest>, unknown, string> {
+        IForm<Partial<IMemberTypeRequest>, IMemberType, string> {
     memberTypeId?: TEntityId
 }
 

@@ -1,10 +1,19 @@
 import { IMedia } from '../media'
 import { IUserBase } from '../../auth'
-import { IMemberExpensesRequest } from './member-expenses'
+import { IMemberExpenses, IMemberExpensesRequest } from './member-expenses'
 import { IMemberDescriptionRequest } from './member-description'
-import { IMemberJointAccountRequest } from './member-joint-accounts'
-import { IMemberRelativeAccountsRequest } from './member-relative-accounts'
-import { IMemberGovernmentBenefitsRequest } from './member-government-benefits'
+import {
+    IMemberJointAccount,
+    IMemberJointAccountRequest,
+} from './member-joint-accounts'
+import {
+    IMemberRelativeAccounts,
+    IMemberRelativeAccountsRequest,
+} from './member-relative-accounts'
+import {
+    IMemberGovernmentBenefits,
+    IMemberGovernmentBenefitsRequest,
+} from './member-government-benefits'
 
 import {
     TEntityId,
@@ -18,41 +27,51 @@ import { IMemberType } from './member-type'
 import { IMemberGender } from './member-gender'
 import { IMemberCenter } from './member-center'
 import { IPaginatedResult } from '../paginated-result'
-import { IMemberIncomeRequest } from './member-income'
-import { IMemberAssetsRequest } from './member-assets'
+import { IMemberIncome, IMemberIncomeRequest } from './member-income'
+import { IMemberAssets, IMemberAssetsRequest } from './member-assets'
 import { IMemberOccupation } from './member-occupation'
-import { IMemberAddressRequest } from './member-address'
+import { IMemberAddress, IMemberAddressRequest } from './member-address'
 import { IMemberClassification } from './member-classification'
-import { IMemberCloseRemarkRequest } from './member-close-remark'
-import { IMemberContactReferenceRequest } from './member-contact-references'
+import {
+    IMemberCloseRemark,
+    IMemberCloseRemarkRequest,
+} from './member-close-remark'
+import {
+    IMemberContactReferenceRequest,
+    IMemberContactReferences,
+} from './member-contact-references'
+import { IMemberEducationalAttainment } from './member-educational-attainment'
+import { IOrganization } from '@/types/lands-types'
+import { IMemberRecruits } from './member-recruits'
 
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
 // Should Only use by employee
 export interface IMemberProfileQuickCreateRequest {
-    id?: TEntityId
-    oldReferenceId?: string
-    passbookNumber?: string
+    old_reference_id?: string
+    passbook?: string
 
     organization_id: TEntityId
     branch_id: TEntityId
 
-    firstName: string
-    middleName?: string
-    lastName: string
+    first_name: string
+    middle_name?: string
+    last_name: string
+    full_name?: string
     suffix?: string
     member_gender_id?: TEntityId
+    birth_date?: string
 
-    civilStatus: TCivilStatus
-    occupationId?: TEntityId
+    civil_status: TCivilStatus
+    occupation_id?: TEntityId
 
-    status: 'Pending' | 'Verified' | 'Not Allowed'
+    status: TGeneralStatus
 
     is_mutual_fund_member: boolean
     is_micro_finance_member: boolean
 
-    member_type_id?: TEntityId
-    member_classification_id?: TEntityId
+    member_type_id: TEntityId
+    member_classification_id: TEntityId
 }
 
 export interface IMemberProfileRequest {
@@ -73,7 +92,7 @@ export interface IMemberProfileRequest {
     businessAddress?: string
     businessContact?: string
 
-    status: 'Pending' | 'Verified' | 'Not Allowed'
+    status: TGeneralStatus
     isClosed: boolean
 
     isMutualFundMember: boolean
@@ -92,7 +111,7 @@ export interface IMemberProfileRequest {
 
     memberIncome?: IMemberIncomeRequest[]
     memberAssets?: IMemberAssetsRequest[]
-    memberAddresses: IMemberAddressRequest[]
+    member_addresses: IMemberAddressRequest[]
     memberExpenses?: IMemberExpensesRequest[]
     memberDescriptions?: IMemberDescriptionRequest[]
     memberCloseRemarks?: IMemberCloseRemarkRequest[]
@@ -107,6 +126,9 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
 
     branch_id: TEntityId
     branch: IBranch
+
+    organization_id: TEntityId
+    organization: IOrganization
 
     user_id: TEntityId
     user: IUserBase
@@ -153,6 +175,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     last_name: string
     full_name: string
     suffix?: string
+    birth_date?: string
     status: TGeneralStatus
 
     description: string
@@ -170,21 +193,21 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // occupationId?: TEntityId
 
     // memberEducationalAttainmentId?: TEntityId
-    // memberEducationalAttainment?: IMemberEducationalAttainment
+    member_educational_attainment?: IMemberEducationalAttainment[]
 
-    // memberAssets?: IMemberAssets[]
-    // memberIncome?: IMemberIncome[]
+    member_assets?: IMemberAssets[]
+    member_income?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
-    // memberAddresses?: IMemberAddress[]
-    // memberRecruits?: IMemberRecruits[]
-    // memberExpenses?: IMemberExpenses[]
+    member_addresses?: IMemberAddress[]
+    member_recruits?: IMemberRecruits[]
+    member_expenses?: IMemberExpenses[]
     // memberDescriptions?: IMemberDescription[]
-    // memberCloseRemarks?: IMemberCloseRemark[]
-    // memberJointAccounts?: IMemberJointAccount[]
-    // memberRelativeAccounts?: IMemberRelativeAccounts[]
-    // memberGovernmentBenefits?: IMemberGovernmentBenefits[]
+    member_close_remarks?: IMemberCloseRemark[]
+    member_joint_accounts?: IMemberJointAccount[]
+    member_relative_accounts?: IMemberRelativeAccounts[]
+    member_government_benefits?: IMemberGovernmentBenefits[]
     // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
-    // memberContactNumberReferences?: IMemberContactNumberReferences[]
+    member_contact_number_references?: IMemberContactReferences[]
 }
 
 export interface IMemberProfilePaginated

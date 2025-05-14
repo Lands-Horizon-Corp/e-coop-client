@@ -80,9 +80,13 @@ const MemberOccupationCombobox = ({
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
                     >
-                        {value
-                            ? data.find((option) => option.id === value)?.name
-                            : placeholder}
+                        {value ? (
+                            data.find((option) => option.id === value)?.name
+                        ) : (
+                            <span className="text-muted-foreground">
+                                {placeholder}
+                            </span>
+                        )}
                         <ChevronDownIcon className="opacity-50" />
                     </Button>
                 </PopoverTrigger>
