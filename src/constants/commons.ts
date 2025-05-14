@@ -96,3 +96,19 @@ export const AccountClosureReasons = [
 ] as const
 
 export const FEEDBACK_TYPE = ['bug', 'feature', 'general'] as const
+
+export const GENERAL_STATUS = [
+    'pending',
+    'for review',
+    'verified',
+    'not allowed',
+] as const
+
+export const CIVIL_STATUS = [
+    'married',
+    'single',
+    'widowed',
+    'divorced',
+    'separated',
+    'civil partnership',
+] as const

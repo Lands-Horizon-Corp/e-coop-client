@@ -15,7 +15,65 @@ import {
     IMemberProfilePaginated,
     IAPIFilteredPaginatedHook,
     IMemberCloseRemarkRequest,
+    IMemberProfileQuickCreateRequest,
 } from '@/types'
+
+export const useQuickCreateMemberProfile = ({
+    showMessage = true,
+    preloads = ['Media'],
+    onSuccess,
+    onError,
+}: undefined | (IAPIHook<IMemberProfile, string> & IQueryProps) = {}) => {
+    const queryClient = useQueryClient()
+
+    return useMutation<
+        IMemberProfile,
+        string,
+        IMemberProfileQuickCreateRequest
+    >({
+        mutationKey: ['member-profile', 'create'],
+        mutationFn: async (data) => {
+            const [error, newMember] = await withCatchAsync(
+                MemberProfileService.quickCreateMemberProfile(
+                    {
+                        ...data,
+                        full_name: `${data.first_name} ${data.middle_name} ${data.last_name} ${data.suffix}`,
+                    },
+                    preloads
+                )
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                onError?.(errorMessage)
+                throw errorMessage
+            }
+
+            queryClient.invalidateQueries({
+                queryKey: ['member', 'resource-query'],
+            })
+
+            queryClient.setQueryData<IMemberProfile>(
+                ['member-profile', newMember.id],
+                newMember
+            )
+
+            queryClient.invalidateQueries({
+                queryKey: ['member', newMember.id],
+            })
+
+            queryClient.removeQueries({
+                queryKey: ['member', 'loader', newMember.id],
+            })
+
+            if (showMessage) toast.success('Member Profile Created')
+            onSuccess?.(newMember)
+
+            return newMember
+        },
+    })
+}
 
 export const useCreateMemberProfile = ({
     showMessage = true,
