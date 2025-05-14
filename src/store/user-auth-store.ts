@@ -1,5 +1,11 @@
 import { create } from 'zustand'
-import { IAuthContext, IBranch, IOrganization, IUserBase } from '@/types'
+import {
+    IBranch,
+    IUserBase,
+    IAuthContext,
+    IOrganization,
+    IUserOrganization,
+} from '@/types'
 
 type TAuthStoreStatus = 'loading' | 'authorized' | 'unauthorized' | 'error'
 
@@ -15,10 +21,8 @@ interface UserAuthStore {
 export const useAuthStore = create<UserAuthStore>((set) => ({
     currentAuth: {
         user: undefined,
-        branch: undefined,
-        organization: undefined,
+        user_organization: null,
         reports: [],
-        role: [],
     },
     authStatus: 'loading',
     setCurrentAuth: (newAuth: IAuthContext) =>
@@ -40,10 +44,8 @@ export const useAuthStore = create<UserAuthStore>((set) => ({
         set({
             currentAuth: defaultAuthContextValue ?? {
                 user: undefined,
-                branch: undefined,
-                organization: undefined,
+                user_organization: null,
                 reports: [],
-                role: [],
             },
             authStatus: 'unauthorized',
         })
@@ -73,7 +75,7 @@ export const useAuthUser = <TUser = IUserBase>() => {
     }
 }
 
-// USE only kapag sure na user, organization, exist in user auth store
+// USE only kapag sure na user, organization, exist in user auth store, pero not sure if may branch
 export const useAuthUserWithOrg = <TUser = IUserBase>() => {
     const { currentAuth, ...rest } = useAuthUser<TUser>()
 
@@ -84,24 +86,33 @@ export const useAuthUserWithOrg = <TUser = IUserBase>() => {
     return {
         ...rest,
         currentAuth: currentAuth as typeof currentAuth & {
-            organization: NonNullable<IOrganization>
+            user_organization: NonNullable<
+                IUserOrganization & { organization: NonNullable<IOrganization> }
+            >
         },
     }
 }
 
 // USE only kapag sure na user, organization, branch, exist in user auth store
 // ideal usage is in /org/:name/branch/:branchname/*
-export const useAuthUserWithBranch = <TUser = IUserBase>() => {
+export const useAuthUserWithOrgBranch = <TUser = IUserBase>() => {
     const { currentAuth, ...rest } = useAuthUserWithOrg<TUser>()
 
-    // if (!currentAuth.branch) {
-    //     throw new Error('Authenticated user has no branch context.')
-    // }
+    if (
+        !currentAuth.user_organization.branch ||
+        !currentAuth.user_organization.organization
+    ) {
+        throw new Error(
+            'Authenticated user has no branch or organization context.'
+        )
+    }
 
     return {
         ...rest,
         currentAuth: currentAuth as typeof currentAuth & {
-            branch: NonNullable<IBranch>
+            user_organization: IUserOrganization & {
+                branch: NonNullable<IBranch>
+            }
         },
     }
 }

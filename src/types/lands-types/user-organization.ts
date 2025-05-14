@@ -1,9 +1,9 @@
 import { IBranch } from '../coop-types'
 import { IUserBase } from '../auth/user'
 import { IOrganization } from './organization'
-import { ITimeStamps, TEntityId, IAuditable } from '../common'
+import { TEntityId, IBaseEntityMeta, TUserType } from '../common'
 
-export interface IUserOrganization extends ITimeStamps, IAuditable {
+export interface IUserOrganization extends IBaseEntityMeta {
     id: TEntityId
 
     organization_id: TEntityId
@@ -16,6 +16,8 @@ export interface IUserOrganization extends ITimeStamps, IAuditable {
 
     user_id: TEntityId
     user: IUserBase
+
+    user_type: TUserType
 
     applicationDescription?: string
     applicationStatus: 'pending' | 'reported' | 'accepted' | 'ban'

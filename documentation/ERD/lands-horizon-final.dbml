@@ -817,7 +817,7 @@ Table member_profile {
   last_name varchar(255) [not null]
   full_name varchar(255) [not null]
   suffix varchar(50)
-  birth_date date
+  birthdate date
   status general_status [not null, default: "pending"]
 
   description text

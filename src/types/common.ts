@@ -5,17 +5,14 @@ import {
     AccountClosureReasons,
     CIVIL_STATUS,
     FAMILY_RELATIONSHIP,
+    GENERAL_STATUS,
 } from '@/constants'
 
 export type TEntityId = string
 
 export type TUserType = 'owner' | 'employee' | 'member' | 'ban'
 
-export type TGeneralStatus =
-    | 'pending'
-    | 'for review'
-    | 'verified'
-    | 'not allowed'
+export type TGeneralStatus = (typeof GENERAL_STATUS)[number]
 
 export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number]
 

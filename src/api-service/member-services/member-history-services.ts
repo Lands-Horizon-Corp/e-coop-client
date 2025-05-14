@@ -7,7 +7,6 @@ import {
     IMemberCenterHistoryPaginated,
     IMemberMutualFundsHistoryPaginated,
     IMemberClassificationHistoryPaginated,
-    IMemberEducationalAttainmentHistoryPaginated,
 } from '@/types'
 
 const BASE_ENDPOINT = '/member-profile'
@@ -70,37 +69,6 @@ export const getMemberClassificationHistoryById = async ({
 
     const response =
         await APIService.get<IMemberClassificationHistoryPaginated>(url)
-    return response.data
-}
-
-export const getMemberEducationalAttainmentHistoryById = async ({
-    profileId,
-    ...props
-}: {
-    sort?: string
-    filters?: string
-    preloads?: string[]
-    profileId: TEntityId
-    pagination?: { pageIndex: number; pageSize: number }
-}) => {
-    const { filters, preloads, pagination, sort } = props || {}
-
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}/${profileId}/member-educational-attainment-history`,
-            query: {
-                sort,
-                preloads,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response =
-        await APIService.get<IMemberEducationalAttainmentHistoryPaginated>(url)
     return response.data
 }
 
