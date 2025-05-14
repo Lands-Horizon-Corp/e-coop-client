@@ -48,6 +48,7 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupIm
 import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-gender';
 import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-classification';
 import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-center';
+import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-profile.$memberId.$settings/index';
 
 // Create Virtual Routes
 
@@ -298,6 +299,15 @@ const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute =
         path: '/users/members/member-center',
         getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any);
+
+const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute =
+    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexImport.update(
+        {
+            id: '/(maintenance)/users/members/member-profile/$memberId/$settings/',
+            path: '/users/members/member-profile/$memberId/$settings/',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
 
 // Populate the FileRoutesByPath interface
 
@@ -562,6 +572,13 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
+        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/';
+            path: '/users/members/member-profile/$memberId/$settings';
+            fullPath: '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
+        };
     }
 }
 
@@ -643,6 +660,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
     OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
     OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
     OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
+    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
@@ -681,6 +699,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
             OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute,
         OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute:
             OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute,
+        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute:
+            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute,
     };
 
 const OrgOrgnameBranchBranchnameRouteRouteWithChildren =
@@ -738,6 +758,7 @@ export interface FileRoutesByFullPath {
     '/org/$orgname/branch/$branchname/users/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
     '/org/$orgname/branch/$branchname/users/members/view-members': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
     '/org/$orgname/branch/$branchname/users/employees': typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
+    '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 export interface FileRoutesByTo {
@@ -776,6 +797,7 @@ export interface FileRoutesByTo {
     '/org/$orgname/branch/$branchname/users/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
     '/org/$orgname/branch/$branchname/users/members/view-members': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
     '/org/$orgname/branch/$branchname/users/employees': typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
+    '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 export interface FileRoutesById {
@@ -817,6 +839,7 @@ export interface FileRoutesById {
     '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/users/employees/': typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 export interface FileRouteTypes {
@@ -857,7 +880,8 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/users/members/member-occupation'
         | '/org/$orgname/branch/$branchname/users/members/member-types'
         | '/org/$orgname/branch/$branchname/users/members/view-members'
-        | '/org/$orgname/branch/$branchname/users/employees';
+        | '/org/$orgname/branch/$branchname/users/employees'
+        | '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings';
     fileRoutesByTo: FileRoutesByTo;
     to:
         | '/auth'
@@ -894,7 +918,8 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/users/members/member-occupation'
         | '/org/$orgname/branch/$branchname/users/members/member-types'
         | '/org/$orgname/branch/$branchname/users/members/view-members'
-        | '/org/$orgname/branch/$branchname/users/employees';
+        | '/org/$orgname/branch/$branchname/users/employees'
+        | '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings';
     id:
         | '__root__'
         | '/(landing)'
@@ -933,7 +958,8 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation'
         | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types'
         | '/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/employees/';
+        | '/org/$orgname/branch/$branchname/(maintenance)/users/employees/'
+        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/';
     fileRoutesById: FileRoutesById;
 }
 
@@ -1084,7 +1110,8 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation",
         "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types",
         "/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/employees/"
+        "/org/$orgname/branch/$branchname/(maintenance)/users/employees/",
+        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/"
       ]
     },
     "/org/$orgname/branch/$branchname/(common)/dashboard": {
@@ -1153,6 +1180,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(maintenance)/users/employees/": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/employees/index.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-profile.$memberId.$settings/index.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     }
   }
