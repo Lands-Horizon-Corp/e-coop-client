@@ -1,7 +1,11 @@
 import { IBranch } from './coop-types'
 import { IUserBase } from './auth/user'
 import { IOrganization } from './lands-types'
-import { AccountClosureReasons, FAMILY_RELATIONSHIP } from '@/constants'
+import {
+    AccountClosureReasons,
+    CIVIL_STATUS,
+    FAMILY_RELATIONSHIP,
+} from '@/constants'
 
 export type TEntityId = string
 
@@ -59,11 +63,6 @@ export interface ITimeStamps {
     updated_at?: string
 }
 
-export type TCivilStatus =
-    | 'Married'
-    | 'Single'
-    | 'Widowed'
-    | 'Separated'
-    | 'N/A'
+export type TCivilStatus = (typeof CIVIL_STATUS)[number]
 
 export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]

@@ -1,9 +1,27 @@
 import z from 'zod'
 import {
+    CIVIL_STATUS,
+    GENERAL_STATUS,
     LETTERS_REGEX,
     NUMBER_LETTER_REGEX,
     PASSWORD_MIN_LENGTH,
 } from '@/constants'
+
+export const entityIdSchema = z.coerce.string().uuid('Invalid')
+
+export const mediaSchema = z.object({
+    id: entityIdSchema,
+    file_name: z.string(),
+    file_size: z.number(),
+    file_type: z.string(),
+    storage_key: z.string(),
+    url: z.string().optional().default(''),
+    download_url: z.string(),
+    bucket_name: z.string(),
+    created_at: z.string(),
+    updated_at: z.string().optional(),
+    deleted_at: z.string().optional(),
+})
 
 const AccountTypes = ['Member', 'Owner', 'Admin', 'Employee'] as const
 
@@ -64,32 +82,6 @@ export const otpCodeSchema = z
 
 export const contactNumberSchema = z.string().min(1, 'Contact Number is empty')
 
-export const accountStatusSchema = z.enum([
-    'Pending',
-    'Verified',
-    'Not Allowed',
-])
+export const generalStatusSchema = z.enum(GENERAL_STATUS)
 
-export const civilStatusSchema = z.enum([
-    'Married',
-    'Single',
-    'Widowed',
-    'Separated',
-    'N/A',
-])
-
-export const entityIdSchema = z.coerce.string().uuid('Invalid Id')
-
-export const mediaSchema = z.object({
-    id: entityIdSchema,
-    fileName: z.string(),
-    fileSize: z.number(),
-    fileType: z.string(),
-    storageKey: z.string(),
-    url: z.string().optional().default(''),
-    bucketName: z.string(),
-    created_at: z.string(),
-    updated_at: z.string().optional(),
-    deleted_at: z.string().optional(),
-    download_url: z.string(),
-})
+export const civilStatusSchema = z.enum(CIVIL_STATUS)

@@ -19,7 +19,7 @@ export const quickCreateMemberProfile = async (
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: BASE_ENDPOINT,
+            url: `${BASE_ENDPOINT}/quick-create`,
             query: { preloads },
         },
         { skipNull: true }
