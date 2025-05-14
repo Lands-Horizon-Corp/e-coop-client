@@ -1,31 +1,36 @@
 import z from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 
 import { Form } from '@/components/ui/form'
+import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
+import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
+import MemberGenderCombobox from '@/components/comboboxes/member-gender-combobox'
+import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
+import MemberClassificationCombobox from '@/components/comboboxes/member-classification-combobox'
 
 import { cn } from '@/lib/utils'
 import { useQuickCreateMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import { quickCreateMemberProfileSchema } from '@/validations/member/member-profile-schema'
 
 import { IForm } from '@/types'
-import { IClassProps } from '@/types'
-import { IMemberProfile, IMemberProfileQuickCreateRequest } from '@/types'
-import { Checkbox } from '@/components/ui/checkbox'
-import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
-import { Label } from '@/components/ui/label'
-import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
-import MemberClassificationCombobox from '@/components/comboboxes/member-classification-combobox'
-import MemberGenderCombobox from '@/components/comboboxes/member-gender-combobox'
-import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
-import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
+import {
+    IClassProps,
+    IMemberProfile,
+    IMemberProfileQuickCreateRequest,
+} from '@/types'
+import { parseDate } from '@internationalized/date'
+import { DateInput, DatePicker, DateSegment } from 'react-aria-components'
 
 type TMemberProfileQuickFormValues = z.infer<
     typeof quickCreateMemberProfileSchema
@@ -76,8 +81,6 @@ const MemberProfileQuickCreateForm = ({
 
     const isDisabled = (field: Path<TMemberProfileQuickFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
-
-    console.log(form.formState.errors)
 
     return (
         <Form {...form}>
@@ -235,7 +238,7 @@ const MemberProfileQuickCreateForm = ({
                                 )}
                             />
                         </div>
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                             <FormFieldWrapper
                                 control={form.control}
                                 name="civil_status"
@@ -259,6 +262,37 @@ const MemberProfileQuickCreateForm = ({
                                         placeholder="Select Gender"
                                         disabled={isDisabled(field.name)}
                                     />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="birth_date"
+                                label="Date of Birth *"
+                                render={({ field }) => (
+                                    // <Input
+                                    //     type="date"
+                                    //     {...field}
+                                    //     value={field.value ?? ''}
+                                    // />
+                                    <DatePicker
+                                        value={
+                                            field.value
+                                                ? parseDate(field.value)
+                                                : undefined
+                                        }
+                                        onChange={(val) => {
+                                            if (!val) return field.onChange('')
+                                            field.onChange(val.toString())
+                                        }}
+                                    >
+                                        <DateInput>
+                                            {(segment) => (
+                                                <DateSegment
+                                                    segment={segment}
+                                                />
+                                            )}
+                                        </DateInput>
+                                    </DatePicker>
                                 )}
                             />
                         </div>
@@ -336,8 +370,8 @@ const MemberProfileQuickCreateForm = ({
                         </div>
                     </div>
                 </fieldset>
-                <span className="text-center text-sm text-muted-foreground">
-                    You can setup other member profile information after
+                <span className="text-center text-xs text-muted-foreground">
+                    You can setup other member profile information later after
                     creation
                 </span>
                 <Separator className="my-2 sm:my-4" />

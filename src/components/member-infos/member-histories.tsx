@@ -1,21 +1,14 @@
 import { ReactNode } from 'react'
 import { IconType } from 'react-icons/lib'
 
-import {
-    BankIcon,
-    UserIcon,
-    GendersIcon,
-    UserCogIcon,
-    GraduationCapIcon,
-} from '../icons'
 import Modal, { IModalProps } from '../modals/modal'
 import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { BankIcon, UserIcon, GendersIcon, UserCogIcon } from '../icons'
 import MemberCenterHistoryTable from '../tables/member/members-profile-table/member-histories/center-history'
 import MemberGenderHistoryTable from '../tables/member/members-profile-table/member-histories/gender-history'
 import MemberTypeHistoryTable from '../tables/member/members-profile-table/member-histories/member-type-history'
 import MemberMutualFundsHistoryTable from '../tables/member/members-profile-table/member-histories/mutualfunds-history'
-import MemberEducationalAttainmentHistoryTable from '../tables/member/members-profile-table/member-histories/educational-history'
 
 import { cn } from '@/lib'
 import { TEntityId, IClassProps } from '@/types'
@@ -68,22 +61,6 @@ const historyTabs: {
             <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
                 <p className="text-sm">Member Type history of this member</p>
                 <MemberTypeHistoryTable
-                    className="grow"
-                    profileId={profileId}
-                />
-            </div>
-        ),
-    },
-    {
-        value: 'member-educational-history',
-        title: 'Educational Attainment',
-        Icon: GraduationCapIcon,
-        Component: ({ profileId }) => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">
-                    Member Educational Attainment history for this member
-                </p>
-                <MemberEducationalAttainmentHistoryTable
                     className="grow"
                     profileId={profileId}
                 />

@@ -8,7 +8,7 @@ import { useAuthStore } from '@/store/user-auth-store'
 const NavGetStarted = () => {
     const { navigate } = useRouter()
     const {
-        currentAuth: { user, organization },
+        currentAuth: { user, user_organization },
         authStatus,
     } = useAuthStore()
 
@@ -17,10 +17,12 @@ const NavGetStarted = () => {
     return (
         <Button
             onClick={() => {
-                if (!organization) {
+                if (!user_organization?.organization) {
                     navigate({ to: '/onboarding' as string })
                 } else {
-                    navigate({ to: `/ecoop/${organization?.name}` as string })
+                    navigate({
+                        to: `/ecoop/${user_organization.organization?.name}` as string,
+                    })
                 }
             }}
             className="scale-effects gap-x-2 rounded-full px-2"

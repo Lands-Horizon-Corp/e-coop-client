@@ -22,7 +22,7 @@ import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-qu
 
 import logger from '@/helpers/loggers/logger'
 import { generateSidebarGroups } from './sidebar-routes'
-// import { useAuthUserWithBranch } from '@/store/user-auth-store'
+// import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 import { IBaseProps, TUserType } from '@/types'
 
@@ -37,7 +37,7 @@ const OrgBranchSidebar = (props: IBaseProps) => {
     }
     // const {
     //     currentAuth: { user },
-    // } = useAuthUserWithBranch()
+    // } = useAuthUserWithOrgBranch()
 
     const baseUrl = `/org/${orgname}/branch/${branchname}`
 
