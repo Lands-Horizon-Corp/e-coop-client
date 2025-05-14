@@ -110,7 +110,7 @@ export const ImageDropPicker = ({
                     disabled={reAdjust || !croppedImage || !newImage}
                     onClick={(e) => {
                         e.preventDefault()
-                        onOpenChange && onOpenChange(false)
+                        onOpenChange?.(false)
                         if (croppedImage) {
                             onPhotoChoose(croppedImage)
                         }

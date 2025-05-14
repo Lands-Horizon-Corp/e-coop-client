@@ -17,28 +17,28 @@ import {
 import { Button } from '@/components/ui/button'
 import { ChevronDownIcon } from '@/components/icons'
 
-import { FAMILY_RELATIONSHIP } from '@/constants'
+import { CIVIL_STATUS } from '@/constants'
 
 import { cn } from '@/lib/utils'
-import { TRelationship } from '@/types' // Assuming this is where your type and const are
+import { TCivilStatus } from '@/types'
 
 interface Props {
     id?: string
     name?: string
-    value?: TRelationship
+    value?: TCivilStatus
     disabled?: boolean
     className?: string
     placeholder?: string
-    relationships?: TRelationship[]
-    onChange?: (selected: TRelationship) => void
+    civilStatuses?: TCivilStatus[]
+    onChange?: (selected: TCivilStatus) => void
 }
 
-const RelationshipCombobox = ({
+const CivilStatusCombobox = ({
     value,
     className,
     disabled = false,
-    placeholder = 'Select Relationship...',
-    relationships = FAMILY_RELATIONSHIP as unknown as TRelationship[],
+    placeholder = 'Select Civil Status...',
+    civilStatuses = CIVIL_STATUS as unknown as TCivilStatus[],
     onChange,
     ...other
 }: Props) => {
@@ -69,28 +69,26 @@ const RelationshipCombobox = ({
             <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                 <Command>
                     <CommandInput
-                        placeholder="Search Relationship..."
+                        placeholder="Search Civil Status..."
                         className="h-9"
                     />
                     <CommandList className="ecoop-scroll">
-                        <CommandEmpty>No relationship found.</CommandEmpty>
+                        <CommandEmpty>No civil status found.</CommandEmpty>
                         <CommandGroup>
-                            {relationships.map((relationship) => (
+                            {civilStatuses.map((status) => (
                                 <CommandItem
-                                    key={relationship}
-                                    value={relationship}
+                                    key={status}
+                                    value={status}
                                     onSelect={() => {
                                         setOpen(false)
-                                        onChange?.(relationship)
+                                        onChange?.(status)
                                     }}
                                 >
-                                    <span className="capitalize">
-                                        {relationship}
-                                    </span>
+                                    <span className="capitalize">{status}</span>
                                     <Check
                                         className={cn(
                                             'ml-auto',
-                                            value === relationship
+                                            value === status
                                                 ? 'opacity-100'
                                                 : 'opacity-0'
                                         )}
@@ -105,4 +103,4 @@ const RelationshipCombobox = ({
     )
 }
 
-export default RelationshipCombobox
+export default CivilStatusCombobox

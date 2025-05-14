@@ -59,7 +59,11 @@ const MunicipalityCombobox = ({
                     className={cn('w-full justify-between px-3', className)}
                 >
                     <span className="capitalize">
-                        {value?.toLocaleLowerCase() || placeholder}
+                        {value?.toLocaleLowerCase() || (
+                            <span className="text-muted-foreground">
+                                {placeholder}
+                            </span>
+                        )}
                     </span>
                     <ChevronDownIcon className="opacity-50" />
                 </Button>

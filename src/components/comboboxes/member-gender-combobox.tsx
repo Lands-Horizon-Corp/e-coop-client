@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import * as React from 'react'
 import { Check } from 'lucide-react'
 
 import {
@@ -13,23 +13,23 @@ import {
     CommandEmpty,
     CommandGroup,
     CommandInput,
+    CommandSeparator,
 } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ChevronDownIcon, PlusIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+
+import { TEntityId, IMemberGender } from '@/types'
+import { useGenders } from '@/hooks/api-hooks/member/use-member-gender'
 import {
-    IMemberClassificationCreateUpdateFormProps,
-    MemberClassificationCreateUpdateFormModal,
-} from '../forms/member-forms/member-classification-create-update-form'
+    IMemberGenderFormProps,
+    MemberGenderCreateUpdateFormModal,
+} from '../forms/member-forms/member-gender-create-update-form'
 
-import { useMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
-
-import { TEntityId, IMemberClassification } from '@/types'
-
-export interface IMemberClassificationComboboxCreateProps
+export interface IMemberGenderComboboxCreateProps
     extends Pick<
-        IMemberClassificationCreateUpdateFormProps,
+        IMemberGenderFormProps,
         'defaultValues' | 'disabledFields' | 'hiddenFields'
     > {}
 
@@ -38,36 +38,36 @@ interface Props {
     disabled?: boolean
     className?: string
     placeholder?: string
-    memberClassificationCreateProps?: IMemberClassificationComboboxCreateProps
-    onChange?: (selected: IMemberClassification) => void
+    memberGenderComboboxCreateProps?: IMemberGenderComboboxCreateProps
+    onChange?: (selected: IMemberGender) => void
 }
 
-const MemberClassificationCombobox = ({
+const MemberGenderCombobox = ({
     value,
-    placeholder = 'Select Member Classification...',
-    disabled = false,
     className,
-    memberClassificationCreateProps,
+    disabled = false,
+    memberGenderComboboxCreateProps,
+    placeholder = 'Select Member Gender...',
     onChange,
 }: Props) => {
-    const [open, setOpen] = useState(false)
-    const [createModal, setCreateModal] = useState(false)
+    const [open, setOpen] = React.useState(false)
+    const [createModal, setCreateModal] = React.useState(false)
 
-    const { data, isLoading } = useMemberClassifications({
+    const { data, isLoading } = useGenders({
         enabled: !disabled,
         showMessage: false,
     })
 
     return (
         <>
-            <MemberClassificationCreateUpdateFormModal
+            <MemberGenderCreateUpdateFormModal
                 open={createModal}
                 onOpenChange={setCreateModal}
                 formProps={{
-                    ...memberClassificationCreateProps,
-                    onSuccess: (data) => {
-                        onChange?.(data)
-                        setOpen(false)
+                    ...memberGenderComboboxCreateProps,
+                    onSuccess: (newGender) => {
+                        onChange?.(newGender)
+                        setCreateModal(false)
                     },
                 }}
             />
@@ -93,7 +93,7 @@ const MemberClassificationCombobox = ({
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
-                            placeholder="Search Member Classification..."
+                            placeholder="Search Member Gender..."
                             className="h-9"
                         />
                         {isLoading ? (
@@ -104,20 +104,22 @@ const MemberClassificationCombobox = ({
                         ) : (
                             <CommandList className="ecoop-scroll">
                                 <CommandEmpty>
-                                    No Member Classification found.
+                                    No Member Gender found.
                                 </CommandEmpty>
-                                {memberClassificationCreateProps && (
-                                    <CommandGroup>
-                                        <CommandItem
-                                            onClick={(e) => e.stopPropagation()}
-                                            onSelect={() =>
-                                                setCreateModal(true)
-                                            }
-                                        >
-                                            <PlusIcon /> Create Member
-                                            Classification
-                                        </CommandItem>
-                                    </CommandGroup>
+                                {memberGenderComboboxCreateProps && (
+                                    <>
+                                        <CommandGroup>
+                                            <CommandItem
+                                                onSelect={() => {
+                                                    setCreateModal(true)
+                                                }}
+                                                onClick={() => {}}
+                                            >
+                                                <PlusIcon /> Create new gender
+                                            </CommandItem>
+                                        </CommandGroup>
+                                        <CommandSeparator />
+                                    </>
                                 )}
                                 <CommandGroup>
                                     {data.map((option) => (
@@ -150,4 +152,4 @@ const MemberClassificationCombobox = ({
     )
 }
 
-export default MemberClassificationCombobox
+export default MemberGenderCombobox

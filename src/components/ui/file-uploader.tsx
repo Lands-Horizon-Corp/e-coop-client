@@ -54,13 +54,13 @@ const FileUploader = ({
                 const reader = new FileReader()
                 reader.addEventListener('load', () => {
                     const newImgUrl = reader.result?.toString() ?? ''
-                    selectedPhotos && selectedPhotos(newImgUrl)
+                    selectedPhotos?.(newImgUrl)
                 })
                 reader.readAsDataURL(file)
             }
 
             setHasError(false)
-            onFileChange && onFileChange(acceptedFiles)
+            onFileChange?.(acceptedFiles)
             handleFilesChange(acceptedFiles)
         },
         [onFileChange, handleFilesChange, selectedPhotos]

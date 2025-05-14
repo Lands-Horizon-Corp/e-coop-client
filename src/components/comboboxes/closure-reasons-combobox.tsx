@@ -55,7 +55,13 @@ const AccountClosureReasonCombobox = ({
                     aria-expanded={open}
                     className={cn('w-full justify-between px-3', className)}
                 >
-                    <span className="capitalize">{value || placeholder}</span>
+                    <span className="capitalize">
+                        {value || (
+                            <span className="text-muted-foreground">
+                                {placeholder}
+                            </span>
+                        )}
+                    </span>
                     <ChevronDownIcon className="opacity-50" />
                 </Button>
             </PopoverTrigger>

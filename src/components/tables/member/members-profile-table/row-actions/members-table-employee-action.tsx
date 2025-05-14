@@ -1,16 +1,13 @@
-// import { useState } from 'react'
-// import { useRouter } from '@tanstack/react-router'
+import { useState } from 'react'
 
 import { IMemberProfileTableActionComponentProp } from '../columns'
-// import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-// import { EyeIcon, UserClockFillIcon, UserIcon } from '@/components/icons'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { FC } from 'react'
 // import { MemberCreateUpdateFormModal } from '@/components/forms/member-forms/member-create-update-form'
 // import { MemberProfileCreateUpdateFormModal } from '@/components/forms/member-forms/member-application-form/member-profile-create-update-form'
 
-// import { MemberHistoriesModal } from '@/components/member-histories'
-// import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
+import { MemberHistoriesModal } from '@/components/member-infos/member-histories'
+import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
 
 interface IMemberProfileTableEmployeeActionProps
     extends IMemberProfileTableActionComponentProp {
@@ -20,12 +17,12 @@ interface IMemberProfileTableEmployeeActionProps
 
 const MemberProfileTableEmployeeAction: FC<
     IMemberProfileTableEmployeeActionProps
-> = () => {
-    // const member = row.original
+> = ({ row }) => {
+    const member = row.original
     // const router = useRouter()
     // const [editModal, setEditModal] = useState(false)
-    // const [viewOverallInfo, setViewOverallInfo] = useState(false)
-    // const [viewHistoryModal, setViewHistoryModal] = useState(false)
+    const [viewOverallInfo, setViewOverallInfo] = useState(false)
+    const [viewHistoryModal, setViewHistoryModal] = useState(false)
     // const [editAccountModal, setEditAccountModal] = useState(false)
 
     return (
@@ -62,25 +59,25 @@ const MemberProfileTableEmployeeAction: FC<
                             birthDate: new Date(member.birthDate),
                         },
                     }}
-                />
-                {member.memberProfile && (
+                /> */}
+                {member && (
                     <>
                         <MemberHistoriesModal
                             open={viewHistoryModal}
                             memberHistoryProps={{
-                                profileId: member.memberProfile?.id,
+                                profileId: member.id,
                             }}
                             onOpenChange={setViewHistoryModal}
                         />
                         <MemberOverallInfoModal
                             overallInfoProps={{
-                                memberProfileId: member.memberProfile.id,
+                                memberProfileId: member.id,
                             }}
                             open={viewOverallInfo}
                             onOpenChange={setViewOverallInfo}
                         />
                     </>
-                )} */}
+                )}
             </div>
             <RowActionsGroup
                 // onEdit={{

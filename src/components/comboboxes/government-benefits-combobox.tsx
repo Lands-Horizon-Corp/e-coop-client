@@ -64,7 +64,11 @@ const GovernmentBenefitsCombobox = ({
                     className={cn('w-full justify-between px-3', className)}
                 >
                     <span className="capitalize">
-                        {selectedItem?.text || placeholder}
+                        {selectedItem?.text || (
+                            <span className="text-muted-foreground">
+                                {placeholder}
+                            </span>
+                        )}
                     </span>
                     <ChevronDownIcon className="opacity-50" />
                 </Button>
