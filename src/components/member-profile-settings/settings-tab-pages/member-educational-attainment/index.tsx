@@ -4,7 +4,6 @@ import {
     PlusIcon,
     TrashIcon,
     SchoolIcon,
-    BookOpenIcon,
     CalendarIcon,
     WoodSignsIcon,
     PencilFillIcon,
@@ -47,7 +46,7 @@ const MemberEducationalAttainmentCard = ({
             <div className="flex justify-between rounded-b-xl border-b bg-secondary/20 p-4">
                 <div className="flex items-center gap-x-2">
                     <GraduationCapIcon className="inline size-6 text-muted-foreground" />
-                    <p className="">{educationalAttainment.name}</p>
+                    <p className="">{educationalAttainment.program_course}</p>
                 </div>
                 <div className="flex items-center justify-end">
                     <Button
@@ -88,12 +87,6 @@ const MemberEducationalAttainmentCard = ({
                         Year
                     </span>
                     <p>{educationalAttainment.school_year ?? '-'}</p>
-
-                    <span className="text-muted-foreground">
-                        <BookOpenIcon className="mr-2 inline text-muted-foreground" />
-                        Course / Program
-                    </span>
-                    <p>{educationalAttainment.program_course ?? '-'}</p>
 
                     <span className="text-muted-foreground">
                         <GraduationCapIcon className="mr-2 inline text-muted-foreground" />
