@@ -14,8 +14,8 @@ export interface IMemberGroupRequest {
     name: string
     description: string
 
-    organization_id: TEntityId
-    branch_id: TEntityId
+    // organization_id: TEntityId
+    // branch_id: TEntityId
 }
 
 export interface IMemberGroupPaginated extends IPaginatedResult<IMemberGroup> {}
