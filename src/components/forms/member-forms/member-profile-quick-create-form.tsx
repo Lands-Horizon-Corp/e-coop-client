@@ -29,8 +29,6 @@ import {
     IMemberProfile,
     IMemberProfileQuickCreateRequest,
 } from '@/types'
-import { parseDate } from '@internationalized/date'
-import { DateInput, DatePicker, DateSegment } from 'react-aria-components'
 
 type TMemberProfileQuickFormValues = z.infer<
     typeof quickCreateMemberProfileSchema
@@ -269,30 +267,12 @@ const MemberProfileQuickCreateForm = ({
                                 name="birth_date"
                                 label="Date of Birth *"
                                 render={({ field }) => (
-                                    // <Input
-                                    //     type="date"
-                                    //     {...field}
-                                    //     value={field.value ?? ''}
-                                    // />
-                                    <DatePicker
-                                        value={
-                                            field.value
-                                                ? parseDate(field.value)
-                                                : undefined
-                                        }
-                                        onChange={(val) => {
-                                            if (!val) return field.onChange('')
-                                            field.onChange(val.toString())
-                                        }}
-                                    >
-                                        <DateInput>
-                                            {(segment) => (
-                                                <DateSegment
-                                                    segment={segment}
-                                                />
-                                            )}
-                                        </DateInput>
-                                    </DatePicker>
+                                    <Input
+                                        type="date"
+                                        {...field}
+                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
+                                        value={field.value ?? ''}
+                                    />
                                 )}
                             />
                         </div>
@@ -310,6 +290,8 @@ const MemberProfileQuickCreateForm = ({
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
                                             id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
                                             className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}`}
                                         />
@@ -343,6 +325,8 @@ const MemberProfileQuickCreateForm = ({
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
                                             id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
                                             className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}`}
                                         />

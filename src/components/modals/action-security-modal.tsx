@@ -85,6 +85,7 @@ const ActionSecurityModal = () => {
 
                         <div className="flex justify-end gap-x-2">
                             <Button
+                                size="sm"
                                 type="submit"
                                 disabled={isPending}
                                 className="w-full px-8"

@@ -275,6 +275,7 @@ const SignUpForm = ({
                 <div className="mt-4 flex flex-col items-center space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <Button
+                        size="sm"
                         type="submit"
                         className="w-full max-w-xl rounded-3xl"
                         disabled={isLoading || readOnly}

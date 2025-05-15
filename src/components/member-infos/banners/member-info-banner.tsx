@@ -64,7 +64,7 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                 />
 
                 <div className="w-fit space-y-1">
-                    <p className="text-xl">{`${memberProfile.user?.full_name ?? 'no name'}`}</p>
+                    <p className="text-xl">{`${memberProfile.full_name ?? 'no name'}`}</p>
                     <p className="text-sm text-muted-foreground/80">
                         {`${memberProfile.user?.email ?? 'no email'}`}
                         {memberProfile.user && (

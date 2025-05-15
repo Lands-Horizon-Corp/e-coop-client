@@ -7,7 +7,6 @@ import {
 } from '../../ui/app-sidebar/types'
 
 import {
-    UserIcon,
     BankIcon,
     BillIcon,
     ShieldIcon,
@@ -20,7 +19,6 @@ import {
     DashboardIcon,
     FootstepsIcon,
     HandCoinsIcon,
-    UserShieldIcon,
     MaintenanceIcon,
     Users3Icon,
     // NotificationIcon,
@@ -63,6 +61,7 @@ export const generateSidebarGroups = (
                     type: 'item',
                     title: 'Dashboard',
                     url: `${baseUrl}/dashboard`,
+                    shortDescription: 'Monitor your data',
                     icon: DashboardIcon,
                     userType: ['employee', 'member'],
                 },
@@ -126,23 +125,23 @@ export const generateSidebarGroups = (
             ],
         },
         {
-            title: 'Users',
+            title: 'Users & Members',
             userType: ['employee'],
             navItems: [
                 {
-                    title: 'Members',
-                    url: `${baseUrl}/users/members`,
-                    icon: UserIcon,
+                    title: 'All Members',
+                    url: `${baseUrl}/view-members`,
+                    type: 'item',
+                    icon: UserListIcon,
+                    userType: ['employee'],
+                },
+                {
+                    title: 'Member Settings',
+                    url: `${baseUrl}/members`,
+                    icon: MaintenanceIcon,
                     type: 'dropdown',
                     userType: ['employee'],
                     items: [
-                        {
-                            title: 'View Members',
-                            url: `/view-members`,
-                            type: 'item',
-                            icon: UserListIcon,
-                            userType: ['employee'],
-                        },
                         {
                             title: 'Member Types',
                             url: `/member-types`,
@@ -187,34 +186,31 @@ export const generateSidebarGroups = (
                         },
                     ],
                 },
+            ],
+        },
+        {
+            title: 'Employee',
+            userType: ['employee'],
+            navItems: [
                 {
-                    title: 'Employees',
-                    url: `${baseUrl}/users/employees`,
-                    type: 'dropdown',
-                    icon: UserShieldIcon,
+                    title: 'View Employees',
+                    url: `${baseUrl}/employees/view-employees`,
+                    icon: UserListIcon,
+                    type: 'item',
                     userType: ['employee'],
-                    items: [
-                        {
-                            title: 'View Employees',
-                            url: `/view-employees`,
-                            icon: UserListIcon,
-                            type: 'item',
-                            userType: ['employee'],
-                        },
-                        {
-                            title: 'Employee Footsteps',
-                            url: `/employee-footsteps`,
-                            icon: FootstepsIcon,
-                            type: 'item',
-                            userType: ['employee'],
-                        },
-                    ],
+                },
+                {
+                    title: 'Employee Footsteps',
+                    url: `${baseUrl}/employee-footstep`,
+                    icon: FootstepsIcon,
+                    type: 'item',
+                    userType: ['employee'],
                 },
                 {
                     title: 'Roles Management',
                     icon: ShieldIcon,
                     type: 'item',
-                    url: `${baseUrl}/roles-management`,
+                    url: `${baseUrl}/employees/roles-management`,
                     userType: ['employee'],
                 },
             ],

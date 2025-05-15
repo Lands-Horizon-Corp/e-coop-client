@@ -194,6 +194,7 @@ const MemberProfileCloseForm = ({
                     <Separator className="my-2 sm:my-4" />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
+                            size="sm"
                             type="button"
                             variant="ghost"
                             disabled={readOnly || isClosingAccount}
@@ -212,6 +213,7 @@ const MemberProfileCloseForm = ({
                             Reset
                         </Button>
                         <Button
+                            size="sm"
                             type="submit"
                             variant="destructive"
                             disabled={isClosingAccount || !!data}

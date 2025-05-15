@@ -135,7 +135,11 @@ const ResetPasswordForm = ({
 
                 <div className="mt-4 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={firstError || error} />
-                    <Button type="submit" disabled={isPending || readOnly}>
+                    <Button
+                        size="sm"
+                        type="submit"
+                        disabled={isPending || readOnly}
+                    >
                         {isPending ? <LoadingSpinner /> : 'Save Password'}
                     </Button>
                 </div>

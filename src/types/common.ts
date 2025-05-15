@@ -4,6 +4,7 @@ import { IOrganization } from './lands-types'
 import {
     AccountClosureReasons,
     CIVIL_STATUS,
+    EDUCATIONAL_ATTAINMENT,
     FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
 } from '@/constants'
@@ -55,7 +56,7 @@ export interface IBaseEntityMeta
         IOrgBranchIdentity {}
 
 export interface ITimeStamps {
-    deleted_at?: string | null
+    deleted_at?: string | undefined
     created_at: string
     updated_at?: string
 }
@@ -63,3 +64,5 @@ export interface ITimeStamps {
 export type TCivilStatus = (typeof CIVIL_STATUS)[number]
 
 export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]
+
+export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number]

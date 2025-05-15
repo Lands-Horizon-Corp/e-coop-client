@@ -99,6 +99,7 @@ const SignInForm = ({
                 <div className="mt-6 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <Button
+                        size="sm"
                         type="submit"
                         className="w-full max-w-xl rounded-3xl"
                         disabled={isPending || readOnly}

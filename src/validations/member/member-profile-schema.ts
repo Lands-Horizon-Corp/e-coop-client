@@ -96,6 +96,7 @@ export const quickCreateMemberProfileSchema = z.object({
     last_name: z.string().min(1, 'Last name is required'),
     full_name: z.string().optional(),
     suffix: z.string().max(15).optional(),
+    contact_number: z.string().optional(),
     birth_date: z.coerce.string().date(),
     member_gender_id: entityIdSchema.optional(),
 

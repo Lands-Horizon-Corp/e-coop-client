@@ -18,13 +18,19 @@ import {
 } from '@/hooks/api-hooks/member/use-member-center'
 import { memberCenterSchema } from '@/validations/member/member-center-schema'
 
-import { IClassProps, IForm, IMemberCenterRequest, TEntityId } from '@/types'
+import {
+    IForm,
+    TEntityId,
+    IClassProps,
+    IMemberCenter,
+    IMemberCenterRequest,
+} from '@/types'
 
 type TMemberCenterForm = z.infer<typeof memberCenterSchema>
 
 export interface IMemberCenterCreateUpdateFormProps
     extends IClassProps,
-        IForm<Partial<IMemberCenterRequest>, unknown, string> {
+        IForm<Partial<IMemberCenterRequest>, IMemberCenter, string> {
     memberCenterId?: TEntityId
 }
 
@@ -124,6 +130,7 @@ const MemberCenterCreateUpdateForm = ({
                     <Separator className="my-2 sm:my-4" />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
+                            size="sm"
                             type="button"
                             variant="ghost"
                             onClick={() => form.reset()}
@@ -132,6 +139,7 @@ const MemberCenterCreateUpdateForm = ({
                             Reset
                         </Button>
                         <Button
+                            size="sm"
                             type="submit"
                             disabled={isCreating || isUpdating}
                             className="w-full self-end px-8 sm:w-fit"
