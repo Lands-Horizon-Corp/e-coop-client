@@ -7,7 +7,13 @@ import {
     IMemberProfileRequest,
     IMemberProfilePaginated,
     IMemberCloseRemarkRequest,
+    IMemberProfileAccountRequest,
     IMemberProfileQuickCreateRequest,
+    IMemberProfilePersonalInfoRequest,
+    IMemberProfileMembershipInfoRequest,
+    IMemberProfileMediasRequest,
+    IMemberEducationalAttainment,
+    IMemberEducationalAttainmentRequest,
 } from '@/types'
 import { downloadFileService } from '@/helpers'
 
@@ -176,4 +182,101 @@ export const exportSelected = async (ids: TEntityId[]) => {
     )
 
     await downloadFileService(url, 'selected_members_export.csv')
+}
+
+// FOR UPDATING
+
+export const updateMemberProfilePersonalInfo = async (
+    id: TEntityId,
+    data: IMemberProfilePersonalInfoRequest
+) => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}/personal-info`,
+    })
+
+    const response = await APIService.put<
+        IMemberProfilePersonalInfoRequest,
+        IMemberProfile
+    >(url, data)
+    return response.data
+}
+
+export const updateMemberProfileMembershipInfo = async (
+    id: TEntityId,
+    data: IMemberProfileMembershipInfoRequest
+) => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}/membership-info`,
+    })
+
+    const response = await APIService.put<
+        IMemberProfileMembershipInfoRequest,
+        IMemberProfile
+    >(url, data)
+    return response.data
+}
+
+export const updateMemberProfileAccountInfo = async (
+    id: TEntityId,
+    data: IMemberProfileAccountRequest
+) => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}/account-info`,
+    })
+
+    const response = await APIService.put<
+        IMemberProfileAccountRequest,
+        IMemberProfile
+    >(url, data)
+    return response.data
+}
+
+export const updateMemberProfileMediasPhotoSignature = async (
+    id: TEntityId,
+    data: IMemberProfileMediasRequest
+) => {
+    const url = qs.stringifyUrl({
+        url: `${BASE_ENDPOINT}/${id}/medias`,
+    })
+
+    const response = await APIService.put<
+        IMemberProfileMediasRequest,
+        IMemberProfile
+    >(url, data)
+    return response.data
+}
+
+// EDUCATIONAL ATTAINMENT
+
+export const createEducationalAttainmentForMember = async (
+    memberProfileId: TEntityId,
+    data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
+) => {
+    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainments`
+    const res = await APIService.post<
+        Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>,
+        IMemberEducationalAttainment
+    >(url, data)
+    return res.data
+}
+
+export const updateEducationalAttainmentForMember = async (
+    memberProfileId: TEntityId,
+    educationalAttainmentId: TEntityId,
+    data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
+) => {
+    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainment/${educationalAttainmentId}`
+    const res = await APIService.put<
+        Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>,
+        IMemberEducationalAttainment
+    >(url, data)
+    return res.data
+}
+
+export const deleteEducationalAttainmentForMember = async (
+    memberProfileId: TEntityId,
+    educationalAttainmentId: TEntityId
+) => {
+    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainments/${educationalAttainmentId}`
+    return APIService.delete(url)
 }

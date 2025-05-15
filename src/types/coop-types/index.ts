@@ -41,6 +41,7 @@ export * from './member/member-contact-references'
 export * from './member/member-educational-attainment'
 export * from './member/member-occupation'
 export * from './member/member-occupation-history'
+export * from './member/member-profile-settings'
 
 /* Other Types */
 export * from './api'
