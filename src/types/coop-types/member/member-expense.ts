@@ -3,7 +3,7 @@ import { IBranch } from '../branch'
 import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
-export interface IMemberExpensesRequest {
+export interface IMemberExpenseRequest {
     id?: TEntityId
     name: string
     date: string
@@ -12,7 +12,7 @@ export interface IMemberExpensesRequest {
 }
 
 // LATEST FROM ERD
-export interface IMemberExpenses extends ITimeStamps, IAuditable {
+export interface IMemberExpense extends ITimeStamps, IAuditable {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile: IMemberProfile

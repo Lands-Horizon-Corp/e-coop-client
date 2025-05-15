@@ -1,7 +1,7 @@
 import z from 'zod'
 import { entityIdSchema, mediaSchema } from '@/validations/common'
 
-export const memberGovernmentBenefits = z.object({
+export const memberGovernmentBenefitSchema = z.object({
     id: entityIdSchema.optional(),
     country: z.string().min(1, 'Country is required'),
     name: z.string().min(1, 'Name is required'),
