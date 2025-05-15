@@ -81,7 +81,7 @@ const PictureCrop = ({ image, onCancel, onCrop }: Props) => {
                     aspect={1 / 1}
                     zoomSpeed={0.3}
                     showGrid={false}
-                    cropShape="round"
+                    cropShape="rect"
                     rotation={rotation}
                     onZoomChange={setZoom}
                     onCropChange={setCrop}

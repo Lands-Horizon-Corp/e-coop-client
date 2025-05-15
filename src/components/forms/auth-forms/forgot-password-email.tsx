@@ -107,6 +107,7 @@ const ForgotPasswordEmail = ({
                 <div className="mt-4 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <Button
+                        size="sm"
                         type="submit"
                         disabled={isLoading || readOnly}
                         className="w-full max-w-xl rounded-3xl"

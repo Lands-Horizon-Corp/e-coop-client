@@ -5,7 +5,7 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 import SectionTitle from '../section-title'
-import RawDescription from './raw-description'
+import RawDescription from '../../raw-description'
 import { TelephoneIcon } from '@/components/icons'
 
 import { cn } from '@/lib'

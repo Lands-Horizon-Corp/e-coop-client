@@ -22,6 +22,7 @@ const buttonVariants = cva(
             },
             hoverVariant: {
                 default: '',
+                primary: 'hover:bg-primary/90 text-primary-foreground',
                 destructive: 'hover:bg-destructive/90',
                 outline: 'hover:bg-accent hover:text-accent-foreground',
                 secondary: 'hover:bg-secondary/80',

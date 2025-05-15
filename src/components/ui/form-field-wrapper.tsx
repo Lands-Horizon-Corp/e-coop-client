@@ -60,7 +60,10 @@ const FormFieldWrapper = <
                         {label && (
                             <FormLabel
                                 htmlFor={field.name}
-                                className={cn(labelClassName)}
+                                className={cn(
+                                    'text-foreground/80',
+                                    labelClassName
+                                )}
                             >
                                 {label}
                             </FormLabel>

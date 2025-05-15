@@ -1,7 +1,7 @@
 import SectionTitle from './section-title'
 import ImageDisplay from '../image-display'
 import { Separator } from '../ui/separator'
-import RawDescription from './displays/raw-description'
+import RawDescription from '../raw-description'
 import AddressesDisplay from './displays/addresses-display'
 import ContactNumbersDisplay from './displays/contact-numbers-display'
 import { DetailsIcon, NoteIcon, StoreIcon, UserIcon } from '../icons'

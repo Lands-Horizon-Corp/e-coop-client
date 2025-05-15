@@ -15,7 +15,7 @@ const RawDescription = ({ className, content }: Props) => {
                 __html: DOMPurify.sanitize(content),
             }}
             className={cn('', className)}
-        ></div>
+        />
     )
 }
 

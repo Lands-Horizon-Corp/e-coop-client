@@ -5,7 +5,7 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 import { WarningFillIcon } from '@/components/icons'
-import RawDescription from '../displays/raw-description'
+import RawDescription from '../../raw-description'
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'

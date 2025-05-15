@@ -140,6 +140,7 @@ const AccountSecurityForm = ({
                         <Separator className="my-2 sm:my-4" />
                         <div className="flex items-center justify-end gap-x-2">
                             <Button
+                                size="sm"
                                 type="button"
                                 variant="ghost"
                                 onClick={() => form.reset()}
@@ -148,6 +149,7 @@ const AccountSecurityForm = ({
                                 Reset
                             </Button>
                             <Button
+                                size="sm"
                                 type="submit"
                                 disabled={isPending}
                                 className="w-full self-end px-8 sm:w-fit"

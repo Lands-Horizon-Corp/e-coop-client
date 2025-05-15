@@ -11,7 +11,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import RawDescription from './raw-description'
+import RawDescription from '../../raw-description'
 
 interface Props extends IClassProps {
     assets?: IMemberAssets[]

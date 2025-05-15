@@ -1,5 +1,5 @@
 import SectionTitle from '../section-title'
-import RawDescription from './raw-description'
+import RawDescription from '../../raw-description'
 import { DetailsIcon } from '@/components/icons'
 import CopyTextButton from '@/components/copy-text-button'
 

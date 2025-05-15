@@ -207,11 +207,13 @@ import {
     FaFileCsv as CsvIcon,
     FaPhoneAlt as PhoneIcon,
     FaMoneyBill as BillIcon,
+    FaBookOpen as BookOpenIcon,
     FaCreditCard as CreditCardIcon,
     FaUserClock as UserClockFillIcon,
 } from 'react-icons/fa'
 
 import {
+    FaSchool as SchoolIcon,
     FaVenusMars as GendersIcon,
     FaChartPie as PieChartIcon,
     FaAddressCard as AddressCardIcon,
@@ -235,6 +237,7 @@ import {
 import {
     GiWallet as WalletIcon,
     GiTakeMyMoney as MoneyIcon,
+    GiWoodenSign as WoodSignsIcon,
 } from 'react-icons/gi'
 
 import {
@@ -308,6 +311,7 @@ export {
     ZoomInIcon,
     AdjustIcon,
     WalletIcon,
+    SchoolIcon,
     Image2Icon,
     DetailsIcon,
     ReplaceIcon,
@@ -324,6 +328,7 @@ export {
     PushPinIcon,
     EyeNoneIcon,
     UserTagIcon,
+    BookOpenIcon,
     PieChartIcon,
     AccountsIcon,
     PaymentsIcon,
@@ -352,6 +357,7 @@ export {
     UserClockIcon,
     DashboardIcon,
     IoIosCodeIcon,
+    WoodSignsIcon,
     TelephoneIcon,
     FolderFillIcon,
     ArrowRightIcon,
