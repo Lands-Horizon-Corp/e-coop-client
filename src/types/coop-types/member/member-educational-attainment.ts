@@ -16,7 +16,6 @@ export interface IMemberEducationalAttainmentRequest {
     branch_id?: TEntityId
     member_profile_id: TEntityId
 
-    name: string
     school_name?: string
     school_year?: number
     program_course?: string
@@ -35,7 +34,6 @@ export interface IMemberEducationalAttainment extends ITimeStamps, IAuditable {
     member_profile_id: TEntityId
     member_profile: IMemberProfile
 
-    name: string
     school_name?: string
     school_year?: number
     program_course?: string
