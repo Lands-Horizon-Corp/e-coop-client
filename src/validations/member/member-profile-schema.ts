@@ -1,19 +1,19 @@
 import z from 'zod'
 
+import {
+    mediaSchema,
+    entityIdSchema,
+    civilStatusSchema,
+    generalStatusSchema,
+} from '../common'
 import { memberCenterSchema } from './member-center-schema'
 import { memberAssetsSchema } from './member-assets-schema'
 import { memberIncomeSchema } from './member-income-schema'
 import { memberAddressSchema } from './member-address-schema'
-import { memberExpensesSchema } from './member-expenses-schema'
+import { memberExpenseSchema } from './member-expense-schema'
 import { memberDescriptionSchema } from './member-description-schema'
 import { memberCloseRemarkSchema } from './member-close-remark-schema'
-import { memberGovernmentBenefits } from './member-government-benefits'
-import {
-    civilStatusSchema,
-    entityIdSchema,
-    generalStatusSchema,
-    mediaSchema,
-} from '../common'
+import { memberGovernmentBenefitSchema } from './member-government-benefit'
 import { memberJointAccountsSchema } from './member-joint-accounts-schema'
 import { memberRelativeAccountsSchema } from './member-relative-accounts-schema'
 import { memberContactReferencesSchema } from './member-contact-number-references-schema'
@@ -76,11 +76,13 @@ export const createMemberProfileSchema = z.object({
 
     memberIncome: z.array(memberIncomeSchema).optional(),
     memberAssets: z.array(memberAssetsSchema).optional(),
-    memberExpenses: z.array(memberExpensesSchema).optional(),
+    memberExpenses: z.array(memberExpenseSchema).optional(),
     memberCloseRemarks: z.array(memberCloseRemarkSchema).optional(),
     memberDescriptions: z.array(memberDescriptionSchema).optional(),
     memberJointAccounts: z.array(memberJointAccountsSchema).optional(),
-    memberGovernmentBenefits: z.array(memberGovernmentBenefits).optional(),
+    memberGovernmentBenefitSchema: z
+        .array(memberGovernmentBenefitSchema)
+        .optional(),
     memberRelativeAccounts: z.array(memberRelativeAccountsSchema).optional(),
 })
 

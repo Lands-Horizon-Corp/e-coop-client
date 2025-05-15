@@ -3,7 +3,7 @@ import { IMemberProfile } from './member-profile'
 import { ITimeStamps, TEntityId } from '../../common'
 
 // LATEST FROM ERD
-export interface IMemberGovernmentBenefitsRequest {
+export interface IMemberGovernmentBenefitRequest {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile: IMemberProfile
@@ -21,7 +21,7 @@ export interface IMemberGovernmentBenefitsRequest {
 }
 
 // LATEST FROM ERD
-export interface IMemberGovernmentBenefits extends ITimeStamps {
+export interface IMemberGovernmentBenefit extends ITimeStamps {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile: IMemberProfile

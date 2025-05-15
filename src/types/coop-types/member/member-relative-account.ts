@@ -3,7 +3,7 @@ import { IMemberProfile } from './member-profile'
 import { IAuditable, ITimeStamps, TEntityId, TRelationship } from '../../common'
 
 // FROM LATEST ERD
-export interface IMemberRelativeAccountsRequest {
+export interface IMemberRelativeAccountRequest {
     id?: TEntityId
 
     branch_id: TEntityId
@@ -15,7 +15,7 @@ export interface IMemberRelativeAccountsRequest {
 }
 
 // FROM LATEST ERD
-export interface IMemberRelativeAccounts extends ITimeStamps, IAuditable {
+export interface IMemberRelativeAccount extends ITimeStamps, IAuditable {
     id: TEntityId
 
     branch_id: TEntityId

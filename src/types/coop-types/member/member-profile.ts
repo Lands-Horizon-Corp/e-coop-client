@@ -1,19 +1,19 @@
 import { IMedia } from '../media'
 import { IUserBase } from '../../auth'
-import { IMemberExpenses, IMemberExpensesRequest } from './member-expenses'
+import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
 import { IMemberDescriptionRequest } from './member-description'
 import {
     IMemberJointAccount,
     IMemberJointAccountRequest,
-} from './member-joint-accounts'
+} from './member-joint-account'
 import {
-    IMemberRelativeAccounts,
-    IMemberRelativeAccountsRequest,
-} from './member-relative-accounts'
+    IMemberRelativeAccount,
+    IMemberRelativeAccountRequest,
+} from './member-relative-account'
 import {
-    IMemberGovernmentBenefits,
-    IMemberGovernmentBenefitsRequest,
-} from './member-government-benefits'
+    IMemberGovernmentBenefit,
+    IMemberGovernmentBenefitRequest,
+} from './member-government-benefit'
 
 import {
     TEntityId,
@@ -28,7 +28,7 @@ import { IMemberGender } from './member-gender'
 import { IMemberCenter } from './member-center'
 import { IPaginatedResult } from '../paginated-result'
 import { IMemberIncome, IMemberIncomeRequest } from './member-income'
-import { IMemberAssets, IMemberAssetsRequest } from './member-assets'
+import { IMemberAsset, IMemberAssetRequest } from './member-asset'
 import { IMemberOccupation } from './member-occupation'
 import { IMemberAddress, IMemberAddressRequest } from './member-address'
 import { IMemberClassification } from './member-classification'
@@ -111,14 +111,14 @@ export interface IMemberProfileRequest {
     memberEducationalAttainmentId?: TEntityId
 
     memberIncome?: IMemberIncomeRequest[]
-    memberAssets?: IMemberAssetsRequest[]
+    memberAssets?: IMemberAssetRequest[]
     member_addresses: IMemberAddressRequest[]
-    memberExpenses?: IMemberExpensesRequest[]
+    memberExpenses?: IMemberExpenseRequest[]
     memberDescriptions?: IMemberDescriptionRequest[]
     memberCloseRemarks?: IMemberCloseRemarkRequest[]
     memberJointAccounts?: IMemberJointAccountRequest[]
-    memberRelativeAccounts?: IMemberRelativeAccountsRequest[]
-    memberGovernmentBenefits?: IMemberGovernmentBenefitsRequest[]
+    memberRelativeAccounts?: IMemberRelativeAccountRequest[]
+    memberGovernmentBenefits?: IMemberGovernmentBenefitRequest[]
     memberContactNumberReferences: IMemberContactReferenceRequest[]
 }
 
@@ -196,17 +196,17 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // memberEducationalAttainmentId?: TEntityId
     member_educational_attainment?: IMemberEducationalAttainment[]
 
-    member_assets?: IMemberAssets[]
+    member_assets?: IMemberAsset[]
     member_income?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
     member_addresses?: IMemberAddress[]
     member_recruits?: IMemberRecruits[]
-    member_expenses?: IMemberExpenses[]
+    member_expenses?: IMemberExpense[]
     // memberDescriptions?: IMemberDescription[]
     member_close_remarks?: IMemberCloseRemark[]
     member_joint_accounts?: IMemberJointAccount[]
-    member_relative_accounts?: IMemberRelativeAccounts[]
-    member_government_benefits?: IMemberGovernmentBenefits[]
+    member_relative_accounts?: IMemberRelativeAccount[]
+    member_government_benefits?: IMemberGovernmentBenefit[]
     // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
     member_contact_number_references?: IMemberContactReferences[]
 }

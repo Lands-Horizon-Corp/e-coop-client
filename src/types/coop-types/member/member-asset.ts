@@ -4,7 +4,7 @@ import { IMemberProfile } from './member-profile'
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
 // LATEST FROM ERD
-export interface IMemberAssetsRequest {
+export interface IMemberAssetRequest {
     id?: TEntityId
     media_id?: TEntityId
 
@@ -19,7 +19,7 @@ export interface IMemberAssetsRequest {
 }
 
 // LATEST FROM ERD
-export interface IMemberAssets extends ITimeStamps, IAuditable {
+export interface IMemberAsset extends ITimeStamps, IAuditable {
     id: TEntityId
     media_id?: TEntityId
     media?: IMedia
