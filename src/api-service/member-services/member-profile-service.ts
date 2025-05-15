@@ -252,7 +252,7 @@ export const createEducationalAttainmentForMember = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainments`
+    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainment`
     const res = await APIService.post<
         Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>,
         IMemberEducationalAttainment
@@ -277,6 +277,6 @@ export const deleteEducationalAttainmentForMember = async (
     memberProfileId: TEntityId,
     educationalAttainmentId: TEntityId
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainments/${educationalAttainmentId}`
+    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainment/${educationalAttainmentId}`
     return APIService.delete(url)
 }
