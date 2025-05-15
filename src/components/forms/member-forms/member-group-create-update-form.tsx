@@ -46,8 +46,8 @@ const MemberGroupCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            organization_id: '',
-            branch_id: '',
+            // organization_id: '',
+            // branch_id: '',
             ...defaultValues,
         },
     })
@@ -109,7 +109,7 @@ const MemberGroupCreateUpdateForm = ({
                             )}
                         />
 
-                        <FormFieldWrapper
+                        {/* <FormFieldWrapper
                             control={form.control}
                             name="organization_id"
                             label="Organization ID"
@@ -137,7 +137,7 @@ const MemberGroupCreateUpdateForm = ({
                                     disabled={isDisabled(field.name)}
                                 />
                             )}
-                        />
+                        /> */}
                     </fieldset>
                 </fieldset>
                 <FormErrorMessage errorMessage={error} />
