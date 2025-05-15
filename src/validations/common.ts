@@ -1,6 +1,7 @@
 import z from 'zod'
 import {
     CIVIL_STATUS,
+    EDUCATIONAL_ATTAINMENT,
     GENERAL_STATUS,
     LETTERS_REGEX,
     NUMBER_LETTER_REGEX,
@@ -10,7 +11,7 @@ import {
 export const entityIdSchema = z.coerce.string().uuid('Invalid')
 
 export const mediaSchema = z.object({
-    id: entityIdSchema,
+    id: entityIdSchema.optional(),
     file_name: z.string(),
     file_size: z.number(),
     file_type: z.string(),
@@ -85,3 +86,5 @@ export const contactNumberSchema = z.string().min(1, 'Contact Number is empty')
 export const generalStatusSchema = z.enum(GENERAL_STATUS)
 
 export const civilStatusSchema = z.enum(CIVIL_STATUS)
+
+export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT)

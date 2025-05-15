@@ -5,155 +5,154 @@ import { downloadFileService } from '@/helpers'
 
 import {
     TEntityId,
-    IMemberEducationalAttainmentRequest,
     IMemberEducationalAttainment,
+    IMemberEducationalAttainmentRequest,
     IMemberEducationalAttainmentPaginated,
 } from '@/types'
 
-export default class MemberEducationalAttainmentService {
-    private static readonly BASE_ENDPOINT = '/member-educational-attainment'
+const BASE_ENDPOINT = '/member-educational-attainment'
 
-    public static async getById(
-        id: TEntityId,
-        preloads?: string[]
-    ): Promise<IMemberEducationalAttainment> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}/${id}`,
-                query: { preloads },
+export const getMemberEducationalAttainmentById = async (
+    id: TEntityId,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/${id}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const res = await APIService.get<IMemberEducationalAttainment>(url, {
+        headers: {
+            Authorization: `Bearer YOUR_TOKEN`,
+        },
+    })
+    return res.data
+}
+
+export const createMemberEducationalAttainment = async (
+    data: IMemberEducationalAttainmentRequest,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const res = await APIService.post<
+        IMemberEducationalAttainmentRequest,
+        IMemberEducationalAttainment
+    >(url, data)
+    return res.data
+}
+
+export const updateMemberEducationalAttainment = async (
+    id: TEntityId,
+    data: IMemberEducationalAttainmentRequest,
+    preloads?: string[]
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/${id}`,
+            query: { preloads },
+        },
+        { skipNull: true }
+    )
+
+    const res = await APIService.put<
+        IMemberEducationalAttainmentRequest,
+        IMemberEducationalAttainment
+    >(url, data, {
+        headers: {
+            Authorization: `Bearer YOUR_TOKEN`,
+        },
+    })
+    return res.data
+}
+
+export const deleteMemberEducationalAttainment = async (id: TEntityId) => {
+    const endpoint = `${BASE_ENDPOINT}/${id}`
+    return APIService.delete(endpoint)
+}
+
+export const getMemberEducationalAttainments = async ({
+    filters,
+    preloads,
+    pagination,
+    sort,
+}: {
+    sort?: string
+    filters?: string
+    preloads?: string[]
+    pagination?: { pageIndex: number; pageSize: number }
+} = {}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}`,
+            query: {
+                sort,
+                preloads,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
             },
-            { skipNull: true }
-        )
+        },
+        { skipNull: true }
+    )
 
-        const response = await APIService.get<IMemberEducationalAttainment>(
-            url,
-            {
-                headers: {
-                    Authorization: `Bearer YOUR_TOKEN`,
-                },
-            }
-        )
+    const res = await APIService.get<IMemberEducationalAttainmentPaginated>(url)
+    return res.data
+}
 
-        return response.data
-    }
+export const exportAllMemberEducationalAttainments = async () => {
+    const url = `${BASE_ENDPOINT}/export`
+    return downloadFileService(
+        url,
+        'all_member_educational_attainments_export.csv'
+    )
+}
 
-    public static async create(
-        data: IMemberEducationalAttainmentRequest,
-        preloads?: string[]
-    ): Promise<IMemberEducationalAttainment> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}`,
-                query: { preloads },
-            },
-            { skipNull: true }
-        )
+export const exportAllFilteredMemberEducationalAttainments = async (
+    filters?: string
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BASE_ENDPOINT}/export-search`,
+            query: { filters },
+        },
+        { skipNull: true }
+    )
+    return downloadFileService(
+        url,
+        'filtered_member_educational_attainments_export.csv'
+    )
+}
 
-        const response = await APIService.post<
-            IMemberEducationalAttainmentRequest,
-            IMemberEducationalAttainment
-        >(url, data)
-        return response.data
-    }
-
-    public static async update(
-        id: TEntityId,
-        data: IMemberEducationalAttainmentRequest,
-        preloads?: string[]
-    ): Promise<IMemberEducationalAttainment> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}/${id}`,
-                query: { preloads },
-            },
-            { skipNull: true }
-        )
-
-        const response = await APIService.put<
-            IMemberEducationalAttainmentRequest,
-            IMemberEducationalAttainment
-        >(url, data, {
-            headers: {
-                Authorization: `Bearer YOUR_TOKEN`,
-            },
-        })
-        return response.data
-    }
-
-    public static async delete(id: TEntityId): Promise<void> {
-        const endpoint = `${MemberEducationalAttainmentService.BASE_ENDPOINT}/${id}`
-        await APIService.delete(endpoint)
-    }
-
-    public static async getMemberEducationalAttainments({
-        filters,
-        preloads,
-        pagination,
-        sort,
-    }: {
-        sort?: string
-        filters?: string
-        preloads?: string[]
-        pagination?: { pageIndex: number; pageSize: number }
-    } = {}): Promise<IMemberEducationalAttainmentPaginated> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}`,
-                query: {
-                    sort,
-                    preloads,
-                    filter: filters,
-                    pageIndex: pagination?.pageIndex,
-                    pageSize: pagination?.pageSize,
-                },
-            },
-            { skipNull: true }
-        )
-
-        const response =
-            await APIService.get<IMemberEducationalAttainmentPaginated>(url)
-        return response.data
-    }
-
-    public static async exportAll(): Promise<void> {
-        const url = `${MemberEducationalAttainmentService.BASE_ENDPOINT}/export`
-        await downloadFileService(
-            url,
-            'all_member_educational_attainments_export.csv'
+export const exportSelectedMemberEducationalAttainments = async (
+    ids: TEntityId[]
+) => {
+    if (ids.length === 0) {
+        throw new Error(
+            'No member educational attainment IDs provided for export.'
         )
     }
+    const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
+    const url = `${BASE_ENDPOINT}/export-selected?${query}`
+    return downloadFileService(
+        url,
+        'selected_member_educational_attainments_export.csv'
+    )
+}
 
-    public static async exportAllFiltered(filters?: string): Promise<void> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${MemberEducationalAttainmentService.BASE_ENDPOINT}/export-search`,
-                query: { filters },
-            },
-            { skipNull: true }
-        )
-        await downloadFileService(
-            url,
-            'filtered_member_educational_attainments_export.csv'
-        )
-    }
-
-    public static async exportSelected(ids: TEntityId[]): Promise<void> {
-        if (ids.length === 0) {
-            throw new Error(
-                'No member educational attainment IDs provided for export.'
-            )
-        }
-        const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-        const url = `${MemberEducationalAttainmentService.BASE_ENDPOINT}/export-selected?${query}`
-        await downloadFileService(
-            url,
-            'selected_member_educational_attainments_export.csv'
-        )
-    }
-
-    public static async deleteMany(ids: TEntityId[]): Promise<void> {
-        const endpoint = `${MemberEducationalAttainmentService.BASE_ENDPOINT}/bulk-delete`
-        const payload = { ids }
-        await APIService.delete<void>(endpoint, payload)
-    }
+export const deleteManyMemberEducationalAttainments = async (
+    ids: TEntityId[]
+) => {
+    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
+    const payload = { ids }
+    return APIService.delete<void>(endpoint, payload)
 }
