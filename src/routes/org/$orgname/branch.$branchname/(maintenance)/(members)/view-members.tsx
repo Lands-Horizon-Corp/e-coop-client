@@ -7,7 +7,7 @@ import { MemberProfileQuickCreateFormModal } from '@/components/forms/member-for
 import MemberProfileTableEmployeeAction from '@/components/tables/member/members-profile-table/row-actions/members-table-employee-action'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members'
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
 )({
     component: RouteComponent,
 })

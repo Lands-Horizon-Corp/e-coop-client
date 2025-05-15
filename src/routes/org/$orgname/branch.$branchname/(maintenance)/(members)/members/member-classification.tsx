@@ -2,32 +2,33 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
-import MemberTypeTable from '@/components/tables/member/member-type-table'
-import MemberTypeTableOwnerAction from '@/components/tables/member/member-type-table/row-actions/member-type-owner-action'
+import MemberClassificationTable from '@/components/tables/member/member-classification-table'
+import { MemberClassificationCreateUpdateFormModal } from '@/components/forms/member-forms/member-classification-create-update-form'
+import MemberClassificationTableOwnerAction from '@/components/tables/member/member-classification-table/row-actions/member-classification-table-owner-action'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types'
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
 )({
     component: RouteComponent,
 })
 
 function RouteComponent() {
     const [modalState, setModalState] = useState(false)
+
     return (
         <PageContainer>
-            <MemberTypeCreateUpdateFormModal
+            <MemberClassificationCreateUpdateFormModal
                 open={modalState}
                 onOpenChange={setModalState}
             />
-            <MemberTypeTable
+            <MemberClassificationTable
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => setModalState(true),
                     },
                 }}
                 actionComponent={(prop) => (
-                    <MemberTypeTableOwnerAction {...prop} />
+                    <MemberClassificationTableOwnerAction {...prop} />
                 )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />

@@ -23,7 +23,7 @@ function RouteComponent() {
                             <div className="flex flex-1 gap-x-8">
                                 <AccountSettingsSidebar />
                                 <div className="flex min-h-full flex-1 flex-col items-center space-y-4 px-4">
-                                    <div className="min-h-full max-w-2xl flex-1 space-y-4 px-0 sm:px-4">
+                                    <div className="min-h-full w-full flex-1 space-y-4 px-0 sm:px-4">
                                         <Outlet />
                                         <div className="space-y-4">
                                             <VerifyNotice />

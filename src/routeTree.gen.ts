@@ -35,20 +35,22 @@ import { Route as OrgOrgnameBranchBranchnamecommonFootstepsImport } from './rout
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard';
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanIndexImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/index';
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members';
+import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employee-footstep';
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type';
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-entry';
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-application';
 import { Route as OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeImport } from './routes/org/$orgname/branch.$branchname/(employee)/accounting/computation-type';
 import { Route as OrgOrgnameBranchBranchnameemployeeAccountingAccountsImport } from './routes/org/$orgname/branch.$branchname/(employee)/accounting/accounts';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/employees/index';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/view-members';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-types';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-occupation';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-group';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-gender';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-classification';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-center';
-import { Route as OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/users/members/member-profile.$memberId.$settings/index';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-occupation';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-group';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-gender';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-classification';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-center';
+import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/view-employees';
+import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/roles-management';
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-profile.$memberId.$settings/index';
 
 // Create Virtual Routes
 
@@ -205,6 +207,22 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute =
         getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any);
 
+const OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport.update({
+        id: '/(maintenance)/(members)/view-members',
+        path: '/view-members',
+        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any);
+
+const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute =
+    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepImport.update(
+        {
+            id: '/(maintenance)/(employees)/employee-footstep',
+            path: '/employee-footstep',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
+
 const OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute =
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeImport.update({
         id: '/(employee)/transaction/payment-type',
@@ -240,71 +258,83 @@ const OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute =
         getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any);
 
-const OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexImport.update({
-        id: '/(maintenance)/users/employees/',
-        path: '/users/employees/',
-        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any);
-
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersImport.update({
-        id: '/(maintenance)/users/members/view-members',
-        path: '/users/members/view-members',
-        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any);
-
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesImport.update({
-        id: '/(maintenance)/users/members/member-types',
-        path: '/users/members/member-types',
-        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any);
-
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationImport.update(
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesImport.update(
         {
-            id: '/(maintenance)/users/members/member-occupation',
-            path: '/users/members/member-occupation',
+            id: '/(maintenance)/(members)/members/member-types',
+            path: '/members/member-types',
             getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
         } as any
     );
 
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupImport.update({
-        id: '/(maintenance)/users/members/member-group',
-        path: '/users/members/member-group',
-        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any);
-
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderImport.update({
-        id: '/(maintenance)/users/members/member-gender',
-        path: '/users/members/member-gender',
-        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any);
-
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationImport.update(
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationImport.update(
         {
-            id: '/(maintenance)/users/members/member-classification',
-            path: '/users/members/member-classification',
+            id: '/(maintenance)/(members)/members/member-occupation',
+            path: '/members/member-occupation',
             getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
         } as any
     );
 
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterImport.update({
-        id: '/(maintenance)/users/members/member-center',
-        path: '/users/members/member-center',
-        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any);
-
-const OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute =
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexImport.update(
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupImport.update(
         {
-            id: '/(maintenance)/users/members/member-profile/$memberId/$settings/',
-            path: '/users/members/member-profile/$memberId/$settings/',
+            id: '/(maintenance)/(members)/members/member-group',
+            path: '/members/member-group',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
+
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderImport.update(
+        {
+            id: '/(maintenance)/(members)/members/member-gender',
+            path: '/members/member-gender',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
+
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationImport.update(
+        {
+            id: '/(maintenance)/(members)/members/member-classification',
+            path: '/members/member-classification',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
+
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterImport.update(
+        {
+            id: '/(maintenance)/(members)/members/member-center',
+            path: '/members/member-center',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
+
+const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute =
+    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesImport.update(
+        {
+            id: '/(maintenance)/(employees)/employees/view-employees',
+            path: '/employees/view-employees',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
+
+const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute =
+    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementImport.update(
+        {
+            id: '/(maintenance)/(employees)/employees/roles-management',
+            path: '/employees/roles-management',
+            getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+        } as any
+    );
+
+const OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute =
+    OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexImport.update(
+        {
+            id: '/(maintenance)/(members)/member-profile/$memberId/$settings/',
+            path: '/member-profile/$memberId/$settings/',
             getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
         } as any
     );
@@ -502,6 +532,20 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
+        '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep';
+            path: '/employee-footstep';
+            fullPath: '/org/$orgname/branch/$branchname/employee-footstep';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
+        };
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members';
+            path: '/view-members';
+            fullPath: '/org/$orgname/branch/$branchname/view-members';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
+        };
         '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': {
             id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays';
             path: '/maintenance/holidays';
@@ -516,67 +560,67 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-center': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-center';
-            path: '/users/members/member-center';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/member-center';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management';
+            path: '/employees/roles-management';
+            fullPath: '/org/$orgname/branch/$branchname/employees/roles-management';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-classification': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-classification';
-            path: '/users/members/member-classification';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/member-classification';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees';
+            path: '/employees/view-employees';
+            fullPath: '/org/$orgname/branch/$branchname/employees/view-employees';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-gender': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-gender';
-            path: '/users/members/member-gender';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/member-gender';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center';
+            path: '/members/member-center';
+            fullPath: '/org/$orgname/branch/$branchname/members/member-center';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-group': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-group';
-            path: '/users/members/member-group';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/member-group';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification';
+            path: '/members/member-classification';
+            fullPath: '/org/$orgname/branch/$branchname/members/member-classification';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation';
-            path: '/users/members/member-occupation';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/member-occupation';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender';
+            path: '/members/member-gender';
+            fullPath: '/org/$orgname/branch/$branchname/members/member-gender';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types';
-            path: '/users/members/member-types';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/member-types';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group';
+            path: '/members/member-group';
+            fullPath: '/org/$orgname/branch/$branchname/members/member-group';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members';
-            path: '/users/members/view-members';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/view-members';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation';
+            path: '/members/member-occupation';
+            fullPath: '/org/$orgname/branch/$branchname/members/member-occupation';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/employees/': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/employees/';
-            path: '/users/employees';
-            fullPath: '/org/$orgname/branch/$branchname/users/employees';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types';
+            path: '/members/member-types';
+            fullPath: '/org/$orgname/branch/$branchname/members/member-types';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
-        '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/': {
-            id: '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/';
-            path: '/users/members/member-profile/$memberId/$settings';
-            fullPath: '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings';
-            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexImport;
+        '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/';
+            path: '/member-profile/$memberId/$settings';
+            fullPath: '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
     }
@@ -650,17 +694,19 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
     OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
+    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     OrgOrgnameBranchBranchnameemployeeLoanIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
-    OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
+    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute;
+    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute;
+    OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
@@ -679,28 +725,32 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
             OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute,
         OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute:
             OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute,
+        OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute:
+            OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
         OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute:
             OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute,
         OrgOrgnameBranchBranchnameemployeeLoanIndexRoute:
             OrgOrgnameBranchBranchnameemployeeLoanIndexRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute,
-        OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute:
-            OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute,
+        OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute:
+            OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute,
+        OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute:
+            OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute,
+        OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute:
+            OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute,
     };
 
 const OrgOrgnameBranchBranchnameRouteRouteWithChildren =
@@ -748,17 +798,19 @@ export interface FileRoutesByFullPath {
     '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
+    '/org/$orgname/branch/$branchname/employee-footstep': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
+    '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
     '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
-    '/org/$orgname/branch/$branchname/users/members/view-members': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
-    '/org/$orgname/branch/$branchname/users/employees': typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
+    '/org/$orgname/branch/$branchname/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute;
+    '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute;
+    '/org/$orgname/branch/$branchname/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute;
+    '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute;
+    '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute;
+    '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute;
+    '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute;
+    '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute;
+    '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 export interface FileRoutesByTo {
@@ -787,17 +839,19 @@ export interface FileRoutesByTo {
     '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
+    '/org/$orgname/branch/$branchname/employee-footstep': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
+    '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
     '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
-    '/org/$orgname/branch/$branchname/users/members/view-members': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
-    '/org/$orgname/branch/$branchname/users/employees': typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
-    '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
+    '/org/$orgname/branch/$branchname/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute;
+    '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute;
+    '/org/$orgname/branch/$branchname/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute;
+    '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute;
+    '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute;
+    '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute;
+    '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute;
+    '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute;
+    '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 export interface FileRoutesById {
@@ -829,17 +883,19 @@ export interface FileRoutesById {
     '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
     '/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     '/org/$orgname/branch/$branchname/(employee)/loan/': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberCenterRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberClassificationRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGenderRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberGroupRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberOccupationRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberTypesRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersViewMembersRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/employees/': typeof OrgOrgnameBranchBranchnamemaintenanceUsersEmployeesIndexRoute;
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemaintenanceUsersMembersMemberProfileMemberIdSettingsIndexRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute;
 }
 
 export interface FileRouteTypes {
@@ -871,17 +927,19 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/loan/loan-application'
         | '/org/$orgname/branch/$branchname/transaction/payment-entry'
         | '/org/$orgname/branch/$branchname/transaction/payment-type'
+        | '/org/$orgname/branch/$branchname/employee-footstep'
+        | '/org/$orgname/branch/$branchname/view-members'
         | '/org/$orgname/branch/$branchname/maintenance/holidays'
         | '/org/$orgname/branch/$branchname/loan'
-        | '/org/$orgname/branch/$branchname/users/members/member-center'
-        | '/org/$orgname/branch/$branchname/users/members/member-classification'
-        | '/org/$orgname/branch/$branchname/users/members/member-gender'
-        | '/org/$orgname/branch/$branchname/users/members/member-group'
-        | '/org/$orgname/branch/$branchname/users/members/member-occupation'
-        | '/org/$orgname/branch/$branchname/users/members/member-types'
-        | '/org/$orgname/branch/$branchname/users/members/view-members'
-        | '/org/$orgname/branch/$branchname/users/employees'
-        | '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings';
+        | '/org/$orgname/branch/$branchname/employees/roles-management'
+        | '/org/$orgname/branch/$branchname/employees/view-employees'
+        | '/org/$orgname/branch/$branchname/members/member-center'
+        | '/org/$orgname/branch/$branchname/members/member-classification'
+        | '/org/$orgname/branch/$branchname/members/member-gender'
+        | '/org/$orgname/branch/$branchname/members/member-group'
+        | '/org/$orgname/branch/$branchname/members/member-occupation'
+        | '/org/$orgname/branch/$branchname/members/member-types'
+        | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings';
     fileRoutesByTo: FileRoutesByTo;
     to:
         | '/auth'
@@ -909,17 +967,19 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/loan/loan-application'
         | '/org/$orgname/branch/$branchname/transaction/payment-entry'
         | '/org/$orgname/branch/$branchname/transaction/payment-type'
+        | '/org/$orgname/branch/$branchname/employee-footstep'
+        | '/org/$orgname/branch/$branchname/view-members'
         | '/org/$orgname/branch/$branchname/maintenance/holidays'
         | '/org/$orgname/branch/$branchname/loan'
-        | '/org/$orgname/branch/$branchname/users/members/member-center'
-        | '/org/$orgname/branch/$branchname/users/members/member-classification'
-        | '/org/$orgname/branch/$branchname/users/members/member-gender'
-        | '/org/$orgname/branch/$branchname/users/members/member-group'
-        | '/org/$orgname/branch/$branchname/users/members/member-occupation'
-        | '/org/$orgname/branch/$branchname/users/members/member-types'
-        | '/org/$orgname/branch/$branchname/users/members/view-members'
-        | '/org/$orgname/branch/$branchname/users/employees'
-        | '/org/$orgname/branch/$branchname/users/members/member-profile/$memberId/$settings';
+        | '/org/$orgname/branch/$branchname/employees/roles-management'
+        | '/org/$orgname/branch/$branchname/employees/view-employees'
+        | '/org/$orgname/branch/$branchname/members/member-center'
+        | '/org/$orgname/branch/$branchname/members/member-classification'
+        | '/org/$orgname/branch/$branchname/members/member-gender'
+        | '/org/$orgname/branch/$branchname/members/member-group'
+        | '/org/$orgname/branch/$branchname/members/member-occupation'
+        | '/org/$orgname/branch/$branchname/members/member-types'
+        | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings';
     id:
         | '__root__'
         | '/(landing)'
@@ -949,17 +1009,19 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/(employee)/loan/loan-application'
         | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry'
         | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
         | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
         | '/org/$orgname/branch/$branchname/(employee)/loan/'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-center'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-classification'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-gender'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-group'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/employees/'
-        | '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/';
+        | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
+        | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/';
     fileRoutesById: FileRoutesById;
 }
 
@@ -1101,17 +1163,19 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(employee)/loan/loan-application",
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry",
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-type",
+        "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays",
         "/org/$orgname/branch/$branchname/(employee)/loan/",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-center",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-classification",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-gender",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-group",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/employees/",
-        "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/"
+        "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management",
+        "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/"
       ]
     },
     "/org/$orgname/branch/$branchname/(common)/dashboard": {
@@ -1142,6 +1206,14 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/payment-type.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
+    "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/employee-footstep.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/view-members.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays.tsx",
       "parent": "/org/$orgname/branch/$branchname"
@@ -1150,40 +1222,40 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(employee)/loan/index.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-center": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-center.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/roles-management.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-classification": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-classification.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/view-employees.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-gender": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-gender.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-center.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-group": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-group.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-classification.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-occupation": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-occupation.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-gender.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-types": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-types.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-group.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/view-members": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/view-members.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-occupation.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/employees/": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/employees/index.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/users/members/member-profile/$memberId/$settings/": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/users/members/member-profile.$memberId.$settings/index.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/member-profile.$memberId.$settings/index.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     }
   }

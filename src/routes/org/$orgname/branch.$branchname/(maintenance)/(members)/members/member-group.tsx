@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(maintenance)/users/members/member-group'
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
 )({
     component: RouteComponent,
 })
