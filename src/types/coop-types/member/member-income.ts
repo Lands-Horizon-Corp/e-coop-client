@@ -8,8 +8,8 @@ export interface IMemberIncomeRequest {
     id?: TEntityId
 
     member_profile_id: TEntityId
-    media_id: TEntityId
-    branch_id: TEntityId
+    media_id?: TEntityId
+    branch_id?: TEntityId
 
     name: string
     amount: number
@@ -23,11 +23,11 @@ export interface IMemberIncome extends ITimeStamps {
     member_profile_id: TEntityId
     member_profile: IMemberProfile
 
-    media_id: TEntityId
-    media: IMedia
+    media_id?: TEntityId
+    media?: IMedia
 
-    branch_id: TEntityId
-    branch: IBranch
+    branch_id?: TEntityId
+    branch?: IBranch
 
     name: string
     amount: number

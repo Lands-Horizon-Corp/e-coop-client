@@ -11,7 +11,7 @@ export interface IMemberContactReferenceRequest {
 }
 
 // LATEST FROM ERD
-export interface IMemberContactReferences extends ITimeStamps, IAuditable {
+export interface IMemberContactReference extends ITimeStamps, IAuditable {
     id: TEntityId
 
     member_profile_id: TEntityId
@@ -19,5 +19,5 @@ export interface IMemberContactReferences extends ITimeStamps, IAuditable {
 
     name: string
     description: string
-    contactNumber: string
+    contact_number: string
 }

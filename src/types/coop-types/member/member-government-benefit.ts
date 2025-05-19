@@ -1,23 +1,25 @@
 import { IMedia } from '../media'
 import { IMemberProfile } from './member-profile'
 import { ITimeStamps, TEntityId } from '../../common'
+import { IOrganization } from '@/types/lands-types'
+import { IBranch } from '../branch'
 
 // LATEST FROM ERD
 export interface IMemberGovernmentBenefitRequest {
-    id: TEntityId
+    id?: TEntityId
     member_profile_id: TEntityId
-    member_profile: IMemberProfile
 
-    front_media_id: TEntityId
-    front_media: IMedia
+    organization_id: TEntityId
+    branch_id: TEntityId
 
-    back_media_id: TEntityId
-    back_media: IMedia
+    front_media_id?: TEntityId
+    back_media_id?: TEntityId
 
     name: string
     country_code: string
     value: string
-    description: string
+    expiry_date?: string
+    description?: string
 }
 
 // LATEST FROM ERD
@@ -26,6 +28,11 @@ export interface IMemberGovernmentBenefit extends ITimeStamps {
     member_profile_id: TEntityId
     member_profile: IMemberProfile
 
+    organization_id: TEntityId
+    organizaiton: IOrganization
+    branch_id: TEntityId
+    branch: IBranch
+
     front_media_id: TEntityId
     front_media: IMedia
 
@@ -35,5 +42,6 @@ export interface IMemberGovernmentBenefit extends ITimeStamps {
     name: string
     country_code: string
     value: string
+    expiry_date?: string
     description: string
 }

@@ -2,11 +2,10 @@ import { TSortingState } from '@/hooks/use-sorting-state'
 
 export interface IOperationCallbacks<
     TDataSuccess = unknown,
-    TError = unknown,
     TRawError = unknown,
 > {
     onSuccess?: (data: TDataSuccess) => void
-    onError?: (error: TError, rawError?: TRawError) => void
+    onError?: (error: string, rawError?: TRawError) => void
 }
 
 export interface IFilterPaginatedHookProps extends IAPIPreloads {
