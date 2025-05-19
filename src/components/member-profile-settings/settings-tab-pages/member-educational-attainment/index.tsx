@@ -14,12 +14,14 @@ import RawDescription from '@/components/raw-description'
 import { MemberEducationalAttainmentCreateUpdateFormModal } from './member-educational-attainment-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useDeleteEducationalAttainmentForMember } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
     IClassProps,
     IMemberProfile,
     IMemberEducationalAttainment,
 } from '@/types'
+import EmptyListIndicator from '../empty-list-indicator'
 
 interface MemberEducationalAttainmentCard {
     educationalAttainment: IMemberEducationalAttainment
@@ -30,6 +32,8 @@ const MemberEducationalAttainmentCard = ({
 }: MemberEducationalAttainmentCard) => {
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
+    const { mutate: deleteEducationalAttainment, isPending: isDeleting } =
+        useDeleteEducationalAttainmentForMember({ showMessage: true })
 
     return (
         <div className="space-y-1 rounded-md border">
@@ -54,6 +58,7 @@ const MemberEducationalAttainmentCard = ({
                         variant="ghost"
                         size="icon"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground"
+                        disabled={isDeleting}
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
@@ -61,20 +66,34 @@ const MemberEducationalAttainmentCard = ({
                         size="icon"
                         variant="ghost"
                         hoverVariant="destructive"
+                        disabled={isDeleting}
                         onClick={() =>
                             onOpen({
                                 title: 'Delete Educational Attainment',
                                 description:
-                                    'Are you sure to delete this educational attainment',
+                                    'Are you sure to delete this educational attainment?',
+                                onConfirm: () =>
+                                    deleteEducationalAttainment({
+                                        memberProfileId:
+                                            educationalAttainment.member_profile_id,
+                                        educationalAttainmentId:
+                                            educationalAttainment.id,
+                                    }),
                             })
                         }
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground"
                     >
-                        <TrashIcon className="size-4" />
+                        {isDeleting ? (
+                            <span className="size-4 animate-spin">
+                                <TrashIcon className="size-4" />
+                            </span>
+                        ) : (
+                            <TrashIcon className="size-4" />
+                        )}
                     </Button>
                 </div>
             </div>
-            <div className="space-y-4 px-4 pb-4">
+            <div className="space-y-4 px-4 pb-4 text-sm">
                 <div className="grid grid-cols-2 gap-4 py-4">
                     <span className="text-muted-foreground">
                         <SchoolIcon className="mr-2 inline text-muted-foreground" />
@@ -96,7 +115,7 @@ const MemberEducationalAttainmentCard = ({
                         {educationalAttainment.educational_attainment ?? '-'}
                     </p>
                 </div>
-                <div className="space-y-2 rounded-md bg-secondary p-4">
+                <div className="space-y-2">
                     <p className="text-muted-foreground/70">Description</p>
                     {educationalAttainment?.description ? (
                         <RawDescription
@@ -106,10 +125,10 @@ const MemberEducationalAttainmentCard = ({
                             }
                         />
                     ) : (
-                        <span className="text-sm italic text-muted-foreground/60">
+                        <p className="text-sm italic text-muted-foreground/60">
                             No Description{' '}
                             <WoodSignsIcon className="ml-1 inline" />
-                        </span>
+                        </p>
                     )}
                 </div>
             </div>
@@ -138,12 +157,7 @@ const MemberEducationalAttainment = ({ memberProfile }: Props) => {
             />
             <div className="mb-2 flex items-start justify-between">
                 <p>Educational Attainments</p>
-                <Button
-                    size="sm"
-                    variant="secondary"
-                    hoverVariant="primary"
-                    onClick={() => setCreate(true)}
-                >
+                <Button size="sm" onClick={() => setCreate(true)}>
                     Add Education <PlusIcon className="ml-1" />
                 </Button>
             </div>
@@ -155,6 +169,10 @@ const MemberEducationalAttainment = ({ memberProfile }: Props) => {
                             educationalAttainment={educationalAttainmentId}
                         />
                     )
+                )}
+                {(!memberProfile.member_educational_attainment ||
+                    memberProfile.member_assets?.length) && (
+                    <EmptyListIndicator message="Empty Educational Attainment" />
                 )}
             </div>
         </div>

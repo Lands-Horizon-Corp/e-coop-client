@@ -2,17 +2,17 @@ import z from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import TextEditor from '@/components/text-editor'
+import ImageField from '@/components/ui/image-field'
 import { Separator } from '@/components/ui/separator'
-import { SignatureLightIcon } from '@/components/icons'
-import { Form, FormControl } from '@/components/ui/form'
-import { AvatarUploadField } from '../../../avatar-upload-field'
+import { VerifiedPatchIcon } from '@/components/icons'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { SignatureUploadField } from '../../../signature-upload-field'
+import { PhoneInput } from '@/components/contact-input/contact-input'
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import MemberGenderCombobox from '@/components/comboboxes/member-gender-combobox'
 
@@ -22,10 +22,12 @@ import { useUpdateMemberProfilePersonalInfo } from '@/hooks/api-hooks/member/use
 
 import {
     IClassProps,
+    IMedia,
     IMemberProfile,
     IMemberProfilePersonalInfoRequest,
 } from '@/types'
 import { IForm, TEntityId } from '@/types'
+import SignatureField from '@/components/ui/signature-field'
 
 type TMemberProfilePersonalInfoFormValues = z.infer<
     typeof memberProfilePersonalInfoSchema
@@ -83,60 +85,80 @@ const MemberPersonalInfoForm = ({
                     <div className="space-y-4">
                         <div className="space-y-4">
                             <p>Photo & Signature</p>
-                            <div className="grid grid-cols-1 gap-2">
+                            <div className="grid grid-cols-2 gap-2">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="media_id"
                                     label="Photo"
                                     hiddenFields={hiddenFields}
-                                    render={({ field }) => (
-                                        <FormControl>
-                                            <AvatarUploadField
-                                                placeholder="Upload Person Picture"
-                                                description="Upload Member Picture/Photo"
+                                    render={({ field }) => {
+                                        const value = form.watch('media')
+
+                                        return (
+                                            <ImageField
                                                 {...field}
-                                                mediaImage={form.getValues(
-                                                    'media'
-                                                )}
-                                                onChange={(mediaUploaded) => {
-                                                    field.onChange(
-                                                        mediaUploaded?.id
-                                                    )
+                                                placeholder="Upload Photo"
+                                                value={
+                                                    value
+                                                        ? (value as IMedia)
+                                                              .download_url
+                                                        : value
+                                                }
+                                                onChange={(newImage) => {
+                                                    if (newImage)
+                                                        field.onChange(
+                                                            newImage.id
+                                                        )
+                                                    else
+                                                        field.onChange(
+                                                            undefined
+                                                        )
+
                                                     form.setValue(
                                                         'media',
-                                                        mediaUploaded
+                                                        newImage
                                                     )
                                                 }}
                                             />
-                                        </FormControl>
-                                    )}
+                                        )
+                                    }}
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="signature_media_id"
                                     label="Signature"
                                     hiddenFields={hiddenFields}
-                                    render={({ field }) => (
-                                        <FormControl>
-                                            <SignatureUploadField
-                                                placeholder="Upload Signature Photo"
+                                    render={({ field }) => {
+                                        const value =
+                                            form.watch('signature_media')
+                                        return (
+                                            <SignatureField
                                                 {...field}
-                                                mediaImage={form.getValues(
-                                                    'signature_media'
-                                                )}
-                                                DisplayIcon={SignatureLightIcon}
-                                                onChange={(mediaUploaded) => {
-                                                    field.onChange(
-                                                        mediaUploaded?.id
-                                                    )
+                                                placeholder="Signature"
+                                                value={
+                                                    value
+                                                        ? (value as IMedia)
+                                                              .download_url
+                                                        : value
+                                                }
+                                                onChange={(newImage) => {
+                                                    if (newImage)
+                                                        field.onChange(
+                                                            newImage.id
+                                                        )
+                                                    else
+                                                        field.onChange(
+                                                            undefined
+                                                        )
+
                                                     form.setValue(
                                                         'signature_media',
-                                                        mediaUploaded
+                                                        newImage
                                                     )
                                                 }}
                                             />
-                                        </FormControl>
-                                    )}
+                                        )
+                                    }}
                                 />
                             </div>
                         </div>
@@ -263,14 +285,24 @@ const MemberPersonalInfoForm = ({
                                 name="contact_number"
                                 label="Contact Number"
                                 hiddenFields={hiddenFields}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        id={field.name}
-                                        placeholder="Contact Number"
-                                        autoComplete="tel"
-                                        disabled={isDisabled(field.name)}
-                                    />
+                                render={({
+                                    field,
+                                    fieldState: { invalid },
+                                }) => (
+                                    <div className="relative flex flex-1 items-center gap-x-2">
+                                        <VerifiedPatchIcon
+                                            className={cn(
+                                                'absolute right-2 top-1/2 z-20 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
+                                                (invalid || error) &&
+                                                    'text-destructive'
+                                            )}
+                                        />
+                                        <PhoneInput
+                                            {...field}
+                                            className="w-full"
+                                            defaultCountry="PH"
+                                        />
+                                    </div>
                                 )}
                             />
                             <FormFieldWrapper
@@ -331,6 +363,7 @@ const MemberPersonalInfoForm = ({
                                     render={({ field }) => (
                                         <TextEditor
                                             {...field}
+                                            content={field.value}
                                             placeholder="Notes"
                                             textEditorClassName="!max-w-none bg-background"
                                             disabled={isDisabled(field.name)}
@@ -345,6 +378,7 @@ const MemberPersonalInfoForm = ({
                                     render={({ field }) => (
                                         <TextEditor
                                             {...field}
+                                            content={field.value}
                                             placeholder="Description"
                                             textEditorClassName="!max-w-none bg-background"
                                             disabled={isDisabled(field.name)}

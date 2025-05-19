@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
+import ImageDisplay from '../image-display'
 import { Button } from '@/components/ui/button'
 import { AdjustIcon } from '@/components/icons'
-import UserAvatar from '@/components/user-avatar'
 import { Progress } from '@/components/ui/progress'
 import PictureCrop from '@/components/picture-crop'
 import SingleImageUploadOption from './upload-options'
@@ -12,14 +12,19 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { IMedia } from '@/types'
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
+import { cn } from '@/lib'
 
 export interface ISingleImageUploadProps {
+    disableCrop?: boolean
     defaultImage?: string
     defaultFileName?: string
+    squarePreview?: boolean
     onUploadComplete: (mediaResource: IMedia) => void
 }
 
 const SingleImageUpload = ({
+    disableCrop,
+    squarePreview = false,
     defaultFileName,
     onUploadComplete,
 }: ISingleImageUploadProps) => {
@@ -41,10 +46,15 @@ const SingleImageUpload = ({
         <div className="space-y-4">
             {newImage === null && (
                 <SingleImageUploadOption
-                    onPhotoChoose={(base64Image) => setNewImage(base64Image)}
+                    onPhotoChoose={(base64Image) => {
+                        setNewImage(base64Image)
+                        if (disableCrop) setCroppedImage(base64Image)
+                    }}
                 />
             )}
-            {newImage !== null && (!croppedImage || reAdjust) ? (
+            {newImage !== null &&
+            !disableCrop &&
+            (!croppedImage || reAdjust) ? (
                 <PictureCrop
                     image={newImage}
                     onCrop={(result) => {
@@ -64,24 +74,29 @@ const SingleImageUpload = ({
             {croppedImage && !reAdjust && (
                 <div className="space-y-4">
                     <div className="relative mx-auto size-fit">
-                        <UserAvatar
+                        <ImageDisplay
                             fallback="-"
-                            src={croppedImage ?? ''}
-                            className="size-48"
+                            src={croppedImage}
+                            className={cn(
+                                'size-48 rounded-lg',
+                                squarePreview && ''
+                            )}
                         />
-                        <ActionTooltip
-                            tooltipContent="ReAdjust Image"
-                            align="center"
-                            side="right"
-                        >
-                            <Button
-                                variant="secondary"
-                                onClick={() => setReAdjust(true)}
-                                className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
+                        {!disableCrop && (
+                            <ActionTooltip
+                                side="right"
+                                align="center"
+                                tooltipContent="ReAdjust Image"
                             >
-                                <AdjustIcon className="size-4 opacity-50 duration-300 ease-in-out group-hover:opacity-80" />
-                            </Button>
-                        </ActionTooltip>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setReAdjust(true)}
+                                    className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
+                                >
+                                    <AdjustIcon className="size-4 opacity-50 duration-300 ease-in-out group-hover:opacity-80" />
+                                </Button>
+                            </ActionTooltip>
+                        )}
                     </div>
                     {isUploadingPhoto && (
                         <>

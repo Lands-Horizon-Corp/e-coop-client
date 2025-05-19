@@ -18,12 +18,13 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ChevronDownIcon } from '@/components/icons'
 
-import { getBarangaysByMunicipality } from '@/helpers/address'
+import { getBarangays, getBarangaysByMunicipality } from '@/helpers/address'
 
 interface Props {
     id?: string
     name?: string
     value?: string
+    showAll?: boolean
     disabled?: boolean
     className?: string
     placeholder?: string
@@ -35,6 +36,7 @@ const BarangayCombobox = ({
     value,
     className,
     municipality,
+    showAll = false,
     disabled = false,
     placeholder = 'Select Barangay...',
     onChange,
@@ -43,8 +45,9 @@ const BarangayCombobox = ({
     const [open, setOpen] = React.useState(false)
 
     const barangays = React.useMemo(() => {
+        if (showAll) return getBarangays()
         return municipality ? getBarangaysByMunicipality(municipality) : []
-    }, [municipality])
+    }, [municipality, showAll])
 
     return (
         <Popover modal open={open} onOpenChange={setOpen}>

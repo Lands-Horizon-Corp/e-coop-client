@@ -2,6 +2,7 @@ import {
     TbMinus as MinusIcon,
     TbSunMoon as SunMoonIcon,
     TbMoneybag as MoneyBagIcon,
+    TbGhost2Filled as GhostIcon,
     TbBlockquote as BlockQuoteIcon,
     TbHeartHandshake as HandShakeHeartIcon,
     TbSquareF1 as F1Icon,
@@ -11,6 +12,7 @@ import {
 
 import {
     CiExport as ExportIcon,
+    CiBarcode as BarcodeScanIcon,
     CiFilter as FunnelOutlineIcon,
 } from 'react-icons/ci'
 
@@ -67,6 +69,7 @@ import {
     PiPlus as PlusIcon,
     PiEmpty as EmptyIcon,
     PiPushPin as PushPinIcon,
+    PiParkDuotone as ParkIcon,
     PiUserList as UserListIcon,
     PiBuilding as BuildingIcon,
     PiNewspaper as ReportsIcon,
@@ -182,13 +185,14 @@ import {
     IoRefresh as RefreshIcon,
     IoStorefront as StoreIcon,
     IoCloseOutline as CloseIcon,
+    IoPrintOutline as PrinterIcon,
     IoCallOutline as TelephoneIcon,
+    IoCalendar as CalendarDotsIcon,
     IoCheckmarkOutline as CheckIcon,
+    IoReceiptOutline as ReceiptIcon,
     IoPencilOutline as EditPencilIcon,
     IoLocationSharp as LocationPinIcon,
     IoFootstepsOutline as FootstepsIcon,
-    IoReceiptOutline as ReceiptIcon,
-    IoPrintOutline as PrinterIcon,
 } from 'react-icons/io5'
 
 import {
@@ -213,7 +217,9 @@ import {
 } from 'react-icons/fa'
 
 import {
+    FaIdCard as IdCardIcon,
     FaSchool as SchoolIcon,
+    FaTreeCity as TreeCityIcon,
     FaVenusMars as GendersIcon,
     FaChartPie as PieChartIcon,
     FaAddressCard as AddressCardIcon,
@@ -236,6 +242,7 @@ import {
 
 import {
     GiWallet as WalletIcon,
+    GiVillage as VillageIcon,
     GiTakeMyMoney as MoneyIcon,
     GiWoodenSign as WoodSignsIcon,
 } from 'react-icons/gi'
@@ -282,7 +289,9 @@ export {
     UserIcon,
     MoonIcon,
     DrawIcon,
+    ParkIcon,
     GearIcon,
+    GhostIcon,
     MoneyIcon,
     EmptyIcon,
     MinusIcon,
@@ -313,6 +322,7 @@ export {
     WalletIcon,
     SchoolIcon,
     Image2Icon,
+    IdCardIcon,
     DetailsIcon,
     ReplaceIcon,
     WarningIcon,
@@ -324,6 +334,7 @@ export {
     SidebarIcon,
     SunMoonIcon,
     ZoomOutIcon,
+    VillageIcon,
     ReportsIcon,
     PushPinIcon,
     EyeNoneIcon,
@@ -344,6 +355,7 @@ export {
     CalendarIcon,
     FileFillIcon,
     UsersAddIcon,
+    TreeCityIcon,
     MoneyBagIcon,
     HandCoinsIcon,
     MapMarkedIcon,
@@ -390,6 +402,8 @@ export {
     ChevronDownIcon,
     PDFFileFillIcon,
     BankDuoToneIcon,
+    BarcodeScanIcon,
+    CalendarDotsIcon,
     BracketErrorIcon,
     ArrowTrendUpIcon,
     BoxesStackedIcon,

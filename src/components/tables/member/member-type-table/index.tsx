@@ -12,7 +12,7 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import memberTypeColumns, {
+import MemberTypeTableColumns, {
     IMemberTypeTableColumnProps,
     memberTypeGlobalSearchTargets,
 } from './columns'
@@ -20,13 +20,18 @@ import memberTypeColumns, {
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
+import {
+    exportAllMemberTypes,
+    deleteManyMemberTypes,
+    exportSelectedMemberTypes,
+} from '@/api-service/member-services/member-type/member-type-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-
-import { TableProps, IMemberType } from '@/types'
 import { useFilteredPaginatedMemberTypes } from '@/hooks/api-hooks/member/use-member-type'
-import * as MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
+
+import { TableProps } from '@/types'
+import { IMemberType } from '@/types'
 
 export interface MemberTypeTableProps
     extends TableProps<IMemberType>,
@@ -57,7 +62,7 @@ const MemberTypeTable = ({
 
     const columns = useMemo(
         () =>
-            memberTypeColumns({
+            MemberTypeTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -130,7 +135,7 @@ const MemberTypeTable = ({
         <FilterContext.Provider value={filterState}>
             <div
                 className={cn(
-                    'relative z-0 flex h-full flex-col gap-y-2',
+                    'flex h-full flex-col gap-y-2',
                     className,
                     !isScrollable && 'h-fit !max-h-none'
                 )}
@@ -151,7 +156,7 @@ const MemberTypeTable = ({
                                 queryKey: ['member-type', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            MemberTypeService.deleteManyMemberTypes(
+                            deleteManyMemberTypes(
                                 selectedData.map((data) => data.id)
                             ),
                     }}
@@ -161,14 +166,13 @@ const MemberTypeTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll: MemberTypeService.exportAllMemberTypes,
-                        // exportAllFiltered: MemberTypeService.exportAllFiltered,
+                        exportAll: exportAllMemberTypes,
                         exportCurrentPage: (ids) =>
-                            MemberTypeService.exportSelectedMemberTypes(
+                            exportSelectedMemberTypes(
                                 ids.map((data) => data.id)
                             ),
                         exportSelected: (ids) =>
-                            MemberTypeService.exportSelectedMemberTypes(
+                            exportSelectedMemberTypes(
                                 ids.map((data) => data.id)
                             ),
                     }}
@@ -182,9 +186,9 @@ const MemberTypeTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
+                    className="mb-2"
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
-                    className={cn('mb-2', isScrollable && 'flex-1')}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

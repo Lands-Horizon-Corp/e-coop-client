@@ -134,6 +134,9 @@ const MemberProfileCloseForm = ({
                                                     <FormControl>
                                                         <TextEditor
                                                             {...field}
+                                                            content={
+                                                                field.value
+                                                            }
                                                             disabled={isDisabled(
                                                                 field.name
                                                             )}

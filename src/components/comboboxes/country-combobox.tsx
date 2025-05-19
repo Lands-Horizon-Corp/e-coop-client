@@ -64,9 +64,12 @@ const CountryComboboxComponent = (
 
     useEffect(() => {
         if (defaultValue) {
-            const initialCountry = options.find(
-                (country) => country.name === defaultValue
-            )
+            const initialCountry = options.find((country) => {
+                return (
+                    country.name === defaultValue ||
+                    country.alpha2 === defaultValue
+                )
+            })
             if (initialCountry) {
                 setSelectedCountry(initialCountry)
             } else {
@@ -116,7 +119,13 @@ const CountryComboboxComponent = (
                 ) : (
                     <span>
                         {slim === false ? (
-                            placeholder || setSelectedCountry.name
+                            placeholder ? (
+                                <span className="text-muted-foreground">
+                                    {placeholder}
+                                </span>
+                            ) : (
+                                setSelectedCountry.name
+                            )
                         ) : (
                             <Globe size={20} />
                         )}

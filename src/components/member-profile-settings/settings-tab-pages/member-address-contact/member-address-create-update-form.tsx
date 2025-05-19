@@ -5,110 +5,93 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
+import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import EducationalAttainmentCombobox from '@/components/comboboxes/educational-attainment-combobox'
+import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 
 import { cn } from '@/lib/utils'
 import { entityIdSchema } from '@/validations/common'
-import { EDUCATIONAL_ATTAINMENT } from '@/constants'
 import {
-    useCreateEducationalAttainmentForMember,
-    useUpdateEducationalAttainmentForMember,
+    useCreateMemberProfileAddress,
+    useUpdateMemberProfileAddress,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
-import {
-    IForm,
-    TEntityId,
-    IClassProps,
-    IMemberEducationalAttainment,
-} from '@/types'
+import { IForm, TEntityId, IClassProps, IMemberAddress } from '@/types'
 
-export const memberEducationalAttainmentSchema = z.object({
+export const memberAddressSchema = z.object({
     id: z.string().optional(),
-    branch_id: entityIdSchema.optional(),
     member_profile_id: entityIdSchema,
-    name: z.string().min(1, 'Name is required'),
-    school_name: z.string().min(1, 'School name is required').optional(),
-    school_year: z.coerce
-        .number({ invalid_type_error: 'Invalid Year' })
-        .transform((val) => Math.trunc(val))
-        .refine(
-            (val) => {
-                const year = Number(val)
-                const currentYear = new Date().getFullYear()
-                return year >= 1900 && year <= currentYear + 1
-            },
-            { message: 'Enter a valid school year' }
-        )
-        .optional(),
-    program_course: z.string().min(1, 'Program/Course is required').optional(),
-    educational_attainment: z.enum(EDUCATIONAL_ATTAINMENT, {
-        required_error: 'Educational attainment is required',
-    }),
-    description: z.string().optional(),
+    label: z.string().min(1, 'Label is required'),
+    country_code: z.string().min(1, 'Country code is required'),
+    address: z.string().min(1, 'Address is required'),
+    city: z.string().optional(),
+    postal_code: z.string().optional(),
+    province_state: z.string().optional(),
+    barangay: z.string().optional(),
+    landmark: z.string().optional(),
 })
 
-type TEducationalAttainmentFormValues = z.infer<
-    typeof memberEducationalAttainmentSchema
->
+type TMemberAddressFormValues = z.infer<typeof memberAddressSchema>
 
-export interface IMemberEducationalAttainmentFormProps
+export interface IMemberAddressFormProps
     extends IClassProps,
         IForm<
-            Partial<IMemberEducationalAttainment>,
-            IMemberEducationalAttainment,
+            Partial<IMemberAddress>,
+            IMemberAddress,
             string,
-            TEducationalAttainmentFormValues
+            TMemberAddressFormValues
         > {
     memberProfileId: TEntityId
-    educationalAttainmentId?: TEntityId
+    memberAddressId?: TEntityId
 }
 
-const MemberEducationalAttainmentCreateUpdateForm = ({
+const MemberAddressCreateUpdateForm = ({
     memberProfileId,
-    educationalAttainmentId,
+    memberAddressId,
     readOnly,
     className,
     defaultValues,
     disabledFields,
     onError,
     onSuccess,
-}: IMemberEducationalAttainmentFormProps) => {
-    const form = useForm<TEducationalAttainmentFormValues>({
-        resolver: zodResolver(memberEducationalAttainmentSchema),
+}: IMemberAddressFormProps) => {
+    const form = useForm<TMemberAddressFormValues>({
+        resolver: zodResolver(memberAddressSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            name: '',
-            description: '',
-            program_course: '',
-            school_year: new Date().getFullYear(),
-            educational_attainment: 'college graduate',
+            label: '',
+            city: '',
+            country_code: '',
+            postal_code: '',
+            province_state: '',
+            barangay: '',
+            landmark: '',
+            address: '',
             ...defaultValues,
         },
     })
 
-    const createMutation = useCreateEducationalAttainmentForMember({
+    const createMutation = useCreateMemberProfileAddress({
         onSuccess,
         onError,
         showMessage: true,
     })
-    const updateMutation = useUpdateEducationalAttainmentForMember({
+    const updateMutation = useUpdateMemberProfileAddress({
         onSuccess,
         onError,
         showMessage: true,
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        if (educationalAttainmentId) {
+        if (memberAddressId) {
             updateMutation.mutate({
                 memberProfileId,
-                educationalAttainmentId,
+                memberAddressId,
                 data: formData,
             })
         } else {
@@ -119,12 +102,14 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
         }
     })
 
-    const { error, isPending, reset } = educationalAttainmentId
+    const { error, isPending, reset } = memberAddressId
         ? updateMutation
         : createMutation
 
-    const isDisabled = (field: Path<TEducationalAttainmentFormValues>) =>
+    const isDisabled = (field: Path<TMemberAddressFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const countryCode = form.watch('country_code')
 
     return (
         <Form {...form}>
@@ -139,86 +124,109 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
-                            label="Name *"
+                            name="label"
+                            label="Label *"
                             render={({ field }) => (
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    placeholder="Name"
+                                    placeholder="Label"
                                     disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="school_name"
-                            label="School Name"
+                            name="country_code"
+                            label="Country Code *"
+                            render={({ field }) => (
+                                <CountryCombobox
+                                    {...field}
+                                    defaultValue={field.value}
+                                    onChange={(country) =>
+                                        field.onChange(country.alpha2)
+                                    }
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="address"
+                            label="Address *"
+                            render={({ field }) => (
+                                <Textarea
+                                    {...field}
+                                    id={field.name}
+                                    placeholder="Type complete address here"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="city"
+                            label="City"
                             render={({ field }) => (
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    placeholder="School Name"
-                                    autoComplete="organization"
+                                    placeholder="City"
                                     disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
+                        <div className="grid grid-cols-2 gap-2">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="postal_code"
+                                label="Postal Code"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        placeholder="Postal Code"
+                                        disabled={isDisabled(field.name)}
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="province_state"
+                                label="Province / State"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        placeholder="Province/State"
+                                        disabled={isDisabled(field.name)}
+                                    />
+                                )}
+                            />
+                        </div>
+                        {countryCode === 'PH' && (
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="barangay"
+                                label="Barangay"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        placeholder="Barangay"
+                                        disabled={isDisabled(field.name)}
+                                    />
+                                )}
+                            />
+                        )}
                         <FormFieldWrapper
                             control={form.control}
-                            name="school_year"
-                            label="Year Graduated"
+                            name="landmark"
+                            label="Landmark"
                             render={({ field }) => (
-                                <Input
+                                <Textarea
                                     {...field}
                                     id={field.name}
-                                    type="number"
-                                    step={1}
-                                    min={1900}
-                                    max={new Date().getFullYear()}
-                                    placeholder="Year Graduated"
-                                    autoComplete="year"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="educational_attainment"
-                            label="Educational Attainment"
-                            render={({ field }) => (
-                                <EducationalAttainmentCombobox
-                                    {...field}
-                                    id={field.name}
-                                    placeholder="Program / Course"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="program_course"
-                            label="Program / Course *"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    id={field.name}
-                                    placeholder="Program / Course"
-                                    autoComplete="course"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="description"
-                            label="Description"
-                            render={({ field }) => (
-                                <TextEditor
-                                    {...field}
-                                    content={field.value}
-                                    placeholder="Description"
-                                    textEditorClassName="!max-w-none bg-background"
+                                    placeholder="Landmark"
                                     disabled={isDisabled(field.name)}
                                 />
                             )}
@@ -249,7 +257,7 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
                         >
                             {isPending ? (
                                 <LoadingSpinner />
-                            ) : educationalAttainmentId ? (
+                            ) : memberAddressId ? (
                                 'Update'
                             ) : (
                                 'Create'
@@ -262,14 +270,14 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
     )
 }
 
-export const MemberEducationalAttainmentCreateUpdateFormModal = ({
-    title = 'Create Educational Attainment',
-    description = 'Fill out the form to add or update educational attainment.',
+export const MemberAddressCreateUpdateFormModal = ({
+    title = 'Create Address',
+    description = 'Fill out the form to add or update address.',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps: Omit<IMemberEducationalAttainmentFormProps, 'className'>
+    formProps: Omit<IMemberAddressFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -278,7 +286,7 @@ export const MemberEducationalAttainmentCreateUpdateFormModal = ({
             className={cn('', className)}
             {...props}
         >
-            <MemberEducationalAttainmentCreateUpdateForm
+            <MemberAddressCreateUpdateForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -289,4 +297,4 @@ export const MemberEducationalAttainmentCreateUpdateFormModal = ({
     )
 }
 
-export default MemberEducationalAttainmentCreateUpdateForm
+export default MemberAddressCreateUpdateForm
