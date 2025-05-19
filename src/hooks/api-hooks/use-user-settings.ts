@@ -24,7 +24,7 @@ export const useUpdateUserSettingsGeneral = ({
     onError,
     onSuccess,
     showMessage,
-}: IAPIHook<IUserBase, string> & IMutationProps) => {
+}: IAPIHook<IUserBase> & IMutationProps) => {
     return useMutation<IUserBase, string, IUserSettingsGeneralRequest>({
         mutationKey: ['update-user-settings-general'],
         mutationFn: async (data) => {
@@ -49,7 +49,7 @@ export const useUpdateUserSettingsProfile = ({
     onError,
     onSuccess,
     showMessage,
-}: IAPIHook<IUserBase, string> & IMutationProps) => {
+}: IAPIHook<IUserBase> & IMutationProps) => {
     return useMutation<IUserBase, string, IUserSettingsProfileRequest>({
         mutationKey: ['update-user-settings-profile'],
         mutationFn: async (data) => {
@@ -85,7 +85,7 @@ export const useUpdateUserSettingsSecurity = ({
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
                 if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage, error)
+                onError?.(errorMessage)
                 throw errorMessage
             }
 

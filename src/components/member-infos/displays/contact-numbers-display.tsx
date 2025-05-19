@@ -11,10 +11,10 @@ import { TelephoneIcon } from '@/components/icons'
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
-import { IMemberContactReferences } from '@/types'
+import { IMemberContactReference } from '@/types'
 
 interface Props extends IClassProps {
-    contactNumbers?: IMemberContactReferences[]
+    contactNumbers?: IMemberContactReference[]
 }
 
 const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {
@@ -48,7 +48,7 @@ const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {
                                 </div>
                                 <div className="space-y-2">
                                     <p>
-                                        {contactNumberReference.contactNumber}
+                                        {contactNumberReference.contact_number}
                                     </p>
                                     <p className="text-xs text-muted-foreground/70">
                                         Contact Number

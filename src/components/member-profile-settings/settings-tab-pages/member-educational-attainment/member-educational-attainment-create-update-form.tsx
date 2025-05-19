@@ -216,6 +216,7 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
+                                    content={field.value}
                                     placeholder="Description"
                                     textEditorClassName="!max-w-none bg-background"
                                     disabled={isDisabled(field.name)}

@@ -51,7 +51,13 @@ const Modal = ({
                 <DialogTitle className={cn('font-medium', titleClassName)}>
                     {title}
                 </DialogTitle>
-                <DialogDescription className={cn('mb-4', descriptionClassName)}>
+                <DialogDescription
+                    className={cn(
+                        'mb-4',
+                        descriptionClassName,
+                        !description && 'hidden'
+                    )}
+                >
                     {description}
                 </DialogDescription>
                 {children}

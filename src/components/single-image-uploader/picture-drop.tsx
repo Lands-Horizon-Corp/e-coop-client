@@ -17,6 +17,10 @@ const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const PictureDrop = ({ onFileSelect, children }: Props) => {
     const [isDragging, setIsDragging] = useState(false)
 
+    const isFileAllowed = (file: File) => {
+        return ALLOWED_IMAGE_TYPES.includes(file.type)
+    }
+
     const handleDrop = (event: DragEvent<HTMLDivElement>) => {
         event.preventDefault()
 
@@ -26,7 +30,7 @@ const PictureDrop = ({ onFileSelect, children }: Props) => {
         if (droppedFilesArray.length === 1) {
             const file = droppedFilesArray[0]
 
-            if (ALLOWED_IMAGE_TYPES.includes(file.type)) {
+            if (isFileAllowed(file)) {
                 const dataTransfer = new DataTransfer()
                 dataTransfer.items.add(file)
                 onFileSelect(dataTransfer.files)
@@ -84,7 +88,12 @@ const PictureDrop = ({ onFileSelect, children }: Props) => {
                     className="hidden"
                     onChange={(e) => {
                         if (e.target.files) {
-                            onFileSelect(e.target.files)
+                            if (isFileAllowed(e.target.files[0]))
+                                onFileSelect(e.target.files)
+                            else
+                                toast.error(
+                                    'Only JPG, JPEG, PNG, or WEBP files are allowed!'
+                                )
                         }
                     }}
                 />

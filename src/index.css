@@ -131,6 +131,7 @@
     body {
         @apply ecoop-scroll w-screen overflow-x-hidden bg-background text-foreground;
         @apply ecoop-scroll w-screen overflow-x-hidden bg-background text-foreground;
+        color-scheme: light dark;
     }
 
     /* input:-webkit-autofill,
