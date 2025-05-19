@@ -38,8 +38,8 @@ import {
 } from './member-close-remark'
 import {
     IMemberContactReferenceRequest,
-    IMemberContactReferences,
-} from './member-contact-references'
+    IMemberContactReference,
+} from './member-contact-reference'
 import { IMemberEducationalAttainment } from './member-educational-attainment'
 import { IOrganization } from '@/types/lands-types'
 import { IMemberRecruits } from './member-recruits'
@@ -208,7 +208,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_relative_accounts?: IMemberRelativeAccount[]
     member_government_benefits?: IMemberGovernmentBenefit[]
     // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
-    member_contact_number_references?: IMemberContactReferences[]
+    member_contact_number_references?: IMemberContactReference[]
 }
 
 export interface IMemberProfilePaginated

@@ -2,6 +2,7 @@ import z from 'zod'
 import {
     CIVIL_STATUS,
     EDUCATIONAL_ATTAINMENT,
+    FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
     LETTERS_REGEX,
     NUMBER_LETTER_REGEX,
@@ -88,3 +89,5 @@ export const generalStatusSchema = z.enum(GENERAL_STATUS)
 export const civilStatusSchema = z.enum(CIVIL_STATUS)
 
 export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT)
+
+export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP)

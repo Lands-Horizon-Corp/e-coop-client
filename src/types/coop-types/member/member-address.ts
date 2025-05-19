@@ -8,14 +8,14 @@ export interface IMemberAddress extends ITimeStamps, IAuditable {
     member_profile: IMemberProfile
 
     label: string
-    city: string
-    country_code: string
-    postal_code: string
-    province_state: string
-    barangay: string
-
-    landmark: string
     address: string
+    country_code: string
+
+    city?: string
+    postal_code?: string
+    province_state?: string
+    barangay?: string
+    landmark?: string
 }
 
 // LATEST FROM ERD
@@ -24,12 +24,12 @@ export interface IMemberAddressRequest {
     member_profile_id: TEntityId
 
     label: string
-    city: string
-    country_code: string
-    postal_code: string
-    province_state: string
-    barangay: string
-
-    landmark: string
     address: string
+    country_code: string
+
+    city?: string
+    postal_code?: string
+    province_state?: string
+    barangay?: string // Optional, specific to some countries
+    landmark?: string // Optional, for additional directions
 }

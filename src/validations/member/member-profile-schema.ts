@@ -16,7 +16,7 @@ import { memberCloseRemarkSchema } from './member-close-remark-schema'
 import { memberGovernmentBenefitSchema } from './member-government-benefit'
 import { memberJointAccountsSchema } from './member-joint-accounts-schema'
 import { memberRelativeAccountsSchema } from './member-relative-accounts-schema'
-import { memberContactReferencesSchema } from './member-contact-number-references-schema'
+import { memberContactReferenceSchema } from './member-contact-number-references-schema'
 
 export const createMemberProfileSchema = z.object({
     id: entityIdSchema.optional(),
@@ -71,7 +71,7 @@ export const createMemberProfileSchema = z.object({
         .min(1, 'Must provide at least 1 address'),
 
     memberContactNumberReferences: z
-        .array(memberContactReferencesSchema)
+        .array(memberContactReferenceSchema)
         .min(1, 'Must provide at least 1 contact number'),
 
     memberIncome: z.array(memberIncomeSchema).optional(),

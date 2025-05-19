@@ -10,7 +10,7 @@ export interface IMemberAssetRequest {
 
     member_profile_id: TEntityId
 
-    branch_id: TEntityId
+    branch_id?: TEntityId
 
     name: string
     entry_date: string

@@ -37,7 +37,7 @@ export const useQuickCreateMemberProfile = ({
                 MemberProfileService.quickCreateMemberProfile(
                     {
                         ...data,
-                        full_name: `${data.first_name} ${data.middle_name} ${data.last_name} ${data.suffix}`,
+                        full_name: `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''} ${data.suffix ?? ''}`,
                     },
                     preloads
                 )

@@ -2,23 +2,27 @@ import { IMedia } from '../media'
 import { IBranch } from '../branch'
 import { IMemberProfile } from './member-profile'
 import { IAuditable, ITimeStamps, TEntityId, TRelationship } from '../../common'
+import { IOrganization } from '@/types/lands-types'
 
 // LATEST FROM ERD
 export interface IMemberJointAccountRequest {
     id?: TEntityId
 
-    branch_id: TEntityId
-    picture_media_id: TEntityId
     member_profile_id: TEntityId
+
+    picture_media_id: TEntityId
     signature_media_id: TEntityId
 
-    description: string
+    branch_id?: TEntityId
+    organization_id?: TEntityId
+
+    description?: string
 
     first_name: string
     middle_name?: string
     last_name: string
+    full_name: string
     suffix?: string
-
     birthday: string
     family_relationship: TRelationship
 }
@@ -26,6 +30,9 @@ export interface IMemberJointAccountRequest {
 // LATEST FROM ERD
 export interface IMemberJointAccount extends ITimeStamps, IAuditable {
     id: TEntityId
+
+    organization_id: TEntityId
+    organization: IOrganization
 
     branch_id: TEntityId
     branch: IBranch
@@ -39,11 +46,12 @@ export interface IMemberJointAccount extends ITimeStamps, IAuditable {
     signature_media_id: TEntityId
     signature_media: IMedia
 
-    description: string
+    description?: string
 
     first_name: string
     middle_name?: string
     last_name: string
+    full_name: string
     suffix?: string
 
     birthday: string
