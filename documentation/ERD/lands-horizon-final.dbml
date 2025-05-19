@@ -1109,6 +1109,8 @@ Table member_government_benefit {
   name varchar(254)
   value varchar(254) [unique, not null]
 
+  expiry_date date
+
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
   deleted_at timestamp
