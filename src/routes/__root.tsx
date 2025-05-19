@@ -45,7 +45,7 @@ function RootLayout() {
     return (
         <div className="relative">
             <Outlet />
-            <Toaster richColors closeButton />
+            <Toaster richColors theme="system" closeButton expand />
             <ConnectionProvider />
             <CookieConsent />
             <ImagePreviewModal />
