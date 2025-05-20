@@ -2,129 +2,30 @@ import { useState } from 'react'
 
 import {
     PlusIcon,
+    NoteIcon,
     PhoneIcon,
     TrashIcon,
     PencilFillIcon,
-    NoteIcon,
 } from '@/components/icons'
+import { Table, TableRow, TableBody, TableCell } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { MemberContactCreateUpdateFormModal } from './member-contact-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberProfileContactReference } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
-import { IMemberContactReference, IMemberProfile } from '@/types'
-import EmptyListIndicator from '../empty-list-indicator'
+import { IMemberProfile } from '@/types'
 
-const MemberContactReferenceCard = ({
-    reference,
+const MemberContactReferences = ({
+    memberProfile,
 }: {
-    reference: IMemberContactReference
+    memberProfile: IMemberProfile
 }) => {
-    const [edit, setEdit] = useState(false)
+    const [create, setCreate] = useState(false)
     const { onOpen } = useConfirmModalStore()
     const { mutate: deleteContactReference, isPending: isDeleting } =
         useDeleteMemberProfileContactReference({ showMessage: true })
-
-    return (
-        <div className="flex flex-col gap-y-1 rounded-xl border p-4">
-            <MemberContactCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Contact Reference"
-                description="Modify / Update this contact reference information."
-                formProps={{
-                    memberProfileId: reference.member_profile_id,
-                    defaultValues: reference,
-                }}
-            />
-            <div className="flex justify-between">
-                <div className="flex items-center gap-x-2">
-                    <p className="font-bold">{reference.name}</p>
-                </div>
-                <div className="flex items-center justify-end">
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        hoverVariant="destructive"
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                        disabled={isDeleting}
-                        onClick={() => setEdit(true)}
-                    >
-                        <PencilFillIcon className="size-4" />
-                    </Button>
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        hoverVariant="destructive"
-                        disabled={isDeleting}
-                        onClick={() =>
-                            onOpen({
-                                title: 'Delete Contact Reference',
-                                description:
-                                    'Are you sure to delete this contact reference?',
-                                onConfirm: () =>
-                                    deleteContactReference({
-                                        memberProfileId:
-                                            reference.member_profile_id,
-                                        contactReferenceId: reference.id,
-                                    }),
-                            })
-                        }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                    >
-                        {isDeleting ? (
-                            <span className="size-4 animate-spin">
-                                <TrashIcon className="size-4" />
-                            </span>
-                        ) : (
-                            <TrashIcon className="size-4" />
-                        )}
-                    </Button>
-                </div>
-            </div>
-            <Separator className="!my-2" />
-            <div className="space-y-2">
-                <div className="grid grid-cols-2 gap-4 gap-y-2 py-4 text-sm">
-                    <div className="flex gap-x-4">
-                        <span className="text-muted-foreground">
-                            <PhoneIcon className="mr-2 inline text-muted-foreground" />
-                            Phone :
-                        </span>
-                        <p>
-                            {reference.contact_number || (
-                                <span className="italic text-muted-foreground/60">
-                                    No phone
-                                </span>
-                            )}
-                        </p>
-                    </div>
-                    <div className="flex gap-x-4">
-                        <span className="text-muted-foreground">
-                            <NoteIcon className="mr-2 inline text-muted-foreground" />
-                            Description :
-                        </span>
-                        <p>
-                            {reference.description || (
-                                <span className="italic text-muted-foreground/60">
-                                    No Description
-                                </span>
-                            )}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-interface Props {
-    memberProfile: IMemberProfile
-}
-
-const MemberContactReferences = ({ memberProfile }: Props) => {
-    const [create, setCreate] = useState(false)
+    const [editId, setEditId] = useState<string | null>(null)
 
     return (
         <div>
@@ -138,25 +39,136 @@ const MemberContactReferences = ({ memberProfile }: Props) => {
                     defaultValues: { member_profile_id: memberProfile.id },
                 }}
             />
+            {editId && (
+                <MemberContactCreateUpdateFormModal
+                    open={!!editId}
+                    onOpenChange={() => setEditId(null)}
+                    title="Update Contact Reference"
+                    description="Modify / Update this contact reference information."
+                    formProps={{
+                        memberProfileId: memberProfile.id,
+                        defaultValues:
+                            memberProfile.member_contact_number_references?.find(
+                                (r) => r.id === editId
+                            ) || {},
+                    }}
+                />
+            )}
             <div className="mb-2 flex items-start justify-between">
                 <p>Contact References</p>
                 <Button size="sm" onClick={() => setCreate(true)}>
                     Add Contact Reference <PlusIcon className="ml-1" />
                 </Button>
             </div>
-            <div className="space-y-4">
-                {memberProfile.member_contact_number_references?.map(
-                    (reference) => (
-                        <MemberContactReferenceCard
-                            key={reference.id}
-                            reference={reference}
-                        />
-                    )
-                )}
-                {(!memberProfile.member_contact_number_references ||
-                    memberProfile.member_contact_number_references) && (
-                    <EmptyListIndicator message="Empty Contact Number References" />
-                )}
+            <div className="rounded-xl border bg-background">
+                <Table>
+                    <TableBody>
+                        {memberProfile.member_contact_number_references &&
+                        memberProfile.member_contact_number_references.length >
+                            0 ? (
+                            memberProfile.member_contact_number_references.map(
+                                (reference) => (
+                                    <TableRow key={reference.id}>
+                                        <TableCell>
+                                            <div className="flex flex-col">
+                                                <span className="font-semibold">
+                                                    {reference.name || '-'}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground/70">
+                                                    Name
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-col">
+                                                <span className="flex items-center gap-1 font-semibold">
+                                                    <PhoneIcon className="inline size-4 text-muted-foreground" />
+                                                    {reference.contact_number || (
+                                                        <span className="italic text-muted-foreground/60">
+                                                            No phone
+                                                        </span>
+                                                    )}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground/70">
+                                                    Contact Number
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-col">
+                                                <span className="flex items-center gap-1 font-semibold">
+                                                    <NoteIcon className="inline size-4 text-muted-foreground" />
+                                                    {reference.description || (
+                                                        <span className="italic text-muted-foreground/60">
+                                                            No Description
+                                                        </span>
+                                                    )}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground/70">
+                                                    Description
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <div className="flex justify-end gap-1">
+                                                <Button
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                                                    disabled={isDeleting}
+                                                    onClick={() =>
+                                                        setEditId(reference.id)
+                                                    }
+                                                >
+                                                    <PencilFillIcon className="size-4" />
+                                                </Button>
+                                                <Button
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    hoverVariant="destructive"
+                                                    className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                                                    disabled={isDeleting}
+                                                    onClick={() =>
+                                                        onOpen({
+                                                            title: 'Delete Contact Reference',
+                                                            description:
+                                                                'Are you sure to delete this contact reference?',
+                                                            onConfirm: () =>
+                                                                deleteContactReference(
+                                                                    {
+                                                                        memberProfileId:
+                                                                            reference.member_profile_id,
+                                                                        contactReferenceId:
+                                                                            reference.id,
+                                                                    }
+                                                                ),
+                                                        })
+                                                    }
+                                                >
+                                                    {isDeleting ? (
+                                                        <span className="size-4 animate-spin">
+                                                            <TrashIcon className="size-4" />
+                                                        </span>
+                                                    ) : (
+                                                        <TrashIcon className="size-4" />
+                                                    )}
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            )
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={4}>
+                                    <div className="py-6 text-center text-muted-foreground">
+                                        Empty Contact Number References
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
             </div>
         </div>
     )

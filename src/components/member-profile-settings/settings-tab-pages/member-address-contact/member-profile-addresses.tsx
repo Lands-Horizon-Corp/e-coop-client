@@ -8,25 +8,25 @@ import {
     VillageIcon,
     TreeCityIcon,
     WoodSignsIcon,
+    PencilFillIcon,
     LocationPinIcon,
     BarcodeScanIcon,
-    PencilFillIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import EmptyListIndicator from '../empty-list-indicator'
 import { MemberAddressCreateUpdateFormModal } from './member-address-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IMemberAddress, IMemberProfile } from '@/types'
-import EmptyListIndicator from '../empty-list-indicator'
 
 const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
 
     return (
-        <div className="flex flex-col gap-y-1 rounded-xl border p-4">
+        <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberAddressCreateUpdateFormModal
                 open={edit}
                 onOpenChange={setEdit}
@@ -39,7 +39,6 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
             />
             <div className="flex justify-between">
                 <div className="flex items-center gap-x-2">
-                    {/* <MapMarkedIcon className="inline size-6 text-muted-foreground" /> */}
                     <p className="font-bold">{address.label}</p>
                 </div>
                 <div className="flex items-center justify-end">
