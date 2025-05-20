@@ -36,7 +36,7 @@ const MemberEducationalAttainmentCard = ({
         useDeleteEducationalAttainmentForMember({ showMessage: true })
 
     return (
-        <div className="space-y-1 rounded-md border">
+        <div className="space-y-1 rounded-lg border bg-background">
             <MemberEducationalAttainmentCreateUpdateFormModal
                 open={edit}
                 onOpenChange={setEdit}

@@ -4,20 +4,27 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import {
     UserIcon,
+    IdCardIcon,
     Users3Icon,
     UserTagIcon,
     HandCoinsIcon,
     MapMarkedIcon,
     GraduationCapIcon,
-    IdCardIcon,
 } from '../icons'
 import MemberProfileSettingsBanner, {
     MemberProfileSettingsBannerSkeleton,
 } from './member-profile-settings-banner'
 import { Separator } from '../ui/separator'
 import { ScrollArea, ScrollBar } from '../ui/scroll-area'
+import MembershipInfo from './settings-tab-pages/membership-info'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import MemberFinancial from './settings-tab-pages/member-financial-info'
+import MemberAddressContact from './settings-tab-pages/member-address-contact'
+import MemberAccountRelationship from './settings-tab-pages/account-relationship'
+import MemberGovernmentBenefits from './settings-tab-pages/member-government-benefits'
+import MemberProfilePersonalInfo from './settings-tab-pages/member-profile-personal-info'
 import MemberCloseAccountBanner from '../member-infos/banners/member-closed-account-banner'
+import MemberEducationalAttainment from './settings-tab-pages/member-educational-attainment'
 
 import { cn } from '@/lib'
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -25,13 +32,6 @@ import { useInternalState } from '@/hooks/use-internal-state'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 import { IClassProps, IMemberProfile, TEntityId } from '@/types'
-import MemberProfilePersonalInfo from './settings-tab-pages/member-profile-personal-info'
-import MembershipInfo from './settings-tab-pages/membership-info'
-import MemberEducationalAttainment from './settings-tab-pages/member-educational-attainment'
-import MemberAddressContact from './settings-tab-pages/member-address-contact'
-import MemberFinancial from './settings-tab-pages/member-financial-info'
-import MemberGovernmentBenefits from './settings-tab-pages/member-government-benefits'
-import MemberAccountRelationship from './settings-tab-pages/account-relationship'
 
 const SettingsTabs: {
     value: string
@@ -426,6 +426,181 @@ const MemberProfileSettings = ({
                         'Social Security System benefit for private employees.',
                     created_at: '2024-04-10T09:30:00Z',
                     updated_at: '2024-04-10T09:30:00Z',
+                },
+            ],
+            member_joint_accounts: [
+                {
+                    id: '11111111-aaaa-bbbb-cccc-222222222222',
+                    organization_id: 'org-1111-aaaa-bbbb-cccc-222222222222',
+                    organization: {
+                        id: 'org-1111-aaaa-bbbb-cccc-222222222222',
+                        name: 'Sample Org',
+                    },
+                    branch_id: 'branch-1111-aaaa-bbbb-cccc-222222222222',
+                    branch: {
+                        id: 'branch-1111-aaaa-bbbb-cccc-222222222222',
+                        name: 'Main Branch',
+                    },
+                    member_profile_id:
+                        'profile-1111-aaaa-bbbb-cccc-222222222222',
+                    member_profile: {
+                        id: 'profile-1111-aaaa-bbbb-cccc-222222222222',
+                        full_name: 'Juan Dela Cruz',
+                        media: {
+                            id: 'media-1111-aaaa-bbbb-cccc-222222222222',
+                            download_url: '',
+                        },
+                    },
+                    picture_media_id: 'media-1111-aaaa-bbbb-cccc-222222222222',
+                    picture_media: {
+                        id: 'media-1111-aaaa-bbbb-cccc-222222222222',
+                        download_url:
+                            'https://cdn.britannica.com/58/129958-050-C0EF01A4/Adolf-Hitler-1933.jpg',
+                    },
+                    signature_media_id:
+                        'media-2222-aaaa-bbbb-cccc-222222222222',
+                    signature_media: {
+                        id: 'media-2222-aaaa-bbbb-cccc-222222222222',
+                        download_url:
+                            'https://www.gettysburgmuseumofhistory.com/wp-content/uploads/2023/11/A6B8D068-25EF-4473-9CE3-D30B7F146749-1024x414.webp',
+                    },
+                    description: 'Joint account for spouse',
+                    first_name: 'Maria',
+                    middle_name: 'Santos',
+                    last_name: 'Dela Cruz',
+                    full_name: 'Maria Santos Dela Cruz',
+                    suffix: '',
+                    birthday: '1990-05-10',
+                    family_relationship: 'spouse',
+                    created_at: '2024-01-01T10:00:00Z',
+                    updated_at: '2024-01-01T10:00:00Z',
+                    created_by: 'admin',
+                    updated_by: 'admin',
+                },
+                {
+                    id: '22222222-bbbb-cccc-dddd-333333333333',
+                    organization_id: 'org-2222-bbbb-cccc-dddd-333333333333',
+                    organization: {
+                        id: 'org-2222-bbbb-cccc-dddd-333333333333',
+                        name: 'Sample Org 2',
+                    },
+                    branch_id: 'branch-2222-bbbb-cccc-dddd-333333333333',
+                    branch: {
+                        id: 'branch-2222-bbbb-cccc-dddd-333333333333',
+                        name: 'Branch 2',
+                    },
+                    member_profile_id:
+                        'profile-2222-bbbb-cccc-dddd-333333333333',
+                    picture_media_id: 'media-3333-bbbb-cccc-dddd-333333333333',
+                    picture_media: {
+                        id: 'media-3333-bbbb-cccc-dddd-333333333333',
+                        download_url: 'https://i.redd.it/t20nfsv8guwe1.jpeg',
+                    },
+                    signature_media_id:
+                        'media-4444-bbbb-cccc-dddd-333333333333',
+                    signature_media: {
+                        id: 'media-4444-bbbb-cccc-dddd-333333333333',
+                        download_url:
+                            'https://www.clipartkey.com/mpngs/m/196-1968543_signature-image-john-doe.png',
+                    },
+                    description: 'Joint account for child',
+                    first_name: 'Juanito',
+                    middle_name: 'Reyes',
+                    last_name: 'Reyes',
+                    full_name: 'Juanito Reyes Reyes',
+                    suffix: '',
+                    birthday: '2010-08-15',
+                    family_relationship: 'child',
+                    created_at: '2024-02-01T10:00:00Z',
+                    updated_at: '2024-02-01T10:00:00Z',
+                    created_by: 'admin',
+                    updated_by: 'admin',
+                },
+            ],
+            member_relative_accounts: [
+                {
+                    id: 'rel-1111-aaaa-bbbb-cccc-222222222222',
+                    organization_id: 'org-1111-aaaa-bbbb-cccc-222222222222',
+                    organization: {
+                        id: 'org-1111-aaaa-bbbb-cccc-222222222222',
+                        name: 'Sample Org',
+                    },
+                    branch_id: 'branch-1111-aaaa-bbbb-cccc-222222222222',
+                    branch: {
+                        id: 'branch-1111-aaaa-bbbb-cccc-222222222222',
+                        name: 'Main Branch',
+                    },
+                    member_profile_id:
+                        'profile-1111-aaaa-bbbb-cccc-222222222222',
+                    member_profile: {
+                        id: 'profile-1111-aaaa-bbbb-cccc-222222222222',
+                        full_name: 'Juan Dela Cruz',
+                        media: {
+                            id: 'media-1111-aaaa-bbbb-cccc-222222222222',
+                            download_url:
+                                'https://cdn.britannica.com/58/129958-050-C0EF01A4/Adolf-Hitler-1933.jpg',
+                        },
+                    },
+                    relative_member_profile_id:
+                        'profile-3333-aaaa-bbbb-cccc-222222222222',
+                    relative_member_profile: {
+                        id: 'profile-3333-aaaa-bbbb-cccc-222222222222',
+                        full_name: 'Jose Dela Cruz',
+                        media: {
+                            id: 'media-3333-aaaa-bbbb-cccc-222222222222',
+                            download_url:
+                                'https://i.redd.it/t20nfsv8guwe1.jpeg',
+                        },
+                    },
+                    family_relationship: 'father',
+                    description: 'Father of Juan',
+                    created_at: '2024-01-01T10:00:00Z',
+                    updated_at: '2024-01-01T10:00:00Z',
+                    created_by: 'admin',
+                    updated_by: 'admin',
+                },
+                {
+                    id: 'rel-2222-bbbb-cccc-dddd-333333333333',
+                    organization_id: 'org-2222-bbbb-cccc-dddd-333333333333',
+                    organization: {
+                        id: 'org-2222-bbbb-cccc-dddd-333333333333',
+                        name: 'Sample Org 2',
+                    },
+                    branch_id: 'branch-2222-bbbb-cccc-dddd-333333333333',
+                    branch: {
+                        id: 'branch-2222-bbbb-cccc-dddd-333333333333',
+                        name: 'Branch 2',
+                    },
+                    member_profile_id:
+                        'profile-2222-bbbb-cccc-dddd-333333333333',
+                    member_profile: {
+                        id: 'profile-2222-bbbb-cccc-dddd-333333333333',
+                        full_name: 'Pedro Reyes',
+                        media: {
+                            id: 'media-2222-bbbb-cccc-dddd-333333333333',
+                            download_url: 'https://i.redd.it/ti3lgoce8wi91.jpg',
+                        },
+                    },
+                    relative_member_profile_id:
+                        'profile-4444-bbbb-cccc-dddd-333333333333',
+                    relative_member_profile: {
+                        id: 'profile-4444-bbbb-cccc-dddd-333333333333',
+                        full_name: 'Maria Reyes',
+                        status: 'verified',
+                        media: {
+                            id: 'media-4444-bbbb-cccc-dddd-333333333333',
+                            download_url:
+                                'https://i.redd.it/t20nfsv8guwe1.jpeg',
+                        },
+                        created_at: '2024-02-01T10:00:00Z',
+                        updated_at: '2024-02-01T10:00:00Z',
+                    },
+                    family_relationship: 'mother',
+                    description: 'Mother of Pedro',
+                    created_at: '2024-02-01T10:00:00Z',
+                    updated_at: '2024-02-01T10:00:00Z',
+                    created_by: 'admin',
+                    updated_by: 'admin',
                 },
             ],
         } as unknown as IMemberProfile,
