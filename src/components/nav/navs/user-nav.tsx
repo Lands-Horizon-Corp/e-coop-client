@@ -10,6 +10,7 @@ import { cn } from '@/lib'
 import { useAuthStore } from '@/store/user-auth-store'
 
 import { IClassProps, IEmployee } from '@/types'
+import TransactionBatchNavButton from '@/components/transaction-batch/batch-nav-button'
 
 const UserNav = ({
     homeUrl,
@@ -30,6 +31,7 @@ const UserNav = ({
                 <PageBreadCrumb homeUrl={homeUrl} className="hidden md:block" />
             </NavContainer>
             <NavContainer className="pointer-events-auto">
+                {user && <TransactionBatchNavButton />}
                 {user && user.type === 'employee' && (
                     <NavTimeInBar currentUser={user as IEmployee} />
                 )}

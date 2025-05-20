@@ -1,5 +1,7 @@
 import qs from 'query-string'
+
 import APIService from '../api-service'
+import { downloadFileService } from '@/helpers'
 
 import {
     TEntityId,
@@ -8,30 +10,29 @@ import {
     IMemberExpense,
     IMemberAddress,
     IMemberProfile,
+    IMemberJointAccount,
     IMemberAssetRequest,
     IMemberIncomeRequest,
     IMemberExpenseRequest,
     IMemberProfileRequest,
     IMemberAddressRequest,
+    IMemberRelativeAccount,
     IMemberProfilePaginated,
     IMemberContactReference,
     IMemberGovernmentBenefit,
     IMemberCloseRemarkRequest,
+    IMemberJointAccountRequest,
     IMemberProfileMediasRequest,
     IMemberEducationalAttainment,
     IMemberProfileAccountRequest,
+    IMemberRelativeAccountRequest,
     IMemberContactReferenceRequest,
     IMemberGovernmentBenefitRequest,
     IMemberProfileQuickCreateRequest,
     IMemberProfilePersonalInfoRequest,
     IMemberProfileMembershipInfoRequest,
     IMemberEducationalAttainmentRequest,
-    IMemberJointAccountRequest,
-    IMemberJointAccount,
-    IMemberRelativeAccountRequest,
-    IMemberRelativeAccount,
 } from '@/types'
-import { downloadFileService } from '@/helpers'
 
 const BASE_ENDPOINT = '/member-profile'
 

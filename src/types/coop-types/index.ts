@@ -50,6 +50,8 @@ export * from './media'
 export * from './branch'
 export * from './footstep'
 export * from './timesheet'
+export * from './bills-and-coins'
 export * from './paginated-result'
+export * from './transaction-batch'
 
 export * from '../qr/qr-crypto-type'

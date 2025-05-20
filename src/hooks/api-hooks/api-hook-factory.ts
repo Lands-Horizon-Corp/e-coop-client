@@ -34,7 +34,7 @@ export const createMutationHook =
         })
     }
 
-// PANG QUERY MUTATION
+// PANG QUERY
 
 export function createQueryHook<TData, TError = string, TVariables = void>(
     queryKey: unknown[],

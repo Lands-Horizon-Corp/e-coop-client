@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { FC, useState } from 'react'
+import { useRouter } from '@tanstack/react-router'
 
 import { IMemberProfileTableActionComponentProp } from '../columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
-import { FC } from 'react'
 // import { MemberCreateUpdateFormModal } from '@/components/forms/member-forms/member-create-update-form'
 // import { MemberProfileCreateUpdateFormModal } from '@/components/forms/member-forms/member-application-form/member-profile-create-update-form'
 
@@ -19,7 +19,7 @@ const MemberProfileTableEmployeeAction: FC<
     IMemberProfileTableEmployeeActionProps
 > = ({ row }) => {
     const member = row.original
-    // const router = useRouter()
+    const router = useRouter()
     // const [editModal, setEditModal] = useState(false)
     const [viewOverallInfo, setViewOverallInfo] = useState(false)
     const [viewHistoryModal, setViewHistoryModal] = useState(false)
@@ -80,11 +80,15 @@ const MemberProfileTableEmployeeAction: FC<
                 )}
             </div>
             <RowActionsGroup
-                // onEdit={{
-                //     text: 'Edit Account',
-                //     isAllowed: true,
-                //     onClick: () => setEditAccountModal((prev) => !prev),
-                // }}
+                onEdit={{
+                    text: 'Edit Account',
+                    isAllowed: true,
+                    onClick() {
+                        router.navigate({
+                            to: `../member-profile/${member.id}/personal-info`,
+                        })
+                    },
+                }}
                 otherActions={
                     <>
                         {/* {!member.memberProfile ? (

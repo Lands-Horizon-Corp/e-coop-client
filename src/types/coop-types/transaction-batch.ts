@@ -1,0 +1,98 @@
+import { IMedia } from './media'
+import { IUserBase } from '../auth'
+import { IAuditable, ITimeStamps, TEntityId } from '../common'
+
+export type TBatchBalanceStatus =
+    | 'balanced'
+    | 'balance overage'
+    | 'balance shortage'
+
+export interface ITransactionBatchStartRequest {}
+
+export interface ITransactionBatch extends ITimeStamps, IAuditable {
+    id: TEntityId
+
+    employee_user_id: TEntityId
+    employee_user: IUserBase
+
+    batch_name?: string
+
+    beginning_balance: number
+
+    deposit_in_bank: number // too lazy to cash count just know the total
+    cash_count_total: number
+    grand_total: number
+
+    total_cash_collection: number
+    total_deposit_entry: number
+
+    // FOR LESS
+    petty_cash: number
+    loan_releases: number
+    time_deposit_withdrawal: number
+    savings_withdrawal: number
+
+    total_cash_handled: number
+    total_supposed_remitance: number
+    total_cash_on_hand: number
+    total_check_remittance: number
+    total_online_remittance: number
+    total_deposit_in_bank: number
+    total_actual_remittance: number
+
+    total_actual_supposed_comparison: number
+
+    description?: string
+    can_view: boolean
+    is_requesting_view: false
+    is_closed: boolean
+
+    // SIGNATURES
+    approved_by_signature_media_id?: TEntityId
+    approved_by_signature_media?: IMedia
+    approved_by_name?: string
+    approved_by_position?: string
+
+    prepared_by_signature_media_id?: TEntityId
+    prepared_by_signature_media?: IMedia
+    prepared_by_name?: string
+    prepared_by_position?: string
+
+    certified_by_signature_media_id?: TEntityId
+    certified_by_signature_media?: IMedia
+    certified_by_name?: string
+    certified_by_position?: string
+
+    verified_by_signature_media_id?: TEntityId
+    verified_by_signature_media?: IMedia
+    verified_by_name?: string
+    verified_by_position?: string
+
+    check_by_signature_media_id?: TEntityId
+    check_by_signature_media?: IMedia
+    check_by_name?: string
+    check_by_position?: string
+
+    acknowledge_by_signature_media_id?: TEntityId
+    acknowledge_by_signature_media?: IMedia
+    acknowledge_by_name?: string
+    acknowledge_by_position?: string
+
+    noted_by_signature_media_id?: TEntityId
+    noted_by_signature_media?: IMedia
+    noted_by_name?: string
+    noted_by_position?: string
+
+    posted_by_signature_media_id?: TEntityId
+    posted_by_signature_media?: IMedia
+    posted_by_name?: string
+    posted_by_position?: string
+
+    paid_by_signature_media_id?: TEntityId
+    paid_by_signature_media?: IMedia
+    paid_by_name?: string
+    paid_by_position?: string
+
+    ended_at: string
+    total_batch_time: string
+}

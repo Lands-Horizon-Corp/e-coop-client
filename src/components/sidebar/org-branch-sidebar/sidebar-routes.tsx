@@ -1,9 +1,9 @@
 import { TUserType } from '@/types'
 import {
-    INavGroupItem,
     INavItem,
-    INavItemDropdown,
+    INavGroupItem,
     INavItemSingle,
+    INavItemDropdown,
 } from '../../ui/app-sidebar/types'
 
 import {
@@ -21,6 +21,7 @@ import {
     HandCoinsIcon,
     MaintenanceIcon,
     Users3Icon,
+    CalendarDotsIcon,
     // NotificationIcon,
     // GraduationCapIcon,
     // BuildingBranchIcon,
@@ -125,7 +126,7 @@ export const generateSidebarGroups = (
             ],
         },
         {
-            title: 'Users & Members',
+            title: 'Members',
             userType: ['employee'],
             navItems: [
                 {
@@ -231,6 +232,26 @@ export const generateSidebarGroups = (
                     icon: BankIcon,
                     title: 'Computation Type',
                     url: `${baseUrl}/accounting/computation-type`,
+                    userType: ['employee'],
+                },
+            ],
+        },
+        {
+            title: 'Maintenance',
+            userType: ['employee'],
+            navItems: [
+                {
+                    type: 'item',
+                    icon: BillIcon,
+                    title: 'Bills & Coins',
+                    url: `${baseUrl}/maintenance/bills-and-coins`,
+                    userType: ['employee'],
+                },
+                {
+                    type: 'item',
+                    icon: CalendarDotsIcon,
+                    title: 'Holidays',
+                    url: `${baseUrl}/maintenance/holidays`,
                     userType: ['employee'],
                 },
             ],
