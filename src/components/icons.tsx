@@ -181,6 +181,7 @@ import {
 } from 'react-icons/bs'
 
 import {
+    IoLayers as LayersIcon,
     IoReload as ReloadIcon,
     IoRefresh as RefreshIcon,
     IoStorefront as StoreIcon,
@@ -258,6 +259,7 @@ import { GrPowerReset as PowerResetIcon } from 'react-icons/gr'
 
 import {
     VscError as ErrorIcon,
+    VscLayersDot as LayersSharpDotIcon,
     VscBracketError as BracketErrorIcon,
     VscCommentDraft as CommentDashedIcon,
     VscLocation as LocationPinOutlineIcon,
@@ -312,6 +314,7 @@ export {
     QrCodeIcon,
     DotBigIcon,
     CameraIcon,
+    LayersIcon,
     FaBoldIcon,
     ShieldIcon,
     Users3Icon,
@@ -436,6 +439,7 @@ export {
     PencilOutlineIcon,
     UserClockFillIcon,
     CommentDashedIcon,
+    LayersSharpDotIcon,
     SignatureLightIcon,
     HandShakeHeartIcon,
     FlipHorizontalIcon,
