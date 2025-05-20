@@ -5,13 +5,13 @@ import { createQueryHook, createMutationHook } from '../api-hook-factory'
 import * as MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 
 import {
+    IAPIHook,
     TEntityId,
     IMemberType,
     IQueryProps,
     IMemberTypeRequest,
     IMemberTypePaginated,
     IFilterPaginatedHookProps,
-    IAPIHook,
 } from '@/types'
 
 export const memberTypeLoader = (

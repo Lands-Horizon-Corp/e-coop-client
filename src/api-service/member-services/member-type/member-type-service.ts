@@ -62,7 +62,7 @@ export const updateMemberType = async (
     return response.data
 }
 
-export const deleteMemberType = async (id: TEntityId): Promise<void> => {
+export const deleteMemberType = async (id: TEntityId) => {
     const endpoint = `${BASE_ENDPOINT}/${id}`
     await APIService.delete<void>(endpoint)
 }

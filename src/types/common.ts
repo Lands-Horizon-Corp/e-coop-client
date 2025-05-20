@@ -2,11 +2,11 @@ import { IBranch } from './coop-types'
 import { IUserBase } from './auth/user'
 import { IOrganization } from './lands-types'
 import {
-    AccountClosureReasons,
     CIVIL_STATUS,
-    EDUCATIONAL_ATTAINMENT,
-    FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
+    FAMILY_RELATIONSHIP,
+    AccountClosureReasons,
+    EDUCATIONAL_ATTAINMENT,
 } from '@/constants'
 
 export type TEntityId = string

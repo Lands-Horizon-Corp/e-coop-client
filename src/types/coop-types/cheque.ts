@@ -17,4 +17,5 @@ export interface IChequeResource extends ITimeStamps {
     description: string
 }
 
-export type IChequePaginatedResource = IPaginatedResult<IChequeResource>
+export interface IChequePaginatedResource
+    extends IPaginatedResult<IChequeResource> {}
