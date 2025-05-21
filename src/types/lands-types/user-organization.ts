@@ -2,23 +2,27 @@ import { IBranch } from '../coop-types'
 import { IUserBase } from '../auth/user'
 import { IOrganization } from './organization'
 import { TEntityId, IBaseEntityMeta, TUserType } from '../common'
+import { IPaginatedResponse } from '@/components/data-table/data-table-pagination/type'
 
-export interface IUserOrganization extends IBaseEntityMeta {
+export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
     id: TEntityId
 
     organization_id: TEntityId
-    organization?: IOrganization
+    organization: IOrganization
 
-    branchId: string
-    branch?: IBranch
+    branch_id: TEntityId
+    branch: IBranch
 
     description?: string
 
     user_id: TEntityId
-    user: IUserBase
+    user: TUser
 
     user_type: TUserType
 
     applicationDescription?: string
     applicationStatus: 'pending' | 'reported' | 'accepted' | 'ban'
 }
+
+export interface IUserOrganizationPaginated<TUser = IUserBase>
+    extends IPaginatedResponse<IUserOrganization<TUser>> {}
