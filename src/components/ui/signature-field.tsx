@@ -6,6 +6,7 @@ import { SignatureLightIcon, XIcon } from '@/components/icons'
 import { SignaturePickerUploaderModal } from '../signature/signature-picker-uploader'
 
 import { IMedia } from '@/types'
+import { cn } from '@/lib'
 
 interface SignatureFieldProps extends Omit<ButtonProps, 'onChange'> {
     name?: string
@@ -40,7 +41,11 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                     size="nostyle"
                     variant="nostyle"
                     onClick={() => setOpen(true)}
-                    className="has-disabled:pointer-events-none has-disabled:opacity-50 darkx:bg-popover/80x relative flex h-52 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed border-primary/60 bg-primary/5 p-4 transition-colors hover:border-foreground hover:bg-primary/10 has-[img]:border-none has-[input:focus]:border-ring has-[input:focus]:ring-[3px] has-[input:focus]:ring-ring/50 data-[dragging=true]:bg-accent/50 dark:border-input"
+                    className={cn(
+                        'has-disabled:pointer-events-none has-disabled:opacity-50 darkx:bg-popover/80x relative flex h-52 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed border-primary/60 bg-primary/5 p-4 transition-colors hover:border-foreground hover:bg-primary/10 has-[img]:border-none has-[input:focus]:border-ring has-[input:focus]:ring-[3px] has-[input:focus]:ring-ring/50 dark:border-input',
+                        value &&
+                            'ring ring-ring/40 ring-offset-1 dark:ring-muted-foreground/20'
+                    )}
                 >
                     {value ? (
                         <div
@@ -48,8 +53,11 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                             className="absolute left-0 top-0 size-full cursor-default"
                         >
                             <ImageDisplay
-                                className="block size-full rounded-none"
                                 src={value}
+                                className={cn(
+                                    'block size-full rounded-none',
+                                    value && 'dark:bg-background/75'
+                                )}
                             />
                             <Button
                                 size="icon"

@@ -1,6 +1,6 @@
 import { IMedia } from '../coop-types'
-import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
 import { IQrScanResult } from '../qr/qr-result'
+import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
 
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps, IAuditable {
@@ -32,12 +32,12 @@ export interface IUserBase extends ITimeStamps, IAuditable {
     qr_code: IQrScanResult<string, 'user-qr'>
 }
 
-export interface IOwner extends IUserBase {
-    type: 'owner'
-}
-
 export interface IEmployee extends IUserBase {
     type: 'employee'
+}
+
+export interface IOwner extends IUserBase {
+    type: 'owner'
 }
 
 export interface IMember extends IUserBase {
