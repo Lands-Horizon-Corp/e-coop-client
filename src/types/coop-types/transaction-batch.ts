@@ -7,9 +7,10 @@ export type TBatchBalanceStatus =
     | 'balance overage'
     | 'balance shortage'
 
-export interface ITransactionBatchStartRequest {}
-
-export interface ITransactionBatch extends ITimeStamps, IAuditable {
+export interface ITransactionBatch
+    extends ITimeStamps,
+        IAuditable,
+        ITransactionBatchSignatures {
     id: TEntityId
 
     employee_user_id: TEntityId
@@ -33,6 +34,7 @@ export interface ITransactionBatch extends ITimeStamps, IAuditable {
     savings_withdrawal: number
 
     total_cash_handled: number
+
     total_supposed_remitance: number
     total_cash_on_hand: number
     total_check_remittance: number
@@ -44,10 +46,35 @@ export interface ITransactionBatch extends ITimeStamps, IAuditable {
 
     description?: string
     can_view: boolean
-    is_requesting_view: false
+    request_view?: string
     is_closed: boolean
 
-    // SIGNATURES
+    ended_at: string
+    total_batch_time: string
+}
+
+export interface ITransactionBatchMinimal
+    extends Omit<
+        ITransactionBatch,
+        | 'total_cash_collection'
+        | 'total_deposit_entry'
+        | 'petty_cash'
+        | 'loan_releases'
+        | 'time_deposit_withdrawal'
+        | 'savings_withdrawal'
+        | 'total_cash_handled'
+        | 'total_supposed_remitance'
+        | 'total_cash_on_hand'
+        | 'total_check_remittance'
+        | 'total_online_remittance'
+        | 'total_deposit_in_bank'
+        | 'total_actual_remittance'
+        | 'total_actual_supposed_comparison'
+        | keyof ITransactionBatchSignatures
+    > {}
+
+// SIGNATURES
+export interface ITransactionBatchSignatures {
     approved_by_signature_media_id?: TEntityId
     approved_by_signature_media?: IMedia
     approved_by_name?: string
@@ -92,7 +119,4 @@ export interface ITransactionBatch extends ITimeStamps, IAuditable {
     paid_by_signature_media?: IMedia
     paid_by_name?: string
     paid_by_position?: string
-
-    ended_at: string
-    total_batch_time: string
 }
