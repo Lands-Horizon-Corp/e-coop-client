@@ -5,12 +5,13 @@ import ActionTooltip from '@/components/action-tooltip'
 import { MagnifyingGlassIcon, XIcon } from '@/components/icons'
 import { DebouncedInput } from '@/components/ui/debounced-input'
 
-import { KeysOfOrString } from '@/types'
 import {
+    useFilter,
     TFilterModes,
     TSearchFilter,
-    useFilter,
 } from '@/contexts/filter-context'
+
+import { KeysOfOrString } from '@/types'
 
 export interface IGlobalSearchTargets<T> {
     field: (string & {}) | keyof T
@@ -83,13 +84,15 @@ const DataTableGlobalSearch = <T,>({
                     </span>
                 </ActionTooltip>
             )}
-            <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => setVisible((prev) => !prev)}
-            >
-                <MagnifyingGlassIcon />
-            </Button>
+            {!visible && (
+                <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => setVisible((prev) => !prev)}
+                >
+                    <MagnifyingGlassIcon />
+                </Button>
+            )}
         </div>
     )
 }
