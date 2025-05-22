@@ -20,7 +20,7 @@ export const useVerifyInvitationCode = (code: string) => {
 
             return response
         },
-        enabled: !!code, 
-        staleTime: 5000
+        enabled: !!code,
+        staleTime: 5000,
     })
 }

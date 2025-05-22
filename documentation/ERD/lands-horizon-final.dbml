@@ -2510,6 +2510,7 @@ Table transaction_batch {
 
   can_view boolean [default: false] // if employee is allowed to view-his/her transaction batch via blotter
   is_closed boolean [default: false] // if teller terminate the blotter
+  request_view timestamp // if it has value, then requested something 
 
   // SIGNATURES
 
