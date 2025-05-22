@@ -95,13 +95,8 @@ export const useJoinOrganization = ({
             }
             queryClient.invalidateQueries({
                 queryKey: ['user-organization', 'details'],
-<<<<<<< HEAD
             })
             onSuccess?.(result)
-=======
-            }),
-                onSuccess?.(result)
->>>>>>> core/components
             return result
         },
     })

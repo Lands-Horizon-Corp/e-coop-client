@@ -83,11 +83,7 @@ const CreateBranchForm = ({
         } else {
             form.reset(defaultFormValues)
         }
-<<<<<<< HEAD
     }, [isEditMode, defaultValues, defaultFormValues])
-=======
-    }, [isEditMode, defaultValues])
->>>>>>> core/components
 
     const {
         mutate: createBranch,

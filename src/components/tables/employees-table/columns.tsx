@@ -160,11 +160,11 @@ const EmployeesTableColumns = (
         ),
         cell: ({
             row: {
-                original: { applicationStatus },
+                original: { application_status },
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                {applicationStatus}
+                {application_status}
             </div>
         ),
         enableMultiSort: true,

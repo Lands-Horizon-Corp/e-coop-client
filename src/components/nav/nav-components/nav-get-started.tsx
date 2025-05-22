@@ -17,11 +17,24 @@ const NavGetStarted = () => {
     return (
         <Button
             onClick={() => {
-                if (!user_organization?.organization) {
+                if (
+                    !user_organization?.organization ||
+                    !user_organization?.branch
+                ) {
                     navigate({ to: '/onboarding' as string })
                 } else {
+                    const orgName = user_organization.organization?.name
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+
+                    const branchName = user_organization?.branch.name
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, '-')
+                        .replace(/^-+|-+$/g, '')
+
                     navigate({
-                        to: `/ecoop/${user_organization.organization?.name}` as string,
+                        to: `/org/${orgName}/branch/${branchName}` as string,
                     })
                 }
             }}
