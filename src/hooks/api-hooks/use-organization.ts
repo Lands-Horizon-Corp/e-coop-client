@@ -10,7 +10,6 @@ import {
     IOrganization,
     IOrganizationRequest,
     IOrganizationPaginated,
-    IUserOrganization,
     IUserOrganizationResponse,
 } from '@/types'
 import {

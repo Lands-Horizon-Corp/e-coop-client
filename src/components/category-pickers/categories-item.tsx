@@ -12,7 +12,6 @@ type CategoriesItemProps = {
 }
 
 const CategoriesItem = ({ className }: CategoriesItemProps) => {
-
     const { clearCategories, selectedCategories, removeCategory } =
         useCategoryStore()
 

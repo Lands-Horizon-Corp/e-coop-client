@@ -44,6 +44,7 @@ export const canJoinOrganizationMember = async (
         )
         return response.status === 200
     } catch (error) {
+        console.log(error)
         return false
     }
 }
@@ -62,6 +63,7 @@ export const switchOrganization = async (userOrganizationId: TEntityId) => {
         )
         return response.status === 200
     } catch (error) {
+        console.log(error)
         return false
     }
 }

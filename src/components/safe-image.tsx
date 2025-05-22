@@ -1,4 +1,4 @@
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import Banner1 from '@/assets/images/banner/Banner1.webp'
 import React, { useEffect, useState } from 'react'
 
 type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
@@ -7,7 +7,7 @@ type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
 
 const SafeImage: React.FC<SafeImageProps> = ({
     src,
-    fallbackSrc = orgBannerList[0],
+    fallbackSrc = Banner1,
     alt = '',
     ...props
 }) => {
