@@ -4,29 +4,26 @@ import { PaginationState } from '@tanstack/react-table'
 
 import GenericPicker from './generic-picker'
 import { Button } from '@/components/ui/button'
-import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 
-import useFilterState from '@/hooks/use-filter-state'
-import { abbreviateUUID } from '@/utils/formatting-utils'
-import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
-import { useFilteredPaginatedMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-
 import { useShortcut } from '../use-shorcuts'
+import useFilterState from '@/hooks/use-filter-state'
+import { useFilteredPaginatedEmployees } from '@/hooks/api-hooks/use-employee'
+import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 
-import { IMemberProfile, TEntityId } from '@/types'
+import { IUserBase, IUserOrganization } from '@/types'
 
 interface Props {
-    value?: TEntityId
+    value?: IUserBase
     disabled?: boolean
     placeholder?: string
-    onSelect?: (selectedMember: IMemberProfile) => void
+    onSelect?: (selectedEmployee: IUserOrganization) => void
     allowShorcutCommand?: boolean
 }
 
-const MemberPicker = ({
+const EmployeePicker = ({
     value,
     disabled,
     allowShorcutCommand = false,
@@ -51,21 +48,18 @@ const MemberPicker = ({
     })
 
     const { data, isPending, isLoading, isFetching } =
-        useFilteredPaginatedMemberProfile({
+        useFilteredPaginatedEmployees({
             filterPayload: finalFilterPayload,
             pagination,
             enabled: !disabled,
             showMessage: false,
         })
 
-    const selectedMember = data.data.find((member) => member.id === value)
-
     useShortcut(
         'Enter',
         (event) => {
             event?.preventDefault()
             if (
-                !selectedMember &&
                 !disabled &&
                 !isPending &&
                 !isLoading &&
@@ -84,22 +78,23 @@ const MemberPicker = ({
                 items={data.data}
                 open={state}
                 listHeading={`Matched Results (${data.totalSize})`}
-                searchPlaceHolder="Search name or PB no."
+                searchPlaceHolder="Search employee username or email"
                 isLoading={isPending || isLoading || isFetching}
-                onSelect={(member) => {
-                    queryClient.setQueryData(['member', value], member)
-                    onSelect?.(member)
+                onSelect={(employee) => {
+                    queryClient.setQueryData(['employee', value], employee)
+                    onSelect?.(employee)
                     setState(false)
                 }}
                 onOpenChange={setState}
                 onSearchChange={(searchValue) => {
                     bulkSetFilter(
                         [
-                            { displayText: 'full name', field: 'fullName' },
                             {
-                                displayText: 'PB',
-                                field: 'memberProfile.passbookNumber',
+                                displayText: 'full name',
+                                field: 'user.full_name',
                             },
+                            { displayText: 'email', field: 'user.email' },
+                            { displayText: 'username', field: 'user.username' },
                         ],
                         {
                             displayText: '',
@@ -109,21 +104,22 @@ const MemberPicker = ({
                         }
                     )
                 }}
-                renderItem={(member) => (
+                renderItem={(employee) => (
                     <div className="flex w-full items-center justify-between py-1">
                         <div className="flex items-center gap-x-2">
-                            <ImageDisplay src={member.media?.download_url} />
+                            <ImageDisplay
+                                src={employee.user?.media?.download_url}
+                            />
                             <span className="text-ellipsis text-foreground/80">
-                                {member.full_name}{' '}
-                                {member.status === 'verified' && (
+                                {employee.user?.full_name}{' '}
+                                {employee.application_status === 'accepted' && (
                                     <BadgeCheckFillIcon className="ml-2 inline size-2 text-primary" />
                                 )}
                             </span>
                         </div>
-
-                        <p className="mr-2 font-mono text-xs italic text-foreground/40">
-                            <span>#{abbreviateUUID(member.id)}</span>
-                        </p>
+                        {/* <p className="mr-2 font-mono text-xs italic text-foreground/40">
+                            <span>#{abbreviateUUID(employee.id)}</span>
+                        </p> */}
                     </div>
                 )}
             >
@@ -144,6 +140,7 @@ const MemberPicker = ({
                 />
             </GenericPicker>
             <Button
+                role="button"
                 type="button"
                 variant="secondary"
                 disabled={disabled}
@@ -153,31 +150,22 @@ const MemberPicker = ({
                 <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                     <span className="inline-flex w-full items-center gap-x-2">
                         <div>
-                            {isFetching ? (
-                                <LoadingSpinner />
-                            ) : (
-                                <ImageDisplay
-                                    src={selectedMember?.media?.download_url}
-                                />
-                            )}
+                            <ImageDisplay src={value?.media?.download_url} />
                         </div>
-                        {!selectedMember ? (
+                        {!value ? (
                             <span className="text-foreground/70">
-                                {value || placeholder || 'Select member'}
+                                {value || placeholder || 'Select employee'}
                             </span>
                         ) : (
-                            <span>{selectedMember.full_name}</span>
+                            <span>{value?.full_name}</span>
                         )}
                     </span>
                     {allowShorcutCommand && (
                         <span className="mr-2 text-sm">⌘ ↵ </span>
                     )}
-                    <span className="mr-1 font-mono text-sm text-foreground/30">
-                        #
-                        {selectedMember?.id
-                            ? abbreviateUUID(selectedMember.id)
-                            : '?'}
-                    </span>
+                    {/* <span className="mr-1 font-mono text-sm text-foreground/30">
+                        #{value?.id ? abbreviateUUID(value.id) : '?'}
+                    </span> */}
                 </span>
                 <ChevronDownIcon />
             </Button>
@@ -185,4 +173,4 @@ const MemberPicker = ({
     )
 }
 
-export default MemberPicker
+export default EmployeePicker

@@ -1,14 +1,14 @@
-import { cn } from '@/lib'
-import { IClassProps } from '@/types'
 import { Button } from '../ui/button'
-import {
-    EyeNoneIcon,
-    LayersSharpDotIcon,
-    PencilFillIcon,
-    PlusIcon,
-} from '../icons'
-import { toReadableDate } from '@/utils'
+import BatchBlotter from './batch-blotter'
 import { Separator } from '../ui/separator'
+import { LayersSharpDotIcon } from '../icons'
+import DepositInBankCard from './deposit-in-bank-card'
+import BeginningBalanceCard from './transaction-batch-funding/beginning-balance-card'
+
+import { cn } from '@/lib'
+import { toReadableDate } from '@/utils'
+
+import { IClassProps, ITransactionBatch } from '@/types'
 
 interface Props extends IClassProps {
     // TODO: pass transaction id or object here
@@ -43,32 +43,10 @@ const TransactionBatch = ({ className }: Props) => {
             <div className="flex min-h-[50vh] w-full shrink-0 gap-x-2">
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
                     <div className="flex gap-x-2">
-                        <div className="relative flex-1 rounded-xl bg-accent p-2">
-                            <p className="text-lg">30000.00</p>
-                            <p className="text-sm text-muted-foreground/70">
-                                Total beginning fund
-                            </p>
-                            <Button
-                                size="icon"
-                                variant="default"
-                                className="absolute right-2 top-1.5 size-fit p-1"
-                            >
-                                <PlusIcon />
-                            </Button>
-                        </div>
-                        <div className="relative flex-1 rounded-xl bg-accent p-2">
-                            <p className="text-lg">8000.00</p>
-                            <p className="text-sm text-muted-foreground/70">
-                                Total Deposit in Bank
-                            </p>
-                            <Button
-                                size="icon"
-                                variant="default"
-                                className="absolute right-2 top-1.5 size-fit p-1"
-                            >
-                                <PencilFillIcon />
-                            </Button>
-                        </div>
+                        <BeginningBalanceCard
+                            transaction_batch={{ id: '' } as ITransactionBatch}
+                        />
+                        <DepositInBankCard />
                     </div>
                     <div className="relative space-y-2 rounded-xl bg-accent p-3">
                         <p className="text-xl">Cash Count</p>
@@ -98,19 +76,11 @@ const TransactionBatch = ({ className }: Props) => {
                         </Button>
                     </div>
                 </div>
-                <div className="flex-1 rounded-xl border bg-background">
-                    <div className="flex size-full flex-col items-center justify-center gap-y-2 p-4">
-                        <EyeNoneIcon className="size-14 text-muted-foreground/40" />
-                        <p>Transaction Batch Blotter Hidden</p>
-                        <p className="text-center text-sm text-muted-foreground/80">
-                            You can request view and your manager will confirm
-                            or decline
-                        </p>
-                        <Button variant="outline" size="sm">
-                            Request View
-                        </Button>
-                    </div>
-                </div>
+                <BatchBlotter
+                    transaction_batch={
+                        { request_view: '2025-05-22T10:52:18.163Z' } as any
+                    }
+                />
             </div>
             <Button
                 size="sm"

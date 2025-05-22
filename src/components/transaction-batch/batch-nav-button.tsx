@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 // import { useTransactionBatchStore } from '@/store/transaction-batch-store'
 
 import { IClassProps } from '@/types'
+// import { toReadableDate } from '@/utils'
 
 interface Props extends IClassProps {}
 
@@ -51,7 +52,7 @@ const TransactionBatchNavButton = (_props: Props) => {
     //     )
 
     return (
-        <Popover>
+        <Popover modal>
             <PopoverTrigger asChild>
                 <Button
                     variant="secondary"

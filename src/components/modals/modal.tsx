@@ -31,10 +31,10 @@ const Modal = ({
     className,
     description,
     titleClassName,
+    hideCloseButton,
     overlayClassName,
     closeButtonClassName,
     descriptionClassName,
-    hideCloseButton,
     ...other
 }: IModalProps) => {
     return (
