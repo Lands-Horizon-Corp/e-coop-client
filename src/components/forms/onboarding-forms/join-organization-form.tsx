@@ -51,7 +51,7 @@ const JoinBranchWithCodeFormModal = ({
     const { mutate: joinWithCode, isPending: IsLoadingJoining } =
         useJoinWithCode({
             onSuccess: (data) => {
-                navigate({ to: '/onboarding' })
+                navigate({ to: '/onboarding' as string })
                 toast.success(
                     `Successfully Joined on ${data.branch?.name} Branch`
                 )
