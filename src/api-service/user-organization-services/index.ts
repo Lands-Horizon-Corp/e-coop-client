@@ -1,1 +1,1 @@
-export * as UserOrganization from './user-organization-service';
+export * as UserOrganization from './user-organization-service'

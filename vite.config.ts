@@ -19,7 +19,7 @@ export default defineConfig({
         }) as PluginOption,
     ],
     build: {
-        sourcemap: false,
+        sourcemap: true,
         rollupOptions: {
             output: {
                 manualChunks: {

@@ -46,7 +46,7 @@ export interface ITransactionBatch
 
     description?: string
     can_view: boolean
-    request_view?: string
+    request_view?: string // date / timestamp
     is_closed: boolean
 
     ended_at: string
@@ -119,4 +119,8 @@ export interface ITransactionBatchSignatures {
     paid_by_signature_media?: IMedia
     paid_by_name?: string
     paid_by_position?: string
+}
+
+export interface ITransactionBatchDepositInBankRequest {
+    deposit_in_bank: number
 }
