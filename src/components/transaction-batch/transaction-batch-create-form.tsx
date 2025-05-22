@@ -24,6 +24,7 @@ import {
     ITransactionBatchMinimal,
     IIntraBatchFundingRequest,
 } from '@/types'
+import EmployeePicker from '../pickers/employee-picker'
 
 const transactionBatchSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -32,6 +33,7 @@ const transactionBatchSchema = z.object({
     organization_id: z.string().optional(),
     branch_id: z.string().optional(),
     provided_by_user_id: entityIdSchema.min(1, 'Provider is required'),
+    provided_by_user: z.any(),
     signature_media_id: z.string().optional(),
     signature_media: z.any(),
 })
@@ -134,11 +136,22 @@ const TransactionBatchCreateForm = ({
                                     name="provided_by_user_id"
                                     label="Provided By *"
                                     render={({ field }) => (
-                                        <Input
+                                        <EmployeePicker
                                             {...field}
-                                            id={field.name}
-                                            placeholder="User ID"
-                                            autoComplete="off"
+                                            value={form.getValues(
+                                                'provided_by_user'
+                                            )}
+                                            onSelect={(value) => {
+                                                form.setValue(
+                                                    'provided_by_user_id',
+                                                    value.user_id
+                                                )
+                                                form.setValue(
+                                                    'provided_by_user',
+                                                    value.user
+                                                )
+                                            }}
+                                            placeholder="Select Employee"
                                             disabled={isDisabled(field.name)}
                                         />
                                     )}
