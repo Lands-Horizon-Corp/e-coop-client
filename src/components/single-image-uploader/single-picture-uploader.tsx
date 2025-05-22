@@ -11,6 +11,8 @@ import { Button } from '../ui/button'
 interface singlePictureUploadModalProps extends IModalProps {
     onPhotoChoose: (imageBase64: string) => void
     defaultImage: string
+    useCustomTrigger?: boolean
+    children?: React.ReactNode
 }
 
 export const SinglePictureUploadModal = ({
@@ -30,6 +32,8 @@ export const ImageDropPicker = ({
     onPhotoChoose,
     onOpenChange,
     defaultImage,
+    useCustomTrigger = false,
+    children,
 }: singlePictureUploadModalProps) => {
     const [reAdjust, setReAdjust] = useState(false)
     const [newImage, setNewImage] = useState<string | null>(null)
@@ -52,24 +56,30 @@ export const ImageDropPicker = ({
         <>
             {openPickedImage && (
                 <div className="relative mx-auto size-fit">
-                    <UserAvatar
-                        fallback="-"
-                        src={croppedImage ?? ''}
-                        className="size-48"
-                    />
-                    <ActionTooltip
-                        tooltipContent="ReAdjust Image"
-                        align="center"
-                        side="right"
-                    >
-                        <Button
-                            variant="secondary"
-                            onClick={() => setReAdjust(true)}
-                            className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
-                        >
-                            <AdjustIcon className="size-4 opacity-50 duration-300 ease-in-out group-hover:opacity-80" />
-                        </Button>
-                    </ActionTooltip>
+                    {useCustomTrigger ? (
+                        children
+                    ) : (
+                        <>
+                            <UserAvatar
+                                fallback="-"
+                                src={croppedImage ?? ''}
+                                className="size-48"
+                            />
+                            <ActionTooltip
+                                tooltipContent="ReAdjust Image"
+                                align="center"
+                                side="right"
+                            >
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setReAdjust(true)}
+                                    className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
+                                >
+                                    <AdjustIcon className="size-4 opacity-50 duration-300 ease-in-out group-hover:opacity-80" />
+                                </Button>
+                            </ActionTooltip>
+                        </>
+                    )}
                 </div>
             )}
             {shouldOpenImagePicker && (

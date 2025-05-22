@@ -194,6 +194,8 @@ import {
     IoPencilOutline as EditPencilIcon,
     IoLocationSharp as LocationPinIcon,
     IoFootstepsOutline as FootstepsIcon,
+    IoReturnDownBackOutline as BackIcon,
+    IoLocation as PinLocationIcon,
 } from 'react-icons/io5'
 
 import {
@@ -226,6 +228,9 @@ import {
     FaAddressCard as AddressCardIcon,
     FaArrowTrendUp as ArrowTrendUpIcon,
     FaBoxesStacked as BoxesStackedIcon,
+    FaCheck as CheckFillIcon,
+    FaHouseChimneyWindow as HouseIcon,
+    FaLandmarkFlag as LandmarkIcon,
 } from 'react-icons/fa6'
 
 import {
@@ -246,16 +251,21 @@ import {
     GiVillage as VillageIcon,
     GiTakeMyMoney as MoneyIcon,
     GiWoodenSign as WoodSignsIcon,
+    GiTreeBranch as BranchIcon,
 } from 'react-icons/gi'
 
 import {
     CgFacebook as FacebookIcon,
     CgDetailsLess as DetailsIcon,
+    CgUnavailable as UnavailableIcon,
 } from 'react-icons/cg'
 
 import { RxDotFilled as DotMediumIcon } from 'react-icons/rx'
 
-import { GrPowerReset as PowerResetIcon } from 'react-icons/gr'
+import {
+    GrPowerReset as PowerResetIcon,
+    GrFormNextLink as NextIcon,
+} from 'react-icons/gr'
 
 import {
     VscError as ErrorIcon,
@@ -273,6 +283,7 @@ import {
     GrMoney as CoinsStackIcon,
     GrVmMaintenance as MaintenanceIcon,
 } from 'react-icons/gr'
+
 export {
     XIcon,
     MapIcon,
@@ -480,4 +491,12 @@ export {
     F2Icon,
     F3Icon,
     MaintenanceIcon,
+    BackIcon,
+    NextIcon,
+    CheckFillIcon,
+    HouseIcon,
+    LandmarkIcon,
+    BranchIcon,
+    PinLocationIcon,
+    UnavailableIcon,
 }
