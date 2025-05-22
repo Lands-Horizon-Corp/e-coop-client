@@ -1,6 +1,7 @@
 import { ISubscriptionPlan } from './subscription-plan'
 import { IBranch, IMedia, IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IOrganizationCategoryRequest } from './organization-category'
 
 export type TOrganizationMigrationStatus =
     | 'pending'
@@ -64,11 +65,13 @@ export interface IOrganizationRequest {
 
     subscription_plan_id: TEntityId
 
-    database_host?: string
-    database_port?: string
-    database_name?: string
-    database_password?: string
-    database_remark?: string
+    terms_and_onditions?: string
+    privacy_policy?: string
+    cookie_policy?: string
+    refund_policy?: string
+    user_agreement?: string
+    is_private?: boolean
+    organization_categories?: IOrganizationCategoryRequest[]
 }
 
 export interface IOrganizationPaginated

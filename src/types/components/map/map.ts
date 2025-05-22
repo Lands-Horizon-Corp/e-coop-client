@@ -1,4 +1,4 @@
-import L, { LatLngExpression } from 'leaflet'
+import L, { LatLngExpression, LatLngLiteral } from 'leaflet'
 import { SetStateAction, Dispatch } from 'react'
 import { MapContainerProps } from 'react-leaflet'
 
@@ -29,7 +29,7 @@ export interface TMainMapProps extends Partial<MapContainerProps> {
     multiplePins?: boolean
     hideControls?: boolean
     markerPosition?: { x: number; y: number }
-    onCoordinateClick?: (coords: LatLngExpression) => void
+    onCoordinateClick?: (coords: LatLngLiteral) => void
     onMultipleCoordinatesChange?: (coords: LatLngExpression[]) => void
     defaultMarkerPins?: { lat: number; lng: number }[]
     searchClassName?: string
