@@ -28,7 +28,7 @@ export const useCategoryStore = create<CategoryDataStore>((set, get) => ({
     handleProceedToSetupOrg: (navigate) => {
         const hasSelectedCategories = get().selectedCategories.length >= 1
         if (hasSelectedCategories) {
-            navigate({ to: '/onboarding/setup-org' })
+            navigate({ to: '/onboarding/setup-org' as string })
             set({ onOpenCategoryPicker: false })
         } else {
             set({ onOpenCategoryPicker: true })
