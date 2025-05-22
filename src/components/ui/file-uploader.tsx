@@ -11,7 +11,7 @@ import { FaCloudUploadAlt } from 'react-icons/fa'
 import { toast } from 'sonner'
 import { Button } from './button'
 import FileTypeIcon from './file-type'
-import { TrashIcon } from '../icons'
+import { HardDriveUploadIcon, ReplaceIcon, TrashIcon } from '../icons'
 import { ScrollArea } from './scroll-area'
 
 interface FileUploaderProps extends DropzoneOptions {
@@ -19,6 +19,7 @@ interface FileUploaderProps extends DropzoneOptions {
     itemClassName?: string
     onFileChange?: (file: File[]) => void
     selectedPhotos?: (selectedPhoto: string) => void
+    buttonOnly?: boolean
 }
 
 const FileUploader = ({
@@ -26,6 +27,7 @@ const FileUploader = ({
     onFileChange,
     selectedPhotos,
     itemClassName,
+    buttonOnly = false,
     ...props
 }: FileUploaderProps) => {
     const [hasError, setHasError] = useState(false)
@@ -79,6 +81,7 @@ const FileUploader = ({
         setUploadedFiles((prevFiles) =>
             prevFiles.filter((_, idx) => idx !== index)
         )
+        selectedPhotos?.('')
     }
 
     const openFile = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -86,51 +89,82 @@ const FileUploader = ({
         open()
     }
 
+    const isEmpty = uploadedFiles.length === 0 || selectedPhotos?.length === 0
+
     return (
-        <div className="max-h-fit w-full">
-            <div
-                {...getRootProps()}
-                className={cn(
-                    'mb-2 flex h-full max-h-64 min-h-64 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-800/30 p-2 pb-4 text-sm dark:bg-background',
-                    className
-                )}
-                aria-label="File upload area"
-            >
-                <input {...getInputProps()} aria-hidden="true" />
-                <FaCloudUploadAlt className="size-24 text-primary" />
-                <p>
-                    <span
+        <>
+            {buttonOnly ? (
+                <div className="flex w-fit gap-x-2" {...getRootProps()}>
+                    <input {...getInputProps()} aria-hidden="true" />
+                    <Button
                         onClick={openFile}
-                        className="cursor-pointer font-semibold underline"
-                        aria-label="Click to upload files"
+                        disabled={uploadedFiles.length > 0}
+                        className="flex items-center justify-center text-xs"
+                        aria-label="Select files"
                     >
-                        Click to upload
-                    </span>{' '}
-                    or Drag and Drop
-                </p>
-                <Button
-                    onClick={openFile}
-                    disabled={uploadedFiles.length > 0}
-                    variant="outline"
-                    className="text-xs"
-                    aria-label="Select files"
-                >
-                    Select Files
-                </Button>
-            </div>
-            <ScrollArea className="max-h-64 overflow-auto">
-                <div className={cn('w-full space-y-2', itemClassName)}>
-                    {!hasError &&
-                        uploadedFiles.map((file, idx) => (
-                            <UploadedFileItem
-                                key={idx}
-                                file={file}
-                                onDelete={handleDeleteFile(idx)}
-                            />
-                        ))}
+                        Select Files
+                        <HardDriveUploadIcon className="ml-2" />
+                    </Button>
+                    <Button
+                        variant={'secondary'}
+                        disabled={isEmpty}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            setUploadedFiles([])
+                            selectedPhotos?.('')
+                        }}
+                    >
+                        replace
+                        <ReplaceIcon className="ml-2" />
+                    </Button>
                 </div>
-            </ScrollArea>
-        </div>
+            ) : (
+                <div className="max-h-fit w-full">
+                    <div
+                        {...getRootProps()}
+                        className={cn(
+                            'mb-2 flex h-full max-h-64 min-h-64 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-800/30 p-2 pb-4 text-sm dark:bg-background',
+                            className
+                        )}
+                        aria-label="File upload area"
+                    >
+                        <input {...getInputProps()} aria-hidden="true" />
+                        <FaCloudUploadAlt className="size-24 text-primary" />
+                        <p>
+                            <span
+                                onClick={openFile}
+                                className="cursor-pointer font-semibold underline"
+                                aria-label="Click to upload files"
+                            >
+                                Click to upload
+                            </span>{' '}
+                            or Drag and Drop
+                        </p>
+                        <Button
+                            onClick={openFile}
+                            disabled={uploadedFiles.length > 0}
+                            variant="outline"
+                            className="text-xs"
+                            aria-label="Select files"
+                        >
+                            Select Files
+                        </Button>
+                    </div>
+                    <ScrollArea className="max-h-64 overflow-auto">
+                        <div className={cn('w-full space-y-2', itemClassName)}>
+                            {!hasError &&
+                                uploadedFiles.map((file, idx) => (
+                                    <UploadedFileItem
+                                        key={idx}
+                                        file={file}
+                                        onDelete={handleDeleteFile(idx)}
+                                    />
+                                ))}
+                        </div>
+                    </ScrollArea>
+                </div>
+            )}
+        </>
     )
 }
 
