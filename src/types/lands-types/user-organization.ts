@@ -20,8 +20,13 @@ export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
 
     user_type: TUserType
 
-    applicationDescription?: string
-    applicationStatus: 'pending' | 'reported' | 'accepted' | 'ban'
+    application_description?: string
+    application_status: 'pending' | 'reported' | 'accepted' | 'ban'
+}
+
+export interface IUserOrganizationResponse {
+    organization: IOrganization
+    user_organization: IUserOrganization
 }
 
 export interface IUserOrganizationPaginated<TUser = IUserBase>

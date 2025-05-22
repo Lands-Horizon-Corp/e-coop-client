@@ -3,13 +3,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as OrganizationService from '@/api-service/organization-service'
+import * as OrganizationService from '@/api-service/organization-services/organization-service'
 
 import {
     TEntityId,
     IOrganization,
     IOrganizationRequest,
     IOrganizationPaginated,
+    IUserOrganization,
+    IUserOrganizationResponse,
 } from '@/types'
 import {
     IAPIHook,
@@ -22,39 +24,45 @@ export const useCreateOrganization = ({
     showMessage = true,
     onError,
     onSuccess,
-}: IAPIHook<IOrganization, string> & IQueryProps = {}) => {
+}: IAPIHook<IUserOrganizationResponse, string> & IQueryProps = {}) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IOrganization, string, IOrganizationRequest>({
-        mutationKey: ['organization', 'create'],
-        mutationFn: async (data) => {
-            const [error, newOrg] = await withCatchAsync(
-                OrganizationService.createOrganization(data)
-            )
+    return useMutation<IUserOrganizationResponse, string, IOrganizationRequest>(
+        {
+            mutationKey: ['organization', 'create'],
+            mutationFn: async (data) => {
+                const [error, newOrg] = await withCatchAsync(
+                    OrganizationService.createOrganization(data)
+                )
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
+                if (error) {
+                    console.error('Error', error)
+                    const errorMessage = serverRequestErrExtractor({ error })
+                    if (showMessage) toast.error(errorMessage)
+                    onError?.(errorMessage)
+                    throw errorMessage
+                }
 
-            queryClient.invalidateQueries({
-                queryKey: ['organization', 'resource-query'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['organization', newOrg.id],
-            })
-            queryClient.removeQueries({
-                queryKey: ['organization', 'loader', newOrg.id],
-            })
+                queryClient.invalidateQueries({
+                    queryKey: ['organization', 'resource-query'],
+                })
+                queryClient.invalidateQueries({
+                    queryKey: ['organization', newOrg.organization.id],
+                })
+                queryClient.removeQueries({
+                    queryKey: [
+                        'organization',
+                        'loader',
+                        newOrg.organization.id,
+                    ],
+                })
 
-            if (showMessage) toast.success('New Organization Created')
-            onSuccess?.(newOrg)
-
-            return newOrg
-        },
-    })
+                if (showMessage) toast.success('New Organization Created')
+                onSuccess?.(newOrg)
+                return newOrg
+            },
+        }
+    )
 }
 
 export const useUpdateOrganization = ({
@@ -131,6 +139,26 @@ export const useDeleteOrganization = ({
 
             toast.success('Organization deleted')
             onSuccess?.(undefined)
+        },
+    })
+}
+
+export const useGetOrganizationById = (organizationId: TEntityId) => {
+    return useQuery<IOrganization>({
+        queryKey: ['organization', 'resource-query', organizationId],
+        enabled: !!organizationId,
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                OrganizationService.getOrganizationById(organizationId)
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage)
+                throw new Error(errorMessage)
+            }
+
+            return result
         },
     })
 }
