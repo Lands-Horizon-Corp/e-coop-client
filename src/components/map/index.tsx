@@ -109,7 +109,7 @@ const Map = ({
                 })
             } else {
                 if (onCoordinateClick) {
-                    onCoordinateClick(latLng)
+                    onCoordinateClick(latLng as L.LatLngLiteral)
                 }
                 setSelectedPins([newPin])
             }
