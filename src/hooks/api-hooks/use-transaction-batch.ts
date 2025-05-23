@@ -5,6 +5,8 @@ import {
     TEntityId,
     ITransactionBatchMinimal,
     IIntraBatchFundingRequest,
+    ITransactionBatch,
+    ITransactionBatchDepositInBankRequest,
 } from '@/types'
 
 export const useCreateTransactionBatch = createMutationHook<
@@ -20,4 +22,13 @@ export const useTransactionBatchRequestBlotterView = createMutationHook<
 >(
     (id) => TransactionBatchService.requestTransactionBatchBlotterView(id),
     'Requested batch view'
+)
+
+export const useTransactionBatchSetDepositInBank = createMutationHook<
+    ITransactionBatchMinimal | ITransactionBatch,
+    string,
+    { id: TEntityId; data: ITransactionBatchDepositInBankRequest }
+>(
+    ({ id, data }) => TransactionBatchService.setDepositInBank(id, data),
+    'Deposit in bank Saved'
 )

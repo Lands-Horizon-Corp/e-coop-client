@@ -43,10 +43,10 @@ export interface IIDentity {
 /* Identity of the entity */
 export interface IOrgBranchIdentity {
     organization_id: TEntityId
-    organization?: IOrganization
+    organization: IOrganization
 
     branch_id: TEntityId
-    branch?: IBranch
+    branch: IBranch
 }
 
 /* Use this only if entity has timestamps, auditable, and has org and branch */
