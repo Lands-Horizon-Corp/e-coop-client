@@ -105,6 +105,9 @@ const MemberProfileQuickCreateForm = ({
                                         {...field}
                                         placeholder="Select Member Type"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
                                     />
                                 )}
                             />
@@ -118,6 +121,9 @@ const MemberProfileQuickCreateForm = ({
                                         {...field}
                                         placeholder="Select Member Classification"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
                                     />
                                 )}
                             />
@@ -259,6 +265,9 @@ const MemberProfileQuickCreateForm = ({
                                         {...field}
                                         placeholder="Select Gender"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
                                     />
                                 )}
                             />
@@ -359,7 +368,7 @@ const MemberProfileQuickCreateForm = ({
                     creation
                 </span>
                 <Separator className="my-2 sm:my-4" />
-                <div>
+                <div className="space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button

@@ -35,6 +35,9 @@ const MemberCenterTableOwnerAction = ({
                         defaultValues: {
                             ...memberCenter,
                         },
+                        onSuccess() {
+                            setUpdateModalForm(false)
+                        },
                     }}
                     title="Update Member Center"
                     description="Modify/Update member center..."

@@ -26,6 +26,9 @@ const BeginningBalanceCard = ({ className, transaction_batch }: Props) => {
                 onOpenChange={setAddModal}
                 formProps={{
                     transactionBatchId: transaction_batch.id,
+                    onSuccess() {
+                        setAddModal(false)
+                    },
                 }}
             />
             <p className="text-lg">30000.00</p>

@@ -66,14 +66,14 @@ const DataTable = <TData,>({
 
     return (
         <DndContext
+            sensors={sensors}
+            onDragEnd={handleDragEnd}
             collisionDetection={closestCenter}
             modifiers={[restrictToHorizontalAxis]}
-            onDragEnd={handleDragEnd}
-            sensors={sensors}
         >
             <Table
                 wrapperClassName={cn(
-                    'ecoop-scroll rounded-lg border -z-0',
+                    'ecoop-scroll bg-popover ring-offset-0 shadow dark:bg-secondary/10 rounded-lg -z-0',
                     className,
                     !isScrollable ? 'h-fit max-h-none min-h-fit' : 'h-full grow'
                 )}
