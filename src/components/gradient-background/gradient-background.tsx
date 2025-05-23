@@ -58,10 +58,12 @@ export const GradientBackground = memo(
         gradientOny = false,
         imageBackgroundOpacity = 0.5,
         className,
+        ...props
     }: GradientBackgroundProps) => {
         const randomGradient = useRandomGradient()
         return (
             <div
+                {...props}
                 className={cn(
                     'relative overflow-hidden rounded-2xl',
                     className
