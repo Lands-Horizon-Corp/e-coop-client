@@ -43,8 +43,7 @@ export const canJoinOrganizationMember = async (
             `/user-organization/organization/${organizationId}/branch/${branchId}/can-join-employee`
         )
         return response.status === 200
-    } catch (error) {
-        console.log(error)
+    } catch {
         return false
     }
 }
@@ -62,8 +61,7 @@ export const switchOrganization = async (userOrganizationId: TEntityId) => {
             `/user-organization/${userOrganizationId}/switch`
         )
         return response.status === 200
-    } catch (error) {
-        console.log(error)
+    } catch {
         return false
     }
 }

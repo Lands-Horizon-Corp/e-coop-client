@@ -3,7 +3,6 @@ import WithOrganization from './-components/with-organization'
 
 import { LandmarkIcon } from '@/components/icons'
 
-import { IBranch, IOrganization, TEntityId } from '@/types'
 import { useGetUserOrganizationByUserId } from '@/hooks/api-hooks/use-user-organization'
 
 import { createFileRoute } from '@tanstack/react-router'
@@ -11,14 +10,6 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/onboarding/')({
     component: RouteComponent,
 })
-
-export type UserOrganizationGroup = {
-    orgnizationId: TEntityId
-    userOrganizationId: TEntityId
-    organizationDetails: IOrganization
-    branches: IBranch[]
-    isPending: 'pending' | 'reported' | 'accepted' | 'ban'
-}
 
 function RouteComponent() {
     const {

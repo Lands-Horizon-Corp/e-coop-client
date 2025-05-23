@@ -5,6 +5,7 @@ import OrganizationItem from '../-components/-organization-list/organization-ite
 import JoinBranchWithCodeFormModal from '@/components/forms/onboarding-forms/join-organization-form'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+// import { CodeSandBox } from '@/components/icons'
 
 export const Route = createFileRoute('/onboarding/organization/')({
     component: RouteComponent,
@@ -20,18 +21,24 @@ function RouteComponent() {
             <JoinBranchWithCodeFormModal
                 open={onOpenJoinWithCodeModal}
                 onOpenChange={setOpenJoinWithCodeModal}
+                title="Enter Code to Join a Branch"
+                titleClassName="text-lg font-semibold"
             />
-            <div className="my-2">
-                <h1 className="text-2xl font-bold text-muted-foreground"></h1>
-                You have existing Organization, choose where to Operate
+            <div className="flex">
+                <div className="my-2 grow">
+                    <h1 className="text-2xl font-bold text-muted-foreground"></h1>
+                    List of organizations you can join, along with their
+                    branches.
+                </div>
+                <Button
+                    variant={'outline'}
+                    size={'sm'}
+                    onClick={() => setOpenJoinWithCodeModal(true)}
+                >
+                    Join with Code
+                    {/* <CodeSandBox className="ml-2" /> */}
+                </Button>
             </div>
-            <Button
-                variant={'outline'}
-                size={'sm'}
-                onClick={() => setOpenJoinWithCodeModal(true)}
-            >
-                Join with code
-            </Button>
             {isNoOrganization && (
                 <div className="col-span-1">
                     <h2 className="text-center text-lg font-semibold">

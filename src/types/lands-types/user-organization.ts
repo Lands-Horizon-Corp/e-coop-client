@@ -29,5 +29,13 @@ export interface IUserOrganizationResponse {
     user_organization: IUserOrganization
 }
 
+export interface UserOrganizationGroup {
+    orgnizationId: TEntityId
+    userOrganizationId: TEntityId
+    organizationDetails: IOrganization
+    branches: IBranch[]
+    isPending: 'pending' | 'reported' | 'accepted' | 'ban'
+}
+
 export interface IUserOrganizationPaginated<TUser = IUserBase>
     extends IPaginatedResponse<IUserOrganization<TUser>> {}

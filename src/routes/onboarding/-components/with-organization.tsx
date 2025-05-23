@@ -5,9 +5,8 @@ import { PinLocationIcon } from '@/components/icons'
 import { StatusBadge } from '@/components/status-badge'
 import SafeImage from '@/components/safe-image'
 import { Button } from '@/components/ui/button'
-import { UserOrganizationGroup } from '..'
 
-import { IBranch, TEntityId } from '@/types'
+import { IBranch, TEntityId, UserOrganizationGroup } from '@/types'
 import {
     Accordion,
     AccordionItem,
@@ -22,7 +21,7 @@ import { useSwitchOrganization } from '@/hooks/api-hooks/use-user-organization'
 import { toast } from 'sonner'
 import { cn } from '@/lib'
 import { useNavigate } from '@tanstack/react-router'
-import NoOrganizationView from './no-organization-view'
+import { useCategoryStore } from '@/store/onboarding/category-store'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: UserOrganizationGroup[]
@@ -33,6 +32,7 @@ const WithOrganization = ({
 }: WithOrganizationViewProps) => {
     const navigate = useNavigate()
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
+    const { handleProceedToSetupOrg } = useCategoryStore()
 
     const handleVisit = async (
         userOrganizationId: TEntityId,
@@ -61,7 +61,31 @@ const WithOrganization = ({
     }
     return (
         <div className="w-full">
-            <ScrollArea className="ecoop-scroll w-full overflow-auto p-10">
+            <div className="my-3 flex w-full justify-center space-x-2">
+                <Button
+                    onClick={() => {
+                        handleProceedToSetupOrg(navigate)
+                    }}
+                    className={cn('w-[300px] rounded-xl')}
+                >
+                    Create your own Organization
+                </Button>
+                <Button
+                    variant={'secondary'}
+                    onClick={() => {
+                        navigate({ to: '/onboarding/organization' })
+                    }}
+                    className={cn('w-[300px] rounded-xl')}
+                >
+                    Join an Organization
+                </Button>
+            </div>
+            <div className="mt-5 w-full px-10">
+                <h4>
+                    You have existing organization. Choose where to operate.
+                </h4>
+            </div>
+            <ScrollArea className="ecoop-scroll max-h-[40rem] w-full overflow-auto p-10">
                 <Accordion
                     type="single"
                     collapsible
@@ -201,9 +225,6 @@ const WithOrganization = ({
                     })}
                 </Accordion>
             </ScrollArea>
-            <div className="my-3 flex w-full justify-center">
-                <NoOrganizationView />
-            </div>
         </div>
     )
 }
