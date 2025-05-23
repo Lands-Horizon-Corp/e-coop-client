@@ -15,16 +15,16 @@ import {
     CommandInput,
 } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
+import {
+    type IBankFormProps,
+    BankCreateUpdateFormModal,
+} from '../forms/bank-create-update-form'
 import { Button } from '@/components/ui/button'
 import { ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { TEntityId, IBank } from '@/types'
 import { useBanks } from '@/hooks/api-hooks/use-bank'
-import {
-    type IBankFormProps,
-    BankCreateUpdateFormModal,
-} from '../forms/bank-create-update-form'
 
 export interface IBankComboboxCreateProps
     extends Pick<
