@@ -2,6 +2,7 @@ import { useRandomGradient } from '@/hooks/use-random-gradient'
 import { memo } from 'react'
 import SafeImage from '../safe-image'
 import { cn } from '@/lib'
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
 
 export const colorPalette = [
     '#073B3A', // Midnight green
@@ -83,6 +84,7 @@ export const GradientBackground = memo(
                         <SafeImage
                             className="relative size-64 -rotate-45"
                             src={mediaUrl}
+                            fallbackSrc={orgBannerList[7]}
                             style={{ opacity: imageBackgroundOpacity }}
                         />
                     </div>
