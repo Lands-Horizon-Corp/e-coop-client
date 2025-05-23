@@ -20,7 +20,6 @@ import {
 
 export const useQuickCreateMemberProfile = ({
     showMessage = true,
-    preloads = ['Media'],
     onSuccess,
     onError,
 }: undefined | (IAPIHook<IMemberProfile, string> & IQueryProps) = {}) => {
@@ -34,13 +33,10 @@ export const useQuickCreateMemberProfile = ({
         mutationKey: ['member-profile', 'create'],
         mutationFn: async (data) => {
             const [error, newMember] = await withCatchAsync(
-                MemberProfileService.quickCreateMemberProfile(
-                    {
-                        ...data,
-                        full_name: `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''} ${data.suffix ?? ''}`,
-                    },
-                    preloads
-                )
+                MemberProfileService.quickCreateMemberProfile({
+                    ...data,
+                    full_name: `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''} ${data.suffix ?? ''}`,
+                })
             )
 
             if (error) {

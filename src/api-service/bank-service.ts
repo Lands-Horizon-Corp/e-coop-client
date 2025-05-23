@@ -1,59 +1,51 @@
 import qs from 'query-string'
 
-import APIService from '../api-service'
-import { downloadFileService } from '@/helpers'
+import APIService from './api-service'
+import { downloadFile } from '../helpers'
 
-import {
-    TEntityId,
-    IMemberGender,
-    IMemberGenderRequest,
-    IMemberGenderPaginated,
-} from '@/types'
+import { IBank, TEntityId, IBankRequest, IBankPaginatedResource } from '@/types'
 
-const BASE_ENDPOINT = '/member-gender'
+const BASE_ENDPOINT = '/bank'
 
-export const getAllMemberGenders = async () => {
-    const response = await APIService.get<IMemberGender[]>(BASE_ENDPOINT)
-    return response.data
-}
-
-export const createMemberGender = async (genderData: IMemberGenderRequest) => {
-    const response = await APIService.post<IMemberGenderRequest, IMemberGender>(
+export const createBank = async (bankData: IBankRequest) => {
+    const response = await APIService.post<IBankRequest, IBank>(
         BASE_ENDPOINT,
-        genderData
+        bankData
     )
     return response.data
 }
 
-export const deleteMemberGender = async (id: TEntityId) => {
+export const deleteBank = async (id: TEntityId) => {
     const endpoint = `${BASE_ENDPOINT}/${id}`
     await APIService.delete<void>(endpoint)
 }
 
-export const updateMemberGender = async (
-    id: TEntityId,
-    genderData: IMemberGenderRequest
-) => {
+export const updateBank = async (id: TEntityId, bankData: IBankRequest) => {
     const endpoint = `${BASE_ENDPOINT}/${id}`
-    const response = await APIService.put<IMemberGenderRequest, IMemberGender>(
+    const response = await APIService.put<IBankRequest, IBank>(
         endpoint,
-        genderData
+        bankData
     )
     return response.data
 }
 
-export const getMemberGenderById = async (id: TEntityId) => {
+export const getBankById = async (id: TEntityId) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
         },
         { skipNull: true }
     )
-    const response = await APIService.get<IMemberGender>(url)
+    const response = await APIService.get<IBank>(url)
     return response.data
 }
 
-export const getPaginatedMemberGenders = async (props?: {
+export const getAllBanks = async () => {
+    const response = await APIService.get<IBank[]>(BASE_ENDPOINT)
+    return response.data
+}
+
+export const getPaginatedBanks = async (props?: {
     sort?: string
     filters?: string
     preloads?: string[]
@@ -75,24 +67,23 @@ export const getPaginatedMemberGenders = async (props?: {
         { skipNull: true }
     )
 
-    const response = await APIService.get<IMemberGenderPaginated>(url)
+    const response = await APIService.get<IBankPaginatedResource>(url)
     return response.data
 }
 
 export const deleteMany = async (ids: TEntityId[]) => {
     const endpoint = `${BASE_ENDPOINT}/bulk-delete`
-    const payload = { ids }
-    await APIService.delete<void>(endpoint, payload)
+    await APIService.delete<void>(endpoint, { ids })
 }
 
 export const exportAll = async () => {
     const url = `${BASE_ENDPOINT}/export`
-    await downloadFileService(url, 'all_genders_export.xlsx')
+    await downloadFile(url, 'all_banks_export.xlsx')
 }
 
 export const exportAllFiltered = async (filters?: string) => {
     const url = `${BASE_ENDPOINT}/export-search?filter=${filters || ''}`
-    await downloadFileService(url, 'filtered_genders_export.xlsx')
+    await downloadFile(url, 'filtered_banks_export.xlsx')
 }
 
 export const exportSelected = async (ids: TEntityId[]) => {
@@ -104,5 +95,5 @@ export const exportSelected = async (ids: TEntityId[]) => {
         { skipNull: true }
     )
 
-    await downloadFileService(url, 'selected_genders_export.xlsx')
+    await downloadFile(url, 'selected_banks_export.xlsx')
 }

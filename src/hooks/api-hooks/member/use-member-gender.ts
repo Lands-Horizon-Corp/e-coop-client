@@ -138,7 +138,7 @@ export const useDeleteGender = ({
 export const useGenders = ({
     enabled,
     showMessage = true,
-}: IAPIHook<IMemberGenderPaginated, string> & IQueryProps = {}) => {
+}: IAPIHook<IMemberGender[], string> & IQueryProps = {}) => {
     return useQuery<IMemberGender[], string>({
         queryKey: ['gender', 'resource-query', 'all'],
         queryFn: async () => {
