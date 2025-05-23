@@ -5,7 +5,7 @@ import OrganizationItem from '../-components/-organization-list/organization-ite
 import JoinBranchWithCodeFormModal from '@/components/forms/onboarding-forms/join-organization-form'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-// import { CodeSandBox } from '@/components/icons'
+import { CodeSandBox } from '@/components/icons'
 
 export const Route = createFileRoute('/onboarding/organization/')({
     component: RouteComponent,
@@ -36,7 +36,7 @@ function RouteComponent() {
                     onClick={() => setOpenJoinWithCodeModal(true)}
                 >
                     Join with Code
-                    {/* <CodeSandBox className="ml-2" /> */}
+                    <CodeSandBox className="ml-2" />
                 </Button>
             </div>
             {isNoOrganization && (
