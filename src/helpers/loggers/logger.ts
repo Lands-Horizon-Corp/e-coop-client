@@ -17,7 +17,7 @@ class Logger {
         )
 
         this.isDevelopment = ['development', 'local'].includes(
-            import.meta.env.VITE_HORIZON_CORP_ENVIRONMENT
+            import.meta.env.VITE_APP_ENV
         )
 
         if (typeof document !== 'undefined' && !this.isDevelopment) {
