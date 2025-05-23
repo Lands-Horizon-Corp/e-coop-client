@@ -43,7 +43,13 @@ const WithOrganization = ({
         const response = await switchOrganization(userOrganizationId)
         if (response) {
             navigate({
-                to: `/onboarding/organization/${orgName}/branch/${branchName}`,
+                to: `/org/${orgName
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')}/branch/${branchName
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')}`,
                 params: {
                     user_organization_id: userOrganizationId,
                     organization_id: organizationId,
