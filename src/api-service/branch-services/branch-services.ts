@@ -32,7 +32,6 @@ export const updateBranch = async (
     branchData: IBranchRequest,
     userOrganizationId: TEntityId
 ) => {
-    console.log('userOrganizationId', userOrganizationId)
     const response = await APIService.put<IBranchRequest, IBranch>(
         `/branch/user-organization/${userOrganizationId}`,
         branchData

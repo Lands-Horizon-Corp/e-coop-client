@@ -51,7 +51,6 @@ export const useUpdateBranch = (
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
                 onError?.(error.message)
-                console.log('error', error)
                 toast.error(errorMessage)
                 throw errorMessage
             }
@@ -139,7 +138,6 @@ export const useDeleteBranch = ({ onSuccess }: IAPIHook<unknown, string>) => {
                 BranchService.deleteBranch(branchId, userOrganizationId)
             )
             if (error) {
-                console.log('error', error)
                 const errorMessage = serverRequestErrExtractor({ error })
                 toast.error(errorMessage)
                 throw errorMessage
