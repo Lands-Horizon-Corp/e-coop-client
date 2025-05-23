@@ -1,6 +1,7 @@
 import { useRandomGradient } from '@/hooks/use-random-gradient'
 import { memo } from 'react'
 import SafeImage from '../safe-image'
+import { cn } from '@/lib'
 
 export const colorPalette = [
     '#073B3A', // Midnight green
@@ -55,10 +56,16 @@ export const GradientBackground = memo(
         mediaUrl,
         gradientOny = false,
         imageBackgroundOpacity = 0.5,
+        className,
     }: GradientBackgroundProps) => {
         const randomGradient = useRandomGradient()
         return (
-            <div className="relative overflow-hidden rounded-2xl">
+            <div
+                className={cn(
+                    'relative overflow-hidden rounded-2xl',
+                    className
+                )}
+            >
                 {children}
                 <div
                     className="pointer-events-none absolute inset-0 z-0"
