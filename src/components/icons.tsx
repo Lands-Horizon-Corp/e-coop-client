@@ -244,6 +244,7 @@ import {
 import {
     FiCamera as CameraIcon,
     FiDownload as DownloadIcon,
+    FiCodesandbox as CodeSandBox,
 } from 'react-icons/fi'
 
 import {
@@ -499,4 +500,5 @@ export {
     BranchIcon,
     PinLocationIcon,
     UnavailableIcon,
+    CodeSandBox,
 }
