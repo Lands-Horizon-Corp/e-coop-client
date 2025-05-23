@@ -22,6 +22,7 @@ import {
     MaintenanceIcon,
     Users3Icon,
     CalendarDotsIcon,
+    BankDuoToneIcon,
     // NotificationIcon,
     // GraduationCapIcon,
     // BuildingBranchIcon,
@@ -245,6 +246,13 @@ export const generateSidebarGroups = (
                     icon: BillIcon,
                     title: 'Bills & Coins',
                     url: `${baseUrl}/maintenance/bills-and-coins`,
+                    userType: ['employee'],
+                },
+                {
+                    type: 'item',
+                    icon: BankDuoToneIcon,
+                    title: 'Banks',
+                    url: `${baseUrl}/maintenance/banks`,
                     userType: ['employee'],
                 },
                 {

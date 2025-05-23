@@ -260,6 +260,9 @@ const MemberPersonalInfoForm = ({
                                         {...field}
                                         placeholder="Select Gender"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
                                     />
                                 )}
                             />

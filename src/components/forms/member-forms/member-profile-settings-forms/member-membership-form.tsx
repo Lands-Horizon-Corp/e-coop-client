@@ -139,6 +139,9 @@ const MemberMembershipForm = ({
                                         {...field}
                                         placeholder="Select Member Type"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
                                     />
                                 )}
                             />
@@ -152,6 +155,9 @@ const MemberMembershipForm = ({
                                         {...field}
                                         placeholder="Select Member Group"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
                                     />
                                 )}
                             />
@@ -167,6 +173,9 @@ const MemberMembershipForm = ({
                                         {...field}
                                         placeholder="Select Classification"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
                                     />
                                 )}
                             />
@@ -180,6 +189,9 @@ const MemberMembershipForm = ({
                                         {...field}
                                         placeholder="Select Center"
                                         disabled={isDisabled(field.name)}
+                                        onChange={(memberCenter) =>
+                                            field.onChange(memberCenter.id)
+                                        }
                                     />
                                 )}
                             />

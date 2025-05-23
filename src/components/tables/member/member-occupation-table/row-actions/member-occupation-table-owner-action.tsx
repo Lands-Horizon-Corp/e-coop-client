@@ -38,6 +38,10 @@ const MemberOccupationTableOwnerAction = ({
                         defaultValues: {
                             ...memberOccupation,
                         },
+
+                        onSuccess() {
+                            setUpdateModalForm(false)
+                        },
                     }}
                     title="Update Member Occupation"
                     description="Modify/Update this member occupation..."
