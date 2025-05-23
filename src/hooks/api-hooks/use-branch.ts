@@ -89,7 +89,7 @@ export const useGetBranchesByOrganizationId = (
     })
 }
 
-export const usegetAllBranches = () => {
+export const useGetAllBranches = () => {
     return useQuery<IBranch[], string>({
         queryKey: ['branch', 'all'],
         queryFn: async () => {

@@ -14,7 +14,10 @@ export const useVerifyInvitationCode = (code: string) => {
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(errorMessage)
+                toast.error(
+                    errorMessage +
+                        ' Branch might not exist or you are not allowed to join any branches'
+                )
                 throw new Error(errorMessage)
             }
 

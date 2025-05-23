@@ -1,13 +1,13 @@
 import { BranchService } from '@/api-service/branch-services'
 import { UserOrganization } from '@/api-service/user-organization-services'
 import { serverRequestErrExtractor } from '@/helpers'
-import { UserOrganizationGroup } from '@/routes/onboarding'
 import { useAuthStore } from '@/store/user-auth-store'
 import {
     IBranch,
     IOperationCallbacks,
     IUserOrganization,
     TEntityId,
+    UserOrganizationGroup,
 } from '@/types'
 import { groupBy, withCatchAsync } from '@/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
