@@ -18,6 +18,11 @@ function RouteComponent() {
             <MemberGroupCreateUpdateFormModal
                 open={modalState}
                 onOpenChange={setModalState}
+                formProps={{
+                    onSuccess() {
+                        setModalState(false)
+                    },
+                }}
             />
             <MemberGroupTable
                 toolbarProps={{
