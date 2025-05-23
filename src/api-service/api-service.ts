@@ -13,6 +13,7 @@ export default class APIService {
         baseURL: APIService.getDefaultUrl(),
         headers: {
             'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip',
         },
         withCredentials: true,
     })
