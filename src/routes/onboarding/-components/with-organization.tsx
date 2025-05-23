@@ -108,17 +108,14 @@ const WithOrganization = ({
                                             <p className="touch-pan-up text-start text-2xl font-bold">
                                                 {org.organizationDetails.name}
                                             </p>
-                                            <p className="text-start text-xs text-white/80">
-                                                <PlainTextEditor
-                                                    content={
-                                                        org.organizationDetails
-                                                            .description
-                                                    }
-                                                />
-                                            </p>
+                                            <PlainTextEditor
+                                                content={
+                                                    org.organizationDetails
+                                                        .description
+                                                }
+                                            />
                                             {org.organizationDetails?.id && (
-                                                <Button
-                                                    size={'sm'}
+                                                <div
                                                     onClick={() => {
                                                         navigate({
                                                             to: '/onboarding/create-branch/$user_organization_id/$organization_id',
@@ -130,11 +127,10 @@ const WithOrganization = ({
                                                             },
                                                         })
                                                     }}
-                                                    variant={'secondary'}
                                                     className="mt-2 max-w-32"
                                                 >
                                                     Add Branch
-                                                </Button>
+                                                </div>
                                             )}
                                         </div>
                                     </AccordionTrigger>
@@ -159,63 +155,68 @@ const WithOrganization = ({
                                                 branch.media?.url ??
                                                 orgBannerList[0]
                                             return (
-                                                <GradientBackground gradientOny>
-                                                    <div
-                                                        key={branch.id}
-                                                        className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline"
+                                                <div key={branch.id}>
+                                                    <GradientBackground
+                                                        gradientOny
                                                     >
-                                                        <SafeImage
-                                                            className="size-16"
-                                                            src={mediaUrl}
-                                                        />
-                                                        <div className="flex grow flex-col">
-                                                            <h1>
-                                                                {branch?.name}
-                                                            </h1>
-                                                            {branch.description && (
-                                                                <PlainTextEditor
-                                                                    className="text-xs"
-                                                                    content={
-                                                                        branch.description ??
-                                                                        ''
+                                                        <div className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
+                                                            <SafeImage
+                                                                className="size-16"
+                                                                src={mediaUrl}
+                                                            />
+                                                            <div className="flex grow flex-col">
+                                                                <h1>
+                                                                    {
+                                                                        branch?.name
                                                                     }
-                                                                />
-                                                            )}
-                                                            <p className="flex items-center gap-y-2 text-xs">
-                                                                {' '}
-                                                                <PinLocationIcon className="mr-2 text-destructive/60" />
-                                                                {branch.address}
-                                                            </p>
+                                                                </h1>
+                                                                {branch.description && (
+                                                                    <PlainTextEditor
+                                                                        className="text-xs"
+                                                                        content={
+                                                                            branch.description ??
+                                                                            ''
+                                                                        }
+                                                                    />
+                                                                )}
+                                                                <span className="flex items-center gap-y-2 text-xs">
+                                                                    {' '}
+                                                                    <PinLocationIcon className="mr-2 text-destructive/60" />
+                                                                    {
+                                                                        branch.address
+                                                                    }
+                                                                </span>
+                                                            </div>
+                                                            <StatusBadge
+                                                                status={
+                                                                    org.isPending
+                                                                }
+                                                            />
+                                                            <Button
+                                                                disabled={
+                                                                    org.isPending ===
+                                                                    'pending'
+                                                                }
+                                                                onClick={async () => {
+                                                                    handleVisit(
+                                                                        org.userOrganizationId,
+                                                                        org.orgnizationId,
+                                                                        org
+                                                                            .organizationDetails
+                                                                            .name,
+                                                                        branch.name
+                                                                    )
+                                                                }}
+                                                                size={'sm'}
+                                                                variant={
+                                                                    'secondary'
+                                                                }
+                                                            >
+                                                                visit
+                                                            </Button>
                                                         </div>
-                                                        <StatusBadge
-                                                            status={
-                                                                org.isPending
-                                                            }
-                                                        />
-                                                        <Button
-                                                            disabled={
-                                                                org.isPending ===
-                                                                'pending'
-                                                            }
-                                                            onClick={async () => {
-                                                                handleVisit(
-                                                                    org.userOrganizationId,
-                                                                    org.orgnizationId,
-                                                                    org
-                                                                        .organizationDetails
-                                                                        .name,
-                                                                    branch.name
-                                                                )
-                                                            }}
-                                                            size={'sm'}
-                                                            variant={
-                                                                'secondary'
-                                                            }
-                                                        >
-                                                            visit
-                                                        </Button>
-                                                    </div>
-                                                </GradientBackground>
+                                                    </GradientBackground>
+                                                </div>
                                             )
                                         })}
                                     </div>
