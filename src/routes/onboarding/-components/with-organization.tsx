@@ -127,7 +127,7 @@ const WithOrganization = ({
                                                             },
                                                         })
                                                     }}
-                                                    className="mt-2 max-w-32"
+                                                    className="mt-2 max-w-32 rounded-lg bg-secondary/50 p-2 text-sm duration-300 ease-in-out hover:scale-105 hover:bg-secondary"
                                                 >
                                                     Add Branch
                                                 </div>
