@@ -37,13 +37,11 @@ import {
 const BASE_ENDPOINT = '/member-profile'
 
 export const quickCreateMemberProfile = async (
-    data: IMemberProfileQuickCreateRequest,
-    preloads?: string[]
+    data: IMemberProfileQuickCreateRequest
 ) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/quick-create`,
-            query: { preloads },
         },
         { skipNull: true }
     )
