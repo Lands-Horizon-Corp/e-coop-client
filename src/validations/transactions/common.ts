@@ -3,7 +3,6 @@ import { z } from 'zod'
 
 export const amountPreprocess = z.preprocess(
     (val) => {
-        console.log(val)
         if (typeof val === 'string') {
             const sanitized = sanitizeNumberInput(val)
 
