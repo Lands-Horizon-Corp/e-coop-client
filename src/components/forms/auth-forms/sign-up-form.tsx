@@ -23,6 +23,7 @@ import { useSignUp } from '@/hooks/api-hooks/use-auth'
 import { signUpSchema } from '@/validations/form-validation/sign-up-schema'
 
 import { IForm, IClassProps, ISignUpRequest, IAuthContext } from '@/types'
+import { useEffect } from 'react'
 
 type TSignUpForm = z.infer<typeof signUpSchema>
 
@@ -62,10 +63,12 @@ const SignUpForm = ({
     const last_name = useWatch({ control: form.control, name: 'last_name' })
     const suffix = useWatch({ control: form.control, name: 'suffix' })
 
-    form.setValue(
-        'full_name',
-        `${first_name} ${middle_name} ${last_name} ${suffix}`
-    )
+    useEffect(() => {
+        const fullName = [first_name, middle_name, last_name]
+            .filter((name) => name && name.trim() !== '')
+            .join(' ')
+        form.setValue('full_name', suffix ? `${fullName}, ${suffix}` : fullName)
+    }, [first_name, middle_name, last_name, suffix, form])
 
     const {
         error,

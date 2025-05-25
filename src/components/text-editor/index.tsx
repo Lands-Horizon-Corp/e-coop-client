@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { useEditor, EditorContent } from '@tiptap/react'
@@ -22,7 +22,7 @@ interface Props extends IBaseProps {
 
 export type THeadingLevel = 1 | 2 | 3 | 4
 
-const TextEditor = ({
+const TextEditor = forwardRef<HTMLDivElement, Props>(({
     className,
     disabled,
     content = '',
@@ -33,10 +33,8 @@ const TextEditor = ({
     isHeadingDisabled = true,
     placeholder = 'Write something …',
     onChange,
-}: Props) => {
-    const [activeHeading, setActiveHeading] = useState<THeadingLevel | null>(
-        null
-    )
+}, ref) => {
+    const [activeHeading, setActiveHeading] = useState<THeadingLevel | null>(null)
 
     const editor = useEditor({
         extensions: [
@@ -72,10 +70,16 @@ const TextEditor = ({
         }
     }, [content, editor])
 
+    useImperativeHandle(ref, () => {
+        // You can expose methods if needed, or just return the DOM node
+        return editor?.view.dom as HTMLDivElement
+    }, [editor])
+
     const toggleHeading = (level: THeadingLevel) => {
         editor?.chain().focus().toggleHeading({ level }).run()
         setActiveHeading(level)
     }
+
     return (
         <div className={cn('w-full space-y-2', className)}>
             {showToolbar && editor && (
@@ -89,6 +93,7 @@ const TextEditor = ({
             <EditorContent editor={editor} disabled={disabled} />
         </div>
     )
-}
+})
 
+TextEditor.displayName = 'TextEditor'
 export default TextEditor
