@@ -14,6 +14,7 @@ import { Badge } from "../ui/badge";
 import { useCurrentLoggedInUserLogout } from "@/hooks/api-hooks/use-auth";
 import { useAuthUser } from "@/store/user-auth-store";
 import { useRouter } from "@tanstack/react-router";
+import useActionSecurityStore from "@/store/action-security-store";
 interface Props {
     devices: ILoggedInUser[]
 }
@@ -50,6 +51,7 @@ const DevicesList = ({ devices }: Props) => {
         resetAuth,
     } = useAuthUser()
 
+    const { onOpenSecurityAction } = useActionSecurityStore()
     const { mutate: handleSignout } = useCurrentLoggedInUserLogout({
         onSuccess: () => {
             resetAuth()
@@ -57,11 +59,17 @@ const DevicesList = ({ devices }: Props) => {
             toast.success('Signed Out')
         },
     })
-
+    const signOut = ()=>{
+         onOpenSecurityAction({
+            title: 'Protected Action',
+            description:
+                'This action carries significant impact and requires your password for verification.',
+            onSuccess: () => handleSignout(),
+        })
+    }
     if (devices.length <= 0) {
         return <></>
     }
-
     return (
         <div className="container mx-auto p-6">
             <div className="flex items-center justify-between mb-6">
@@ -69,7 +77,7 @@ const DevicesList = ({ devices }: Props) => {
                     <UserIcon className="h-6 w-6" />
                     <h1 className="text-2xl font-bold">Logged In Users</h1>
                 </div>
-                <Button onClick={() => handleSignout()} variant="outline" className="flex items-center gap-2">
+                <Button onClick={() => signOut()} variant="outline" className="flex items-center gap-2">
                     <LogoutIcon className="h-4 w-4" />
                     Logout from all devices, including this one.
                 </Button>
