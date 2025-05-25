@@ -2,7 +2,7 @@ import z from 'zod'
 import { useForm } from 'react-hook-form'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
-
+import { toast } from 'sonner'
 import {
     EmailIcon,
     FacebookIcon,
@@ -36,8 +36,8 @@ const contactInputClasses =
 
 const ContactPage = () => {
     const defaultValues = {
-        firstName: '',
-        lastName: '',
+        first_name: '',
+        last_name: '',
         email: '',
         contactNumber: '',
         description: '',
@@ -55,7 +55,8 @@ const ContactPage = () => {
     })
 
     const { mutate: sendContactMessage, isPending } = useCreateContactUs({
-        onSuccess: () => {
+        onSuccess: (data) => {
+            toast.success(`Thank you ${data.first_name} ${data.last_name}. Expect a call or email for us personally :)`)
             startCooldown()
             form.reset()
         },
@@ -291,7 +292,7 @@ const ContactPage = () => {
                                     className="text-sm font-semibold underline"
                                     to="/"
                                 >
-                                    +639321784911
+                                    +630916171081
                                 </Link>
                             </div>
                         </div>
