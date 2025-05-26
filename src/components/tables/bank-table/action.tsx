@@ -1,44 +1,38 @@
 import { useState } from 'react'
-
-import { IMemberGroupTableActionComponentProp } from './columns'
+import { IBankTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
-import { MemberGroupCreateUpdateFormModal } from '@/components/forms/member-forms/member-group-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useDeleteMemberGroup } from '@/hooks/api-hooks/member/use-member-group'
+import { useDeleteBank } from '@/hooks/api-hooks/use-bank'
+import { BankCreateUpdateFormModal } from '@/components/forms/bank-create-update-form'
 
-interface IMemberGroupTableActionProps
-    extends IMemberGroupTableActionComponentProp {
-    onGroupUpdate?: () => void
+interface IBankTableActionProps extends IBankTableActionComponentProp {
+    onBankUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const MemberGroupTableAction = ({
-    row,
-    onDeleteSuccess,
-}: IMemberGroupTableActionProps) => {
+const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
-    const group = row.original
+    const bank = row.original
 
     const { onOpen } = useConfirmModalStore()
 
-    const { isPending: isDeletingGroup, mutate: deleteGroup } =
-        useDeleteMemberGroup({
-            onSuccess: onDeleteSuccess,
-        })
+    const { isPending: isDeletingBank, mutate: deleteBank } = useDeleteBank({
+        onSuccess: onDeleteSuccess,
+    })
 
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                <MemberGroupCreateUpdateFormModal
+                <BankCreateUpdateFormModal
                     open={updateModalForm}
                     onOpenChange={setUpdateModalForm}
                     formProps={{
-                        groupId: group.id,
+                        bankId: bank.id,
                         defaultValues: {
-                            ...group,
+                            ...bank,
                         },
-                        onSuccess() {
+                        onSuccess: () => {
                             setUpdateModalForm(false)
                         },
                     }}
@@ -47,13 +41,13 @@ const MemberGroupTableAction = ({
             <RowActionsGroup
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingGroup,
+                    isAllowed: !isDeletingBank,
                     onClick: () => {
                         onOpen({
-                            title: 'Delete Group',
+                            title: 'Delete Bank',
                             description:
-                                'Are you sure you want to delete this Group?',
-                            onConfirm: () => deleteGroup(group.id),
+                                'Are you sure you want to delete this bank?',
+                            onConfirm: () => deleteBank(bank.id),
                         })
                     },
                 }}
@@ -68,4 +62,4 @@ const MemberGroupTableAction = ({
     )
 }
 
-export default MemberGroupTableAction
+export default BankAction

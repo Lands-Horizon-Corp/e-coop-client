@@ -58,7 +58,6 @@ function RouteComponent() {
     const handleSeedOrganizationWithBranch = async () => {
         if (organization?.id) {
             const response = await seed(organization_id)
-            console.log(response)
             if (response) {
                 toast.success(`Successfully seed the Organization with Branch!`)
                 navigate({ to: '/onboarding' })
@@ -91,6 +90,25 @@ function RouteComponent() {
 
     const isNoBranches = branches?.length === 0
 
+    const defaultValues = {
+        name: branch?.name ?? '',
+        media_id: branch?.media.url ?? '',
+        type: branch?.type ?? 'cooperative branch',
+        email: branch?.email ?? '',
+        description: branch?.description ?? '',
+        contact_number: branch?.contact_number ?? '',
+        address: branch?.address ?? '',
+        province: branch?.province ?? '',
+        country_code: branch?.country_code ?? '',
+        city: branch?.city ?? '',
+        region: branch?.region ?? '',
+        barangay: branch?.barangay ?? '',
+        postal_code: branch?.postal_code ?? '',
+        latitude: branch?.latitude ?? 0,
+        longitude: branch?.longitude ?? 0,
+        is_main_branch: !!branch?.is_main_branch,
+    }
+
     return (
         <div className="w-full">
             <CreateBranchForm
@@ -99,24 +117,7 @@ function RouteComponent() {
                 setOpenCreateBranchModal={setOpenCreateBranchModal}
                 userOrganizationId={user_organization_id}
                 branch={branch}
-                defaultValues={{
-                    name: branch?.name ?? '',
-                    media_id: branch?.media.url ?? '',
-                    type: branch?.type ?? 'cooperative branch',
-                    email: branch?.email ?? '',
-                    description: branch?.description ?? '',
-                    contact_number: branch?.contact_number ?? '',
-                    address: branch?.address ?? '',
-                    province: branch?.province ?? '',
-                    country_code: branch?.country_code ?? '',
-                    city: branch?.city ?? '',
-                    region: branch?.region ?? '',
-                    barangay: branch?.barangay ?? '',
-                    postal_code: branch?.postal_code ?? '',
-                    latitude: branch?.latitude ?? 0,
-                    longitude: branch?.longitude ?? 0,
-                    is_main_branch: !!branch?.is_main_branch,
-                }}
+                defaultValues={defaultValues}
             />
             <div className="min-h-full w-full min-w-full rounded-none border-none bg-transparent">
                 <div className="flex gap-x-5 px-2 py-5">
@@ -162,65 +163,68 @@ function RouteComponent() {
                     <div className="flex max-h-96 flex-col gap-y-3 overflow-y-auto">
                         {branches?.map((branch) => {
                             const mediaUrl =
-                                branch.media?.download_url ?? orgBannerList[0]
+                                branch?.media?.download_url ?? orgBannerList[0]
                             return (
-                                <GradientBackground mediaUrl={mediaUrl}>
-                                    <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
-                                        <SafeImage
-                                            className="size-16"
-                                            src={mediaUrl}
-                                        />
-                                        <div className="flex grow flex-col">
-                                            <h1>{branch?.name}</h1>
-                                            {branch.description && (
-                                                <PlainTextEditor
-                                                    className="text-xs"
-                                                    content={
-                                                        branch?.description ??
-                                                        ''
-                                                    }
-                                                />
-                                            )}
-                                            <p className="flex items-center gap-y-1 text-xs">
-                                                <AddressCardIcon className="mr-2" />
-                                                {branch.address}
-                                            </p>
-                                            <div className="absolute bottom-7 right-2 z-50 flex gap-1 text-xs">
-                                                <Button
-                                                    size={'sm'}
-                                                    onClick={() => {
-                                                        handleOpenCreateEditModal(
-                                                            branch
-                                                        )
-                                                    }}
-                                                    variant={'secondary'}
-                                                    className={cn(
-                                                        'flex max-h-7 space-x-2 text-xs'
-                                                    )}
-                                                >
-                                                    <span>edit</span>
-                                                    <EditPencilIcon />
-                                                </Button>
-                                                <Button
-                                                    size={'sm'}
-                                                    onClick={() => {
-                                                        handleDeleteBranch(
-                                                            branch.id,
-                                                            user_organization_id
-                                                        )
-                                                    }}
-                                                    variant={'destructive'}
-                                                    className={cn(
-                                                        'flex max-h-7 space-x-2 text-xs'
-                                                    )}
-                                                >
-                                                    <span> delete</span>
-                                                    <TrashIcon />
-                                                </Button>
+                                <div key={branch.id}>
+                                    <GradientBackground mediaUrl={mediaUrl}>
+                                        <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
+                                            <SafeImage
+                                                className="size-16"
+                                                fallbackSrc={mediaUrl}
+                                                src={mediaUrl}
+                                            />
+                                            <div className="flex grow flex-col">
+                                                <h1>{branch?.name}</h1>
+                                                {branch.description && (
+                                                    <PlainTextEditor
+                                                        className="text-xs"
+                                                        content={
+                                                            branch?.description ??
+                                                            ''
+                                                        }
+                                                    />
+                                                )}
+                                                <p className="flex items-center gap-y-1 text-xs">
+                                                    <AddressCardIcon className="mr-2" />
+                                                    {branch.address}
+                                                </p>
+                                                <div className="absolute bottom-7 right-2 z-50 flex gap-1 text-xs">
+                                                    <Button
+                                                        size={'sm'}
+                                                        onClick={() => {
+                                                            handleOpenCreateEditModal(
+                                                                branch
+                                                            )
+                                                        }}
+                                                        variant={'secondary'}
+                                                        className={cn(
+                                                            'flex max-h-7 space-x-2 text-xs'
+                                                        )}
+                                                    >
+                                                        <span>edit</span>
+                                                        <EditPencilIcon />
+                                                    </Button>
+                                                    <Button
+                                                        size={'sm'}
+                                                        onClick={() => {
+                                                            handleDeleteBranch(
+                                                                branch.id,
+                                                                user_organization_id
+                                                            )
+                                                        }}
+                                                        variant={'destructive'}
+                                                        className={cn(
+                                                            'flex max-h-7 space-x-2 text-xs'
+                                                        )}
+                                                    >
+                                                        <span> delete</span>
+                                                        <TrashIcon />
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </GradientBackground>
+                                    </GradientBackground>
+                                </div>
                             )
                         })}
                     </div>

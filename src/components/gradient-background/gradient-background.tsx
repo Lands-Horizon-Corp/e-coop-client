@@ -1,6 +1,8 @@
 import { useRandomGradient } from '@/hooks/use-random-gradient'
 import { memo } from 'react'
 import SafeImage from '../safe-image'
+import { cn } from '@/lib'
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
 
 export const colorPalette = [
     '#073B3A', // Midnight green
@@ -55,10 +57,18 @@ export const GradientBackground = memo(
         mediaUrl,
         gradientOny = false,
         imageBackgroundOpacity = 0.5,
+        className,
+        ...props
     }: GradientBackgroundProps) => {
         const randomGradient = useRandomGradient()
         return (
-            <div className="relative overflow-hidden rounded-2xl">
+            <div
+                {...props}
+                className={cn(
+                    'relative overflow-hidden rounded-2xl',
+                    className
+                )}
+            >
                 {children}
                 <div
                     className="pointer-events-none absolute inset-0 z-0"
@@ -76,6 +86,7 @@ export const GradientBackground = memo(
                         <SafeImage
                             className="relative size-64 -rotate-45"
                             src={mediaUrl}
+                            fallbackSrc={orgBannerList[7]}
                             style={{ opacity: imageBackgroundOpacity }}
                         />
                     </div>

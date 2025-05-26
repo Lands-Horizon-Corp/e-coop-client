@@ -35,6 +35,9 @@ const MemberClassificationTableOwnerAction = ({
                         defaultValues: {
                             ...memberClassification,
                         },
+                        onSuccess() {
+                            setUpdateModalForm(false)
+                        },
                     }}
                     title="Update Member Classification"
                     description="Modify/Update the member classification..."

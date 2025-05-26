@@ -11,7 +11,7 @@ import {
     IMemberCenterPaginated,
 } from '@/types'
 
-const BASE_ENDPOINT = '/member-type'
+const BASE_ENDPOINT = '/member-center'
 
 export const getMemberCenterById = async (
     id: TEntityId,

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
+import BankTable from '@/components/tables/bank-table'
+import BankAction from '@/components/tables/bank-table/action'
 import PageContainer from '@/components/containers/page-container'
-import BillsAndCoinsTable from '@/components/tables/bills-and-coins-table'
-import BillsAndCoinsAction from '@/components/tables/bills-and-coins-table/action'
-import { BillsAndCoinCreateUpdateFormModal } from '@/components/forms/bills-and-coin-create-update-form'
+import { BankCreateUpdateFormModal } from '@/components/forms/bank-create-update-form'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
 )({
     component: RouteComponent,
 })
@@ -17,7 +17,7 @@ function RouteComponent() {
 
     return (
         <PageContainer>
-            <BillsAndCoinCreateUpdateFormModal
+            <BankCreateUpdateFormModal
                 open={createModal}
                 onOpenChange={setCreateModal}
                 formProps={{
@@ -25,8 +25,8 @@ function RouteComponent() {
                     onSuccess: () => {},
                 }}
             />
-            <BillsAndCoinsTable
-                actionComponent={(props) => <BillsAndCoinsAction {...props} />}
+            <BankTable
+                actionComponent={(props) => <BankAction {...props} />}
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => setCreateModal(true),

@@ -200,14 +200,12 @@ const OrganizationForm = () => {
                                                         <p className="touch-pan-up text-start text-2xl font-bold">
                                                             {HeaderTitleDisplay}
                                                         </p>
-                                                        <p className="text-start text-xs text-white/80">
-                                                            <PlainTextEditor
-                                                                className="overflow max-h-7 min-w-96 max-w-[30rem] overflow-y-hidden"
-                                                                content={
-                                                                    DescriptionDisplay
-                                                                }
-                                                            />
-                                                        </p>
+                                                        <PlainTextEditor
+                                                            className="overflow max-h-7 min-w-96 max-w-[30rem] overflow-y-hidden"
+                                                            content={
+                                                                DescriptionDisplay
+                                                            }
+                                                        />
                                                     </div>
                                                 </div>
                                             </GradientBackground>
@@ -319,16 +317,19 @@ const OrganizationForm = () => {
                                     label="Organization Description"
                                     name="description"
                                     className="col-span-4"
-                                    render={({ field }) => (
-                                        <FormControl>
-                                            <TextEditor
-                                                {...field}
-                                                className="w-full"
-                                                textEditorClassName="!max-w-none"
-                                                placeholder="Write some description about your Organization..."
-                                            />
-                                        </FormControl>
-                                    )}
+                                    render={({ field }) => {
+                                        const { ref: _ref, ...rest } = field
+                                        return (
+                                            <FormControl>
+                                                <TextEditor
+                                                    {...rest}
+                                                    className="w-full"
+                                                    textEditorClassName="!max-w-none"
+                                                    placeholder="Write some description about your Organization..."
+                                                />
+                                            </FormControl>
+                                        )
+                                    }}
                                 />
                             </div>
                         )}
@@ -370,13 +371,6 @@ const OrganizationForm = () => {
                     </CardContent>
                     <CardFooter className="flex flex-col gap-2">
                         <FormErrorMessage errorMessage={error} />
-                        {/* {hasFormError && (
-                            <FormErrorMessage
-                                errorMessage={
-                                    'Form has error on Field. Please provide necessary details'
-                                }
-                            />
-                        )} */}
                         <div className="flex w-full items-center justify-end gap-x-2">
                             <div className="flex items-center gap-x-2 text-card-foreground/70">
                                 <span className="text-accent-foreground">

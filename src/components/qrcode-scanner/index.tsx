@@ -54,8 +54,7 @@ const QrCodeScanner = <TData, TErr = string>({
                         return err
                     },
                 })
-            } catch (e) {
-                console.log(e)
+            } catch {
                 toast.error('Invalid QR')
                 onErrorDecode?.('Invalid QR code content' as TErr)
             }

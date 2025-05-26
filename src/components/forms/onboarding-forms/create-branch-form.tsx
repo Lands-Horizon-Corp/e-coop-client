@@ -13,7 +13,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { Input } from '@/components/ui/input'
-import UserAvatar from '@/components/user-avatar'
 import { Label } from '@/components/ui/label'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -21,7 +20,7 @@ import TextEditor from '@/components/text-editor'
 import MapPicker from '@/components/map-picker'
 import { DialogClose } from '@/components/ui/dialog'
 
-import { IBranch, IBranchRequest, TEntityId } from '@/types'
+import { IBranch, IBranchRequest, IClassProps, IForm, TEntityId } from '@/types'
 import { useCreateBranch, useUpdateBranch } from '@/hooks/api-hooks/use-branch'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { branchRequestSchema } from '@/validations/form-validation/branch/create-branch-schema'
@@ -33,13 +32,18 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LatLngLiteral } from 'leaflet'
+import { cn } from '@/lib'
+import UserAvatar from '@/components/user-avatar'
 
-interface CreateBranchFormProps extends IModalProps {
+export interface ICreateBranchFormProps
+    extends IClassProps,
+        IForm<Partial<IBranchRequest>, string>,
+        IModalProps {
     userOrganizationId: TEntityId
     setOpenCreateBranchModal: React.Dispatch<React.SetStateAction<boolean>>
     branch: IBranch | undefined
-    defaultValues: Partial<IBranchRequest> | undefined
 }
+
 type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
 
 const CreateBranchForm = ({
@@ -48,42 +52,25 @@ const CreateBranchForm = ({
     branch,
     defaultValues,
     ...props
-}: CreateBranchFormProps) => {
+}: ICreateBranchFormProps) => {
     const [openImagePicker, setOpenImagePicker] = useState(false)
     const [onOpenMap, setOnOpenMapPicker] = useState(false)
 
     const isEditMode = !!branch
 
-    const defaultFormValues = {
-        name: '',
-        email: '',
-        type: 'cooperative branch',
-        media_id: null,
-        contact_number: '',
-        country_code: '',
-        description: '',
-        address: '',
-        province: '',
-        city: '',
-        region: '',
-        barangay: '',
-        postal_code: '',
-        is_main_branch: false,
-    }
     const form = useForm<ICreateBranchSchema>({
         resolver: zodResolver(branchRequestSchema),
-        defaultValues: defaultFormValues,
+        defaultValues: {
+            type: 'cooperative branch',
+            ...defaultValues,
+        },
     })
 
     useEffect(() => {
-        if (isEditMode && defaultValues) {
-            form.reset({
-                ...defaultValues,
-            })
-        } else {
-            form.reset(defaultFormValues)
+        if (defaultValues) {
+            form.reset(defaultValues)
         }
-    }, [isEditMode, defaultValues, defaultFormValues, form])
+    }, [defaultValues, form])
 
     const {
         mutate: createBranch,
@@ -127,16 +114,15 @@ const CreateBranchForm = ({
     const handleSubmit = async (data: ICreateBranchSchema) => {
         if (userOrganizationId) {
             if (isEditMode) {
-                let media = ''
                 const isMediaNotChanged =
                     defaultValues?.media_id === data.media_id
+                const media = isMediaNotChanged
+                    ? branch.media.id
+                    : await handleUploadPhoto(data.media_id ?? '')
+                const request = { ...data, media_id: media }
                 if (isMediaNotChanged) {
-                    media = branch.media.id
-                    const request = { ...data, media_id: media }
                     updateBranch(request)
                 } else {
-                    const media = await handleUploadPhoto(data.media_id ?? '')
-                    const request = { ...data, media_id: media }
                     updateBranch(request)
                 }
             } else {
@@ -153,7 +139,6 @@ const CreateBranchForm = ({
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
 
     const combinedError = error
-
     return (
         <div className="mt-10">
             <Modal
@@ -365,73 +350,85 @@ const CreateBranchForm = ({
                                     label="Branch Logo"
                                     name="media_id"
                                     className="col-span-4"
-                                    render={({ field }) => (
-                                        <FormControl>
-                                            <div className="relative mx-auto size-fit">
-                                                <SinglePictureUploadModal
-                                                    open={openImagePicker}
-                                                    onOpenChange={
-                                                        setOpenImagePicker
-                                                    }
-                                                    onPhotoChoose={(
-                                                        newImage
-                                                    ) => {
-                                                        field.onChange(newImage)
-                                                    }}
-                                                    defaultImage={
-                                                        field.value ?? ''
-                                                    }
-                                                />
-                                                <UserAvatar
-                                                    src={field.value ?? ''}
-                                                    className="size-48"
-                                                />
-                                                <ActionTooltip
-                                                    tooltipContent={
-                                                        field.value
-                                                            ? 'Replace'
-                                                            : 'Insert'
-                                                    }
-                                                    align="center"
-                                                    side="right"
-                                                >
-                                                    <Button
-                                                        variant="secondary"
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
-                                                            setOpenImagePicker(
-                                                                true
+                                    render={({ field }) => {
+                                        return (
+                                            <FormControl>
+                                                <div className="relative mx-auto size-fit">
+                                                    <SinglePictureUploadModal
+                                                        open={openImagePicker}
+                                                        onOpenChange={
+                                                            setOpenImagePicker
+                                                        }
+                                                        onPhotoChoose={(
+                                                            newImage
+                                                        ) => {
+                                                            field.onChange(
+                                                                newImage
                                                             )
                                                         }}
-                                                        className="absolute bottom-2 right-2 size-fit w-fit rounded-full border border-transparent p-1"
-                                                    >
-                                                        {field.value ? (
-                                                            <ReplaceIcon />
-                                                        ) : (
-                                                            <PlusIcon />
+                                                        defaultImage={
+                                                            field.value ?? ''
+                                                        }
+                                                    />
+
+                                                    <UserAvatar
+                                                        fallback={`${isEditMode ? form.getValues('name').charAt(0) : `-`}`}
+                                                        fallbackClassName="!text-3xl"
+                                                        src={field.value ?? ''}
+                                                        className={cn(
+                                                            'size-48 !rounded-none'
                                                         )}
-                                                    </Button>
-                                                </ActionTooltip>
-                                            </div>
-                                        </FormControl>
-                                    )}
+                                                    />
+                                                    <ActionTooltip
+                                                        tooltipContent={
+                                                            field.value
+                                                                ? 'Replace'
+                                                                : 'Insert'
+                                                        }
+                                                        align="center"
+                                                        side="right"
+                                                    >
+                                                        <Button
+                                                            variant="secondary"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setOpenImagePicker(
+                                                                    true
+                                                                )
+                                                            }}
+                                                            className="absolute bottom-2 right-2 size-fit w-fit rounded-full border border-transparent p-1"
+                                                        >
+                                                            {field.value ? (
+                                                                <ReplaceIcon />
+                                                            ) : (
+                                                                <PlusIcon />
+                                                            )}
+                                                        </Button>
+                                                    </ActionTooltip>
+                                                </div>
+                                            </FormControl>
+                                        )
+                                    }}
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
                                     label="Organization Description"
                                     name="description"
                                     className="col-span-4"
-                                    render={({ field }) => (
-                                        <FormControl>
-                                            <TextEditor
-                                                {...field}
-                                                content={field.value ?? ''}
-                                                className="w-full"
-                                                textEditorClassName="!max-w-none !h-32"
-                                                placeholder="Write some description about your branch..."
-                                            />
-                                        </FormControl>
-                                    )}
+                                    render={({ field }) => {
+                                        const { ref: _ref, ...rest } = field
+                                        return (
+                                            <FormControl>
+                                                <TextEditor
+                                                    {...rest}
+                                                    content={field.value ?? ''}
+                                                    className="w-full"
+                                                    textEditorClassName="!max-w-none !h-32"
+                                                    placeholder="Write some description about your branch..."
+                                                />
+                                            </FormControl>
+                                        )
+                                    }}
                                 />
                                 <div className="flex gap-x-2">
                                     <FormFieldWrapper

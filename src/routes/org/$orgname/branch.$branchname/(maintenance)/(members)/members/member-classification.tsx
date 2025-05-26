@@ -20,6 +20,11 @@ function RouteComponent() {
             <MemberClassificationCreateUpdateFormModal
                 open={modalState}
                 onOpenChange={setModalState}
+                formProps={{
+                    onSuccess() {
+                        setModalState(false)
+                    },
+                }}
             />
             <MemberClassificationTable
                 toolbarProps={{

@@ -31,10 +31,13 @@ export const requestTransactionBatchBlotterView = async (id: TEntityId) => {
     return response.data
 }
 
-export const setDepositInBank = async (id: TEntityId, amount: number) => {
+export const setDepositInBank = async (
+    id: TEntityId,
+    data: ITransactionBatchDepositInBankRequest
+) => {
     const response = await APIService.put<
         ITransactionBatchDepositInBankRequest,
         ITransactionBatchMinimal | ITransactionBatch
-    >(`/transaction-batch/${id}/deposit-in-bank`, { deposit_in_bank: amount })
+    >(`/transaction-batch/${id}/deposit-in-bank`, data)
     return response.data
 }

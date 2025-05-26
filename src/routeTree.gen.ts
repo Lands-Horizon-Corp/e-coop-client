@@ -43,6 +43,7 @@ import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './rout
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanIndexImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/index';
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays';
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins';
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks';
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members';
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employee-footstep';
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type';
@@ -265,6 +266,13 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute =
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsImport.update({
         id: '/(maintenance)/maintenance/bills-and-coins',
         path: '/maintenance/bills-and-coins',
+        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any);
+
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute =
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksImport.update({
+        id: '/(maintenance)/maintenance/banks',
+        path: '/maintenance/banks',
         getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any);
 
@@ -656,6 +664,13 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
+        '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': {
+            id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks';
+            path: '/maintenance/banks';
+            fullPath: '/org/$orgname/branch/$branchname/maintenance/banks';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
+        };
         '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': {
             id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins';
             path: '/maintenance/bills-and-coins';
@@ -852,6 +867,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute;
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute;
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     OrgOrgnameBranchBranchnameemployeeLoanIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
@@ -886,6 +902,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
             OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute,
         OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
             OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
+        OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
+            OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute,
         OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute:
             OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute,
         OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute:
@@ -966,6 +984,7 @@ export interface FileRoutesByFullPath {
     '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     '/org/$orgname/branch/$branchname/employee-footstep': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
     '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
+    '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute;
     '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute;
     '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
@@ -1013,6 +1032,7 @@ export interface FileRoutesByTo {
     '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     '/org/$orgname/branch/$branchname/employee-footstep': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
     '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
+    '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute;
     '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute;
     '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
@@ -1065,6 +1085,7 @@ export interface FileRoutesById {
     '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute;
     '/org/$orgname/branch/$branchname/(employee)/loan/': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute;
@@ -1117,6 +1138,7 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/transaction/payment-type'
         | '/org/$orgname/branch/$branchname/employee-footstep'
         | '/org/$orgname/branch/$branchname/view-members'
+        | '/org/$orgname/branch/$branchname/maintenance/banks'
         | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
         | '/org/$orgname/branch/$branchname/maintenance/holidays'
         | '/org/$orgname/branch/$branchname/loan'
@@ -1163,6 +1185,7 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/transaction/payment-type'
         | '/org/$orgname/branch/$branchname/employee-footstep'
         | '/org/$orgname/branch/$branchname/view-members'
+        | '/org/$orgname/branch/$branchname/maintenance/banks'
         | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
         | '/org/$orgname/branch/$branchname/maintenance/holidays'
         | '/org/$orgname/branch/$branchname/loan'
@@ -1213,6 +1236,7 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
         | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep'
         | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
+        | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
         | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
         | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
         | '/org/$orgname/branch/$branchname/(employee)/loan/'
@@ -1403,6 +1427,7 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-type",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footstep",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members",
+        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays",
         "/org/$orgname/branch/$branchname/(employee)/loan/",
@@ -1455,6 +1480,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/view-members.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/banks.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins": {

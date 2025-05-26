@@ -37,12 +37,10 @@ function RouteComponent() {
                             <p className="touch-pan-up text-start text-2xl font-bold">
                                 {organizationData?.name}
                             </p>
-                            <p className="text-start text-sm text-white/80">
-                                <PlainTextEditor
-                                    className="overflow max-h-10 min-w-96 max-w-[30rem] overflow-y-hidden"
-                                    content={organizationData?.description}
-                                />
-                            </p>
+                            <PlainTextEditor
+                                className="overflow max-h-10 min-w-96 max-w-[30rem] overflow-y-hidden"
+                                content={organizationData?.description}
+                            />
                         </div>
                     </div>
                     <div className="flex items-center gap-x-2">
@@ -65,11 +63,13 @@ function RouteComponent() {
                 <div className="grid grid-cols-1 gap-2">
                     {joinableBranches?.map(({ branch, isUserCanJoin }) => {
                         return (
-                            <Branch
-                                branch={branch}
-                                isUserCanJoin={isUserCanJoin}
-                                organizationId={organization_id}
-                            />
+                            <div key={branch.id}>
+                                <Branch
+                                    branch={branch}
+                                    isUserCanJoin={isUserCanJoin}
+                                    organizationId={organization_id}
+                                />
+                            </div>
                         )
                     })}
                     {isNoBranches && (

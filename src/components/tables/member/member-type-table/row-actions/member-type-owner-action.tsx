@@ -44,6 +44,7 @@ const MemberTypeTableOwnerAction = ({
                         defaultValues: {
                             // ...memberType,
                         },
+                        onSuccess: () => setUpdateModalForm(false),
                     }}
                     title="Update Member Type"
                     description="Modify/Update members type..."

@@ -1,14 +1,14 @@
 import { Button } from '../ui/button'
 import BatchBlotter from './batch-blotter'
-import { Separator } from '../ui/separator'
 import { LayersSharpDotIcon } from '../icons'
-import DepositInBankCard from './deposit-in-bank-card'
+import DepositInBankCard from './deposit-in-bank/deposit-in-bank-card'
 import BeginningBalanceCard from './transaction-batch-funding/beginning-balance-card'
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 
 import { IClassProps, ITransactionBatch } from '@/types'
+import TransactionBatchCashCount from './transaction-batch-cash-count'
 
 interface Props extends IClassProps {
     // TODO: pass transaction id or object here
@@ -40,45 +40,35 @@ const TransactionBatch = ({ className }: Props) => {
                     </p>
                 </div>
             </div>
-            <div className="flex min-h-[50vh] w-full shrink-0 gap-x-2">
+            <div className="flex min-h-[40vh] w-full shrink-0 gap-x-2">
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
                     <div className="flex gap-x-2">
+                        {/* TODO: // add correct values */}
                         <BeginningBalanceCard
                             transaction_batch={{ id: '' } as ITransactionBatch}
                         />
-                        <DepositInBankCard />
+                        {/* TODO: // add correct values */}
+                        <DepositInBankCard
+                            transactionBatchId={''}
+                            depositInBankAmount={0}
+                        />
                     </div>
-                    <div className="relative space-y-2 rounded-xl bg-accent p-3">
-                        <p className="text-xl">Cash Count</p>
-                        <div>
-                            <p className="py-8 text-center text-xs text-muted-foreground/80">
-                                no bills/coins
-                            </p>
-                        </div>
-                        <div>
-                            <div className="flex items-center justify-between gap-x-2">
-                                <p className="text-xs text-muted-foreground/60">
-                                    Cashcount Total
-                                </p>
-                                <Separator className="flex-1 bg-muted-foreground/10" />
-                                <p className="text-xl">38000.00</p>
-                            </div>
-                            <div className="flex items-center justify-between gap-x-2">
-                                <p className="text-xs text-muted-foreground/60">
-                                    Grand Total
-                                </p>
-                                <Separator className="flex-1 bg-muted-foreground/10" />
-                                <p className="text-xl text-primary">38000.00</p>
-                            </div>
-                        </div>
-                        <Button size="sm" className="w-full">
-                            Save Cashcount
-                        </Button>
-                    </div>
+                    <TransactionBatchCashCount
+                        transactionBatch={{} as ITransactionBatch}
+                    />
+                    <Button size="sm" variant="secondary" className="w-full">
+                        Add Check Remittance
+                    </Button>
+                    <Button size="sm" variant="secondary" className="w-full">
+                        Add Online Remittance
+                    </Button>
                 </div>
                 <BatchBlotter
                     transaction_batch={
-                        { request_view: '2025-05-22T10:52:18.163Z' } as any
+                        {
+                            request_view: '2025-05-22T10:52:18.163Z',
+                            can_view: true,
+                        } as ITransactionBatch
                     }
                 />
             </div>

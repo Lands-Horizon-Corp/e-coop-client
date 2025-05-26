@@ -9,7 +9,11 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import { AddressCardIcon, PinLocationIcon } from '@/components/icons'
+import {
+    AddressCardIcon,
+    MagnifyingGlassIcon,
+    PinLocationIcon,
+} from '@/components/icons'
 
 import { useVerifyInvitationCode } from '@/hooks/api-hooks/use-invitation-code'
 import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
@@ -31,7 +35,8 @@ const joinOrganizationFormSchema = z.object({
 type TJoinOrganizationForm = z.infer<typeof joinOrganizationFormSchema>
 
 const JoinBranchWithCodeFormModal = ({
-    description = 'Fill out to join branch',
+    title,
+    description,
     className,
     onOpenChange,
     ...props
@@ -74,7 +79,7 @@ const JoinBranchWithCodeFormModal = ({
 
     return (
         <Modal
-            title="Join Branch"
+            title={title}
             description={description}
             titleClassName="text-2xl"
             className={cn('w-[44rem]', className)}
@@ -92,35 +97,40 @@ const JoinBranchWithCodeFormModal = ({
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input
-                                        placeholder="Enter your invitation code"
-                                        {...field}
-                                        className="h-20 w-full rounded-2xl bg-secondary/50 text-xl text-primary"
-                                    />
+                                    <div className="relative w-full">
+                                        <span className="absolute inset-y-0 left-3 flex items-center text-primary">
+                                            <MagnifyingGlassIcon className="h-5 w-5" />
+                                        </span>
+                                        <Input
+                                            placeholder="Search for branches via code"
+                                            {...field}
+                                            className="w-full rounded-2xl bg-secondary/50 pl-10 text-primary"
+                                        />
+                                    </div>
                                 </FormControl>
                             </FormItem>
                         )}
                     />
                     {isLoading && (
                         <div className="flex w-full justify-center">
-                            <LoadingSpinner className="animate-spin" />
+                            <LoadingSpinner className="animate-spin text-primary" />
                         </div>
                     )}
                     {branch && organization && (
                         <>
                             <GradientBackground
                                 imageBackgroundOpacity={0.1}
-                                mediaUrl={organization?.media?.url}
+                                mediaUrl={organization.media?.url}
                             >
                                 <div className="relative z-50 flex min-h-16 w-full cursor-pointer items-center gap-x-4 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
                                     <div className="flex grow flex-col gap-y-2">
                                         <div className="flex">
                                             <SafeImage
                                                 className="aspect-square size-16"
-                                                src={organization?.media?.url}
+                                                src={organization.media?.url}
                                             />
                                             <div className="p-2">
-                                                <h1>{organization?.name}</h1>
+                                                <h1>{organization.name}</h1>
                                                 <PlainTextEditor
                                                     className="text-xs"
                                                     content={
@@ -136,27 +146,45 @@ const JoinBranchWithCodeFormModal = ({
                                             </div>
                                         </div>
                                         <div className="pl-5">
-                                            <GradientBackground gradientOny>
+                                            <GradientBackground
+                                                className="!bg-black/50"
+                                                gradientOny
+                                            >
                                                 <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-2 hover:bg-secondary/50 hover:no-underline">
                                                     <SafeImage
                                                         className="size-16"
-                                                        src={branch?.media?.url}
+                                                        src={branch.media?.url}
                                                     />
-                                                    <div className="flex grow flex-col">
-                                                        <h1>{branch?.name}</h1>
-                                                        {branch.description && (
-                                                            <PlainTextEditor
-                                                                className="text-xs"
-                                                                content={
-                                                                    branch?.description ??
-                                                                    ''
-                                                                }
-                                                            />
-                                                        )}
-                                                        <p className="flex items-center gap-y-1 text-xs">
-                                                            <AddressCardIcon className="mr-2" />
-                                                            {branch.address}
-                                                        </p>
+                                                    <div className="flex grow px-2">
+                                                        <div className="flex w-full grow flex-col">
+                                                            <h1>
+                                                                {branch.name}
+                                                            </h1>
+                                                            {branch.description && (
+                                                                <PlainTextEditor
+                                                                    className="text-xs"
+                                                                    content={
+                                                                        branch?.description ??
+                                                                        ''
+                                                                    }
+                                                                />
+                                                            )}
+                                                            <p className="flex items-center gap-y-1 text-xs">
+                                                                <AddressCardIcon className="mr-2" />
+                                                                {branch.address}
+                                                            </p>
+                                                        </div>
+                                                        <Button
+                                                            type="submit"
+                                                            className="w-full max-w-11 bg-primary/50"
+                                                            size={'sm'}
+                                                            disabled={
+                                                                isLoading ||
+                                                                IsLoadingJoining
+                                                            }
+                                                        >
+                                                            Join
+                                                        </Button>
                                                     </div>
                                                 </div>
                                             </GradientBackground>
@@ -166,15 +194,6 @@ const JoinBranchWithCodeFormModal = ({
                             </GradientBackground>
                         </>
                     )}
-                    <div className="w-full p-2">
-                        <Button
-                            type="submit"
-                            className="w-full"
-                            disabled={isLoading || IsLoadingJoining}
-                        >
-                            Join
-                        </Button>
-                    </div>
                 </form>
             </Form>
         </Modal>

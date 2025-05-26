@@ -19,6 +19,11 @@ function RouteComponent() {
             <MemberCenterCreateUpdateFormModal
                 open={modalState}
                 onOpenChange={setModalState}
+                formProps={{
+                    onSuccess() {
+                        setModalState(false)
+                    },
+                }}
             />
             <MemberCenterTable
                 toolbarProps={{

@@ -12,13 +12,19 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
-import { IClassProps, IForm } from '@/types/components'
-import { IMemberType, IMemberTypeRequest, TEntityId } from '@/types'
 import {
     useCreateMemberType,
     useUpdateMemberType,
 } from '@/hooks/api-hooks/member/use-member-type'
 import { createMemberTypeSchema } from '@/validations/member/member-type-schema'
+
+import {
+    IForm,
+    TEntityId,
+    IClassProps,
+    IMemberType,
+    IMemberTypeRequest,
+} from '@/types'
 
 export type TMemberTypeForm = z.infer<typeof createMemberTypeSchema>
 
@@ -50,14 +56,12 @@ const MemberTypeCreateUpdateForm = ({
         },
     })
 
-    // Create hook (for create mode)
     const {
         error: createError,
         isPending: isCreating,
         mutate: createMemberType,
     } = useCreateMemberType({ onSuccess, onError })
 
-    // Update hook (for update mode)
     const {
         error: updateError,
         isPending: isUpdating,
@@ -72,7 +76,6 @@ const MemberTypeCreateUpdateForm = ({
         }
     }
 
-    // Combine any errors from both operations
     const combinedError = createError || updateError
 
     return (
