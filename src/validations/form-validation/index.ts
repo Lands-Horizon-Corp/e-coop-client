@@ -1,3 +1,5 @@
 export * from './otp-schema'
 export * from './sign-in-schema'
 export * from './sign-up-schema'
+export * from './remittance/check-remittance-schema'
+export * from './remittance/online-remittance-schema'

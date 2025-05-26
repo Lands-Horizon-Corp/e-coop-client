@@ -4,14 +4,14 @@ import { Button } from '../../ui/button'
 
 import { cn } from '@/lib'
 
-import { IClassProps, ITransactionBatch } from '@/types'
+import { IClassProps, TTransactionBatchFullorMin } from '@/types'
 import { BatchFundingCreateFormModal } from './batch-funding-create-form'
 
 interface Props extends IClassProps {
-    transaction_batch: ITransactionBatch
+    transactionBatch: TTransactionBatchFullorMin
 }
 
-const BeginningBalanceCard = ({ className, transaction_batch }: Props) => {
+const BeginningBalanceCard = ({ className, transactionBatch }: Props) => {
     const [addModal, setAddModal] = useState(false)
 
     return (
@@ -25,7 +25,7 @@ const BeginningBalanceCard = ({ className, transaction_batch }: Props) => {
                 open={addModal}
                 onOpenChange={setAddModal}
                 formProps={{
-                    transactionBatchId: transaction_batch.id,
+                    transactionBatchId: transactionBatch?.id,
                     onSuccess() {
                         setAddModal(false)
                     },

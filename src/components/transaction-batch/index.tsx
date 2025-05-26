@@ -1,20 +1,26 @@
 import { Button } from '../ui/button'
 import BatchBlotter from './batch-blotter'
 import { LayersSharpDotIcon } from '../icons'
+import BatchCheckRemitance from './remittance/check-remittance'
+import BatchOnlineRemitance from './remittance/online-remittance'
+import TransactionBatchCashCount from './transaction-batch-cash-count'
 import DepositInBankCard from './deposit-in-bank/deposit-in-bank-card'
 import BeginningBalanceCard from './transaction-batch-funding/beginning-balance-card'
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
 
-import { IClassProps, ITransactionBatch } from '@/types'
-import TransactionBatchCashCount from './transaction-batch-cash-count'
+import {
+    IClassProps,
+    ITransactionBatch,
+    TTransactionBatchFullorMin,
+} from '@/types'
 
 interface Props extends IClassProps {
-    // TODO: pass transaction id or object here
+    transactionBatch: TTransactionBatchFullorMin
 }
 
-const TransactionBatch = ({ className }: Props) => {
+const TransactionBatch = ({ className, transactionBatch }: Props) => {
     return (
         <div
             className={cn(
@@ -43,33 +49,26 @@ const TransactionBatch = ({ className }: Props) => {
             <div className="flex min-h-[40vh] w-full shrink-0 gap-x-2">
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
                     <div className="flex gap-x-2">
-                        {/* TODO: // add correct values */}
                         <BeginningBalanceCard
-                            transaction_batch={{ id: '' } as ITransactionBatch}
+                            transactionBatch={transactionBatch}
                         />
-                        {/* TODO: // add correct values */}
                         <DepositInBankCard
-                            transactionBatchId={''}
+                            transactionBatchId={transactionBatch?.id}
                             depositInBankAmount={0}
                         />
                     </div>
                     <TransactionBatchCashCount
-                        transactionBatch={{} as ITransactionBatch}
+                        transactionBatch={transactionBatch}
                     />
-                    <Button size="sm" variant="secondary" className="w-full">
-                        Add Check Remittance
-                    </Button>
-                    <Button size="sm" variant="secondary" className="w-full">
-                        Add Online Remittance
-                    </Button>
+                    <BatchCheckRemitance
+                        transactionBatchId={transactionBatch?.id}
+                    />
+                    <BatchOnlineRemitance
+                        transactionBatchId={transactionBatch?.id}
+                    />
                 </div>
                 <BatchBlotter
-                    transaction_batch={
-                        {
-                            request_view: '2025-05-22T10:52:18.163Z',
-                            can_view: true,
-                        } as ITransactionBatch
-                    }
+                    transactionBatch={transactionBatch as ITransactionBatch}
                 />
             </div>
             <Button

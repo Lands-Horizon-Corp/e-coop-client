@@ -12,11 +12,11 @@ import useActionSecurityStore from '@/store/action-security-store'
 import { toReadableDate } from '@/utils'
 
 interface Props extends IClassProps {
-    transaction_batch: ITransactionBatch
+    transactionBatch: ITransactionBatch
     onBatchUpdate?: (data: ITransactionBatch | ITransactionBatchMinimal) => void
 }
 
-const BatchBlotter = ({ transaction_batch, onBatchUpdate }: Props) => {
+const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
     const { mutate: requestBlotterView, isPending: isRequestingView } =
         useTransactionBatchRequestBlotterView({ onSuccess: onBatchUpdate })
 
@@ -24,9 +24,9 @@ const BatchBlotter = ({ transaction_batch, onBatchUpdate }: Props) => {
 
     return (
         <div className="relative flex-1 rounded-2xl border bg-background p-4">
-            {!transaction_batch?.can_view ? (
+            {!transactionBatch?.can_view ? (
                 <div className="flex size-full flex-col items-center justify-center gap-y-3 p-4">
-                    {transaction_batch?.request_view ? (
+                    {transactionBatch?.request_view ? (
                         <>
                             <EyeNoneIcon className="size-12 text-muted-foreground/40" />
                             <p>Blotter View Request Pending</p>
@@ -34,7 +34,7 @@ const BatchBlotter = ({ transaction_batch, onBatchUpdate }: Props) => {
                                 Requested access on{' '}
                                 <span className="rounded-sm bg-accent p-0.5 px-1 text-accent-foreground">
                                     {toReadableDate(
-                                        transaction_batch.request_view,
+                                        transactionBatch.request_view,
                                         "MM-dd-yyyy 'at' hh:mm a"
                                     )}
                                 </span>
@@ -55,7 +55,7 @@ const BatchBlotter = ({ transaction_batch, onBatchUpdate }: Props) => {
                                 variant="outline"
                                 disabled={
                                     isRequestingView ||
-                                    !!transaction_batch?.request_view
+                                    !!transactionBatch?.request_view
                                 }
                                 onClick={() =>
                                     onOpenSecurityAction({
@@ -64,7 +64,7 @@ const BatchBlotter = ({ transaction_batch, onBatchUpdate }: Props) => {
                                             'You are requesting blotter view, please confirm if it is really you.',
                                         onSuccess: () =>
                                             requestBlotterView(
-                                                transaction_batch.id
+                                                transactionBatch.id
                                             ),
                                     })
                                 }
