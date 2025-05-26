@@ -1,6 +1,7 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, Path, UseFormReturn } from 'react-hook-form'
 
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -14,12 +15,11 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib/utils'
+import useActionSecurityStore from '@/store/action-security-store'
 import { userSettingsGeneralSchema } from '@/validations/user-settings'
 import { useUpdateUserSettingsGeneral } from '@/hooks/api-hooks/use-user-settings'
 
 import { IForm, IUserBase, IClassProps, TEntityId } from '@/types'
-import useActionSecurityStore from '@/store/action-security-store'
-import { useEffect } from 'react'
 
 type TAccountGeneralFormValues = z.infer<typeof userSettingsGeneralSchema>
 
@@ -29,6 +29,8 @@ export interface IAccountGeneralFormProps
     accountId?: TEntityId
 }
 
+export type TFormRef = UseFormReturn<TAccountGeneralFormValues>
+
 const AccountGeneralForm = ({
     readOnly,
     className,
@@ -37,7 +39,7 @@ const AccountGeneralForm = ({
     onError,
     onSuccess,
 }: IAccountGeneralFormProps) => {
-    const form = useForm<TAccountGeneralFormValues>({
+    const form: TFormRef = useForm<TAccountGeneralFormValues>({
         resolver: zodResolver(userSettingsGeneralSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
