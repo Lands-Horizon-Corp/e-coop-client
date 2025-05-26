@@ -23,21 +23,25 @@ export interface IOnlineRemitance extends IBaseEntityMeta {
     reference_number: string
     account_name: string
     amount: number
-    date_entry: string | null
-    description: string | null
+    date_entry?: string
+    description?: string
 }
 
 export interface IOnlineRemitanceRequest {
     id?: TEntityId
 
     bank_id: TEntityId
-    media_id: TEntityId
-    // transaction_batch_id: TEntityId // IDK IF SERVER AUTO PLACE THIS IN BACKEND
+    media_id?: TEntityId
+    transaction_batch_id?: TEntityId // IDK IF SERVER AUTO PLACE THIS IN BACKEND
+
+    employee_user_id?: TEntityId
+    organization_id?: TEntityId
+    branch_id?: TEntityId
 
     country_code: string
     reference_number: string
     account_name: string
     amount: number
-    date_entry: string | null
-    description: string | null
+    date_entry?: string
+    description?: string
 }

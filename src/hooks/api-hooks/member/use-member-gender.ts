@@ -6,17 +6,15 @@ import { serverRequestErrExtractor } from '@/helpers'
 import * as GenderService from '@/api-service/member-services/member-gender-service'
 
 import {
+    IAPIHook,
     TEntityId,
+    IQueryProps,
     IMemberGender,
+    IOperationCallbacks,
     IMemberGenderRequest,
     IMemberGenderPaginated,
-} from '@/types'
-import {
-    IAPIHook,
-    IQueryProps,
-    IOperationCallbacks,
     IAPIFilteredPaginatedHook,
-} from '@/types/api-hooks-types'
+} from '@/types'
 
 export const useCreateGender = ({
     showMessage = true,

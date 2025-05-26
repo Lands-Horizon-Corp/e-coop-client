@@ -73,6 +73,10 @@ export interface ITransactionBatchMinimal
         | keyof ITransactionBatchSignatures
     > {}
 
+export type TTransactionBatchFullorMin =
+    | ITransactionBatch
+    | ITransactionBatchMinimal
+
 // SIGNATURES
 export interface ITransactionBatchSignatures {
     approved_by_signature_media_id?: TEntityId
