@@ -1,8 +1,4 @@
-import React from 'react'
-
-type Props = {}
-
-const BatchCashCount = (props: Props) => {
+const BatchCashCount = () => {
     return <div>BatchCashCountForm</div>
 }
 
