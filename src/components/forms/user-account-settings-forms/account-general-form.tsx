@@ -58,7 +58,6 @@ const AccountGeneralForm = ({
     } = useUpdateUserSettingsGeneral({
         onError,
         onSuccess: (userData) => {
-            form.reset(defaultValues)
             onSuccess?.(userData)
         },
         showMessage: true,

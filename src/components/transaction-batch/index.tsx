@@ -67,6 +67,7 @@ const TransactionBatch = ({ className }: Props) => {
                     transaction_batch={
                         {
                             request_view: '2025-05-22T10:52:18.163Z',
+                            can_view: true,
                         } as ITransactionBatch
                     }
                 />
