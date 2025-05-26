@@ -1,13 +1,44 @@
+import { serverRequestErrExtractor } from '@/helpers'
 import { createMutationHook } from './api-hook-factory'
 import * as TransactionBatchService from '@/api-service/transaction-batch-service'
 
 import {
+    IAPIHook,
     TEntityId,
+    IQueryProps,
+    ITransactionBatch,
     ITransactionBatchMinimal,
     IIntraBatchFundingRequest,
-    ITransactionBatch,
     ITransactionBatchDepositInBankRequest,
+    TTransactionBatchFullorMin,
 } from '@/types'
+import { withCatchAsync } from '@/utils'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
+export const useCurrentTransactionBatch = ({
+    enabled,
+    showMessage = true,
+}: IAPIHook<TTransactionBatchFullorMin, string> & IQueryProps = {}) => {
+    return useQuery<TTransactionBatchFullorMin, string>({
+        queryKey: ['transaction-batch', 'current'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                TransactionBatchService.currentTransactionBatch()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        enabled,
+        retry: 1,
+    })
+}
 
 export const useCreateTransactionBatch = createMutationHook<
     ITransactionBatchMinimal,

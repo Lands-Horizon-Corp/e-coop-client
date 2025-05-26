@@ -1,16 +1,18 @@
 import APIService from './api-service'
 
 import {
-    ITransactionBatch,
-    ITransactionBatchDepositInBankRequest,
-    ITransactionBatchMinimal,
     TEntityId,
+    ITransactionBatch,
+    ITransactionBatchMinimal,
+    ITransactionBatchDepositInBankRequest,
 } from '@/types'
 
 import { IIntraBatchFundingRequest } from '@/types/coop-types/intra-batch-funding'
 
 export const currentTransactionBatch = async () => {
-    const response = await APIService.get('/transaction-batch/current')
+    const response = await APIService.get<
+        ITransactionBatchMinimal | ITransactionBatch
+    >('/transaction-batch/current')
     return response.data
 }
 
