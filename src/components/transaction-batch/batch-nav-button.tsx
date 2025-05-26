@@ -47,31 +47,31 @@ const TransactionBatchNavButton = (_props: Props) => {
         }
     )
 
-    // if (!transactionBatch)
-    //     return (
-    //         <>
-    //             <Button
-    //                 variant="secondary"
-    //                 hoverVariant="primary"
-    //                 onClick={() => setCreateModal((prev) => !prev)}
-    //                 className="group rounded-full text-foreground/70"
-    //             >
-    //                 <LayersSharpDotIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
-    //                 Start Batch
-    //             </Button>
-    //             <TransactionBatchCreateFormModal
-    //                 open={createModal}
-    //                 onOpenChange={setCreateModal}
-    //                 formProps={{
-    //                     defaultValues: {
-    //                         name: `${user.user_name}'s-batch-${toReadableDate(new Date(), 'MM-dd-yyyy')}`.toLowerCase(),
-    //                         branch_id: user_organization.branch_id,
-    //                         organization_id: user_organization.organization_id,
-    //                     },
-    //                 }}
-    //             />
-    //         </>
-    //     )
+    if (!transactionBatch)
+        return (
+            <>
+                <Button
+                    variant="secondary"
+                    hoverVariant="primary"
+                    onClick={() => setCreateModal((prev) => !prev)}
+                    className="group rounded-full text-foreground/70"
+                >
+                    <LayersSharpDotIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
+                    Start Batch
+                </Button>
+                <TransactionBatchCreateFormModal
+                    open={createModal}
+                    onOpenChange={setCreateModal}
+                    formProps={{
+                        defaultValues: {
+                            name: `${user.user_name}'s-batch-${toReadableDate(new Date(), 'MM-dd-yyyy')}`.toLowerCase(),
+                            branch_id: user_organization.branch_id,
+                            organization_id: user_organization.organization_id,
+                        },
+                    }}
+                />
+            </>
+        )
 
     return (
         <Popover modal>
