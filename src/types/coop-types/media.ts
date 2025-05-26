@@ -1,3 +1,4 @@
+import { IUserBase } from '../auth'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 
 export interface IMedia extends ITimeStamps, IAuditable {
@@ -23,5 +24,5 @@ export interface IMediaRequest {
     bucketName?: string
 
     userId?: TEntityId
-    // TODO: user?: IUserResource
+    user?: IUserBase
 }

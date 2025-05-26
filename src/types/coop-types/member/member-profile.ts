@@ -43,6 +43,7 @@ import {
 import { IMemberEducationalAttainment } from './member-educational-attainment'
 import { IOrganization } from '@/types/lands-types'
 import { IMemberRecruits } from './member-recruits'
+import { IMemberGroup } from './member-group'
 
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
@@ -144,7 +145,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_type: IMemberType
 
     member_group_id: TEntityId
-    // TODO: Add member group
+    member_group: IMemberGroup
 
     member_gender_id: TEntityId
     member_gender: IMemberGender
