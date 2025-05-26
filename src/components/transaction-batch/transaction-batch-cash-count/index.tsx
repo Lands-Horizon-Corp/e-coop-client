@@ -3,10 +3,10 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib'
 
-import { IClassProps, ITransactionBatch } from '@/types'
+import { IClassProps, ITransactionBatchMinimal } from '@/types'
 
 interface Props extends IClassProps {
-    transactionBatch: ITransactionBatch
+    transactionBatch: ITransactionBatchMinimal
 }
 
 const TransactionBatchCashCount = ({ className }: Props) => {

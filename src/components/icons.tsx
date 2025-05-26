@@ -231,6 +231,7 @@ import {
     FaCheck as CheckFillIcon,
     FaHouseChimneyWindow as HouseIcon,
     FaLandmarkFlag as LandmarkIcon,
+    FaMoneyCheck as MoneyCheckIcon,
 } from 'react-icons/fa6'
 
 import {
@@ -386,6 +387,7 @@ export {
     IoIosCodeIcon,
     WoodSignsIcon,
     TelephoneIcon,
+    MoneyCheckIcon,
     FolderFillIcon,
     ArrowRightIcon,
     CoinsStackIcon,

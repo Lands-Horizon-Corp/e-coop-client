@@ -153,7 +153,7 @@ const CountryComboboxComponent = (
                                         key={key}
                                         onSelect={() => handleSelect(option)}
                                     >
-                                        <div className="flex w-0 flex-grow space-x-2 overflow-hidden">
+                                        <div className="flex w-0 flex-grow items-center space-x-2 overflow-hidden">
                                             <div className="inline-flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full">
                                                 <CircleFlag
                                                     countryCode={option.alpha2.toLowerCase()}
@@ -162,6 +162,9 @@ const CountryComboboxComponent = (
                                             </div>
                                             <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                                                 {option.name}
+                                            </span>
+                                            <span className="text-xs text-muted-foreground/60">
+                                                {option.alpha2}
                                             </span>
                                         </div>
                                         <CheckIcon

@@ -18,9 +18,13 @@ import {
 } from '@/hooks/api-hooks/member/use-member-gender'
 import { createGenderSchema } from '@/validations/member/member-gender-schema'
 
-import { IForm } from '@/types'
-import { IClassProps } from '@/types'
-import { IMemberGenderRequest, IMemberGender, TEntityId } from '@/types'
+import {
+    IForm,
+    TEntityId,
+    IClassProps,
+    IMemberGender,
+    IMemberGenderRequest,
+} from '@/types'
 
 type TGenderFormValues = z.infer<typeof createGenderSchema>
 
