@@ -22,7 +22,6 @@ import { toast } from 'sonner'
 import { cn } from '@/lib'
 import { useNavigate } from '@tanstack/react-router'
 import { useCategoryStore } from '@/store/onboarding/category-store'
-import { useAuthUser } from '@/store/user-auth-store'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: UserOrganizationGroup[]
@@ -34,8 +33,6 @@ const WithOrganization = ({
     const navigate = useNavigate()
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
     const { handleProceedToSetupOrg } = useCategoryStore()
-
-    const {  } = useAuthUser();
 
     const handleVisit = async (
         userOrganizationId: TEntityId,
