@@ -8,6 +8,7 @@ import {
     TbSquareF1 as F1Icon,
     TbSquareF2 as F2Icon,
     TbSquareF3 as F3Icon,
+    TbCreditCard as CreditCardIcon2,
 } from 'react-icons/tb'
 
 import {
@@ -150,6 +151,8 @@ import {
     MdOutlineRotate90DegreesCcw as Rotate90DegreeLeftIcon,
     MdAccountBalance as AccountsIcon,
     MdOutlineSavings as SavingsIcon,
+    MdOutlineManageAccounts as AccountSetupIcon,
+    MdOutlineQueryStats as FinanceReportsIcon,
 } from 'react-icons/md'
 
 import {
@@ -231,6 +234,7 @@ import {
     FaCheck as CheckFillIcon,
     FaHouseChimneyWindow as HouseIcon,
     FaLandmarkFlag as LandmarkIcon,
+    FaUserLock as UserLockIcon,
     FaMoneyCheck as MoneyCheckIcon,
 } from 'react-icons/fa6'
 
@@ -285,6 +289,8 @@ import {
     GrMoney as CoinsStackIcon,
     GrVmMaintenance as MaintenanceIcon,
 } from 'react-icons/gr'
+
+import { TiBook as BookIcon } from 'react-icons/ti'
 
 export {
     XIcon,
@@ -503,4 +509,9 @@ export {
     PinLocationIcon,
     UnavailableIcon,
     CodeSandBox,
+    UserLockIcon,
+    AccountSetupIcon,
+    CreditCardIcon2,
+    BookIcon,
+    FinanceReportsIcon,
 }
