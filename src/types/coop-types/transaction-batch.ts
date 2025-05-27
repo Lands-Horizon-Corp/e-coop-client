@@ -1,6 +1,8 @@
 import { IMedia } from './media'
 import { IUserBase } from '../auth'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IOrganization } from '../lands-types'
+import { IBranch } from './branch'
 
 export type TBatchBalanceStatus =
     | 'balanced'
@@ -12,6 +14,12 @@ export interface ITransactionBatch
         IAuditable,
         ITransactionBatchSignatures {
     id: TEntityId
+
+    organization_id: TEntityId
+    organization: IOrganization
+
+    branch_id: TEntityId
+    branch: IBranch
 
     employee_user_id: TEntityId
     employee_user: IUserBase
