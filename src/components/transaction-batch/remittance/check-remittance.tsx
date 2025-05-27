@@ -83,7 +83,7 @@ const BatchCheckRemitance = ({ transactionBatchId }: Props) => {
     )
 
     return (
-        <div className="rounded-xl bg-popover/70">
+        <div className="rounded-xl bg-secondary dark:bg-popover/70">
             <CheckRemittanceCreateUpdateFormModal
                 {...modalState}
                 formProps={{
@@ -111,7 +111,7 @@ const BatchCheckRemitance = ({ transactionBatchId }: Props) => {
 
 const RemittanceList = ({ list }: { list: ICheckRemittance[] }) => {
     return (
-        <div className="max-h-64 w-full overflow-auto bg-popover">
+        <div className="max-h-64 w-full overflow-auto bg-background/70 dark:bg-popover">
             <Table>
                 <TableBody>
                     {list && list.length > 0 ? (

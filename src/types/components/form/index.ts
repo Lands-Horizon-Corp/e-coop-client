@@ -11,10 +11,11 @@ export interface IForm<
 > extends IClassProps {
     readOnly?: boolean
     defaultValues?: TDefaultVals
+    resetOnDefaultChange?: boolean
+    hiddenFields?: Array<Path<THidisable>>
+    disabledFields?: Array<Path<THidisable>>
     onSuccess?: (data: IData) => void
     onError?: (e: IErr) => void
     onLoading?: (loadingState: boolean) => void
     onSubmit?: (formDatas: Required<TDefaultVals>) => void
-    hiddenFields?: Array<Path<THidisable>>
-    disabledFields?: Array<Path<THidisable>>
 }
