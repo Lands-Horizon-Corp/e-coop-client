@@ -1,5 +1,6 @@
 import { Button } from '../ui/button'
 import BatchBlotter from './batch-blotter'
+import { Separator } from '../ui/separator'
 import { LayersSharpDotIcon } from '../icons'
 import BatchCheckRemitance from './remittance/check-remittance'
 import BatchOnlineRemitance from './remittance/online-remittance'
@@ -60,6 +61,7 @@ const TransactionBatch = ({ className, transactionBatch }: Props) => {
                     <TransactionBatchCashCount
                         transactionBatch={transactionBatch}
                     />
+                    <Separator />
                     <BatchCheckRemitance
                         transactionBatchId={transactionBatch?.id}
                     />

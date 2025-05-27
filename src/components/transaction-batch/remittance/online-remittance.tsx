@@ -8,19 +8,19 @@ import {
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import ImageDisplay from '@/components/image-display'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { OnlineRemittanceCreateUpdateFormModal } from '@/components/forms/remittance/online-remittance-create-update-form'
 
-import {
-    useDeleteOnlineRemittance,
-    useCurrentBatchOnlineRemittances,
-} from '@/hooks/api-hooks/use-online-remittance'
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useModalState } from '@/hooks/use-modal-state'
-import useConfirmModalStore from '@/store/confirm-modal-store'
+import {
+    useCurrentBatchOnlineRemittances,
+    useDeleteOnlineRemittance,
+} from '@/hooks/api-hooks/use-online-remittance'
 
 import { IOnlineRemitance, TEntityId } from '@/types'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 type Props = {
     transactionBatchId: TEntityId
@@ -83,7 +83,7 @@ const BatchOnlineRemittance = ({ transactionBatchId }: Props) => {
     )
 
     return (
-        <div className="rounded-xl bg-popover/70">
+        <div className="rounded-xl bg-secondary dark:bg-popover/70">
             <OnlineRemittanceCreateUpdateFormModal
                 {...modalState}
                 formProps={{
@@ -111,7 +111,7 @@ const BatchOnlineRemittance = ({ transactionBatchId }: Props) => {
 
 const RemittanceList = ({ list }: { list: IOnlineRemitance[] }) => {
     return (
-        <div className="max-h-64 w-full overflow-auto bg-popover">
+        <div className="max-h-64 w-full overflow-auto bg-background/70 dark:bg-popover">
             <Table>
                 <TableBody>
                     {list && list.length > 0 ? (
@@ -154,8 +154,6 @@ const RemittanceListRow = ({
         <TableRow key={onlineRemittance.id} className="text-xs">
             <OnlineRemittanceCreateUpdateFormModal
                 {...modalState}
-                title="Edit Online Remittance"
-                description="edit/update online remittance details"
                 formProps={{
                     defaultValues: onlineRemittance,
                 }}

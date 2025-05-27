@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import TransactionBatch from '.'
 import { Button } from '../ui/button'
 import { LayersSharpDotIcon } from '../icons'
@@ -10,17 +8,17 @@ import { TransactionBatchCreateFormModal } from './transaction-batch-create-form
 
 import { toReadableDate } from '@/utils'
 import { useSubscribe } from '@/hooks/use-pubsub'
+import { useModalState } from '@/hooks/use-modal-state'
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { useTransactionBatchStore } from '@/store/transaction-batch-store'
 import { useCurrentTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
 
 import { IEmployee, IClassProps, TTransactionBatchFullorMin } from '@/types'
-// import { toReadableDate } from '@/utils'
 
 interface Props extends IClassProps {}
 
 const TransactionBatchNavButton = (_props: Props) => {
-    const [createModal, setCreateModal] = useState(false)
+    const modalState = useModalState()
     const {
         currentAuth: { user, user_organization },
     } = useAuthUserWithOrgBranch<IEmployee>()
@@ -32,6 +30,7 @@ const TransactionBatchNavButton = (_props: Props) => {
             can_view: true,
         } as TTransactionBatchFullorMin,
         setData,
+        reset,
     } = useTransactionBatchStore()
 
     useCurrentTransactionBatch({
@@ -47,21 +46,27 @@ const TransactionBatchNavButton = (_props: Props) => {
         }
     )
 
+    useSubscribe<TTransactionBatchFullorMin>(
+        `transaction-batch.${transactionBatch?.id}.delete`,
+        () => {
+            reset()
+        }
+    )
+
     if (!transactionBatch)
         return (
             <>
                 <Button
                     variant="secondary"
                     hoverVariant="primary"
-                    onClick={() => setCreateModal((prev) => !prev)}
                     className="group rounded-full text-foreground/70"
+                    onClick={() => modalState.onOpenChange((prev) => !prev)}
                 >
                     <LayersSharpDotIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
                     Start Batch
                 </Button>
                 <TransactionBatchCreateFormModal
-                    open={createModal}
-                    onOpenChange={setCreateModal}
+                    {...modalState}
                     formProps={{
                         defaultValues: {
                             name: `${user.user_name}'s-batch-${toReadableDate(new Date(), 'MM-dd-yyyy')}`.toLowerCase(),
