@@ -12,19 +12,33 @@ import {
     ICashCountRequest,
     ITransactionBatchMinimal,
 } from '@/types'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 interface Props extends IClassProps {
     transactionBatch: ITransactionBatchMinimal
 }
 
 const TransactionBatchCashCount = ({ className, transactionBatch }: Props) => {
-    const { data: billsAndCoins, isPending: isLoadingBillsAndCoins } =
-        useBillsAndCoins()
+    const {
+        data: billsAndCoins,
+        isPending: isLoadingBillsAndCoins,
+        refetch: refetchBillsAndCoins,
+    } = useBillsAndCoins()
 
-    const { data: cashCounts, isPending: isLoadingCashCounts } =
-        useCurrentBatchCashCounts({
-            enabled: billsAndCoins.length === 0 || isLoadingBillsAndCoins,
-        })
+    useSubscribe(`bills-and-coins.update`, refetchBillsAndCoins)
+
+    const {
+        data: cashCounts,
+        isPending: isLoadingCashCounts,
+        refetch: refetchCashCounts,
+    } = useCurrentBatchCashCounts({
+        enabled: billsAndCoins.length === 0 || isLoadingBillsAndCoins,
+    })
+
+    useSubscribe(
+        `cash-count.transaction-batch.${transactionBatch.id}.update`,
+        refetchCashCounts
+    )
 
     const mergedCashCountBillsAndCoins: ICashCountRequest[] = useMemo(() => {
         if (
