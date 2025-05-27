@@ -1,3 +1,5 @@
+import { ColumnDef, Row } from '@tanstack/react-table'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { PushPinSlashIcon } from '@/components/icons'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
@@ -6,30 +8,29 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { IInvitationCode } from '@/types'
-import InvitationCodeAction from './action'
+import { toReadableDate } from '@/utils'
+import { IAccountClassification } from '@/types/coop-types/account-classification'
+import AccountClassificationAction from './action'
 
-import { ColumnDef, Row } from '@tanstack/react-table'
-
-export const InvitationCodeGlobalSearchTargets: IGlobalSearchTargets<IInvitationCode>[] =
+export const AccountClassificationGlobalSearchTargets: IGlobalSearchTargets<IAccountClassification>[] =
     [
-        { field: 'code', displayText: 'Invitation Code' },
+        { field: 'name', displayText: 'Classification Name' },
         { field: 'description', displayText: 'Description' },
     ]
 
-export interface IInvitationTableActionComponentProp {
-    row: Row<IInvitationCode>
+export interface IAccountClassificationTableActionComponentProp {
+    row: Row<IAccountClassification>
 }
 
-export interface IInvitationCodeTableColumnProps {
+export interface IAccountClassificationTableColumnProps {
     actionComponent?: (
-        props: IInvitationTableActionComponentProp
+        props: IAccountClassificationTableActionComponentProp
     ) => React.ReactNode
 }
 
-const InvitationCodeTableColumns = (
-    opts?: IInvitationCodeTableColumnProps
-): ColumnDef<IInvitationCode>[] => [
+const AccountClassificationTableColumns = (
+    opts?: IAccountClassificationTableColumnProps
+): ColumnDef<IAccountClassification>[] => [
     {
         id: 'select',
         header: ({ table, column }) => (
@@ -60,26 +61,26 @@ const InvitationCodeTableColumns = (
         minSize: 80,
     },
     {
-        id: 'code',
-        accessorKey: 'Code',
+        id: 'name',
+        accessorKey: 'name',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Code">
+            <DataTableColumnHeader {...props} title="Classification Name">
                 <ColumnActions {...props}>
-                    <TextFilter<IInvitationCode>
-                        displayText="Code"
-                        field="code"
+                    <TextFilter<IAccountClassification>
+                        displayText="Classification Name"
+                        field="name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
         cell: ({
             row: {
-                original: { code },
+                original: { name },
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
                 <span className="truncate text-xs text-muted-foreground/70">
-                    {code || '-'}
+                    {name || '-'}
                 </span>
             </div>
         ),
@@ -96,7 +97,7 @@ const InvitationCodeTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
-                    <TextFilter<IInvitationCode>
+                    <TextFilter<IAccountClassification>
                         displayText="Description"
                         field="description"
                     />
@@ -107,7 +108,7 @@ const InvitationCodeTableColumns = (
             row: {
                 original: { description },
             },
-        }) => <div>{description}</div>,
+        }) => <div>{description || '-'}</div>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -116,44 +117,20 @@ const InvitationCodeTableColumns = (
         minSize: 180,
     },
     {
-        id: 'max_uses',
-        accessorKey: 'max uses',
+        id: 'created_at',
+        accessorKey: 'created_at',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Max Uses">
+            <DataTableColumnHeader {...props} title="Date Created">
                 <ColumnActions {...props} />
             </DataTableColumnHeader>
         ),
         cell: ({
             row: {
-                original: { max_use },
+                original: { created_at },
             },
         }) => (
             <span className="text-sm font-semibold">
-                {max_use !== undefined ? max_use : '-'}
-            </span>
-        ),
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 150,
-    },
-    {
-        id: 'current_uses',
-        accessorKey: 'curent uses',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Current Uses">
-                <ColumnActions {...props} />
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { current_use },
-            },
-        }) => (
-            <span className="text-sm font-semibold">
-                {current_use !== undefined ? current_use : '-'}
+                {created_at ? toReadableDate(created_at) : '-'}
             </span>
         ),
         enableMultiSort: true,
@@ -166,7 +143,7 @@ const InvitationCodeTableColumns = (
     {
         id: 'actions',
         header: () => null,
-        cell: ({ row }) => <InvitationCodeAction row={row} />,
+        cell: ({ row }) => <AccountClassificationAction row={row} />,
         enableSorting: false,
         enableResizing: false,
         enableHiding: false,
@@ -175,4 +152,4 @@ const InvitationCodeTableColumns = (
     },
 ]
 
-export default InvitationCodeTableColumns
+export default AccountClassificationTableColumns

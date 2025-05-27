@@ -64,10 +64,14 @@ export const createInvitationCode = async (
 }
 
 // PUT /invitation-code/:invitation_code_id/
-export const updateInvitationCode = async (inviationCodeId: TEntityId) => {
-    const response = await APIService.put<IInvitationCode>(
-        `/invitation-code/${inviationCodeId}`
-    )
+export const updateInvitationCode = async (
+    inviationCodeId: TEntityId,
+    IInvitationCodeData: IInvitationCodeRequest
+) => {
+    const response = await APIService.put<
+        IInvitationCodeRequest,
+        IInvitationCode
+    >(`/invitation-code/${inviationCodeId}`, IInvitationCodeData)
     return response.data
 }
 

@@ -14,7 +14,10 @@ import { Input } from '../ui/input'
 import InputDatePicker from '../date-time-pickers/input-date-picker'
 import { Textarea } from '../ui/textarea'
 
-import { useCreateInvitationCode } from '@/hooks/api-hooks/use-invitation-code'
+import {
+    useCreateInvitationCode,
+    useUpdateInvitationCode,
+} from '@/hooks/api-hooks/use-invitation-code'
 
 import { cn } from '@/lib/utils'
 
@@ -46,66 +49,98 @@ export interface InvitationCodeFormProps
             string,
             InvitationCodeFormValues
         > {
-    InivitationCodeId?: TEntityId
-    OrganizationId: TEntityId
-    BranchId: TEntityId
+    InvitationCodeId?: TEntityId
+    organizationId: TEntityId
+    branchId: TEntityId
 }
 
 const InvitationCodeCreateUpdateForm = ({
-    InivitationCodeId,
-    BranchId,
-    OrganizationId,
+    InvitationCodeId,
+    branchId,
+    organizationId,
     readOnly,
     className,
     disabledFields,
     onError,
     onSuccess,
+    defaultValues,
 }: InvitationCodeFormProps) => {
+    const formDefaultValues: InvitationCodeFormValues = defaultValues
+        ? {
+              code: defaultValues.code || '',
+              expiration_date: defaultValues.expiration_date
+                  ? new Date(defaultValues.expiration_date)
+                  : new Date(),
+              current_use: defaultValues.current_use || 0,
+              max_use: defaultValues.max_use || 0,
+              description: defaultValues.description || '',
+          }
+        : {
+              max_use: 0,
+              code: '',
+              description: '',
+              current_use: 0,
+              expiration_date: new Date(),
+          }
+
     const form = useForm<InvitationCodeFormValues>({
         resolver: zodResolver(InviationCodeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: {
-            code: '',
-            description: '',
-            current_use: 0,
-            expiration_date: new Date(),
-        },
+        defaultValues: formDefaultValues,
     })
 
     const { currentAuth: user } = useAuthUser()
 
-    const createInivationCodeMutate = useCreateInvitationCode(
-        OrganizationId,
-        BranchId
-    )
+    const {
+        mutate: createInvitationCode,
+        isPending: isCreating,
+        error: createError,
+        reset: resetCreate,
+    } = useCreateInvitationCode({ onSuccess, onError })
+
+    const {
+        mutate: updateInvitationCode,
+        isPending: isUpdating,
+        error: updateError,
+        reset: resetUpdate,
+    } = useUpdateInvitationCode({ onSuccess, onError })
 
     if (!user.user_organization?.user_type) return <>user not found</>
     const userType = user.user_organization.user_type
-
-    const createMutation = createInivationCodeMutate({ onSuccess, onError })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (!userType) {
             onError?.('User type is not defined')
             return
         }
-        if (InivitationCodeId) {
-            // updateMutation.mutate({ InivitationCodeId, data: formData })
+        const requestData = {
+            ...formData,
+            user_type: userType,
+            expiration_date: formData.expiration_date.toISOString(),
+        }
+        if (InvitationCodeId) {
+            updateInvitationCode({
+                data: requestData,
+                invitationCodeId: InvitationCodeId,
+            })
         } else {
-            const requestData = {
-                ...formData,
-                user_type: userType,
-                expiration_date: formData.expiration_date.toISOString(),
-            }
-            createMutation.mutate(requestData)
+            createInvitationCode({
+                data: requestData,
+                organizationId,
+                branchId,
+            })
         }
     })
 
-    const { error, isPending, reset } = createMutation
+    const isPending = isCreating || isUpdating
+    const error = createError || updateError
 
     const isDisabled = (field: Path<InvitationCodeFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const isInvitationOnChanged =
+        JSON.stringify(form.watch()) !== JSON.stringify(formDefaultValues)
 
     return (
         <Form {...form}>
@@ -172,6 +207,11 @@ const InvitationCodeCreateUpdateForm = ({
                                         {...field}
                                         placeholder="Max Use"
                                         type="number"
+                                        onChange={(e) => {
+                                            field.onChange(
+                                                parseInt(e.target.value)
+                                            )
+                                        }}
                                         disabled={isDisabled(field.name)}
                                     />
                                 )}
@@ -185,6 +225,11 @@ const InvitationCodeCreateUpdateForm = ({
                                         {...field}
                                         placeholder="Max Use"
                                         type="number"
+                                        onChange={(e) => {
+                                            field.onChange(
+                                                parseInt(e.target.value)
+                                            )
+                                        }}
                                         disabled={isDisabled(field.name)}
                                     />
                                 )}
@@ -202,7 +247,8 @@ const InvitationCodeCreateUpdateForm = ({
                             variant="ghost"
                             onClick={() => {
                                 form.reset()
-                                reset()
+                                resetCreate()
+                                resetUpdate()
                             }}
                             className="w-full self-end px-8 sm:w-fit"
                         >
@@ -211,12 +257,12 @@ const InvitationCodeCreateUpdateForm = ({
                         <Button
                             size="sm"
                             type="submit"
-                            disabled={isPending}
+                            disabled={isPending || !isInvitationOnChanged}
                             className="w-full self-end px-8 sm:w-fit"
                         >
                             {isPending ? (
                                 <LoadingSpinner />
-                            ) : InivitationCodeId ? (
+                            ) : InvitationCodeId ? (
                                 'Update'
                             ) : (
                                 'Create'
@@ -238,7 +284,7 @@ export const InivationCodeFormModal = ({
 }: IModalProps & {
     formProps?: Omit<
         InvitationCodeFormProps,
-        'className' | 'OrganizationId' | 'BranchId'
+        'className' | 'organizationId' | 'branchId' | 'InvitationCodeId'
     >
     organizationId: TEntityId
     branchId: TEntityId
@@ -252,8 +298,8 @@ export const InivationCodeFormModal = ({
         >
             <InvitationCodeCreateUpdateForm
                 {...formProps}
-                BranchId={props.branchId}
-                OrganizationId={props.organizationId}
+                branchId={props.branchId}
+                organizationId={props.organizationId}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
                     props.onOpenChange?.(false)

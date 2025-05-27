@@ -43,8 +43,10 @@ const InvitationCodeAction = ({
                     branchId={branchId}
                     onOpenChange={setUpdateModalForm}
                     open={updateModalForm}
+                    title="Edit Invitation Code"
+                    description="Update details for this invitation code."
+                    titleClassName="font-bold"
                     formProps={{
-                        InivitationCodeId: invitationCode.id,
                         defaultValues: {
                             ...invitationCode,
                         },
