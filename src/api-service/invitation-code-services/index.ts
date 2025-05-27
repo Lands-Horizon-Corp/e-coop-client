@@ -1,1 +1,1 @@
-export * as InvitationCodeService from './verify-code'
+export * as InvitationCodeService from './invitation-code'
