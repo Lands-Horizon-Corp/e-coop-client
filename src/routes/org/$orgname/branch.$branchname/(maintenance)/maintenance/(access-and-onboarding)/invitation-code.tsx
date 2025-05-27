@@ -34,6 +34,7 @@ function RouteComponent() {
                 organizationId={organizationId}
                 branchId={branchId}
                 onOpenChange={setCreateModal}
+                titleClassName="font-bold"
                 formProps={{
                     defaultValues: {},
                     onSuccess: () => {},
