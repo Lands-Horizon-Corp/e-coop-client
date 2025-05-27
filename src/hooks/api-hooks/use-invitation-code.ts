@@ -87,20 +87,23 @@ export const useFilteredPaginatedInvitationCode = ({
     })
 }
 
-export const useCreateInvitationCode = (
-    organizationId: TEntityId,
-    branchId: TEntityId
-) => {
-    return createMutationHook<IInvitationCode, string, IInvitationCodeRequest>(
-        (data) =>
-            InvitationCodeService.createInvitationCode(
-                data,
-                organizationId,
-                branchId
-            ),
-        'New Invitation Code Created'
-    )
-}
+export const useCreateInvitationCode = createMutationHook<
+    IInvitationCode,
+    string,
+    {
+        data: IInvitationCodeRequest
+        organizationId: TEntityId
+        branchId: TEntityId
+    }
+>(
+    (payload) =>
+        InvitationCodeService.createInvitationCode(
+            payload.data,
+            payload.organizationId,
+            payload.branchId
+        ),
+    'New Invitation Code Created'
+)
 
 export const useDeleteInvitationCode = (
     invitationCodeId: TEntityId,
@@ -117,3 +120,19 @@ export const useDeleteInvitationCode = (
         'Invitation Code Deleted'
     )
 }
+
+export const useUpdateInvitationCode = createMutationHook<
+    IInvitationCode,
+    string,
+    {
+        data: IInvitationCodeRequest
+        invitationCodeId: TEntityId
+    }
+>(
+    (payload) =>
+        InvitationCodeService.updateInvitationCode(
+            payload.invitationCodeId,
+            payload.data
+        ),
+    'Invitation Code Updated'
+)
