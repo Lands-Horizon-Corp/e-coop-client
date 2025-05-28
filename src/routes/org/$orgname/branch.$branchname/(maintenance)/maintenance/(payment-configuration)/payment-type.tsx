@@ -1,4 +1,11 @@
+import PageContainer from '@/components/containers/page-container'
+import { PaymentTypeFormModal } from '@/components/forms/payment-type-forms/payment-type-create-update-form'
+import { PaymentTypeTable } from '@/components/tables/payment-type-table'
+import PaymentTypeAction from '@/components/tables/payment-type-table/action'
+
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type'
@@ -7,5 +14,32 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    return <div>Hello, payment type</div>
+    const [createModal, setCreateModal] = useState(false)
+    const invalidateQueries = useQueryClient()
+
+    return (
+        <PageContainer>
+            <PaymentTypeFormModal
+                open={createModal}
+                onOpenChange={setCreateModal}
+                titleClassName="font-bold"
+                formProps={{
+                    defaultValues: {},
+                    onSuccess: () => {
+                        invalidateQueries.invalidateQueries({
+                            queryKey: ['payment-type', 'resource-query'],
+                        })
+                    },
+                }}
+            />
+            <PaymentTypeTable
+                actionComponent={(props) => <PaymentTypeAction {...props} />}
+                toolbarProps={{
+                    createActionProps: {
+                        onClick: () => setCreateModal(true),
+                    },
+                }}
+            />
+        </PageContainer>
+    )
 }

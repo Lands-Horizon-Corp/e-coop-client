@@ -6,7 +6,12 @@ import { StatusBadge } from '@/components/status-badge'
 import SafeImage from '@/components/safe-image'
 import { Button } from '@/components/ui/button'
 
-import { IBranch, TEntityId, UserOrganizationGroup } from '@/types'
+import {
+    IBranch,
+    IUserOrganization,
+    TEntityId,
+    UserOrganizationGroup,
+} from '@/types'
 import {
     Accordion,
     AccordionItem,
@@ -22,6 +27,7 @@ import { toast } from 'sonner'
 import { cn } from '@/lib'
 import { useNavigate } from '@tanstack/react-router'
 import { useCategoryStore } from '@/store/onboarding/category-store'
+import { useAuthStore } from '@/store/user-auth-store'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: UserOrganizationGroup[]
@@ -31,10 +37,12 @@ const WithOrganization = ({
     organizationsWithBranches,
 }: WithOrganizationViewProps) => {
     const navigate = useNavigate()
+    const { updateCurrentAuth } = useAuthStore()
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
     const { handleProceedToSetupOrg } = useCategoryStore()
 
     const handleVisit = async (
+        userOrganization: IUserOrganization,
         userOrganizationId: TEntityId,
         organizationId: TEntityId,
         orgName: string,
@@ -42,6 +50,11 @@ const WithOrganization = ({
     ) => {
         const response = await switchOrganization(userOrganizationId)
         if (response) {
+            updateCurrentAuth({
+                user_organization: userOrganization,
+                user: userOrganization.user,
+            })
+
             navigate({
                 to: `/org/${orgName
                     .toLowerCase()
@@ -199,6 +212,7 @@ const WithOrganization = ({
                                                                 }
                                                                 onClick={async () => {
                                                                     handleVisit(
+                                                                        org.userOrganization,
                                                                         org.userOrganizationId,
                                                                         org.orgnizationId,
                                                                         org
