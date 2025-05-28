@@ -90,6 +90,7 @@ import {
     PiGraduationCapFill as GraduationCapIcon,
     PiWarningCircleFill as WarningCircleIcon,
     PiHandWithdrawDuotone as HandWithdrawIcon,
+    PiContactlessPaymentDuotone as OnlinePaymentIcon,
     PiTextStrikethroughLight as TextStrikethroughLightIcon,
 } from 'react-icons/pi'
 
@@ -455,6 +456,7 @@ export {
     CalendarCheckIcon,
     WarningCircleIcon,
     VerifiedPatchIcon,
+    OnlinePaymentIcon,
     LoadingCircleIcon,
     PencilOutlineIcon,
     UserClockFillIcon,

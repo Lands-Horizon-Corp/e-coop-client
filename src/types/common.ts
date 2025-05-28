@@ -53,7 +53,9 @@ export interface IOrgBranchIdentity {
 export interface IBaseEntityMeta
     extends ITimeStamps,
         IAuditable,
-        IOrgBranchIdentity {}
+        IOrgBranchIdentity {
+    id: TEntityId
+}
 
 export interface ITimeStamps {
     deleted_at?: string | undefined

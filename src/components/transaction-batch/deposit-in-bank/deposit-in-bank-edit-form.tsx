@@ -66,6 +66,7 @@ const DepositInBankCreateForm = ({
         mutate: setDepositInBank,
         error,
         isPending,
+        reset,
     } = useTransactionBatchSetDepositInBank({
         onSuccess,
         onError,
@@ -113,7 +114,10 @@ const DepositInBankCreateForm = ({
                             size="sm"
                             type="button"
                             variant="ghost"
-                            onClick={() => form.reset()}
+                            onClick={() => {
+                                form.reset()
+                                reset()
+                            }}
                             className="w-full self-end px-8 sm:w-fit"
                         >
                             Reset

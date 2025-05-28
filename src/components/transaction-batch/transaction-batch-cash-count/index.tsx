@@ -36,7 +36,7 @@ const TransactionBatchCashCount = ({ className, transactionBatch }: Props) => {
     })
 
     useSubscribe(
-        `cash-count.transaction-batch.${transactionBatch.id}.update`,
+        `cash-count.transaction-batch.${transactionBatch?.id}.update`,
         refetchCashCounts
     )
 
