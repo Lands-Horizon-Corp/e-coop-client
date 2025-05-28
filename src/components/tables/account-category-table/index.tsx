@@ -19,19 +19,21 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { IInvitationCode, TableProps } from '@/types'
-import InvitationCodeTableColumns, {
-    IInvitationCodeTableColumnProps,
-    InvitationCodeGlobalSearchTargets,
-} from './columns'
-import { useFilteredPaginatedInvitationCode } from '@/hooks/api-hooks/use-invitation-code'
-import { deleteMany } from '@/api-service/invitation-code-services/invitation-code'
+import { TableProps } from '@/types'
+import AccountCategoryTableColumns, {
+    IAccountCategoryTableColumnProps,
+    AccountCategoryGlobalSearchTargets,
+} from './column'
 
-export interface InvitationCodeProps
-    extends TableProps<IInvitationCode>,
-        IInvitationCodeTableColumnProps {
+import { useFilteredPaginatedAccountCategory } from '@/hooks/api-hooks/use-account-category'
+import { IAccountCategory } from '@/types/coop-types/account-category'
+import { deleteManyAccountCategories } from '@/api-service/account-category-services/account-category-service'
+
+export interface AccountCategoryTableProps
+    extends TableProps<IAccountCategory>,
+        IAccountCategoryTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IInvitationCode>,
+        IDataTableToolbarProps<IAccountCategory>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -42,13 +44,13 @@ export interface InvitationCodeProps
     >
 }
 
-const InvitationCodeTable = ({
+const AccountCategoryTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: InvitationCodeProps) => {
+}: AccountCategoryTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -56,7 +58,7 @@ const InvitationCodeTable = ({
 
     const columns = useMemo(
         () =>
-            InvitationCodeTableColumns({
+            AccountCategoryTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -72,7 +74,7 @@ const InvitationCodeTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IInvitationCode>({
+    } = useDataTableState<IAccountCategory>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -87,7 +89,7 @@ const InvitationCodeTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedInvitationCode({
+    } = useFilteredPaginatedAccountCategory({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -137,7 +139,7 @@ const InvitationCodeTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: InvitationCodeGlobalSearchTargets,
+                        targets: AccountCategoryGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -147,10 +149,15 @@ const InvitationCodeTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['invitation-code', 'resource-query'],
+                                queryKey: [
+                                    'account_category',
+                                    'resource-query',
+                                ],
                             }),
                         onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
+                            deleteManyAccountCategories(
+                                selectedData.map((data) => data.id)
+                            ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -186,4 +193,4 @@ const InvitationCodeTable = ({
     )
 }
 
-export default InvitationCodeTable
+export default AccountCategoryTable

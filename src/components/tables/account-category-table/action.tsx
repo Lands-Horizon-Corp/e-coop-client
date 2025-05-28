@@ -2,44 +2,49 @@ import { useState } from 'react'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { IAccountClassificationTableActionComponentProp } from './column'
-import { AccountClassificationFormModal } from '@/components/forms/account-classification-forms/account-classification-create-update-form'
-import { useDeleteAccountClassification } from '@/hooks/api-hooks/use-account-classification'
+import { IAccountCategoryTableActionComponentProp } from './column'
+import { AccountCategoryFormModal } from '@/components/forms/account-category-forms/account-category-create-update-form'
+import { useDeleteAccountCategory } from '@/hooks/api-hooks/use-account-category'
 
-interface IAccountClassificationActionProps
-    extends IAccountClassificationTableActionComponentProp {
-    onAccountClassificationUpdate?: () => void
+interface IAccountCategoryActionProps
+    extends IAccountCategoryTableActionComponentProp {
+    onAccountCategoryUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const AccountClassificationAction = ({
+const AccountCategoryAction = ({
     row,
     onDeleteSuccess,
-}: IAccountClassificationActionProps) => {
+}: IAccountCategoryActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
 
-    const accountClassification = row.original
+    const accountCategory = row.original
+    const organizationId = accountCategory.organization_id
+    const branchId = accountCategory.branch_id
+
     const { onOpen } = useConfirmModalStore()
 
     const {
-        mutate: deleteAccountClassification,
-        isPending: isDeletingAccountClassification,
-    } = useDeleteAccountClassification({ onSuccess: onDeleteSuccess })
+        mutate: deleteAccountCategory,
+        isPending: isDeletingAccountCategory,
+    } = useDeleteAccountCategory({ onSuccess: onDeleteSuccess })
 
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                <AccountClassificationFormModal
+                <AccountCategoryFormModal
                     className="!max-w-2xl"
+                    organizationId={organizationId}
+                    branchId={branchId}
                     onOpenChange={setUpdateModalForm}
                     open={updateModalForm}
-                    title="Edit Account Classification"
-                    description="Update details for this account classification."
+                    title="Edit Account Category"
+                    description="Update details for this account category."
                     titleClassName="font-bold"
                     formProps={{
-                        accountClassificationId: accountClassification.id,
+                        accountCategoryId: accountCategory.id,
                         defaultValues: {
-                            ...accountClassification,
+                            ...accountCategory,
                         },
                         onSuccess: () => {
                             setUpdateModalForm(false)
@@ -50,16 +55,14 @@ const AccountClassificationAction = ({
             <RowActionsGroup
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingAccountClassification,
+                    isAllowed: !isDeletingAccountCategory,
                     onClick: () => {
                         onOpen({
-                            title: 'Delete Account Classification',
+                            title: 'Delete Account Category',
                             description:
-                                'Are you sure you want to delete this Account Classification?',
+                                'Are you sure you want to delete this Account Category?',
                             onConfirm: () =>
-                                deleteAccountClassification(
-                                    accountClassification.id
-                                ),
+                                deleteAccountCategory(accountCategory.id),
                         })
                     },
                 }}
@@ -74,4 +77,4 @@ const AccountClassificationAction = ({
     )
 }
 
-export default AccountClassificationAction
+export default AccountCategoryAction
