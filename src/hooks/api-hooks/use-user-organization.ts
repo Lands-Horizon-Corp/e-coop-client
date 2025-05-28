@@ -53,6 +53,7 @@ export const useGetUserOrganizationByUserId = () => {
                             .filter((branch): branch is IBranch => !!branch),
                         orgnizationId: firstItem.organization.id,
                         isPending: firstItem.application_status,
+                        userOrganization: firstItem,
                     })
 
                     return acc

@@ -33,6 +33,7 @@ export interface UserOrganizationGroup {
     userOrganizationId: TEntityId
     organizationDetails: IOrganization
     branches: IBranch[]
+    userOrganization: IUserOrganization
     isPending: 'pending' | 'reported' | 'accepted' | 'ban'
 }
 
