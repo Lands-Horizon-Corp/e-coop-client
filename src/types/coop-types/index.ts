@@ -58,3 +58,11 @@ export * from './online-remittance'
 export * from './transaction-batch'
 export * from '../qr/qr-crypto-type'
 export * from './intra-batch-funding'
+
+/* Entries */
+export * from './cash-entry'
+export * from './check-entry'
+export * from './online-entry'
+export * from './deposit-entry'
+export * from './withdrawal-entry'
+export * from './transaction-entry'
