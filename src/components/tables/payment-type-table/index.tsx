@@ -1,37 +1,41 @@
+import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
+import DataTableToolbar, {
+    IDataTableToolbarProps,
+} from '@/components/data-table/data-table-toolbar'
+import FilterContext from '@/contexts/filter-context/filter-context'
+
+import { useFilteredPaginatedPaymentType } from '@/hooks/api-hooks/use-payment-type'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import { usePagination } from '@/hooks/use-pagination'
+import useDatableFilterState from '@/hooks/use-filter-state'
+
+import { TableProps } from '@/types/components'
+import { IPaymentType } from '@/types/coop-types/payment-type'
+
+import { deleteManyPaymentTypes } from '@/api-service/payment-type-services/payment-type-service'
+
+import { cn } from '@/lib'
+import { useQueryClient } from '@tanstack/react-query'
 import {
     useReactTable,
     getCoreRowModel,
     getSortedRowModel,
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
-import DataTable from '@/components/data-table'
-import DataTableToolbar, {
-    IDataTableToolbarProps,
-} from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+import {
+    IPaymentTypeTableColumnProps,
+    PaymentTypeTableColumns,
+    PaymentTypeGlobalSearchTargets,
+} from './column'
 
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-
-import { IInvitationCode, TableProps } from '@/types'
-import InvitationCodeTableColumns, {
-    IInvitationCodeTableColumnProps,
-    InvitationCodeGlobalSearchTargets,
-} from './columns'
-import { useFilteredPaginatedInvitationCode } from '@/hooks/api-hooks/use-invitation-code'
-import { deleteMany } from '@/api-service/invitation-code-services/invitation-code'
-
-export interface InvitationCodeProps
-    extends TableProps<IInvitationCode>,
-        IInvitationCodeTableColumnProps {
+export interface PaymentTypeTableProps
+    extends TableProps<IPaymentType>,
+        IPaymentTypeTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IInvitationCode>,
+        IDataTableToolbarProps<IPaymentType>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -42,13 +46,13 @@ export interface InvitationCodeProps
     >
 }
 
-const InvitationCodeTable = ({
+export const PaymentTypeTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: InvitationCodeProps) => {
+}: PaymentTypeTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -56,7 +60,7 @@ const InvitationCodeTable = ({
 
     const columns = useMemo(
         () =>
-            InvitationCodeTableColumns({
+            PaymentTypeTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -72,7 +76,7 @@ const InvitationCodeTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IInvitationCode>({
+    } = useDataTableState<IPaymentType>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -87,7 +91,7 @@ const InvitationCodeTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedInvitationCode({
+    } = useFilteredPaginatedPaymentType({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -137,7 +141,7 @@ const InvitationCodeTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: InvitationCodeGlobalSearchTargets,
+                        targets: PaymentTypeGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -147,10 +151,12 @@ const InvitationCodeTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['invitation-code', 'resource-query'],
+                                queryKey: ['payment_type', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
+                            deleteManyPaymentTypes(
+                                selectedData.map((data) => data.id)
+                            ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -185,5 +191,3 @@ const InvitationCodeTable = ({
         </FilterContext.Provider>
     )
 }
-
-export default InvitationCodeTable

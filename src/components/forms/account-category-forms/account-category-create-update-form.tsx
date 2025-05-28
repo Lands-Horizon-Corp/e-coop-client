@@ -12,56 +12,56 @@ import { useAuthUserWithOrg } from '@/store/user-auth-store'
 
 import { IForm, IClassProps, TEntityId } from '@/types'
 import {
-    IAccountClassification,
-    IAccountClassificationRequest,
-} from '@/types/coop-types/account-classification'
+    IAccountCategory,
+    IAccountCategoryRequest,
+} from '@/types/coop-types/account-category'
 
 import {
-    useCreateAccountClassification,
-    useUpdateAccountClassification,
-} from '@/hooks/api-hooks/use-account-classification'
+    useCreateAccountCategory,
+    useUpdateAccountCategory,
+} from '@/hooks/api-hooks/use-account-category'
 
 import { cn } from '@/lib/utils'
 import z from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-const AccountClassificationSchema = z.object({
-    name: z.string().min(1, 'Classification name is required'),
+const AccountCategorySchema = z.object({
+    name: z.string().min(1, 'Category name is required'),
     description: z.string().optional(),
 })
 
-type AccountClassificationFormValues = z.infer<
-    typeof AccountClassificationSchema
->
+type AccountCategoryFormValues = z.infer<typeof AccountCategorySchema>
 
-export interface AccountClassificationFormProps
+export interface AccountCategoryFormProps
     extends IClassProps,
         IForm<
-            Partial<IAccountClassificationRequest>,
-            IAccountClassification,
+            Partial<IAccountCategoryRequest>,
+            IAccountCategory,
             string,
-            AccountClassificationFormValues
+            AccountCategoryFormValues
         > {
-    accountClassificationId?: TEntityId
+    accountCategoryId?: TEntityId
+    organizationId: TEntityId
+    branchId: TEntityId
 }
 
-const AccountClassificationCreateUpdateForm = ({
-    accountClassificationId,
+const AccountCategoryCreateUpdateForm = ({
+    accountCategoryId,
+    branchId,
+    organizationId,
     readOnly,
     className,
     disabledFields,
     onError,
     onSuccess,
     defaultValues,
-}: AccountClassificationFormProps) => {
+}: AccountCategoryFormProps) => {
     const { currentAuth: user } = useAuthUserWithOrg()
     const userType = user.user_organization.user_type
-    const branchId = user.user_organization.branch_id
-    const organizationId = user.user_organization.organization_id
 
-    const form = useForm<AccountClassificationFormValues>({
-        resolver: zodResolver(AccountClassificationSchema),
+    const form = useForm<AccountCategoryFormValues>({
+        resolver: zodResolver(AccountCategorySchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: defaultValues || {
@@ -74,43 +74,43 @@ const AccountClassificationCreateUpdateForm = ({
         error: createError,
         isPending: isCreating,
         reset: resetCreate,
-        mutate: createAccountClassificationMutate,
-    } = useCreateAccountClassification({ onSuccess, onError })
+        mutate: createAccountCategoryMutate,
+    } = useCreateAccountCategory({ onSuccess, onError })
 
     const {
         error: updateError,
         isPending: isUpdating,
         reset: resetUpdate,
-        mutate: updateAccountClassification,
-    } = useUpdateAccountClassification({ onSuccess, onError })
+        mutate: updateAccountCategory,
+    } = useUpdateAccountCategory({ onSuccess, onError })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (!userType) {
             onError?.('User type is not defined')
             return
         }
-        if (accountClassificationId) {
-            updateAccountClassification({
-                accountClassificationId: accountClassificationId,
+        if (accountCategoryId) {
+            updateAccountCategory({
+                accountCategoryId: accountCategoryId,
                 data: formData,
             })
         } else {
-            const requestData: IAccountClassificationRequest = {
+            const requestData: IAccountCategoryRequest = {
                 ...formData,
                 organization_id: organizationId,
                 branch_id: branchId,
             }
-            createAccountClassificationMutate(requestData)
+            createAccountCategoryMutate(requestData)
         }
     })
 
     const isPending = isCreating || isUpdating
     const error = createError || updateError
 
-    const isDisabled = (field: Path<AccountClassificationFormValues>) =>
+    const isDisabled = (field: Path<AccountCategoryFormValues>) =>
         readOnly || disabledFields?.includes(field) || isPending || false
 
-    const isAccountClassificationOnChanged =
+    const isAccountCategoryOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
 
     return (
@@ -127,11 +127,11 @@ const AccountClassificationCreateUpdateForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="name"
-                            label="Classification Name"
+                            label="Category Name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    placeholder="e.g., Savings, Checking"
+                                    placeholder="e.g., Assets, Liabilities"
                                     disabled={isDisabled(field.name)}
                                 />
                             )}
@@ -146,7 +146,7 @@ const AccountClassificationCreateUpdateForm = ({
                                     {...field}
                                     id={field.name}
                                     autoComplete="off"
-                                    placeholder="Optional description for the classification"
+                                    placeholder="Optional description for the category"
                                     className="max-h-40"
                                     disabled={isDisabled(field.name)}
                                 />
@@ -174,14 +174,12 @@ const AccountClassificationCreateUpdateForm = ({
                         <Button
                             size="sm"
                             type="submit"
-                            disabled={
-                                isPending || !isAccountClassificationOnChanged
-                            }
+                            disabled={isPending || !isAccountCategoryOnChanged}
                             className="w-full self-end px-8 sm:w-fit"
                         >
                             {isPending ? (
                                 <LoadingSpinner />
-                            ) : accountClassificationId ? (
+                            ) : accountCategoryId ? (
                                 'Update'
                             ) : (
                                 'Create'
@@ -194,14 +192,19 @@ const AccountClassificationCreateUpdateForm = ({
     )
 }
 
-export const AccountClassificationFormModal = ({
-    title = 'Create Account Classification',
-    description = 'Fill out the form to add a new account classification',
+export const AccountCategoryFormModal = ({
+    title = 'Create Account Category',
+    description = 'Fill out the form to add a new account category',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<AccountClassificationFormProps, 'className'>
+    formProps?: Omit<
+        AccountCategoryFormProps,
+        'className' | 'organizationId' | 'branchId'
+    >
+    organizationId: TEntityId
+    branchId: TEntityId
 }) => {
     return (
         <Modal
@@ -210,8 +213,10 @@ export const AccountClassificationFormModal = ({
             className={cn('', className)}
             {...props}
         >
-            <AccountClassificationCreateUpdateForm
+            <AccountCategoryCreateUpdateForm
                 {...formProps}
+                branchId={props.branchId}
+                organizationId={props.organizationId}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
                     props.onOpenChange?.(false)
@@ -221,4 +226,4 @@ export const AccountClassificationFormModal = ({
     )
 }
 
-export default AccountClassificationCreateUpdateForm
+export default AccountCategoryCreateUpdateForm

@@ -7,66 +7,79 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Textarea } from '@/components/ui/textarea'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
-
-import { useAuthUserWithOrg } from '@/store/user-auth-store'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
 import { IForm, IClassProps, TEntityId } from '@/types'
 import {
-    IAccountClassification,
-    IAccountClassificationRequest,
-} from '@/types/coop-types/account-classification'
+    IPaymentType,
+    IPaymentTypeRequest,
+} from '@/types/coop-types/payment-type'
 
 import {
-    useCreateAccountClassification,
-    useUpdateAccountClassification,
-} from '@/hooks/api-hooks/use-account-classification'
+    useCreatePaymentType,
+    useUpdatePaymentType,
+} from '@/hooks/api-hooks/use-payment-type'
 
 import { cn } from '@/lib/utils'
 import z from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuthUserWithOrg } from '@/store/user-auth-store'
 
-const AccountClassificationSchema = z.object({
-    name: z.string().min(1, 'Classification name is required'),
+const PaymentTypeSchema = z.object({
+    name: z.string().min(1, 'Payment type name is required'),
     description: z.string().optional(),
+    number_of_days: z
+        .number()
+        .int()
+        .min(0, 'Number of days must be non-negative')
+        .optional(),
+    type: z.enum(['cash', 'check', 'online'], {
+        required_error: 'Payment type is required',
+    }),
 })
 
-type AccountClassificationFormValues = z.infer<
-    typeof AccountClassificationSchema
->
+type PaymentTypeFormValues = z.infer<typeof PaymentTypeSchema>
 
-export interface AccountClassificationFormProps
+export interface PaymentTypeFormProps
     extends IClassProps,
         IForm<
-            Partial<IAccountClassificationRequest>,
-            IAccountClassification,
+            Partial<IPaymentTypeRequest>,
+            IPaymentType,
             string,
-            AccountClassificationFormValues
+            PaymentTypeFormValues
         > {
-    accountClassificationId?: TEntityId
+    paymentTypeId?: TEntityId
 }
 
-const AccountClassificationCreateUpdateForm = ({
-    accountClassificationId,
+const PaymentTypeCreateUpdateForm = ({
+    paymentTypeId,
     readOnly,
     className,
     disabledFields,
     onError,
     onSuccess,
     defaultValues,
-}: AccountClassificationFormProps) => {
+}: PaymentTypeFormProps) => {
     const { currentAuth: user } = useAuthUserWithOrg()
-    const userType = user.user_organization.user_type
     const branchId = user.user_organization.branch_id
     const organizationId = user.user_organization.organization_id
 
-    const form = useForm<AccountClassificationFormValues>({
-        resolver: zodResolver(AccountClassificationSchema),
+    const form = useForm<PaymentTypeFormValues>({
+        resolver: zodResolver(PaymentTypeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: defaultValues || {
             name: '',
             description: '',
+            number_of_days: undefined,
+            type: undefined,
         },
     })
 
@@ -74,43 +87,39 @@ const AccountClassificationCreateUpdateForm = ({
         error: createError,
         isPending: isCreating,
         reset: resetCreate,
-        mutate: createAccountClassificationMutate,
-    } = useCreateAccountClassification({ onSuccess, onError })
+        mutate: createPaymentTypeMutate,
+    } = useCreatePaymentType({ onSuccess, onError })
 
     const {
         error: updateError,
         isPending: isUpdating,
         reset: resetUpdate,
-        mutate: updateAccountClassification,
-    } = useUpdateAccountClassification({ onSuccess, onError })
+        mutate: updatePaymentType,
+    } = useUpdatePaymentType({ onSuccess, onError })
 
     const onSubmit = form.handleSubmit((formData) => {
-        if (!userType) {
-            onError?.('User type is not defined')
-            return
-        }
-        if (accountClassificationId) {
-            updateAccountClassification({
-                accountClassificationId: accountClassificationId,
+        if (paymentTypeId) {
+            updatePaymentType({
+                paymentTypeId: paymentTypeId,
                 data: formData,
             })
         } else {
-            const requestData: IAccountClassificationRequest = {
+            const requestData: IPaymentTypeRequest = {
                 ...formData,
                 organization_id: organizationId,
                 branch_id: branchId,
             }
-            createAccountClassificationMutate(requestData)
+            createPaymentTypeMutate(requestData)
         }
     })
 
     const isPending = isCreating || isUpdating
     const error = createError || updateError
 
-    const isDisabled = (field: Path<AccountClassificationFormValues>) =>
+    const isDisabled = (field: Path<PaymentTypeFormValues>) =>
         readOnly || disabledFields?.includes(field) || isPending || false
 
-    const isAccountClassificationOnChanged =
+    const isPaymentTypeOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
 
     return (
@@ -127,12 +136,63 @@ const AccountClassificationCreateUpdateForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="name"
-                            label="Classification Name"
+                            label="Payment Type Name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    placeholder="e.g., Savings, Checking"
+                                    placeholder="e.g., Cash, Bank Transfer, Credit Card"
                                     disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="type"
+                            label="Payment Method Type"
+                            render={({ field }) => (
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                    disabled={isDisabled(field.name)}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="cash">
+                                            cash
+                                        </SelectItem>
+                                        <SelectItem value="check">
+                                            check
+                                        </SelectItem>
+                                        <SelectItem value="online">
+                                            online
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="number_of_days"
+                            label="Number of Days (Optional)"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    type="number"
+                                    placeholder="e.g., 30 (for credit terms)"
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(e) =>
+                                        field.onChange(
+                                            parseInt(e.target.value) ||
+                                                undefined
+                                        )
+                                    }
+                                    value={
+                                        field.value !== undefined
+                                            ? field.value
+                                            : ''
+                                    }
                                 />
                             )}
                         />
@@ -146,7 +206,7 @@ const AccountClassificationCreateUpdateForm = ({
                                     {...field}
                                     id={field.name}
                                     autoComplete="off"
-                                    placeholder="Optional description for the classification"
+                                    placeholder="Optional description for the payment type"
                                     className="max-h-40"
                                     disabled={isDisabled(field.name)}
                                 />
@@ -174,14 +234,12 @@ const AccountClassificationCreateUpdateForm = ({
                         <Button
                             size="sm"
                             type="submit"
-                            disabled={
-                                isPending || !isAccountClassificationOnChanged
-                            }
+                            disabled={isPending || !isPaymentTypeOnChanged}
                             className="w-full self-end px-8 sm:w-fit"
                         >
                             {isPending ? (
                                 <LoadingSpinner />
-                            ) : accountClassificationId ? (
+                            ) : paymentTypeId ? (
                                 'Update'
                             ) : (
                                 'Create'
@@ -194,14 +252,14 @@ const AccountClassificationCreateUpdateForm = ({
     )
 }
 
-export const AccountClassificationFormModal = ({
-    title = 'Create Account Classification',
-    description = 'Fill out the form to add a new account classification',
+export const PaymentTypeFormModal = ({
+    title = 'Create Payment Type',
+    description = 'Fill out the form to add a new payment type',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<AccountClassificationFormProps, 'className'>
+    formProps?: Omit<PaymentTypeFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -210,7 +268,7 @@ export const AccountClassificationFormModal = ({
             className={cn('', className)}
             {...props}
         >
-            <AccountClassificationCreateUpdateForm
+            <PaymentTypeCreateUpdateForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -221,4 +279,4 @@ export const AccountClassificationFormModal = ({
     )
 }
 
-export default AccountClassificationCreateUpdateForm
+export default PaymentTypeCreateUpdateForm

@@ -9,7 +9,7 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import FormFieldWrapper from '../ui/form-field-wrapper'
-import { useAuthUser } from '@/store/user-auth-store'
+import { useAuthUserWithOrg } from '@/store/user-auth-store'
 import { Input } from '../ui/input'
 import InputDatePicker from '../date-time-pickers/input-date-picker'
 import { Textarea } from '../ui/textarea'
@@ -50,14 +50,10 @@ export interface InvitationCodeFormProps
             InvitationCodeFormValues
         > {
     InvitationCodeId?: TEntityId
-    organizationId: TEntityId
-    branchId: TEntityId
 }
 
 const InvitationCodeCreateUpdateForm = ({
     InvitationCodeId,
-    branchId,
-    organizationId,
     readOnly,
     className,
     disabledFields,
@@ -65,6 +61,11 @@ const InvitationCodeCreateUpdateForm = ({
     onSuccess,
     defaultValues,
 }: InvitationCodeFormProps) => {
+    const { currentAuth: user } = useAuthUserWithOrg()
+    const userType = user.user_organization.user_type
+    const branchId = user.user_organization.branch_id
+    const organizationId = user.user_organization.organization_id
+
     const formDefaultValues: InvitationCodeFormValues = defaultValues
         ? {
               code: defaultValues.code || '',
@@ -90,8 +91,6 @@ const InvitationCodeCreateUpdateForm = ({
         defaultValues: formDefaultValues,
     })
 
-    const { currentAuth: user } = useAuthUser()
-
     const {
         mutate: createInvitationCode,
         isPending: isCreating,
@@ -106,9 +105,6 @@ const InvitationCodeCreateUpdateForm = ({
         reset: resetUpdate,
     } = useUpdateInvitationCode({ onSuccess, onError })
 
-    if (!user.user_organization?.user_type) return <>user not found</>
-    const userType = user.user_organization.user_type
-
     const onSubmit = form.handleSubmit((formData) => {
         if (!userType) {
             onError?.('User type is not defined')
@@ -117,6 +113,8 @@ const InvitationCodeCreateUpdateForm = ({
         const requestData = {
             ...formData,
             user_type: userType,
+            branchId: branchId,
+            organizationId: organizationId,
             expiration_date: formData.expiration_date.toISOString(),
         }
         if (InvitationCodeId) {
@@ -127,8 +125,6 @@ const InvitationCodeCreateUpdateForm = ({
         } else {
             createInvitationCode({
                 data: requestData,
-                organizationId,
-                branchId,
             })
         }
     })
@@ -282,12 +278,7 @@ export const InivationCodeFormModal = ({
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<
-        InvitationCodeFormProps,
-        'className' | 'organizationId' | 'branchId' | 'InvitationCodeId'
-    >
-    organizationId: TEntityId
-    branchId: TEntityId
+    formProps?: Omit<InvitationCodeFormProps, 'className' | 'InvitationCodeId'>
 }) => {
     return (
         <Modal
@@ -298,8 +289,6 @@ export const InivationCodeFormModal = ({
         >
             <InvitationCodeCreateUpdateForm
                 {...formProps}
-                branchId={props.branchId}
-                organizationId={props.organizationId}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
                     props.onOpenChange?.(false)

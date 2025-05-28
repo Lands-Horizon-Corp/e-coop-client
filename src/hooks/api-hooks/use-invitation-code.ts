@@ -37,15 +37,6 @@ export const useVerifyInvitationCode = (code: string) => {
     })
 }
 
-// export const useVerifyInvitationCode = (code: string) => {
-//     return createQueryHook<IInvitationCode, string>(
-//         ['invitation-code', 'verify'],
-//         () => InvitationCodeService.verifyInvitationCode(code),
-//         !!code,
-//         5000
-//     )
-// }
-
 export const useFilteredPaginatedInvitationCode = ({
     sort,
     enabled,
@@ -92,34 +83,21 @@ export const useCreateInvitationCode = createMutationHook<
     string,
     {
         data: IInvitationCodeRequest
-        organizationId: TEntityId
-        branchId: TEntityId
     }
 >(
-    (payload) =>
-        InvitationCodeService.createInvitationCode(
-            payload.data,
-            payload.organizationId,
-            payload.branchId
-        ),
+    (payload) => InvitationCodeService.createInvitationCode(payload.data),
     'New Invitation Code Created'
 )
 
-export const useDeleteInvitationCode = (
-    invitationCodeId: TEntityId,
-    organizationId: TEntityId,
-    branchId: TEntityId
-) => {
-    return createMutationHook<IInvitationCode, string, void>(
-        () =>
-            InvitationCodeService.deleteInvitationCode(
-                invitationCodeId,
-                organizationId,
-                branchId
-            ),
-        'Invitation Code Deleted'
-    )
-}
+export const useDeleteInvitationCode = createMutationHook<
+    IInvitationCode,
+    string,
+    TEntityId
+>(
+    (invitationCodeId) =>
+        InvitationCodeService.deleteInvitationCode(invitationCodeId),
+    'Invitation Code Deleted'
+)
 
 export const useUpdateInvitationCode = createMutationHook<
     IInvitationCode,

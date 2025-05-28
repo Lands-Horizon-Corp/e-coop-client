@@ -1,48 +1,48 @@
-import { useState } from 'react'
-
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
-import { InivationCodeFormModal } from '@/components/forms/inivitation-code-create-update.form'
+import { PaymentTypeFormModal } from '@/components/forms/payment-type-forms/payment-type-create-update-form'
 
+import { useDeletePaymentType } from '@/hooks/api-hooks/use-payment-type'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useDeleteInvitationCode } from '@/hooks/api-hooks/use-invitation-code'
 
-import { IInvitationTableActionComponentProp } from './columns'
+import { useState } from 'react'
+import { IPaymentTypeTableActionComponentProp } from './column'
 
-interface IInvitationCodeTableActionProps
-    extends IInvitationTableActionComponentProp {
-    onInvitationUpdate?: () => void
+interface IPaymentTypeActionProps extends IPaymentTypeTableActionComponentProp {
+    onPaymentTypeUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const InvitationCodeAction = ({
+const PaymentTypeAction = ({
     row,
     onDeleteSuccess,
-}: IInvitationCodeTableActionProps) => {
+}: IPaymentTypeActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
-    const invitationCode = row.original
     const { onOpen } = useConfirmModalStore()
 
-    const {
-        mutate: deleteInvitationCodeMutation,
-        isPending: isDeletingInvitationCode,
-    } = useDeleteInvitationCode()
+    const paymentType = row.original
+
+    const { mutate: deletePaymentType, isPending: isDeletingPaymentType } =
+        useDeletePaymentType({ onSuccess: onDeleteSuccess })
 
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                <InivationCodeFormModal
+                <PaymentTypeFormModal
                     className="!max-w-2xl"
                     onOpenChange={setUpdateModalForm}
                     open={updateModalForm}
-                    title="Edit Invitation Code"
-                    description="Update details for this invitation code."
+                    title="Edit Payment Type"
+                    description="Update details for this payment type."
                     titleClassName="font-bold"
                     formProps={{
+                        paymentTypeId: paymentType.id,
                         defaultValues: {
-                            ...invitationCode,
+                            name: paymentType.name,
+                            description: paymentType.description,
+                            number_of_days: paymentType.number_of_days,
+                            type: paymentType.type,
                         },
                         onSuccess: () => {
-                            onDeleteSuccess?.()
                             setUpdateModalForm(false)
                         },
                     }}
@@ -51,14 +51,13 @@ const InvitationCodeAction = ({
             <RowActionsGroup
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingInvitationCode,
+                    isAllowed: !isDeletingPaymentType,
                     onClick: () => {
                         onOpen({
-                            title: 'Delete Invitation Code',
+                            title: 'Delete Payment Type',
                             description:
-                                'Are you sure you want to delete this Invitation Code?',
-                            onConfirm: () =>
-                                deleteInvitationCodeMutation(invitationCode.id),
+                                'Are you sure you want to delete this Payment Type?',
+                            onConfirm: () => deletePaymentType(paymentType.id),
                         })
                     },
                 }}
@@ -73,4 +72,4 @@ const InvitationCodeAction = ({
     )
 }
 
-export default InvitationCodeAction
+export default PaymentTypeAction
