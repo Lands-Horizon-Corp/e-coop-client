@@ -31,7 +31,8 @@ export const updateBillsCoin = async (
 }
 
 export const getAllBillsCoins = async () => {
-    return await APIService.get<IBillsAndCoin[]>(`/bills-and-coins`)
+    const response = await APIService.get<IBillsAndCoin[]>(`/bills-and-coins`)
+    return response.data
 }
 
 export const deleteBillsAndCoin = async (id: TEntityId) => {

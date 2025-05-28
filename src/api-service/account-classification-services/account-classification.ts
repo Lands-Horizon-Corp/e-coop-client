@@ -52,19 +52,14 @@ export const getPaginatedAccountClassifications = async (props?: {
     return response.data
 }
 
-// POST /account-classification/organization/:organization_id/branch/:branch_id
+// POST /account-classification/account-classification-id
 export const createAccountClassification = async (
-    accountClassificationData: IAccountClassificationRequest,
-    organizationId: TEntityId,
-    branchId: TEntityId
+    accountClassificationData: IAccountClassificationRequest
 ) => {
     const response = await APIService.post<
         IAccountClassificationRequest,
         IAccountClassification
-    >(
-        `/account-classification/organization/${organizationId}/branch/${branchId}`,
-        accountClassificationData
-    )
+    >(`/account-classification`, accountClassificationData)
     return response.data
 }
 
@@ -80,14 +75,12 @@ export const updateAccountClassification = async (
     return response.data
 }
 
-// DELETE /account-classification/:account_classification_id/organization/:organization_id/branch/:branch_id
+// DELETE /account-classification/:account_classification_id
 export const deleteAccountClassification = async (
-    accountClassificationId: TEntityId,
-    organizationId: TEntityId,
-    branchId: TEntityId
+    accountClassificationId: TEntityId
 ) => {
     const response = await APIService.delete<void>(
-        `/account-classification/${accountClassificationId}/organization/${organizationId}/branch/${branchId}`
+        `/account-classification/${accountClassificationId}`
     )
     return response.data
 }

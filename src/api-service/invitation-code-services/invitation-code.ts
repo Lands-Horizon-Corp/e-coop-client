@@ -47,19 +47,14 @@ export const getPaginatedInvitationCode = async (props?: {
     return response.data
 }
 
-// POST /invitation-code/organization/:organization_id/branch/:branch_id
+// POST /invitation-code/invitation-code-id
 export const createInvitationCode = async (
-    InvitationCodeData: IInvitationCodeRequest,
-    organizationId: TEntityId,
-    branchId: TEntityId
+    InvitationCodeData: IInvitationCodeRequest
 ) => {
     const response = await APIService.post<
         IInvitationCodeRequest,
         IInvitationCode
-    >(
-        `/invitation-code/organization/${organizationId}/branch/${branchId}`,
-        InvitationCodeData
-    )
+    >(`/invitation-code`, InvitationCodeData)
     return response.data
 }
 
@@ -75,14 +70,10 @@ export const updateInvitationCode = async (
     return response.data
 }
 
-// DELETE /invitation-code/:invitation_code_id/organization/:organization_id/branch/:branch_id
-export const deleteInvitationCode = async (
-    inviationCodeId: TEntityId,
-    organizationId: TEntityId,
-    branchId: TEntityId
-) => {
+// DELETE /invitation-code/:invitation_code_id
+export const deleteInvitationCode = async (inviationCodeId: TEntityId) => {
     const response = await APIService.delete<IInvitationCode>(
-        ` /invitation-code/${inviationCodeId}/organization/${organizationId}/branch/${branchId}`
+        ` /invitation-code/${inviationCodeId}`
     )
     return response.data
 }

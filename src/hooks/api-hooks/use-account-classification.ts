@@ -1,4 +1,3 @@
-import { serverRequestErrExtractor } from '@/helpers'
 import { TEntityId } from '@/types'
 import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
 import {
@@ -6,11 +5,15 @@ import {
     IAccountClassification,
     IAccountClassificationRequest,
 } from '@/types/coop-types/account-classification'
+
+import { createMutationHook } from './api-hook-factory'
+import { AccountClassificationServices } from '@/api-service/account-classification-services'
+
+import { serverRequestErrExtractor } from '@/helpers'
+
 import { withCatchAsync, toBase64 } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { createMutationHook } from './api-hook-factory'
-import { AccountClassificationServices } from '@/api-service/account-classification-services'
 
 export const useFilteredPaginatedAccountClassification = ({
     sort,
@@ -64,18 +67,10 @@ export const useFilteredPaginatedAccountClassification = ({
 export const useCreateAccountClassification = createMutationHook<
     IAccountClassification,
     string,
-    {
-        organizationId: TEntityId
-        branchId: TEntityId
-        data: IAccountClassificationRequest
-    }
+    IAccountClassificationRequest
 >(
     (payload) =>
-        AccountClassificationServices.createAccountClassification(
-            payload.data,
-            payload.organizationId,
-            payload.branchId
-        ),
+        AccountClassificationServices.createAccountClassification(payload),
     'New Account Classification Created'
 )
 
@@ -98,17 +93,11 @@ export const useUpdateAccountClassification = createMutationHook<
 export const useDeleteAccountClassification = createMutationHook<
     void,
     string,
-    {
-        accountclassificationId: TEntityId
-        organizationId: TEntityId
-        branchId: TEntityId
-    }
+    TEntityId
 >(
-    (payload) =>
+    (accountclassificationId) =>
         AccountClassificationServices.deleteAccountClassification(
-            payload.accountclassificationId,
-            payload.organizationId,
-            payload.branchId
+            accountclassificationId
         ),
     'Account Classification Deleted'
 )

@@ -1,8 +1,7 @@
-import { IBranch } from '../coop-types'
 import { IUserBase } from '../auth/user'
 import { IOrganization } from './organization'
+import { IBranch, IPaginatedResult } from '../coop-types'
 import { TEntityId, IBaseEntityMeta, TUserType } from '../common'
-import { IPaginatedResponse } from '@/components/data-table/data-table-pagination/type'
 
 export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
     id: TEntityId
@@ -34,8 +33,9 @@ export interface UserOrganizationGroup {
     userOrganizationId: TEntityId
     organizationDetails: IOrganization
     branches: IBranch[]
+    userOrganization: IUserOrganization
     isPending: 'pending' | 'reported' | 'accepted' | 'ban'
 }
 
 export interface IUserOrganizationPaginated<TUser = IUserBase>
-    extends IPaginatedResponse<IUserOrganization<TUser>> {}
+    extends IPaginatedResult<IUserOrganization<TUser>> {}
