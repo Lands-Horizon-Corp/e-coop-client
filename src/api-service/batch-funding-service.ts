@@ -1,22 +1,56 @@
+import qs from 'query-string'
 import APIService from './api-service'
 
 import {
     TEntityId,
-    IIntraBatchFunding,
-    IIntraBatchFundingRequest,
+    IBatchFunding,
+    IBatchFundingRequest,
+    IBatchFundingPaginated,
 } from '@/types'
 
-export const createBatchFund = async (data: IIntraBatchFundingRequest) => {
-    const response = await APIService.post<
-        IIntraBatchFundingRequest,
-        IIntraBatchFunding
-    >('/batch-funding', data)
+export const createBatchFund = async (data: IBatchFundingRequest) => {
+    const response = await APIService.post<IBatchFundingRequest, IBatchFunding>(
+        '/batch-funding',
+        data
+    )
     return response.data
 }
 
-export const getTransactionBatchAllFund = async (id: TEntityId) => {
-    const response = await APIService.get<IIntraBatchFunding[]>(
+export const getAllTransactionBatchFund = async (id: TEntityId) => {
+    const response = await APIService.get<IBatchFunding[]>(
         `/batch-funding/transaction-batch/${id}`
     )
+    return response.data
+}
+
+export const getPaginatedBatchOnlineEntry = async ({
+    sort,
+    filters,
+    preloads,
+    pagination,
+    transactionBatchId,
+}: {
+    transactionBatchId: TEntityId
+} & {
+    sort?: string
+    filters?: string
+    preloads?: string[]
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `/batch-funding/transaction-batch/${transactionBatchId}/paginated`,
+            query: {
+                sort,
+                preloads,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IBatchFundingPaginated>(url)
     return response.data
 }

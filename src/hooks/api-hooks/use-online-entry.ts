@@ -8,7 +8,6 @@ import * as OnlineEntryService from '@/api-service/online-entry-service'
 import {
     TEntityId,
     IQueryProps,
-    ICheckEntryPaginated,
     IOnlineEntryPaginated,
     IAPIFilteredPaginatedHook,
 } from '@/types'
@@ -21,7 +20,7 @@ export const useFilteredBatchOnlineEntry = ({
     showMessage = true,
     transactionBatchId,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<ICheckEntryPaginated, string> &
+}: IAPIFilteredPaginatedHook<IOnlineEntryPaginated, string> &
     IQueryProps & {
         transactionBatchId: TEntityId
     }) => {
@@ -57,7 +56,7 @@ export const useFilteredBatchOnlineEntry = ({
         initialData: {
             data: [],
             pages: [],
-            totalSize: 0,
+            totalSize: 5,
             totalPage: 1,
             ...pagination,
         },

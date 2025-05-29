@@ -1,9 +1,9 @@
 import { TransBatchHistoryTabsContentProps } from '.'
-import BatchWithdrawalEntryTable from '@/components/tables/transaction-batch-history-tables/batch-withdrawal-entry-table'
+import BatchBatchFundingTable from '@/components/tables/transaction-batch-history-tables/batch-batch-funding-table'
 
 import { cn } from '@/lib'
 
-const BatchWithdrawalEntryHistory = ({
+const BatchFundingHistory = ({
     transactionBatchId,
     className,
 }: TransBatchHistoryTabsContentProps) => {
@@ -14,7 +14,7 @@ const BatchWithdrawalEntryHistory = ({
                 className
             )}
         >
-            <BatchWithdrawalEntryTable
+            <BatchBatchFundingTable
                 className="grow"
                 transactionBatchId={transactionBatchId}
             />
@@ -22,4 +22,4 @@ const BatchWithdrawalEntryHistory = ({
     )
 }
 
-export default BatchWithdrawalEntryHistory
+export default BatchFundingHistory

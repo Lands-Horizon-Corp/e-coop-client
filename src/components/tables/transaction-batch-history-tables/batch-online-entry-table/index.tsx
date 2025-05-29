@@ -24,8 +24,7 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useFilteredBatchOnlineEntry } from '@/hooks/api-hooks/use-online-entry'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '@/types'
-import { IOnlineEntry } from '@/types/coop-types/online-entry'
+import { TableProps, IOnlineEntry } from '@/types'
 
 export interface BatchOnlineEntryTableProps
     extends TableProps<IOnlineEntry>,
@@ -71,7 +70,7 @@ const BatchOnlineEntryTable = ({
         setIsScrollable,
         columnVisibility,
         setColumnVisibility,
-        rowSelectionState,
+        // rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IOnlineEntry>({
         defaultColumnOrder: columns.map((c) => c.id!),
@@ -107,7 +106,7 @@ const BatchOnlineEntryTable = ({
             sorting: tableSorting,
             pagination,
             columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
+            // rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
         rowCount: pageSize,

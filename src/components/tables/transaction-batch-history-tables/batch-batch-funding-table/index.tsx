@@ -11,9 +11,9 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import BatchCashEntryTableColumns, {
-    ICashEntryTableColumnProps,
-    cashEntryGlobalSearchTargets,
+import BatchFundingTableColumns, {
+    IBatchFundingTableColumnProps,
+    batchFundingGlobalSearchTargets,
 } from './columns'
 
 import { cn } from '@/lib'
@@ -21,17 +21,16 @@ import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useFilteredBatchCashEntry } from '@/hooks/api-hooks/use-cash-entry'
+import { useFilteredBatchFunding } from '@/hooks/api-hooks/use-batch-funding'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-// import { deleteManyCashEntry } from '@/api-service/cash-entry-service'
 
-import { TableProps, ICashEntry } from '@/types'
+import { TableProps, IBatchFunding } from '@/types'
 
-export interface BatchCashEntryTableProps
-    extends TableProps<ICashEntry>,
-        ICashEntryTableColumnProps {
+export interface BatchFundingTableProps
+    extends TableProps<IBatchFunding>,
+        IBatchFundingTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<ICashEntry>,
+        IDataTableToolbarProps<IBatchFunding>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -43,21 +42,21 @@ export interface BatchCashEntryTableProps
     transactionBatchId: string
 }
 
-const BatchCashEntryTable = ({
+const BatchBatchFundingTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
     transactionBatchId,
-}: BatchCashEntryTableProps) => {
+}: BatchFundingTableProps) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            BatchCashEntryTableColumns({
+            BatchFundingTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -73,7 +72,7 @@ const BatchCashEntryTable = ({
         setColumnVisibility,
         // rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<ICashEntry>({
+    } = useDataTableState<IBatchFunding>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -88,7 +87,7 @@ const BatchCashEntryTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredBatchCashEntry({
+    } = useFilteredBatchFunding({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -139,23 +138,13 @@ const BatchCashEntryTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: cashEntryGlobalSearchTargets,
+                        targets: batchFundingGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    // deleteActionProps={{
-                    //     onDeleteSuccess: () =>
-                    //         queryClient.invalidateQueries({
-                    //             queryKey: ['cash-entry', 'resource-query'],
-                    //         }),
-                    //     onDelete: (selectedData) =>
-                    //         deleteManyCashEntry(
-                    //             selectedData.map((data) => data.id)
-                    //         ),
-                    // }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
@@ -177,4 +166,4 @@ const BatchCashEntryTable = ({
     )
 }
 
-export default BatchCashEntryTable
+export default BatchBatchFundingTable

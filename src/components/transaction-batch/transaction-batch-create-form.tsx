@@ -22,7 +22,7 @@ import {
     IMedia,
     IClassProps,
     ITransactionBatchMinimal,
-    IIntraBatchFundingRequest,
+    IBatchFundingRequest,
 } from '@/types'
 import EmployeePicker from '../pickers/employee-picker'
 
@@ -43,7 +43,7 @@ type TTransactionBatchFormValues = z.infer<typeof transactionBatchSchema>
 export interface ITransactionBatchCreateFormProps
     extends IClassProps,
         IForm<
-            Partial<IIntraBatchFundingRequest>,
+            Partial<IBatchFundingRequest>,
             ITransactionBatchMinimal,
             string,
             TTransactionBatchFormValues

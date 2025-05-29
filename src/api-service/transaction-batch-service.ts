@@ -7,7 +7,7 @@ import {
     ITransactionBatchDepositInBankRequest,
 } from '@/types'
 
-import { IIntraBatchFundingRequest } from '@/types/coop-types/intra-batch-funding'
+import { IBatchFundingRequest } from '@/types/coop-types/batch-funding'
 
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
@@ -17,10 +17,10 @@ export const currentTransactionBatch = async () => {
 }
 
 export const createTransactionBatch = async (
-    data: Omit<IIntraBatchFundingRequest, 'transaction_batch_id'>
+    data: Omit<IBatchFundingRequest, 'transaction_batch_id'>
 ) => {
     const response = await APIService.post<
-        Omit<IIntraBatchFundingRequest, 'transaction_batch_id'>,
+        Omit<IBatchFundingRequest, 'transaction_batch_id'>,
         ITransactionBatchMinimal
     >('/trnsaction-batch', data)
     return response.data

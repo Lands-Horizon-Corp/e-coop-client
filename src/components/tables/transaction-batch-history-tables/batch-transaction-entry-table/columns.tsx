@@ -1,82 +1,51 @@
 import { ReactNode } from 'react'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { Checkbox } from '@/components/ui/checkbox'
-import { PushPinSlashIcon } from '@/components/icons'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import ImageNameDisplay from '@/components/elements/image-name-display'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
-import { toReadableDate } from '@/utils'
-import { ICashEntry } from '@/types/coop-types/cash-entry'
 
-export const cashEntryGlobalSearchTargets: IGlobalSearchTargets<ICashEntry>[] =
+import { formatNumber, toReadableDateTime } from '@/utils'
+
+import { ITransactionEntry } from '@/types'
+
+export const transactionEntryGlobalSearchTargets: IGlobalSearchTargets<ITransactionEntry>[] =
     [
         { field: 'reference_number', displayText: 'Reference Number' },
         { field: 'employee_user.username', displayText: 'Employee' },
     ]
 
-export interface ICashEntryTableActionComponentProp {
-    row: Row<ICashEntry>
+export interface ITransactionEntryTableActionComponentProp {
+    row: Row<ITransactionEntry>
 }
 
-export interface ICashEntryTableColumnProps {
-    actionComponent?: (props: ICashEntryTableActionComponentProp) => ReactNode
+export interface ITransactionEntryTableColumnProps {
+    actionComponent?: (
+        props: ITransactionEntryTableActionComponentProp
+    ) => ReactNode
 }
 
-const BatchCashEntryTableColumns = (
-    opts?: ICashEntryTableColumnProps
-): ColumnDef<ICashEntry>[] => [
-    {
-        id: 'select',
-        header: ({ table, column }) => (
-            <div className={'flex w-fit items-center gap-x-1 px-2'}>
-                <HeaderToggleSelect table={table} />
-                {!column.getIsPinned() && (
-                    <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
-                        className="mr-2 size-3.5 cursor-pointer"
-                    />
-                )}
-            </div>
-        ),
-        cell: ({ row }) => (
-            <div className="flex w-fit items-center gap-x-1 px-0">
-                {opts?.actionComponent?.({ row })}
-                <Checkbox
-                    aria-label="Select row"
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                />
-            </div>
-        ),
-        enableSorting: false,
-        enableResizing: false,
-        enableHiding: false,
-        size: 80,
-        minSize: 80,
-    },
+const BatchTransactionEntryTableColumns = (
+    _opts?: ITransactionEntryTableColumnProps
+): ColumnDef<ITransactionEntry>[] => [
     {
         id: 'reference_number',
         accessorKey: 'reference_number',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Reference #">
                 <ColumnActions {...props}>
-                    <TextFilter<ICashEntry>
+                    <TextFilter<ITransactionEntry>
                         displayText="Reference #"
                         field="reference_number"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
-            <span className="font-semibold">
-                {row.original.reference_number}
-            </span>
-        ),
+        cell: ({ row }) => <p>{row.original.reference_number}</p>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -90,18 +59,25 @@ const BatchCashEntryTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Employee">
                 <ColumnActions {...props}>
-                    <TextFilter<ICashEntry>
+                    <TextFilter<ITransactionEntry>
                         displayText="Employee"
                         field="employee_user.username"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
+        cell: ({
+            row: {
+                original: { employee_user },
+            },
+        }) => (
             <span>
-                {row.original.employee_user?.user_name ||
-                    row.original.employee_user_id ||
-                    '-'}
+                {employee_user && (
+                    <ImageNameDisplay
+                        name={employee_user?.full_name}
+                        src={employee_user?.media?.download_url}
+                    />
+                )}
             </span>
         ),
         enableMultiSort: true,
@@ -117,7 +93,7 @@ const BatchCashEntryTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Debit">
                 <ColumnActions {...props}>
-                    <NumberFilter<ICashEntry>
+                    <NumberFilter<ITransactionEntry>
                         displayText="Debit"
                         field="debit"
                     />
@@ -125,11 +101,7 @@ const BatchCashEntryTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row }) => (
-            <span>
-                {row.original.debit?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                })}
-            </span>
+            <p className="text-right">{formatNumber(row.original.debit, 2)}</p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -144,7 +116,7 @@ const BatchCashEntryTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Credit">
                 <ColumnActions {...props}>
-                    <NumberFilter<ICashEntry>
+                    <NumberFilter<ITransactionEntry>
                         displayText="Credit"
                         field="credit"
                     />
@@ -152,11 +124,7 @@ const BatchCashEntryTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row }) => (
-            <span>
-                {row.original.credit?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                })}
-            </span>
+            <p className="text-right">{formatNumber(row.original.credit, 2)}</p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -171,7 +139,7 @@ const BatchCashEntryTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Date Created">
                 <ColumnActions {...props}>
-                    <DateFilter<ICashEntry>
+                    <DateFilter<ITransactionEntry>
                         displayText="Date Created"
                         field="created_at"
                     />
@@ -181,7 +149,7 @@ const BatchCashEntryTableColumns = (
         cell: ({ row }) => (
             <span>
                 {row.original.created_at
-                    ? toReadableDate(row.original.created_at)
+                    ? toReadableDateTime(row.original.created_at)
                     : '-'}
             </span>
         ),
@@ -194,4 +162,4 @@ const BatchCashEntryTableColumns = (
     },
 ]
 
-export default BatchCashEntryTableColumns
+export default BatchTransactionEntryTableColumns

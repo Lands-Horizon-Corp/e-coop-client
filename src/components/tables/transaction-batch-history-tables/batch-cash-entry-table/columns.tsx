@@ -10,8 +10,9 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 // import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
-import { toReadableDate } from '@/utils'
+import { formatNumber, toReadableDate } from '@/utils'
 import { ICashEntry } from '@/types/coop-types/cash-entry'
+import ImageNameDisplay from '@/components/elements/image-name-display'
 
 export const cashEntryGlobalSearchTargets: IGlobalSearchTargets<ICashEntry>[] =
     [
@@ -43,11 +44,7 @@ const BatchCashEntryTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
-            <span className="font-semibold">
-                {row.original.reference_number}
-            </span>
-        ),
+        cell: ({ row }) => <span>{row.original.reference_number}</span>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -68,19 +65,92 @@ const BatchCashEntryTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
+        cell: ({
+            row: {
+                original: { employee_user },
+            },
+        }) => (
             <span>
-                {row.original.employee_user?.user_name ||
-                    row.original.employee_user_id ||
-                    '-'}
+                <ImageNameDisplay
+                    name={employee_user?.full_name}
+                    src={employee_user?.media?.download_url}
+                />
             </span>
         ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
-        size: 140,
-        minSize: 100,
+        size: 200,
+        minSize: 200,
+    },
+    {
+        id: 'member_profile.full_name',
+        accessorKey: 'member_profile.full_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Member Profile">
+                <ColumnActions {...props}>
+                    <TextFilter<ICashEntry>
+                        displayText="Member Profile"
+                        field="member_profile.full_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { member_profile },
+            },
+        }) => (
+            <span>
+                {member_profile && (
+                    <ImageNameDisplay
+                        name={member_profile?.full_name}
+                        src={member_profile?.media?.download_url}
+                    />
+                )}
+            </span>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 250,
+        minSize: 250,
+    },
+    {
+        id: 'member_joint_account.full_name',
+        accessorKey: 'member_joint_account.full_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Joint Account">
+                <ColumnActions {...props}>
+                    <TextFilter<ICashEntry>
+                        displayText="Joint Account"
+                        field="member_joint_account.full_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { member_joint_account },
+            },
+        }) => (
+            <span>
+                {member_joint_account && (
+                    <ImageNameDisplay
+                        name={member_joint_account?.full_name}
+                        src={member_joint_account?.picture_media.download_url}
+                    />
+                )}
+            </span>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 250,
+        minSize: 250,
     },
     {
         id: 'debit',
@@ -96,11 +166,7 @@ const BatchCashEntryTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row }) => (
-            <span>
-                {row.original.debit?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                })}
-            </span>
+            <p className="text-right">{formatNumber(row.original.debit, 2)}</p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -123,11 +189,7 @@ const BatchCashEntryTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row }) => (
-            <span>
-                {row.original.credit?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                })}
-            </span>
+            <p className="text-right">{formatNumber(row.original.credit, 2)}</p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -140,7 +202,7 @@ const BatchCashEntryTableColumns = (
         id: 'created_at',
         accessorKey: 'created_at',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
+            <DataTableColumnHeader {...props} title="Date">
                 <ColumnActions {...props}>
                     <DateFilter<ICashEntry>
                         displayText="Date Created"
@@ -152,7 +214,10 @@ const BatchCashEntryTableColumns = (
         cell: ({ row }) => (
             <span>
                 {row.original.created_at
-                    ? toReadableDate(row.original.created_at)
+                    ? toReadableDate(
+                          row.original.created_at,
+                          "MMM dd yyyy 'at' hh:mm a"
+                      )
                     : '-'}
             </span>
         ),

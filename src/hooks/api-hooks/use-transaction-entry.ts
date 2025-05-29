@@ -3,16 +3,16 @@ import { useQuery } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as DepositEntryService from '@/api-service/deposit-entry-service'
+import * as TransactionEntryService from '@/api-service/transaction-entry-service'
 
 import {
     TEntityId,
     IQueryProps,
-    IDepositEntryPaginated,
     IAPIFilteredPaginatedHook,
+    ITransactionEntryPaginated,
 } from '@/types'
 
-export const useFilteredBatchDepositEntry = ({
+export const useFilteredBatchTransactionEntry = ({
     sort,
     enabled,
     filterPayload,
@@ -20,13 +20,13 @@ export const useFilteredBatchDepositEntry = ({
     showMessage = true,
     transactionBatchId,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IDepositEntryPaginated, string> &
+}: IAPIFilteredPaginatedHook<ITransactionEntryPaginated, string> &
     IQueryProps & {
         transactionBatchId: TEntityId
     }) => {
-    return useQuery<IDepositEntryPaginated, string>({
+    return useQuery<ITransactionEntryPaginated, string>({
         queryKey: [
-            'deposit-entry',
+            'transaction-entry',
             'transaction-batch',
             transactionBatchId,
             'resource-query',
@@ -36,7 +36,7 @@ export const useFilteredBatchDepositEntry = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                DepositEntryService.getPaginatedBatchDepositEntry({
+                TransactionEntryService.getPaginatedBatchTransactionEntry({
                     preloads,
                     pagination,
                     transactionBatchId,

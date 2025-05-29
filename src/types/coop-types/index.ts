@@ -57,7 +57,7 @@ export * from './paginated-result'
 export * from './online-remittance'
 export * from './transaction-batch'
 export * from '../qr/qr-crypto-type'
-export * from './intra-batch-funding'
+export * from './batch-funding'
 
 /* Entries */
 export * from './cash-entry'

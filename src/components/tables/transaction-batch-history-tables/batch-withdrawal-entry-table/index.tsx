@@ -24,8 +24,7 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useFilteredBatchWithdrawalEntry } from '@/hooks/api-hooks/use-withdrawal-entry'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '@/types'
-import { IWithdrawalEntry } from '@/types/coop-types/withdrawal-entry'
+import { TableProps, IWithdrawalEntry } from '@/types'
 
 export interface BatchWithdrawalEntryTableProps
     extends TableProps<IWithdrawalEntry>,
@@ -71,7 +70,7 @@ const BatchWithdrawalEntryTable = ({
         setIsScrollable,
         columnVisibility,
         setColumnVisibility,
-        rowSelectionState,
+        // rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IWithdrawalEntry>({
         defaultColumnOrder: columns.map((c) => c.id!),
@@ -107,7 +106,7 @@ const BatchWithdrawalEntryTable = ({
             sorting: tableSorting,
             pagination,
             columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
+            // rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
         rowCount: pageSize,

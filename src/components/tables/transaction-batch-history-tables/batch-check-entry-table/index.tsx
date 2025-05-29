@@ -24,8 +24,7 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useFilteredBatchCheckEntry } from '@/hooks/api-hooks/use-check-entry'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 
-import { TableProps } from '@/types'
-import { ICheckEntry } from '@/types/coop-types/check-entry'
+import { TableProps, ICheckEntry } from '@/types'
 
 export interface BatchCheckEntryTableProps
     extends TableProps<ICheckEntry>,
@@ -71,7 +70,7 @@ const BatchCheckEntryTable = ({
         setIsScrollable,
         columnVisibility,
         setColumnVisibility,
-        rowSelectionState,
+        // rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<ICheckEntry>({
         defaultColumnOrder: columns.map((c) => c.id!),
@@ -107,7 +106,7 @@ const BatchCheckEntryTable = ({
             sorting: tableSorting,
             pagination,
             columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
+            // rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
         rowCount: pageSize,

@@ -257,8 +257,9 @@ import {
     GiWallet as WalletIcon,
     GiVillage as VillageIcon,
     GiTakeMyMoney as MoneyIcon,
-    GiWoodenSign as WoodSignsIcon,
     GiTreeBranch as BranchIcon,
+    GiWoodenSign as WoodSignsIcon,
+    GiMoneyStack as MoneyStackIcon,
 } from 'react-icons/gi'
 
 import {
@@ -394,6 +395,7 @@ export {
     IoIosCodeIcon,
     WoodSignsIcon,
     TelephoneIcon,
+    MoneyStackIcon,
     MoneyCheckIcon,
     FolderFillIcon,
     ArrowRightIcon,

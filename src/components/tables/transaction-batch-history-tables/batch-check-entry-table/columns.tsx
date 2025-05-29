@@ -10,8 +10,9 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 // import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
-import { toReadableDate } from '@/utils'
+import { formatNumber, toReadableDate } from '@/utils'
 import { ICheckEntry } from '@/types/coop-types/check-entry'
+import ImageNameDisplay from '@/components/elements/image-name-display'
 
 export const checkEntryGlobalSearchTargets: IGlobalSearchTargets<ICheckEntry>[] =
     [
@@ -31,6 +32,31 @@ export interface ICheckEntryTableColumnProps {
 const BatchCheckEntryTableColumns = (
     _opts?: ICheckEntryTableColumnProps
 ): ColumnDef<ICheckEntry>[] => [
+    {
+        id: 'check_number',
+        accessorKey: 'check_number',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Check">
+                <ColumnActions {...props}>
+                    <TextFilter<ICheckEntry>
+                        displayText="Check"
+                        field="check_number"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { check_number },
+            },
+        }) => <p>{check_number}</p>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 260,
+        minSize: 200,
+    },
     {
         id: 'bank',
         accessorKey: 'bank.name',
@@ -52,29 +78,6 @@ const BatchCheckEntryTableColumns = (
         size: 140,
         minSize: 100,
     },
-    // {
-    //     id: 'reference_number',
-    //     accessorKey: 'reference_number',
-    //     header: (props) => (
-    //         <DataTableColumnHeader {...props} title="Reference #">
-    //             <ColumnActions {...props}>
-    //                 <TextFilter<ICheckEntry>
-    //                     displayText="Reference #"
-    //                     field="reference_number"
-    //                 />
-    //             </ColumnActions>
-    //         </DataTableColumnHeader>
-    //     ),
-    //     cell: ({ row }) => (
-    //         <span className="font-semibold">{row.original.}</span>
-    //     ),
-    //     enableMultiSort: true,
-    //     enableSorting: true,
-    //     enableResizing: true,
-    //     enableHiding: false,
-    //     size: 160,
-    //     minSize: 120,
-    // },
     {
         id: 'employee_user',
         accessorKey: 'employee_user.username',
@@ -88,11 +91,18 @@ const BatchCheckEntryTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
+        cell: ({
+            row: {
+                original: { employee_user },
+            },
+        }) => (
             <span>
-                {row.original.employee_user?.user_name ||
-                    row.original.employee_user_id ||
-                    '-'}
+                {employee_user && (
+                    <ImageNameDisplay
+                        name={employee_user?.full_name}
+                        src={employee_user?.media?.download_url}
+                    />
+                )}
             </span>
         ),
         enableMultiSort: true,
@@ -101,6 +111,72 @@ const BatchCheckEntryTableColumns = (
         enableHiding: false,
         size: 140,
         minSize: 100,
+    },
+    {
+        id: 'member_profile.full_name',
+        accessorKey: 'member_profile.full_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Member Profile">
+                <ColumnActions {...props}>
+                    <TextFilter<ICheckEntry>
+                        displayText="Member Profile"
+                        field="member_profile.full_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { member_profile },
+            },
+        }) => (
+            <span>
+                <ImageNameDisplay
+                    name={member_profile?.full_name}
+                    src={member_profile?.media?.download_url}
+                />
+            </span>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 250,
+        minSize: 250,
+    },
+    {
+        id: 'member_joint_account.full_name',
+        accessorKey: 'member_joint_account.full_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Joint Account">
+                <ColumnActions {...props}>
+                    <TextFilter<ICheckEntry>
+                        displayText="Joint Account"
+                        field="member_joint_account.full_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { member_joint_account },
+            },
+        }) => (
+            <span>
+                {member_joint_account && (
+                    <ImageNameDisplay
+                        name={member_joint_account?.full_name}
+                        src={member_joint_account?.picture_media.download_url}
+                    />
+                )}
+            </span>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 250,
+        minSize: 250,
     },
     {
         id: 'debit',
@@ -116,11 +192,7 @@ const BatchCheckEntryTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row }) => (
-            <span>
-                {row.original.debit?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                })}
-            </span>
+            <p className="text-right">{formatNumber(row.original.debit, 2)}</p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -143,11 +215,7 @@ const BatchCheckEntryTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row }) => (
-            <span>
-                {row.original.credit?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                })}
-            </span>
+            <p className="text-right">{formatNumber(row.original.credit, 2)}</p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -172,7 +240,10 @@ const BatchCheckEntryTableColumns = (
         cell: ({ row }) => (
             <span>
                 {row.original.check_date
-                    ? toReadableDate(row.original.check_date)
+                    ? toReadableDate(
+                          row.original.check_date,
+                          "MMM dd yyyy 'at' hh:mm a"
+                      )
                     : '-'}
             </span>
         ),
