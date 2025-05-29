@@ -56,7 +56,7 @@ export const useFilteredBatchCheckEntry = ({
         initialData: {
             data: [],
             pages: [],
-            totalSize: 0,
+            totalSize: 5,
             totalPage: 1,
             ...pagination,
         },

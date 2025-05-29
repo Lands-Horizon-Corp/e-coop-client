@@ -3,16 +3,16 @@ import { useQuery } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
+import { createMutationHook } from './api-hook-factory'
 import * as CheckRemittanceService from '@/api-service/check-remittance-service'
 
 import {
     IAPIHook,
+    TEntityId,
+    IQueryProps,
     ICheckRemittance,
     ICheckRemittanceRequest,
-    IQueryProps,
-    TEntityId,
 } from '@/types'
-import { createMutationHook } from './api-hook-factory'
 
 export const useCurrentBatchCheckRemittances = ({
     enabled,

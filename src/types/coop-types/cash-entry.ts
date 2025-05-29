@@ -1,9 +1,9 @@
 import { IUserBase } from '../auth'
+import { IPaginatedResult } from './paginated-result'
 import { IBaseEntityMeta, TEntityId } from '../common'
 import { IMemberProfile } from './member/member-profile'
 import { TTransactionBatchFullorMin } from './transaction-batch'
 import { IMemberJointAccount } from './member/member-joint-account'
-import { IPaginatedResult } from './paginated-result'
 
 export interface ICashEntry extends IBaseEntityMeta {
     id: TEntityId

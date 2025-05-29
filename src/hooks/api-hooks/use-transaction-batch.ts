@@ -1,3 +1,7 @@
+import { toast } from 'sonner'
+import { useQuery } from '@tanstack/react-query'
+
+import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import { createMutationHook } from './api-hook-factory'
 import * as TransactionBatchService from '@/api-service/transaction-batch-service'
@@ -7,14 +11,11 @@ import {
     TEntityId,
     IQueryProps,
     ITransactionBatch,
+    IBatchFundingRequest,
     ITransactionBatchMinimal,
-    IIntraBatchFundingRequest,
-    ITransactionBatchDepositInBankRequest,
     TTransactionBatchFullorMin,
+    ITransactionBatchDepositInBankRequest,
 } from '@/types'
-import { withCatchAsync } from '@/utils'
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 export const useCurrentTransactionBatch = ({
     enabled,
@@ -43,7 +44,7 @@ export const useCurrentTransactionBatch = ({
 export const useCreateTransactionBatch = createMutationHook<
     ITransactionBatchMinimal,
     string,
-    Omit<IIntraBatchFundingRequest, 'transaction_batch_id'>
+    Omit<IBatchFundingRequest, 'transaction_batch_id'>
 >((variables) => TransactionBatchService.createTransactionBatch(variables))
 
 export const useTransactionBatchRequestBlotterView = createMutationHook<
