@@ -3,16 +3,25 @@ import { useQuery } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as DepositEntryService from '@/api-service/deposit-entry-service'
+import { createMutationHook } from './api-hook-factory'
+import * as BatchFundingService from '@/api-service/batch-funding-service'
 
 import {
     TEntityId,
     IQueryProps,
-    IDepositEntryPaginated,
+    IBatchFunding,
+    IBatchFundingRequest,
+    IBatchFundingPaginated,
     IAPIFilteredPaginatedHook,
 } from '@/types'
 
-export const useFilteredBatchDepositEntry = ({
+export const useCreateBatchFunding = createMutationHook<
+    IBatchFunding,
+    string,
+    IBatchFundingRequest
+>((vars) => BatchFundingService.createBatchFund(vars), 'Added to batch fund')
+
+export const useFilteredBatchFunding = ({
     sort,
     enabled,
     filterPayload,
@@ -20,13 +29,13 @@ export const useFilteredBatchDepositEntry = ({
     showMessage = true,
     transactionBatchId,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IDepositEntryPaginated, string> &
+}: IAPIFilteredPaginatedHook<IBatchFundingPaginated, string> &
     IQueryProps & {
         transactionBatchId: TEntityId
     }) => {
-    return useQuery<IDepositEntryPaginated, string>({
+    return useQuery<IBatchFundingPaginated, string>({
         queryKey: [
-            'deposit-entry',
+            'batch-funding',
             'transaction-batch',
             transactionBatchId,
             'resource-query',
@@ -36,7 +45,7 @@ export const useFilteredBatchDepositEntry = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                DepositEntryService.getPaginatedBatchDepositEntry({
+                BatchFundingService.getPaginatedBatchOnlineEntry({
                     preloads,
                     pagination,
                     transactionBatchId,
@@ -56,7 +65,7 @@ export const useFilteredBatchDepositEntry = ({
         initialData: {
             data: [],
             pages: [],
-            totalSize: 5,
+            totalSize: 0,
             totalPage: 1,
             ...pagination,
         },

@@ -56,7 +56,7 @@ export const useFilteredBatchCashEntry = ({
         initialData: {
             data: [],
             pages: [],
-            totalSize: 0,
+            totalSize: 5,
             totalPage: 1,
             ...pagination,
         },

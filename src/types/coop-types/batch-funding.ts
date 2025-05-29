@@ -4,8 +4,9 @@ import { IUserBase } from '../auth'
 import { IOrganization } from '../lands-types'
 import { ITransactionBatch } from './transaction-batch'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult } from './paginated-result'
 
-export interface IIntraBatchFundingRequest {
+export interface IBatchFundingRequest {
     id?: TEntityId
 
     organization_id?: TEntityId
@@ -20,7 +21,7 @@ export interface IIntraBatchFundingRequest {
     description?: string
 }
 
-export interface IIntraBatchFunding extends ITimeStamps, IAuditable {
+export interface IBatchFunding extends ITimeStamps, IAuditable {
     id: TEntityId
 
     organization_id: TEntityId
@@ -42,3 +43,6 @@ export interface IIntraBatchFunding extends ITimeStamps, IAuditable {
     amount: number
     description?: string
 }
+
+export interface IBatchFundingPaginated
+    extends IPaginatedResult<IBatchFunding> {}

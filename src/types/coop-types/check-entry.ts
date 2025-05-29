@@ -38,6 +38,7 @@ export interface ICheckEntry extends IBaseEntityMeta {
     disbursement_transaction_id?: TEntityId | null
     // TODO: disbursement_transaction? : IDisbursementTransaction | null
 
+    check_number: string
     credit: number
     debit: number
     check_date: string
