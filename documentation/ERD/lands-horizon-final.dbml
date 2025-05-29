@@ -2680,7 +2680,7 @@ Ref: cash_count.transaction_batch_id > transaction_batch.id [delete:cascade, upd
 Ref: cash_count.employee_user_id > user.id [delete:cascade, update:cascade]
 
 // 🔑
-Table intra_batch_funding {
+Table batch_funding {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   organization_id varchar(50)
@@ -2708,11 +2708,11 @@ Table intra_batch_funding {
 
 }
 
-Ref: intra_batch_funding.organization_id > organization.id [delete: cascade, update: cascade]
-Ref: intra_batch_funding.branch_id > branch.id [delete:cascade, update:cascade]
-Ref: intra_batch_funding.signature_media_id - media.id [delete:cascade, update:cascade]
-Ref: intra_batch_funding.transaction_batch_id > transaction_batch.id [delete:cascade, update:cascade]
-Ref: intra_batch_funding.provided_by_user_id > user.id [delete:cascade, update:cascade]
+Ref: batch_funding.organization_id > organization.id [delete: cascade, update: cascade]
+Ref: batch_funding.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: batch_funding.signature_media_id - media.id [delete:cascade, update:cascade]
+Ref: batch_funding.transaction_batch_id > transaction_batch.id [delete:cascade, update:cascade]
+Ref: batch_funding.provided_by_user_id > user.id [delete:cascade, update:cascade]
 
 // eto na yung payment
 // 🔑
