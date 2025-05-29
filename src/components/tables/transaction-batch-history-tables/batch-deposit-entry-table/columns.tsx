@@ -1,13 +1,14 @@
 import { ReactNode } from 'react'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
+import ImageNameDisplay from '@/components/elements/image-name-display'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import { toReadableDate } from '@/utils'
+import { formatNumber, toReadableDateTime } from '@/utils'
 import { IDepositEntry } from '@/types/coop-types/deposit-entry'
 
 export const depositEntryGlobalSearchTargets: IGlobalSearchTargets<IDepositEntry>[] =
@@ -42,11 +43,7 @@ const BatchDepositEntryTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
-            <span className="font-semibold">
-                {row.original.reference_number}
-            </span>
-        ),
+        cell: ({ row }) => <p>{row.original.reference_number}</p>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -67,11 +64,18 @@ const BatchDepositEntryTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
+        cell: ({
+            row: {
+                original: { employee_user },
+            },
+        }) => (
             <span>
-                {row.original.employee_user?.user_name ||
-                    row.original.employee_user_id ||
-                    '-'}
+                {employee_user && (
+                    <ImageNameDisplay
+                        name={employee_user?.full_name}
+                        src={employee_user?.media?.download_url}
+                    />
+                )}
             </span>
         ),
         enableMultiSort: true,
@@ -80,6 +84,74 @@ const BatchDepositEntryTableColumns = (
         enableHiding: false,
         size: 140,
         minSize: 100,
+    },
+    {
+        id: 'member_profile.full_name',
+        accessorKey: 'member_profile.full_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Member Profile">
+                <ColumnActions {...props}>
+                    <TextFilter<IDepositEntry>
+                        displayText="Member Profile"
+                        field="member_profile.full_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { member_profile },
+            },
+        }) => (
+            <span>
+                {member_profile && (
+                    <ImageNameDisplay
+                        name={member_profile?.full_name}
+                        src={member_profile?.media?.download_url}
+                    />
+                )}
+            </span>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 250,
+        minSize: 250,
+    },
+    {
+        id: 'member_joint_account.full_name',
+        accessorKey: 'member_joint_account.full_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Joint Account">
+                <ColumnActions {...props}>
+                    <TextFilter<IDepositEntry>
+                        displayText="Joint Account"
+                        field="member_joint_account.full_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { member_joint_account },
+            },
+        }) => (
+            <span>
+                {member_joint_account && (
+                    <ImageNameDisplay
+                        name={member_joint_account?.full_name}
+                        src={member_joint_account?.picture_media?.download_url}
+                    />
+                )}
+            </span>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 250,
+        minSize: 250,
     },
     {
         id: 'amount',
@@ -94,13 +166,11 @@ const BatchDepositEntryTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => (
-            <span>
-                {row.original.amount?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                })}
-            </span>
-        ),
+        cell: ({
+            row: {
+                original: { amount },
+            },
+        }) => <p className="text-right">{formatNumber(amount, 2)}</p>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -112,10 +182,10 @@ const BatchDepositEntryTableColumns = (
         id: 'created_at',
         accessorKey: 'created_at',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
+            <DataTableColumnHeader {...props} title="Deposit Date">
                 <ColumnActions {...props}>
                     <DateFilter<IDepositEntry>
-                        displayText="Date Created"
+                        displayText="Deposit Date"
                         field="created_at"
                     />
                 </ColumnActions>
@@ -124,7 +194,7 @@ const BatchDepositEntryTableColumns = (
         cell: ({ row }) => (
             <span>
                 {row.original.created_at
-                    ? toReadableDate(row.original.created_at)
+                    ? toReadableDateTime(row.original.created_at)
                     : '-'}
             </span>
         ),

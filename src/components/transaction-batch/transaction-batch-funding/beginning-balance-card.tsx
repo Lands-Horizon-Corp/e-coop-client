@@ -5,7 +5,7 @@ import { Button } from '../../ui/button'
 import { cn } from '@/lib'
 
 import { IClassProps, TTransactionBatchFullorMin } from '@/types'
-import { BatchFundingCreateFormModal } from './batch-funding-create-form'
+import { BatchFundingCreateFormModal } from '../../forms/batch-funding-create-form'
 
 interface Props extends IClassProps {
     transactionBatch: TTransactionBatchFullorMin

@@ -2,25 +2,30 @@ import { ReactNode } from 'react'
 import { IconType } from 'react-icons/lib'
 
 import {
+    ReceiptIcon,
     MoneyBagIcon,
     MoneyCheckIcon,
+    MoneyStackIcon,
+    HandDepositIcon,
     HandWithdrawIcon,
     OnlinePaymentIcon,
-    HandDepositIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+import BatchFundingHistory from './batch-funding-history'
 import BatchCashEntryHistory from './batch-cash-entry-history'
 import BatchCheckEntryHistory from './batch-check-entry-history'
 import BatchOnlineEntryHistory from './batch-online-entry-history'
-import BatchWithdrawalEntryHistory from './batch-withdrawal-entry-history'
+import BatchDepositEntryHistory from './batch-deposit-entry-history'
 
 import { cn } from '@/lib'
 import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, TEntityId } from '@/types'
+import BatchWithdrawalEntryHistory from './batch-withdrwal-entry-history'
+import BatchTransactionEntryHistory from './batch-transaction-entry-history'
 
 export interface TransBatchHistoryTabsContentProps extends IClassProps {
     transactionBatchId: TEntityId
@@ -36,6 +41,12 @@ const HistoryTabs: {
         }
     ) => ReactNode
 }[] = [
+    {
+        value: 'batch-funding',
+        title: 'Batch Funding',
+        Icon: MoneyStackIcon,
+        Component: BatchFundingHistory,
+    },
     {
         value: 'cash-entries',
         title: 'Cash Entries',
@@ -64,7 +75,13 @@ const HistoryTabs: {
         value: 'deposit-entries',
         title: 'Deposit Entries',
         Icon: HandDepositIcon,
-        Component: BatchWithdrawalEntryHistory,
+        Component: BatchDepositEntryHistory,
+    },
+    {
+        value: 'transaction-entries',
+        title: 'Transaction Entries',
+        Icon: ReceiptIcon,
+        Component: BatchTransactionEntryHistory,
     },
 ]
 
@@ -86,11 +103,11 @@ const TransactionBatchHistories = ({
     )
 
     return (
-        <div className="flex min-h-[80vh] w-full max-w-full flex-1 flex-col gap-y-4 p-4">
+        <div className="flex min-h-[90vh] w-full max-w-full flex-1 flex-col gap-y-4 p-4">
             <Tabs
                 value={value}
                 className="flex-1 flex-col"
-                defaultValue="cash-entries"
+                defaultValue="batch-funding"
                 onValueChange={handleChange}
             >
                 <ScrollArea>

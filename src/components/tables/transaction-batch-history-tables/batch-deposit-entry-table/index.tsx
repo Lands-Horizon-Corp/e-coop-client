@@ -71,7 +71,7 @@ const BatchDepositEntryTable = ({
         setIsScrollable,
         columnVisibility,
         setColumnVisibility,
-        rowSelectionState,
+        // rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IDepositEntry>({
         defaultColumnOrder: columns.map((c) => c.id!),
@@ -107,7 +107,7 @@ const BatchDepositEntryTable = ({
             sorting: tableSorting,
             pagination,
             columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
+            // rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
         rowCount: pageSize,

@@ -16,15 +16,15 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 import { entityIdSchema } from '@/validations/common'
-import { useCreateBatchFunding } from '@/hooks/api-hooks/use-transaction-batch-funding'
+import { useCreateBatchFunding } from '@/hooks/api-hooks/use-batch-funding'
 
 import {
     IForm,
     IMedia,
     TEntityId,
     IClassProps,
-    IIntraBatchFunding,
-    IIntraBatchFundingRequest,
+    IBatchFunding,
+    IBatchFundingRequest,
 } from '@/types'
 
 const batchFundingSchema = z.object({
@@ -45,8 +45,8 @@ type TBatchFundingFormValues = z.infer<typeof batchFundingSchema>
 export interface IBatchFundingCreateFormProps
     extends IClassProps,
         IForm<
-            Partial<IIntraBatchFundingRequest>,
-            IIntraBatchFunding,
+            Partial<IBatchFundingRequest>,
+            IBatchFunding,
             string,
             TBatchFundingFormValues
         > {
