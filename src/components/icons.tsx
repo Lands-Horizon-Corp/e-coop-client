@@ -15,6 +15,7 @@ import {
     CiExport as ExportIcon,
     CiBarcode as BarcodeScanIcon,
     CiFilter as FunnelOutlineIcon,
+    CiGlobe as GlobeIcon,
 } from 'react-icons/ci'
 
 import {
@@ -136,6 +137,7 @@ import {
 
 import {
     MdOutlineDraw as DrawIcon,
+    MdOutlineScreenshotMonitor as MonitorIcon,
     MdOutlineEmail as EmailIcon,
     MdFamilyRestroom as FamilyIcon,
     MdRotateLeft as RotateLeftIcon,
@@ -200,6 +202,7 @@ import {
     IoFootstepsOutline as FootstepsIcon,
     IoReturnDownBackOutline as BackIcon,
     IoLocation as PinLocationIcon,
+    IoLanguage as LanguageIcon,
 } from 'react-icons/io5'
 
 import {
@@ -221,6 +224,7 @@ import {
     FaBookOpen as BookOpenIcon,
     FaCreditCard as CreditCardIcon,
     FaUserClock as UserClockFillIcon,
+    FaTabletAlt as TabletIcon,
 } from 'react-icons/fa'
 
 import {
@@ -251,6 +255,7 @@ import {
     FiCamera as CameraIcon,
     FiDownload as DownloadIcon,
     FiCodesandbox as CodeSandBox,
+    FiNavigation as NavigationIcon,
 } from 'react-icons/fi'
 
 import {
@@ -266,6 +271,7 @@ import {
     CgFacebook as FacebookIcon,
     CgDetailsLess as DetailsIcon,
     CgUnavailable as UnavailableIcon,
+    CgSmartphone as SmartphoneIcon,
 } from 'react-icons/cg'
 
 import { RxDotFilled as DotMediumIcon } from 'react-icons/rx'
@@ -295,6 +301,12 @@ import {
 import { TiBook as BookIcon } from 'react-icons/ti'
 
 export {
+    NavigationIcon,
+    LanguageIcon,
+    GlobeIcon,
+    TabletIcon,
+    SmartphoneIcon,
+    MonitorIcon,
     XIcon,
     MapIcon,
     CsvIcon,

@@ -1,7 +1,7 @@
 import z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-
+import { toast } from 'sonner'
 import {
     Form,
     FormControl,
@@ -34,6 +34,7 @@ const FeedbackForm = () => {
         feedbackType: '',
         email: '',
         description: '',
+        name: '',
     }
 
     const feedbackForm = useForm<TFeedBack>({
@@ -44,7 +45,11 @@ const FeedbackForm = () => {
     })
 
     const { mutate: sendFeedbackMessage, isPending } = useCreateFeedback({
-        onSuccess: () => feedbackForm.reset(),
+        onSuccess: (data) => {
+            toast.success(`Thank you ${data.name} for your feedback! :)`)
+            console.log(data)
+            feedbackForm.reset()
+        },
     })
 
     const handleFeedBackSubmit = (data: TFeedBack) => {
@@ -87,19 +92,22 @@ const FeedbackForm = () => {
                                             >
                                                 <SelectValue placeholder="Choose feedback type" />
                                             </SelectTrigger>
-                                            <SelectContent id="helo">
+                                            <SelectContent>
                                                 <SelectItem
+                                                    className='capitalize'
                                                     value={UpdateStatus.FEATURE}
                                                 >
                                                     {UpdateStatus.FEATURE}
                                                 </SelectItem>
                                                 <SelectItem
+                                                    className='capitalize'
                                                     value={UpdateStatus.BUG}
                                                 >
                                                     {UpdateStatus.BUG}
                                                 </SelectItem>
                                                 <SelectItem
                                                     value={UpdateStatus.GENERAL}
+                                                    className='capitalize'
                                                 >
                                                     {UpdateStatus.GENERAL}
                                                 </SelectItem>
@@ -126,6 +134,26 @@ const FeedbackForm = () => {
                                         content={field.value}
                                         onChange={field.onChange}
                                     ></TextEditor>
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        name="name"
+                        control={feedbackForm.control}
+                        render={({ field }) => (
+                            <FormItem className="">
+                                <FormLabel
+                                    htmlFor={field.name}
+                                    className="h-[24px] w-full text-[14px]"
+                                >
+                                    Name
+                                </FormLabel>
+                                <FormControl>
+                                    <Input
+                                        content={field.value}
+                                        onChange={field.onChange}
+                                    ></Input>
                                 </FormControl>
                             </FormItem>
                         )}
