@@ -11,9 +11,13 @@ import ConfirmModal from '@/components/modals/confirm-modal'
 import ConnectionProvider from '@/providers/connection-provider'
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
+import NotFoundPage from '@/components/elements/pages/not-found-page'
+import ErrorPage from '@/components/elements/pages/error-page'
 
 export const Route = createRootRoute({
     component: RootLayout,
+    errorComponent: ErrorPage,
+    notFoundComponent: NotFoundPage,
 })
 
 function RootLayout() {
@@ -45,13 +49,19 @@ function RootLayout() {
     return (
         <div className="relative">
             <Outlet />
-            <Toaster richColors theme="system" closeButton expand />
             <ConnectionProvider />
             <CookieConsent />
             <ImagePreviewModal />
             <ConfirmModal />
             <TanStackRouterDevtools />
             <ActionSecurityProvider />
+            <Toaster
+                className="z-50"
+                richColors
+                theme="system"
+                closeButton
+                expand
+            />
         </div>
     )
 }

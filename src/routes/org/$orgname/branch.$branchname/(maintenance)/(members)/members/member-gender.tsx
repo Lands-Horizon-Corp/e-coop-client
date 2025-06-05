@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import MemberGenderTable from '@/components/tables/member/member-genders-table'
 import { MemberGenderCreateUpdateFormModal } from '@/components/forms/member-forms/member-gender-create-update-form'
-import MemberGenderTableOwnerAction from '@/components/tables/member/member-genders-table/row-actions/member-gender-table-owner-action'
+import MemberGenderTableAction from '@/components/tables/member/member-genders-table/member-gender-table-owner-action'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
@@ -28,7 +28,7 @@ function RouteComponent() {
                     },
                 }}
                 actionComponent={(prop) => (
-                    <MemberGenderTableOwnerAction {...prop} />
+                    <MemberGenderTableAction {...prop} />
                 )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
