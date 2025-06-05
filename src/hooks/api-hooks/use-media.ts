@@ -16,7 +16,7 @@ export const useSinglePictureUpload = ({
 }: {
     onUploadProgressChange?: (progress: number) => void
     onUploadETAChange?: (eta: string) => void
-} & IOperationCallbacks<IMedia, string>) => {
+} & IOperationCallbacks<IMedia, string> = {}) => {
     return useMutation<IMedia, string, File>({
         mutationKey: ['upload-media-photo'],
         mutationFn: async (fileImage) => {

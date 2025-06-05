@@ -1,23 +1,38 @@
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
-import { IMedia } from './media'
+import {
+    IMedia,
+    IUserBase,
+    TEntityId,
+    IBaseEntityMeta,
+    IPaginatedResult,
+} from '@/types'
 
-export interface ITimeInRequest {
-    timeIn: Date
-    mediaIn: IMedia
+export interface ITimesheet extends IBaseEntityMeta {
+    user_id: TEntityId
+    user?: IUserBase
+
+    media_in_id?: TEntityId
+    media_in?: IMedia
+
+    media_out_id?: TEntityId
+    media_out?: IMedia
+
+    time_in: string
+    time_out?: string
 }
 
-export interface ITimeOutRequest {
-    timeOut: Date
-    mediaOut: IMedia
+export interface ITimesheetRequest {
+    id?: TEntityId
+    user_id?: TEntityId
+
+    media_in_id?: TEntityId
+    media_out_id?: TEntityId
+
+    time_in: string
+    time_out?: string
 }
 
-export interface ITimesheet extends ITimeStamps, IAuditable {
-    id: TEntityId
-    employeeId: number
-    timeIn: Date
-    timeOut?: Date
-    mediaInId?: number
-    mediaOutId?: number
-    mediaIn?: IMedia
-    mediaOut?: IMedia
+export interface ITimesheetInOutRequest {
+    media_id?: TEntityId
 }
+
+export interface IPaginatedTimesheet extends IPaginatedResult<ITimesheet> {}
