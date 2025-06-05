@@ -4,9 +4,11 @@ import { Separator } from '../ui/separator'
 import { EyeIcon, LayersSharpDotIcon } from '../icons'
 import BatchCheckRemitance from './remittance/check-remittance'
 import BatchOnlineRemitance from './remittance/online-remittance'
+import BeginningBalanceCard from './transaction-batch-funding-card'
 import TransactionBatchCashCount from './transaction-batch-cash-count'
 import DepositInBankCard from './deposit-in-bank/deposit-in-bank-card'
-import BeginningBalanceCard from './transaction-batch-funding/beginning-balance-card'
+import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
+import { TransactionBatchEndFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-end-form'
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
@@ -17,7 +19,6 @@ import {
     TTransactionBatchFullorMin,
 } from '@/types'
 import { useModalState } from '@/hooks/use-modal-state'
-import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
 
 interface Props extends IClassProps {
     transactionBatch: TTransactionBatchFullorMin
@@ -25,6 +26,7 @@ interface Props extends IClassProps {
 
 const TransactionBatch = ({ className, transactionBatch }: Props) => {
     const historyModal = useModalState()
+    const endModal = useModalState()
 
     return (
         <div
@@ -41,6 +43,7 @@ const TransactionBatch = ({ className, transactionBatch }: Props) => {
                     transactionBatchId: transactionBatch?.id,
                 }}
             />
+            <TransactionBatchEndFormModal {...endModal} />
             <div className="flex items-center justify-between">
                 <div className="flex items-start gap-x-2">
                     <LayersSharpDotIcon className="mt-1 inline text-primary" />{' '}
@@ -93,6 +96,7 @@ const TransactionBatch = ({ className, transactionBatch }: Props) => {
             <Button
                 size="sm"
                 hoverVariant="primary"
+                onClick={() => endModal.onOpenChange(true)}
                 className="shrink-0 rounded-xl dark:bg-secondary dark:text-secondary-foreground"
             >
                 End Batch

@@ -8,19 +8,19 @@ import {
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { OnlineRemittanceCreateUpdateFormModal } from '@/components/forms/remittance/online-remittance-create-update-form'
 
-import { useSubscribe } from '@/hooks/use-pubsub'
-import { useModalState } from '@/hooks/use-modal-state'
 import {
     useCurrentBatchOnlineRemittances,
     useDeleteOnlineRemittance,
 } from '@/hooks/api-hooks/use-online-remittance'
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useModalState } from '@/hooks/use-modal-state'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IOnlineRemitance, TEntityId } from '@/types'
-import useConfirmModalStore from '@/store/confirm-modal-store'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 type Props = {
     transactionBatchId: TEntityId
@@ -96,8 +96,6 @@ const BatchOnlineRemittance = ({ transactionBatchId }: Props) => {
                 <p>Online Remittance</p>
                 <Button
                     size="icon"
-                    variant="secondary"
-                    hoverVariant="primary"
                     className="size-fit p-1"
                     onClick={() => modalState.onOpenChange(true)}
                 >

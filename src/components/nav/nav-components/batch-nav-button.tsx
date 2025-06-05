@@ -1,8 +1,8 @@
-import TransactionBatch from '.'
-import { Button } from '../ui/button'
-import { LayersSharpDotIcon } from '../icons'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { TransactionBatchCreateFormModal } from './transaction-batch-create-form'
+import { Button } from '../../ui/button'
+import { LayersSharpDotIcon } from '../../icons'
+import TransactionBatch from '../../transaction-batch'
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
+import { TransactionBatchCreateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-create-form'
 
 // import { useAuthUser } from '@/store/user-auth-store'
 
@@ -24,11 +24,7 @@ const TransactionBatchNavButton = (_props: Props) => {
     } = useAuthUserWithOrgBranch<IEmployee>()
 
     const {
-        data: transactionBatch = {
-            id: '20a2f5a3-61ee-4dd3-b93d-252e819b66ce',
-            request_view: '2025-05-22T10:52:18.163Z',
-            can_view: true,
-        } as TTransactionBatchFullorMin,
+        data: transactionBatch,
         setData,
         reset,
     } = useTransactionBatchStore()
@@ -82,6 +78,7 @@ const TransactionBatchNavButton = (_props: Props) => {
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
+                    size="sm"
                     variant="secondary"
                     hoverVariant="primary"
                     className="group rounded-full text-foreground/70"

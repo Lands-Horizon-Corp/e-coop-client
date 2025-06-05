@@ -2,16 +2,17 @@ import z from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import TextEditor from '../text-editor'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import SignatureField from '../ui/signature-field'
+import TextEditor from '@/components/text-editor'
 import { Separator } from '@/components/ui/separator'
+import SignatureField from '@/components/ui/signature-field'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import EmployeePicker from '@/components/pickers/employee-picker'
 
 import { cn } from '@/lib/utils'
 import { entityIdSchema } from '@/validations/common'
@@ -21,10 +22,9 @@ import {
     IForm,
     IMedia,
     IClassProps,
-    ITransactionBatchMinimal,
     IBatchFundingRequest,
+    ITransactionBatchMinimal,
 } from '@/types'
-import EmployeePicker from '../pickers/employee-picker'
 
 const transactionBatchSchema = z.object({
     name: z.string().min(1, 'Name is required'),
