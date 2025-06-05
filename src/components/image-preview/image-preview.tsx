@@ -418,44 +418,49 @@ export const ImagePreviewActions = React.forwardRef<
     }
 )
 
-export const ImagePreviewPanel = forwardRef(
-    ({
-        Images,
-        focusIndex,
-        scrollToIndex,
-        scrollIntoView,
-    }: ImagePreviewPanelProps) => {
-        if (!Images.length) {
-            return (
-                <div className="flex h-fit w-full items-center justify-center p-5 text-gray-500">
-                    No images available
-                </div>
-            )
-        }
-
-        if (Images.length === 1) {
-            return null
-        }
-
+export const ImagePreviewPanel = forwardRef<
+    HTMLDivElement,
+    ImagePreviewPanelProps
+>(({ Images, focusIndex, scrollToIndex, scrollIntoView }, ref) => {
+    if (!Images || Images.length === 0) {
         return (
-            <div className="!z-10 flex items-center space-y-2 overflow-x-auto overflow-y-hidden border-r-[.5px] border-background/20 bg-black/10 p-10 backdrop-blur duration-100 ease-in-out dark:border-slate-400/20 dark:bg-black/70 lg:h-full lg:flex-col lg:overflow-y-auto">
-                {Images.map((data, index) => (
-                    <div
-                        onClick={() => scrollToIndex(index)}
-                        className={cn(
-                            `content:[''] relative flex aspect-square max-h-64 max-w-64 scroll-mb-4 scroll-mt-4 whitespace-nowrap bg-transparent ${focusIndex === index ? 'scale-105 duration-300 ease-in-out before:absolute before:-right-2.5 before:top-1/2 before:h-[40%] before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-primary' : 'border-none'}`
-                        )}
-                        key={index}
-                        ref={focusIndex === index ? scrollIntoView : null}
-                    >
-                        <img
-                            className="h-full w-full cursor-pointer overflow-hidden rounded-lg object-cover"
-                            src={data.url}
-                            alt={`Image ${index}`}
-                        />
-                    </div>
-                ))}
+            <div className="flex h-fit w-full items-center justify-center p-5 text-gray-500">
+                No images available
             </div>
         )
     }
-)
+
+    if (Images.length === 1) {
+        return null
+    }
+
+    return (
+        <div
+            ref={ref}
+            className="!z-10 flex items-center space-y-2 overflow-x-auto overflow-y-hidden border-r-[.5px] border-background/20 bg-black/10 p-10 backdrop-blur duration-100 ease-in-out dark:border-slate-400/20 dark:bg-black/70 lg:h-full lg:flex-col lg:overflow-y-auto"
+        >
+            {Images.map((data, index) => (
+                <div
+                    onClick={() => scrollToIndex(index)}
+                    className={cn(
+                        `content:[''] relative flex aspect-square max-h-64 max-w-64 scroll-mb-4 scroll-mt-4 whitespace-nowrap bg-transparent ${
+                            focusIndex === index
+                                ? 'scale-105 duration-300 ease-in-out before:absolute before:-right-2.5 before:top-1/2 before:h-[40%] before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-primary'
+                                : 'border-none'
+                        }`
+                    )}
+                    key={index}
+                    ref={focusIndex === index ? scrollIntoView : null}
+                >
+                    <img
+                        className="h-full w-full cursor-pointer overflow-hidden rounded-lg object-cover"
+                        src={data.url}
+                        alt={`Image ${index}`}
+                    />
+                </div>
+            ))}
+        </div>
+    )
+})
+
+ImagePreviewPanel.displayName = 'ImagePreviewPanel'
