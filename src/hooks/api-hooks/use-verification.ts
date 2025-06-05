@@ -24,7 +24,6 @@ export const useVerifyPassword = ({
                 throw errorMessage
             }
 
-            toast.success('Password verified successfully')
             onSuccess?.(data)
             return data
         },
