@@ -28,7 +28,10 @@ const UserNav = ({
         >
             <NavContainer className="pointer-events-auto">
                 <AppSidebarToggle />
-                <PageBreadCrumb homeUrl={homeUrl} className="hidden text-xs md:block" />
+                <PageBreadCrumb
+                    homeUrl={homeUrl}
+                    className="hidden text-xs md:block"
+                />
             </NavContainer>
             <NavContainer className="pointer-events-auto">
                 {user && <TransactionBatchNavButton />}

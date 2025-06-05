@@ -4,10 +4,20 @@ import {
     TEntityId,
     ITransactionBatch,
     ITransactionBatchMinimal,
+    TTransactionBatchFullorMin,
+    ITransactionBatchEndRequest,
+    ITransactionBatchSignatures,
     ITransactionBatchDepositInBankRequest,
 } from '@/types'
 
 import { IBatchFundingRequest } from '@/types/coop-types/batch-funding'
+
+export const getTransactionBatchById = async (id: TEntityId) => {
+    const response = await APIService.get<ITransactionBatch>(
+        `/transaction-batch/${id}`
+    )
+    return response.data
+}
 
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
@@ -41,5 +51,45 @@ export const setDepositInBank = async (
         ITransactionBatchDepositInBankRequest,
         ITransactionBatchMinimal | ITransactionBatch
     >(`/transaction-batch/${id}/deposit-in-bank`, data)
+    return response.data
+}
+
+export const endCurrentBatch = async (data: ITransactionBatchEndRequest) => {
+    const response = await APIService.put<
+        ITransactionBatchEndRequest,
+        TTransactionBatchFullorMin
+    >(`/transaction-batch/end-batch`, data)
+    return response.data
+}
+
+export const getAllTransactionBatchViewRequest = async () => {
+    const response = await APIService.get<ITransactionBatch[]>(
+        '/transaction-batch/view-requests'
+    )
+    return response.data
+}
+
+export const allowBlotterView = async (id: TEntityId) => {
+    const response = await APIService.put<void, ITransactionBatch>(
+        `/transaction-batch/${id}/view-accept`
+    )
+    return response.data
+}
+
+export const getAllEndedBatchViewRequest = async () => {
+    const response = await APIService.get<ITransactionBatch[]>(
+        '/transaction-batch/view-approval'
+    )
+    return response.data
+}
+
+export const updateEndedBatchApprovals = async (
+    id: TEntityId,
+    data: ITransactionBatchSignatures
+) => {
+    const response = await APIService.put<
+        ITransactionBatchSignatures,
+        ITransactionBatch
+    >(`/transaction-batch/${id}/view-accept`, data)
     return response.data
 }

@@ -5,32 +5,46 @@ import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import * as FootstepService from '@/api-service/footstep-service'
 
-import { IFilterPaginatedHookProps, IFootstepPaginated } from '@/types'
+import {
+    TEntityId,
+    IFootstepPaginated,
+    IFilterPaginatedHookProps,
+} from '@/types'
+
+export type TFootstepHookMode = 'me' | 'branch' | 'user-organization'
 
 export const useFilteredPaginatedFootsteps = ({
     sort,
+    mode,
+    user_org_id,
     filterPayload,
     preloads = [],
-    mode = 'self',
     pagination = { pageSize: 10, pageIndex: 1 },
-}: { mode?: 'team' | 'self' } & IFilterPaginatedHookProps) => {
+}: {
+    mode?: TFootstepHookMode
+} & { user_org_id?: TEntityId } & IFilterPaginatedHookProps) => {
     return useQuery<IFootstepPaginated, string>({
         queryKey: [
             'footstep',
             'resource-query',
             mode,
+            user_org_id,
             filterPayload,
             pagination,
             sort,
         ],
         queryFn: async () => {
-            let serviceFn = FootstepService.getFootsteps
+            let url: string = `me`
 
-            if (mode === 'team') serviceFn = FootstepService.getFootstepsTeam
-            else serviceFn = FootstepService.getFootsteps
+            if (mode == 'branch') {
+                url = 'branch'
+            } else if (mode == 'user-organization') {
+                url = `user-organization/${user_org_id}`
+            }
 
             const [error, result] = await withCatchAsync(
-                serviceFn({
+                FootstepService.getPaginatedFootsteps({
+                    url,
                     preloads,
                     pagination,
                     sort: sort && toBase64(sort),

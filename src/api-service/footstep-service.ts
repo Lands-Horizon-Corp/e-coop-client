@@ -5,69 +5,63 @@ import { downloadFile } from '../helpers'
 
 import { IFootstepPaginated, TEntityId } from '@/types'
 
-const BASE_ENDPOINT = '/footstep'
+export const exportAll = async (url: string) => {
+    return downloadFile(`/footstep/${url}`, 'all_footsteps_export.csv')
+}
 
-export const getFootstepById = async (
-    footstepId: TEntityId,
-    preloads: string[] = [
-        'Admin',
-        'Admin.Media',
-        'Employee',
-        'Employee.Media',
-        'Owner',
-        'Owner.Media',
-        'Member',
-        'Member.Media',
-    ]
-) => {
-    const url = qs.stringifyUrl(
+export const exportAllFiltered = async (props: {
+    url: string
+    sort?: string
+    filters?: string
+    preloads?: string[]
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const { url, filters, preloads, pagination, sort } = props || {}
+
+    const finalUrl = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/${footstepId}`,
-            query: { preloads },
+            url: `/footstep/${url}`,
+            query: {
+                sort,
+                preloads,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
         },
         { skipNull: true }
     )
-    return APIService.get<IFootstepPaginated>(url).then((res) => res.data)
+    return downloadFile(finalUrl, 'filtered_footsteps_export.csv')
 }
 
-export const exportAll = async () => {
-    const url = `${BASE_ENDPOINT}/export`
-    return downloadFile(url, 'all_footsteps_export.csv')
-}
-
-export const exportAllFiltered = async (filters?: string) => {
-    const filterQuery = filters ? `filter=${encodeURIComponent(filters)}` : ''
-    const url = `${BASE_ENDPOINT}/export-search${filterQuery ? `?${filterQuery}` : ''}`
-    return downloadFile(url, 'filtered_footsteps_export.csv')
-}
-
-export const exportSelected = async (ids: TEntityId[]) => {
+export const exportSelected = async (url: string, ids: TEntityId[]) => {
     if (ids.length === 0) {
         throw new Error('No footstep IDs provided for export.')
     }
 
-    const url = qs.stringifyUrl(
+    const finalUrl = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/export-selected?`,
+            url: `/footstep/${url}/export-selected?`,
             query: { ids },
         },
         { skipNull: true }
     )
 
-    return downloadFile(url, 'selected_footsteps_export.csv')
+    return downloadFile(finalUrl, 'selected_footsteps_export.csv')
 }
 
-export const getFootstepsTeam = async (props?: {
+export const getPaginatedFootsteps = async (props: {
+    url: string
     sort?: string
     filters?: string
     preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { url, filters, preloads, pagination, sort } = props || {}
 
-    const url = qs.stringifyUrl(
+    const finalUrl = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/team`,
+            url: `/footstep/${url}`,
             query: {
                 sort,
                 preloads,
@@ -79,30 +73,5 @@ export const getFootstepsTeam = async (props?: {
         { skipNull: true }
     )
 
-    return APIService.get<IFootstepPaginated>(url).then((res) => res.data)
-}
-
-export const getFootsteps = async (props?: {
-    sort?: string
-    filters?: string
-    preloads?: string[]
-    pagination?: { pageIndex: number; pageSize: number }
-}) => {
-    const { filters, preloads, pagination, sort } = props || {}
-
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}`,
-            query: {
-                sort,
-                preloads,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    return APIService.get<IFootstepPaginated>(url).then((res) => res.data)
+    return APIService.get<IFootstepPaginated>(finalUrl).then((res) => res.data)
 }

@@ -1,8 +1,8 @@
 import { IMedia } from './media'
-import { IUserBase } from '../auth'
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
-import { IOrganization } from '../lands-types'
 import { IBranch } from './branch'
+import { IUserBase } from '../auth'
+import { IOrganization } from '../lands-types'
+import { IAuditable, ITimeStamps, TEntityId } from '../common'
 
 export type TBatchBalanceStatus =
     | 'balanced'
@@ -87,6 +87,11 @@ export type TTransactionBatchFullorMin =
 
 // SIGNATURES
 export interface ITransactionBatchSignatures {
+    employee_by_signature_media_id?: TEntityId
+    employee_by_signature_media?: IMedia
+    employee_by_name?: string
+    employee_by_position?: string
+
     approved_by_signature_media_id?: TEntityId
     approved_by_signature_media?: IMedia
     approved_by_name?: string
@@ -135,4 +140,10 @@ export interface ITransactionBatchSignatures {
 
 export interface ITransactionBatchDepositInBankRequest {
     deposit_in_bank: number
+}
+
+export interface ITransactionBatchEndRequest {
+    employee_by_signature_media_id: TEntityId
+    employee_by_name: string
+    employee_by_position: string
 }
