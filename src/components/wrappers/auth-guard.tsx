@@ -2,12 +2,15 @@ import { ReactNode } from 'react'
 import { Navigate, useRouter } from '@tanstack/react-router'
 
 import {
+    RefreshIcon,
+    ArrowRightIcon,
     ShieldExclamationIcon,
     BadgeExclamationFillIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { FlickeringGrid } from '../elements/backgrounds/flickering-grid'
 
 import { useAuthStore } from '@/store/user-auth-store'
 
@@ -33,11 +36,39 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
         if (authStatus === 'error' && !currentAuth.user)
             return (
                 <div className="relative flex h-screen w-full flex-col items-center justify-center gap-y-4 text-muted-foreground">
-                    <ShieldExclamationIcon className="size-16" />
-                    <p>
+                    <ShieldExclamationIcon className="z-10 size-16" />
+                    <p className="z-10">
                         Sorry we cannot load your authorization, try refreshing
                         the page. If the error persist try again later.
                     </p>
+                    <div className="z-10 flex items-center gap-x-2">
+                        <Button
+                            variant="secondary"
+                            hoverVariant="primary"
+                            className="gap-x-2 rounded-full"
+                            onClick={() => location.reload()}
+                        >
+                            <RefreshIcon />
+                            Refresh
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            hoverVariant="primary"
+                            className="gap-x-2 rounded-full"
+                            onClick={() => router.navigate({ to: '/auth' })}
+                        >
+                            <ArrowRightIcon className="-rotate-45" />
+                            Go to Sign In
+                        </Button>
+                    </div>
+                    <FlickeringGrid
+                        gridGap={1}
+                        squareSize={64}
+                        color="#02BEAA"
+                        maxOpacity={0.5}
+                        flickerChance={0.05}
+                        className="absolute inset-0 z-0 opacity-80 [mask-image:radial-gradient(80vh_circle_at_center,white,transparent)] dark:opacity-20"
+                    />
                 </div>
             )
 
