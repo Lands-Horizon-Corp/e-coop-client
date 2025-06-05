@@ -49,6 +49,7 @@ import {
     LuChevronsUpDown as ChevronsUpDownIcon,
     LuHardDriveUpload as HardDriveUploadIcon,
     LuReplace as ReplaceIcon,
+    LuScale as WeightScaleIcon,
 } from 'react-icons/lu'
 
 import {
@@ -162,9 +163,13 @@ import {
     BsImage as Image2Icon,
     BsZoomIn as ZoomInIcon,
     BsZoomOut as ZoomOutIcon,
+    BsSignpost2Fill as SignPostIcon,
     BsCameraFill as CameraFillIcon,
+    BsUiChecksGrid as ChecksGridIcon,
     BsPatchCheck as VerifiedPatchIcon,
     BsFileEarmarkFill as FileFillIcon,
+    BsShieldLockFill as ShieldLockIcon,
+    BsShieldFillCheck as ShieldCheckIcon,
     BsPatchQuestion as BadgeQuestionIcon,
     BsFileEarmarkPdfFill as PDFFileFillIcon,
     BsFileEarmarkTextFill as TextFileFillIcon,
@@ -189,7 +194,6 @@ import {
 import {
     IoLayers as LayersIcon,
     IoReload as ReloadIcon,
-    IoRefresh as RefreshIcon,
     IoStorefront as StoreIcon,
     IoCloseOutline as CloseIcon,
     IoPrintOutline as PrinterIcon,
@@ -207,6 +211,7 @@ import {
 
 import {
     RxReset as ResetIcon,
+    RxReload as RefreshIcon,
     RxEyeNone as EyeNoneIcon,
     RxFontItalic as ToolbarItalicIcon,
     RxDotsVertical as DotsVerticalIcon,
@@ -228,6 +233,8 @@ import {
 } from 'react-icons/fa'
 
 import {
+    FaPlay as PlayIcon,
+    FaStop as StopIcon,
     FaIdCard as IdCardIcon,
     FaSchool as SchoolIcon,
     FaTreeCity as TreeCityIcon,
@@ -241,6 +248,7 @@ import {
     FaLandmarkFlag as LandmarkIcon,
     FaUserLock as UserLockIcon,
     FaMoneyCheck as MoneyCheckIcon,
+    FaBusinessTime as BriefCaseClockIcon,
 } from 'react-icons/fa6'
 
 import {
@@ -314,6 +322,8 @@ export {
     KeyIcon,
     DevIcon,
     EyeIcon,
+    StopIcon,
+    PlayIcon,
     NoteIcon,
     CopyIcon,
     BankIcon,
@@ -407,6 +417,8 @@ export {
     IoIosCodeIcon,
     WoodSignsIcon,
     TelephoneIcon,
+    ChecksGridIcon,
+    ShieldLockIcon,
     MoneyStackIcon,
     MoneyCheckIcon,
     FolderFillIcon,
@@ -428,6 +440,7 @@ export {
     CreditCardIcon,
     UserShieldIcon,
     WarningFillIcon,
+    ShieldCheckIcon,
     AddressCardIcon,
     ArrowUpDownIcon,
     ChevronLeftIcon,
@@ -489,6 +502,7 @@ export {
     FullscreenExitIcon,
     MessageOutlineIcon,
     HeartBreakFillIcon,
+    BriefCaseClockIcon,
     MagnifyingGlassIcon,
     SpreadSheetFileIcon,
     HardDriveUploadIcon,
@@ -530,4 +544,6 @@ export {
     CreditCardIcon2,
     BookIcon,
     FinanceReportsIcon,
+    WeightScaleIcon,
+    SignPostIcon,
 }

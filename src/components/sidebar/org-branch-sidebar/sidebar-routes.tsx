@@ -29,6 +29,7 @@ import {
     CreditCardIcon2,
     BookIcon,
     FinanceReportsIcon,
+    ChecksGridIcon,
     // NotificationIcon,
     // GraduationCapIcon,
     // BuildingBranchIcon,
@@ -197,6 +198,19 @@ export const generateSidebarGroups = (
             ],
         },
         {
+            title: 'Approval & Request',
+            userType: ['employee'],
+            navItems: [
+                {
+                    title: 'Approvals',
+                    url: `${baseUrl}/approvals`,
+                    icon: ChecksGridIcon,
+                    type: 'item',
+                    userType: ['employee'],
+                },
+            ],
+        },
+        {
             title: 'Employee',
             userType: ['employee'],
             navItems: [
@@ -207,13 +221,13 @@ export const generateSidebarGroups = (
                     type: 'item',
                     userType: ['employee'],
                 },
-                {
-                    title: 'Employee Footsteps',
-                    url: `${baseUrl}/employee-footstep`,
-                    icon: FootstepsIcon,
-                    type: 'item',
-                    userType: ['employee'],
-                },
+                // {
+                //     title: 'Employee Footsteps',
+                //     url: `${baseUrl}/employee-footstep`,
+                //     icon: FootstepsIcon,
+                //     type: 'item',
+                //     userType: ['employee'],
+                // },
                 {
                     title: 'Roles Management',
                     icon: ShieldIcon,
@@ -391,21 +405,28 @@ export const generateSidebarGroups = (
         },
         {
             title: 'Others',
-            userType: ['employee'],
+            userType: ['employee', 'member'],
             navItems: [
                 {
                     type: 'item',
-                    title: 'Footsteps',
+                    title: 'Users Footsteps',
                     icon: FootstepsIcon,
-                    url: `${baseUrl}/footsteps`,
-                    userType: ['employee'],
+                    url: `${baseUrl}/users-footsteps`,
+                    userType: ['owner', 'employee'],
+                },
+                {
+                    type: 'item',
+                    title: 'My Footsteps',
+                    icon: FootstepsIcon,
+                    url: `${baseUrl}/my-footsteps`,
+                    userType: ['employee', 'member', 'owner'],
                 },
                 {
                     type: 'item',
                     title: 'Settings',
                     icon: SettingsIcon,
                     url: `${baseUrl}/settings`,
-                    userType: ['employee'],
+                    userType: ['employee', 'member'],
                 },
             ],
         },

@@ -112,10 +112,7 @@ const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
                     <ActionTooltip side="left" tooltipContent="Change Camera">
                         <Button
                             variant="secondary"
-                            className={cn(
-                                'size-fit rounded-full p-2',
-                                className
-                            )}
+                            className={cn('size-fit rounded-full p-2')}
                         >
                             <CameraSelectIcon className="size-4" />
                         </Button>

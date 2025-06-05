@@ -79,7 +79,7 @@ const PageBreadCrumb = ({ className, homeUrl }: Props) => {
 
     return (
         <Breadcrumb className={cn('capitalize', className)}>
-            <BreadcrumbList>
+            <BreadcrumbList className="text-xs">
                 <PageNavigator />
                 {homeUrl && (
                     <>
