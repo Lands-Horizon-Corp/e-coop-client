@@ -48,3 +48,14 @@ export interface IVerifyEmailRequest {
 export interface IVerifyContactNumberRequest {
     otp: string
 }
+
+export interface ILoggedInUser {
+    accept_language: string
+    device_type: string
+    ip_address: string
+    language: string
+    latitude: number
+    location: string
+    longitude: number
+    user_agent: string
+}

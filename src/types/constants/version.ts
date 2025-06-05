@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 
 export enum UpdateStatus {
-    FEATURE = 'Feature',
-    BUG = 'Bug',
-    GENERAL = 'General',
+    FEATURE = 'feature',
+    BUG = 'bug',
+    GENERAL = 'general',
 }
 
 export interface SoftwareUpdates {
