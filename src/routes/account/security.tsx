@@ -13,7 +13,7 @@ function RouteComponent() {
     const { data: users } = useCurrentLoggedInUser({})
     return (
         <div>
-            <DevicesList devices={users ?? []}/>
+            <DevicesList devices={users ?? []} />
             <AccountSecurityForm />
         </div>
     )

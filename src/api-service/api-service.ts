@@ -10,8 +10,6 @@ import { API_URL } from '@/constants/envs'
 import { IRequestParams } from '@/types'
 
 export default class APIService {
-
-    
     private static httpClient: AxiosInstance = axios.create({
         baseURL: APIService.getDefaultUrl(),
         headers: {

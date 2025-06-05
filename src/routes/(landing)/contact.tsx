@@ -56,7 +56,9 @@ const ContactPage = () => {
 
     const { mutate: sendContactMessage, isPending } = useCreateContactUs({
         onSuccess: (data) => {
-            toast.success(`Thank you ${data.first_name} ${data.last_name}. Expect a call or email for us personally :)`)
+            toast.success(
+                `Thank you ${data.first_name} ${data.last_name}. Expect a call or email for us personally :)`
+            )
             startCooldown()
             form.reset()
         },
