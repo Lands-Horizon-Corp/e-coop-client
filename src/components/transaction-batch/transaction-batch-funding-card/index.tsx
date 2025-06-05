@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { PlusIcon } from '../../icons'
 import { Button } from '../../ui/button'
+import { BatchFundingCreateFormModal } from '../../forms/batch-funding-create-form'
 
 import { cn } from '@/lib'
 
 import { IClassProps, TTransactionBatchFullorMin } from '@/types'
-import { BatchFundingCreateFormModal } from '../../forms/batch-funding-create-form'
 
 interface Props extends IClassProps {
     transactionBatch: TTransactionBatchFullorMin

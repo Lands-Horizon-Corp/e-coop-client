@@ -1,15 +1,17 @@
-import { EyeNoneIcon } from '../icons'
+import { Button } from '@/components/ui/button'
+import { EyeNoneIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+
+import { toReadableDate } from '@/utils'
+import useActionSecurityStore from '@/store/action-security-store'
+import { useTransactionBatchRequestBlotterView } from '@/hooks/api-hooks/use-transaction-batch'
 
 import {
     IClassProps,
     ITransactionBatch,
     ITransactionBatchMinimal,
 } from '@/types'
-import { Button } from '@/components/ui/button'
-import { useTransactionBatchRequestBlotterView } from '@/hooks/api-hooks/use-transaction-batch'
-import LoadingSpinner from '../spinners/loading-spinner'
-import useActionSecurityStore from '@/store/action-security-store'
-import { toReadableDate } from '@/utils'
+import { BatchBlotterSummaryView } from './batch-blotter-summary'
 
 interface Props extends IClassProps {
     transactionBatch: ITransactionBatch
@@ -21,7 +23,6 @@ const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
         useTransactionBatchRequestBlotterView({ onSuccess: onBatchUpdate })
 
     const { onOpenSecurityAction } = useActionSecurityStore()
-
     return (
         <div className="relative flex-1 rounded-2xl border bg-background p-4">
             {!transactionBatch?.can_view ? (
@@ -79,116 +80,7 @@ const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
                     )}
                 </div>
             ) : (
-                <div className="space-y-2">
-                    <p className="text-center font-medium">
-                        Transaction Batch Summary (Blotter)
-                    </p>
-                    <div className="w-full space-y-2">
-                        <p>Collection</p>
-                        <div className="rounded-xl bg-accent">
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    OR Collection
-                                </p>
-                                <p>1,400</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Deposit Entry
-                                </p>
-                                <p>5,800</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Teller Beginning Balance
-                                </p>
-                                <p>100</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full space-y-2">
-                        <p>Less (Disbursements)</p>
-                        <div className="rounded-xl bg-accent">
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Savings Withdrawal
-                                </p>
-                                <p>8000</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Time Dep. Withdrawal
-                                </p>
-                                <p>3,800</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Loan Releases
-                                </p>
-                                <p>15,000</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Petty Cash
-                                </p>
-                                <p>850</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Commercial Check
-                                </p>
-                                <p>4,000</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Transfer RF
-                                </p>
-                                <p>100</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full space-y-2">
-                        <p>Summary</p>
-                        <div className="rounded-xl bg-accent">
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Total Supposed Remittance
-                                </p>
-                                <p>4,000</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Total Cash on Hand
-                                </p>
-                                <p>30,000</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Total Check Remitance
-                                </p>
-                                <p>15,000</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Total Deposit in Bank
-                                </p>
-                                <p>850</p>
-                            </div>
-                            <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                                <p className="text-muted-foreground">
-                                    Total Actual Remittance
-                                </p>
-                                <p>4,000</p>
-                            </div>
-                        </div>
-                        <div className="flex justify-between rounded-xl bg-accent p-4 text-primary">
-                            <p className="">Balanced</p>
-                            <p className="">0.00</p>
-                        </div>
-                    </div>
-                </div>
+                <BatchBlotterSummaryView transBatch={transactionBatch} />
             )}
         </div>
     )
