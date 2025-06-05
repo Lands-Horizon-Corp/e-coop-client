@@ -102,7 +102,6 @@ export const useCurrentLoggedInUser = ({
     })
 }
 
-
 export const useCurrentLoggedInUserLogout = ({
     onError,
     onSuccess,
@@ -112,7 +111,9 @@ export const useCurrentLoggedInUserLogout = ({
     return useMutation<void, string>({
         mutationKey: ['auth', 'signout', 'current-logged-in-user'],
         mutationFn: async () => {
-            const [error] = await withCatchAsync(AuthService.signOutLoggedInUsers())
+            const [error] = await withCatchAsync(
+                AuthService.signOutLoggedInUsers()
+            )
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -131,9 +132,6 @@ export const useCurrentLoggedInUserLogout = ({
         },
     })
 }
-
-
-
 
 // Sign In
 export const useSignIn = ({

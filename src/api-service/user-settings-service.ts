@@ -8,7 +8,6 @@ import {
     IUserSettingsPhotoUpdateRequest,
 } from '@/types'
 
-
 export const updateUserSettingsGeneral = async (
     data: IUserSettingsGeneralRequest
 ) => {

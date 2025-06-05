@@ -4,6 +4,8 @@ import {
     IBranch,
     IUserBase,
     IAuthContext,
+    IVerification,
+    ILoggedInUser,
     IOrganization,
     ISignUpRequest,
     ISignInRequest,
@@ -12,10 +14,7 @@ import {
     IChangePasswordRequest,
     IVerifyContactNumberRequest,
     IVerificationPasswordRequest,
-    IVerification,
-    ILoggedInUser,
 } from '@/types'
-
 
 export const currentAuth = async () => {
     const endpoint = `/authentication/current`
@@ -68,7 +67,6 @@ export const signOutLoggedInUsers = async () => {
     const endpoint = `/authentication/current-logged-in-accounts/logout`
     return await APIService.post(endpoint)
 }
-
 
 // SENDS OTP
 export const forgotPassword = async (data: IForgotPasswordRequest) => {

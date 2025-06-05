@@ -47,7 +47,6 @@ const FeedbackForm = () => {
     const { mutate: sendFeedbackMessage, isPending } = useCreateFeedback({
         onSuccess: (data) => {
             toast.success(`Thank you ${data.name} for your feedback! :)`)
-            console.log(data)
             feedbackForm.reset()
         },
     })
@@ -94,20 +93,20 @@ const FeedbackForm = () => {
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem
-                                                    className='capitalize'
+                                                    className="capitalize"
                                                     value={UpdateStatus.FEATURE}
                                                 >
                                                     {UpdateStatus.FEATURE}
                                                 </SelectItem>
                                                 <SelectItem
-                                                    className='capitalize'
+                                                    className="capitalize"
                                                     value={UpdateStatus.BUG}
                                                 >
                                                     {UpdateStatus.BUG}
                                                 </SelectItem>
                                                 <SelectItem
                                                     value={UpdateStatus.GENERAL}
-                                                    className='capitalize'
+                                                    className="capitalize"
                                                 >
                                                     {UpdateStatus.GENERAL}
                                                 </SelectItem>

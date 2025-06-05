@@ -11,4 +11,4 @@ declare global {
     }
 }
 
-export function setCurrentGeoFromBrowser(): void;
+export function setCurrentGeoFromBrowser(): void
