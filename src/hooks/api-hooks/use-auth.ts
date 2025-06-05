@@ -12,6 +12,7 @@ import {
     ISignUpRequest,
     IChangePasswordRequest,
     IForgotPasswordRequest,
+    ILoggedInUser,
 } from '@/types'
 import {
     IAPIHook,
@@ -73,6 +74,62 @@ export const useCurrentUser = ({
             return data
         },
         retry: 1,
+    })
+}
+// Get Current User
+export const useCurrentLoggedInUser = ({
+    onError,
+    onSuccess,
+}: IOperationCallbacks<ILoggedInUser[]>) => {
+    return useQuery<ILoggedInUser[], string>({
+        queryKey: ['current-logged-in-user'],
+        queryFn: async () => {
+            const [error, data] = await withCatchAsync(
+                AuthService.currentLoggedInUsers()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage)
+                onError?.(errorMessage)
+                throw errorMessage
+            }
+
+            onSuccess?.(data)
+            return data
+        },
+        retry: 1,
+    })
+}
+
+export const useCurrentLoggedInUserLogout = ({
+    onError,
+    onSuccess,
+}: IOperationCallbacks<void> | undefined = {}) => {
+    const queryClient = useQueryClient()
+
+    return useMutation<void, string>({
+        mutationKey: ['auth', 'signout', 'current-logged-in-user'],
+        mutationFn: async () => {
+            const [error] = await withCatchAsync(
+                AuthService.signOutLoggedInUsers()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage)
+                onError?.(errorMessage)
+                throw errorMessage
+            }
+
+            toast.success('Signed out successfully')
+            onSuccess?.()
+
+            // Invalidate cached data
+            queryClient.invalidateQueries({
+                queryKey: ['auth', 'current-user'],
+            })
+        },
     })
 }
 
