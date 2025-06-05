@@ -1,23 +1,21 @@
 import { ReactNode } from 'react'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import ImageDisplay from '@/components/image-display'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
-import FootstepTableAdminAction from './row-actions/footstep-table-admin-action'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-
-import { toReadableDate } from '@/utils/date-utils'
-import { IFootstep, IUserBase } from '@/types'
+import { toReadableDateTime } from '@/utils'
+import { IFootstep } from '@/types/coop-types/footstep'
 
 export const footstepGlobalSearchTargets: IGlobalSearchTargets<IFootstep>[] = [
-    { field: 'description', displayText: 'Description' },
-    { field: 'activity', displayText: 'Activity' },
+    { field: 'user.username', displayText: 'User' },
     { field: 'module', displayText: 'Module' },
-    { field: 'user.full_name', displayText: 'Fullname' },
+    { field: 'activity', displayText: 'Activity' },
+    { field: 'description', displayText: 'Description' },
+    { field: 'ip_address', displayText: 'IP Address' },
+    { field: 'location', displayText: 'Location' },
 ]
 
 export interface IFootstepTableActionComponentProp {
@@ -28,184 +26,158 @@ export interface IFootstepTableColumnProps {
     actionComponent?: (props: IFootstepTableActionComponentProp) => ReactNode
 }
 
-const footstepTableColumns = (
-    opts?: IFootstepTableColumnProps
-): ColumnDef<IFootstep>[] => {
-    const displayUserMediaAndName = (user?: IUserBase) => {
-        if (!user) {
-            return <span className="italic text-foreground/40">No data</span>
-        }
-
-        return (
-            <div className="flex items-center gap-2">
-                {user.media?.download_url && (
-                    <ImageDisplay
-                        src={user.media.download_url}
-                        className="size-7 rounded-full"
+const FootstepTableColumns = (
+    _opts?: IFootstepTableColumnProps
+): ColumnDef<IFootstep>[] => [
+    {
+        id: 'user.username',
+        accessorKey: 'user.username',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="User">
+                <ColumnActions {...props}>
+                    <TextFilter<IFootstep>
+                        displayText="User"
+                        field="user.username"
                     />
-                )}
-                <div>{user.full_name}</div>
-            </div>
-        )
-    }
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row }) => <span>{row.original.user?.user_name}</span>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 160,
+        minSize: 120,
+    },
+    {
+        id: 'module',
+        accessorKey: 'module',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Module">
+                <ColumnActions {...props}>
+                    <TextFilter<IFootstep>
+                        displayText="Module"
+                        field="module"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row }) => <span>{row.original.module}</span>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 140,
+        minSize: 100,
+    },
+    {
+        id: 'activity',
+        accessorKey: 'activity',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Activity">
+                <ColumnActions {...props}>
+                    <TextFilter<IFootstep>
+                        displayText="Activity"
+                        field="activity"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row }) => <span>{row.original.activity}</span>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 180,
+        minSize: 120,
+    },
+    {
+        id: 'description',
+        accessorKey: 'description',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Description">
+                <ColumnActions {...props}>
+                    <TextFilter<IFootstep>
+                        displayText="Description"
+                        field="description"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row }) => <span>{row.original.description}</span>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 200,
+        minSize: 120,
+    },
+    {
+        id: 'ip_address',
+        accessorKey: 'ip_address',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="IP Address">
+                <ColumnActions {...props}>
+                    <TextFilter<IFootstep>
+                        displayText="IP Address"
+                        field="ip_address"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row }) => <span>{row.original.ip_address}</span>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 140,
+        minSize: 100,
+    },
+    {
+        id: 'location',
+        accessorKey: 'location',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Location">
+                <ColumnActions {...props}>
+                    <TextFilter<IFootstep>
+                        displayText="Location"
+                        field="location"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row }) => <span>{row.original.location}</span>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 180,
+        minSize: 120,
+    },
+    {
+        id: 'created_at',
+        accessorKey: 'created_at',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Date Created">
+                <ColumnActions {...props}>
+                    <DateFilter<IFootstep>
+                        displayText="Date Created"
+                        field="created_at"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row }) => (
+            <span>{toReadableDateTime(row.original.created_at)}</span>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 180,
+        minSize: 150,
+    },
+]
 
-    return [
-        {
-            id: 'actions',
-            header: 'Actions',
-            cell: ({ row }) =>
-                opts?.actionComponent ? (
-                    opts.actionComponent({ row })
-                ) : (
-                    <FootstepTableAdminAction row={row} />
-                ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
-            id: 'description',
-            accessorKey: 'description',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Description">
-                    <ColumnActions {...props}>
-                        <TextFilter
-                            field="description"
-                            displayText="Description"
-                            defaultMode="contains"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { description },
-                },
-            }) => <div>{description}</div>,
-        },
-        {
-            id: 'activity',
-            accessorKey: 'activity',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Activity">
-                    <ColumnActions {...props}>
-                        <TextFilter
-                            field="activity"
-                            displayText="Activity"
-                            defaultMode="contains"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { activity },
-                },
-            }) => <div>{activity}</div>,
-        },
-        {
-            id: 'module',
-            accessorKey: 'module',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Module">
-                    <ColumnActions {...props}>
-                        <TextFilter
-                            field="module"
-                            displayText="Module"
-                            defaultMode="contains"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { module },
-                },
-            }) => <div>{module}</div>,
-        },
-        {
-            id: 'user',
-            header: 'User',
-            cell: ({
-                row: {
-                    original: { user },
-                },
-            }) => displayUserMediaAndName(user),
-            enableSorting: false,
-        },
-        {
-            id: 'longitude',
-            accessorKey: 'longitude',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Longitude">
-                    <ColumnActions {...props}>
-                        <NumberFilter
-                            displayText="Longitude"
-                            field="longitude"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { longitude },
-                },
-            }) => <div>{longitude}</div>,
-        },
-        {
-            id: 'latitude',
-            accessorKey: 'latitude',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Latitude">
-                    <ColumnActions {...props}>
-                        <NumberFilter displayText="Latitude" field="latitude" />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { latitude },
-                },
-            }) => <div>{latitude}</div>,
-        },
-        {
-            id: 'user_agent',
-            accessorKey: 'user_agent',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="User Agent">
-                    <ColumnActions {...props}>
-                        <TextFilter
-                            displayText="User Agent"
-                            field="user_agent"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { user_agent },
-                },
-            }) => <div>{user_agent}</div>,
-        },
-        {
-            id: 'created_at',
-            accessorKey: 'created_at',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Date Created">
-                    <ColumnActions {...props}>
-                        <DateFilter<IFootstep>
-                            displayText="Date Created"
-                            field="created_at"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { created_at },
-                },
-            }) => <div>{toReadableDate(created_at, 'MMMM d, yyyy')}</div>,
-        },
-    ]
-}
-
-export default footstepTableColumns
+export default FootstepTableColumns

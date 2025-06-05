@@ -11,22 +11,23 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import footstepColumns, {
+import FootstepTableColumns, {
     IFootstepTableColumnProps,
     footstepGlobalSearchTargets,
 } from './columns'
 
 import { cn } from '@/lib'
-import { TableProps } from '@/types'
-import { IFootstep } from '@/types'
-import * as FootstepService from '@/api-service/footstep-service'
-import FilterContext from '@/contexts/filter-context/filter-context'
-
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
+import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useFilteredPaginatedFootsteps } from '@/hooks/api-hooks/use-footstep'
+import {
+    type TFootstepHookMode,
+    useFilteredPaginatedFootsteps,
+} from '@/hooks/api-hooks/use-footstep'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+
+import { TableProps, IFootstep, TEntityId } from '@/types'
 
 export interface FootstepTableProps
     extends TableProps<IFootstep>,
@@ -41,24 +42,35 @@ export interface FootstepTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
-    mode?: 'self' | 'team'
+    mode: TFootstepHookMode
 }
+
+export type TFootstepTableProps = FootstepTableProps &
+    (
+        | {
+              mode: 'user-organization'
+              user_org_id: TEntityId
+          }
+        | { mode: 'me' }
+        | { mode: 'branch' }
+    )
 
 const FootstepTable = ({
     mode,
     className,
+    user_org_id,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: FootstepTableProps) => {
+}: TFootstepTableProps & { user_org_id?: TEntityId }) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            footstepColumns({
+            FootstepTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -92,6 +104,7 @@ const FootstepTable = ({
     } = useFilteredPaginatedFootsteps({
         mode,
         pagination,
+        user_org_id,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
@@ -102,7 +115,7 @@ const FootstepTable = ({
         columns,
         data: data,
         initialState: {
-            columnPinning: { left: ['select'] },
+            columnPinning: { left: [] },
         },
         state: {
             sorting: tableSorting,
@@ -147,23 +160,8 @@ const FootstepTable = ({
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
+                    // No delete/export for footsteps by default
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        exportAll: FootstepService.exportAll,
-                        exportAllFiltered: FootstepService.exportAllFiltered,
-                        exportCurrentPage: (ids) =>
-                            FootstepService.exportSelected(
-                                ids.map((data) => data.id)
-                            ),
-                        exportSelected: (ids) =>
-                            FootstepService.exportSelected(
-                                ids.map((data) => data.id)
-                            ),
-                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -174,9 +172,9 @@ const FootstepTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
+                    className="mb-2"
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
-                    className="mb-2"
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
