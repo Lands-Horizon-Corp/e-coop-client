@@ -2514,6 +2514,10 @@ Table transaction_batch {
 
   // SIGNATURES
 
+  employee_by_signature_media_id varchar(50) [ref: - media.id]
+  employee_by_name varchar(255)
+  approved_by_position varchar(255)
+
   approved_by_signature_media_id varchar(50) [ref: - media.id]
   approved_by_name varchar(255)
   approved_by_position varchar(255)
