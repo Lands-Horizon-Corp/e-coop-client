@@ -5,19 +5,19 @@ import NavTimeInBar from '../nav-components/nav-time-in-bar'
 import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
 import NavProfileMenu from '@/components/nav/nav-components/nav-profile-menu'
+import TransactionBatchNavButton from '@/components/nav/nav-components/batch-nav-button'
 
 import { cn } from '@/lib'
 import { useAuthStore } from '@/store/user-auth-store'
 
-import { IClassProps, IEmployee } from '@/types'
-import TransactionBatchNavButton from '@/components/transaction-batch/batch-nav-button'
+import { IClassProps } from '@/types'
 
 const UserNav = ({
     homeUrl,
     className,
 }: { homeUrl?: `/${string}` } & IClassProps) => {
     const {
-        currentAuth: { user },
+        currentAuth: { user, user_organization },
     } = useAuthStore()
     return (
         <RootNav
@@ -28,12 +28,12 @@ const UserNav = ({
         >
             <NavContainer className="pointer-events-auto">
                 <AppSidebarToggle />
-                <PageBreadCrumb homeUrl={homeUrl} className="hidden md:block" />
+                <PageBreadCrumb homeUrl={homeUrl} className="hidden text-xs md:block" />
             </NavContainer>
             <NavContainer className="pointer-events-auto">
                 {user && <TransactionBatchNavButton />}
-                {user && user.type === 'employee' && (
-                    <NavTimeInBar currentUser={user as IEmployee} />
+                {user && user_organization?.user_type === 'employee' && (
+                    <NavTimeInBar />
                 )}
                 <NavProfileMenu />
                 <NavThemeToggle />
