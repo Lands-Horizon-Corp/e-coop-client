@@ -55,7 +55,9 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
                             variant="secondary"
                             hoverVariant="primary"
                             className="gap-x-2 rounded-full"
-                            onClick={() => router.navigate({ to: '/auth' })}
+                            onClick={() =>
+                                router.navigate({ to: '/auth' as string })
+                            }
                         >
                             <ArrowRightIcon className="-rotate-45" />
                             Go to Sign In
