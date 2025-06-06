@@ -46,7 +46,7 @@ type GradientBackgroundProps = {
     gradientColor?: string
     opacity?: number
     mediaUrl?: string
-    gradientOny?: boolean
+    gradientOnly?: boolean
     imageBackgroundOpacity?: number
 }
 export const GradientBackground = memo(
@@ -55,7 +55,7 @@ export const GradientBackground = memo(
         gradientColor,
         opacity = 0.1,
         mediaUrl,
-        gradientOny = false,
+        gradientOnly = false,
         imageBackgroundOpacity = 0.5,
         className,
         ...props
@@ -81,7 +81,7 @@ export const GradientBackground = memo(
                         backgroundBlendMode: 'lighten',
                     }}
                 />
-                {!gradientOny && (
+                {!gradientOnly && (
                     <div className="absolute -top-12 right-0 rounded-full backdrop-blur-3xl before:absolute before:-left-32 before:top-5 before:size-96 before:overflow-hidden before:bg-gradient-to-l before:from-[#073B3A] before:to-[#2b4b4a00] before:content-['']">
                         <SafeImage
                             className="relative size-64 -rotate-45"

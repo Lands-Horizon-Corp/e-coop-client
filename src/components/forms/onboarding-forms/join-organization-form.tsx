@@ -148,7 +148,7 @@ const JoinBranchWithCodeFormModal = ({
                                         <div className="pl-5">
                                             <GradientBackground
                                                 className="!bg-black/50"
-                                                gradientOny
+                                                gradientOnly
                                             >
                                                 <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-2 hover:bg-secondary/50 hover:no-underline">
                                                     <SafeImage
