@@ -2,6 +2,8 @@ import NoOrganizationView from './-components/no-organization-view'
 import WithOrganization from './-components/with-organization'
 
 import { LandmarkIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { useGetUserOrganizationByUserId } from '@/hooks/api-hooks/use-user-organization'
 
@@ -15,11 +17,10 @@ function RouteComponent() {
     const {
         data: userOrganizationsData = [],
         isLoading,
-        error,
+        isPending,
+        isError,
+        isFetching,
     } = useGetUserOrganizationByUserId()
-
-    if (isLoading) return <div>Loading...</div>
-    if (error) return <div>Error loading data.</div>
 
     const hasOrganization: boolean =
         Object.keys(userOrganizationsData).length > 0
@@ -32,14 +33,35 @@ function RouteComponent() {
                 </span>
                 Welcome to E-Coop Onboarding
             </h1>
-
-            {hasOrganization ? (
-                <WithOrganization
-                    organizationsWithBranches={userOrganizationsData}
-                />
-            ) : (
-                <NoOrganizationView />
+            {isPending && (
+                <div className="flex h-14 w-full items-center justify-center">
+                    <LoadingSpinner className="animate-spin" />
+                </div>
             )}
+            {userOrganizationsData ? (
+                hasOrganization ? (
+                    <WithOrganization
+                        isLoading={isLoading}
+                        organizationsWithBranches={userOrganizationsData}
+                    />
+                ) : (
+                    <NoOrganizationView />
+                )
+            ) : isError ? (
+                <FormErrorMessage
+                    errorMessage={'Something went wrong! Failed to load data.'}
+                />
+            ) : isLoading ? (
+                <LoadingSpinner className="animate-spin" />
+            ) : (
+                <>
+                    hello
+                    <NoOrganizationView />
+                </>
+            )}
+            <div className="text-xs opacity-30">
+                {isFetching ? 'Fetching data...' : null}
+            </div>
         </div>
     )
 }

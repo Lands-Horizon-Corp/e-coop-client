@@ -27,6 +27,7 @@ import { Route as AuthForgotPasswordImport } from './routes/auth/forgot-password
 import { Route as AccountSecurityImport } from './routes/account/security';
 import { Route as AccountQrImport } from './routes/account/qr';
 import { Route as AccountProfileImport } from './routes/account/profile';
+import { Route as landingTestImport } from './routes/(landing)/test';
 import { Route as landingDevelopersImport } from './routes/(landing)/developers';
 import { Route as landingContactImport } from './routes/(landing)/contact';
 import { Route as landingAboutImport } from './routes/(landing)/about';
@@ -173,6 +174,12 @@ const AccountProfileRoute = AccountProfileImport.update({
     id: '/profile',
     path: '/profile',
     getParentRoute: () => AccountRouteRoute,
+} as any);
+
+const landingTestRoute = landingTestImport.update({
+    id: '/test',
+    path: '/test',
+    getParentRoute: () => landingRouteRoute,
 } as any);
 
 const landingDevelopersRoute = landingDevelopersImport.update({
@@ -584,6 +591,13 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof landingDevelopersImport;
             parentRoute: typeof landingRouteImport;
         };
+        '/(landing)/test': {
+            id: '/(landing)/test';
+            path: '/test';
+            fullPath: '/test';
+            preLoaderRoute: typeof landingTestImport;
+            parentRoute: typeof landingRouteImport;
+        };
         '/account/profile': {
             id: '/account/profile';
             path: '/profile';
@@ -964,6 +978,7 @@ interface landingRouteRouteChildren {
     landingAboutRoute: typeof landingAboutRoute;
     landingContactRoute: typeof landingContactRoute;
     landingDevelopersRoute: typeof landingDevelopersRoute;
+    landingTestRoute: typeof landingTestRoute;
     landingIndexRoute: typeof landingIndexRoute;
 }
 
@@ -971,6 +986,7 @@ const landingRouteRouteChildren: landingRouteRouteChildren = {
     landingAboutRoute: landingAboutRoute,
     landingContactRoute: landingContactRoute,
     landingDevelopersRoute: landingDevelopersRoute,
+    landingTestRoute: landingTestRoute,
     landingIndexRoute: landingIndexRoute,
 };
 
@@ -1193,6 +1209,7 @@ export interface FileRoutesByFullPath {
     '/about': typeof landingAboutRoute;
     '/contact': typeof landingContactRoute;
     '/developers': typeof landingDevelopersRoute;
+    '/test': typeof landingTestRoute;
     '/account/profile': typeof AccountProfileRoute;
     '/account/qr': typeof AccountQrRoute;
     '/account/security': typeof AccountSecurityRoute;
@@ -1252,6 +1269,7 @@ export interface FileRoutesByTo {
     '/about': typeof landingAboutRoute;
     '/contact': typeof landingContactRoute;
     '/developers': typeof landingDevelopersRoute;
+    '/test': typeof landingTestRoute;
     '/account/profile': typeof AccountProfileRoute;
     '/account/qr': typeof AccountQrRoute;
     '/account/security': typeof AccountSecurityRoute;
@@ -1317,6 +1335,7 @@ export interface FileRoutesById {
     '/(landing)/about': typeof landingAboutRoute;
     '/(landing)/contact': typeof landingContactRoute;
     '/(landing)/developers': typeof landingDevelopersRoute;
+    '/(landing)/test': typeof landingTestRoute;
     '/account/profile': typeof AccountProfileRoute;
     '/account/qr': typeof AccountQrRoute;
     '/account/security': typeof AccountSecurityRoute;
@@ -1383,6 +1402,7 @@ export interface FileRouteTypes {
         | '/about'
         | '/contact'
         | '/developers'
+        | '/test'
         | '/account/profile'
         | '/account/qr'
         | '/account/security'
@@ -1441,6 +1461,7 @@ export interface FileRouteTypes {
         | '/about'
         | '/contact'
         | '/developers'
+        | '/test'
         | '/account/profile'
         | '/account/qr'
         | '/account/security'
@@ -1504,6 +1525,7 @@ export interface FileRouteTypes {
         | '/(landing)/about'
         | '/(landing)/contact'
         | '/(landing)/developers'
+        | '/(landing)/test'
         | '/account/profile'
         | '/account/qr'
         | '/account/security'
@@ -1599,6 +1621,7 @@ export const routeTree = rootRoute
         "/(landing)/about",
         "/(landing)/contact",
         "/(landing)/developers",
+        "/(landing)/test",
         "/(landing)/"
       ]
     },
@@ -1650,6 +1673,10 @@ export const routeTree = rootRoute
     },
     "/(landing)/developers": {
       "filePath": "(landing)/developers.tsx",
+      "parent": "/(landing)"
+    },
+    "/(landing)/test": {
+      "filePath": "(landing)/test.tsx",
       "parent": "/(landing)"
     },
     "/account/profile": {

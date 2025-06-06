@@ -1288,7 +1288,7 @@ enum interest_saving_type_diminishing_straight {
 
 enum other_information_of_an_account {
   "None"
-  "Jewely"
+  "Jewelry"
   "Grocery"
   "Track Loan Deduction"
   "Restructured"

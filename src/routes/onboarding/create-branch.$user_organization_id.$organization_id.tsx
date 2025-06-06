@@ -1,13 +1,11 @@
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { Button } from '@/components/ui/button'
-
 import { ScrollArea } from '@/components/ui/scroll-area'
-
 import {
     useDeleteBranch,
     useGetBranchesByOrganizationId,
 } from '@/hooks/api-hooks/use-branch'
-import CreateBranchForm from '@/components/forms/onboarding-forms/create-branch-form'
+import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
 
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
@@ -26,10 +24,11 @@ import {
 import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
 import { useSeedOrganization } from '@/hooks/api-hooks/use-user-organization'
 import { toast } from 'sonner'
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { IBranch, TEntityId } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { cn } from '@/lib'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const Route = createFileRoute(
     '/onboarding/create-branch/$user_organization_id/$organization_id'
@@ -39,13 +38,18 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
     const navigate = useNavigate()
-
     const { onOpen } = useConfirmModalStore()
 
     const { user_organization_id, organization_id } = Route.useParams()
+
     const [onOpenCreateBranchModal, setOpenCreateBranchModal] = useState(false)
-    const { data: organization } = useGetOrganizationById(organization_id)
-    const { data: branches } = useGetBranchesByOrganizationId(organization_id)
+
+    const { data: organization, isPending: isPendingOrganization } =
+        useGetOrganizationById(organization_id)
+
+    const { data: branches, isPending: isPendingBranches } =
+        useGetBranchesByOrganizationId(organization_id)
+
     const { mutateAsync: seed } = useSeedOrganization()
     const [branch, setBranch] = useState<IBranch>()
 
@@ -65,15 +69,12 @@ function RouteComponent() {
         }
     }
 
-    const handleDeleteBranch = async (
-        branchId: TEntityId,
-        userOrganizationId: TEntityId
-    ) => {
+    const handleDeleteBranch = async (userOrganizationId: TEntityId) => {
         onOpen({
             title: 'Delete Branch',
             description: `You are about delete this branch, are you sure you want to proceed?`,
             onConfirm: () => {
-                deleteBranch({ branchId, userOrganizationId })
+                deleteBranch(userOrganizationId)
             },
             confirmString: 'Proceed',
         })
@@ -111,131 +112,193 @@ function RouteComponent() {
 
     return (
         <div className="w-full">
-            <CreateBranchForm
+            <CreateUpdateFormFormModal
                 open={onOpenCreateBranchModal}
                 onOpenChange={setOpenCreateBranchModal}
-                setOpenCreateBranchModal={setOpenCreateBranchModal}
-                userOrganizationId={user_organization_id}
-                branch={branch}
-                defaultValues={defaultValues}
+                useOrganizationId={user_organization_id}
+                formProps={{
+                    setOpenCreateBranchModal: setOpenCreateBranchModal,
+                    branch: branch,
+                    defaultValues: {
+                        ...defaultValues,
+                    },
+                }}
             />
-            <div className="min-h-full w-full min-w-full rounded-none border-none bg-transparent">
-                <div className="flex gap-x-5 px-2 py-5">
-                    <SafeImage
-                        className="size-24"
-                        src={organization?.media?.id}
-                    />
-                    <div className="flex grow flex-col gap-y-2">
-                        <h1 className="flex items-center gap-x-2 text-xl font-semibold">
-                            <span>
-                                <LandmarkIcon className="z-50" size={24} />
-                            </span>
-                            {organization?.name}
-                        </h1>
-                        <PlainTextEditor
-                            className="text-sm"
-                            content={organization?.description}
-                        />
-                        <div className="flex items-center gap-x-2">
-                            <PushPinIcon className="text-red-400" />
-                            <p className="text-xs">{organization?.address}</p>
+            <div className="min-h-full w-full min-w-full rounded-none border-none bg-transparent py-5">
+                {isPendingOrganization ? (
+                    <div className="flex gap-x-5 px-2 py-5">
+                        <Skeleton className="size-24 rounded-lg" />
+                        <div className="flex grow flex-col gap-y-2">
+                            <Skeleton className="h-6 w-3/4 rounded-md" />
+                            <Skeleton className="h-12 w-full rounded-md" />
+                            <div className="flex items-center gap-x-2">
+                                <Skeleton className="size-4 rounded-full" />
+                                <Skeleton className="h-4 w-2/3 rounded-md" />
+                            </div>
+                            <div className="flex items-center gap-x-2">
+                                <Skeleton className="size-4 rounded-full" />
+                                <Skeleton className="h-4 w-1/2 rounded-md" />
+                            </div>
                         </div>
-                        <div className="flex items-center gap-x-2">
-                            <PhoneIcon className="text-blue-400" />
-                            <p className="text-xs">
-                                {organization?.contact_number}
-                            </p>
-                        </div>
+                        <Skeleton className="h-10 w-32 rounded-lg" />
                     </div>
-                    <Button
-                        onClick={() => handleOpenCreateEditModal()}
-                        variant={'secondary'}
-                    >
-                        <PlusIcon className="mr-2" />
-                        Add Branch
-                    </Button>
-                </div>
+                ) : (
+                    <div className="flex gap-x-5 px-2 py-5">
+                        <SafeImage
+                            className="size-24"
+                            src={organization?.media?.id}
+                        />
+                        <div className="flex grow flex-col gap-y-2">
+                            <h1 className="flex items-center gap-x-2 text-xl font-semibold">
+                                <span>
+                                    <LandmarkIcon className="z-50" size={24} />
+                                </span>
+                                {organization?.name}
+                            </h1>
+                            <PlainTextEditor
+                                className="text-sm"
+                                content={organization?.description}
+                            />
+                            <div className="flex items-center gap-x-2">
+                                <PushPinIcon className="text-red-400" />
+                                <p className="text-xs">
+                                    {organization?.address}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-x-2">
+                                <PhoneIcon className="text-blue-400" />
+                                <p className="text-xs">
+                                    {organization?.contact_number}
+                                </p>
+                            </div>
+                        </div>
+                        <Button
+                            onClick={() => handleOpenCreateEditModal()}
+                            variant={'secondary'}
+                        >
+                            <PlusIcon className="mr-2" />
+                            Add Branch
+                        </Button>
+                    </div>
+                )}
                 <p className="flex items-center gap-x-1 py-2">
                     <BranchIcon className="mr-2" />
                     List of Branches
                 </p>
                 <ScrollArea className="ecoop-scroll mb-10">
                     <div className="flex max-h-96 flex-col gap-y-3 overflow-y-auto">
-                        {branches?.map((branch) => {
-                            const mediaUrl =
-                                branch?.media?.download_url ?? orgBannerList[0]
-                            return (
-                                <div key={branch.id}>
-                                    <GradientBackground mediaUrl={mediaUrl}>
-                                        <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
-                                            <SafeImage
-                                                className="size-16"
-                                                fallbackSrc={mediaUrl}
-                                                src={mediaUrl}
-                                            />
-                                            <div className="flex grow flex-col">
-                                                <h1>{branch?.name}</h1>
-                                                {branch.description && (
-                                                    <PlainTextEditor
-                                                        className="text-xs"
-                                                        content={
-                                                            branch?.description ??
-                                                            ''
-                                                        }
-                                                    />
-                                                )}
-                                                <p className="flex items-center gap-y-1 text-xs">
-                                                    <AddressCardIcon className="mr-2" />
-                                                    {branch.address}
-                                                </p>
-                                                <div className="absolute bottom-7 right-2 z-50 flex gap-1 text-xs">
-                                                    <Button
-                                                        size={'sm'}
-                                                        onClick={() => {
-                                                            handleOpenCreateEditModal(
-                                                                branch
-                                                            )
-                                                        }}
-                                                        variant={'secondary'}
-                                                        className={cn(
-                                                            'flex max-h-7 space-x-2 text-xs'
-                                                        )}
-                                                    >
-                                                        <span>edit</span>
-                                                        <EditPencilIcon />
-                                                    </Button>
-                                                    <Button
-                                                        size={'sm'}
-                                                        onClick={() => {
-                                                            handleDeleteBranch(
-                                                                branch.id,
-                                                                user_organization_id
-                                                            )
-                                                        }}
-                                                        variant={'destructive'}
-                                                        className={cn(
-                                                            'flex max-h-7 space-x-2 text-xs'
-                                                        )}
-                                                    >
-                                                        <span> delete</span>
-                                                        <TrashIcon />
-                                                    </Button>
+                        {isPendingBranches &&
+                            Array.from({
+                                length: 2,
+                            }).map(() => {
+                                return (
+                                    <div className="flex gap-x-5 px-2 py-5">
+                                        <div className="relative flex min-h-10 w-full rounded-2xl border-0 p-5">
+                                            <Skeleton className="size-16 rounded-full" />
+
+                                            <div className="ml-2 flex grow flex-col">
+                                                <Skeleton className="mb-2 h-6 w-3/4 rounded-md" />
+
+                                                <Skeleton className="h-10 w-full rounded-md" />
+
+                                                <div className="mb-1 mt-2 flex items-center gap-y-1">
+                                                    <Skeleton className="mr-2 size-4 rounded-full" />
+                                                    <Skeleton className="h-4 w-2/3 rounded-md" />
+                                                </div>
+
+                                                <div className="flex items-center gap-y-1">
+                                                    <Skeleton className="mr-2 size-4 rounded-full" />
+                                                    <Skeleton className="h-4 w-1/2 rounded-md" />
+                                                </div>
+
+                                                <div className="absolute bottom-7 right-2 z-50 flex gap-1">
+                                                    <Skeleton className="h-7 w-16 rounded-md" />
+                                                    <Skeleton className="h-7 w-16 rounded-md" />
                                                 </div>
                                             </div>
                                         </div>
-                                    </GradientBackground>
-                                </div>
-                            )
-                        })}
+                                    </div>
+                                )
+                            })}
+                        {isNoBranches ? (
+                            <div className="flex h-44 w-full items-center justify-center">
+                                <p className="text-sm font-thin">
+                                    No branches to show
+                                </p>{' '}
+                                🍃
+                            </div>
+                        ) : (
+                            branches?.map((branch) => {
+                                const mediaUrl =
+                                    branch?.media?.download_url ?? ''
+                                return (
+                                    <div key={branch.id}>
+                                        <GradientBackground mediaUrl={mediaUrl}>
+                                            <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
+                                                <Avatar className="size-16">
+                                                    <AvatarImage
+                                                        src={mediaUrl}
+                                                    />
+                                                </Avatar>
+                                                <div className="flex grow flex-col">
+                                                    <h1>{branch?.name}</h1>
+                                                    {branch.description && (
+                                                        <PlainTextEditor
+                                                            className="text-xs"
+                                                            content={
+                                                                branch?.description ??
+                                                                ''
+                                                            }
+                                                        />
+                                                    )}
+                                                    <p className="flex items-center gap-y-1 text-xs">
+                                                        <AddressCardIcon className="mr-2" />
+                                                        {branch.address}
+                                                    </p>
+                                                    <div className="absolute bottom-7 right-2 z-50 flex gap-1 text-xs">
+                                                        <Button
+                                                            size={'sm'}
+                                                            onClick={() => {
+                                                                handleOpenCreateEditModal(
+                                                                    branch
+                                                                )
+                                                            }}
+                                                            variant={
+                                                                'secondary'
+                                                            }
+                                                            className={cn(
+                                                                'flex max-h-7 space-x-2 text-xs'
+                                                            )}
+                                                        >
+                                                            <span>edit</span>
+                                                            <EditPencilIcon />
+                                                        </Button>
+                                                        <Button
+                                                            size={'sm'}
+                                                            onClick={() => {
+                                                                handleDeleteBranch(
+                                                                    user_organization_id
+                                                                )
+                                                            }}
+                                                            variant={
+                                                                'destructive'
+                                                            }
+                                                            className={cn(
+                                                                'flex max-h-7 space-x-2 text-xs'
+                                                            )}
+                                                        >
+                                                            <span> delete</span>
+                                                            <TrashIcon />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </GradientBackground>
+                                    </div>
+                                )
+                            })
+                        )}
                     </div>
-                    {isNoBranches && (
-                        <div className="flex h-44 w-full items-center justify-center">
-                            <p className="text-sm font-thin">
-                                No branches to show
-                            </p>{' '}
-                            🍃
-                        </div>
-                    )}
                 </ScrollArea>
                 <div className="flex w-full items-center justify-end py-2">
                     <Button

@@ -49,7 +49,7 @@ const Branch = ({ branch, organizationId, isUserCanJoin }: BranchProps) => {
 
     return (
         <div className="flex max-h-96 flex-col gap-y-2 overflow-y-auto">
-            <GradientBackground gradientOny>
+            <GradientBackground gradientOnly>
                 <div
                     key={branch.id}
                     className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline"

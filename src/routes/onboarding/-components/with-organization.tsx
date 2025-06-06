@@ -3,7 +3,6 @@ import { GradientBackground } from '@/components/gradient-background/gradient-ba
 import PlainTextEditor from '@/components/plain-text-editor'
 import { PinLocationIcon } from '@/components/icons'
 import { StatusBadge } from '@/components/status-badge'
-import SafeImage from '@/components/safe-image'
 import { Button } from '@/components/ui/button'
 
 import {
@@ -28,13 +27,17 @@ import { cn } from '@/lib'
 import { useNavigate } from '@tanstack/react-router'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 import { useAuthStore } from '@/store/user-auth-store'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import OrganizationItemSkeleton from '@/components/Skeleton/organization-item-skeleton'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: UserOrganizationGroup[]
+    isLoading: boolean
 }
 
 const WithOrganization = ({
     organizationsWithBranches,
+    isLoading,
 }: WithOrganizationViewProps) => {
     const navigate = useNavigate()
     const { updateCurrentAuth } = useAuthStore()
@@ -49,6 +52,7 @@ const WithOrganization = ({
         branchName: string
     ) => {
         const response = await switchOrganization(userOrganizationId)
+
         if (response) {
             updateCurrentAuth({
                 user_organization: userOrganization,
@@ -72,6 +76,7 @@ const WithOrganization = ({
             toast.error("can't switch Branch")
         }
     }
+
     return (
         <div className="w-full">
             <div className="my-3 flex w-full justify-center space-x-2">
@@ -104,6 +109,10 @@ const WithOrganization = ({
                     collapsible
                     className={cn('w-full space-y-4')}
                 >
+                    {isLoading &&
+                        Array.from({ length: 3 }).map((_, index) => (
+                            <OrganizationItemSkeleton key={index} />
+                        ))}
                     {organizationsWithBranches.map((org) => {
                         const mediaUrl =
                             org.organizationDetails.media?.url ??
@@ -170,13 +179,16 @@ const WithOrganization = ({
                                             return (
                                                 <div key={branch.id}>
                                                     <GradientBackground
-                                                        gradientOny
+                                                        gradientOnly
                                                     >
                                                         <div className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                                            <SafeImage
-                                                                className="size-16"
-                                                                src={mediaUrl}
-                                                            />
+                                                            <Avatar className="size-16">
+                                                                <AvatarImage
+                                                                    src={
+                                                                        mediaUrl
+                                                                    }
+                                                                />
+                                                            </Avatar>
                                                             <div className="flex grow flex-col">
                                                                 <h1>
                                                                     {
