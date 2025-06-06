@@ -20,12 +20,10 @@ export const useGetUserOrganizationByUserId = () => {
     return useQuery<UserOrganizationGroup[], string>({
         queryKey: ['user-organization', 'details'],
         enabled: !!userId,
-        initialData: [],
         queryFn: async () => {
             if (!userId) {
                 throw new Error('User ID is missing')
             }
-
             const [error, result] = await withCatchAsync(
                 UserOrganization.getUserOrganizationUserId(userId)
             )

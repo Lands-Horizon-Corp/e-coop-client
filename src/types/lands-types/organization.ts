@@ -2,6 +2,7 @@ import { ISubscriptionPlan } from './subscription-plan'
 import { IBranch, IMedia, IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IOrganizationCategoryRequest } from './organization-category'
+import { IUserOrganization } from './user-organization'
 
 export type TOrganizationMigrationStatus =
     | 'pending'
@@ -76,3 +77,8 @@ export interface IOrganizationRequest {
 
 export interface IOrganizationPaginated
     extends IPaginatedResult<IOrganization> {}
+
+export interface ICreateOrganizationResponse {
+    organization: IOrganization
+    user_organization: IUserOrganization
+}

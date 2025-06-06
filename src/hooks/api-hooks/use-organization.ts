@@ -10,7 +10,7 @@ import {
     IOrganization,
     IOrganizationRequest,
     IOrganizationPaginated,
-    IUserOrganizationResponse,
+    ICreateOrganizationResponse,
 } from '@/types'
 import {
     IAPIHook,
@@ -23,45 +23,43 @@ export const useCreateOrganization = ({
     showMessage = true,
     onError,
     onSuccess,
-}: IAPIHook<IUserOrganizationResponse, string> & IQueryProps = {}) => {
+}: IAPIHook<ICreateOrganizationResponse, string> & IQueryProps = {}) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IUserOrganizationResponse, string, IOrganizationRequest>(
-        {
-            mutationKey: ['organization', 'create'],
-            mutationFn: async (data) => {
-                const [error, newOrg] = await withCatchAsync(
-                    OrganizationService.createOrganization(data)
-                )
+    return useMutation<
+        ICreateOrganizationResponse,
+        string,
+        IOrganizationRequest
+    >({
+        mutationKey: ['organization', 'create'],
+        mutationFn: async (data) => {
+            const [error, newOrg] = await withCatchAsync(
+                OrganizationService.createOrganization(data)
+            )
 
-                if (error) {
-                    console.error('Error', error)
-                    const errorMessage = serverRequestErrExtractor({ error })
-                    if (showMessage) toast.error(errorMessage)
-                    onError?.(errorMessage)
-                    throw errorMessage
-                }
+            if (error) {
+                console.error('Error', error)
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                onError?.(errorMessage)
+                throw errorMessage
+            }
 
-                queryClient.invalidateQueries({
-                    queryKey: ['organization', 'resource-query'],
-                })
-                queryClient.invalidateQueries({
-                    queryKey: ['organization', newOrg.organization.id],
-                })
-                queryClient.removeQueries({
-                    queryKey: [
-                        'organization',
-                        'loader',
-                        newOrg.organization.id,
-                    ],
-                })
+            queryClient.invalidateQueries({
+                queryKey: ['organization', 'resource-query'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['organization', newOrg.organization.id],
+            })
+            queryClient.removeQueries({
+                queryKey: ['organization', 'loader', newOrg.organization.id],
+            })
 
-                if (showMessage) toast.success('New Organization Created')
-                onSuccess?.(newOrg)
-                return newOrg
-            },
-        }
-    )
+            if (showMessage) toast.success('New Organization Created')
+            onSuccess?.(newOrg)
+            return newOrg
+        },
+    })
 }
 
 export const useUpdateOrganization = ({
@@ -163,7 +161,6 @@ export const useGetOrganizationById = (organizationId: TEntityId) => {
 }
 
 export const useOrganizations = ({
-    enabled,
     showMessage = true,
 }: IAPIHook<IOrganization[], string> & IQueryProps = {}) => {
     return useQuery<IOrganization[], string>({
@@ -172,17 +169,13 @@ export const useOrganizations = ({
             const [error, result] = await withCatchAsync(
                 OrganizationService.getAllOrganizations()
             )
-
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
                 if (showMessage) toast.error(errorMessage)
                 throw errorMessage
             }
-
             return result
         },
-        initialData: [],
-        enabled,
         retry: 1,
     })
 }
