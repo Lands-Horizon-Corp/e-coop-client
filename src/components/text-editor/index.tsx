@@ -1,7 +1,7 @@
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { useEditor, EditorContent } from '@tiptap/react'
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 
 import Toolbar from './toolbar'
 
@@ -26,7 +26,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
     (
         {
             className,
-            disabled,
+            disabled = false,
             content = '',
             spellCheck = true,
             showToolbar = true,
@@ -55,6 +55,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
                 }),
             ],
             content: content,
+            editable: !disabled,
             editorProps: {
                 attributes: {
                     spellcheck: spellCheck ? 'true' : 'false',

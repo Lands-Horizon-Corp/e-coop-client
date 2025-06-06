@@ -59,7 +59,6 @@ export interface IBranch extends ITimeStamps, IAuditable {
     longitude: number | null
 
     is_main_branch: boolean
-    is_admin_verified: boolean | null
 }
 
 export interface IBranchPaginated extends IPaginatedResult<IBranch> {}

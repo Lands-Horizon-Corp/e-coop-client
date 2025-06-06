@@ -1,0 +1,38 @@
+import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult } from './paginated-result'
+
+export type AccountingPrincipleType = 'positive' | 'negative'
+
+export interface IGeneralLedgerAccountsGrouping
+    extends IAuditable,
+        ITimeStamps {
+    id: TEntityId
+
+    organization_id: TEntityId
+    branch_id: TEntityId
+
+    debit: AccountingPrincipleType
+    credit: AccountingPrincipleType
+    name: string
+    description: string
+
+    from_code?: number
+    to_code?: number
+}
+
+export interface IGeneralLedgerAccountsGroupingRequest {
+    name: string
+    description: string
+
+    debit: AccountingPrincipleType
+    credit: AccountingPrincipleType
+
+    from_code?: number
+    to_code?: number
+
+    organization_id?: TEntityId
+    branch_id?: TEntityId
+}
+
+export interface IPaginatedGeneralLedgerAccountsGroupingRequest
+    extends IPaginatedResult<IGeneralLedgerAccountsGrouping> {}

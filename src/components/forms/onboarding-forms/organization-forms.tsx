@@ -22,7 +22,7 @@ import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { useCreateOrganization } from '@/hooks/api-hooks/use-organization'
 
 import { IOrganizationCategoryRequest } from '@/types/lands-types/organization-category'
-import { IUserOrganizationResponse, TEntityId } from '@/types'
+import { ICreateOrganizationResponse, TEntityId } from '@/types'
 
 import { useCategoryStore } from '@/store/onboarding/category-store'
 import {
@@ -33,6 +33,8 @@ import {
 import {
     LoadingSpinnerIcon,
     NextIcon,
+    PlusIcon,
+    ReplaceIcon,
     UnavailableIcon,
     VerifiedPatchIcon,
 } from '@/components/icons'
@@ -45,6 +47,10 @@ import { useForm } from 'react-hook-form'
 import { cn } from '@/lib'
 import CategoriesItem from '@/components/category-pickers/categories-item'
 import { toast } from 'sonner'
+import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
+import UserAvatar from '@/components/user-avatar'
+import ActionTooltip from '@/components/action-tooltip'
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
 
 const steps = [
     {
@@ -63,6 +69,8 @@ const steps = [
 
 const OrganizationForm = () => {
     const [activeStep, setActiveStep] = useState(0)
+    const [openImagePicker, setOpenImagePicker] = useState(false)
+
     const { selectedCategories, clearCategories, setOnOpenCategoryPicker } =
         useCategoryStore()
 
@@ -79,18 +87,24 @@ const OrganizationForm = () => {
             address: '',
             description: '',
             subscription_plan_id: '',
+            media_id: '',
+            cover_media_id: '',
         },
     })
 
     const {
         error,
-        isPending: isLoading,
+        isPending: isCreating,
         mutateAsync: createOrganization,
     } = useCreateOrganization({
-        onSuccess: (data: IUserOrganizationResponse) => {
+        onSuccess: (data: ICreateOrganizationResponse) => {
+            const organizationId = data.organization.id
+            const userOrganizationId = data.user_organization.id
+
             navigate({
-                to: `/onboarding/create-branch/${data.user_organization.id}/${data.organization.id}`,
+                to: `/onboarding/create-branch/${userOrganizationId}/${organizationId}`,
             })
+
             clearCategories()
         },
         onError: (error) => {
@@ -102,18 +116,29 @@ const OrganizationForm = () => {
         useSinglePictureUpload({})
 
     const handleSubmit = async (data: Organization) => {
-        let mediaId = ''
+        let logoMedia = ''
+        let CoverMedia = ''
 
-        if (data.media_id) {
+        if (data.media_id || data.cover_media_id) {
             const uploadedPhoto = await uploadPhoto(
                 base64ImagetoFile(data.media_id, `bg-banner.jpg`) as File
             )
-            mediaId = uploadedPhoto.id
+            if (data.cover_media_id) {
+                const uploadedCoverPhoto = await uploadPhoto(
+                    base64ImagetoFile(
+                        data.cover_media_id,
+                        `bg-banner.jpg`
+                    ) as File
+                )
+                CoverMedia = uploadedCoverPhoto.id
+            }
+            logoMedia = uploadedPhoto.id
         }
 
         const requestData = {
             ...data,
-            media_id: mediaId,
+            media_id: logoMedia,
+            cover_media_id: CoverMedia,
             organization_categories: selectedCategories.map((catItem) => ({
                 category_id: catItem.id,
             })) as IOrganizationCategoryRequest[],
@@ -137,13 +162,16 @@ const OrganizationForm = () => {
     ) => {
         e.preventDefault()
         if (isFinalStep) return
+        const isActiveStep = activeStep === 0
 
         const isValid = await form.trigger(
-            activeStep === 0 ? 'name' : 'subscription_plan_id'
+            isActiveStep
+                ? ['name', 'media_id', 'email']
+                : 'subscription_plan_id'
         )
 
         if (!isValid) {
-            const fieldName = activeStep === 0 ? 'name' : 'subscription_plan_id'
+            const fieldName = isActiveStep ? 'name' : 'subscription_plan_id'
             const error = form.formState.errors[fieldName]
 
             if (error) {
@@ -185,52 +213,140 @@ const OrganizationForm = () => {
                         {activeStep === 0 && (
                             <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
                                 <FormFieldWrapper
+                                    control={form.control}
+                                    label="Upload Organization Logo"
+                                    name="media_id"
+                                    className="col-span-4"
+                                    render={({ field }) => {
+                                        return (
+                                            <FormControl>
+                                                <div className="relative mx-auto size-fit">
+                                                    <SinglePictureUploadModal
+                                                        open={openImagePicker}
+                                                        onOpenChange={
+                                                            setOpenImagePicker
+                                                        }
+                                                        onPhotoChoose={(
+                                                            newImage
+                                                        ) => {
+                                                            field.onChange(
+                                                                newImage
+                                                            )
+                                                        }}
+                                                        defaultImage={
+                                                            field.value ?? ''
+                                                        }
+                                                    />
+
+                                                    <UserAvatar
+                                                        fallback={`-`}
+                                                        fallbackClassName="!text-3xl"
+                                                        src={field.value ?? ''}
+                                                        className={cn(
+                                                            'size-36 !rounded-none'
+                                                        )}
+                                                    />
+                                                    <ActionTooltip
+                                                        tooltipContent={
+                                                            field.value
+                                                                ? 'Replace'
+                                                                : 'Insert'
+                                                        }
+                                                        align="center"
+                                                        side="right"
+                                                    >
+                                                        <Button
+                                                            variant="secondary"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setOpenImagePicker(
+                                                                    true
+                                                                )
+                                                            }}
+                                                            className="absolute bottom-2 right-2 size-fit w-fit rounded-full border border-transparent p-1"
+                                                        >
+                                                            {field.value ? (
+                                                                <ReplaceIcon />
+                                                            ) : (
+                                                                <PlusIcon />
+                                                            )}
+                                                        </Button>
+                                                    </ActionTooltip>
+                                                </div>
+                                            </FormControl>
+                                        )
+                                    }}
+                                />
+                                <FormFieldWrapper
                                     className="md:col-span-4"
                                     control={form.control}
-                                    name="media_id"
+                                    name="cover_media_id"
                                     label="Upload Banner Background"
-                                    render={({ field }) => (
-                                        <div>
-                                            <GradientBackground
-                                                className="w-full"
-                                                mediaUrl={field.value}
-                                            >
-                                                <div className="flex min-h-32 cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                                    <div className="flex flex-col">
-                                                        <p className="touch-pan-up text-start text-2xl font-bold">
-                                                            {HeaderTitleDisplay}
-                                                        </p>
-                                                        <PlainTextEditor
-                                                            className="overflow max-h-7 min-w-96 max-w-[30rem] overflow-y-hidden"
-                                                            content={
-                                                                DescriptionDisplay
+                                    render={({ field }) => {
+                                        const hasNoImageSelected =
+                                            form.watch('media_id') === ''
+                                        return (
+                                            <div>
+                                                <GradientBackground
+                                                    className="w-full"
+                                                    mediaUrl={field.value}
+                                                >
+                                                    <div className="flex min-h-32 cursor-pointer items-center justify-between gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
+                                                        <img
+                                                            style={{
+                                                                opacity:
+                                                                    hasNoImageSelected
+                                                                        ? 0.1
+                                                                        : 1,
+                                                            }}
+                                                            className={`size-24 rounded-lg`}
+                                                            src={
+                                                                form.watch(
+                                                                    'media_id'
+                                                                ) ||
+                                                                orgBannerList[0]
                                                             }
                                                         />
+                                                        <div className="flex grow flex-col">
+                                                            <p className="touch-pan-up text-start text-2xl font-bold">
+                                                                {
+                                                                    HeaderTitleDisplay
+                                                                }
+                                                            </p>
+                                                            <PlainTextEditor
+                                                                className="overflow max-h-7 min-w-96 max-w-[30rem] overflow-y-hidden"
+                                                                content={
+                                                                    DescriptionDisplay
+                                                                }
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </GradientBackground>
-                                            <div className="flex w-full justify-end py-2">
-                                                <FileUploader
-                                                    maxFiles={1}
-                                                    buttonOnly
-                                                    accept={{
-                                                        'image/png': ['.png'],
-                                                        'image/jpeg': [
-                                                            '.jpg',
-                                                            '.jpeg',
-                                                        ],
-                                                    }}
-                                                    selectedPhotos={(
-                                                        selectedPhoto
-                                                    ) => {
-                                                        field.onChange(
+                                                </GradientBackground>
+                                                <div className="flex w-full justify-end py-2">
+                                                    <FileUploader
+                                                        maxFiles={1}
+                                                        buttonOnly
+                                                        accept={{
+                                                            'image/png': [
+                                                                '.png',
+                                                            ],
+                                                            'image/jpeg': [
+                                                                '.jpg',
+                                                                '.jpeg',
+                                                            ],
+                                                        }}
+                                                        selectedPhotos={(
                                                             selectedPhoto
-                                                        )
-                                                    }}
-                                                />
+                                                        ) => {
+                                                            field.onChange(
+                                                                selectedPhoto
+                                                            )
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )
+                                    }}
                                 />
                                 <div className="col-span-4 flex w-full items-center gap-x-2">
                                     <CategoriesItem className="grow" />
@@ -372,6 +488,15 @@ const OrganizationForm = () => {
                     <CardFooter className="flex flex-col gap-2">
                         <FormErrorMessage errorMessage={error} />
                         <div className="flex w-full items-center justify-end gap-x-2">
+                            <Button
+                                variant="ghost"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    form.reset()
+                                }}
+                            >
+                                reset
+                            </Button>
                             <div className="flex items-center gap-x-2 text-card-foreground/70">
                                 <span className="text-accent-foreground">
                                     {' '}
@@ -407,13 +532,13 @@ const OrganizationForm = () => {
                                 type="submit"
                                 disabled={
                                     !isFinalStep ||
-                                    isLoading ||
+                                    isCreating ||
                                     isUploadingPhoto
                                 }
                                 variant={isFinalStep ? 'default' : 'outline'}
                                 className="w-full"
                             >
-                                {isLoading ? (
+                                {isUploadingPhoto || isCreating ? (
                                     <LoadingSpinnerIcon
                                         size={18}
                                         className="mr-2 animate-spin"

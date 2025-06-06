@@ -49,7 +49,7 @@ export const canJoinOrganizationMember = async (
 }
 
 export const seedOrganization = async (organizationId: TEntityId) => {
-    const response = await APIService.get(
+    const response = await APIService.post(
         `/user-organization/${organizationId}/seed`
     )
     return response.status === 200

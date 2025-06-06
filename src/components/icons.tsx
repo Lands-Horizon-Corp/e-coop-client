@@ -229,6 +229,7 @@ import {
     FaBookOpen as BookOpenIcon,
     FaCreditCard as CreditCardIcon,
     FaUserClock as UserClockFillIcon,
+    FaCalendarCheck as FaCalendarCheckIcon,
     FaTabletAlt as TabletIcon,
 } from 'react-icons/fa'
 
@@ -273,12 +274,14 @@ import {
     GiTreeBranch as BranchIcon,
     GiWoodenSign as WoodSignsIcon,
     GiMoneyStack as MoneyStackIcon,
+    GiMoneyStack as GiMoneyStackIcon,
 } from 'react-icons/gi'
 
 import {
     CgFacebook as FacebookIcon,
     CgDetailsLess as DetailsIcon,
     CgUnavailable as UnavailableIcon,
+    CgInternal as InternalIcon,
     CgSmartphone as SmartphoneIcon,
 } from 'react-icons/cg'
 
@@ -295,6 +298,7 @@ import {
     VscBracketError as BracketErrorIcon,
     VscCommentDraft as CommentDashedIcon,
     VscLocation as LocationPinOutlineIcon,
+    VscExclude as ExcludeIcon,
 } from 'react-icons/vsc'
 
 import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
@@ -544,6 +548,10 @@ export {
     CreditCardIcon2,
     BookIcon,
     FinanceReportsIcon,
+    ExcludeIcon,
+    InternalIcon,
+    GiMoneyStackIcon,
+    FaCalendarCheckIcon,
     WeightScaleIcon,
     SignPostIcon,
 }
