@@ -85,6 +85,7 @@ export const useGetBranchesByOrganizationId = (
             }
             return response
         },
+        enabled: !!userOrganizationId,
     })
 }
 
@@ -127,15 +128,11 @@ export const useGetBranchesById = (id: string) => {
 export const useDeleteBranch = ({ onSuccess }: IAPIHook<unknown, string>) => {
     const queryClient = useQueryClient()
 
-    return useMutation<
-        unknown,
-        string,
-        { branchId: TEntityId; userOrganizationId: TEntityId }
-    >({
+    return useMutation<unknown, string, TEntityId>({
         mutationKey: ['delete-branch-with-user-org-id'],
-        mutationFn: async ({ branchId, userOrganizationId }) => {
+        mutationFn: async (branchId) => {
             const [error, result] = await withCatchAsync(
-                BranchService.deleteBranch(branchId, userOrganizationId)
+                BranchService.deleteBranch(branchId)
             )
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })

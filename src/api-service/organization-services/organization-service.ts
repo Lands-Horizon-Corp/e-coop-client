@@ -8,7 +8,7 @@ import {
     IOrganization,
     IOrganizationRequest,
     IOrganizationPaginated,
-    IUserOrganizationResponse,
+    ICreateOrganizationResponse,
 } from '@/types'
 
 export const getAllOrganizations = async () => {
@@ -32,7 +32,7 @@ export const createOrganization = async (
 ) => {
     const response = await APIService.post<
         IOrganizationRequest,
-        IUserOrganizationResponse
+        ICreateOrganizationResponse
     >(`/organization`, organizationData)
     return response.data
 }

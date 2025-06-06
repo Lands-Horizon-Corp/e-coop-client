@@ -1,157 +1,115 @@
-import {
-    TEntityId,
-    IAccountsRequest,
-    IAccountResource,
-    IAccountsPaginatedResource,
-} from '@/types'
+import { TPagination } from '@/hooks/use-pagination'
+import { TEntityId } from '@/types'
 import qs from 'query-string'
 import APIService from '../api-service'
 import { downloadFileService } from '@/helpers'
+import { IAccount, IAccountRequest } from '@/types/coop-types/accounts/account'
 
-/**
- * Service class to handle CRUD operations for Accounts.
- */
-export default class AccountsService {
-    private static readonly BASE_ENDPOINT = '/account'
-
-    /**
-     * Centralized request handling for better error management.
-     */
-    private static async makeRequest<T>(
-        apiCall: () => Promise<{ data: T }>
-    ): Promise<T> {
-        try {
-            const response = await apiCall()
-            return response.data
-        } catch (error) {
-            console.error('API Request Failed:', error)
-            throw error
-        }
-    }
-
-    /**
-     * Constructs the request URL with optional preloads.
-     */
-    private static buildUrl(
-        endpoint: string,
-        {
-            filters,
-            preloads,
-            pagination,
-            sort,
-        }: {
-            filters?: string
-            preloads?: string[]
-            pagination?: { pageIndex: number; pageSize: number }
-            sort?: string
-        }
-    ): string {
-        return qs.stringifyUrl(
-            {
-                url: `${this.BASE_ENDPOINT}${endpoint}`,
-                query: {
-                    sort,
-                    preloads,
-                    filters,
-                    pageIndex: pagination?.pageIndex,
-                    pageSize: pagination?.pageSize,
-                },
-            },
-            { skipNull: true, skipEmptyString: true }
-        )
-    }
-
-    public static async getAccounts({
-        sort,
+const buildAccountUrl = (
+    endpoint: string,
+    {
         filters,
         preloads,
         pagination,
+        sort,
+        ids, // Added for export selected
     }: {
-        sort?: string
         filters?: string
         preloads?: string[]
-        pagination?: { pageIndex: number; pageSize: number }
-    }) {
-        const url = this.buildUrl(``, { filters, preloads, pagination, sort })
-
-        return this.makeRequest(() =>
-            APIService.get<IAccountsPaginatedResource>(url)
-        )
+        pagination?: TPagination
+        sort?: string
+        ids?: TEntityId[]
     }
-
-    /**
-     * Creates a new account.
-     */
-    public static async create(
-        accountsData: IAccountsRequest,
-        preloads?: string[]
-    ): Promise<IAccountResource> {
-        const url = this.buildUrl('', { preloads })
-        return this.makeRequest(() =>
-            APIService.post<IAccountsRequest, IAccountResource>(
-                url,
-                accountsData
-            )
-        )
-    }
-
-    /**
-     * Deletes an account by ID.
-     */
-    public static async delete(id: TEntityId): Promise<void> {
-        const url = this.buildUrl(`/${id}`, {})
-        return this.makeRequest(() => APIService.delete(url))
-    }
-
-    /**
-     * Updates an account by ID.
-     */
-    public static async update(
-        id: TEntityId,
-        accountData: IAccountsRequest,
-        preloads?: string[]
-    ): Promise<IAccountResource> {
-        const url = this.buildUrl(`/${id}`, { preloads })
-        return this.makeRequest(() =>
-            APIService.put<IAccountsRequest, IAccountResource>(url, accountData)
-        )
-    }
-
-    public static async deleteMany(ids: TEntityId[]): Promise<void> {
-        const endpoint = `${AccountsService.BASE_ENDPOINT}/bulk-delete`
-
-        const payload = { ids }
-
-        await APIService.delete<void>(endpoint, payload)
-    }
-
-    public static async exportAll(): Promise<void> {
-        const url = this.buildUrl(`/export`, {})
-        await downloadFileService(url, 'all_accounts_export.xlsx')
-    }
-
-    public static async exportAllFiltered(filters?: string): Promise<void> {
-        const url = this.buildUrl(`/export-search?filter=${filters || ''}`, {})
-        await downloadFileService(url, 'filtered_accounts_export.xlsx')
-    }
-
-    public static async exportSelected(ids: TEntityId[]): Promise<void> {
-        const url = qs.stringifyUrl(
-            {
-                url: `${AccountsService.BASE_ENDPOINT}/export-selected`,
-                query: { ids },
+): string => {
+    return qs.stringifyUrl(
+        {
+            url: `/account${endpoint}`,
+            query: {
+                sort,
+                preloads,
+                filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+                ids,
             },
-            { skipNull: true }
-        )
+        },
+        { skipNull: true, skipEmptyString: true }
+    )
+}
 
-        await downloadFileService(url, 'selected_accounts_export.xlsx')
-    }
+// GET /account/:id
+export const getAccountById = async (id: TEntityId): Promise<IAccount> => {
+    const response = await APIService.get<IAccount>(`/account/${id}`)
+    return response.data
+}
 
-    public static async exportCurrentPage(page: number): Promise<void> {
-        const url = this.buildUrl(`/export-current-page/${page}`, {})
-        await downloadFileService(
-            url,
-            `current_page_accounts_${page}_export.xlsx`
-        )
-    }
+// GET /account/
+export const getAllAccounts = async (): Promise<IAccount[]> => {
+    const response = await APIService.get<IAccount[]>(`/account`)
+    return response.data
+}
+
+// POST /account
+export const createAccount = async (
+    accountData: IAccountRequest // Corrected from IAccountsRequest
+): Promise<IAccount> => {
+    const response = await APIService.post<IAccountRequest, IAccount>(
+        `/account`,
+        accountData
+    )
+    return response.data
+}
+
+// PUT /account/:id
+export const updateAccount = async (
+    id: TEntityId,
+    accountData: IAccountRequest // Corrected from IAccountsRequest
+): Promise<IAccount> => {
+    const response = await APIService.put<IAccountRequest, IAccount>(
+        `/account/${id}`,
+        accountData
+    )
+    return response.data
+}
+
+// DELETE /account/:id
+export const deleteAccount = async (id: TEntityId): Promise<void> => {
+    const response = await APIService.delete<void>(`/account/${id}`)
+    return response.data // APIService.delete might return response.data for void, or you might just not return anything.
+}
+
+// DELETE /account/bulk-delete
+export const deleteManyAccounts = async (ids: TEntityId[]): Promise<void> => {
+    const endpoint = `/account/bulk-delete`
+    await APIService.delete<void>(endpoint, { ids }) // Assuming APIService.delete can take a payload for body
+}
+
+// GET /account/export
+export const exportAllAccounts = async (): Promise<void> => {
+    const url = buildAccountUrl(`/export`, {})
+    await downloadFileService(url, 'all_accounts_export.xlsx')
+}
+
+// GET /account/export-search?filter=...
+export const exportAllFilteredAccounts = async (
+    filters?: string
+): Promise<void> => {
+    const url = buildAccountUrl(`/export-search`, { filters }) // filters directly in query string
+    await downloadFileService(url, 'filtered_accounts_export.xlsx')
+}
+
+// GET /account/export-selected?ids=...
+export const exportSelectedAccounts = async (
+    ids: TEntityId[]
+): Promise<void> => {
+    const url = buildAccountUrl(`/export-selected`, { ids })
+    await downloadFileService(url, 'selected_accounts_export.xlsx')
+}
+
+// GET /account/export-current-page/:page
+export const exportCurrentPageAccounts = async (
+    page: number
+): Promise<void> => {
+    const url = `/account/export-current-page/${page}` // Direct path for this one
+    await downloadFileService(url, `current_page_accounts_${page}_export.xlsx`)
 }
