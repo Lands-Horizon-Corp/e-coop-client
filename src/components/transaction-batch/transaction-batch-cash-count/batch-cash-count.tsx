@@ -94,7 +94,7 @@ const BatchCashCount = ({
         })
     })
 
-    useFormHelper({ form, defaultValues, ...other })
+    useFormHelper<ICashCountBatchRequest>({ form, defaultValues, ...other })
 
     return (
         <Form {...form}>

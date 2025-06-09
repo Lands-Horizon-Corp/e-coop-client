@@ -8,7 +8,7 @@ import FormErrorMessage from '../ui/form-error-message'
 import LoadingSpinner from '../spinners/loading-spinner'
 
 import { useCamera } from '@/hooks/use-camera'
-import { useTimeInOut } from '@/hooks/use-timesheet'
+import { useTimeInOut } from '@/hooks/api-hooks/use-timesheet'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { ITimesheet, IClassProps, IOperationCallbacks } from '@/types'
 

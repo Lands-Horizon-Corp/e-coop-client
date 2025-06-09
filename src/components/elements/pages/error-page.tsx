@@ -2,17 +2,20 @@ import { IoMdArrowBack } from 'react-icons/io'
 import { ErrorComponentProps, useRouter } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
-import { BracketErrorIcon } from '@/components/icons'
+import { BracketErrorIcon, RefreshIcon } from '@/components/icons'
 import { FlickeringGrid } from '../backgrounds/flickering-grid'
 
 import { cn } from '@/lib'
 
 import { IBaseProps } from '@/types'
+import { allErrorMessageExtractor } from '@/helpers'
 
 interface Props extends IBaseProps, ErrorComponentProps {}
 
 const ErrorPage = ({ className, error }: Props) => {
     const router = useRouter()
+
+    const errorMessage = allErrorMessageExtractor({ error })
 
     return (
         <div
@@ -32,18 +35,27 @@ const ErrorPage = ({ className, error }: Props) => {
             <div className="z-10 flex h-full w-full flex-col items-center justify-center gap-y-4">
                 <BracketErrorIcon className="size-24 text-muted-foreground" />
                 <p className="text-foreground">Something went wrong</p>
-                <p className="text-muted-foreground">
-                    {error instanceof String ? error : error.message}
-                </p>
-                <Button
-                    variant="secondary"
-                    hoverVariant="primary"
-                    className="gap-x-2 rounded-full"
-                    onClick={() => router.history.back()}
-                >
-                    <IoMdArrowBack />
-                    Go Back
-                </Button>
+                <p className="text-muted-foreground">{errorMessage}</p>
+                <div className="z-10 flex items-center gap-x-2">
+                    <Button
+                        variant="secondary"
+                        hoverVariant="primary"
+                        className="gap-x-2 rounded-full"
+                        onClick={() => location.reload()}
+                    >
+                        <RefreshIcon />
+                        Refresh
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        hoverVariant="primary"
+                        className="gap-x-2 rounded-full"
+                        onClick={() => router.history.back()}
+                    >
+                        <IoMdArrowBack />
+                        Go Back
+                    </Button>
+                </div>
             </div>
         </div>
     )

@@ -4,7 +4,6 @@ import {
     getSortedRowModel,
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
 import DataTableToolbar, {
@@ -12,32 +11,29 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import HolidayTableColumns, {
-    IHolidayTableColumnProps,
-    holidayGlobalSearchTargets,
+import TimesheetTableColumns, {
+    ITimesheetTableColumnProps,
+    timesheetGlobalSearchTargets,
 } from './columns'
 
 import { cn } from '@/lib'
+import {
+    TTimesheetHookMode,
+    useFilteredPaginatedTimesheets,
+} from '@/hooks/api-hooks/use-timesheet'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import {
-    // exportAll,
-    deleteManyHolidays,
-    // exportSelected,
-} from '@/api-service/holiday-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedHolidays } from '@/hooks/api-hooks/use-holiday'
 
-import { TableProps } from '@/types'
-import { IHoliday } from '@/types'
+import { TableProps, ITimesheet, TEntityId } from '@/types'
 
-interface HolidayTableProps
-    extends TableProps<IHoliday>,
-        IHolidayTableColumnProps {
+export interface TimesheetTableProps
+    extends TableProps<ITimesheet>,
+        ITimesheetTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IHoliday>,
+        IDataTableToolbarProps<ITimesheet>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -46,23 +42,37 @@ interface HolidayTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
+    mode: TTimesheetHookMode
 }
 
-const HolidaysTable = ({
+export type TTimesheetProps = TimesheetTableProps &
+    (
+        | {
+              mode: 'user-organization'
+              userId: TEntityId
+          }
+        | { mode: 'me' }
+        | { mode: 'all' }
+    )
+
+const TimesheetTable = ({
+    mode,
     className,
+    userId,
     toolbarProps,
     defaultFilter,
     onSelectData,
     actionComponent,
-}: HolidayTableProps) => {
-    const queryClient = useQueryClient()
+}: TTimesheetProps & {
+    userId?: TEntityId
+}) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            HolidayTableColumns({
+            TimesheetTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -78,7 +88,7 @@ const HolidaysTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IHoliday>({
+    } = useDataTableState<ITimesheet>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -88,16 +98,25 @@ const HolidaysTable = ({
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
 
-    const {
-        isPending,
-        isRefetching,
-        data: { data, totalPage, pageSize, totalSize },
-        refetch,
-    } = useFilteredPaginatedHolidays({
+    const timesheetQuery = useFilteredPaginatedTimesheets({
+        mode,
         pagination,
+        user_org_id: userId,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
+
+    const {
+        isPending,
+        isRefetching,
+        data: { data, totalPage, pageSize, totalSize } = {
+            data: [],
+            totalPage: 1,
+            pageSize: 10,
+            totalSize: 0,
+        },
+        refetch,
+    } = timesheetQuery
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
@@ -105,7 +124,7 @@ const HolidaysTable = ({
         columns,
         data: data,
         initialState: {
-            columnPinning: { left: ['select'] },
+            columnPinning: { left: [] },
         },
         state: {
             sorting: tableSorting,
@@ -143,35 +162,14 @@ const HolidaysTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: holidayGlobalSearchTargets,
+                        targets: timesheetGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['holiday', 'resource-query'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyHolidays(
-                                selectedData.map((data) => data.id)
-                            ),
-                    }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        // exportAll: exportAll,
-                        // exportCurrentPage: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
-                        // exportSelected: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
-                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -192,4 +190,4 @@ const HolidaysTable = ({
     )
 }
 
-export default HolidaysTable
+export default TimesheetTable

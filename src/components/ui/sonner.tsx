@@ -1,11 +1,12 @@
 // import { useTheme } from "next-themes"
 import { Toaster as Sonner } from 'sonner'
+import { createPortal as yeetToDOM } from 'react-dom'
 
 import { useTheme } from '@/providers/theme-provider'
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
-const Toaster = ({ ...props }: ToasterProps) => {
+const Toasterize = ({ ...props }: ToasterProps) => {
     const { theme = 'system' } = useTheme()
 
     return (
@@ -25,6 +26,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
             {...props}
         />
     )
+}
+
+const Toaster = (props: ToasterProps) => {
+    return <>{yeetToDOM(<Toasterize {...props} />, document.body)}</>
 }
 
 export { Toaster }
