@@ -1,18 +1,19 @@
-import { Toaster } from 'sonner'
 import { AxiosError } from 'axios'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
+import { Toaster } from '@/components/ui/sonner'
+import CookieConsent from '@/components/cookie-consent'
+import ConfirmModal from '@/components/modals/confirm-modal'
+import ErrorPage from '@/components/elements/pages/error-page'
+import NotFoundPage from '@/components/elements/pages/not-found-page'
+import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
+
 import { useNatsConnect } from '@/hooks/use-pubsub'
 import { useAuthStore } from '@/store/user-auth-store'
-import CookieConsent from '@/components/cookie-consent'
 import { useAuthContext } from '@/hooks/api-hooks/use-auth'
-import ConfirmModal from '@/components/modals/confirm-modal'
 import ConnectionProvider from '@/providers/connection-provider'
-import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
-import NotFoundPage from '@/components/elements/pages/not-found-page'
-import ErrorPage from '@/components/elements/pages/error-page'
 
 export const Route = createRootRoute({
     component: RootLayout,
@@ -48,6 +49,13 @@ function RootLayout() {
 
     return (
         <div className="relative">
+            <Toaster
+                expand
+                richColors
+                closeButton
+                theme="system"
+                className="z-[9999]"
+            />
             <Outlet />
             <ConnectionProvider />
             <CookieConsent />
@@ -55,13 +63,6 @@ function RootLayout() {
             <ConfirmModal />
             <TanStackRouterDevtools />
             <ActionSecurityProvider />
-            <Toaster
-                className="z-50"
-                richColors
-                theme="system"
-                closeButton
-                expand
-            />
         </div>
     )
 }

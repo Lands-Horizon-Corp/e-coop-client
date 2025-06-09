@@ -1,5 +1,9 @@
+import {
+    useRouter,
+    useSearch,
+    createLazyFileRoute,
+} from '@tanstack/react-router'
 import { useCallback } from 'react'
-import { useSearch } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import GuestGuard from '@/components/wrappers/guest-guard'
@@ -7,10 +11,9 @@ import AuthPageWrapper from './-components/auth-page-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import SignInForm from '@/components/forms/auth-forms/sign-in-form'
 
-import { IAuthContext } from '@/types'
 import { useAuthStore } from '@/store/user-auth-store'
-import { createLazyFileRoute } from '@tanstack/react-router'
-import { useRouter } from '@tanstack/react-router'
+
+import { IAuthContext } from '@/types'
 
 export const Route = createLazyFileRoute('/auth/sign-in')({
     component: SignInPage,
