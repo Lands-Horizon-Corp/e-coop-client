@@ -1,5 +1,4 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
-import { IGeneralLedgerAccountsGrouping } from './general-ledger-accounts-grouping'
 import { IPaginatedResult } from './paginated-result'
 
 export enum GeneralLedgerTypeEnum {
@@ -18,7 +17,7 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
     general_ledger_definition_entries_id?: TEntityId
 
     parent_id?: TEntityId
-    parent?: IGeneralLedgerAccountsGrouping
+    parent?: IGeneralLedgerDefinition
     general_ledger_accounts: IGeneralLedgerDefinition[]
 
     name: string
@@ -34,6 +33,8 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
 }
 
 export interface IGeneralLedgerDefinitionRequest {
+    organization_id: TEntityId
+    branch_id: TEntityId
     name: string
     general_ledger_type: GeneralLedgerTypeEnum
 
@@ -44,9 +45,9 @@ export interface IGeneralLedgerDefinitionRequest {
     beginning_balance_of_the_year_credit?: number
     beginning_balance_of_the_year_debit?: number
 
-    organization_id?: TEntityId
-    branch_id?: TEntityId
     general_ledger_definition_entries_id?: TEntityId
+
+    general_ledger_accounts_grouping_id?: TEntityId
 }
 
 export interface IPaginatedGeneralLedgerDefinition
@@ -77,11 +78,10 @@ export const generalLedgerDefinitionSample: IGeneralLedgerDefinition[] = [
                     organization_id: 'org-123',
                     branch_id: 'branch-001',
                     name: 'Asset Group',
+                    parent_id: 'group-001',
+                    general_ledger_accounts: [],
+                    general_ledger_type: GeneralLedgerTypeEnum.Assets,
                     description: 'Group for all asset-related GL accounts',
-                    debit: 'positive',
-                    credit: 'negative',
-                    from_code: 1000,
-                    to_code: 1999,
                     created_at: '2025-06-06T08:00:00Z',
                     updated_at: '2025-06-06T08:00:00Z',
                 },
@@ -103,12 +103,11 @@ export const generalLedgerDefinitionSample: IGeneralLedgerDefinition[] = [
                             name: 'Asset Group',
                             description:
                                 'Group for all asset-related GL accounts',
-                            debit: 'positive',
-                            credit: 'negative',
-                            from_code: 1000,
-                            to_code: 1999,
                             created_at: '2025-06-06T08:00:00Z',
                             updated_at: '2025-06-06T08:00:00Z',
+                            parent_id: 'group-001',
+                            general_ledger_accounts: [],
+                            general_ledger_type: GeneralLedgerTypeEnum.Assets,
                         },
                         beginning_balance_of_the_year_debit: 6000,
                         created_at: '2025-06-06T08:02:00Z',
@@ -129,12 +128,12 @@ export const generalLedgerDefinitionSample: IGeneralLedgerDefinition[] = [
                                     name: 'Asset Group',
                                     description:
                                         'Group for all asset-related GL accounts',
-                                    debit: 'positive',
-                                    credit: 'negative',
-                                    from_code: 1000,
-                                    to_code: 1999,
                                     created_at: '2025-06-06T08:00:00Z',
                                     updated_at: '2025-06-06T08:00:00Z',
+                                    parent_id: 'group-001',
+                                    general_ledger_accounts: [],
+                                    general_ledger_type:
+                                        GeneralLedgerTypeEnum.Assets,
                                 },
                                 beginning_balance_of_the_year_debit: 2500,
                                 created_at: '2025-06-06T08:03:00Z',
@@ -173,10 +172,10 @@ export const generalLedgerDefinitionSample: IGeneralLedgerDefinition[] = [
                     branch_id: 'branch-001',
                     name: 'Liability Group',
                     description: 'Group for all liability-related GL accounts',
-                    debit: 'negative',
-                    credit: 'positive',
-                    from_code: 2000,
-                    to_code: 2999,
+                    parent_id: 'group-002',
+                    general_ledger_accounts: [],
+                    general_ledger_type:
+                        GeneralLedgerTypeEnum.LiabilitiesEquityAndReserves,
                     created_at: '2025-06-06T08:10:00Z',
                     updated_at: '2025-06-06T08:10:00Z',
                 },
@@ -199,10 +198,10 @@ export const generalLedgerDefinitionSample: IGeneralLedgerDefinition[] = [
                             name: 'Liability Group',
                             description:
                                 'Group for all liability-related GL accounts',
-                            debit: 'negative',
-                            credit: 'positive',
-                            from_code: 2000,
-                            to_code: 2999,
+                            parent_id: 'group-002',
+                            general_ledger_accounts: [],
+                            general_ledger_type:
+                                GeneralLedgerTypeEnum.LiabilitiesEquityAndReserves,
                             created_at: '2025-06-06T08:10:00Z',
                             updated_at: '2025-06-06T08:10:00Z',
                         },
@@ -225,10 +224,10 @@ export const generalLedgerDefinitionSample: IGeneralLedgerDefinition[] = [
                                     name: 'Liability Group',
                                     description:
                                         'Group for all liability-related GL accounts',
-                                    debit: 'negative',
-                                    credit: 'positive',
-                                    from_code: 2000,
-                                    to_code: 2999,
+                                    parent_id: 'group-002',
+                                    general_ledger_accounts: [],
+                                    general_ledger_type:
+                                        GeneralLedgerTypeEnum.LiabilitiesEquityAndReserves,
                                     created_at: '2025-06-06T08:10:00Z',
                                     updated_at: '2025-06-06T08:10:00Z',
                                 },

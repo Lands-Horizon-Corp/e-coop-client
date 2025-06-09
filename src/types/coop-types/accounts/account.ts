@@ -187,8 +187,8 @@ export interface IAccount extends IAuditable, ITimeStamps {
 }
 
 export interface IAccountRequest {
-    organization_id?: TEntityId
-    branch_id?: TEntityId
+    organization_id: TEntityId
+    branch_id: TEntityId
 
     general_ledger_definition_id?: TEntityId
     financial_statement_definition_id?: TEntityId
@@ -208,35 +208,30 @@ export interface IAccountRequest {
     cash_on_hand?: boolean
     paid_up_share_capital?: boolean
 
-    // pang loan
     computation_type?: ComputationTypeEnum
 
     fines_amort?: number
     fines_maturity?: number
-
     interest_standard?: number
     interest_secured?: number
 
     computation_sheet_id?: TEntityId
 
+    coh_cib_fines_grace_period_entry_cash_hand?: number
+    coh_cib_fines_grace_period_entry_cash_in_bank?: number
+
     coh_cib_fines_grace_period_entry_daily_amortization?: number
     coh_cib_fines_grace_period_entry_daily_maturity?: number
-
     coh_cib_fines_grace_period_entry_weekly_amortization?: number
     coh_cib_fines_grace_period_entry_weekly_maturity?: number
-
     coh_cib_fines_grace_period_entry_monthly_amortization?: number
     coh_cib_fines_grace_period_entry_monthly_maturity?: number
-
     coh_cib_fines_grace_period_entry_semi_monthly_amortization?: number
     coh_cib_fines_grace_period_entry_semi_monthly_maturity?: number
-
     coh_cib_fines_grace_period_entry_quarterly_amortization?: number
     coh_cib_fines_grace_period_entry_quarterly_maturity?: number
-
     coh_cib_fines_grace_period_entry_semi_anual_amortization?: number
     coh_cib_fines_grace_period_entry_semi_anual_maturity?: number
-
     coh_cib_fines_grace_period_entry_lumpsum_amortization?: number
     coh_cib_fines_grace_period_entry_lumpsum_maturity?: number
 
@@ -247,15 +242,14 @@ export interface IAccountRequest {
 
     fines_grace_period_amortization?: number
     additional_grace_period?: number
-
     number_grace_period_daily?: boolean
-
     fines_grace_period_maturity?: number
     yearly_subscription_fee?: number
     loan_cut_off_days?: number
 
     lumpsum_computation_type?: LumpsumComputationTypeEnum
     interest_fines_computation_diminishing?: InterestFinesComputationDiminishingEnum
+
     interest_fines_computation_diminishing_straight_diminishing_yearly?: InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
     earned_unearned_interest?: EarnedUnearnedInterestEnum
     loan_saving_type?: LoanSavingTypeEnum
