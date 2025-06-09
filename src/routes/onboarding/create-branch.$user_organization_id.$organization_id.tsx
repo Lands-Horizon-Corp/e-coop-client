@@ -146,7 +146,7 @@ function RouteComponent() {
                     <div className="flex gap-x-5 px-2 py-5">
                         <SafeImage
                             className="size-24"
-                            src={organization?.media?.id}
+                            src={organization?.media?.url}
                         />
                         <div className="flex grow flex-col gap-y-2">
                             <h1 className="flex items-center gap-x-2 text-xl font-semibold">
@@ -233,8 +233,8 @@ function RouteComponent() {
                             </div>
                         ) : (
                             branches?.map((branch) => {
-                                const mediaUrl =
-                                    branch?.media?.download_url ?? ''
+                                const mediaUrl = branch?.media?.url ?? ''
+                                console.log(mediaUrl)
                                 return (
                                     <div key={branch.id}>
                                         <GradientBackground mediaUrl={mediaUrl}>
