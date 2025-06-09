@@ -1,5 +1,4 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
-import { IFinancialStatementAccountsGrouping } from './financial-statement-accounts-grouping'
 import { IPaginatedResult } from './paginated-result'
 
 export enum FinancialStatementTypeEnum {
@@ -24,7 +23,7 @@ export interface IFinancialStatementDefinition extends IAuditable, ITimeStamps {
     exclude?: boolean
 
     parent_id?: TEntityId
-    parent?: IFinancialStatementAccountsGrouping
+    parent?: IFinancialStatementDefinition
     financial_statement_accounts: IFinancialStatementDefinition[]
 
     name_in_total?: string
@@ -78,9 +77,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                         branch_id: 'branch-001',
                         name: 'Asset Group',
                         description: 'Group for all asset-related accounts',
-                        debit: 'positive',
-                        credit: 'negative',
-                        code: 1000,
+                        parent_id: 'fsd-001',
+                        financial_statement_accounts: [],
+                        financial_statement_type:
+                            FinancialStatementTypeEnum.Assets,
                         created_at: '2025-06-06T08:00:00Z',
                     },
                     financial_statement_accounts: [
@@ -98,9 +98,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                                 name: 'Asset Group',
                                 description:
                                     'Group for all asset-related accounts',
-                                debit: 'positive',
-                                credit: 'negative',
-                                code: 1000,
+                                parent_id: 'group-001',
+                                financial_statement_accounts: [],
+                                financial_statement_type:
+                                    FinancialStatementTypeEnum.Assets,
                                 created_at: '2025-06-06T08:00:00Z',
                             },
                             financial_statement_accounts: [
@@ -118,9 +119,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                                         name: 'Asset Group',
                                         description:
                                             'Group for all asset-related accounts',
-                                        debit: 'positive',
-                                        credit: 'negative',
-                                        code: 1000,
+                                        parent_id: 'fsd-001',
+                                        financial_statement_accounts: [],
+                                        financial_statement_type:
+                                            FinancialStatementTypeEnum.Assets,
                                         created_at: '2025-06-06T08:00:00Z',
                                     },
                                     financial_statement_accounts: [],
@@ -143,9 +145,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                         branch_id: 'branch-001',
                         name: 'Liability Group',
                         description: 'Group for all liability-related accounts',
-                        debit: 'negative',
-                        credit: 'positive',
-                        code: 2000,
+                        parent_id: 'fsd-001',
+                        financial_statement_accounts: [],
+                        financial_statement_type:
+                            FinancialStatementTypeEnum.Assets,
                         created_at: '2025-06-06T08:05:00Z',
                     },
                     financial_statement_accounts: [
@@ -163,9 +166,9 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                                 name: 'Liability Group',
                                 description:
                                     'Group for all liability-related accounts',
-                                debit: 'negative',
-                                credit: 'positive',
-                                code: 2000,
+                                financial_statement_accounts: [],
+                                financial_statement_type:
+                                    FinancialStatementTypeEnum.Assets,
                                 created_at: '2025-06-06T08:05:00Z',
                             },
                             financial_statement_accounts: [
@@ -183,9 +186,9 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                                         name: 'Liability Group',
                                         description:
                                             'Group for all liability-related accounts',
-                                        debit: 'negative',
-                                        credit: 'positive',
-                                        code: 2000,
+                                        financial_statement_accounts: [],
+                                        financial_statement_type:
+                                            FinancialStatementTypeEnum.Assets,
                                         created_at: '2025-06-06T08:05:00Z',
                                     },
                                     financial_statement_accounts: [],
@@ -216,9 +219,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                         branch_id: 'branch-001',
                         name: 'Revenue Group',
                         description: 'Group for all revenue accounts',
-                        debit: 'negative',
-                        credit: 'positive',
-                        code: 3000,
+                        parent_id: 'fsd-002',
+                        financial_statement_accounts: [],
+                        financial_statement_type:
+                            FinancialStatementTypeEnum.Revenue,
                         created_at: '2025-06-06T08:10:00Z',
                     },
                     financial_statement_accounts: [
@@ -235,9 +239,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                                 branch_id: 'branch-001',
                                 name: 'Revenue Group',
                                 description: 'Group for all revenue accounts',
-                                debit: 'negative',
-                                credit: 'positive',
-                                code: 3000,
+                                parent_id: 'fsd-002',
+                                financial_statement_accounts: [],
+                                financial_statement_type:
+                                    FinancialStatementTypeEnum.Revenue,
                                 created_at: '2025-06-06T08:10:00Z',
                             },
                             financial_statement_accounts: [],
@@ -257,9 +262,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                         branch_id: 'branch-001',
                         name: 'Expense Group',
                         description: 'Group for all expense accounts',
-                        debit: 'positive',
-                        credit: 'negative',
-                        code: 4000,
+                        parent_id: 'fsd-002',
+                        financial_statement_accounts: [],
+                        financial_statement_type:
+                            FinancialStatementTypeEnum.Revenue,
                         created_at: '2025-06-06T08:15:00Z',
                     },
                     financial_statement_accounts: [
@@ -276,9 +282,10 @@ export const financialStatementDefinitionSample: IFinancialStatementDefinition[]
                                 branch_id: 'branch-001',
                                 name: 'Expense Group',
                                 description: 'Group for all expense accounts',
-                                debit: 'positive',
-                                credit: 'negative',
-                                code: 4000,
+                                parent_id: 'fsd-002',
+                                financial_statement_accounts: [],
+                                financial_statement_type:
+                                    FinancialStatementTypeEnum.Revenue,
                                 created_at: '2025-06-06T08:15:00Z',
                             },
                             financial_statement_accounts: [],
