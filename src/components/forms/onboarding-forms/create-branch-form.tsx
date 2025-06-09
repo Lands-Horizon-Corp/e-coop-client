@@ -102,15 +102,15 @@ export const CreateUpdateBranchForm = ({
         const uploadedMedia = await uploadPhoto(
             base64ImagetoFile(mediaId, `bg-banner.jpg`) as File
         )
+        console.log('upload', uploadedMedia.id)
         return uploadedMedia.id
     }
 
     const handleSubmit = async (data: ICreateBranchSchema) => {
         if (useOrganizationId) {
             if (isEditMode) {
-                const isMediaNotChanged =
-                    defaultValues?.media_id === data.media_id
-                const media = isMediaNotChanged
+                const isMediaFromDB = data.media_id?.startsWith('http')
+                const media = isMediaFromDB
                     ? branch.media.id
                     : await handleUploadPhoto(data.media_id ?? '')
                 const request = { ...data, media_id: media }
@@ -514,7 +514,7 @@ export const CreateUpdateBranchForm = ({
                         >
                             {isLoading ? (
                                 <div className="flex space-x-2">
-                                    <p>Creating...</p>
+                                    {isEditMode ? 'updating ' : 'Creating '}{' '}
                                     <LoadingSpinnerIcon
                                         size={18}
                                         className="mr-2 animate-spin"
