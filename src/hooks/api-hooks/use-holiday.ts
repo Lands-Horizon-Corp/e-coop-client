@@ -4,43 +4,51 @@ import { useQuery } from '@tanstack/react-query'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import { createMutationHook } from './api-hook-factory'
-import * as BankService from '@/api-service/bank-service'
+import * as HolidayService from '@/api-service/holiday-service'
 
 import {
-    IBank,
+    IHoliday,
     IAPIHook,
     TEntityId,
     IQueryProps,
-    IBankRequest,
-    IBankPaginated,
+    IHolidayRequest,
+    IHolidayPaginated,
     IAPIFilteredPaginatedHook,
 } from '@/types'
 
-export const useCreateBank = createMutationHook<IBank, string, IBankRequest>(
-    (data) => BankService.createBank(data),
-    'Bank created'
-)
-
-export const useUpdateBank = createMutationHook<
-    IBank,
+// Create
+export const useCreateHoliday = createMutationHook<
+    IHoliday,
     string,
-    { bankId: TEntityId; data: IBankRequest }
->(({ bankId, data }) => BankService.updateBank(bankId, data), 'Bank updated')
+    IHolidayRequest
+>((data) => HolidayService.createHoliday(data), 'Holiday created')
 
-export const useDeleteBank = createMutationHook<void, string, TEntityId>(
-    (id) => BankService.deleteBank(id),
-    'Bank deleted'
+// Update
+export const useUpdateHoliday = createMutationHook<
+    IHoliday,
+    string,
+    { holidayId: TEntityId; data: IHolidayRequest }
+>(
+    ({ holidayId, data }) => HolidayService.updateHoliday(holidayId, data),
+    'Holiday updated'
 )
 
-export const useBanks = ({
+// Delete
+export const useDeleteHoliday = createMutationHook<void, string, TEntityId>(
+    (id) => HolidayService.deleteHoliday(id),
+    'Holiday deleted'
+)
+
+// Get all holidays
+export const useHolidays = ({
     enabled,
     showMessage = true,
-}: IAPIHook<IBank[], string> & IQueryProps = {}) => {
-    return useQuery<IBank[], string>({
-        queryKey: ['bank', 'resource-query', 'all'],
+}: IAPIHook<IHoliday[], string> & IQueryProps = {}) => {
+    return useQuery<IHoliday[], string>({
+        queryKey: ['holiday', 'resource-query', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                BankService.getAllBanks()
+                HolidayService.getAllHolidays()
             )
 
             if (error) {
@@ -57,19 +65,26 @@ export const useBanks = ({
     })
 }
 
-export const useFilteredPaginatedBanks = ({
+// Paginated/filtered holidays
+export const useFilteredPaginatedHolidays = ({
     sort,
     enabled,
     filterPayload,
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IBankPaginated, string> & IQueryProps = {}) => {
-    return useQuery<IBankPaginated, string>({
-        queryKey: ['bank', 'resource-query', filterPayload, pagination, sort],
+}: IAPIFilteredPaginatedHook<IHolidayPaginated, string> & IQueryProps = {}) => {
+    return useQuery<IHolidayPaginated, string>({
+        queryKey: [
+            'holiday',
+            'resource-query',
+            filterPayload,
+            pagination,
+            sort,
+        ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                BankService.getPaginatedBanks({
+                HolidayService.getPaginatedHolidays({
                     preloads,
                     pagination,
                     sort: sort && toBase64(sort),

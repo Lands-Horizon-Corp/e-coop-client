@@ -44,6 +44,7 @@ import { IMemberEducationalAttainment } from './member-educational-attainment'
 import { IOrganization } from '@/types/lands-types'
 import { IMemberRecruits } from './member-recruits'
 import { IMemberGroup } from './member-group'
+import { IQrScanResult } from '../../qr/index'
 
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
@@ -191,6 +192,8 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     business_address: string
     business_contact_number: string
     civil_status: TCivilStatus
+
+    qr_code: IQrScanResult<string, 'member-profile-qr'>
 
     // occupationId?: TEntityId
 

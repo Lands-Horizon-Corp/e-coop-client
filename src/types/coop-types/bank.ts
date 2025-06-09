@@ -16,4 +16,4 @@ export interface IBank extends IBaseEntityMeta {
     description: string
 }
 
-export interface IBankPaginatedResource extends IPaginatedResult<IBank> {}
+export interface IBankPaginated extends IPaginatedResult<IBank> {}

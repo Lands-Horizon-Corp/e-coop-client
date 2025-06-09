@@ -127,6 +127,20 @@ export const closeMemberProfileAccount = async (
     return response.data
 }
 
+export const approveMemberProfile = async (id: TEntityId) => {
+    const response = await APIService.put<void, IMemberProfile>(
+        `/member-profile/${id}/approve`
+    )
+    return response.data
+}
+
+export const declineMemberProfile = async (id: TEntityId) => {
+    const response = await APIService.put<void, IMemberProfile>(
+        `/member-profile/${id}/decline`
+    )
+    return response.data
+}
+
 export const deleteMany = async (ids: TEntityId[]) => {
     const endpoint = `${BASE_ENDPOINT}/bulk-delete`
     const payload = { ids }
@@ -144,19 +158,25 @@ export const getAllMemberProfile = async (preloads?: string[]) => {
 }
 
 export const getPaginatedMemberProfile = async ({
+    mode,
+    sort,
     filters,
     preloads,
     pagination,
-    sort,
 }: {
+    mode: 'all' | 'pendings'
     sort?: string
     filters?: string
     preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
-} = {}) => {
-    const url = qs.stringifyUrl(
+}) => {
+    let url: string = `${BASE_ENDPOINT}`
+
+    if (mode === 'pendings') url = '/pending'
+
+    const finalUrl = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/paginated`,
+            url: `${url}/paginated`,
             query: {
                 sort,
                 preloads,
@@ -168,7 +188,7 @@ export const getPaginatedMemberProfile = async ({
         { skipNull: true }
     )
 
-    const response = await APIService.get<IMemberProfilePaginated>(url)
+    const response = await APIService.get<IMemberProfilePaginated>(finalUrl)
     return response.data
 }
 
