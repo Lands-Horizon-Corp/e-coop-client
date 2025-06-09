@@ -1,7 +1,11 @@
-import { IClassProps } from '@/types'
 import BlotterRequestKanban from './kanbans/blotter-request-kanban'
-import { cn } from '@/lib'
+import UserJoinRequestKanban from './kanbans/user-join-request-kanban'
+import NewMemberProfileKanban from './kanbans/new-member-profile-kanban'
 import EndedTransactionBatchKanban from './kanbans/ended-transaction-batch-kanban'
+
+import { cn } from '@/lib'
+
+import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {}
 
@@ -15,6 +19,8 @@ const Approval = ({ className }: Props) => {
         >
             <EndedTransactionBatchKanban />
             <BlotterRequestKanban />
+            <UserJoinRequestKanban />
+            <NewMemberProfileKanban />
         </div>
     )
 }

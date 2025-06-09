@@ -28,79 +28,21 @@ export const timeInOut = async (data: ITimesheetInOutRequest) => {
 }
 
 export const getPaginatedTimesheets = async ({
+    url,
     sort,
     filters,
     preloads,
     pagination,
 }: {
-    sort?: string
-    filters?: string
-    preloads?: string[]
-    pagination?: { pageIndex: number; pageSize: number }
-} = {}) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `/timesheet`,
-            query: {
-                sort,
-                preloads,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IPaginatedTimesheet>(url)
-    return response.data
-}
-
-export const getMyPaginatedTimesheets = async ({
-    sort,
-    filters,
-    preloads,
-    pagination,
-}: {
-    sort?: string
-    filters?: string
-    preloads?: string[]
-    pagination?: { pageIndex: number; pageSize: number }
-} = {}) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `/timesheet/me`,
-            query: {
-                sort,
-                preloads,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IPaginatedTimesheet>(url)
-    return response.data
-}
-
-export const getUserPaginatedTimesheets = async ({
-    userId,
-    sort,
-    filters,
-    preloads,
-    pagination,
-}: {
-    userId: TEntityId
+    url: string
     sort?: string
     filters?: string
     preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const url = qs.stringifyUrl(
+    const finalUrl = qs.stringifyUrl(
         {
-            url: `/timesheet/user/${userId}`,
+            url: `/timesheet/${url}`,
             query: {
                 sort,
                 preloads,
@@ -112,6 +54,6 @@ export const getUserPaginatedTimesheets = async ({
         { skipNull: true }
     )
 
-    const response = await APIService.get<IPaginatedTimesheet>(url)
+    const response = await APIService.get<IPaginatedTimesheet>(finalUrl)
     return response.data
 }

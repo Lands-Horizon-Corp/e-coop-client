@@ -9,7 +9,13 @@ import JointAccountsDisplay from './displays/joint-accounts-display'
 import MemberRecruitsDisplay from './displays/member-recruits-display'
 import RelativeAccountsDisplay from './displays/relative-accounts-display'
 // import MemberDescriptionDisplays from './displays/member-descriptions-display'
-import { DetailsIcon, HandCoinsIcon, PieChartIcon, UserTagIcon } from '../icons'
+import {
+    DetailsIcon,
+    HandCoinsIcon,
+    PieChartIcon,
+    QrCodeIcon,
+    UserTagIcon,
+} from '../icons'
 
 import { cn } from '@/lib'
 import { IBaseProps } from '@/types'
@@ -44,13 +50,22 @@ const MemberGeneralMembershipInfo = ({
                     organization={data?.organization}
                     branch={data?.branch}
                 />
-                <QrCode
-                    value={JSON.stringify({
-                        type: 'member-id',
-                        data: { id: data?.id },
-                    })}
-                    className="size-24 p-2"
-                />
+                {data?.qr_code ? (
+                    <QrCode
+                        value={JSON.stringify(data.qr_code)}
+                        className="size-24 p-2"
+                    />
+                ) : (
+                    <div className="text-muted-foreground/60">
+                        <QrCodeIcon
+                            strokeWidth={1.2}
+                            className="mx-auto size-24"
+                        />
+                        <p className="mx-auto text-center text-xs">
+                            QR Unavailable
+                        </p>
+                    </div>
+                )}
             </div>
             <div className="grid gap-4 md:grid-cols-4">
                 <div className="space-y-2">

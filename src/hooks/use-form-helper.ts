@@ -8,24 +8,24 @@ import { useCallback, useEffect } from 'react'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
-interface UseFormHelperProps<T, TForm extends FieldValues> {
+interface UseFormHelperProps<T extends FieldValues> {
     readOnly?: boolean
-    form: UseFormReturn<TForm>
-    hiddenFields?: Array<Path<T>>
+    form: UseFormReturn<T>
+    hiddenFields?: Path<T>[]
     resetOnDefaultChange?: boolean
-    disabledFields?: Array<Path<T>>
+    disabledFields?: Path<T>[]
     defaultValues?: DefaultValues<T>
     onNewDefaulValueNotice?: { title: string; description: string }
 }
 
-export const useFormHelper = <T, TForm extends FieldValues>({
+export const useFormHelper = <T extends FieldValues>({
     readOnly = false,
     hiddenFields = [],
     disabledFields = [],
     form,
     defaultValues,
     resetOnDefaultChange = false,
-}: UseFormHelperProps<T, TForm>) => {
+}: UseFormHelperProps<T>) => {
     const { onOpen } = useConfirmModalStore()
 
     useEffect(() => {
@@ -37,11 +37,10 @@ export const useFormHelper = <T, TForm extends FieldValues>({
                         'The data you are currently editting has changed, but you have unsaved changes. Do you want to keep editting or update to newest data?',
                     confirmString: 'Newest',
                     cancelString: 'Keep Editting',
-                    onConfirm: () =>
-                        form.reset(defaultValues as unknown as TForm),
+                    onConfirm: () => form.reset(defaultValues as unknown as T),
                 })
             } else {
-                form.reset(defaultValues as TForm)
+                form.reset(defaultValues as T)
             }
         }
     }, [form, onOpen, defaultValues, resetOnDefaultChange])
@@ -56,8 +55,21 @@ export const useFormHelper = <T, TForm extends FieldValues>({
         [hiddenFields]
     )
 
+    const getDisableHideFieldProps = useCallback(
+        (field: Path<T>) => {
+            const prop: { disabled?: boolean; hidden?: boolean } = {}
+
+            if (readOnly || hiddenFields.includes(field)) prop.hidden = true
+            if (disabledFields.includes(field)) prop.disabled = true
+
+            return prop
+        },
+        [hiddenFields, readOnly, disabledFields]
+    )
+
     return {
         isHidden,
         isDisabled,
+        getDisableHideFieldProps,
     }
 }

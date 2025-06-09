@@ -36,6 +36,9 @@ export const createTransactionBatch = async (
     return response.data
 }
 
+// Create TransactionBatch -> id
+// TransactionBatch Funding
+
 export const requestTransactionBatchBlotterView = async (id: TEntityId) => {
     const response = await APIService.put<void, ITransactionBatchMinimal>(
         `/transaction-batch/${id}/view-request`
@@ -58,7 +61,7 @@ export const endCurrentBatch = async (data: ITransactionBatchEndRequest) => {
     const response = await APIService.put<
         ITransactionBatchEndRequest,
         TTransactionBatchFullorMin
-    >(`/transaction-batch/end-batch`, data)
+    >(`/transaction-batch/end`, data)
     return response.data
 }
 

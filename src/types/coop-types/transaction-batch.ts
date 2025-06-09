@@ -57,8 +57,8 @@ export interface ITransactionBatch
     request_view?: string // date / timestamp
     is_closed: boolean
 
-    ended_at: string
-    total_batch_time: string
+    ended_at?: string
+    total_batch_time?: string
 }
 
 export interface ITransactionBatchMinimal

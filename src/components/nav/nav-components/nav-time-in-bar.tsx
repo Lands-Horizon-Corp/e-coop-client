@@ -9,48 +9,10 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { BriefCaseClockIcon, DotBigIcon } from '@/components/icons'
 
 import { cn } from '@/lib/utils'
-import { useCurrentTimesheet } from '@/hooks/use-timesheet'
+import { useCurrentTimesheet } from '@/hooks/api-hooks/use-timesheet'
 
 const NavTimeInBar = () => {
-    const { data: timesheet, isPending: isLoading } = useCurrentTimesheet({
-        initialData: {
-            id: '11111111-1111-1111-1111-111111111111',
-            user_id: '22222222-2222-2222-2222-222222222222',
-            user: {
-                id: '22222222-2222-2222-2222-222222222222',
-                user_name: 'Jake',
-                first_name: 'Mock',
-                last_name: 'User',
-                email: 'mockuser@example.com',
-                media: {
-                    download_url:
-                        'https://w0.peakpx.com/wallpaper/446/783/HD-wallpaper-jake-the-dog-adventure-time-cartoon.jpg',
-                },
-            },
-            media_in_id: '33333333-3333-3333-3333-333333333333',
-            media_in: {
-                id: '33333333-3333-3333-3333-333333333333',
-                download_url: '/mock-in.jpg',
-                file_name: 'mock-in.jpg',
-                size: 123456,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            },
-            media_out_id: '44444444-4444-4444-4444-444444444444',
-            media_out: {
-                id: '44444444-4444-4444-4444-444444444444',
-                download_url: '/mock-out.jpg',
-                file_name: 'mock-out.jpg',
-                size: 123456,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-            },
-            time_in: '2025-06-04T07:38:06.198Z',
-            time_out: undefined,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-        } as unknown as any,
-    })
+    const { data: timesheet, isPending: isLoading } = useCurrentTimesheet()
 
     // const quote = useMemo(() => {
     //     return !timesheet ? randomStartOfDayQuoute() : randomEndOfDayQuoute()

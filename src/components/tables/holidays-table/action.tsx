@@ -1,36 +1,39 @@
-import { IBankTableActionComponentProp } from './columns'
+import { IHolidayTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
-import { BankCreateUpdateFormModal } from '@/components/forms/bank-create-update-form'
+import { HolidayCreateUpdateFormModal } from '@/components/forms/holiday-create-update-form'
 
 import { useModalState } from '@/hooks/use-modal-state'
-import { useDeleteBank } from '@/hooks/api-hooks/use-bank'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useDeleteHoliday } from '@/hooks/api-hooks/use-holiday'
 
-interface IBankTableActionProps extends IBankTableActionComponentProp {
+interface IHolidayTableActionComponentProps
+    extends IHolidayTableActionComponentProp {
     onBankUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
+const HolidayTableAction = ({
+    row,
+    onDeleteSuccess,
+}: IHolidayTableActionComponentProps) => {
     const updateModal = useModalState()
-    const bank = row.original
+    const holiday = row.original
 
     const { onOpen } = useConfirmModalStore()
 
-    const { isPending: isDeletingBank, mutate: deleteBank } = useDeleteBank({
-        onSuccess: onDeleteSuccess,
-    })
+    const { isPending: isDeletingHoliday, mutate: deleteHoliday } =
+        useDeleteHoliday({
+            onSuccess: onDeleteSuccess,
+        })
 
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                <BankCreateUpdateFormModal
+                <HolidayCreateUpdateFormModal
                     {...updateModal}
                     formProps={{
-                        bankId: bank.id,
-                        defaultValues: {
-                            ...bank,
-                        },
+                        holidayId: holiday.id,
+                        defaultValues: holiday,
                         onSuccess: () => {
                             updateModal.onOpenChange(false)
                         },
@@ -40,13 +43,13 @@ const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
             <RowActionsGroup
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingBank,
+                    isAllowed: !isDeletingHoliday,
                     onClick: () => {
                         onOpen({
-                            title: 'Delete Bank',
+                            title: 'Delete Holiday',
                             description:
-                                'Are you sure you want to delete this bank?',
-                            onConfirm: () => deleteBank(bank.id),
+                                'Are you sure you want to delete this holiday?',
+                            onConfirm: () => deleteHoliday(holiday.id),
                         })
                     },
                 }}
@@ -61,4 +64,4 @@ const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
     )
 }
 
-export default BankAction
+export default HolidayTableAction

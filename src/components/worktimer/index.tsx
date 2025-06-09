@@ -9,7 +9,7 @@ import LoadingSpinner from '../spinners/loading-spinner'
 
 import { cn } from '@/lib'
 import { toReadableDateTime } from '@/utils'
-import { useCurrentTimesheet } from '@/hooks/use-timesheet'
+import { useCurrentTimesheet } from '@/hooks/api-hooks/use-timesheet'
 
 import ARTWORK_TIMED_IN from '@/assets/artworks/artwork-timed-in.svg'
 import ARTWORK_TIME_IN_OUT from '@/assets/artworks/artwork-time-in-out.svg'

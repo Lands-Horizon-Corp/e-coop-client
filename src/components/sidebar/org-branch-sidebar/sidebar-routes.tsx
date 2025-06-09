@@ -404,6 +404,26 @@ export const generateSidebarGroups = (
             ],
         },
         {
+            title: 'Timesheet',
+            userType: ['employee', 'member'],
+            navItems: [
+                {
+                    type: 'item',
+                    title: 'Timesheets',
+                    icon: CalendarDotsIcon,
+                    url: `${baseUrl}/timesheets`,
+                    userType: ['owner', 'employee'],
+                },
+                {
+                    type: 'item',
+                    title: 'My Timesheet',
+                    icon: CalendarDotsIcon,
+                    url: `${baseUrl}/my-timesheet`,
+                    userType: ['employee', 'member'],
+                },
+            ],
+        },
+        {
             title: 'Others',
             userType: ['employee', 'member'],
             navItems: [

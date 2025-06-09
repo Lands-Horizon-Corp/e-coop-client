@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/user-auth-store'
 import {
     IBranch,
     IOperationCallbacks,
+    IQueryProps,
     IUserOrganization,
     TEntityId,
     UserOrganizationGroup,
@@ -12,6 +13,7 @@ import {
 import { groupBy, withCatchAsync } from '@/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { createMutationHook } from './api-hook-factory'
 
 export const useGetUserOrganizationByUserId = () => {
     const { currentAuth } = useAuthStore.getState()
@@ -196,3 +198,45 @@ export const useSeedOrganization = () => {
         },
     })
 }
+
+export const useUserOrgJoinRequests = ({
+    showMessage,
+    onSuccess,
+    onError,
+    ...others
+}: IOperationCallbacks<IUserOrganization[]> &
+    IQueryProps<IUserOrganization[]> = {}) => {
+    return useQuery<IUserOrganization[], string>({
+        queryKey: ['user-organization', 'join-request', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                UserOrganization.getAllJoinRequests()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                onError?.(errorMessage, error)
+                throw errorMessage
+            }
+
+            onSuccess?.(result)
+            return result
+        },
+        retry: 1,
+        ...others,
+        initialData: others.initialData ?? [],
+    })
+}
+
+export const useUserOrgAcceptJoinRequest = createMutationHook<
+    IUserOrganization,
+    string,
+    TEntityId
+>((id) => UserOrganization.acceptJoinRequest(id), 'join request accepted')
+
+export const useUserOrgRejectJoinRequest = createMutationHook<
+    IUserOrganization,
+    string,
+    TEntityId
+>((id) => UserOrganization.rejectJoinRequest(id), 'Join request rejected.')
