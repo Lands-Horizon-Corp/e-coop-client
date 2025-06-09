@@ -89,14 +89,17 @@ const AccountCreateUpdateForm = ({
             ...defaultValues,
         },
     })
+
     const isDisabled = (field: Path<TAccountFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const handleSubmit = form.handleSubmit((data: IAccountRequest) => {
+        console.log(data)
+    })
+
     return (
         <Form {...form}>
-            <form
-                // onSubmit={onSubmit}
-                className={cn('w-full', className)}
-            >
+            <form onSubmit={handleSubmit} className={cn('w-full', className)}>
                 <div className="flex w-full gap-x-5">
                     <fieldset disabled={readOnly} className="w-[40%] space-y-3">
                         <FormFieldWrapper
@@ -234,15 +237,13 @@ const AccountCreateUpdateForm = ({
                             render={({ field }) => {
                                 const { ref: _ref, ...rest } = field
                                 return (
-                                    <FormControl>
-                                        <TextEditor
-                                            {...rest}
-                                            content={field.value ?? ''}
-                                            className="w-full"
-                                            textEditorClassName="!max-w-none !h-32"
-                                            placeholder="Write some description about the account..."
-                                        />
-                                    </FormControl>
+                                    <TextEditor
+                                        {...rest}
+                                        content={field.value ?? ''}
+                                        className="w-full"
+                                        textEditorClassName="!max-w-none !h-32"
+                                        placeholder="Write some description about the account..."
+                                    />
                                 )
                             }}
                         />
@@ -250,7 +251,7 @@ const AccountCreateUpdateForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 name="account_exclusive_setting_type"
-                                className="" // Using a grid to arrange checkboxes
+                                className=""
                                 render={({ field }) => (
                                     <>
                                         {/* Checkbox for Is Internal */}
@@ -477,7 +478,7 @@ const AccountCreateUpdateForm = ({
                                     <RadioGroup
                                         onValueChange={field.onChange}
                                         value={field.value}
-                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2" // Adjust grid for fewer options
+                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                     >
                                         {Object.values(
                                             InterestFinesComputationDiminishingEnum
@@ -530,7 +531,7 @@ const AccountCreateUpdateForm = ({
                                     <RadioGroup
                                         onValueChange={field.onChange}
                                         value={field.value}
-                                        className="grid grid-cols-1 gap-4" // Adjust grid for multiple lines
+                                        className="grid grid-cols-1 gap-4"
                                     >
                                         {Object.values(
                                             InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
@@ -875,7 +876,7 @@ const AccountCreateUpdateForm = ({
                                             <RadioGroup
                                                 onValueChange={field.onChange}
                                                 value={field.value}
-                                                className="grid grid-cols-1 gap-4 sm:grid-cols-2" // Adjust grid for fewer options
+                                                className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                             >
                                                 {Object.values(
                                                     EarnedUnearnedInterestEnum
@@ -1840,20 +1841,20 @@ const AccountCreateUpdateForm = ({
                         >
                             Reset
                         </Button>
-                        {/* <Button
-                    size="sm"
-                    type="submit"
-                    disabled={isPending}
-                    className="w-full self-end px-8 sm:w-fit"
-                >
-                    {isPending ? (
+                        <Button
+                            size="sm"
+                            type="submit"
+                            className="w-full self-end px-8 sm:w-fit"
+                        >
+                            {/* {isPending ? (
                         <LoadingSpinner />
                     ) : bankId ? (
                         'Update'
                     ) : (
                         'Create'
-                    )}
-                </Button> */}
+                    )} */}
+                            Create
+                        </Button>
                     </div>
                 </div>
             </form>

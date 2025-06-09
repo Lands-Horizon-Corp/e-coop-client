@@ -102,7 +102,6 @@ export const CreateUpdateBranchForm = ({
         const uploadedMedia = await uploadPhoto(
             base64ImagetoFile(mediaId, `bg-banner.jpg`) as File
         )
-        console.log('upload', uploadedMedia.id)
         return uploadedMedia.id
     }
 
