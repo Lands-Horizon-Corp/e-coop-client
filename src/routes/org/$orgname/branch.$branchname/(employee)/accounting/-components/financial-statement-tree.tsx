@@ -16,7 +16,7 @@ const FinancialStatementTreeViewer = ({
     }
 
     return (
-        <div className="rounded-lg p-4 shadow-md">
+        <div className="w-1/2 rounded-lg p-4 shadow-md">
             <h3 className="mb-4 text-xl font-bold">
                 Financial Statement Definition
             </h3>

@@ -191,8 +191,12 @@ function RouteComponent() {
                             Array.from({
                                 length: 2,
                             }).map(() => {
+                                const key = Math.random()
                                 return (
-                                    <div className="flex gap-x-5 px-2 py-5">
+                                    <div
+                                        key={key}
+                                        className="flex gap-x-5 px-2 py-5"
+                                    >
                                         <div className="relative flex min-h-10 w-full rounded-2xl border-0 p-5">
                                             <Skeleton className="size-16 rounded-full" />
 
@@ -309,7 +313,7 @@ function RouteComponent() {
                             handleSeedOrganizationWithBranch()
                         }}
                     >
-                        seed
+                        continue
                     </Button>
                 </div>
             </div>
