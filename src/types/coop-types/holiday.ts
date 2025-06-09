@@ -13,4 +13,4 @@ export interface IHolidayRequest {
     description: string
 }
 
-export interface IPaginatedHoliday extends IPaginatedResult<IHoliday> {}
+export interface IHolidayPaginated extends IPaginatedResult<IHoliday> {}

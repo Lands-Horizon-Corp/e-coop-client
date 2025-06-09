@@ -17,6 +17,7 @@ import {
     IMemberCloseRemarkRequest,
     IMemberProfileQuickCreateRequest,
 } from '@/types'
+import { createMutationHook } from '../api-hook-factory'
 
 export const useQuickCreateMemberProfile = ({
     showMessage = true,
@@ -254,19 +255,48 @@ export const useCloseMemberProfile = ({
     })
 }
 
+export const useApproveMemberProfile = createMutationHook<
+    IMemberProfile,
+    string,
+    TEntityId
+>(
+    (id) => MemberProfileService.approveMemberProfile(id),
+    'Member profile approved'
+)
+
+export const useDeclineMemberProfile = createMutationHook<
+    IMemberProfile,
+    string,
+    TEntityId
+>(
+    (id) => MemberProfileService.declineMemberProfile(id),
+    'Member profile declined'
+)
+
 export const useFilteredPaginatedMemberProfile = ({
     sort,
     enabled,
+    initialData,
+    mode = 'all',
     filterPayload,
     preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IMemberProfile, string> & IQueryProps = {}) => {
+}: IAPIFilteredPaginatedHook<IMemberProfile, string> &
+    IQueryProps<IMemberProfilePaginated> & { mode?: 'all' | 'pendings' }) => {
     return useQuery<IMemberProfilePaginated, string>({
-        queryKey: ['gender', 'resource-query', filterPayload, pagination, sort],
+        queryKey: [
+            'gender',
+            'resource-query',
+            mode,
+            filterPayload,
+            pagination,
+            sort,
+        ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberProfileService.getPaginatedMemberProfile({
+                    mode,
                     preloads,
                     pagination,
                     sort: sort && toBase64(sort),
@@ -282,7 +312,7 @@ export const useFilteredPaginatedMemberProfile = ({
 
             return result
         },
-        initialData: {
+        initialData: initialData ?? {
             data: [],
             pages: [],
             totalSize: 0,

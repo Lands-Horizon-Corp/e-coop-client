@@ -65,3 +65,24 @@ export const switchOrganization = async (userOrganizationId: TEntityId) => {
         return false
     }
 }
+
+export const getAllJoinRequests = async () => {
+    const response = await APIService.get<IUserOrganization[]>(
+        '/user-organization/join-request'
+    )
+    return response.data
+}
+
+export const acceptJoinRequest = async (userOrganizationId: TEntityId) => {
+    const response = await APIService.put<void, IUserOrganization>(
+        `/user-organization/join-request/${userOrganizationId}/accept`
+    )
+    return response.data
+}
+
+export const rejectJoinRequest = async (userOrganizationId: TEntityId) => {
+    const response = await APIService.put<void, IUserOrganization>(
+        `/user-organization/join-request/${userOrganizationId}/reject`
+    )
+    return response.data
+}

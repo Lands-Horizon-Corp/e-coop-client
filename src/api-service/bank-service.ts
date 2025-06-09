@@ -3,7 +3,7 @@ import qs from 'query-string'
 import APIService from './api-service'
 import { downloadFile } from '../helpers'
 
-import { IBank, TEntityId, IBankRequest, IBankPaginatedResource } from '@/types'
+import { IBank, TEntityId, IBankRequest, IBankPaginated } from '@/types'
 
 const BASE_ENDPOINT = '/bank'
 
@@ -55,7 +55,7 @@ export const getPaginatedBanks = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/search`,
+            url: `${BASE_ENDPOINT}/paginated`,
             query: {
                 sort,
                 preloads,
@@ -67,7 +67,7 @@ export const getPaginatedBanks = async (props?: {
         { skipNull: true }
     )
 
-    const response = await APIService.get<IBankPaginatedResource>(url)
+    const response = await APIService.get<IBankPaginated>(url)
     return response.data
 }
 
