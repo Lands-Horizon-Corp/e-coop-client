@@ -15,7 +15,7 @@ import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-stateme
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 import z from 'zod'
 
-const TEntityIdSchema = z.string()
+const TEntityIdSchema = z.string().min(1, 'Name is required')
 
 export enum AccountExclusiveSettingTypeEnum {
     None = 'None',
@@ -25,8 +25,8 @@ export enum AccountExclusiveSettingTypeEnum {
 }
 
 export const IAccountRequestSchema = z.object({
-    organization_id: TEntityIdSchema.optional(),
-    branch_id: TEntityIdSchema.optional(),
+    organization_id: TEntityIdSchema,
+    branch_id: TEntityIdSchema,
 
     general_ledger_definition_id: TEntityIdSchema.optional(),
     financial_statement_definition_id: TEntityIdSchema.optional(),
@@ -172,55 +172,3 @@ export const IAccountRequestSchema = z.object({
 
     general_ledger_grouping_exclude_account: z.boolean().optional(),
 })
-
-// const validAccountData = {
-//     id: 'acc_123',
-//     organization_id: 'org_abc',
-//     branch_id: 'br_main',
-//     member_type_id: 'mt_001',
-//     name: 'Savings Account',
-//     description: 'Standard savings account for members.',
-//     type: AccountTypeEnum.Deposit,
-//     minAmount: 100,
-//     maxAmount: 100000,
-//     is_internal: false,
-//     created_at: new Date().toISOString(),
-//     updated_at: new Date().toISOString(),
-// }
-
-// try {
-//     console.log('Valid IAccount data:', validAccountData)
-// } catch (error) {
-//     console.error('IAccount validation error:', error)
-// }
-
-// const invalidAccountData = {
-//     id: 'acc_456',
-//     member_type_id: 'mt_002',
-//     description: 'Invalid account example.',
-//     type: AccountTypeEnum.Loan,
-// }
-
-// try {
-//     console.log('Valid IAccount data (should not be):', invalidAccountData)
-// } catch (error) {
-//     console.error('IAccount validation error (expected):', error)
-// }
-
-// const validAccountRequestData = {
-//     member_type_id: 'mt_003',
-//     name: 'New Loan Product',
-//     description: 'A new loan offering.',
-//     type: AccountTypeEnum.Loan,
-//     computation_type: ComputationTypeEnum.Straight,
-//     interest_standard: 0.05,
-//     organization_id: 'org_xyz',
-//     branch_id: 'br_east',
-// }
-
-// try {
-//     IAccountRequestSchema.parse(validAccountRequestData)
-//     console.log('Valid IAccountRequest data:', validAccountRequestData)
-// } catch (error) {
-//     console.error('IAccountRequest validation error:', error)
-// }
