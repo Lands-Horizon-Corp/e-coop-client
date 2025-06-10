@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
+import { createMutationHook } from '../api-hook-factory'
 import * as MemberProfileService from '@/api-service/member-services/member-profile-service'
 
 import {
@@ -17,7 +18,6 @@ import {
     IMemberCloseRemarkRequest,
     IMemberProfileQuickCreateRequest,
 } from '@/types'
-import { createMutationHook } from '../api-hook-factory'
 
 export const useQuickCreateMemberProfile = ({
     showMessage = true,
@@ -272,6 +272,31 @@ export const useDeclineMemberProfile = createMutationHook<
     (id) => MemberProfileService.declineMemberProfile(id),
     'Member profile declined'
 )
+
+export const useAllPendingMemberProfiles = ({
+    enabled,
+    showMessage = true,
+}: IAPIHook<IMemberProfile[], string> & IQueryProps = {}) => {
+    return useQuery<IMemberProfile[], string>({
+        queryKey: ['member-profile', 'resource-query', 'all', 'pending'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberProfileService.getAllPendingMemberProfile()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
 
 export const useFilteredPaginatedMemberProfile = ({
     sort,

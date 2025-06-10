@@ -192,6 +192,13 @@ export const getPaginatedMemberProfile = async ({
     return response.data
 }
 
+export const getAllPendingMemberProfile = async () => {
+    const response = await APIService.get<IMemberProfile[]>(
+        `${BASE_ENDPOINT}/pending`
+    )
+    return response.data
+}
+
 export const exportAll = async () => {
     const url = `${BASE_ENDPOINT}/export`
     await downloadFileService(url, 'all_members_export.csv')

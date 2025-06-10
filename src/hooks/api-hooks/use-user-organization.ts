@@ -1,19 +1,21 @@
-import { BranchService } from '@/api-service/branch-services'
-import { UserOrganization } from '@/api-service/user-organization-services'
-import { serverRequestErrExtractor } from '@/helpers'
+import { toast } from 'sonner'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
+import { groupBy, withCatchAsync } from '@/utils'
 import { useAuthStore } from '@/store/user-auth-store'
+import { createMutationHook } from './api-hook-factory'
+import { BranchService } from '@/api-service/branch-services'
+import { isArray, serverRequestErrExtractor } from '@/helpers'
+import { UserOrganization } from '@/api-service/user-organization-services'
+
 import {
     IBranch,
-    IOperationCallbacks,
+    TEntityId,
     IQueryProps,
     IUserOrganization,
-    TEntityId,
+    IOperationCallbacks,
     UserOrganizationGroup,
 } from '@/types'
-import { groupBy, withCatchAsync } from '@/utils'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { createMutationHook } from './api-hook-factory'
 
 export const useGetUserOrganizationByUserId = () => {
     const { currentAuth } = useAuthStore.getState()
@@ -221,7 +223,7 @@ export const useUserOrgJoinRequests = ({
             }
 
             onSuccess?.(result)
-            return result
+            return isArray(result) ? result : []
         },
         retry: 1,
         ...others,
