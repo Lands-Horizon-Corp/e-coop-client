@@ -1,7 +1,7 @@
 import z from 'zod'
 
 export const branchRequestSchema = z.object({
-    media_id: z.string().nullable(),
+    // media_id: z.string().nullable(),
     media: z.any(),
     type: z.union([z.literal('cooperative branch'), z.string()]),
     name: z.string().min(1, 'Name is Required'),
