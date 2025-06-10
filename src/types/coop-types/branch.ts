@@ -44,9 +44,9 @@ export interface IBranch extends ITimeStamps, IAuditable {
     name: string
     email: string
 
-    description: string | null
-    country_code: string
-    contact_number: string | null
+    description?: string
+    country_code?: string
+    contact_number?: string
 
     address: string
     province: string
@@ -55,8 +55,8 @@ export interface IBranch extends ITimeStamps, IAuditable {
     barangay: string
     postal_code: string
 
-    latitude: number | null
-    longitude: number | null
+    latitude: number
+    longitude: number
 
     is_main_branch: boolean
 }

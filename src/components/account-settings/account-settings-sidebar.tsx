@@ -52,6 +52,7 @@ const AccountSettingsSidebar = (prop: Props) => {
                     <DropdownMenuSeparator />
                     {settingsNavItems.map((item) => (
                         <DropdownMenuItem
+                            key={item.path}
                             className={cn(
                                 'text-muted-foreground',
                                 pathname == item.path && 'text-foreground'

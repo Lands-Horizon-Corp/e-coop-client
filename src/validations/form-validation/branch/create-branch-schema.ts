@@ -2,6 +2,7 @@ import z from 'zod'
 
 export const branchRequestSchema = z.object({
     media_id: z.string().nullable(),
+    media: z.any(),
     type: z.union([z.literal('cooperative branch'), z.string()]),
     name: z.string().min(1, 'Name is Required'),
     email: z.string().email('Invalid Email').min(1, 'Email is Required'),
@@ -20,5 +21,5 @@ export const branchRequestSchema = z.object({
     postal_code: z.string().min(4, 'Postal code is required'),
     latitude: z.coerce.number().optional(),
     longitude: z.coerce.number().optional(),
-    is_main_branch: z.boolean(),
+    is_main_branch: z.boolean().optional().default(false),
 })

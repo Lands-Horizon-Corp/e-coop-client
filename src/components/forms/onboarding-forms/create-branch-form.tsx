@@ -13,7 +13,6 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import TextEditor from '@/components/text-editor'
 import MapPicker from '@/components/map-picker'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
-import UserAvatar from '@/components/user-avatar'
 
 import {
     HouseIcon,
@@ -22,7 +21,14 @@ import {
     ReplaceIcon,
 } from '@/components/icons'
 
-import { IBranch, IBranchRequest, IClassProps, IForm, TEntityId } from '@/types'
+import {
+    IBranch,
+    IBranchRequest,
+    IClassProps,
+    IForm,
+    IMedia,
+    TEntityId,
+} from '@/types'
 import { useCreateBranch, useUpdateBranch } from '@/hooks/api-hooks/use-branch'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { branchRequestSchema } from '@/validations/form-validation/branch/create-branch-schema'
@@ -35,23 +41,24 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LatLngLiteral } from 'leaflet'
 import { cn } from '@/lib'
+import ImageDisplay from '@/components/image-display'
 
 type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
 
 export interface ICreateBranchFormProps
     extends IClassProps,
-        IForm<Partial<IBranchRequest>, string>,
+        IForm<Partial<IBranchRequest>, IBranch, string>,
         IModalProps {
-    setOpenCreateBranchModal?: React.Dispatch<React.SetStateAction<boolean>>
     branch?: IBranch
     useOrganizationId: TEntityId
 }
 
 export const CreateUpdateBranchForm = ({
-    setOpenCreateBranchModal,
     branch,
     defaultValues,
     useOrganizationId,
+    onSuccess,
+    onError,
 }: ICreateBranchFormProps) => {
     const [openImagePicker, setOpenImagePicker] = useState(false)
     const [onOpenMap, setOnOpenMapPicker] = useState(false)
@@ -71,13 +78,14 @@ export const CreateUpdateBranchForm = ({
         error,
     } = useCreateBranch(
         {
-            onSuccess: () => {
+            onSuccess: (data) => {
                 toast.success('Branch created successfully')
                 form.reset()
-                setOpenCreateBranchModal?.(false)
+                onSuccess?.(data)
             },
             onError: (err) => {
                 toast.error(<>{err}</>)
+                onError?.(err)
             },
         },
         useOrganizationId
@@ -86,10 +94,14 @@ export const CreateUpdateBranchForm = ({
     const { mutate: updateBranch, isPending: isLoadingUpdateBranch } =
         useUpdateBranch(
             {
-                onSuccess: () => {
+                onSuccess: (data) => {
                     toast.success('Update Branch successfully')
                     form.reset()
-                    setOpenCreateBranchModal?.(false)
+                    onSuccess?.(data)
+                },
+                onError: (err) => {
+                    toast.error(<>{err}</>)
+                    onError?.(err)
                 },
             },
             useOrganizationId
@@ -108,10 +120,11 @@ export const CreateUpdateBranchForm = ({
     const handleSubmit = async (data: ICreateBranchSchema) => {
         if (useOrganizationId) {
             if (isEditMode) {
-                const isMediaFromDB = data.media_id?.startsWith('http')
+                const isMediaFromDB =
+                    data.media.download_url?.startsWith('http')
                 const media = isMediaFromDB
                     ? branch.media.id
-                    : await handleUploadPhoto(data.media_id ?? '')
+                    : await handleUploadPhoto(data.media.download_url ?? '')
                 const request = { ...data, media_id: media }
                 updateBranch(request)
             } else {
@@ -347,6 +360,10 @@ export const CreateUpdateBranchForm = ({
                                 name="media_id"
                                 className="col-span-4"
                                 render={({ field }) => {
+                                    const media = form.getValues(
+                                        'media'
+                                    ) as IMedia
+
                                     return (
                                         <FormControl>
                                             <div className="relative mx-auto size-fit">
@@ -358,20 +375,22 @@ export const CreateUpdateBranchForm = ({
                                                     onPhotoChoose={(
                                                         newImage
                                                     ) => {
-                                                        field.onChange(newImage)
+                                                        form.setValue('media', {
+                                                            download_url:
+                                                                newImage,
+                                                        })
                                                     }}
                                                     defaultImage={
-                                                        field.value ?? ''
+                                                        media.download_url ?? ''
                                                     }
                                                 />
 
-                                                <UserAvatar
-                                                    // fallback={`-`}
+                                                <ImageDisplay
                                                     fallbackClassName="!text-3xl"
-                                                    src={field.value ?? ''}
-                                                    className={cn(
-                                                        'size-48 !rounded-none'
-                                                    )}
+                                                    src={
+                                                        media.download_url ?? ''
+                                                    }
+                                                    className="size-48"
                                                 />
                                                 <ActionTooltip
                                                     tooltipContent={

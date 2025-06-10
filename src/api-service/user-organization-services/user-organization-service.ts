@@ -8,6 +8,13 @@ export const getUserOrganizationUserId = async (userId: TEntityId) => {
     return response.data
 }
 
+export const getCurrentUserOrganizations = async () => {
+    const response = await APIService.get<IUserOrganization[]>(
+        `/user-organization/current`
+    )
+    return response.data
+}
+
 export const getAllUserOrganizations = async () => {
     const response =
         await APIService.get<IUserOrganization[]>(`/user-organization`)
@@ -22,7 +29,7 @@ export const joinOrganization = async (
         IUserOrganization,
         IUserOrganization
     >(
-        `/user-organization/join/organization/${organizationId}/branch/${branchId} `
+        `/user-organization/organization/${organizationId}/branch/${branchId}/join`
     )
     return response.data
 }
@@ -30,7 +37,7 @@ export const joinWithInvitationCode = async (code: string) => {
     const response = await APIService.post<
         IUserOrganization,
         IUserOrganization
-    >(`/user-organization/join/invitation-code/${code}`)
+    >(`/user-organization/invitation-code/${code}/join`)
     return response.data
 }
 
