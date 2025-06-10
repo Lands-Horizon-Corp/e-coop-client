@@ -182,6 +182,7 @@ function RouteComponent() {
                             branches?.map((branch) => {
                                 return (
                                     <BranchBar
+                                        isSeeding={isSeeding}
                                         key={branch.id}
                                         branch={branch}
                                         userOrgId={user_organization_id}
@@ -217,9 +218,11 @@ function RouteComponent() {
 export const BranchBar = ({
     branch,
     userOrgId,
+    isSeeding,
 }: {
     branch: IBranch
     userOrgId: TEntityId
+    isSeeding: boolean
 }) => {
     const updateModal = useModalState()
     const { onOpen } = useConfirmModalStore()
@@ -274,6 +277,7 @@ export const BranchBar = ({
                                         updateModal.onOpenChange(true)
                                     }}
                                     variant={'secondary'}
+                                    disabled={isSeeding}
                                     className={cn(
                                         'flex max-h-7 space-x-2 text-xs'
                                     )}
@@ -283,6 +287,7 @@ export const BranchBar = ({
                                 </Button>
                                 <Button
                                     size={'sm'}
+                                    disabled={isSeeding}
                                     onClick={() => {
                                         handleDeleteBranch(userOrgId)
                                     }}
