@@ -41,8 +41,8 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LatLngLiteral } from 'leaflet'
 import { cn } from '@/lib'
-import { useLocationInfo } from '@/hooks/use-country-classifcation'
 import ImageDisplay from '@/components/image-display'
+import { useLocationInfo } from '@/hooks/use-location-info'
 
 type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
 
