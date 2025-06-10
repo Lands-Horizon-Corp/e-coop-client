@@ -36,17 +36,21 @@ export const useCreateBranch = (
     })
 }
 
-export const useUpdateBranch = (
-    { onError, onSuccess }: IAPIHook<IBranch, string>,
-    userOrganizationId: TEntityId
-) => {
+export const useUpdateBranch = ({
+    onError,
+    onSuccess,
+}: IAPIHook<IBranch, string>) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IBranch, string, IBranchRequest>({
+    return useMutation<
+        IBranch,
+        string,
+        { id: TEntityId; data: IBranchRequest }
+    >({
         mutationKey: ['update-branch', 'update'],
-        mutationFn: async (branchData) => {
+        mutationFn: async ({ id, data }) => {
             const [error, response] = await withCatchAsync(
-                BranchService.updateBranch(branchData, userOrganizationId)
+                BranchService.updateBranch(id, data)
             )
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
