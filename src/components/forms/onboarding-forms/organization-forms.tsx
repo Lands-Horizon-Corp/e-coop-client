@@ -51,6 +51,7 @@ import { SinglePictureUploadModal } from '@/components/single-image-uploader/sin
 import UserAvatar from '@/components/user-avatar'
 import ActionTooltip from '@/components/action-tooltip'
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { useLocationInfo } from '@/hooks/use-country-classifcation'
 
 const steps = [
     {
@@ -68,6 +69,8 @@ const steps = [
 ]
 
 const OrganizationForm = () => {
+    const { countryCode } = useLocationInfo()
+
     const [activeStep, setActiveStep] = useState(0)
     const [openImagePicker, setOpenImagePicker] = useState(false)
 
@@ -409,7 +412,7 @@ const OrganizationForm = () => {
                                             <PhoneInput
                                                 {...field}
                                                 className="w-full"
-                                                defaultCountry="PH"
+                                                defaultCountry={countryCode}
                                             />
                                         </div>
                                     )}
