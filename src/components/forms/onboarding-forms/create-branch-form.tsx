@@ -49,12 +49,12 @@ export interface ICreateBranchFormProps
     extends IClassProps,
         IForm<Partial<IBranchRequest>, IBranch, string>,
         IModalProps {
-    branch?: IBranch
-    useOrganizationId: TEntityId
+    branchId?: TEntityId
+    useOrganizationId?: TEntityId
 }
 
 export const CreateUpdateBranchForm = ({
-    branch,
+    branchId,
     defaultValues,
     useOrganizationId,
     onSuccess,
@@ -62,8 +62,6 @@ export const CreateUpdateBranchForm = ({
 }: ICreateBranchFormProps) => {
     const [openImagePicker, setOpenImagePicker] = useState(false)
     const [onOpenMap, setOnOpenMapPicker] = useState(false)
-
-    const isEditMode = !!branch
 
     const form = useForm<ICreateBranchSchema>({
         resolver: zodResolver(branchRequestSchema),
@@ -88,24 +86,21 @@ export const CreateUpdateBranchForm = ({
                 onError?.(err)
             },
         },
-        useOrganizationId
+        useOrganizationId as TEntityId
     )
 
     const { mutate: updateBranch, isPending: isLoadingUpdateBranch } =
-        useUpdateBranch(
-            {
-                onSuccess: (data) => {
-                    toast.success('Update Branch successfully')
-                    form.reset()
-                    onSuccess?.(data)
-                },
-                onError: (err) => {
-                    toast.error(<>{err}</>)
-                    onError?.(err)
-                },
+        useUpdateBranch({
+            onSuccess: (data) => {
+                toast.success('Update Branch successfully')
+                form.reset()
+                onSuccess?.(data)
             },
-            useOrganizationId
-        )
+            onError: (err) => {
+                toast.error(<>{err}</>)
+                onError?.(err)
+            },
+        })
 
     const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
         useSinglePictureUpload({})
@@ -119,14 +114,14 @@ export const CreateUpdateBranchForm = ({
 
     const handleSubmit = async (data: ICreateBranchSchema) => {
         if (useOrganizationId) {
-            if (isEditMode) {
+            if (branchId) {
                 const isMediaFromDB =
                     data.media.download_url?.startsWith('http')
                 const media = isMediaFromDB
-                    ? branch.media.id
+                    ? data.media.id
                     : await handleUploadPhoto(data.media.download_url ?? '')
                 const request = { ...data, media_id: media }
-                updateBranch(request)
+                updateBranch({ id: branchId, data: request })
             } else {
                 const mediaId = await handleUploadPhoto(data.media_id ?? '')
                 const request = { ...data, media_id: mediaId }
@@ -532,14 +527,14 @@ export const CreateUpdateBranchForm = ({
                         >
                             {isLoading ? (
                                 <div className="flex space-x-2">
-                                    {isEditMode ? 'updating ' : 'Creating '}{' '}
+                                    {branchId ? 'updating ' : 'Creating '}{' '}
                                     <LoadingSpinnerIcon
                                         size={18}
                                         className="mr-2 animate-spin"
                                     />
                                 </div>
                             ) : (
-                                `${isEditMode ? 'Update' : 'Create'} Branch `
+                                `${branchId ? 'Update' : 'Create'} Branch `
                             )}
                         </Button>
                     </div>
@@ -558,7 +553,7 @@ export const CreateUpdateFormFormModal = ({
     ...props
 }: IModalProps & {
     formProps?: Omit<ICreateBranchFormProps, 'className' | 'useOrganizationId'>
-    useOrganizationId: TEntityId
+    useOrganizationId?: TEntityId
 }) => {
     return (
         <Modal
