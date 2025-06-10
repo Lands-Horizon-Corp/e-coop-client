@@ -1,25 +1,24 @@
-import { TEntityId } from '@/types'
-import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
-import {
-    IAccountClassificationPaginatedResource,
-    IAccountClassification,
-    IAccountClassificationRequest,
-} from '@/types/coop-types/account-classification'
+import { toast } from 'sonner'
+import { useQuery } from '@tanstack/react-query'
 
+import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
+
+import { withCatchAsync, toBase64 } from '@/utils'
+import { serverRequestErrExtractor } from '@/helpers'
 import { createMutationHook } from './api-hook-factory'
 import { AccountClassificationServices } from '@/api-service/account-classification-services'
 
-import { serverRequestErrExtractor } from '@/helpers'
-
-import { withCatchAsync, toBase64 } from '@/utils'
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'sonner'
+import {
+    TEntityId,
+    IAccountClassification,
+    IAccountClassificationRequest,
+    IAccountClassificationPaginatedResource,
+} from '@/types'
 
 export const useFilteredPaginatedAccountClassification = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IAccountClassificationPaginatedResource, string> &
@@ -36,7 +35,6 @@ export const useFilteredPaginatedAccountClassification = ({
             const [error, result] = await withCatchAsync(
                 AccountClassificationServices.getPaginatedAccountClassifications(
                     {
-                        preloads,
                         pagination,
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),

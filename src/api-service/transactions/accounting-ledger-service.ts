@@ -28,12 +28,10 @@ export default class AccountingLedgerService {
         endpoint: string,
         {
             filters,
-            preloads,
             pagination,
             sort,
         }: {
             filters?: string
-            preloads?: string[]
             pagination?: { pageIndex: number; pageSize: number }
             sort?: string
         }
@@ -43,7 +41,6 @@ export default class AccountingLedgerService {
                 url: `${this.BASE_ENDPOINT}${endpoint}`,
                 query: {
                     sort,
-                    preloads,
                     filters,
                     pageIndex: pagination?.pageIndex,
                     pageSize: pagination?.pageSize,
@@ -54,10 +51,9 @@ export default class AccountingLedgerService {
     }
 
     public static async create(
-        ledgerData: IAccountingLedgerRequest,
-        preloads?: string[]
+        ledgerData: IAccountingLedgerRequest
     ): Promise<IAccountingLedgerResource> {
-        const url = this.buildUrl('', { preloads })
+        const url = this.buildUrl('', {})
         return this.makeRequest(() =>
             APIService.post<
                 IAccountingLedgerRequest,
@@ -69,15 +65,13 @@ export default class AccountingLedgerService {
     public static async getLedgers({
         sort,
         filters,
-        preloads,
         pagination,
     }: {
         sort?: string
         filters?: string
-        preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
     }) {
-        const url = this.buildUrl('', { filters, preloads, pagination, sort })
+        const url = this.buildUrl('', { filters, pagination, sort })
         return this.makeRequest(() =>
             APIService.get<IAccountingLedgerPaginatedResource>(url)
         )

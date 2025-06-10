@@ -1,3 +1,4 @@
+import { entityIdSchema } from '@/validations/common'
 import { z } from 'zod'
 
 export const TOrganizationMigrationStatus = z.enum([
@@ -11,7 +12,7 @@ export const TOrganizationMigrationStatus = z.enum([
 
 export const OrganizationSchema = z.object({
     name: z.string().min(1, 'Organization name is required'),
-    subscription_plan_id: z.string().min(1, ' Subscription plan is required'),
+    subscription_plan_id: entityIdSchema,
     address: z.string().optional(),
     email: z
         .string()
@@ -21,8 +22,8 @@ export const OrganizationSchema = z.object({
         }),
     contact_number: z.string().optional(),
     description: z.string().optional(),
-    media_id: z.string().min(1, 'Organization logo is required!'),
-    cover_media_id: z.string().optional(),
+    media_id: entityIdSchema,
+    cover_media_id: entityIdSchema,
 })
 
 export type Organization = z.infer<typeof OrganizationSchema>

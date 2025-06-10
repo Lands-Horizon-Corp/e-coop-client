@@ -34,10 +34,6 @@ const BlotterRequestKanban = (_props: Props) => {
                     title="Blotter View Request"
                 />
             </div>
-            {/* <p className="text-sm text-muted-foreground">
-                Employees are not allowed to view their own transaction batch
-                blotter by default. 
-            </p> */}
             <Separator />
             <KanbanItemsContainer>
                 {data.map((transactionBatch) => (

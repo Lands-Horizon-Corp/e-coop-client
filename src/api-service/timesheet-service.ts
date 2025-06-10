@@ -31,13 +31,11 @@ export const getPaginatedTimesheets = async ({
     url,
     sort,
     filters,
-    preloads,
     pagination,
 }: {
     url: string
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
     const finalUrl = qs.stringifyUrl(
@@ -45,7 +43,6 @@ export const getPaginatedTimesheets = async ({
             url: `/timesheet/${url}`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

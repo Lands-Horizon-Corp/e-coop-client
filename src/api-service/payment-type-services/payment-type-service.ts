@@ -26,17 +26,15 @@ export const getAllPaymentTypes = async () => {
 export const getPaginatedPaymentTypes = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: TPagination
 }): Promise<IPaginatedResult<IPaymentType>> => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `/payment-type`,
             query: {
                 sort,
-                preloads,
                 filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

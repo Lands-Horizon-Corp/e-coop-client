@@ -19,7 +19,7 @@ import { toReadableDate } from '@/utils'
 import {
     useApproveMemberProfile,
     useDeclineMemberProfile,
-    useFilteredPaginatedMemberProfile,
+    useAllPendingMemberProfiles,
 } from '@/hooks/api-hooks/member/use-member-profile'
 import { useModalState } from '@/hooks/use-modal-state'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -29,11 +29,7 @@ import { IClassProps, IMemberProfile } from '@/types'
 interface Props extends IClassProps {}
 
 const NewMemberProfileKanban = (_props: Props) => {
-    const { data: paginated, isPending } = useFilteredPaginatedMemberProfile({
-        mode: 'all',
-    })
-
-    const data = paginated?.data ?? []
+    const { data, isPending } = useAllPendingMemberProfiles()
 
     return (
         <KanbanContainer className="w-[360px]">

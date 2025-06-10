@@ -31,18 +31,16 @@ export default class ComputationTypeService {
     }
 
     /**
-     * Constructs the request URL with optional preloads.
+     * Constructs the request URL with optional .
      */
     private static buildUrl(
         endpoint: string,
         {
             filters,
-            preloads,
             pagination,
             sort,
         }: {
             filters?: string
-            preloads?: string[]
             pagination?: { pageIndex: number; pageSize: number }
             sort?: string
         }
@@ -52,7 +50,6 @@ export default class ComputationTypeService {
                 url: `${this.BASE_ENDPOINT}${endpoint}`,
                 query: {
                     sort,
-                    preloads,
                     filters,
                     pageIndex: pagination?.pageIndex,
                     pageSize: pagination?.pageSize,
@@ -66,10 +63,9 @@ export default class ComputationTypeService {
      * Creates a new computation type.
      */
     public static async create(
-        computationTypeData: IAccountsComputationTypeRequest,
-        preloads?: string[]
+        computationTypeData: IAccountsComputationTypeRequest
     ): Promise<IAccountsComputationTypeResource> {
-        const url = this.buildUrl('', { preloads })
+        const url = this.buildUrl('', {})
         return this.makeRequest(() =>
             APIService.post<
                 IAccountsComputationTypeRequest,
@@ -91,10 +87,9 @@ export default class ComputationTypeService {
      */
     public static async update(
         id: TEntityId,
-        computationTypeData: IAccountsComputationTypeRequest,
-        preloads?: string[]
+        computationTypeData: IAccountsComputationTypeRequest
     ): Promise<IAccountsComputationTypeResource> {
-        const url = this.buildUrl(`/${id}`, { preloads })
+        const url = this.buildUrl(`/${id}`, {})
         return this.makeRequest(() =>
             APIService.put<
                 IAccountsComputationTypeRequest,
@@ -104,20 +99,18 @@ export default class ComputationTypeService {
     }
 
     /**
-     * Fetches computation types with optional filters, preloads, sorting, and pagination.
+     * Fetches computation types with optional filters, sorting, and pagination.
      */
     public static async getComputationTypes({
         sort,
         filters,
-        preloads,
         pagination,
     }: {
         sort?: string
         filters?: string
-        preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
     }) {
-        const url = this.buildUrl(``, { filters, preloads, pagination, sort })
+        const url = this.buildUrl(``, { filters, pagination, sort })
 
         return this.makeRequest(() =>
             APIService.get<IAccountsComputationTypePaginatedResource>(url)

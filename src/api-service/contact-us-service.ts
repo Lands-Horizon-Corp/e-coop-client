@@ -36,11 +36,10 @@ export const updateContactUs = async (
     return response.data
 }
 
-export const getContactUsById = async (id: TEntityId, preloads?: string) => {
+export const getContactUsById = async (id: TEntityId) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )

@@ -43,6 +43,8 @@ export * from './member/member-occupation'
 export * from './member/member-occupation-history'
 export * from './member/member-profile-settings'
 
+export * from './account-classification'
+
 /* Other Types */
 export * from './api'
 // export * from './role'

@@ -17,18 +17,16 @@ export const getMemberCenterHistoryById = async ({
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     profileId: TEntityId
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${profileId}/member-center-history`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,
@@ -47,18 +45,16 @@ export const getMemberClassificationHistoryById = async ({
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     profileId: TEntityId
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${profileId}/member-classification-history`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,
@@ -78,18 +74,16 @@ export const getMemberTypeHistoryById = async ({
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     profileId: TEntityId
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${profileId}/member-type-history`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,
@@ -108,18 +102,16 @@ export const getMemberGenderHistoryById = async ({
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     profileId: TEntityId
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${profileId}/member-gender-history`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,
@@ -138,18 +130,16 @@ export const getMemberMutualFundsHistoryById = async ({
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     profileId: TEntityId
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${profileId}/member-mutual-funds-history`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

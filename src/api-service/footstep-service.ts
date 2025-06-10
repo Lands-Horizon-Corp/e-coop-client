@@ -13,17 +13,15 @@ export const exportAllFiltered = async (props: {
     url: string
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { url, filters, preloads, pagination, sort } = props || {}
+    const { url, filters, pagination, sort } = props || {}
 
     const finalUrl = qs.stringifyUrl(
         {
             url: `/footstep/${url}`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,
@@ -54,17 +52,15 @@ export const getPaginatedFootsteps = async (props: {
     url: string
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { url, filters, preloads, pagination, sort } = props || {}
+    const { url, filters, pagination, sort } = props || {}
 
     const finalUrl = qs.stringifyUrl(
         {
             url: `/footstep/${url}`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

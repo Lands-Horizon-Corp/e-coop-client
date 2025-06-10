@@ -19,7 +19,6 @@ export const useFilteredPaginatedPaymentType = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IPaymentTypePaginatedResource, string> &
@@ -35,7 +34,6 @@ export const useFilteredPaginatedPaymentType = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 PaymentTypeServices.getPaginatedPaymentTypes({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

@@ -18,7 +18,6 @@ export const useFilteredPaginatedGeneralLedgerDefinition = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IPaginatedGeneralLedgerDefinition, string> &
@@ -38,7 +37,6 @@ export const useFilteredPaginatedGeneralLedgerDefinition = ({
                         pagination,
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
-                        preloads,
                     }
                 )
             )

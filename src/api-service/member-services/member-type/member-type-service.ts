@@ -14,12 +14,10 @@ import {
 const BASE_ENDPOINT = '/member-type'
 
 export const getMemberTypeById = async (
-    id: TEntityId,
-    preloads?: string[]
+    id: TEntityId
 ): Promise<IMemberType> => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.get<IMemberType>(url)
@@ -27,13 +25,11 @@ export const getMemberTypeById = async (
 }
 
 export const createMemberType = async (
-    data: IMemberTypeRequest,
-    preloads?: string[]
+    data: IMemberTypeRequest
 ): Promise<IMemberType> => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -47,12 +43,10 @@ export const createMemberType = async (
 
 export const updateMemberType = async (
     id: TEntityId,
-    data: IMemberTypeRequest,
-    preloads?: string[]
+    data: IMemberTypeRequest
 ): Promise<IMemberType> => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.put<IMemberTypeRequest, IMemberType>(
@@ -67,11 +61,10 @@ export const deleteMemberType = async (id: TEntityId) => {
     await APIService.delete<void>(endpoint)
 }
 
-export const getAllMemberTypes = async (preloads?: string[]) => {
+export const getAllMemberTypes = async () => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -83,12 +76,10 @@ export const getAllMemberTypes = async (preloads?: string[]) => {
 export const getPaginatedMemberTypes = async ({
     sort,
     filters,
-    preloads,
     pagination,
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 } = {}): Promise<IMemberTypePaginated> => {
     const url = qs.stringifyUrl(
@@ -96,7 +87,6 @@ export const getPaginatedMemberTypes = async ({
             url: `${BASE_ENDPOINT}/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

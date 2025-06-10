@@ -7,7 +7,7 @@ const KanbanContainer = ({ className, children }: Props) => {
     return (
         <div
             className={cn(
-                'max-h-full space-y-4 overflow-clip rounded-lg',
+                'h-fit shrink-0 space-y-4 overflow-clip rounded-lg',
                 className
             )}
         >

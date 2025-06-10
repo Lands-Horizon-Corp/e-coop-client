@@ -12,10 +12,9 @@ import {
 
 const BASE_ENDPOINT = '/feedback'
 
-export const getFeedbackById = async (id: TEntityId, preloads?: string[]) => {
+export const getFeedbackById = async (id: TEntityId) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.get<IFeedback>(url)
@@ -38,15 +37,13 @@ export const deleteFeedback = async (id: TEntityId) => {
 export const getAllFeedback = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
 }) => {
-    const { filters, preloads, sort } = props || {}
+    const { filters, sort } = props || {}
 
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/paginated`,
         query: {
             sort,
-            preloads,
             filter: filters,
         },
     })
@@ -58,16 +55,14 @@ export const getAllFeedback = async (props?: {
 export const getPaginatedFeedbacks = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/paginated`,
         query: {
             sort,
-            preloads,
             filter: filters,
             pageIndex: pagination?.pageIndex,
             pageSize: pagination?.pageSize,

@@ -1,17 +1,18 @@
-import { Button } from '@/components/ui/button'
-import KanbanTitle from '../kanban/kanban-title'
-import { Separator } from '@/components/ui/separator'
-import ImageDisplay from '@/components/image-display'
-import KanbanContainer from '../kanban/kanban-container'
 import {
     EyeIcon,
     LayersSharpDotIcon,
     SignatureLightIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import KanbanTitle from '../kanban/kanban-title'
+import { Separator } from '@/components/ui/separator'
+import ImageDisplay from '@/components/image-display'
+import KanbanContainer from '../kanban/kanban-container'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import KanbanItemsContainer from '../kanban/kanban-items-container'
 import { BatchBlotterQuickViewModal } from '@/components/transaction-batch/transaction-batch-quick-view'
 import TransactionBatchStatusIndicator from '@/components/transaction-batch/transaction-batch-status-indicator'
+import { TransactionBatchSignCreateUpdateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-sign-create-update-form'
 
 import { formatNumber } from '@/utils'
 import {
@@ -21,7 +22,6 @@ import {
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, ITransactionBatch } from '@/types'
-import { TransactionBatchSignCreateUpdateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-sign-create-update-form'
 
 interface Props extends IClassProps {}
 
@@ -38,10 +38,6 @@ const EndedTransactionBatchKanban = (_props: Props) => {
                     title="Ended Batch"
                 />
             </div>
-            {/* <p className="text-sm text-muted-foreground">
-                Employees are not allowed to view their own transaction batch
-                blotter by default. 
-            </p> */}
             <Separator />
             <KanbanItemsContainer>
                 {data.map((transactionBatch) => (

@@ -12,14 +12,10 @@ import {
 
 const BASE_ENDPOINT = '/member-occupation'
 
-export const getMemberOccupationById = async (
-    id: TEntityId,
-    preloads?: string[]
-) => {
+export const getMemberOccupationById = async (id: TEntityId) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -34,13 +30,11 @@ export const getMemberOccupationById = async (
 }
 
 export const createMemberOccupation = async (
-    data: IMemberOccupationRequest,
-    preloads?: string[]
+    data: IMemberOccupationRequest
 ) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -54,13 +48,11 @@ export const createMemberOccupation = async (
 
 export const updateMemberOccupation = async (
     id: TEntityId,
-    data: IMemberOccupationRequest,
-    preloads?: string[]
+    data: IMemberOccupationRequest
 ) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -81,17 +73,10 @@ export const removeMemberOccupation = async (id: TEntityId) => {
     await APIService.delete(endpoint)
 }
 
-export const getAllMemberOccupation = async ({
-    preloads,
-}: {
-    preloads?: string[]
-} = {}) => {
+export const getAllMemberOccupation = async () => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}`,
-            query: {
-                preloads,
-            },
         },
         { skipNull: true }
     )
@@ -102,13 +87,11 @@ export const getAllMemberOccupation = async ({
 
 export const getPaginatedMemberOccupation = async ({
     filters,
-    preloads,
     pagination,
     sort,
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 } = {}) => {
     const url = qs.stringifyUrl(
@@ -116,7 +99,6 @@ export const getPaginatedMemberOccupation = async ({
             url: `${BASE_ENDPOINT}/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

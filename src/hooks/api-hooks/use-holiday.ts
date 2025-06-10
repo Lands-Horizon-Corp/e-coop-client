@@ -70,7 +70,6 @@ export const useFilteredPaginatedHolidays = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IHolidayPaginated, string> & IQueryProps = {}) => {
@@ -85,7 +84,6 @@ export const useFilteredPaginatedHolidays = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 HolidayService.getPaginatedHolidays({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
