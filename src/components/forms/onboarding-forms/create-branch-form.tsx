@@ -71,7 +71,6 @@ export const CreateUpdateBranchForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            country_code: countryCode,
             ...defaultValues,
         },
     })
