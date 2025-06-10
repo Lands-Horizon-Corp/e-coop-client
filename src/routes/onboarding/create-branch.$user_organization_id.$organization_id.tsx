@@ -255,9 +255,12 @@ export const BranchBar = ({
                 }}
             />
             <div>
-                <GradientBackground mediaUrl={branch.media?.download_url ?? ''}>
+                <GradientBackground mediaUrl={branch.media?.url ?? ''}>
                     <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
-                        <ImageDisplay src={branch?.media?.download_url} />
+                        <ImageDisplay
+                            className="size-16 rounded-lg"
+                            src={branch?.media?.url}
+                        />
                         <div className="flex grow flex-col">
                             <h1>{branch?.name}</h1>
                             {branch.description && (
