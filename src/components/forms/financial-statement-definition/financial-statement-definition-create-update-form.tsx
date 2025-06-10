@@ -78,8 +78,6 @@ const FSDefinitionCreateUpdateForm = ({
         console.log('Form submitted:', data)
     })
 
-    console.log(form.formState.errors)
-
     return (
         <Form {...form}>
             <form

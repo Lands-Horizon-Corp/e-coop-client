@@ -71,7 +71,6 @@ export const CreateUpdateBranchForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            country_code: countryCode,
             ...defaultValues,
         },
     })
@@ -115,6 +114,7 @@ export const CreateUpdateBranchForm = ({
         const uploadedMedia = await uploadPhoto(
             base64ImagetoFile(mediaId, `bg-banner.jpg`) as File
         )
+        console.log(uploadedMedia.id)
         return uploadedMedia.id
     }
 
@@ -127,10 +127,15 @@ export const CreateUpdateBranchForm = ({
                     ? data.media.id
                     : await handleUploadPhoto(data.media.download_url ?? '')
                 const request = { ...data, media_id: media }
-                updateBranch({ id: branchId, data: request })
+                updateBranch({ id: useOrganizationId, data: request })
             } else {
-                const mediaId = await handleUploadPhoto(data.media_id ?? '')
-                const request = { ...data, media_id: mediaId }
+                const mediaId = await handleUploadPhoto(
+                    data.media.download_url ?? ''
+                )
+                const request = {
+                    ...data,
+                    media_id: mediaId,
+                }
                 createBranch(request)
             }
         } else {
@@ -145,6 +150,7 @@ export const CreateUpdateBranchForm = ({
         isPedingCreateBranch || isLoadingUpdateBranch || isUploadingPhoto
 
     const combinedError = error
+
     return (
         <div className="mt-10">
             <MapPicker
@@ -360,12 +366,12 @@ export const CreateUpdateBranchForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Branch Logo"
-                                name="media_id"
+                                name="media"
                                 className="col-span-4"
                                 render={({ field }) => {
-                                    const media = form.getValues(
-                                        'media'
-                                    ) as IMedia
+                                    const media =
+                                        (form.getValues('media') as IMedia) ??
+                                        ''
 
                                     return (
                                         <FormControl>
@@ -384,14 +390,15 @@ export const CreateUpdateBranchForm = ({
                                                         })
                                                     }}
                                                     defaultImage={
-                                                        media.download_url ?? ''
+                                                        media.download_url
                                                     }
                                                 />
 
                                                 <ImageDisplay
                                                     fallbackClassName="!text-3xl"
                                                     src={
-                                                        media.download_url ?? ''
+                                                        media.url ??
+                                                        media.download_url
                                                     }
                                                     className="size-48"
                                                 />
