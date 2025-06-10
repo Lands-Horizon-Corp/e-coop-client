@@ -53,14 +53,10 @@ export const quickCreateMemberProfile = async (
     return response.data
 }
 
-export const createMemberProfile = async (
-    data: IMemberProfileRequest,
-    preloads?: string[]
-) => {
+export const createMemberProfile = async (data: IMemberProfileRequest) => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -72,13 +68,9 @@ export const createMemberProfile = async (
     return response.data
 }
 
-export const getMemberProfileById = async (
-    id: TEntityId,
-    preloads?: string[]
-) => {
+export const getMemberProfileById = async (id: TEntityId) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.get<IMemberProfile>(url)
@@ -87,12 +79,10 @@ export const getMemberProfileById = async (
 
 export const updateMemberProfile = async (
     id: TEntityId,
-    data: IMemberProfileRequest,
-    preloads?: string[]
+    data: IMemberProfileRequest
 ) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.put<
@@ -108,12 +98,10 @@ export const updateMemberProfile = async (
 
 export const closeMemberProfileAccount = async (
     id: TEntityId,
-    closeRemark: IMemberCloseRemarkRequest[],
-    preloads?: string[]
+    closeRemark: IMemberCloseRemarkRequest[]
 ) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}/close-account`,
-        query: { preloads },
     })
 
     const response = await APIService.put<
@@ -147,10 +135,9 @@ export const deleteMany = async (ids: TEntityId[]) => {
     await APIService.delete<void>(endpoint, payload)
 }
 
-export const getAllMemberProfile = async (preloads?: string[]) => {
+export const getAllMemberProfile = async () => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}`,
-        query: { preloads },
     })
 
     const response = await APIService.get<IMemberProfile[]>(url)
@@ -161,13 +148,11 @@ export const getPaginatedMemberProfile = async ({
     mode,
     sort,
     filters,
-    preloads,
     pagination,
 }: {
     mode: 'all' | 'pendings'
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
     let url: string = `${BASE_ENDPOINT}`
@@ -179,7 +164,6 @@ export const getPaginatedMemberProfile = async ({
             url: `${url}/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

@@ -20,17 +20,15 @@ export const getAllGeneralLedgerDefinition = async () => {
 export const getPaginatedGeneralLedgerDefinition = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: TPagination
 }): Promise<IPaginatedGeneralLedgerDefinition> => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `/payment-type`,
             query: {
                 sort,
-                preloads,
                 filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

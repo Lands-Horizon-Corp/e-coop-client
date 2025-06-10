@@ -18,7 +18,6 @@ export const useFilteredPaginatedFootsteps = ({
     mode,
     user_org_id,
     filterPayload,
-    preloads = [],
     pagination = { pageSize: 10, pageIndex: 1 },
 }: {
     mode?: TFootstepHookMode
@@ -45,7 +44,6 @@ export const useFilteredPaginatedFootsteps = ({
             const [error, result] = await withCatchAsync(
                 FootstepService.getPaginatedFootsteps({
                     url,
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

@@ -16,7 +16,6 @@ export const useFilteredBatchTransactionEntry = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     transactionBatchId,
     pagination = { pageSize: 10, pageIndex: 1 },
@@ -37,7 +36,6 @@ export const useFilteredBatchTransactionEntry = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 TransactionEntryService.getPaginatedBatchTransactionEntry({
-                    preloads,
                     pagination,
                     transactionBatchId,
                     sort: sort && toBase64(sort),

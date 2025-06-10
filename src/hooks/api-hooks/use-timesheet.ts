@@ -75,7 +75,6 @@ export const useFilteredPaginatedTimesheets = ({
     mode,
     user_org_id,
     filterPayload,
-    preloads = [],
     pagination = { pageSize: 10, pageIndex: 1 },
 }: {
     mode?: TTimesheetHookMode
@@ -102,7 +101,6 @@ export const useFilteredPaginatedTimesheets = ({
             const [error, result] = await withCatchAsync(
                 TimesheetService.getPaginatedTimesheets({
                     url,
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

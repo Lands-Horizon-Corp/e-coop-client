@@ -18,7 +18,6 @@ import {
 } from '@/types'
 
 export const useCreateMemberOccupation = ({
-    preloads = [],
     showMessage = true,
     onSuccess,
     onError,
@@ -29,7 +28,7 @@ export const useCreateMemberOccupation = ({
         mutationKey: ['member-occupation', 'create'],
         mutationFn: async (data) => {
             const [error, newOccupation] = await withCatchAsync(
-                MemberOccupationService.createMemberOccupation(data, preloads)
+                MemberOccupationService.createMemberOccupation(data)
             )
 
             if (error) {
@@ -58,7 +57,6 @@ export const useCreateMemberOccupation = ({
 }
 
 export const useUpdateMemberOccupation = ({
-    preloads = [],
     showMessage = true,
     onSuccess,
     onError,
@@ -75,8 +73,7 @@ export const useUpdateMemberOccupation = ({
             const [error, result] = await withCatchAsync(
                 MemberOccupationService.updateMemberOccupation(
                     occupationId,
-                    data,
-                    preloads
+                    data
                 )
             )
 
@@ -145,15 +142,12 @@ export const useDeleteMemberOccupation = ({
 export const useMemberOccupations = ({
     enabled,
     showMessage,
-    preloads = [],
 }: IAPIHook<IMemberOccupation[], string> & IQueryProps = {}) => {
     return useQuery<IMemberOccupation[], string>({
         queryKey: ['member-occupation', 'resource-query', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberOccupationService.getAllMemberOccupation({
-                    preloads,
-                })
+                MemberOccupationService.getAllMemberOccupation()
             )
 
             if (error) {
@@ -175,7 +169,6 @@ export const useFilteredPaginatedMemberOccupations = ({
     enabled,
     showMessage,
     filterPayload,
-    preloads = [],
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberOccupationPaginated, string> = {}) => {
     return useQuery<IMemberOccupationPaginated, string>({
@@ -189,7 +182,6 @@ export const useFilteredPaginatedMemberOccupations = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberOccupationService.getPaginatedMemberOccupation({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

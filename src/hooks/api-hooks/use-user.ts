@@ -14,7 +14,7 @@ export const useMemberMedias = ({
     showMessage,
     ...other
 }: { userId: TEntityId } & IQueryProps<IMedia[]> &
-    Omit<IAPIHook<IMedia[], string>, 'preloads'>) => {
+    IAPIHook<IMedia[], string>) => {
     return useQuery<IMedia[], string>({
         queryKey: ['user', userId, 'medias'],
         queryFn: async () => {

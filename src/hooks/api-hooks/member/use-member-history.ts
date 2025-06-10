@@ -21,7 +21,6 @@ export const useMemberCenterHistory = ({
     enabled,
     profileId,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberCenterHistoryPaginated, string> &
@@ -38,7 +37,6 @@ export const useMemberCenterHistory = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterHistoryService.getMemberCenterHistoryById({
-                    preloads,
                     profileId,
                     pagination,
                     sort: sort && toBase64(sort),
@@ -71,7 +69,6 @@ export const useMemberClassificationHistory = ({
     enabled,
     profileId,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberClassificationHistoryPaginated, string> &
@@ -88,7 +85,6 @@ export const useMemberClassificationHistory = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterHistoryService.getMemberClassificationHistoryById({
-                    preloads,
                     profileId,
                     pagination,
                     sort: sort && toBase64(sort),
@@ -121,7 +117,6 @@ export const useMemberClassificationHistory = ({
 //     enabled,
 //     profileId,
 //     filterPayload,
-//     preloads = [],
 //     showMessage = true,
 //     pagination = { pageSize: 10, pageIndex: 1 },
 // }: IAPIFilteredPaginatedHook<
@@ -142,7 +137,6 @@ export const useMemberClassificationHistory = ({
 //             const [error, result] = await withCatchAsync(
 //                 MemberCenterHistoryService.getMemberEducationalAttainmentHistoryById(
 //                     {
-//                         preloads,
 //                         profileId,
 //                         pagination,
 //                         sort: sort && toBase64(sort),
@@ -176,7 +170,6 @@ export const useMemberTypeHistory = ({
     enabled,
     profileId,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberTypeHistoryPaginated, string> &
@@ -193,7 +186,6 @@ export const useMemberTypeHistory = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterHistoryService.getMemberTypeHistoryById({
-                    preloads,
                     profileId,
                     pagination,
                     sort: sort && toBase64(sort),
@@ -226,7 +218,6 @@ export const useMemberGenderHistory = ({
     enabled,
     profileId,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberGenderHistoryPaginated, string> &
@@ -243,7 +234,6 @@ export const useMemberGenderHistory = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterHistoryService.getMemberGenderHistoryById({
-                    preloads,
                     profileId,
                     pagination,
                     sort: sort && toBase64(sort),
@@ -276,7 +266,6 @@ export const useMemberMutualFundsHistory = ({
     enabled,
     profileId,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberMutualFundsHistoryPaginated, string> &
@@ -293,7 +282,6 @@ export const useMemberMutualFundsHistory = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterHistoryService.getMemberMutualFundsHistoryById({
-                    preloads,
                     profileId,
                     pagination,
                     sort: sort && toBase64(sort),

@@ -13,27 +13,19 @@ import {
 
 const BASE_ENDPOINT = '/member-center'
 
-export const getMemberCenterById = async (
-    id: TEntityId,
-    preloads?: string[]
-) => {
+export const getMemberCenterById = async (id: TEntityId) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.get<IMemberCenter>(url)
     return response.data
 }
 
-export const createMemberCenter = async (
-    data: IMemberCenterRequest,
-    preloads?: string[]
-) => {
+export const createMemberCenter = async (data: IMemberCenterRequest) => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -52,12 +44,10 @@ export const deleteMemberCenter = async (id: TEntityId) => {
 
 export const updateMemberCenter = async (
     id: TEntityId,
-    data: IMemberCenterRequest,
-    preloads?: string[]
+    data: IMemberCenterRequest
 ) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.put<IMemberCenterRequest, IMemberCenter>(
@@ -67,11 +57,10 @@ export const updateMemberCenter = async (
     return response.data
 }
 
-export const getAllMemberCenters = async (preloads?: string[]) => {
+export const getAllMemberCenters = async () => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -83,17 +72,15 @@ export const getAllMemberCenters = async (preloads?: string[]) => {
 export const getPaginatedMemberCenters = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

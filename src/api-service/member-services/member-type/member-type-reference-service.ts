@@ -11,12 +11,10 @@ import {
 const BASE_ENDPOINT = '/member-type-reference'
 
 export const getMemberTypeReferenceById = async (
-    id: TEntityId,
-    preloads?: string[]
+    id: TEntityId
 ): Promise<IMemberTypeReference> => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.get<IMemberTypeReference>(url)
@@ -24,13 +22,11 @@ export const getMemberTypeReferenceById = async (
 }
 
 export const createMemberTypeReference = async (
-    data: IMemberTypeReferenceRequest,
-    preloads?: string[]
+    data: IMemberTypeReferenceRequest
 ): Promise<IMemberTypeReference> => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -52,12 +48,10 @@ export const deleteMemberTypeReference = async (
 
 export const updateMemberTypeReference = async (
     id: TEntityId,
-    data: IMemberTypeReferenceRequest,
-    preloads?: string[]
+    data: IMemberTypeReferenceRequest
 ): Promise<IMemberTypeReference> => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
-        query: { preloads },
     })
 
     const response = await APIService.put<
@@ -72,17 +66,15 @@ export const getPaginatedMemberTypeReferences = async (props?: {
     memberTypeId: string
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }): Promise<IMemberTypeReferencePaginated> => {
-    const { memberTypeId, filters, preloads, pagination, sort } = props || {}
+    const { memberTypeId, filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${memberTypeId}`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

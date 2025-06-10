@@ -184,7 +184,6 @@ export const useFilteredPaginatedOrganizations = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IOrganizationPaginated, string> &
@@ -200,7 +199,6 @@ export const useFilteredPaginatedOrganizations = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 OrganizationService.getPaginatedOrganizations({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

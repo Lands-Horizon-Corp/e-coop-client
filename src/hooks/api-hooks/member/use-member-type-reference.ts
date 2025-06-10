@@ -17,7 +17,6 @@ import {
 } from '@/types'
 
 export const useCreateMemberTypeReference = ({
-    preloads = [],
     showMessage = true,
     onSuccess,
     onError,
@@ -34,10 +33,7 @@ export const useCreateMemberTypeReference = ({
         mutationKey: ['member-type-reference', 'create'],
         mutationFn: async (data) => {
             const [error, newMemberTypeReference] = await withCatchAsync(
-                MemberTypeReferenceService.createMemberTypeReference(
-                    data,
-                    preloads
-                )
+                MemberTypeReferenceService.createMemberTypeReference(data)
             )
 
             if (error) {
@@ -69,7 +65,6 @@ export const useCreateMemberTypeReference = ({
 
 export const useUpdateMemberTypeReference = ({
     showMessage = true,
-    preloads = ['Owner', 'Media', 'Owner.Media'],
     onSuccess,
     onError,
 }: IAPIHook<IMemberTypeReference, string> & IMutationProps) => {
@@ -85,8 +80,7 @@ export const useUpdateMemberTypeReference = ({
             const [error, result] = await withCatchAsync(
                 MemberTypeReferenceService.updateMemberTypeReference(
                     memberTypeReferenceId,
-                    data,
-                    preloads
+                    data
                 )
             )
 
@@ -128,7 +122,6 @@ export const useFilteredPaginatedMemberTypeReferences = ({
     enabled,
     memberTypeId,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberTypeReferencePaginated, string> & {
@@ -146,7 +139,6 @@ export const useFilteredPaginatedMemberTypeReferences = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberTypeReferenceService.getPaginatedMemberTypeReferences({
-                    preloads,
                     pagination,
                     memberTypeId,
                     sort: sort && toBase64(sort),

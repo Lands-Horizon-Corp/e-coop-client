@@ -26,17 +26,15 @@ export const getAllEmployees = async () => {
 export const getPaginatedEmployees = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `/user-organization/employee/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

@@ -61,7 +61,6 @@ export const useFilteredPaginatedBanks = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IBankPaginated, string> & IQueryProps = {}) => {
@@ -70,7 +69,6 @@ export const useFilteredPaginatedBanks = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 BankService.getPaginatedBanks({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

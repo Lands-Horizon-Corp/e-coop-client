@@ -78,7 +78,6 @@ export const useFilteredPaginatedBillsAndCoin = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IBillsAndCoinPaginated, string> &
@@ -94,7 +93,6 @@ export const useFilteredPaginatedBillsAndCoin = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 BillsAndCoinService.getPaginatedBillsAndCoins({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

@@ -16,7 +16,6 @@ export const useFilteredBatchCashEntry = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     transactionBatchId,
     pagination = { pageSize: 10, pageIndex: 1 },
@@ -37,7 +36,6 @@ export const useFilteredBatchCashEntry = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 CashEntryService.getPaginatedBatchCashEntry({
-                    preloads,
                     pagination,
                     transactionBatchId,
                     sort: sort && toBase64(sort),

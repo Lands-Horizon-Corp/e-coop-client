@@ -16,7 +16,6 @@ import { withCatchAsync, toBase64 } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 
 import {
-    IAPIPreloads,
     IOperationCallbacks,
     IFilterPaginatedHookProps,
 } from '../../types/api-hooks-types'
@@ -32,7 +31,7 @@ export const feedbackLoader = (feedbackId: TEntityId) =>
     queryOptions<IFeedback>({
         queryKey: ['feedback', 'loader', feedbackId],
         queryFn: async () => {
-            const data = await getFeedbackById(feedbackId, ['User'])
+            const data = await getFeedbackById(feedbackId)
             return data
         },
         retry: 0,
@@ -41,16 +40,14 @@ export const feedbackLoader = (feedbackId: TEntityId) =>
 // Load/get feedback by id
 export const useFeedback = ({
     feedbackId,
-    preloads = ['User'],
     onError,
     onSuccess,
-}: { feedbackId: TEntityId } & IAPIPreloads &
-    IOperationCallbacks<IFeedback, string>) => {
+}: { feedbackId: TEntityId } & IOperationCallbacks<IFeedback, string>) => {
     return useQuery<IFeedback, string>({
         queryKey: ['feedback', feedbackId],
         queryFn: async () => {
             const [error, data] = await withCatchAsync(
-                getFeedbackById(feedbackId, preloads)
+                getFeedbackById(feedbackId)
             )
 
             if (error) {
@@ -131,7 +128,6 @@ export const useDeleteFeedback = ({
 export const useFilteredPaginatedFeedbacks = ({
     sort,
     filterPayload,
-    preloads = ['User'],
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IFilterPaginatedHookProps = {}) => {
     return useQuery<IFeedbackPaginated, string>({
@@ -145,7 +141,6 @@ export const useFilteredPaginatedFeedbacks = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 getPaginatedFeedbacks({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

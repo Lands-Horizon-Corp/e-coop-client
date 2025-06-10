@@ -16,7 +16,6 @@ export const useFilteredBatchOnlineEntry = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     transactionBatchId,
     pagination = { pageSize: 10, pageIndex: 1 },
@@ -37,7 +36,6 @@ export const useFilteredBatchOnlineEntry = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 OnlineEntryService.getPaginatedBatchOnlineEntry({
-                    preloads,
                     pagination,
                     transactionBatchId,
                     sort: sort && toBase64(sort),

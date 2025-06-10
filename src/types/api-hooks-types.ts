@@ -8,14 +8,10 @@ export interface IOperationCallbacks<
     onError?: (error: string, rawError?: TRawError) => void
 }
 
-export interface IFilterPaginatedHookProps extends IAPIPreloads {
+export interface IFilterPaginatedHookProps {
     sort?: TSortingState
     filterPayload?: Record<string, unknown>
     pagination?: { pageIndex: number; pageSize: number }
-}
-
-export interface IAPIPreloads {
-    preloads?: string[]
 }
 
 export interface IQueryProps<T = unknown> {
@@ -31,8 +27,7 @@ export interface IMutationProps {
 }
 
 export interface IAPIHook<TData = unknown, TError = unknown>
-    extends IOperationCallbacks<TData, TError>,
-        IAPIPreloads {}
+    extends IOperationCallbacks<TData, TError> {}
 
 export interface IAPIFilteredPaginatedHook<TData = unknown, TError = unknown>
     extends IQueryProps,
