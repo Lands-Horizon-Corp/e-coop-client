@@ -1,6 +1,5 @@
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import SafeImage from '@/components/safe-image'
 import PlainTextEditor from '@/components/plain-text-editor'
 
 import { Button } from '@/components/ui/button'
@@ -25,6 +24,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import useDebounce from '@/hooks/use-debounce'
+import ImageDisplay from '@/components/image-display'
 
 const joinOrganizationFormSchema = z.object({
     invitationCode: z.string().min(1, {
@@ -125,8 +125,8 @@ const JoinBranchWithCodeFormModal = ({
                                 <div className="relative z-50 flex min-h-16 w-full cursor-pointer items-center gap-x-4 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
                                     <div className="flex grow flex-col gap-y-2">
                                         <div className="flex">
-                                            <SafeImage
-                                                className="aspect-square size-16"
+                                            <ImageDisplay
+                                                className="aspect-square size-16 rounded-lg"
                                                 src={organization.media?.url}
                                             />
                                             <div className="p-2">
@@ -151,9 +151,12 @@ const JoinBranchWithCodeFormModal = ({
                                                 gradientOnly
                                             >
                                                 <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-2 hover:bg-secondary/50 hover:no-underline">
-                                                    <SafeImage
-                                                        className="size-16"
-                                                        src={branch.media?.url}
+                                                    <ImageDisplay
+                                                        className="size-16 rounded-lg"
+                                                        src={
+                                                            organization?.media
+                                                                ?.url
+                                                        }
                                                     />
                                                     <div className="flex grow px-2">
                                                         <div className="flex w-full grow flex-col">
