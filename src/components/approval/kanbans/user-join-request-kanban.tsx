@@ -26,7 +26,7 @@ import { cn } from '@/lib'
 interface Props extends IClassProps {}
 
 const UserJoinRequestKanban = (_props: Props) => {
-    const { data = [], isPending } = useUserOrgJoinRequests()
+    const { data, isPending } = useUserOrgJoinRequests()
 
     return (
         <KanbanContainer className="w-[360px]">
