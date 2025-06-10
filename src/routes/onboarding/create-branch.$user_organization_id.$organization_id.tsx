@@ -15,6 +15,7 @@ import {
     BranchIcon,
     EditPencilIcon,
     LandmarkIcon,
+    LoadingCircleIcon,
     PhoneIcon,
     PlusIcon,
     PushPinIcon,
@@ -47,7 +48,7 @@ function RouteComponent() {
     const { data: branches, isPending: isPendingBranches } =
         useGetBranchesByOrganizationId(organization_id)
 
-    const { mutateAsync: seed } = useSeedOrganization()
+    const { mutateAsync: seed, isPending: isSeeding } = useSeedOrganization()
 
     const handleSeedOrganizationWithBranch = async () => {
         if (organization?.id) {
@@ -119,6 +120,7 @@ function RouteComponent() {
                         </div>
                         <Button
                             variant={'secondary'}
+                            disabled={isSeeding}
                             onClick={() => createModal.onOpenChange(true)}
                         >
                             <PlusIcon className="mr-2" />
@@ -192,13 +194,19 @@ function RouteComponent() {
                 <div className="flex w-full items-center justify-end py-2">
                     <Button
                         variant={'outline'}
-                        disabled={isNoBranches}
+                        disabled={isNoBranches || isSeeding}
                         className="w-28"
                         onClick={async () => {
                             handleSeedOrganizationWithBranch()
                         }}
                     >
-                        continue
+                        {' '}
+                        {isSeeding ? 'Seeding' : ''}
+                        {isSeeding ? (
+                            <LoadingCircleIcon className="ml-2 animate-spin" />
+                        ) : (
+                            'continue'
+                        )}
                     </Button>
                 </div>
             </div>

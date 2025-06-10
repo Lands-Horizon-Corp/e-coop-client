@@ -28,6 +28,8 @@ import { contactFormSchema } from '@/routes/(landing)/-validations/contact-form'
 import { cn } from '@/lib/utils'
 import UseCooldown from '@/hooks/use-cooldown'
 import { useCreateContactUs } from '@/hooks/api-hooks/use-contact-us'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { useLocationInfo } from '@/hooks/use-location-info'
 
 type TContact = z.infer<typeof contactFormSchema>
 
@@ -35,11 +37,13 @@ const contactInputClasses =
     'rounded-[10px] border border-[#4D4C4C]/20 bg-white/50 dark:bg-secondary/70 focus:border-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 placeholder:text-[#838383]'
 
 const ContactPage = () => {
+    const { countryCode } = useLocationInfo()
+
     const defaultValues = {
         first_name: '',
         last_name: '',
         email: '',
-        contactNumber: '',
+        contact_number: countryCode ?? '',
         description: '',
     }
 
@@ -175,29 +179,21 @@ const ContactPage = () => {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                name="contact_number"
+                            <FormFieldWrapper
                                 control={form.control}
-                                render={({ field }) => (
-                                    <FormItem className="">
-                                        <div className="flex flex-col justify-start">
-                                            <FormLabel
-                                                htmlFor={field.name}
-                                                className="h-[38px] w-full max-w-[90px] text-[15px] font-semibold"
-                                            >
-                                                Phone
-                                            </FormLabel>
-                                            <FormControl>
-                                                <div className="flex-1 space-y-2">
-                                                    <PhoneInput
-                                                        placeholder="Enter a phone number"
-                                                        {...field}
-                                                    />
-                                                </div>
-                                            </FormControl>
+                                name="contact_number"
+                                label="Phone"
+                                render={({ field }) => {
+                                    return (
+                                        <div className="flex-1 space-y-2">
+                                            <PhoneInput
+                                                defaultCountry={countryCode}
+                                                placeholder="Enter a phone number"
+                                                {...field}
+                                            />
                                         </div>
-                                    </FormItem>
-                                )}
+                                    )
+                                }}
                             />
 
                             <FormField
