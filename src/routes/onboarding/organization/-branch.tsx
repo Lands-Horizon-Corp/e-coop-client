@@ -10,8 +10,8 @@ import { IBranch, TEntityId } from '@/types'
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
 
 import { toast } from 'sonner'
-import SafeImage from '@/components/safe-image'
 import { useNavigate } from '@tanstack/react-router'
+import ImageDisplay from '@/components/image-display'
 
 type BranchProps = {
     branch: IBranch
@@ -54,7 +54,10 @@ const Branch = ({ branch, organizationId, isUserCanJoin }: BranchProps) => {
                     key={branch.id}
                     className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline"
                 >
-                    <SafeImage className="size-10 rounded-xl" src={mediaUrl} />
+                    <ImageDisplay
+                        className="size-10 rounded-xl"
+                        src={mediaUrl}
+                    />
                     <div className="flex grow flex-col">
                         <h1>{branch?.name}</h1>
                         <PlainTextEditor

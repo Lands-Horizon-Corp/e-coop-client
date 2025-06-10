@@ -1,35 +1,38 @@
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import ImageDisplay from '@/components/image-display'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import PlainTextEditor from '@/components/plain-text-editor'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
+
 import {
     useDeleteBranch,
     useGetBranchesByOrganizationId,
 } from '@/hooks/api-hooks/use-branch'
-import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
 
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import PlainTextEditor from '@/components/plain-text-editor'
-import SafeImage from '@/components/safe-image'
 import {
-    AddressCardIcon,
-    BranchIcon,
-    EditPencilIcon,
-    LandmarkIcon,
-    LoadingCircleIcon,
-    PhoneIcon,
     PlusIcon,
-    PushPinIcon,
     TrashIcon,
+    PhoneIcon,
+    BranchIcon,
+    PushPinIcon,
+    LandmarkIcon,
+    EditPencilIcon,
+    AddressCardIcon,
+    LoadingCircleIcon,
 } from '@/components/icons'
-import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
+
+import { useModalState } from '@/hooks/use-modal-state'
 import { useSeedOrganization } from '@/hooks/api-hooks/use-user-organization'
-import { toast } from 'sonner'
+import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
+
 import { IBranch, TEntityId } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import { cn } from '@/lib'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useModalState } from '@/hooks/use-modal-state'
-import ImageDisplay from '@/components/image-display'
+import { toast } from 'sonner'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
     '/onboarding/create-branch/$user_organization_id/$organization_id'
@@ -90,8 +93,8 @@ function RouteComponent() {
                     </div>
                 ) : (
                     <div className="flex gap-x-5 px-2 py-5">
-                        <SafeImage
-                            className="size-24"
+                        <ImageDisplay
+                            className="size-24 rounded-lg"
                             src={organization?.media?.url}
                         />
                         <div className="flex grow flex-col gap-y-2">
@@ -251,7 +254,9 @@ export const BranchBar = ({
                 useOrganizationId={userOrgId}
                 formProps={{
                     branchId: branch.id,
-                    defaultValues: branch,
+                    defaultValues: {
+                        ...branch,
+                    },
                 }}
             />
             <div>
