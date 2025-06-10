@@ -49,12 +49,10 @@ export const deleteManyBillsAndCoin = async (
 export const getPaginatedBillsAndCoins = async ({
     sort,
     filters,
-    preloads,
     pagination,
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 } = {}) => {
     const url = qs.stringifyUrl(
@@ -62,7 +60,6 @@ export const getPaginatedBillsAndCoins = async ({
             url: `/bills-and-coins/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageSize: pagination?.pageSize,
                 pageIndex: pagination?.pageIndex,

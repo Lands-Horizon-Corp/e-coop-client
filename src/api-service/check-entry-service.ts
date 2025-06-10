@@ -7,7 +7,6 @@ import { ICheckEntryPaginated, TEntityId } from '@/types'
 export const getPaginatedBatchCheckEntry = async ({
     sort,
     filters,
-    preloads,
     pagination,
     transactionBatchId,
 }: {
@@ -15,7 +14,6 @@ export const getPaginatedBatchCheckEntry = async ({
 } & {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
     const url = qs.stringifyUrl(
@@ -23,7 +21,6 @@ export const getPaginatedBatchCheckEntry = async ({
             url: `/check-entry/transaction-batch/${transactionBatchId}/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

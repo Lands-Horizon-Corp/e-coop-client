@@ -50,13 +50,11 @@ export const getAllHolidays = async () => {
 
 export const getPaginatedHolidays = async ({
     sort,
-    preloads,
     filters,
     pagination,
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 } = {}) => {
     const url = qs.stringifyUrl(
@@ -64,7 +62,6 @@ export const getPaginatedHolidays = async ({
             url: `holidays/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

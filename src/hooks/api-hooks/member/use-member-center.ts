@@ -21,24 +21,18 @@ import {
     IMemberCenterPaginated,
 } from '@/types'
 
-export const memberCenterLoader = (
-    memberCenterId: TEntityId,
-    preloads: string[] = []
-) =>
+export const memberCenterLoader = (memberCenterId: TEntityId) =>
     queryOptions<IMemberCenter>({
         queryKey: ['member-center', 'loader', memberCenterId],
         queryFn: async () => {
-            const data = await MemberCenterService.getMemberCenterById(
-                memberCenterId,
-                preloads
-            )
+            const data =
+                await MemberCenterService.getMemberCenterById(memberCenterId)
             return data
         },
         retry: 0,
     })
 
 export const useCreateMemberCenter = ({
-    preloads = [],
     showMessage = true,
     onSuccess,
     onError,
@@ -49,7 +43,7 @@ export const useCreateMemberCenter = ({
         mutationKey: ['member-center', 'create'],
         mutationFn: async (data) => {
             const [error, newMemberCenter] = await withCatchAsync(
-                MemberCenterService.createMemberCenter(data, preloads)
+                MemberCenterService.createMemberCenter(data)
             )
 
             if (error) {
@@ -80,7 +74,6 @@ export const useCreateMemberCenter = ({
 
 export const useUpdateMemberCenter = ({
     showMessage = true,
-    preloads = [],
     onSuccess,
     onError,
 }: IAPIHook<IMemberCenter, string> & IMutationProps) => {
@@ -94,11 +87,7 @@ export const useUpdateMemberCenter = ({
         mutationKey: ['member-center', 'update'],
         mutationFn: async ({ memberCenterId, data }) => {
             const [error, result] = await withCatchAsync(
-                MemberCenterService.updateMemberCenter(
-                    memberCenterId,
-                    data,
-                    preloads
-                )
+                MemberCenterService.updateMemberCenter(memberCenterId, data)
             )
 
             if (error) {
@@ -167,7 +156,6 @@ export const useFilteredPaginatedMemberCenters = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberCenterPaginated, string> &
@@ -183,7 +171,6 @@ export const useFilteredPaginatedMemberCenters = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterService.getPaginatedMemberCenters({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
@@ -212,14 +199,13 @@ export const useFilteredPaginatedMemberCenters = ({
 
 export const useMemberCenter = ({
     enabled,
-    preloads = [],
     showMessage = true,
 }: IAPIHook<IMemberCenter[], string> & IQueryProps = {}) => {
     return useQuery<IMemberCenter[], string>({
         queryKey: ['member-center', 'resource-query', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberCenterService.getAllMemberCenters(preloads)
+                MemberCenterService.getAllMemberCenters()
             )
 
             if (error) {
@@ -240,7 +226,6 @@ export const useFilteredPaginatedMemberCenter = ({
     sort,
     enabled,
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberCenterPaginated, string> &
@@ -256,7 +241,6 @@ export const useFilteredPaginatedMemberCenter = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterService.getPaginatedMemberCenters({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

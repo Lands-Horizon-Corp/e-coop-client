@@ -24,17 +24,15 @@ export const getAllInvitationCode = async () => {
 export const getPaginatedInvitationCode = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `/invitation-code`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

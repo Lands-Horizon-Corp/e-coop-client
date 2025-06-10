@@ -27,12 +27,10 @@ export default class ChequeService {
         endpoint: string,
         {
             filters,
-            preloads,
             pagination,
             sort,
         }: {
             filters?: string
-            preloads?: string[]
             pagination?: { pageIndex: number; pageSize: number }
             sort?: string
         }
@@ -42,7 +40,6 @@ export default class ChequeService {
                 url: `${this.BASE_ENDPOINT}${endpoint}`,
                 query: {
                     sort,
-                    preloads,
                     filters,
                     pageIndex: pagination?.pageIndex,
                     pageSize: pagination?.pageSize,
@@ -53,10 +50,9 @@ export default class ChequeService {
     }
 
     public static async create(
-        chequeData: IChequeResponse,
-        preloads?: string[]
+        chequeData: IChequeResponse
     ): Promise<IChequeResource> {
-        const url = this.buildUrl('', { preloads })
+        const url = this.buildUrl('', {})
         return this.makeRequest(() =>
             APIService.post<IChequeResponse, IChequeResource>(url, chequeData)
         )
@@ -69,10 +65,9 @@ export default class ChequeService {
 
     public static async update(
         id: TEntityId,
-        chequeData: IChequeResponse,
-        preloads?: string[]
+        chequeData: IChequeResponse
     ): Promise<IChequeResource> {
-        const url = this.buildUrl(`/${id}`, { preloads })
+        const url = this.buildUrl(`/${id}`, {})
         return this.makeRequest(() =>
             APIService.put<IChequeResponse, IChequeResource>(url, chequeData)
         )
@@ -81,15 +76,13 @@ export default class ChequeService {
     public static async getCheques({
         sort,
         filters,
-        preloads,
         pagination,
     }: {
         sort?: string
         filters?: string
-        preloads?: string[]
         pagination?: { pageIndex: number; pageSize: number }
     }): Promise<IChequePaginatedResource> {
-        const url = this.buildUrl('', { filters, preloads, pagination, sort })
+        const url = this.buildUrl('', { filters, pagination, sort })
         return this.makeRequest(() =>
             APIService.get<IChequePaginatedResource>(url)
         )

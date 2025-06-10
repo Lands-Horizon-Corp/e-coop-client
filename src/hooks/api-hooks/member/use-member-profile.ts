@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
+import { createMutationHook } from '../api-hook-factory'
 import * as MemberProfileService from '@/api-service/member-services/member-profile-service'
 
 import {
@@ -17,7 +18,6 @@ import {
     IMemberCloseRemarkRequest,
     IMemberProfileQuickCreateRequest,
 } from '@/types'
-import { createMutationHook } from '../api-hook-factory'
 
 export const useQuickCreateMemberProfile = ({
     showMessage = true,
@@ -74,7 +74,6 @@ export const useQuickCreateMemberProfile = ({
 
 export const useCreateMemberProfile = ({
     showMessage = true,
-    preloads = ['Media'],
     onSuccess,
     onError,
 }: undefined | (IAPIHook<IMemberProfile, string> & IQueryProps) = {}) => {
@@ -84,7 +83,7 @@ export const useCreateMemberProfile = ({
         mutationKey: ['member-profile', 'create'],
         mutationFn: async (data) => {
             const [error, newMember] = await withCatchAsync(
-                MemberProfileService.createMemberProfile(data, preloads)
+                MemberProfileService.createMemberProfile(data)
             )
 
             if (error) {
@@ -121,7 +120,6 @@ export const useCreateMemberProfile = ({
 
 export const useMemberProfile = ({
     profileId,
-    preloads = ['Media', 'Owner', 'Owner.Media'],
     onError,
     onSuccess,
     ...opts
@@ -131,7 +129,7 @@ export const useMemberProfile = ({
         queryKey: ['member-profile', profileId],
         queryFn: async () => {
             const [error, data] = await withCatchAsync(
-                MemberProfileService.getMemberProfileById(profileId, preloads)
+                MemberProfileService.getMemberProfileById(profileId)
             )
 
             if (error) {
@@ -150,7 +148,6 @@ export const useMemberProfile = ({
 
 export const useUpdateMemberProfile = ({
     showMessage = true,
-    preloads = ['Media'],
     onSuccess,
     onError,
 }: undefined | (IAPIHook<IMemberProfile, string> & IMutationProps) = {}) => {
@@ -164,7 +161,7 @@ export const useUpdateMemberProfile = ({
         mutationKey: ['member-profile', 'update'],
         mutationFn: async ({ id, data }) => {
             const [error, updatedMember] = await withCatchAsync(
-                MemberProfileService.updateMemberProfile(id, data, preloads)
+                MemberProfileService.updateMemberProfile(id, data)
             )
 
             if (error) {
@@ -200,7 +197,6 @@ export const useUpdateMemberProfile = ({
 
 export const useCloseMemberProfile = ({
     showMessage = true,
-    preloads = ['Media'],
     onSuccess,
     onError,
     ...other
@@ -215,11 +211,7 @@ export const useCloseMemberProfile = ({
         mutationKey: ['member-profile', 'close-account'],
         mutationFn: async ({ profileId, data }) => {
             const [error, closedMember] = await withCatchAsync(
-                MemberProfileService.closeMemberProfileAccount(
-                    profileId,
-                    data,
-                    preloads
-                )
+                MemberProfileService.closeMemberProfileAccount(profileId, data)
             )
 
             if (error) {
@@ -273,13 +265,37 @@ export const useDeclineMemberProfile = createMutationHook<
     'Member profile declined'
 )
 
+export const useAllPendingMemberProfiles = ({
+    enabled,
+    showMessage = true,
+}: IAPIHook<IMemberProfile[], string> & IQueryProps = {}) => {
+    return useQuery<IMemberProfile[], string>({
+        queryKey: ['member-profile', 'resource-query', 'all', 'pending'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberProfileService.getAllPendingMemberProfile()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
+
 export const useFilteredPaginatedMemberProfile = ({
     sort,
     enabled,
     initialData,
     mode = 'all',
     filterPayload,
-    preloads = [],
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberProfile, string> &
@@ -297,7 +313,6 @@ export const useFilteredPaginatedMemberProfile = ({
             const [error, result] = await withCatchAsync(
                 MemberProfileService.getPaginatedMemberProfile({
                     mode,
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

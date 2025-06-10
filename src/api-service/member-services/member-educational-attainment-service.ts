@@ -12,14 +12,10 @@ import {
 
 const BASE_ENDPOINT = '/member-educational-attainment'
 
-export const getMemberEducationalAttainmentById = async (
-    id: TEntityId,
-    preloads?: string[]
-) => {
+export const getMemberEducationalAttainmentById = async (id: TEntityId) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -33,13 +29,11 @@ export const getMemberEducationalAttainmentById = async (
 }
 
 export const createMemberEducationalAttainment = async (
-    data: IMemberEducationalAttainmentRequest,
-    preloads?: string[]
+    data: IMemberEducationalAttainmentRequest
 ) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -53,13 +47,11 @@ export const createMemberEducationalAttainment = async (
 
 export const updateMemberEducationalAttainment = async (
     id: TEntityId,
-    data: IMemberEducationalAttainmentRequest,
-    preloads?: string[]
+    data: IMemberEducationalAttainmentRequest
 ) => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -82,13 +74,11 @@ export const deleteMemberEducationalAttainment = async (id: TEntityId) => {
 
 export const getMemberEducationalAttainments = async ({
     filters,
-    preloads,
     pagination,
     sort,
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 } = {}) => {
     const url = qs.stringifyUrl(
@@ -96,7 +86,6 @@ export const getMemberEducationalAttainments = async ({
             url: `${BASE_ENDPOINT}`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

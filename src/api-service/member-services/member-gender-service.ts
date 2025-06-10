@@ -56,17 +56,15 @@ export const getMemberGenderById = async (id: TEntityId) => {
 export const getPaginatedMemberGenders = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/search`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

@@ -22,17 +22,13 @@ import {
     IMemberClassificationPaginated,
 } from '@/types'
 
-export const memberClassificationLoader = (
-    classificationId: TEntityId,
-    preloads: string[] = []
-) =>
+export const memberClassificationLoader = (classificationId: TEntityId) =>
     queryOptions<IMemberClassification>({
         queryKey: ['member-classification', 'loader', classificationId],
         queryFn: async () => {
             const data =
                 await MemberClassificationService.getMemberClassificationById(
-                    classificationId,
-                    preloads
+                    classificationId
                 )
             return data
         },
@@ -40,7 +36,6 @@ export const memberClassificationLoader = (
     })
 
 export const useCreateMemberClassification = ({
-    preloads = [],
     showMessage = true,
     onSuccess,
     onError,
@@ -55,10 +50,7 @@ export const useCreateMemberClassification = ({
         mutationKey: ['member-classification', 'create'],
         mutationFn: async (data) => {
             const [error, newClassification] = await withCatchAsync(
-                MemberClassificationService.createMemberClassification(
-                    data,
-                    preloads
-                )
+                MemberClassificationService.createMemberClassification(data)
             )
 
             if (error) {
@@ -91,7 +83,6 @@ export const useCreateMemberClassification = ({
 }
 
 export const useUpdateMemberClassification = ({
-    preloads = [],
     showMessage = true,
     onSuccess,
     onError,
@@ -108,8 +99,7 @@ export const useUpdateMemberClassification = ({
             const [error, result] = await withCatchAsync(
                 MemberClassificationService.updateMemberClassification(
                     classificationId,
-                    data,
-                    preloads
+                    data
                 )
             )
 
@@ -182,7 +172,6 @@ export const useFilteredPaginatedMemberClassifications = ({
     enabled,
     showMessage,
     filterPayload,
-    preloads = [],
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IMemberClassificationPaginated, string> = {}) => {
     return useQuery<IMemberClassificationPaginated, string>({
@@ -196,7 +185,6 @@ export const useFilteredPaginatedMemberClassifications = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberClassificationService.getPaginatedMemberClassifications({
-                    preloads,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
@@ -226,15 +214,12 @@ export const useFilteredPaginatedMemberClassifications = ({
 export const useMemberClassifications = ({
     enabled,
     showMessage,
-    preloads = [],
 }: IAPIHook<IMemberClassification[], string> & IQueryProps = {}) => {
     return useQuery<IMemberClassification[], string>({
         queryKey: ['member-classification', 'resource-query', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberClassificationService.getMemberClassifications({
-                    preloads,
-                })
+                MemberClassificationService.getMemberClassifications()
             )
 
             if (error) {

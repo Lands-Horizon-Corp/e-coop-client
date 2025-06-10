@@ -39,13 +39,11 @@ export const createOrganization = async (
 
 export const updateOrganization = async (
     id: TEntityId,
-    data: IOrganizationRequest,
-    preloads?: string[]
+    data: IOrganizationRequest
 ) => {
     const url = qs.stringifyUrl(
         {
             url: `/organization/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -71,17 +69,15 @@ export const deleteManyOrganizations = async (ids: TEntityId[]) => {
 export const getPaginatedOrganizations = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `/organization/search`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

@@ -28,17 +28,15 @@ export const getAllAccountCategories = async () => {
 export const getPaginatedAccountCategories = async (props?: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: TPagination
 }): Promise<IPaginatedResult<IAccountCategory>> => {
-    const { filters, preloads, pagination, sort } = props || {}
+    const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl(
         {
             url: `/account-category`,
             query: {
                 sort,
-                preloads,
                 filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

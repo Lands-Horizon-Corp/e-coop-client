@@ -6,7 +6,6 @@ import { ICashEntryPaginated } from '@/types/coop-types/cash-entry'
 export const getPaginatedBatchCashEntry = async ({
     sort,
     filters,
-    preloads,
     pagination,
     transactionBatchId,
 }: {
@@ -14,7 +13,6 @@ export const getPaginatedBatchCashEntry = async ({
 } & {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
     const url = qs.stringifyUrl(
@@ -22,7 +20,6 @@ export const getPaginatedBatchCashEntry = async ({
             url: `/cash-entry/transaction-batch/${transactionBatchId}/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,

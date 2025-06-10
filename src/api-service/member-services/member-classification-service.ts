@@ -13,13 +13,11 @@ import {
 const BASE_ENDPOINT = '/member-classification'
 
 export const getMemberClassificationById = async (
-    id: TEntityId,
-    preloads?: string[]
+    id: TEntityId
 ): Promise<IMemberClassification> => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -33,13 +31,11 @@ export const getMemberClassificationById = async (
 }
 
 export const createMemberClassification = async (
-    data: IMemberClassificationRequest,
-    preloads?: string[]
+    data: IMemberClassificationRequest
 ): Promise<IMemberClassification> => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -53,13 +49,11 @@ export const createMemberClassification = async (
 
 export const updateMemberClassification = async (
     id: TEntityId,
-    data: IMemberClassificationRequest,
-    preloads?: string[]
+    data: IMemberClassificationRequest
 ): Promise<IMemberClassification> => {
     const url = qs.stringifyUrl(
         {
             url: `${BASE_ENDPOINT}/${id}`,
-            query: { preloads },
         },
         { skipNull: true }
     )
@@ -82,17 +76,12 @@ export const deleteMemberClassification = async (
     await APIService.delete(endpoint)
 }
 
-export const getMemberClassifications = async ({
-    preloads,
-}: {
-    preloads?: string[]
-} = {}): Promise<IMemberClassification[]> => {
+export const getMemberClassifications = async (): Promise<
+    IMemberClassification[]
+> => {
     const url = qs.stringifyUrl(
         {
             url: BASE_ENDPOINT,
-            query: {
-                preloads,
-            },
         },
         { skipNull: true }
     )
@@ -104,12 +93,10 @@ export const getMemberClassifications = async ({
 export const getPaginatedMemberClassifications = async ({
     sort,
     filters,
-    preloads,
     pagination,
 }: {
     sort?: string
     filters?: string
-    preloads?: string[]
     pagination?: { pageIndex: number; pageSize: number }
 } = {}): Promise<IMemberClassificationPaginated> => {
     const url = qs.stringifyUrl(
@@ -117,7 +104,6 @@ export const getPaginatedMemberClassifications = async ({
             url: `${BASE_ENDPOINT}/paginated`,
             query: {
                 sort,
-                preloads,
                 filter: filters,
                 pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,
