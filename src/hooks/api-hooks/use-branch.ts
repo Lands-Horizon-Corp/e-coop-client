@@ -37,12 +37,12 @@ export const useCreateBranch = (
 }
 
 export const useUpdateBranch = (
-    { onError, onSuccess }: IAPIHook<unknown, string>,
+    { onError, onSuccess }: IAPIHook<IBranch, string>,
     userOrganizationId: TEntityId
 ) => {
     const queryClient = useQueryClient()
 
-    return useMutation<unknown, string, IBranchRequest>({
+    return useMutation<IBranch, string, IBranchRequest>({
         mutationKey: ['update-branch', 'update'],
         mutationFn: async (branchData) => {
             const [error, response] = await withCatchAsync(

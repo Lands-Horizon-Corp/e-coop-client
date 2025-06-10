@@ -22,8 +22,8 @@ export const OrganizationSchema = z.object({
         }),
     contact_number: z.string().optional(),
     description: z.string().optional(),
-    media_id: entityIdSchema,
-    cover_media_id: entityIdSchema,
+    media_id: z.string().min(1, 'Organization Logo is required'),
+    cover_media_id: z.string().min(1, 'Cover media is required'),
 })
 
 export type Organization = z.infer<typeof OrganizationSchema>

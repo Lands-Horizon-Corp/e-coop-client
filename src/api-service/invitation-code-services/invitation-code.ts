@@ -9,7 +9,7 @@ import qs from 'query-string'
 
 export const verifyInvitationCode = async (code: string) => {
     const response = await APIService.get<IInvitationCode>(
-        `/invitation-code/verify/${code}`
+        `/invitation-code/code/${code}`
     )
     return response.data
 }
