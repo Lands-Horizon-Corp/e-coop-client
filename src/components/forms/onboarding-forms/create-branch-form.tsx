@@ -41,6 +41,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LatLngLiteral } from 'leaflet'
 import { cn } from '@/lib'
+import { useLocationInfo } from '@/hooks/use-country-classifcation'
 import ImageDisplay from '@/components/image-display'
 
 type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
@@ -60,12 +61,17 @@ export const CreateUpdateBranchForm = ({
     onSuccess,
     onError,
 }: ICreateBranchFormProps) => {
+    const { countryCode } = useLocationInfo()
+
     const [openImagePicker, setOpenImagePicker] = useState(false)
     const [onOpenMap, setOnOpenMapPicker] = useState(false)
 
     const form = useForm<ICreateBranchSchema>({
         resolver: zodResolver(branchRequestSchema),
+        reValidateMode: 'onChange',
+        mode: 'onSubmit',
         defaultValues: {
+            country_code: countryCode,
             ...defaultValues,
         },
     })
@@ -205,7 +211,7 @@ export const CreateUpdateBranchForm = ({
                                         {...field}
                                         className="w-full"
                                         disabled={isLoading}
-                                        defaultCountry="PH"
+                                        defaultCountry={countryCode}
                                     />
                                 )}
                             />
@@ -290,7 +296,9 @@ export const CreateUpdateBranchForm = ({
                                     render={({ field }) => (
                                         <CountryCombobox
                                             {...field}
-                                            defaultValue={field.value}
+                                            defaultValue={
+                                                field.value || countryCode
+                                            }
                                             disabled={isLoading}
                                             onChange={(country) =>
                                                 field.onChange(country.alpha2)
@@ -530,7 +538,7 @@ export const CreateUpdateBranchForm = ({
                                     {branchId ? 'updating ' : 'Creating '}{' '}
                                     <LoadingSpinnerIcon
                                         size={18}
-                                        className="mr-2 animate-spin"
+                                        className="ml-2 animate-spin"
                                     />
                                 </div>
                             ) : (
