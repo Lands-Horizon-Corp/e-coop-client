@@ -22,7 +22,7 @@ export const useGetUserOrganizationByUserId = () => {
     const userId = currentAuth?.user?.id
 
     return useQuery<UserOrganizationGroup[], string>({
-        queryKey: ['user-organization', 'details'],
+        queryKey: ['user-organization', 'details', userId],
         enabled: !!userId,
         queryFn: async () => {
             if (!userId) {
@@ -30,6 +30,48 @@ export const useGetUserOrganizationByUserId = () => {
             }
             const [error, result] = await withCatchAsync(
                 UserOrganization.getUserOrganizationUserId(userId)
+            )
+
+            if (error || !result) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage)
+                throw new Error(errorMessage)
+            }
+
+            const grouped = groupBy(result, (item) => item.organization_id)
+
+            return Object.keys(grouped).reduce<UserOrganizationGroup[]>(
+                (acc, orgKey) => {
+                    const orgGroup = grouped[orgKey]
+                    const firstItem = orgGroup?.[0]
+
+                    if (!firstItem || !firstItem.organization) return acc
+
+                    acc.push({
+                        userOrganizationId: firstItem.id,
+                        organizationDetails: firstItem.organization,
+                        branches: orgGroup
+                            .map((org) => org.branch)
+                            .filter((branch): branch is IBranch => !!branch),
+                        orgnizationId: firstItem.organization.id,
+                        isPending: firstItem.application_status,
+                        userOrganization: firstItem,
+                    })
+
+                    return acc
+                },
+                []
+            )
+        },
+    })
+}
+
+export const useGetCurrentUserOrganizations = () => {
+    return useQuery<UserOrganizationGroup[], string>({
+        queryKey: ['user-organization', 'details'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                UserOrganization.getCurrentUserOrganizations()
             )
 
             if (error || !result) {
