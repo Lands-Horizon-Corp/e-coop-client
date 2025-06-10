@@ -51,7 +51,7 @@ import { SinglePictureUploadModal } from '@/components/single-image-uploader/sin
 import UserAvatar from '@/components/user-avatar'
 import ActionTooltip from '@/components/action-tooltip'
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
-import { useLocationInfo } from '@/hooks/use-country-classifcation'
+import { useLocationInfo } from '@/hooks/use-location-info'
 
 const steps = [
     {
