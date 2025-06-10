@@ -16,7 +16,6 @@ export const getAllBranches = async () => {
     const response = await APIService.get<IBranch[]>(`/branch`)
     return response.data
 }
-// DELETE /branch/user-organization/:user_organization_id
 export const deleteBranch = async (userOrganizationId: TEntityId) => {
     const response = await APIService.delete(
         `/branch/user-organization/${userOrganizationId}`
@@ -24,13 +23,12 @@ export const deleteBranch = async (userOrganizationId: TEntityId) => {
     return response.data
 }
 
-//PUT /branch/:branch_id
 export const updateBranch = async (
-    branchId: TEntityId,
+    userOrganizationId: TEntityId,
     branchData: IBranchRequest
 ) => {
     const response = await APIService.put<IBranchRequest, IBranch>(
-        `/branch/${branchId}`,
+        `/branch/user-organization/${userOrganizationId}`,
         branchData
     )
     return response.data
