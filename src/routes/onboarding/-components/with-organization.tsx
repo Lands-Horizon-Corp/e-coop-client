@@ -1,7 +1,7 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import PlainTextEditor from '@/components/plain-text-editor'
-import { PinLocationIcon } from '@/components/icons'
+import { GearIcon, PinLocationIcon } from '@/components/icons'
 import { StatusBadge } from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
 
@@ -103,7 +103,7 @@ const WithOrganization = ({
                     You have existing organization. Choose where to operate.
                 </h4>
             </div>
-            <ScrollArea className="ecoop-scroll max-h-[40rem] w-full overflow-auto p-10">
+            <ScrollArea className="w-full overflow-auto p-10">
                 <Accordion
                     type="single"
                     collapsible
@@ -136,24 +136,27 @@ const WithOrganization = ({
                                                         .description
                                                 }
                                             />
-                                            {org.organizationDetails?.id && (
-                                                <div
-                                                    onClick={() => {
-                                                        navigate({
-                                                            to: '/onboarding/create-branch/$user_organization_id/$organization_id',
-                                                            params: {
-                                                                user_organization_id:
-                                                                    org.userOrganizationId,
-                                                                organization_id:
-                                                                    org.orgnizationId,
-                                                            },
-                                                        })
-                                                    }}
-                                                    className="mt-2 max-w-32 rounded-lg bg-secondary/50 p-2 text-sm duration-300 ease-in-out hover:scale-105 hover:bg-secondary"
-                                                >
-                                                    Add Branch
-                                                </div>
-                                            )}
+                                            {org.organizationDetails?.id &&
+                                                org.userOrganization
+                                                    .user_type === 'owner' && (
+                                                    <span
+                                                        onClick={() => {
+                                                            navigate({
+                                                                to: '/onboarding/create-branch/$user_organization_id/$organization_id',
+                                                                params: {
+                                                                    user_organization_id:
+                                                                        org.userOrganizationId,
+                                                                    organization_id:
+                                                                        org.orgnizationId,
+                                                                },
+                                                            })
+                                                        }}
+                                                        className="mt-2 flex w-fit items-center gap-x-2 rounded-lg border border-border bg-secondary/40 p-2 px-4 text-sm text-foreground duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:text-primary-foreground hover:dark:bg-primary/90 hover:dark:text-primary-foreground"
+                                                    >
+                                                        <GearIcon /> Manage
+                                                        Branch
+                                                    </span>
+                                                )}
                                         </div>
                                     </AccordionTrigger>
                                 </GradientBackground>

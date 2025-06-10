@@ -8,7 +8,6 @@ import {
 import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
 
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
 import PlainTextEditor from '@/components/plain-text-editor'
 import SafeImage from '@/components/safe-image'
 import {
@@ -27,8 +26,9 @@ import { toast } from 'sonner'
 import { IBranch, TEntityId } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { cn } from '@/lib'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useModalState } from '@/hooks/use-modal-state'
+import ImageDisplay from '@/components/image-display'
 
 export const Route = createFileRoute(
     '/onboarding/create-branch/$user_organization_id/$organization_id'
@@ -38,11 +38,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
     const navigate = useNavigate()
-    const { onOpen } = useConfirmModalStore()
 
     const { user_organization_id, organization_id } = Route.useParams()
-
-    const [onOpenCreateBranchModal, setOpenCreateBranchModal] = useState(false)
 
     const { data: organization, isPending: isPendingOrganization } =
         useGetOrganizationById(organization_id)
@@ -51,13 +48,6 @@ function RouteComponent() {
         useGetBranchesByOrganizationId(organization_id)
 
     const { mutateAsync: seed } = useSeedOrganization()
-    const [branch, setBranch] = useState<IBranch>()
-
-    const { mutate: deleteBranch } = useDeleteBranch({
-        onSuccess: () => {
-            toast.success(`Successfully deleted Branch!`)
-        },
-    })
 
     const handleSeedOrganizationWithBranch = async () => {
         if (organization?.id) {
@@ -69,60 +59,15 @@ function RouteComponent() {
         }
     }
 
-    const handleDeleteBranch = async (userOrganizationId: TEntityId) => {
-        onOpen({
-            title: 'Delete Branch',
-            description: `You are about delete this branch, are you sure you want to proceed?`,
-            onConfirm: () => {
-                deleteBranch(userOrganizationId)
-            },
-            confirmString: 'Proceed',
-        })
-    }
-
-    const handleOpenCreateEditModal = (branch?: IBranch) => {
-        if (branch) {
-            setBranch(branch)
-        } else {
-            setBranch(undefined)
-        }
-        setOpenCreateBranchModal(true)
-    }
+    const createModal = useModalState()
 
     const isNoBranches = branches?.length === 0
-
-    const defaultValues = {
-        name: branch?.name ?? '',
-        media_id: branch?.media.url ?? '',
-        type: branch?.type ?? 'cooperative branch',
-        email: branch?.email ?? '',
-        description: branch?.description ?? '',
-        contact_number: branch?.contact_number ?? '',
-        address: branch?.address ?? '',
-        province: branch?.province ?? '',
-        country_code: branch?.country_code ?? '',
-        city: branch?.city ?? '',
-        region: branch?.region ?? '',
-        barangay: branch?.barangay ?? '',
-        postal_code: branch?.postal_code ?? '',
-        latitude: branch?.latitude ?? 0,
-        longitude: branch?.longitude ?? 0,
-        is_main_branch: !!branch?.is_main_branch,
-    }
 
     return (
         <div className="w-full">
             <CreateUpdateFormFormModal
-                open={onOpenCreateBranchModal}
-                onOpenChange={setOpenCreateBranchModal}
+                {...createModal}
                 useOrganizationId={user_organization_id}
-                formProps={{
-                    setOpenCreateBranchModal: setOpenCreateBranchModal,
-                    branch: branch,
-                    defaultValues: {
-                        ...defaultValues,
-                    },
-                }}
             />
             <div className="min-h-full w-full min-w-full rounded-none border-none bg-transparent py-5">
                 {isPendingOrganization ? (
@@ -173,8 +118,8 @@ function RouteComponent() {
                             </div>
                         </div>
                         <Button
-                            onClick={() => handleOpenCreateEditModal()}
                             variant={'secondary'}
+                            onClick={() => createModal.onOpenChange(true)}
                         >
                             <PlusIcon className="mr-2" />
                             Add Branch
@@ -233,72 +178,12 @@ function RouteComponent() {
                             </div>
                         ) : (
                             branches?.map((branch) => {
-                                const mediaUrl = branch?.media?.url ?? ''
-                                console.log(mediaUrl)
                                 return (
-                                    <div key={branch.id}>
-                                        <GradientBackground mediaUrl={mediaUrl}>
-                                            <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
-                                                <Avatar className="size-16">
-                                                    <AvatarImage
-                                                        src={mediaUrl}
-                                                    />
-                                                </Avatar>
-                                                <div className="flex grow flex-col">
-                                                    <h1>{branch?.name}</h1>
-                                                    {branch.description && (
-                                                        <PlainTextEditor
-                                                            className="text-xs"
-                                                            content={
-                                                                branch?.description ??
-                                                                ''
-                                                            }
-                                                        />
-                                                    )}
-                                                    <p className="flex items-center gap-y-1 text-xs">
-                                                        <AddressCardIcon className="mr-2" />
-                                                        {branch.address}
-                                                    </p>
-                                                    <div className="absolute bottom-7 right-2 z-50 flex gap-1 text-xs">
-                                                        <Button
-                                                            size={'sm'}
-                                                            onClick={() => {
-                                                                handleOpenCreateEditModal(
-                                                                    branch
-                                                                )
-                                                            }}
-                                                            variant={
-                                                                'secondary'
-                                                            }
-                                                            className={cn(
-                                                                'flex max-h-7 space-x-2 text-xs'
-                                                            )}
-                                                        >
-                                                            <span>edit</span>
-                                                            <EditPencilIcon />
-                                                        </Button>
-                                                        <Button
-                                                            size={'sm'}
-                                                            onClick={() => {
-                                                                handleDeleteBranch(
-                                                                    user_organization_id
-                                                                )
-                                                            }}
-                                                            variant={
-                                                                'destructive'
-                                                            }
-                                                            className={cn(
-                                                                'flex max-h-7 space-x-2 text-xs'
-                                                            )}
-                                                        >
-                                                            <span> delete</span>
-                                                            <TrashIcon />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </GradientBackground>
-                                    </div>
+                                    <BranchBar
+                                        key={branch.id}
+                                        branch={branch}
+                                        userOrgId={user_organization_id}
+                                    />
                                 )
                             })
                         )}
@@ -318,5 +203,94 @@ function RouteComponent() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export const BranchBar = ({
+    branch,
+    userOrgId,
+}: {
+    branch: IBranch
+    userOrgId: TEntityId
+}) => {
+    const updateModal = useModalState()
+    const { onOpen } = useConfirmModalStore()
+
+    const { mutate: deleteBranch } = useDeleteBranch({
+        onSuccess: () => {
+            toast.success(`Successfully deleted Branch!`)
+        },
+    })
+
+    const handleDeleteBranch = async (userOrganizationId: TEntityId) => {
+        onOpen({
+            title: 'Delete Branch',
+            description: `You are about delete this branch, are you sure you want to proceed?`,
+            onConfirm: () => {
+                deleteBranch(userOrganizationId)
+            },
+            confirmString: 'Proceed',
+        })
+    }
+
+    return (
+        <>
+            <CreateUpdateFormFormModal
+                {...updateModal}
+                useOrganizationId={userOrgId}
+                formProps={{
+                    branchId: branch.id,
+                    defaultValues: branch,
+                }}
+            />
+            <div>
+                <GradientBackground mediaUrl={branch.media?.download_url ?? ''}>
+                    <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
+                        <ImageDisplay src={branch?.media?.download_url} />
+                        <div className="flex grow flex-col">
+                            <h1>{branch?.name}</h1>
+                            {branch.description && (
+                                <PlainTextEditor
+                                    className="text-xs"
+                                    content={branch?.description ?? ''}
+                                />
+                            )}
+                            <p className="flex items-center gap-y-1 text-xs">
+                                <AddressCardIcon className="mr-2" />
+                                {branch.address}
+                            </p>
+                            <div className="absolute bottom-7 right-2 z-50 flex gap-1 text-xs">
+                                <Button
+                                    size={'sm'}
+                                    onClick={() => {
+                                        updateModal.onOpenChange(true)
+                                    }}
+                                    variant={'secondary'}
+                                    className={cn(
+                                        'flex max-h-7 space-x-2 text-xs'
+                                    )}
+                                >
+                                    <span>edit</span>
+                                    <EditPencilIcon />
+                                </Button>
+                                <Button
+                                    size={'sm'}
+                                    onClick={() => {
+                                        handleDeleteBranch(userOrgId)
+                                    }}
+                                    variant={'destructive'}
+                                    className={cn(
+                                        'flex max-h-7 space-x-2 text-xs'
+                                    )}
+                                >
+                                    <span> delete</span>
+                                    <TrashIcon />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </GradientBackground>
+            </div>
+        </>
     )
 }
