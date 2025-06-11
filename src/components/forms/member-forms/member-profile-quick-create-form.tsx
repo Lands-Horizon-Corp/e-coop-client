@@ -17,7 +17,6 @@ import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import MemberGenderCombobox from '@/components/comboboxes/member-gender-combobox'
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
-import MemberClassificationCombobox from '@/components/comboboxes/member-classification-combobox'
 
 import { cn } from '@/lib/utils'
 import { useQuickCreateMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
@@ -56,8 +55,6 @@ const MemberProfileQuickCreateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            organization_id: 'a0ddb598-c98c-443e-9c05-ca80bcc94be5', // TODO: REMOVE ONCE ORG BRANCH DONE
-            branch_id: 'cecfa0bc-be4b-488c-b64e-44adbc555645', // TODO: REMOVE ONCE ORG BRANCH DONE
             first_name: '',
             last_name: '',
             status: 'for review',
@@ -113,17 +110,14 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_classification_id"
-                                label="Member Classification *"
+                                name="status"
+                                label="Member Profile Status"
                                 className="col-span-1"
                                 render={({ field }) => (
-                                    <MemberClassificationCombobox
+                                    <GeneralStatusCombobox
                                         {...field}
-                                        placeholder="Select Member Classification"
+                                        placeholder="Status"
                                         disabled={isDisabled(field.name)}
-                                        onChange={(selected) =>
-                                            field.onChange(selected.id)
-                                        }
                                     />
                                 )}
                             />
@@ -153,19 +147,6 @@ const MemberProfileQuickCreateForm = ({
                                         id={field.name}
                                         placeholder="Old Passbook/Old Reference ID"
                                         autoComplete="off"
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="status"
-                                label="Member Profile Status"
-                                className="col-span-1"
-                                render={({ field }) => (
-                                    <GeneralStatusCombobox
-                                        {...field}
-                                        placeholder="Status"
                                         disabled={isDisabled(field.name)}
                                     />
                                 )}

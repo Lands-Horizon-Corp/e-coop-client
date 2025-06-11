@@ -20,7 +20,6 @@ import AppSidebarItem from '@/components/ui/app-sidebar/app-sidebar-item'
 import { flatSidebarGroupItem } from '@/components/ui/app-sidebar/app-sidebar-utils'
 import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
 
-import logger from '@/helpers/loggers/logger'
 import { generateSidebarGroups } from './sidebar-routes'
 // import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
@@ -61,8 +60,6 @@ const OrgBranchSidebar = (props: IBaseProps) => {
             })),
         [memoizedSidebarRouteGroup, router]
     )
-
-    logger.log(item)
 
     return (
         <Sidebar variant="inset" {...props}>

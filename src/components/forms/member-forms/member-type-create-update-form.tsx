@@ -18,19 +18,13 @@ import {
 } from '@/hooks/api-hooks/member/use-member-type'
 import { createMemberTypeSchema } from '@/validations/member/member-type-schema'
 
-import {
-    IForm,
-    TEntityId,
-    IClassProps,
-    IMemberType,
-    IMemberTypeRequest,
-} from '@/types'
+import { IForm, TEntityId, IClassProps, IMemberType } from '@/types'
 
 export type TMemberTypeForm = z.infer<typeof createMemberTypeSchema>
 
 export interface IMemberTypeCreateUpdateFormProps
     extends IClassProps,
-        IForm<Partial<IMemberTypeRequest>, IMemberType, string> {
+        IForm<Partial<TMemberTypeForm>, IMemberType, string> {
     memberTypeId?: TEntityId
 }
 
