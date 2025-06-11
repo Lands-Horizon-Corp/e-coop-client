@@ -33,6 +33,7 @@ const TransactionBatchNavButton = (_props: Props) => {
         onSuccess(data) {
             setData(data)
         },
+        showMessage: false,
     })
 
     useSubscribe<TTransactionBatchFullorMin>(

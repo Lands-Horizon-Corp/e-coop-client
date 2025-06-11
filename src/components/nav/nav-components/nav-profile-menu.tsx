@@ -4,6 +4,14 @@ import { toast } from 'sonner'
 import { useRouter } from '@tanstack/react-router'
 
 import {
+    GearIcon,
+    LogoutIcon,
+    BuildingIcon,
+    ArrowRightIcon,
+    BadgeCheckFillIcon,
+    BuildingBranchIcon,
+} from '@/components/icons'
+import {
     Accordion,
     AccordionItem,
     AccordionTrigger,
@@ -16,28 +24,19 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
 import UserAvatar from '@/components/user-avatar'
-import {
-    MapPin,
-    Building2,
-    ArrowRightLeft,
-    LogOutIcon as LogoutIcon,
-} from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
+import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { useSignOut } from '@/hooks/api-hooks/use-auth'
 import { useAuthStore } from '@/store/user-auth-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useGetCurrentUserOrganizations } from '@/hooks/api-hooks/use-user-organization'
-import type { IUserOrganization } from '@/types'
-import {
-    ArrowRightIcon,
-    BadgeCheckFillIcon,
-    GearIcon,
-} from '@/components/icons'
 import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
-import ImageDisplay from '@/components/image-display'
+
+import type { IUserOrganization } from '@/types'
+import { useQueryClient } from '@tanstack/react-query'
 
 const slugify = (str: string) =>
     str
@@ -62,6 +61,7 @@ const isActive = (userOrg: IUserOrganization, branchId?: string) => {
 
 const NavProfileMenu = () => {
     const router = useRouter()
+    const queryClient = useQueryClient()
     const { onOpen } = useConfirmModalStore()
     const {
         currentAuth: { user, user_organization: userOrg },
@@ -115,6 +115,8 @@ const NavProfileMenu = () => {
                     organization_id: nextUserOrg.organization.id,
                 },
             })
+
+            queryClient.invalidateQueries()
 
             toast.success(`Switched to ${nextUserOrg.branch.name || 'branch'}`)
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -209,7 +211,7 @@ const NavProfileMenu = () => {
                                         >
                                             <AccordionTrigger className="rounded-md px-2 py-2 hover:bg-accent hover:no-underline">
                                                 <div className="flex flex-1 items-center gap-3">
-                                                    <Building2 className="h-4 w-4 text-muted-foreground" />
+                                                    <BuildingIcon className="h-4 w-4 text-muted-foreground" />
                                                     <span className="text-sm font-medium">
                                                         {orgName}
                                                     </span>
@@ -265,7 +267,7 @@ const NavProfileMenu = () => {
                                                                         >
                                                                             <div className="min-w-0 flex-1">
                                                                                 <div className="mb-1 flex items-center gap-2">
-                                                                                    <MapPin className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
+                                                                                    <BuildingBranchIcon className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
                                                                                     <span className="truncate text-xs font-medium">
                                                                                         {
                                                                                             branch.name
@@ -279,17 +281,7 @@ const NavProfileMenu = () => {
                                                                                             Main
                                                                                         </Badge>
                                                                                     )}
-                                                                                    {isActive(
-                                                                                        orgGroup.userOrganization,
-                                                                                        branch.id
-                                                                                    ) && (
-                                                                                        <Badge
-                                                                                            variant="default"
-                                                                                            className="bg-primary text-xs text-primary-foreground"
-                                                                                        >
-                                                                                            Active
-                                                                                        </Badge>
-                                                                                    )}
+
                                                                                     {orgGroup.isPending !==
                                                                                         'accepted' && (
                                                                                         <Badge
@@ -316,27 +308,42 @@ const NavProfileMenu = () => {
                                                                                     }
                                                                                 </div>
                                                                             </div>
-                                                                            <Button
-                                                                                size="sm"
-                                                                                variant="outline"
-                                                                                className="ml-2 h-6 flex-shrink-0 px-2 text-xs"
-                                                                                onClick={() =>
-                                                                                    handleSwitch(
-                                                                                        orgGroup.userOrganization,
-                                                                                        branch
-                                                                                    )
-                                                                                }
-                                                                                disabled={
-                                                                                    isLoading
-                                                                                }
-                                                                            >
-                                                                                {isLoading ? (
-                                                                                    <LoadingSpinner className="mr-1 h-3 w-3" />
-                                                                                ) : (
-                                                                                    <ArrowRightLeft className="mr-1 h-3 w-3" />
+                                                                            <div className="flex flex-col items-end space-y-1">
+                                                                                <p className="text-xs text-muted-foreground">
+                                                                                    as{' '}
+                                                                                    {
+                                                                                        orgGroup
+                                                                                            .userOrganization
+                                                                                            .user_type
+                                                                                    }
+                                                                                </p>
+                                                                                {!isActive(
+                                                                                    orgGroup.userOrganization,
+                                                                                    branch.id
+                                                                                ) && (
+                                                                                    <Button
+                                                                                        size="sm"
+                                                                                        variant="outline"
+                                                                                        className="ml-2 h-6 flex-shrink-0 px-2 text-xs"
+                                                                                        onClick={() =>
+                                                                                            handleSwitch(
+                                                                                                orgGroup.userOrganization,
+                                                                                                branch
+                                                                                            )
+                                                                                        }
+                                                                                        disabled={
+                                                                                            isLoading
+                                                                                        }
+                                                                                    >
+                                                                                        Switch
+                                                                                        {isLoading ? (
+                                                                                            <LoadingSpinner className="ml-1 h-3 w-3" />
+                                                                                        ) : (
+                                                                                            <ArrowRightIcon className="ml-1 h-3 w-3" />
+                                                                                        )}
+                                                                                    </Button>
                                                                                 )}
-                                                                                Switch
-                                                                            </Button>
+                                                                            </div>
                                                                         </div>
                                                                     )
                                                                 }

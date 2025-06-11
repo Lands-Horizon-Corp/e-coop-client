@@ -14,10 +14,6 @@ import { useCurrentTimesheet } from '@/hooks/api-hooks/use-timesheet'
 const NavTimeInBar = () => {
     const { data: timesheet, isPending: isLoading } = useCurrentTimesheet()
 
-    // const quote = useMemo(() => {
-    //     return !timesheet ? randomStartOfDayQuoute() : randomEndOfDayQuoute()
-    // }, [timesheet])
-
     return (
         <>
             <Popover modal>
@@ -31,7 +27,7 @@ const NavTimeInBar = () => {
                             'group relative gap-x-2 rounded-full text-foreground/70'
                         )}
                     >
-                        {timesheet && (
+                        {!!timesheet && (
                             <div className="absolute -right-1 -top-1">
                                 <DotBigIcon className="absolute mr-2 text-primary blur-sm" />
                                 <DotBigIcon className="mr-2 text-primary" />
