@@ -35,7 +35,7 @@ export interface ISignUpRequest {
     contact_number: string
     password: string
 
-    birthdate: Date
+    birthdate: string
     media?: IMediaRequest
 }
 
