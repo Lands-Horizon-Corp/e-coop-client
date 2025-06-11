@@ -31,15 +31,12 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install
-              working-directory: .
 
             - name: Run ESLint
               run: pnpm run lint
-              working-directory: .
 
             - name: Run Prettier Check
               run: pnpm run fc
-              working-directory: .
 
     test:
         name: Run Vitest Tests
@@ -60,11 +57,9 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install
-              working-directory: .
 
             - name: Run Vitest tests
-              run: pnpm run test
-              working-directory: .
+              run: pnpm test run
 
     build:
         name: Build Project
@@ -85,11 +80,9 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install
-              working-directory: .
 
             - name: Run TypeScript Build
               run: pnpm run build
-              working-directory: .
 
             - name: Run Vite Build
               run: pnpm run build
