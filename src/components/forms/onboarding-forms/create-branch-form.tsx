@@ -22,6 +22,7 @@ import {
 } from '@/components/icons'
 
 import {
+    branchTypeEnum,
     IBranch,
     IBranchRequest,
     IClassProps,
@@ -43,6 +44,12 @@ import { LatLngLiteral } from 'leaflet'
 import { cn } from '@/lib'
 import ImageDisplay from '@/components/image-display'
 import { useLocationInfo } from '@/hooks/use-location-info'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from '@/components/ui/select'
 
 type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
 
@@ -128,7 +135,7 @@ export const CreateUpdateBranchForm = ({
                     ? data.media.id
                     : await handleUploadPhoto(data.media.download_url ?? '')
                 const request = { ...data, media_id: media }
-                updateBranch({ id: useOrganizationId, data: request })
+                updateBranch({ id: branchId, data: request })
             } else {
                 const mediaId = await handleUploadPhoto(
                     data.media.download_url ?? ''
@@ -144,8 +151,7 @@ export const CreateUpdateBranchForm = ({
         }
     }
 
-    const isBranchOnChanged =
-        JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+    const isBranchOnChanged = form.formState.isDirty
 
     const isLoading =
         isPedingCreateBranch || isLoadingUpdateBranch || isUploadingPhoto
@@ -162,8 +168,8 @@ export const CreateUpdateBranchForm = ({
                 onOpenChange={setOnOpenMapPicker}
                 onChange={(coordinates) => {
                     const { lat, lng }: LatLngLiteral = coordinates
-                    form.setValue('latitude', lat)
-                    form.setValue('longitude', lng)
+                    form.setValue('latitude', lat, { shouldDirty: true })
+                    form.setValue('longitude', lng, { shouldDirty: true })
                 }}
             />
             <Form {...form}>
@@ -202,13 +208,35 @@ export const CreateUpdateBranchForm = ({
                                 name="type"
                                 label="Branch Type"
                                 render={({ field }) => (
-                                    <Input
-                                        {...field}
+                                    <Select
+                                        onValueChange={(selectedValue) => {
+                                            field.onChange(selectedValue)
+                                        }}
                                         disabled={isLoading}
-                                        placeholder="Enter branch type"
-                                    />
+                                        defaultValue={field.value}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            {field.value ||
+                                                'Select branch Type'}
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {Object.values(branchTypeEnum).map(
+                                                (branch) => {
+                                                    return (
+                                                        <SelectItem
+                                                            key={branch}
+                                                            value={branch}
+                                                        >
+                                                            {branch}
+                                                        </SelectItem>
+                                                    )
+                                                }
+                                            )}
+                                        </SelectContent>
+                                    </Select>
                                 )}
                             />
+
                             <FormFieldWrapper
                                 control={form.control}
                                 name="contact_number"
@@ -371,7 +399,6 @@ export const CreateUpdateBranchForm = ({
                                     const media =
                                         (form.getValues('media') as IMedia) ??
                                         ''
-
                                     return (
                                         <FormControl>
                                             <div className="relative mx-auto size-fit">
@@ -383,10 +410,17 @@ export const CreateUpdateBranchForm = ({
                                                     onPhotoChoose={(
                                                         newImage
                                                     ) => {
-                                                        form.setValue('media', {
-                                                            download_url:
-                                                                newImage,
-                                                        })
+                                                        form.setValue(
+                                                            'media',
+                                                            {
+                                                                download_url:
+                                                                    newImage,
+                                                            },
+                                                            {
+                                                                shouldDirty:
+                                                                    true,
+                                                            }
+                                                        )
                                                     }}
                                                     defaultImage={
                                                         media.download_url
@@ -465,7 +499,7 @@ export const CreateUpdateBranchForm = ({
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
-                                                value={field.value ?? ''}
+                                                value={field.value}
                                                 disabled={isLoading}
                                                 onChange={(e) =>
                                                     field.onChange(
@@ -488,7 +522,7 @@ export const CreateUpdateBranchForm = ({
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
-                                                value={field.value ?? ''}
+                                                value={field.value}
                                                 disabled={isLoading}
                                                 onChange={(e) =>
                                                     field.onChange(
