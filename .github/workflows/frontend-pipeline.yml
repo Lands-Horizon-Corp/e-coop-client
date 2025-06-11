@@ -27,15 +27,12 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install
-              working-directory: ./client
 
             - name: Run ESLint
               run: pnpm run lint
-              working-directory: ./client
 
             - name: Run Prettier Check
               run: pnpm run fc
-              working-directory: ./client
 
     test:
         name: Run Vitest Tests
@@ -56,11 +53,9 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install
-              working-directory: ./client
 
             - name: Run Vitest tests
               run: pnpm run test
-              working-directory: ./client
 
     build:
         name: Build Project
@@ -81,15 +76,12 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install
-              working-directory: ./client
 
             - name: Run TypeScript Build
               run: pnpm run build
-              working-directory: ./client
 
             - name: Run Vite Build
               run: pnpm run build
-              working-directory: ./client
 
     # TODO: Setup Deploy Workflow 
     # deploy:
