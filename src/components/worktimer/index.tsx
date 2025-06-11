@@ -1,26 +1,28 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { Button } from '../ui/button'
 import TimeInOut from './time-in-out'
 import ImageDisplay from '../image-display'
-import { Separator } from '../ui/separator'
-import { PlayIcon, StopIcon } from '../icons'
 import LoadingSpinner from '../spinners/loading-spinner'
+import { ArrowUpIcon, PlayIcon, StopIcon } from '../icons'
+import { LiveWorkTimeDurationDisplay } from './work-time-duration-display'
 
 import { cn } from '@/lib'
 import { toReadableDateTime } from '@/utils'
+import useActionSecurityStore from '@/store/action-security-store'
 import { useCurrentTimesheet } from '@/hooks/api-hooks/use-timesheet'
 
 import ARTWORK_TIMED_IN from '@/assets/artworks/artwork-timed-in.svg'
 import ARTWORK_TIME_IN_OUT from '@/assets/artworks/artwork-time-in-out.svg'
 
-import { IClassProps } from '@/types'
-import { LiveWorkTimeDurationDisplay } from './work-time-duration-display'
-import useActionSecurityStore from '@/store/action-security-store'
+import { IClassProps, ITimesheet } from '@/types'
 
 interface Props extends IClassProps {}
 
 const WorkTimer = ({ className }: Props) => {
+    const queryClient = useQueryClient()
     const { onOpenSecurityAction } = useActionSecurityStore()
     const [showTimeInOut, setShowTimeInOut] = useState(false)
     const { data: timesheet, isPending } = useCurrentTimesheet()
@@ -28,7 +30,7 @@ const WorkTimer = ({ className }: Props) => {
     return (
         <div
             className={cn(
-                'ecoop-scroll flex max-h-[90vh] min-w-[430px] flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-1 dark:bg-popover',
+                'ecoop-scroll relative flex max-h-[90vh] min-w-[430px] flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-1 dark:bg-popover',
                 'shadow-xl',
                 className
             )}
@@ -42,6 +44,9 @@ const WorkTimer = ({ className }: Props) => {
                 )}
             >
                 {timesheet ? 'Timed In' : 'Timed Out'}
+            </p>
+            <p className="mx-auto max-w-72 text-center text-xs text-muted-foreground">
+                Log your time-in and time-out to track your work hours
             </p>
             {timesheet && (
                 <div className="flex flex-col items-center gap-y-4">
@@ -66,7 +71,7 @@ const WorkTimer = ({ className }: Props) => {
                         className="size-48 rounded-xl"
                         src={ARTWORK_TIME_IN_OUT}
                     />
-                    <p className="text-lg">Ready to Start Your Day?</p>
+                    <p className="!-mb-4 text-lg">Ready to Start Your Day?</p>
                     <p className="text-sm text-muted-foreground">
                         Begin your shift and let the system track your working
                         time
@@ -75,9 +80,21 @@ const WorkTimer = ({ className }: Props) => {
             )}
             {showTimeInOut ? (
                 <TimeInOut
+                    timesheet={timesheet}
                     onCancel={() => setShowTimeInOut(false)}
-                    onSuccess={() => {
+                    onSuccess={(data) => {
                         setShowTimeInOut(false)
+                        if (data.time_out) {
+                            return queryClient.invalidateQueries({
+                                exact: true,
+                                queryKey: ['timesheet', 'current'],
+                            })
+                        }
+
+                        return queryClient.setQueryData<ITimesheet>(
+                            ['timesheet', 'current'],
+                            data
+                        )
                     }}
                 />
             ) : (
@@ -106,10 +123,18 @@ const WorkTimer = ({ className }: Props) => {
                 </Button>
             )}
             {isPending && <LoadingSpinner />}
-            <Separator />
-            <Button variant="outline" hoverVariant="primary">
-                My Timesheets
-            </Button>
+            <p className="mx-auto max-w-72 text-center text-xs text-muted-foreground">
+                You can view your past timesheet/work time histories in{' '}
+                <Link
+                    to={
+                        '/org/$orgname/branch/$branchname/my-timesheet' as string
+                    }
+                    className="text-foreground/60 underline duration-150 hover:text-foreground"
+                >
+                    My Timesheet Page{' '}
+                    <ArrowUpIcon className="inline size-2 rotate-45" />
+                </Link>
+            </p>
         </div>
     )
 }
