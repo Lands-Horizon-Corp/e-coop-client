@@ -12,6 +12,7 @@ import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberType } from '@/hooks/api-hooks/member/use-member-type'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface IMemberTypeTableOwnerActionProps
     extends IMemberTypeTableActionComponentProp {
@@ -23,6 +24,7 @@ const MemberTypeTableOwnerAction = ({
     row,
     onDeleteSuccess,
 }: IMemberTypeTableOwnerActionProps) => {
+    const queryClient = useQueryClient()
     const [updateModalForm, setUpdateModalForm] = useState(false)
     // const [createModalForm, setCreateModalForm] = useState(false)
     // const [viewReferencesTable, setViewReferencesTable] = useState(false)
@@ -41,10 +43,23 @@ const MemberTypeTableOwnerAction = ({
                 <MemberTypeCreateUpdateFormModal
                     formProps={{
                         memberTypeId: memberType.id,
-                        defaultValues: {
-                            // ...memberType,
+                        defaultValues: memberType,
+                        onSuccess: () => {
+                            setUpdateModalForm(false)
+                            queryClient.invalidateQueries({
+                                queryKey: ['member-type', 'resource-query'],
+                            })
+                            queryClient.invalidateQueries({
+                                queryKey: ['member-type'],
+                            })
+                            queryClient.removeQueries({
+                                queryKey: [
+                                    'member-type',
+                                    'loader',
+                                    memberType.id,
+                                ],
+                            })
                         },
-                        onSuccess: () => setUpdateModalForm(false),
                     }}
                     title="Update Member Type"
                     description="Modify/Update members type..."

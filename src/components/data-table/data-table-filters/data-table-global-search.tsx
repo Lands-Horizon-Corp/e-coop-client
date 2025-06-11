@@ -32,7 +32,7 @@ const DataTableGlobalSearch = <T,>({
     ...otherProps
 }: IGlobalSearchProps<T>) => {
     const [visible, setVisible] = useState(true)
-    const { filters, setFilter, bulkSetFilter } = useFilter<
+    const { filters, setFilter, bulkSetFilter, setFilterLogic } = useFilter<
         unknown,
         KeysOfOrString<T>
     >()
@@ -72,6 +72,7 @@ const DataTableGlobalSearch = <T,>({
                                     ...filterVal,
                                     value: val,
                                 })
+                                setFilterLogic('OR')
                             }}
                         />
                         <Button
