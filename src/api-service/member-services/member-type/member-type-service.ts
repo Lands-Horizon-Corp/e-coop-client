@@ -84,7 +84,7 @@ export const getPaginatedMemberTypes = async ({
 } = {}): Promise<IMemberTypePaginated> => {
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/paginated`,
+            url: `${BASE_ENDPOINT}/search`,
             query: {
                 sort,
                 filter: filters,

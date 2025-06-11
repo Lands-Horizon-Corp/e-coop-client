@@ -59,7 +59,7 @@ export const getPaginatedHolidays = async ({
 } = {}) => {
     const url = qs.stringifyUrl(
         {
-            url: `holidays/paginated`,
+            url: `holidays/search`,
             query: {
                 sort,
                 filter: filters,

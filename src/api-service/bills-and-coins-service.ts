@@ -57,7 +57,7 @@ export const getPaginatedBillsAndCoins = async ({
 } = {}) => {
     const url = qs.stringifyUrl(
         {
-            url: `/bills-and-coins/paginated`,
+            url: `/bills-and-coins/search`,
             query: {
                 sort,
                 filter: filters,

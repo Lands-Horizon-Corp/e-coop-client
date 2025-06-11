@@ -96,7 +96,7 @@ export const getPaginatedMemberOccupation = async ({
 } = {}) => {
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/paginated`,
+            url: `${BASE_ENDPOINT}/search`,
             query: {
                 sort,
                 filter: filters,

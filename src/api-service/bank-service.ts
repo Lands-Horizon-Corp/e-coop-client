@@ -54,7 +54,7 @@ export const getPaginatedBanks = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/paginated`,
+            url: `${BASE_ENDPOINT}/search`,
             query: {
                 sort,
                 filter: filters,
