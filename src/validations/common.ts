@@ -76,6 +76,8 @@ export const birthDateSchema = z.coerce.date().refine(
     { message: 'Birthdate cannot be today or in the future' }
 )
 
+export const stringDateSchema = z.string().date()
+
 export const otpCodeSchema = z
     .string()
     .min(6, 'OTP must be 6 alphanumeric characters')
