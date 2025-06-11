@@ -1,10 +1,16 @@
 name: Deploy Pipeline
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    push:
+        branches:
+            - staging
+            - main
+            - development
+    pull_request:
+        branches:
+            - staging
+            - main
+            - development
 
 jobs:
     code_quality:
