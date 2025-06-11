@@ -13,15 +13,20 @@ import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { ITimesheet, IClassProps, IOperationCallbacks } from '@/types'
 
 import { cn } from '@/lib'
+import { toDateTimeFormatFile } from '@/utils'
 
-interface Props
-    extends IClassProps,
-        IOperationCallbacks<ITimesheet | undefined | null, string> {
+interface Props extends IClassProps, IOperationCallbacks<ITimesheet, string> {
     timesheet?: ITimesheet
     onCancel?: () => void
 }
 
-const TimeInOut = ({ className, onSuccess, onError, onCancel }: Props) => {
+const TimeInOut = ({
+    timesheet,
+    className,
+    onSuccess,
+    onError,
+    onCancel,
+}: Props) => {
     const { camRef, captureImageToFile } = useCamera()
     const [imageId, setImageId] = useState<string | undefined>(undefined)
 
@@ -36,15 +41,17 @@ const TimeInOut = ({ className, onSuccess, onError, onCancel }: Props) => {
         isPending: isSaving,
         error,
     } = useTimeInOut({
-        onSuccess: (data) => {
-            onSuccess?.(data && data.time_out ? undefined : data)
+        onSuccess: (timesheetData) => {
+            onSuccess?.(timesheetData)
             setImageId(undefined)
         },
         onError,
     })
 
     const handleSave = async () => {
-        const image = captureImageToFile()
+        const image = captureImageToFile({
+            captureFileName: `${timesheet ? 'time-out' : 'time-in'}_${toDateTimeFormatFile(new Date())}`,
+        })
         let uploaded: string | undefined = imageId
 
         if (!image) {

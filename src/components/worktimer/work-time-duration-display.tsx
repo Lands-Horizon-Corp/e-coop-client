@@ -41,7 +41,7 @@ export const LiveWorkTimeDurationDisplay = ({
     timeIn: Date | string
     pollingInterval?: number
 }) => {
-    const [values, setValues] = useState({ hours: 0, minutes: 0, seconds: 0 })
+    const [values, setValues] = useState(getTimeDifference(timeIn, new Date()))
 
     useEffect(() => {
         const interval = setInterval(() => {
