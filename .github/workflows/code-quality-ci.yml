@@ -1,4 +1,4 @@
-name: Frontend Quality Checks Pipeline
+name: Quality Checks Pipeline
 
 on:
     push:
