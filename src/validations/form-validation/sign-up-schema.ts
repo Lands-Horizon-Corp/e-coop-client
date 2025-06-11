@@ -1,4 +1,5 @@
 import z from 'zod'
+import { isBefore, startOfDay } from 'date-fns'
 
 import {
     emailSchema,
@@ -6,8 +7,8 @@ import {
     lastNameSchema,
     userNameSchema,
     firstNameSchema,
-    birthDateSchema,
     middleNameSchema,
+    stringDateSchema,
     contactNumberSchema,
 } from '@/validations/common'
 
@@ -20,7 +21,15 @@ export const signUpSchema = z.object({
     full_name: z.string().min(1, 'full name is required'),
     suffix: z.string().optional(),
 
-    birthdate: birthDateSchema,
+    birthdate: stringDateSchema.refine(
+        (val) => {
+            const date = startOfDay(new Date(val))
+            const now = startOfDay(new Date())
+            return isBefore(date, now)
+        },
+        { message: 'Birthdate must be in the past' }
+    ),
+
     contact_number: contactNumberSchema,
     password: passwordSchema,
 

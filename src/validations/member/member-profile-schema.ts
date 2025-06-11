@@ -5,6 +5,7 @@ import {
     entityIdSchema,
     civilStatusSchema,
     generalStatusSchema,
+    stringDateSchema,
 } from '../common'
 import { memberCenterSchema } from './member-center-schema'
 import { memberAssetsSchema } from './member-assets-schema'
@@ -90,8 +91,8 @@ export const quickCreateMemberProfileSchema = z.object({
     old_reference_id: z.string().optional(),
     passbook: z.string().optional(),
 
-    organization_id: entityIdSchema,
-    branch_id: entityIdSchema,
+    organization_id: entityIdSchema.optional(),
+    branch_id: entityIdSchema.optional(),
 
     first_name: z.string().min(1, 'First name is required'),
     middle_name: z.string().optional(),
@@ -99,7 +100,9 @@ export const quickCreateMemberProfileSchema = z.object({
     full_name: z.string().optional(),
     suffix: z.string().max(15).optional(),
     contact_number: z.string().optional(),
-    birth_date: z.coerce.string().date(),
+    birth_date: stringDateSchema.transform((val) =>
+        new Date(val).toISOString()
+    ),
     member_gender_id: entityIdSchema.optional(),
 
     civil_status: civilStatusSchema,
@@ -111,5 +114,4 @@ export const quickCreateMemberProfileSchema = z.object({
     is_micro_finance_member: z.boolean().default(false),
 
     member_type_id: entityIdSchema,
-    member_classification_id: entityIdSchema,
 })
