@@ -13,76 +13,34 @@ on:
             # - staging
 
 jobs:
-    lint:
+    code_quality:
+
         name: Code Quality CI
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout code
+            - name: 📝 Checkout code
               uses: actions/checkout@v3
 
-            - name: Set up Node.js
+            - name: 🛠️ Set up Node.js
               uses: actions/setup-node@v3
               with:
                   node-version: "22.14.0"
 
-            - name: Install pnpm
+            - name: 📦 Install pnpm
               run: npm install -g pnpm@10.8.0
 
-            - name: Install dependencies
+            - name: 📦 Install dependencies
               run: pnpm install
 
-            - name: Run ESLint
+            - name: 🔍 Run ESLint
               run: pnpm run lint
 
-            - name: Run Prettier Check
+            - name: 🧹 Run Prettier Check
               run: pnpm run fc
 
-    test:
-        name: Run Vitest Tests
-        runs-on: ubuntu-latest
-        needs: lint
+            - name: 🧪 Run Tests
+              run: pnpm vitest run
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: "22.14.0"
-
-            - name: Install pnpm
-              run: npm install -g pnpm@10.8.0
-
-            - name: Install dependencies
-              run: pnpm install
-
-            - name: Run Vitest tests
-              run: pnpm test run
-
-    build:
-        name: Build Project
-        runs-on: ubuntu-latest
-        needs: test
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: "22.14.0"
-
-            - name: Install pnpm
-              run: npm install -g pnpm@10.8.0
-
-            - name: Install dependencies
-              run: pnpm install
-
-            - name: Run TypeScript Build
-              run: pnpm run build
-
-            - name: Run Vite Build
+            - name: 🏁 Run Build
               run: pnpm run build
