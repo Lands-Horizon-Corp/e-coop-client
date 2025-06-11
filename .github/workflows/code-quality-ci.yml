@@ -3,14 +3,14 @@ name: Frontend Quality Checks Pipeline
 on:
     push:
         branches:
+            - staging
             - main
             - development
-            # - staging
     pull_request:
         branches:
+            - staging
             - main
             - development
-            # - staging
 
 jobs:
     code_quality:
