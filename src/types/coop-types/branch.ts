@@ -3,12 +3,18 @@ import { IPaginatedResult } from './paginated-result'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IOrganization } from '../lands-types'
 
+export enum branchTypeEnum {
+    CooperativeBranch = 'cooperative branch',
+    BusinessBranch = 'business branch',
+    BankingBranch = 'banking branch',
+}
+
 export interface IBranchRequest {
     id?: TEntityId
 
     media_id: string | null
 
-    type: 'cooperative branch' | string
+    type: branchTypeEnum
     name: string
     email: string
 
@@ -40,7 +46,7 @@ export interface IBranch extends ITimeStamps, IAuditable {
     media_id: string | null
     media: IMedia
 
-    type: 'cooperative branch' | string
+    type: branchTypeEnum
     name: string
     email: string
 

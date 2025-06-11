@@ -1,9 +1,11 @@
+import { branchTypeEnum } from '@/types'
 import z from 'zod'
 
 export const branchRequestSchema = z.object({
-    // media_id: z.string().nullable(),
     media: z.any(),
-    type: z.union([z.literal('cooperative branch'), z.string()]),
+    type: z.nativeEnum(branchTypeEnum, {
+        required_error: 'branch type is required',
+    }),
     name: z.string().min(1, 'Name is Required'),
     email: z.string().email('Invalid Email').min(1, 'Email is Required'),
     description: z
