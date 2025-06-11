@@ -1,16 +1,20 @@
-name: Deploy Pipeline
+name: Frontend Quality Checks Pipeline
 
 on:
     push:
         branches:
             - main
+            - development
+            # - staging
     pull_request:
         branches:
             - main
+            - development
+            # - staging
 
 jobs:
     lint:
-        name: Lint Code
+        name: Code Quality CI
         runs-on: ubuntu-latest
 
         steps:
@@ -55,7 +59,7 @@ jobs:
               run: pnpm install
 
             - name: Run Vitest tests
-              run: pnpm run test
+              run: pnpm test run
 
     build:
         name: Build Project
@@ -82,15 +86,3 @@ jobs:
 
             - name: Run Vite Build
               run: pnpm run build
-
-    # TODO: Setup Deploy Workflow 
-    # deploy:
-    #     runs-on: ubuntu-latest
-    #     needs: build
-    #     env:
-    #         AWS_AMPLIFY_WEB_HOOK_ID: ${{ secrets.AWS_AMPLIFY_WEB_HOOK_ID }}
-    #         AWS_AMPLIFY_WEB_HOOK_TOKEN: ${{ secrets.AWS_AMPLIFY_WEB_HOOK_TOKEN }}
-    #     steps:
-    #         - name: Trigger Amplify Build
-    #           run: |
-    #               curl -X POST -d {} "https://webhooks.amplify.us-east-1.amazonaws.com/prod/webhooks?id=$AWS_AMPLIFY_WEB_HOOK_ID&token=$AWS_AMPLIFY_WEB_HOOK_TOKEN&operation=startbuild" -H "Content-Type:application/json"
