@@ -1,18 +1,11 @@
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import PlainTextEditor from '@/components/plain-text-editor'
-
 import { Button } from '@/components/ui/button'
 import { FormItem, FormControl, Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import {
-    AddressCardIcon,
-    MagnifyingGlassIcon,
-    PinLocationIcon,
-} from '@/components/icons'
+import { MagnifyingGlassIcon } from '@/components/icons'
 
 import { useVerifyInvitationCode } from '@/hooks/api-hooks/use-invitation-code'
 import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
@@ -23,8 +16,6 @@ import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import useDebounce from '@/hooks/use-debounce'
-import ImageDisplay from '@/components/image-display'
 
 const joinOrganizationFormSchema = z.object({
     invitationCode: z.string().min(1, {
@@ -49,9 +40,7 @@ const JoinBranchWithCodeFormModal = ({
     })
     const navigate = useNavigate()
 
-    const invitationCode = form.watch('invitationCode')
-    const debouncedCode = useDebounce(invitationCode, 2000)
-    const { data: codeData, isLoading } = useVerifyInvitationCode(debouncedCode)
+    const { mutateAsync, isPending: isVerfiying } = useVerifyInvitationCode()
 
     const { mutate: joinWithCode, isPending: IsLoadingJoining } =
         useJoinWithCode({
@@ -61,21 +50,20 @@ const JoinBranchWithCodeFormModal = ({
                     `Successfully Joined on ${data.branch?.name} Branch`
                 )
             },
-            onError: (errorMessage) => {
-                toast.error(
-                    `${errorMessage as string}\nYou might already have joined this branch!`
-                )
-            },
         })
 
     const handleSubmit = async (data: TJoinOrganizationForm) => {
-        if (codeData) {
-            joinWithCode(data.invitationCode)
+        try {
+            const isValid = await mutateAsync(data.invitationCode)
+            if (isValid) {
+                joinWithCode(data.invitationCode)
+            } else {
+                toast.error('The invitation code is not valid.')
+            }
+        } catch (error) {
+            toast.error(`Verification failed: ${error || 'Unknown error'}`)
         }
     }
-
-    const branch = codeData?.branch
-    const organization = codeData?.organization
 
     return (
         <Modal
@@ -111,92 +99,24 @@ const JoinBranchWithCodeFormModal = ({
                             </FormItem>
                         )}
                     />
-                    {isLoading && (
-                        <div className="flex w-full justify-center">
-                            <LoadingSpinner className="animate-spin text-primary" />
-                        </div>
-                    )}
-                    {branch && organization && (
-                        <>
-                            <GradientBackground
-                                imageBackgroundOpacity={0.1}
-                                mediaUrl={organization.media?.url}
-                            >
-                                <div className="relative z-50 flex min-h-16 w-full cursor-pointer items-center gap-x-4 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <div className="flex">
-                                            <ImageDisplay
-                                                className="aspect-square size-16 rounded-lg"
-                                                src={organization.media?.url}
-                                            />
-                                            <div className="p-2">
-                                                <h1>{organization.name}</h1>
-                                                <PlainTextEditor
-                                                    className="text-xs"
-                                                    content={
-                                                        organization?.description ??
-                                                        ''
-                                                    }
-                                                />
-                                                <p className="flex items-center gap-y-2 text-xs">
-                                                    {' '}
-                                                    <PinLocationIcon className="mr-2" />
-                                                    {organization.address}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="pl-5">
-                                            <GradientBackground
-                                                className="!bg-black/50"
-                                                gradientOnly
-                                            >
-                                                <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-2 hover:bg-secondary/50 hover:no-underline">
-                                                    <ImageDisplay
-                                                        className="size-16 rounded-lg"
-                                                        src={
-                                                            organization?.media
-                                                                ?.url
-                                                        }
-                                                    />
-                                                    <div className="flex grow px-2">
-                                                        <div className="flex w-full grow flex-col">
-                                                            <h1>
-                                                                {branch.name}
-                                                            </h1>
-                                                            {branch.description && (
-                                                                <PlainTextEditor
-                                                                    className="text-xs"
-                                                                    content={
-                                                                        branch?.description ??
-                                                                        ''
-                                                                    }
-                                                                />
-                                                            )}
-                                                            <p className="flex items-center gap-y-1 text-xs">
-                                                                <AddressCardIcon className="mr-2" />
-                                                                {branch.address}
-                                                            </p>
-                                                        </div>
-                                                        <Button
-                                                            type="submit"
-                                                            className="w-full max-w-11 bg-primary/50"
-                                                            size={'sm'}
-                                                            disabled={
-                                                                isLoading ||
-                                                                IsLoadingJoining
-                                                            }
-                                                        >
-                                                            Join
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            </GradientBackground>
-                                        </div>
-                                    </div>
-                                </div>
-                            </GradientBackground>
-                        </>
-                    )}
+                    <Button
+                        type="submit"
+                        disabled={IsLoadingJoining || isVerfiying}
+                    >
+                        {isVerfiying ? (
+                            <>
+                                verifying...{' '}
+                                <LoadingSpinner className="ml-2 animate-spin" />
+                            </>
+                        ) : IsLoadingJoining ? (
+                            <>
+                                joining...{' '}
+                                <LoadingSpinner className="ml-2 animate-spin" />
+                            </>
+                        ) : (
+                            'join'
+                        )}
+                    </Button>
                 </form>
             </Form>
         </Modal>
