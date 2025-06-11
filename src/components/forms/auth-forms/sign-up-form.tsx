@@ -1,4 +1,5 @@
 import z from 'zod'
+import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -16,14 +17,13 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { PhoneInput } from '@/components/contact-input/contact-input'
-import InputDatePicker from '@/components/date-time-pickers/input-date-picker'
 
 import { cn } from '@/lib/utils'
+import { toReadableDate } from '@/utils'
 import { useSignUp } from '@/hooks/api-hooks/use-auth'
 import { signUpSchema } from '@/validations/form-validation/sign-up-schema'
 
 import { IForm, IClassProps, ISignUpRequest, IAuthContext } from '@/types'
-import { useEffect } from 'react'
 
 type TSignUpForm = z.infer<typeof signUpSchema>
 
@@ -48,7 +48,7 @@ const SignUpForm = ({
             first_name: '',
             last_name: '',
             full_name: '',
-            birthdate: new Date('01-01-1999'),
+            birthdate: toReadableDate(new Date(), 'yyyy-MM-dd'),
             contact_number: '',
             password: '',
             accept_terms: false,
@@ -79,7 +79,12 @@ const SignUpForm = ({
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((formData) => signUp(formData))}
+                onSubmit={form.handleSubmit((formData) =>
+                    signUp({
+                        ...formData,
+                        birthdate: new Date(formData.birthdate).toISOString(),
+                    })
+                )}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <div className="flex items-center gap-x-2 pt-2 font-medium sm:pb-4">
@@ -150,12 +155,11 @@ const SignUpForm = ({
                             control={form.control}
                             name="birthdate"
                             render={({ field }) => (
-                                <InputDatePicker
-                                    id={field.name}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                    captionLayout="dropdown-buttons"
-                                    disabled={(date) => date > new Date()}
+                                <Input
+                                    type="date"
+                                    {...field}
+                                    value={field.value ?? ''}
+                                    className="block [&::-webkit-calendar-picker-indicator]:hidden"
                                 />
                             )}
                         />
