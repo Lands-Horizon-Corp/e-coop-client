@@ -22,13 +22,12 @@ export const deleteBranch = async (userOrganizationId: TEntityId) => {
     )
     return response.data
 }
-
 export const updateBranch = async (
-    userOrganizationId: TEntityId,
+    branchId: TEntityId,
     branchData: IBranchRequest
 ) => {
     const response = await APIService.put<IBranchRequest, IBranch>(
-        `/branch/user-organization/${userOrganizationId}`,
+        `/branch/${branchId}`,
         branchData
     )
     return response.data
