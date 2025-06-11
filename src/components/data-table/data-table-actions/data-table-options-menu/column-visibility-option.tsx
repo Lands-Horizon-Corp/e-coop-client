@@ -31,11 +31,15 @@ const ColumnVisibilityOption = <TData,>({
         <DropdownMenuGroup>
             <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {hiddenColumnsLength > 0 && (
+            {hiddenColumnsLength > 0 ? (
                 <DropdownMenuItem onClick={onShowAllColumns}>
                     <EyeIcon className="mr-2" />
                     Show All
                 </DropdownMenuItem>
+            ) : (
+                <DropdownMenuLabel className="text-center text-xs font-normal text-muted-foreground">
+                    No columns to hide
+                </DropdownMenuLabel>
             )}
             {allColumns
                 .filter(

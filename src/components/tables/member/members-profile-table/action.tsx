@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 
-import { IMemberProfileTableActionComponentProp } from '../columns'
+import { IMemberProfileTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 // import { MemberCreateUpdateFormModal } from '@/components/forms/member-forms/member-create-update-form'
 // import { MemberProfileCreateUpdateFormModal } from '@/components/forms/member-forms/member-application-form/member-profile-create-update-form'
@@ -9,15 +9,15 @@ import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { MemberHistoriesModal } from '@/components/member-infos/member-histories'
 import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
 
-interface IMemberProfileTableEmployeeActionProps
+interface IMemberProfileTableActionProps
     extends IMemberProfileTableActionComponentProp {
     onMemberUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const MemberProfileTableEmployeeAction: FC<
-    IMemberProfileTableEmployeeActionProps
-> = ({ row }) => {
+const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
+    row,
+}) => {
     const member = row.original
     const router = useRouter()
     // const [editModal, setEditModal] = useState(false)
@@ -138,4 +138,4 @@ const MemberProfileTableEmployeeAction: FC<
     )
 }
 
-export default MemberProfileTableEmployeeAction
+export default MemberProfileTableAction

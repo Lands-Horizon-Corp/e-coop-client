@@ -57,8 +57,9 @@ export type TTimesheetProps = TimesheetTableProps &
 
 const TimesheetTable = ({
     mode,
-    className,
     userId,
+    className,
+    onRowClick,
     toolbarProps,
     defaultFilter,
     onSelectData,
@@ -73,9 +74,10 @@ const TimesheetTable = ({
     const columns = useMemo(
         () =>
             TimesheetTableColumns({
+                hideSelect: mode === 'me',
                 actionComponent,
             }),
-        [actionComponent]
+        [actionComponent, mode]
     )
 
     const {
@@ -124,7 +126,7 @@ const TimesheetTable = ({
         columns,
         data: data,
         initialState: {
-            columnPinning: { left: [] },
+            columnPinning: { left: ['select'] },
         },
         state: {
             sorting: tableSorting,
@@ -181,6 +183,13 @@ const TimesheetTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={
+                        onRowClick
+                            ? onRowClick
+                            : mode === 'me'
+                              ? () => {}
+                              : onRowClick
+                    }
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
                 />

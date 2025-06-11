@@ -7,11 +7,11 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { toReadableDate } from '@/utils'
 import { IMemberGender } from '@/types'
-import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
+import { toReadableDate } from '@/utils'
 
 export const genderGlobalSearchTargets: IGlobalSearchTargets<IMemberGender>[] =
     [
@@ -104,13 +104,18 @@ const MemberGenderTableColumns = (
                 row: {
                     original: { description },
                 },
-            }) => <div>{description}</div>,
+            }) => (
+                <p className="!text-wrap text-muted-foreground">
+                    {description}
+                </p>
+            ),
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,
             enableHiding: false,
-            size: 180,
-            minSize: 180,
+            size: 200,
+            minSize: 200,
+            maxSize: 800,
         },
         {
             id: 'created_at',
@@ -130,6 +135,31 @@ const MemberGenderTableColumns = (
                     original: { created_at },
                 },
             }) => <div>{toReadableDate(created_at)}</div>,
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            size: 180,
+            minSize: 180,
+        },
+        {
+            id: 'updated_at',
+            accessorKey: 'updated_at',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Updated">
+                    <ColumnActions {...props}>
+                        <DateFilter<IMemberGender>
+                            displayText="Date Updated"
+                            field="updated_at"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { updated_at },
+                },
+            }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,

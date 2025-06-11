@@ -105,8 +105,8 @@ const memberTypeTableColumns = (
             }) => <div>{prefix}</div>,
             enableMultiSort: true,
             enableResizing: true,
-            size: 180,
-            minSize: 180,
+            maxSize: 180,
+            minSize: 100,
         },
         {
             id: 'description',
@@ -128,7 +128,7 @@ const memberTypeTableColumns = (
             }) => <div>{description}</div>,
             enableMultiSort: true,
             enableResizing: true,
-            minSize: 200,
+            minSize: 300,
             maxSize: 500,
         },
         {
@@ -152,6 +152,31 @@ const memberTypeTableColumns = (
             enableMultiSort: true,
             enableResizing: true,
             minSize: 150,
+        },
+        {
+            id: 'updated_at',
+            accessorKey: 'updated_at',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Updated">
+                    <ColumnActions {...props}>
+                        <DateFilter<IMemberType>
+                            displayText="Date Updated"
+                            field="updated_at"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { updated_at },
+                },
+            }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            size: 180,
+            minSize: 180,
         },
     ]
 }
