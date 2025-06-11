@@ -21,3 +21,9 @@ export const formatCalendarDate = (date: CalendarDate, fmt = 'MM-dd-yyyy') => {
     const jsDate = new Date(date.toString())
     return format(jsDate, fmt)
 }
+
+export const toDateTimeFormatFile = (
+    ...args: Parameters<typeof toReadableDate>
+) => {
+    return toReadableDate(args[0], args[1] ?? 'yyyyMMdd_HHmmss')
+}
