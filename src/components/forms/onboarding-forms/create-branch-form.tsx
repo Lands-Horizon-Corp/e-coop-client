@@ -71,6 +71,7 @@ export const CreateUpdateBranchForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
+            country_code: countryCode,
             ...defaultValues,
         },
     })
@@ -302,9 +303,7 @@ export const CreateUpdateBranchForm = ({
                                     render={({ field }) => (
                                         <CountryCombobox
                                             {...field}
-                                            defaultValue={
-                                                field.value || countryCode
-                                            }
+                                            defaultValue={field.value}
                                             disabled={isLoading}
                                             onChange={(country) =>
                                                 field.onChange(country.alpha2)
