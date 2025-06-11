@@ -1,7 +1,7 @@
 import { IMedia } from '../media'
 import { IUserBase } from '../../auth'
-import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
 import { IMemberDescriptionRequest } from './member-description'
+import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
 import {
     IMemberJointAccount,
     IMemberJointAccountRequest,
@@ -53,8 +53,8 @@ export interface IMemberProfileQuickCreateRequest {
     old_reference_id?: string
     passbook?: string
 
-    organization_id: TEntityId
-    branch_id: TEntityId
+    organization_id?: TEntityId
+    branch_id?: TEntityId
 
     first_name: string
     middle_name?: string
@@ -74,7 +74,6 @@ export interface IMemberProfileQuickCreateRequest {
     is_micro_finance_member: boolean
 
     member_type_id: TEntityId
-    member_classification_id: TEntityId
 }
 
 export interface IMemberProfileRequest {

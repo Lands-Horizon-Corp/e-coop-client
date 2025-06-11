@@ -32,7 +32,7 @@ export const getPaginatedEmployees = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/user-organization/employee/paginated`,
+            url: `/user-organization/employee/search`,
             query: {
                 sort,
                 filter: filters,

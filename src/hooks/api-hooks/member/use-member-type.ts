@@ -1,6 +1,6 @@
-import { queryOptions } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-import { toBase64 } from '@/utils'
+import { toBase64, withCatchAsync } from '@/utils'
 import { createQueryHook, createMutationHook } from '../api-hook-factory'
 import * as MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 
@@ -11,8 +11,10 @@ import {
     IQueryProps,
     IMemberTypeRequest,
     IMemberTypePaginated,
-    IFilterPaginatedHookProps,
+    IAPIFilteredPaginatedHook,
 } from '@/types'
+import { serverRequestErrExtractor } from '@/helpers'
+import { toast } from 'sonner'
 
 export const memberTypeLoader = (memberTypeId: TEntityId) =>
     queryOptions<IMemberType>({
@@ -51,26 +53,47 @@ export const useMemberTypes = createQueryHook<
     IQueryProps & IAPIHook<IMemberType[]>
 >(['member-type', 'all'], () => MemberTypeService.getAllMemberTypes(), [])
 
-export const useFilteredPaginatedMemberTypes = createQueryHook<
-    IMemberTypePaginated,
-    string,
-    IFilterPaginatedHookProps & IQueryProps
->(
-    ['member-type', 'resource-query'],
-    (variables) =>
-        MemberTypeService.getPaginatedMemberTypes({
-            pagination: variables?.pagination ?? { pageSize: 10, pageIndex: 1 },
-            sort: variables?.sort ? toBase64(variables.sort) : undefined,
-            filters: variables?.filterPayload
-                ? toBase64(variables.filterPayload)
-                : undefined,
-        }),
-    {
-        data: [],
-        pages: [],
-        totalSize: 0,
-        totalPage: 0,
-        pageIndex: 0,
-        pageSize: 0,
-    }
-)
+export const useFilteredPaginatedMemberTypes = ({
+    sort,
+    enabled,
+    filterPayload,
+    showMessage = true,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<IMemberTypePaginated, string> &
+    IQueryProps = {}) => {
+    return useQuery<IMemberTypePaginated, string>({
+        queryKey: [
+            'member-type',
+            'resource-query',
+            filterPayload,
+            pagination,
+            sort,
+        ],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberTypeService.getPaginatedMemberTypes({
+                    pagination,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
+        enabled,
+        retry: 1,
+    })
+}

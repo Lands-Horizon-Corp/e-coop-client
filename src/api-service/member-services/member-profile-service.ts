@@ -161,7 +161,7 @@ export const getPaginatedMemberProfile = async ({
 
     const finalUrl = qs.stringifyUrl(
         {
-            url: `${url}/paginated`,
+            url: `${url}/search`,
             query: {
                 sort,
                 filter: filters,

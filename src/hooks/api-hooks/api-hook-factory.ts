@@ -1,5 +1,11 @@
+import {
+    useQuery,
+    useMutation,
+    QueryClient,
+    UseQueryResult,
+    useQueryClient,
+} from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { useQuery, useMutation, UseQueryResult } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
@@ -9,13 +15,20 @@ import { IAPIHook, IMutationProps, IQueryProps } from '@/types/api-hooks-types'
 export const createMutationHook =
     <TData, TError = string, TVariables = void>(
         mutationFn: (variables: TVariables) => Promise<TData>,
-        successMessage?: string
+        successMessage?: string,
+        invalidateFn?: (
+            queryClient: QueryClient,
+            variables: TVariables,
+            data: TData
+        ) => void
     ) =>
     ({
         onError,
         onSuccess,
         showMessage = true,
     }: IAPIHook<TData, TError> & IMutationProps = {}) => {
+        const queryClient = useQueryClient()
+
         return useMutation<TData, TError, TVariables>({
             mutationFn: async (variables) => {
                 const [error, result] = await withCatchAsync(
@@ -29,6 +42,7 @@ export const createMutationHook =
                 }
                 if (showMessage && successMessage) toast.success(successMessage)
                 onSuccess?.(result)
+                invalidateFn?.(queryClient, variables, result)
                 return result
             },
         })

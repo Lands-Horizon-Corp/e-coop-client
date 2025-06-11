@@ -37,7 +37,7 @@ export const getPaginatedBatchOnlineEntry = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/batch-funding/transaction-batch/${transactionBatchId}/paginated`,
+            url: `/batch-funding/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort,
                 filter: filters,

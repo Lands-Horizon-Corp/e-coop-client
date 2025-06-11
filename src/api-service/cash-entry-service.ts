@@ -17,7 +17,7 @@ export const getPaginatedBatchCashEntry = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/cash-entry/transaction-batch/${transactionBatchId}/paginated`,
+            url: `/cash-entry/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort,
                 filter: filters,

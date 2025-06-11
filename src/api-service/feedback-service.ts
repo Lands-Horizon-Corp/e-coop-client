@@ -41,7 +41,7 @@ export const getAllFeedback = async (props?: {
     const { filters, sort } = props || {}
 
     const url = qs.stringifyUrl({
-        url: `${BASE_ENDPOINT}/paginated`,
+        url: `${BASE_ENDPOINT}/search`,
         query: {
             sort,
             filter: filters,
@@ -60,7 +60,7 @@ export const getPaginatedFeedbacks = async (props?: {
     const { filters, pagination, sort } = props || {}
 
     const url = qs.stringifyUrl({
-        url: `${BASE_ENDPOINT}/paginated`,
+        url: `${BASE_ENDPOINT}/search`,
         query: {
             sort,
             filter: filters,

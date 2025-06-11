@@ -1,17 +1,16 @@
 import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
 
-import { withCatchAsync } from '@/utils'
+import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import { createMutationHook } from './api-hook-factory'
 import * as TimesheetService from '@/api-service/timesheet-service'
-import { toBase64 } from '@/utils'
 
 import {
     IAPIHook,
     TEntityId,
-    IQueryProps,
     ITimesheet,
+    IQueryProps,
     IPaginatedTimesheet,
     ITimesheetInOutRequest,
     IFilterPaginatedHookProps,
@@ -90,12 +89,12 @@ export const useFilteredPaginatedTimesheets = ({
             sort,
         ],
         queryFn: async () => {
-            let url: string = ``
+            let url: string = `search`
 
             if (mode === 'me') {
-                url = 'me'
+                url = 'me/search'
             } else if (mode === 'user-organization') {
-                url = `user-organization/${user_org_id}`
+                url = `user-organization/${user_org_id}/search`
             }
 
             const [error, result] = await withCatchAsync(
