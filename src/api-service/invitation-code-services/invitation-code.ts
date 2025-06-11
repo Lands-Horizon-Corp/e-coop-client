@@ -11,7 +11,7 @@ export const verifyInvitationCode = async (code: string) => {
     const response = await APIService.get<IInvitationCode>(
         `/invitation-code/code/${code}`
     )
-    return response.data
+    return response.status === 202
 }
 
 // GET /invitation-code/
