@@ -33,6 +33,7 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { cn } from '@/lib'
 import { toast } from 'sonner'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useLocationInfo } from '@/hooks/use-location-info'
 
 export const Route = createFileRoute(
     '/onboarding/create-branch/$user_organization_id/$organization_id'
@@ -44,6 +45,7 @@ function RouteComponent() {
     const navigate = useNavigate()
 
     const { user_organization_id, organization_id } = Route.useParams()
+    const { countryCode } = useLocationInfo()
 
     const { data: organization, isPending: isPendingOrganization } =
         useGetOrganizationById(organization_id)
@@ -72,6 +74,11 @@ function RouteComponent() {
             <CreateUpdateFormFormModal
                 {...createModal}
                 useOrganizationId={user_organization_id}
+                formProps={{
+                    defaultValues: {
+                        country_code: countryCode,
+                    },
+                }}
             />
             <div className="min-h-full w-full min-w-full rounded-none border-none bg-transparent py-5">
                 {isPendingOrganization ? (
