@@ -4,7 +4,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import MemberProfileTable from '@/components/tables/member/members-profile-table'
 import { MemberProfileQuickCreateFormModal } from '@/components/forms/member-forms/member-profile-quick-create-form'
-import MemberProfileTableEmployeeAction from '@/components/tables/member/members-profile-table/row-actions/members-table-employee-action'
+import MemberProfileTableEmployeeAction from '@/components/tables/member/members-profile-table/action'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
@@ -14,6 +15,9 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
     const [createModal, setCreateModal] = useState(false)
+    const {
+        currentAuth: { user_organization },
+    } = useAuthUserWithOrgBranch()
 
     return (
         <PageContainer>
@@ -22,7 +26,8 @@ function RouteComponent() {
                 onOpenChange={setCreateModal}
                 formProps={{
                     defaultValues: {
-                        // TODO: Once org was established, and branch id exist, put it here
+                        organization_id: user_organization.organization_id,
+                        branch_id: user_organization.branch_id,
                     },
                     onSuccess: () => {},
                 }}
