@@ -4,14 +4,14 @@
 
 @font-face {
     font-family: 'Inter';
-    src: url('../assets/fonts/Inter/Inter-VariableFont.ttf') format('truetype');
+    src: url('./assets/fonts/Inter/Inter-VariableFont.ttf') format('truetype');
     font-weight: 100 900;
     font-display: swap;
 }
 
 @font-face {
     font-family: 'Inter';
-    src: url('../assets/fonts/Inter/Inter-VariableFont.ttf') format('truetype');
+    src: url('./assets/fonts/Inter/Inter-VariableFont.ttf') format('truetype');
     font-weight: 100 900;
     font-display: swap;
 }
@@ -131,6 +131,7 @@
     body {
         @apply ecoop-scroll w-screen overflow-x-hidden bg-background text-foreground;
         @apply ecoop-scroll w-screen overflow-x-hidden bg-background text-foreground;
+        color-scheme: light dark;
     }
 
     /* input:-webkit-autofill,

@@ -1,4 +1,3 @@
-/** TODO: To deprecate and replaced by image display */
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { IBaseProps } from '@/types'

@@ -1,0 +1,64 @@
+import { toast } from 'sonner'
+import { useQuery } from '@tanstack/react-query'
+
+import { toBase64, withCatchAsync } from '@/utils'
+import { serverRequestErrExtractor } from '@/helpers'
+import * as OnlineEntryService from '@/api-service/online-entry-service'
+
+import {
+    TEntityId,
+    IQueryProps,
+    IOnlineEntryPaginated,
+    IAPIFilteredPaginatedHook,
+} from '@/types'
+
+export const useFilteredBatchOnlineEntry = ({
+    sort,
+    enabled,
+    filterPayload,
+    showMessage = true,
+    transactionBatchId,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<IOnlineEntryPaginated, string> &
+    IQueryProps & {
+        transactionBatchId: TEntityId
+    }) => {
+    return useQuery<IOnlineEntryPaginated, string>({
+        queryKey: [
+            'online-entry',
+            'transaction-batch',
+            transactionBatchId,
+            'resource-query',
+            filterPayload,
+            pagination,
+            sort,
+        ],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                OnlineEntryService.getPaginatedBatchOnlineEntry({
+                    pagination,
+                    transactionBatchId,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: {
+            data: [],
+            pages: [],
+            totalSize: 5,
+            totalPage: 1,
+            ...pagination,
+        },
+        enabled,
+        retry: 1,
+    })
+}

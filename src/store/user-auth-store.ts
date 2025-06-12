@@ -1,41 +1,118 @@
 import { create } from 'zustand'
-// TODO: Set user data here once completed
-// import { IUserData } from '@/server'
+import {
+    IBranch,
+    IUserBase,
+    IAuthContext,
+    IOrganization,
+    IUserOrganization,
+} from '@/types'
 
 type TAuthStoreStatus = 'loading' | 'authorized' | 'unauthorized' | 'error'
 
 interface UserAuthStore {
-    currentUser: any | null
+    currentAuth: IAuthContext
     authStatus: TAuthStoreStatus
-    setCurrentUser: (newUserData: any | null) => void
+    setCurrentAuth: (newAuth: IAuthContext) => void
+    updateCurrentAuth: (newAuth: Partial<IAuthContext>) => void
     setAuthStatus: (status: TAuthStoreStatus) => void
+    resetAuth: (defaultAuthContextValue?: IAuthContext) => void
 }
 
-export const useUserAuthStore = create<UserAuthStore>((set) => ({
-    currentUser: null,
+export const useAuthStore = create<UserAuthStore>((set) => ({
+    currentAuth: {
+        user: undefined,
+        user_organization: null,
+        reports: [],
+    },
     authStatus: 'loading',
-    setCurrentUser: (newUserData: any | null) =>
+    setCurrentAuth: (newAuth: IAuthContext) =>
         set({
-            currentUser: newUserData,
-            authStatus: newUserData ? 'authorized' : 'unauthorized',
+            currentAuth: newAuth,
+            authStatus: newAuth.user ? 'authorized' : 'unauthorized',
         }),
+    updateCurrentAuth: (partialAuth) => {
+        set((state) => ({
+            currentAuth: {
+                ...state.currentAuth,
+                ...partialAuth,
+            },
+        }))
+    },
+
     setAuthStatus: (authStatus: TAuthStoreStatus) => set({ authStatus }),
+    resetAuth: (defaultAuthContextValue) => {
+        set({
+            currentAuth: defaultAuthContextValue ?? {
+                user: undefined,
+                user_organization: null,
+                reports: [],
+            },
+            authStatus: 'unauthorized',
+        })
+    },
 }))
 
-export const useAuthUser = <TUser = any /*extends IUserData */>() => {
-    const { currentUser, setCurrentUser, setAuthStatus } = useUserAuthStore(
-        (state) => state
-    )
+// USE only kapag sure ka na user ay existing
+// ideal usage is in onboarding, since we dont care if nag eexist ang branch or organization sa authContext
+export const useAuthUser = <TUser = IUserBase>() => {
+    const { currentAuth, authStatus, ...rest } = useAuthStore((state) => state)
 
-    if (!currentUser) {
+    if (
+        !currentAuth.user ||
+        authStatus === 'unauthorized' ||
+        authStatus === 'error'
+    ) {
         throw new Error(
             'User is not authenticated but tried to access protected data'
         )
     }
 
     return {
-        currentUser: currentUser as TUser,
-        setCurrentUser: setCurrentUser as (newUserData: TUser | null) => void,
-        setAuthStatus,
+        ...rest,
+        currentAuth: currentAuth as IAuthContext<TUser> & {
+            user: NonNullable<typeof currentAuth.user>
+        },
+    }
+}
+
+// USE only kapag sure na user, organization, exist in user auth store, pero not sure if may branch
+export const useAuthUserWithOrg = <TUser = IUserBase>() => {
+    const { currentAuth, ...rest } = useAuthUser<TUser>()
+
+    // if (!currentAuth.organization) {
+    //     throw new Error('Authenticated user has no organization context.')
+    // }
+
+    return {
+        ...rest,
+        currentAuth: currentAuth as typeof currentAuth & {
+            user_organization: NonNullable<
+                IUserOrganization & { organization: NonNullable<IOrganization> }
+            >
+        },
+    }
+}
+
+// USE only kapag sure na user, organization, branch, exist in user auth store
+// ideal usage is in /org/:name/branch/:branchname/*
+export const useAuthUserWithOrgBranch = <TUser = IUserBase>() => {
+    const { currentAuth, ...rest } = useAuthUserWithOrg<TUser>()
+
+    if (
+        !currentAuth.user_organization.branch ||
+        !currentAuth.user_organization.organization
+    ) {
+        throw new Error(
+            'Authenticated user has no branch or organization context.'
+        )
+    }
+
+    return {
+        ...rest,
+        currentAuth: currentAuth as typeof currentAuth & {
+            user_organization: IUserOrganization & {
+                branch: NonNullable<IBranch>
+            }
+        },
     }
 }

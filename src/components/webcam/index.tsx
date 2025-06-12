@@ -14,9 +14,9 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 
-import { IBaseProps } from '@/types/components'
+import { IClassProps } from '@/types'
 
-interface Props extends IBaseProps {}
+interface Props extends IClassProps {}
 
 const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
     const [camActive, setCamActive] = useState(false)
@@ -112,10 +112,7 @@ const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
                     <ActionTooltip side="left" tooltipContent="Change Camera">
                         <Button
                             variant="secondary"
-                            className={cn(
-                                'size-fit rounded-full p-2',
-                                className
-                            )}
+                            className={cn('size-fit rounded-full p-2')}
                         >
                             <CameraSelectIcon className="size-4" />
                         </Button>

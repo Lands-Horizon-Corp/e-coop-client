@@ -7,16 +7,16 @@ const useIsFocused = () => {
     useEffect(() => {
         const handleFocus = () => setIsFocused(true)
         const handleBlur = () => setIsFocused(false)
-
-        if (ref.current) {
-            ref.current.addEventListener('focus', handleFocus)
-            ref.current.addEventListener('blur', handleBlur)
+        const refInside = ref.current
+        if (refInside) {
+            refInside.addEventListener('focus', handleFocus)
+            refInside.addEventListener('blur', handleBlur)
         }
 
         return () => {
-            if (ref.current) {
-                ref.current.removeEventListener('focus', handleFocus)
-                ref.current.removeEventListener('blur', handleBlur)
+            if (refInside) {
+                refInside.removeEventListener('focus', handleFocus)
+                refInside.removeEventListener('blur', handleBlur)
             }
         }
     }, [])

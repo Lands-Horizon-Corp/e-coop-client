@@ -1,8 +1,8 @@
 import {
     Tooltip,
     TooltipContent,
-    TooltipTrigger,
     TooltipProvider,
+    TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { ReactNode } from '@tanstack/react-router'
 
@@ -15,11 +15,11 @@ export interface IActionTooltipProps {
 }
 
 const ActionTooltip = ({
+    tooltipContent,
+    children,
     side,
     align,
-    children,
     delayDuration,
-    tooltipContent,
 }: IActionTooltipProps) => {
     return (
         <TooltipProvider>

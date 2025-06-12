@@ -16,9 +16,9 @@ class Logger {
             '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'
         )
 
-        this.isDevelopment =
-            typeof import.meta.env !== 'undefined' &&
-            import.meta.env.VITE_CLIENT_APP_ENV === 'development'
+        this.isDevelopment = ['development', 'local'].includes(
+            import.meta.env.VITE_APP_ENV
+        )
 
         if (typeof document !== 'undefined' && !this.isDevelopment) {
             document.addEventListener('contextmenu', (event) =>

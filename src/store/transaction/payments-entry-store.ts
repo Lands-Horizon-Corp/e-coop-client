@@ -1,21 +1,15 @@
 import { create } from 'zustand'
-// TODO: Update types name once created
-type IMemberResource = any
-type IPaymentsEntry = any
-type IAccountsRequest = any
-// import { IMemberResource } from '@/server/types'
-// import { IPaymentsEntry } from '@/server/types/transactions/payments-entry'
-// import { IAccountsRequest } from '@/server/types/accounts/accounts'
+import { IUserBase, IAccountsRequest, IPaymentsEntry } from '@/types'
 
 // Payments Data
 export interface PaymentsDataStore {
-    selectedMember: IMemberResource | null
+    selectedMember: IUserBase | null
     ORNumber: string
     selectedPayments: IPaymentsEntry[]
     selectedAccounts: IAccountsRequest | null
     focusTypePayment: string | null
 
-    setSelectedMember: (member: IMemberResource | null) => void
+    setSelectedMember: (member: IUserBase | null) => void
     setORNumber: (orNumber: string) => void
     setSelectedPayments: (payments: IPaymentsEntry[]) => void
     setSelectedAccounts: (accounts: IAccountsRequest | null) => void

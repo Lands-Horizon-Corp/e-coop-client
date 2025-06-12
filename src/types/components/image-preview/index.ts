@@ -1,16 +1,16 @@
 import { MutableRefObject } from 'react'
-import { IMediaResource } from '@/server/types'
+import { IMedia } from '@/types'
 
 export interface ImagePreviewProps {
     hideCloseButton?: boolean
     closeButtonClassName?: string
     overlayClassName?: string
-    Images: IMediaResource[]
+    Images: IMedia[]
     scaleInterval?: number
 }
 
 export interface ImageContainerProps extends Partial<DownloadProps> {
-    media: IMediaResource
+    media: IMedia
     scale: number
     rotateDegree: number
     flipScale: string
@@ -29,9 +29,10 @@ export interface ImagePreviewActionProps extends Partial<DownloadProps> {
 }
 
 export interface ImagePreviewPanelProps {
-    Images: IMediaResource[]
+    Images: IMedia[]
     focusIndex: number
     scrollToIndex: (index: number) => void
+    scrollIntoView: React.RefObject<HTMLDivElement>
 }
 
 export interface DownloadProps

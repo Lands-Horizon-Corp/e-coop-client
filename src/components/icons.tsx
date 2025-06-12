@@ -2,26 +2,32 @@ import {
     TbMinus as MinusIcon,
     TbSunMoon as SunMoonIcon,
     TbMoneybag as MoneyBagIcon,
+    TbGhost2Filled as GhostIcon,
     TbBlockquote as BlockQuoteIcon,
     TbHeartHandshake as HandShakeHeartIcon,
     TbSquareF1 as F1Icon,
     TbSquareF2 as F2Icon,
     TbSquareF3 as F3Icon,
+    TbCreditCard as CreditCardIcon2,
 } from 'react-icons/tb'
 
 import {
     CiExport as ExportIcon,
+    CiBarcode as BarcodeScanIcon,
     CiFilter as FunnelOutlineIcon,
+    CiGlobe as GlobeIcon,
 } from 'react-icons/ci'
 
 import {
     GoDotFill as DotBigIcon,
     GoArrowLeft as ArrowLeftIcon,
+    GoArrowRight as ArrowRightIcon,
     GoSearch as MagnifyingGlassIcon,
 } from 'react-icons/go'
 
 import {
     IoIosClose as XIcon,
+    IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
     IoIosFunnel as FunnelFilledIcon,
 } from 'react-icons/io'
@@ -43,6 +49,7 @@ import {
     LuChevronsUpDown as ChevronsUpDownIcon,
     LuHardDriveUpload as HardDriveUploadIcon,
     LuReplace as ReplaceIcon,
+    LuScale as WeightScaleIcon,
 } from 'react-icons/lu'
 
 import {
@@ -65,6 +72,7 @@ import {
     PiPlus as PlusIcon,
     PiEmpty as EmptyIcon,
     PiPushPin as PushPinIcon,
+    PiParkDuotone as ParkIcon,
     PiUserList as UserListIcon,
     PiBuilding as BuildingIcon,
     PiNewspaper as ReportsIcon,
@@ -84,6 +92,7 @@ import {
     PiGraduationCapFill as GraduationCapIcon,
     PiWarningCircleFill as WarningCircleIcon,
     PiHandWithdrawDuotone as HandWithdrawIcon,
+    PiContactlessPaymentDuotone as OnlinePaymentIcon,
     PiTextStrikethroughLight as TextStrikethroughLightIcon,
 } from 'react-icons/pi'
 
@@ -107,6 +116,7 @@ import {
     HiOutlineChevronRight as ChevronRightIcon,
     HiOutlineQuestionMarkCircle as QuestionIcon,
     HiOutlineChatBubbleOvalLeft as MessagesIcon,
+    HiShieldExclamation as ShieldExclamationIcon,
     HiOutlineChevronDoubleLeft as ChevronsLeftIcon,
     HiOutlineArrowRightEndOnRectangle as LogoutIcon,
     HiOutlineChevronDoubleRight as ChevronsRightIcon,
@@ -128,6 +138,7 @@ import {
 
 import {
     MdOutlineDraw as DrawIcon,
+    MdOutlineScreenshotMonitor as MonitorIcon,
     MdOutlineEmail as EmailIcon,
     MdFamilyRestroom as FamilyIcon,
     MdRotateLeft as RotateLeftIcon,
@@ -144,15 +155,21 @@ import {
     MdOutlineRotate90DegreesCcw as Rotate90DegreeLeftIcon,
     MdAccountBalance as AccountsIcon,
     MdOutlineSavings as SavingsIcon,
+    MdOutlineManageAccounts as AccountSetupIcon,
+    MdOutlineQueryStats as FinanceReportsIcon,
 } from 'react-icons/md'
 
 import {
     BsImage as Image2Icon,
     BsZoomIn as ZoomInIcon,
     BsZoomOut as ZoomOutIcon,
+    BsSignpost2Fill as SignPostIcon,
     BsCameraFill as CameraFillIcon,
+    BsUiChecksGrid as ChecksGridIcon,
     BsPatchCheck as VerifiedPatchIcon,
     BsFileEarmarkFill as FileFillIcon,
+    BsShieldLockFill as ShieldLockIcon,
+    BsShieldFillCheck as ShieldCheckIcon,
     BsPatchQuestion as BadgeQuestionIcon,
     BsFileEarmarkPdfFill as PDFFileFillIcon,
     BsFileEarmarkTextFill as TextFileFillIcon,
@@ -175,21 +192,26 @@ import {
 } from 'react-icons/bs'
 
 import {
+    IoLayers as LayersIcon,
     IoReload as ReloadIcon,
-    IoRefresh as RefreshIcon,
     IoStorefront as StoreIcon,
     IoCloseOutline as CloseIcon,
+    IoPrintOutline as PrinterIcon,
     IoCallOutline as TelephoneIcon,
+    IoCalendar as CalendarDotsIcon,
     IoCheckmarkOutline as CheckIcon,
+    IoReceiptOutline as ReceiptIcon,
     IoPencilOutline as EditPencilIcon,
     IoLocationSharp as LocationPinIcon,
     IoFootstepsOutline as FootstepsIcon,
-    IoReceiptOutline as ReceiptIcon,
-    IoPrintOutline as PrinterIcon,
+    IoReturnDownBackOutline as BackIcon,
+    IoLocation as PinLocationIcon,
+    IoLanguage as LanguageIcon,
 } from 'react-icons/io5'
 
 import {
     RxReset as ResetIcon,
+    RxReload as RefreshIcon,
     RxEyeNone as EyeNoneIcon,
     RxFontItalic as ToolbarItalicIcon,
     RxDotsVertical as DotsVerticalIcon,
@@ -204,15 +226,30 @@ import {
     FaFileCsv as CsvIcon,
     FaPhoneAlt as PhoneIcon,
     FaMoneyBill as BillIcon,
+    FaBookOpen as BookOpenIcon,
     FaCreditCard as CreditCardIcon,
     FaUserClock as UserClockFillIcon,
+    FaCalendarCheck as FaCalendarCheckIcon,
+    FaTabletAlt as TabletIcon,
 } from 'react-icons/fa'
 
 import {
+    FaPlay as PlayIcon,
+    FaStop as StopIcon,
+    FaIdCard as IdCardIcon,
+    FaSchool as SchoolIcon,
+    FaTreeCity as TreeCityIcon,
     FaVenusMars as GendersIcon,
     FaChartPie as PieChartIcon,
-    FaBoxesStacked as BoxesStackedIcon,
     FaAddressCard as AddressCardIcon,
+    FaArrowTrendUp as ArrowTrendUpIcon,
+    FaBoxesStacked as BoxesStackedIcon,
+    FaCheck as CheckFillIcon,
+    FaHouseChimneyWindow as HouseIcon,
+    FaLandmarkFlag as LandmarkIcon,
+    FaUserLock as UserLockIcon,
+    FaMoneyCheck as MoneyCheckIcon,
+    FaBusinessTime as BriefCaseClockIcon,
 } from 'react-icons/fa6'
 
 import {
@@ -226,36 +263,62 @@ import {
 import {
     FiCamera as CameraIcon,
     FiDownload as DownloadIcon,
+    FiCodesandbox as CodeSandBox,
+    FiNavigation as NavigationIcon,
 } from 'react-icons/fi'
 
 import {
     GiWallet as WalletIcon,
+    GiVillage as VillageIcon,
     GiTakeMyMoney as MoneyIcon,
+    GiTreeBranch as BranchIcon,
+    GiWoodenSign as WoodSignsIcon,
+    GiMoneyStack as MoneyStackIcon,
+    GiMoneyStack as GiMoneyStackIcon,
 } from 'react-icons/gi'
 
 import {
     CgFacebook as FacebookIcon,
     CgDetailsLess as DetailsIcon,
+    CgUnavailable as UnavailableIcon,
+    CgInternal as InternalIcon,
+    CgSmartphone as SmartphoneIcon,
 } from 'react-icons/cg'
 
 import { RxDotFilled as DotMediumIcon } from 'react-icons/rx'
 
-import { GrPowerReset as PowerResetIcon } from 'react-icons/gr'
+import {
+    GrPowerReset as PowerResetIcon,
+    GrFormNextLink as NextIcon,
+} from 'react-icons/gr'
 
 import {
     VscError as ErrorIcon,
+    VscLayersDot as LayersSharpDotIcon,
+    VscBracketError as BracketErrorIcon,
     VscCommentDraft as CommentDashedIcon,
     VscLocation as LocationPinOutlineIcon,
+    VscExclude as ExcludeIcon,
 } from 'react-icons/vsc'
 
 import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
 
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 
-import { GrMoney as CoinsStackIcon } from 'react-icons/gr'
+import {
+    GrMoney as CoinsStackIcon,
+    GrVmMaintenance as MaintenanceIcon,
+} from 'react-icons/gr'
 
-// Export section
+import { TiBook as BookIcon } from 'react-icons/ti'
+
 export {
+    NavigationIcon,
+    LanguageIcon,
+    GlobeIcon,
+    TabletIcon,
+    SmartphoneIcon,
+    MonitorIcon,
     XIcon,
     MapIcon,
     CsvIcon,
@@ -263,6 +326,8 @@ export {
     KeyIcon,
     DevIcon,
     EyeIcon,
+    StopIcon,
+    PlayIcon,
     NoteIcon,
     CopyIcon,
     BankIcon,
@@ -273,6 +338,9 @@ export {
     UserIcon,
     MoonIcon,
     DrawIcon,
+    ParkIcon,
+    GearIcon,
+    GhostIcon,
     MoneyIcon,
     EmptyIcon,
     MinusIcon,
@@ -293,6 +361,7 @@ export {
     QrCodeIcon,
     DotBigIcon,
     CameraIcon,
+    LayersIcon,
     FaBoldIcon,
     ShieldIcon,
     Users3Icon,
@@ -301,7 +370,9 @@ export {
     ZoomInIcon,
     AdjustIcon,
     WalletIcon,
+    SchoolIcon,
     Image2Icon,
+    IdCardIcon,
     DetailsIcon,
     ReplaceIcon,
     WarningIcon,
@@ -313,10 +384,12 @@ export {
     SidebarIcon,
     SunMoonIcon,
     ZoomOutIcon,
+    VillageIcon,
     ReportsIcon,
     PushPinIcon,
     EyeNoneIcon,
     UserTagIcon,
+    BookOpenIcon,
     PieChartIcon,
     AccountsIcon,
     PaymentsIcon,
@@ -332,6 +405,7 @@ export {
     CalendarIcon,
     FileFillIcon,
     UsersAddIcon,
+    TreeCityIcon,
     MoneyBagIcon,
     HandCoinsIcon,
     MapMarkedIcon,
@@ -345,8 +419,14 @@ export {
     UserClockIcon,
     DashboardIcon,
     IoIosCodeIcon,
+    WoodSignsIcon,
     TelephoneIcon,
+    ChecksGridIcon,
+    ShieldLockIcon,
+    MoneyStackIcon,
+    MoneyCheckIcon,
     FolderFillIcon,
+    ArrowRightIcon,
     CoinsStackIcon,
     PencilFillIcon,
     SmallBrushIcon,
@@ -364,6 +444,7 @@ export {
     CreditCardIcon,
     UserShieldIcon,
     WarningFillIcon,
+    ShieldCheckIcon,
     AddressCardIcon,
     ArrowUpDownIcon,
     ChevronLeftIcon,
@@ -376,6 +457,10 @@ export {
     ChevronDownIcon,
     PDFFileFillIcon,
     BankDuoToneIcon,
+    BarcodeScanIcon,
+    CalendarDotsIcon,
+    BracketErrorIcon,
+    ArrowTrendUpIcon,
     BoxesStackedIcon,
     NotificationIcon,
     ChevronsLeftIcon,
@@ -402,10 +487,12 @@ export {
     CalendarCheckIcon,
     WarningCircleIcon,
     VerifiedPatchIcon,
+    OnlinePaymentIcon,
     LoadingCircleIcon,
     PencilOutlineIcon,
     UserClockFillIcon,
     CommentDashedIcon,
+    LayersSharpDotIcon,
     SignatureLightIcon,
     HandShakeHeartIcon,
     FlipHorizontalIcon,
@@ -419,6 +506,7 @@ export {
     FullscreenExitIcon,
     MessageOutlineIcon,
     HeartBreakFillIcon,
+    BriefCaseClockIcon,
     MagnifyingGlassIcon,
     SpreadSheetFileIcon,
     HardDriveUploadIcon,
@@ -430,6 +518,7 @@ export {
     FlipVerticalLineIcon,
     BadgeExclamationIcon,
     DocumentFileFillIcon,
+    ShieldExclamationIcon,
     BadgeQuestionFillIcon,
     LocationPinOutlineIcon,
     QuestionCircleFillIcon,
@@ -444,4 +533,25 @@ export {
     F1Icon,
     F2Icon,
     F3Icon,
+    MaintenanceIcon,
+    BackIcon,
+    NextIcon,
+    CheckFillIcon,
+    HouseIcon,
+    LandmarkIcon,
+    BranchIcon,
+    PinLocationIcon,
+    UnavailableIcon,
+    CodeSandBox,
+    UserLockIcon,
+    AccountSetupIcon,
+    CreditCardIcon2,
+    BookIcon,
+    FinanceReportsIcon,
+    ExcludeIcon,
+    InternalIcon,
+    GiMoneyStackIcon,
+    FaCalendarCheckIcon,
+    WeightScaleIcon,
+    SignPostIcon,
 }

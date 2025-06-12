@@ -1,5 +1,6 @@
 import { zodErrExtractor } from './zod-err-extractor'
 import { axiosErrExtractor } from './axios-err-extractor'
+import { searchParamErrExtractor } from './path-params-err-extractor'
 
 export type TErrorMessageExtractor = [
     new (...args: any[]) => Error, // Error, AxiosError, or any other error
@@ -40,6 +41,7 @@ export const allErrorMessageExtractor = ({
     errorMessageExtractors = [
         zodErrExtractor,
         axiosErrExtractor,
+        searchParamErrExtractor,
         // add your own error extractor here
     ],
     ...other

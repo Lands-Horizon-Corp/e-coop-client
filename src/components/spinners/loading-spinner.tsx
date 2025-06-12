@@ -1,9 +1,11 @@
 import { LoadingCircleIcon } from '@/components/icons'
 
 import { cn } from '@/lib/utils'
-import { IBaseProps } from '@/types/components'
+import { IClassProps } from '@/types'
 
-const LoadingSpinner = ({ className }: IBaseProps) => {
+interface Props extends IClassProps {}
+
+const LoadingSpinner = ({ className }: Props) => {
     return (
         <LoadingCircleIcon
             className={cn(

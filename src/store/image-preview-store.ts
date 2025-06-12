@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { IMediaResource } from '@/server/types'
+import { IMedia } from '@/types'
 
 interface ImagePreviewState {
     isOpen: boolean
@@ -13,7 +13,7 @@ export interface ImagePreviewData {
     overlayClassName?: string
     scaleInterval?: number
     className?: string
-    Images?: IMediaResource[]
+    Images?: IMedia[]
 }
 
 interface ImagePreviewActions {

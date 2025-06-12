@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import {
@@ -11,17 +10,22 @@ import {
 import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib'
-import { IBaseProps } from '@/types'
+import { ReactNode } from 'react'
+
+import { IBaseProps, IClassProps } from '@/types'
+
+export interface IModalClassNames extends DialogExtraProps, IClassProps {
+    titleClassName?: string
+    descriptionClassName?: string
+}
 
 export interface IModalProps
     extends IBaseProps,
         DialogPrimitive.DialogProps,
-        DialogExtraProps {
+        IModalClassNames {
     title?: string | ReactNode
     description?: string | ReactNode
     footer?: React.ReactNode
-    titleClassName?: string
-    descriptionClassName?: string
 }
 
 const Modal = ({
@@ -31,10 +35,10 @@ const Modal = ({
     className,
     description,
     titleClassName,
+    hideCloseButton,
     overlayClassName,
     closeButtonClassName,
     descriptionClassName,
-    hideCloseButton,
     ...other
 }: IModalProps) => {
     return (
@@ -51,7 +55,13 @@ const Modal = ({
                 <DialogTitle className={cn('font-medium', titleClassName)}>
                     {title}
                 </DialogTitle>
-                <DialogDescription className={cn('mb-4', descriptionClassName)}>
+                <DialogDescription
+                    className={cn(
+                        'mb-4',
+                        descriptionClassName,
+                        !description && 'hidden'
+                    )}
+                >
                     {description}
                 </DialogDescription>
                 {children}

@@ -16,7 +16,7 @@ const Footer = () => {
                         <Link className="footer-link" to="/">
                             Home
                         </Link>
-                        <Link className="footer-link" to="/about">
+                        <Link className="footer-link" to={'/about' as string}>
                             About
                         </Link>
                         <Link className="footer-link" to=".">

@@ -1,7 +1,7 @@
-import { create } from 'zustand'
 import { MapContainerProps } from 'react-leaflet'
+import { create } from 'zustand'
 
-import { Pin } from '@/types/components'
+import { Pin } from '@/types'
 
 interface MapStoreState {
     markerPosition?: { x: number; y: number }
