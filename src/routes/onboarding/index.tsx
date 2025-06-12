@@ -5,9 +5,11 @@ import { LandmarkIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
+import { useAuthUser } from '@/store/user-auth-store'
 import { useGetUserOrganizationByUserId } from '@/hooks/api-hooks/use-user-organization'
 
 import { createFileRoute } from '@tanstack/react-router'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute('/onboarding/')({
     component: RouteComponent,
@@ -15,12 +17,21 @@ export const Route = createFileRoute('/onboarding/')({
 
 function RouteComponent() {
     const {
-        data: userOrganizationsData = [],
+        currentAuth: { user },
+    } = useAuthUser()
+
+    const {
+        data: userOrganizationsData,
         isLoading,
         isPending,
         isError,
         isFetching,
-    } = useGetUserOrganizationByUserId()
+        refetch,
+    } = useGetUserOrganizationByUserId(user.id)
+
+    useSubscribe(`user_organization.create.user.${user.id}`, () => refetch())
+    useSubscribe(`user_organization.update.user.${user.id}`, () => refetch())
+    useSubscribe(`user_organization.delete.user.${user.id}`, () => refetch())
 
     const hasOrganization: boolean =
         Object.keys(userOrganizationsData).length > 0

@@ -1,6 +1,5 @@
 import z from 'zod'
 import { useState } from 'react'
-import { zodSearchValidator } from '@tanstack/router-zod-adapter'
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
 
 import { GoArrowLeft } from 'react-icons/go'
@@ -20,7 +19,12 @@ export const PasswordResetPagePathSchema = z.object({
 
 export const Route = createFileRoute('/auth/password-reset/$resetId')({
     component: PasswordResetPage,
-    validateSearch: zodSearchValidator(PasswordResetPagePathSchema),
+    params: {
+        parse: (params) => {
+            const data = PasswordResetPagePathSchema.parse(params)
+            return data
+        },
+    },
 })
 
 function PasswordResetPage() {

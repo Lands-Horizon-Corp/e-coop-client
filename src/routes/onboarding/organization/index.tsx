@@ -1,27 +1,46 @@
-import { useOrganizations } from '@/hooks/api-hooks/use-organization'
-import { createFileRoute } from '@tanstack/react-router'
-
-import OrganizationItem from '../-components/-organization-list/organization-item'
-import JoinBranchWithCodeFormModal from '@/components/forms/onboarding-forms/join-organization-form'
+import z from 'zod'
 import { useState } from 'react'
+import { createFileRoute, useSearch } from '@tanstack/react-router'
+import { useOrganizations } from '@/hooks/api-hooks/use-organization'
+
 import { Button } from '@/components/ui/button'
 import { CodeSandBox } from '@/components/icons'
-import OrganizationItemSkeleton from '@/components/Skeleton/organization-item-skeleton'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import OrganizationItem from '../-components/-organization-list/organization-item'
+import OrganizationItemSkeleton from '@/components/Skeleton/organization-item-skeleton'
+import JoinBranchWithCodeFormModal from '@/components/forms/onboarding-forms/join-organization-form'
+import { useAuthUser } from '@/store/user-auth-store'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
+const paramSchema = z.object({
+    invitation_code: z.string().optional(),
+})
 
 export const Route = createFileRoute('/onboarding/organization/')({
     component: RouteComponent,
+    validateSearch: (search) => paramSchema.parse(search),
 })
 
 function RouteComponent() {
+    const {
+        currentAuth: { user },
+    } = useAuthUser()
+    const { invitation_code } = useSearch({ from: '/onboarding/organization/' })
+
     const {
         data: Organizations,
         isPending,
         isError,
         isFetching,
+        refetch,
     } = useOrganizations()
 
-    const [onOpenJoinWithCodeModal, setOpenJoinWithCodeModal] = useState(false)
+    useSubscribe(`user_organization.create.user.${user.id}`, () => refetch())
+    useSubscribe(`user_organization.update.user.${user.id}`, () => refetch())
+    useSubscribe(`user_organization.delete.user.${user.id}`, () => refetch())
+
+    const [onOpenJoinWithCodeModal, setOpenJoinWithCodeModal] =
+        useState(!!invitation_code)
 
     const isNoOrganization = Organizations?.length === 0
 
@@ -34,9 +53,11 @@ function RouteComponent() {
             </div>
         )
     }
+
     return (
         <div className="w-full py-2">
             <JoinBranchWithCodeFormModal
+                defaultCode={invitation_code}
                 open={onOpenJoinWithCodeModal}
                 onOpenChange={setOpenJoinWithCodeModal}
                 title="Enter Code to Join a Branch"

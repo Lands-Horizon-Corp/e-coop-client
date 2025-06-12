@@ -22,7 +22,6 @@ import { Route as AccountIndexImport } from './routes/account/index';
 import { Route as landingIndexImport } from './routes/(landing)/index';
 import { Route as OrgOrgnameImport } from './routes/org/$orgname';
 import { Route as OnboardingSetupOrgImport } from './routes/onboarding/setup-org';
-import { Route as OnboardingOrganizationidImport } from './routes/onboarding/$organization_id';
 import { Route as AuthForgotPasswordImport } from './routes/auth/forgot-password';
 import { Route as AccountSecurityImport } from './routes/account/security';
 import { Route as AccountQrImport } from './routes/account/qr';
@@ -34,11 +33,12 @@ import { Route as landingAboutImport } from './routes/(landing)/about';
 import { Route as OnboardingOrganizationRouteImport } from './routes/onboarding/organization/route';
 import { Route as OnboardingOrganizationIndexImport } from './routes/onboarding/organization/index';
 import { Route as OnboardingOrganizationOrganizationidImport } from './routes/onboarding/organization/$organization_id';
+import { Route as OnboardingCreateBranchOrganizationidImport } from './routes/onboarding/create-branch.$organization_id';
 import { Route as AuthPasswordResetResetIdImport } from './routes/auth/password-reset.$resetId';
 import { Route as AccountVerifyEmailImport } from './routes/account/verify/email';
 import { Route as AccountVerifyContactImport } from './routes/account/verify/contact';
-import { Route as OnboardingCreateBranchUserorganizationidOrganizationidImport } from './routes/onboarding/create-branch.$user_organization_id.$organization_id';
 import { Route as OrgOrgnameBranchBranchnameRouteImport } from './routes/org/$orgname/branch.$branchname/route';
+import { Route as OrgOrgnameBranchBranchnameIndexImport } from './routes/org/$orgname/branch.$branchname/index';
 import { Route as OrgOrgnameBranchBranchnamecommonUsersFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/users-footsteps';
 import { Route as OrgOrgnameBranchBranchnamecommonMyFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/my-footsteps';
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard';
@@ -149,12 +149,6 @@ const OnboardingSetupOrgRoute = OnboardingSetupOrgImport.update({
     getParentRoute: () => OnboardingRouteRoute,
 } as any);
 
-const OnboardingOrganizationidRoute = OnboardingOrganizationidImport.update({
-    id: '/$organization_id',
-    path: '/$organization_id',
-    getParentRoute: () => OnboardingRouteRoute,
-} as any);
-
 const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
     id: '/forgot-password',
     path: '/forgot-password',
@@ -224,6 +218,13 @@ const OnboardingOrganizationOrganizationidRoute =
         getParentRoute: () => OnboardingOrganizationRouteRoute,
     } as any);
 
+const OnboardingCreateBranchOrganizationidRoute =
+    OnboardingCreateBranchOrganizationidImport.update({
+        id: '/create-branch/$organization_id',
+        path: '/create-branch/$organization_id',
+        getParentRoute: () => OnboardingRouteRoute,
+    } as any);
+
 const AuthPasswordResetResetIdRoute = AuthPasswordResetResetIdImport.update({
     id: '/password-reset/$resetId',
     path: '/password-reset/$resetId',
@@ -242,18 +243,18 @@ const AccountVerifyContactRoute = AccountVerifyContactImport.update({
     getParentRoute: () => AccountRouteRoute,
 } as any);
 
-const OnboardingCreateBranchUserorganizationidOrganizationidRoute =
-    OnboardingCreateBranchUserorganizationidOrganizationidImport.update({
-        id: '/create-branch/$user_organization_id/$organization_id',
-        path: '/create-branch/$user_organization_id/$organization_id',
-        getParentRoute: () => OnboardingRouteRoute,
-    } as any);
-
 const OrgOrgnameBranchBranchnameRouteRoute =
     OrgOrgnameBranchBranchnameRouteImport.update({
         id: '/branch/$branchname',
         path: '/branch/$branchname',
         getParentRoute: () => OrgOrgnameRoute,
+    } as any);
+
+const OrgOrgnameBranchBranchnameIndexRoute =
+    OrgOrgnameBranchBranchnameIndexImport.update({
+        id: '/',
+        path: '/',
+        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any);
 
 const OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute =
@@ -652,13 +653,6 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof AuthForgotPasswordImport;
             parentRoute: typeof AuthRouteImport;
         };
-        '/onboarding/$organization_id': {
-            id: '/onboarding/$organization_id';
-            path: '/$organization_id';
-            fullPath: '/onboarding/$organization_id';
-            preLoaderRoute: typeof OnboardingOrganizationidImport;
-            parentRoute: typeof OnboardingRouteImport;
-        };
         '/onboarding/setup-org': {
             id: '/onboarding/setup-org';
             path: '/setup-org';
@@ -729,6 +723,13 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof AuthPasswordResetResetIdImport;
             parentRoute: typeof AuthRouteImport;
         };
+        '/onboarding/create-branch/$organization_id': {
+            id: '/onboarding/create-branch/$organization_id';
+            path: '/create-branch/$organization_id';
+            fullPath: '/onboarding/create-branch/$organization_id';
+            preLoaderRoute: typeof OnboardingCreateBranchOrganizationidImport;
+            parentRoute: typeof OnboardingRouteImport;
+        };
         '/onboarding/organization/$organization_id': {
             id: '/onboarding/organization/$organization_id';
             path: '/$organization_id';
@@ -750,12 +751,12 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
             parentRoute: typeof OrgOrgnameImport;
         };
-        '/onboarding/create-branch/$user_organization_id/$organization_id': {
-            id: '/onboarding/create-branch/$user_organization_id/$organization_id';
-            path: '/create-branch/$user_organization_id/$organization_id';
-            fullPath: '/onboarding/create-branch/$user_organization_id/$organization_id';
-            preLoaderRoute: typeof OnboardingCreateBranchUserorganizationidOrganizationidImport;
-            parentRoute: typeof OnboardingRouteImport;
+        '/org/$orgname/branch/$branchname/': {
+            id: '/org/$orgname/branch/$branchname/';
+            path: '/';
+            fullPath: '/org/$orgname/branch/$branchname/';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnameIndexImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
         '/org/$orgname/branch/$branchname/(common)/dashboard': {
             id: '/org/$orgname/branch/$branchname/(common)/dashboard';
@@ -1100,20 +1101,18 @@ const OnboardingOrganizationRouteRouteWithChildren =
 
 interface OnboardingRouteRouteChildren {
     OnboardingOrganizationRouteRoute: typeof OnboardingOrganizationRouteRouteWithChildren;
-    OnboardingOrganizationidRoute: typeof OnboardingOrganizationidRoute;
     OnboardingSetupOrgRoute: typeof OnboardingSetupOrgRoute;
     OnboardingIndexRoute: typeof OnboardingIndexRoute;
-    OnboardingCreateBranchUserorganizationidOrganizationidRoute: typeof OnboardingCreateBranchUserorganizationidOrganizationidRoute;
+    OnboardingCreateBranchOrganizationidRoute: typeof OnboardingCreateBranchOrganizationidRoute;
 }
 
 const OnboardingRouteRouteChildren: OnboardingRouteRouteChildren = {
     OnboardingOrganizationRouteRoute:
         OnboardingOrganizationRouteRouteWithChildren,
-    OnboardingOrganizationidRoute: OnboardingOrganizationidRoute,
     OnboardingSetupOrgRoute: OnboardingSetupOrgRoute,
     OnboardingIndexRoute: OnboardingIndexRoute,
-    OnboardingCreateBranchUserorganizationidOrganizationidRoute:
-        OnboardingCreateBranchUserorganizationidOrganizationidRoute,
+    OnboardingCreateBranchOrganizationidRoute:
+        OnboardingCreateBranchOrganizationidRoute,
 };
 
 const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
@@ -1121,6 +1120,7 @@ const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
 );
 
 interface OrgOrgnameBranchBranchnameRouteRouteChildren {
+    OrgOrgnameBranchBranchnameIndexRoute: typeof OrgOrgnameBranchBranchnameIndexRoute;
     OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
     OrgOrgnameBranchBranchnamecommonMyFootstepsRoute: typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute;
     OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute: typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute;
@@ -1162,6 +1162,8 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
     {
+        OrgOrgnameBranchBranchnameIndexRoute:
+            OrgOrgnameBranchBranchnameIndexRoute,
         OrgOrgnameBranchBranchnamecommonDashboardRoute:
             OrgOrgnameBranchBranchnamecommonDashboardRoute,
         OrgOrgnameBranchBranchnamecommonMyFootstepsRoute:
@@ -1270,7 +1272,6 @@ export interface FileRoutesByFullPath {
     '/account/qr': typeof AccountQrRoute;
     '/account/security': typeof AccountSecurityRoute;
     '/auth/forgot-password': typeof AuthForgotPasswordRoute;
-    '/onboarding/$organization_id': typeof OnboardingOrganizationidRoute;
     '/onboarding/setup-org': typeof OnboardingSetupOrgRoute;
     '/org/$orgname': typeof OrgOrgnameRouteWithChildren;
     '/auth/sign-in': typeof AuthSignInLazyRoute;
@@ -1280,10 +1281,11 @@ export interface FileRoutesByFullPath {
     '/account/verify/contact': typeof AccountVerifyContactRoute;
     '/account/verify/email': typeof AccountVerifyEmailRoute;
     '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute;
+    '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute;
     '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute;
     '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute;
     '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren;
-    '/onboarding/create-branch/$user_organization_id/$organization_id': typeof OnboardingCreateBranchUserorganizationidOrganizationidRoute;
+    '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute;
     '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
     '/org/$orgname/branch/$branchname/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute;
     '/org/$orgname/branch/$branchname/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute;
@@ -1333,7 +1335,6 @@ export interface FileRoutesByTo {
     '/account/qr': typeof AccountQrRoute;
     '/account/security': typeof AccountSecurityRoute;
     '/auth/forgot-password': typeof AuthForgotPasswordRoute;
-    '/onboarding/$organization_id': typeof OnboardingOrganizationidRoute;
     '/onboarding/setup-org': typeof OnboardingSetupOrgRoute;
     '/org/$orgname': typeof OrgOrgnameRouteWithChildren;
     '/auth/sign-in': typeof AuthSignInLazyRoute;
@@ -1344,10 +1345,10 @@ export interface FileRoutesByTo {
     '/account/verify/contact': typeof AccountVerifyContactRoute;
     '/account/verify/email': typeof AccountVerifyEmailRoute;
     '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute;
+    '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute;
     '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute;
     '/onboarding/organization': typeof OnboardingOrganizationIndexRoute;
-    '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren;
-    '/onboarding/create-branch/$user_organization_id/$organization_id': typeof OnboardingCreateBranchUserorganizationidOrganizationidRoute;
+    '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute;
     '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
     '/org/$orgname/branch/$branchname/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute;
     '/org/$orgname/branch/$branchname/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute;
@@ -1402,7 +1403,6 @@ export interface FileRoutesById {
     '/account/qr': typeof AccountQrRoute;
     '/account/security': typeof AccountSecurityRoute;
     '/auth/forgot-password': typeof AuthForgotPasswordRoute;
-    '/onboarding/$organization_id': typeof OnboardingOrganizationidRoute;
     '/onboarding/setup-org': typeof OnboardingSetupOrgRoute;
     '/org/$orgname': typeof OrgOrgnameRouteWithChildren;
     '/auth/sign-in': typeof AuthSignInLazyRoute;
@@ -1413,10 +1413,11 @@ export interface FileRoutesById {
     '/account/verify/contact': typeof AccountVerifyContactRoute;
     '/account/verify/email': typeof AccountVerifyEmailRoute;
     '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute;
+    '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute;
     '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute;
     '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute;
     '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren;
-    '/onboarding/create-branch/$user_organization_id/$organization_id': typeof OnboardingCreateBranchUserorganizationidOrganizationidRoute;
+    '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute;
     '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute;
     '/org/$orgname/branch/$branchname/(common)/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute;
     '/org/$orgname/branch/$branchname/(common)/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute;
@@ -1472,7 +1473,6 @@ export interface FileRouteTypes {
         | '/account/qr'
         | '/account/security'
         | '/auth/forgot-password'
-        | '/onboarding/$organization_id'
         | '/onboarding/setup-org'
         | '/org/$orgname'
         | '/auth/sign-in'
@@ -1482,10 +1482,11 @@ export interface FileRouteTypes {
         | '/account/verify/contact'
         | '/account/verify/email'
         | '/auth/password-reset/$resetId'
+        | '/onboarding/create-branch/$organization_id'
         | '/onboarding/organization/$organization_id'
         | '/onboarding/organization/'
         | '/org/$orgname/branch/$branchname'
-        | '/onboarding/create-branch/$user_organization_id/$organization_id'
+        | '/org/$orgname/branch/$branchname/'
         | '/org/$orgname/branch/$branchname/dashboard'
         | '/org/$orgname/branch/$branchname/my-footsteps'
         | '/org/$orgname/branch/$branchname/users-footsteps'
@@ -1534,7 +1535,6 @@ export interface FileRouteTypes {
         | '/account/qr'
         | '/account/security'
         | '/auth/forgot-password'
-        | '/onboarding/$organization_id'
         | '/onboarding/setup-org'
         | '/org/$orgname'
         | '/auth/sign-in'
@@ -1545,10 +1545,10 @@ export interface FileRouteTypes {
         | '/account/verify/contact'
         | '/account/verify/email'
         | '/auth/password-reset/$resetId'
+        | '/onboarding/create-branch/$organization_id'
         | '/onboarding/organization/$organization_id'
         | '/onboarding/organization'
         | '/org/$orgname/branch/$branchname'
-        | '/onboarding/create-branch/$user_organization_id/$organization_id'
         | '/org/$orgname/branch/$branchname/dashboard'
         | '/org/$orgname/branch/$branchname/my-footsteps'
         | '/org/$orgname/branch/$branchname/users-footsteps'
@@ -1601,7 +1601,6 @@ export interface FileRouteTypes {
         | '/account/qr'
         | '/account/security'
         | '/auth/forgot-password'
-        | '/onboarding/$organization_id'
         | '/onboarding/setup-org'
         | '/org/$orgname'
         | '/auth/sign-in'
@@ -1612,10 +1611,11 @@ export interface FileRouteTypes {
         | '/account/verify/contact'
         | '/account/verify/email'
         | '/auth/password-reset/$resetId'
+        | '/onboarding/create-branch/$organization_id'
         | '/onboarding/organization/$organization_id'
         | '/onboarding/organization/'
         | '/org/$orgname/branch/$branchname'
-        | '/onboarding/create-branch/$user_organization_id/$organization_id'
+        | '/org/$orgname/branch/$branchname/'
         | '/org/$orgname/branch/$branchname/(common)/dashboard'
         | '/org/$orgname/branch/$branchname/(common)/my-footsteps'
         | '/org/$orgname/branch/$branchname/(common)/users-footsteps'
@@ -1723,10 +1723,9 @@ export const routeTree = rootRoute
       "filePath": "onboarding/route.tsx",
       "children": [
         "/onboarding/organization",
-        "/onboarding/$organization_id",
         "/onboarding/setup-org",
         "/onboarding/",
-        "/onboarding/create-branch/$user_organization_id/$organization_id"
+        "/onboarding/create-branch/$organization_id"
       ]
     },
     "/onboarding/organization": {
@@ -1768,10 +1767,6 @@ export const routeTree = rootRoute
     "/auth/forgot-password": {
       "filePath": "auth/forgot-password.tsx",
       "parent": "/auth"
-    },
-    "/onboarding/$organization_id": {
-      "filePath": "onboarding/$organization_id.tsx",
-      "parent": "/onboarding"
     },
     "/onboarding/setup-org": {
       "filePath": "onboarding/setup-org.tsx",
@@ -1815,6 +1810,10 @@ export const routeTree = rootRoute
       "filePath": "auth/password-reset.$resetId.tsx",
       "parent": "/auth"
     },
+    "/onboarding/create-branch/$organization_id": {
+      "filePath": "onboarding/create-branch.$organization_id.tsx",
+      "parent": "/onboarding"
+    },
     "/onboarding/organization/$organization_id": {
       "filePath": "onboarding/organization/$organization_id.tsx",
       "parent": "/onboarding/organization"
@@ -1827,6 +1826,7 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/route.tsx",
       "parent": "/org/$orgname",
       "children": [
+        "/org/$orgname/branch/$branchname/",
         "/org/$orgname/branch/$branchname/(common)/dashboard",
         "/org/$orgname/branch/$branchname/(common)/my-footsteps",
         "/org/$orgname/branch/$branchname/(common)/users-footsteps",
@@ -1866,9 +1866,9 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/"
       ]
     },
-    "/onboarding/create-branch/$user_organization_id/$organization_id": {
-      "filePath": "onboarding/create-branch.$user_organization_id.$organization_id.tsx",
-      "parent": "/onboarding"
+    "/org/$orgname/branch/$branchname/": {
+      "filePath": "org/$orgname/branch.$branchname/index.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(common)/dashboard": {
       "filePath": "org/$orgname/branch.$branchname/(common)/dashboard.tsx",

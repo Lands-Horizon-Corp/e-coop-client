@@ -1,8 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 import TimesheetTable from '@/components/tables/timesheet-table'
 import PageContainer from '@/components/containers/page-container'
 import TimesheetTableAction from '@/components/tables/timesheet-table/action'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets'
@@ -11,6 +15,32 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+
+    const queryClient = useQueryClient()
+
+    useSubscribe(`timesheet.create.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['timesheet', 'resource-query', 'all'],
+        })
+    })
+
+    useSubscribe(`timesheet.update.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['timesheet', 'resource-query', 'all'],
+        })
+    })
+
+    useSubscribe(`timesheet.delete.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['timesheet', 'resource-query', 'me'],
+        })
+    })
+
     return (
         <PageContainer>
             <TimesheetTable

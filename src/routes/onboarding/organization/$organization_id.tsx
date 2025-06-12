@@ -1,13 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
-import { useCanJoinMember } from '@/hooks/api-hooks/use-user-organization'
+
 import Branch from './-branch'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import SafeImage from '@/components/safe-image'
+import { Skeleton } from '@/components/ui/skeleton'
 import PlainTextEditor from '@/components/plain-text-editor'
 import { BranchIcon, PhoneIcon, PushPinIcon } from '@/components/icons'
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
-import SafeImage from '@/components/safe-image'
-import { Skeleton } from '@/components/ui/skeleton'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+
+import { useCanJoinMember } from '@/hooks/api-hooks/use-user-organization'
+import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
 
 export const Route = createFileRoute(
     '/onboarding/organization/$organization_id'

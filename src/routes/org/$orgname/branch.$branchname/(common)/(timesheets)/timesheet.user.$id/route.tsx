@@ -17,6 +17,12 @@ export const Route = createFileRoute(
 )({
     component: RouteComponent,
     validateSearch: zodSearchValidator(pathSchema),
+    params: {
+        parse: (params) => {
+            const data = pathSchema.parse(params)
+            return data
+        },
+    },
 })
 
 function RouteComponent() {

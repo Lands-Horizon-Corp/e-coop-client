@@ -1,15 +1,5 @@
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import ImageDisplay from '@/components/image-display'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import PlainTextEditor from '@/components/plain-text-editor'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
-
-import {
-    useDeleteBranch,
-    useGetBranchesByOrganizationId,
-} from '@/hooks/api-hooks/use-branch'
+import z from 'zod'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import {
     PlusIcon,
@@ -18,34 +8,55 @@ import {
     BranchIcon,
     PushPinIcon,
     LandmarkIcon,
+    CheckFillIcon,
     EditPencilIcon,
     AddressCardIcon,
     LoadingCircleIcon,
 } from '@/components/icons'
-
-import { useModalState } from '@/hooks/use-modal-state'
-import { useSeedOrganization } from '@/hooks/api-hooks/use-user-organization'
-import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
-
-import { IBranch, TEntityId } from '@/types'
-import useConfirmModalStore from '@/store/confirm-modal-store'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import ImageDisplay from '@/components/image-display'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import PlainTextEditor from '@/components/plain-text-editor'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
 
 import { cn } from '@/lib'
 import { toast } from 'sonner'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import {
+    useDeleteBranch,
+    useGetBranchesByOrganizationId,
+} from '@/hooks/api-hooks/use-branch'
+import { useModalState } from '@/hooks/use-modal-state'
 import { useLocationInfo } from '@/hooks/use-location-info'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
+import { useSeedOrganization } from '@/hooks/api-hooks/use-user-organization'
+
+import { IBranch, TEntityId } from '@/types'
+import { entityIdSchema } from '@/validations/common'
+
+const routeSchema = z.object({
+    organization_id: entityIdSchema,
+})
 
 export const Route = createFileRoute(
-    '/onboarding/create-branch/$user_organization_id/$organization_id'
+    '/onboarding/create-branch/$organization_id'
 )({
     component: RouteComponent,
+    params: {
+        parse: (params) => {
+            const data = routeSchema.parse(params)
+            return data
+        },
+    },
 })
 
 function RouteComponent() {
     const navigate = useNavigate()
 
-    const { user_organization_id, organization_id } = Route.useParams()
     const { countryCode } = useLocationInfo()
+    const { organization_id } = Route.useParams()
 
     const { data: organization, isPending: isPendingOrganization } =
         useGetOrganizationById(organization_id)
@@ -73,11 +84,12 @@ function RouteComponent() {
         <div className="w-full">
             <CreateUpdateFormFormModal
                 {...createModal}
-                useOrganizationId={user_organization_id}
                 formProps={{
+                    organizationId: organization_id,
                     defaultValues: {
                         country_code: countryCode,
                     },
+                    hiddenFields: ['is_main_branch'],
                 }}
             />
             <div className="min-h-full w-full min-w-full rounded-none border-none bg-transparent py-5">
@@ -192,10 +204,10 @@ function RouteComponent() {
                             branches?.map((branch) => {
                                 return (
                                     <BranchBar
-                                        isSeeding={isSeeding}
                                         key={branch.id}
                                         branch={branch}
-                                        userOrgId={user_organization_id}
+                                        isSeeding={isSeeding}
+                                        organizationId={organization_id}
                                     />
                                 )
                             })
@@ -204,9 +216,7 @@ function RouteComponent() {
                 </ScrollArea>
                 <div className="flex w-full items-center justify-end py-2">
                     <Button
-                        variant={'outline'}
                         disabled={isNoBranches || isSeeding}
-                        className="w-28"
                         onClick={async () => {
                             handleSeedOrganizationWithBranch()
                         }}
@@ -216,7 +226,10 @@ function RouteComponent() {
                         {isSeeding ? (
                             <LoadingCircleIcon className="ml-2 animate-spin" />
                         ) : (
-                            'continue'
+                            <>
+                                <CheckFillIcon className="mr-2" />
+                                Click here to finish setup
+                            </>
                         )}
                     </Button>
                 </div>
@@ -227,12 +240,12 @@ function RouteComponent() {
 
 export const BranchBar = ({
     branch,
-    userOrgId,
     isSeeding,
+    organizationId,
 }: {
     branch: IBranch
-    userOrgId: TEntityId
     isSeeding: boolean
+    organizationId: TEntityId
 }) => {
     const updateModal = useModalState()
     const { onOpen } = useConfirmModalStore()
@@ -243,24 +256,14 @@ export const BranchBar = ({
         },
     })
 
-    const handleDeleteBranch = async (userOrganizationId: TEntityId) => {
-        onOpen({
-            title: 'Delete Branch',
-            description: `You are about delete this branch, are you sure you want to proceed?`,
-            onConfirm: () => {
-                deleteBranch(userOrganizationId)
-            },
-            confirmString: 'Proceed',
-        })
-    }
-
     return (
         <>
             <CreateUpdateFormFormModal
                 {...updateModal}
-                useOrganizationId={userOrgId}
                 formProps={{
+                    organizationId,
                     branchId: branch.id,
+                    hiddenFields: ['is_main_branch'],
                     defaultValues: {
                         ...branch,
                     },
@@ -303,9 +306,16 @@ export const BranchBar = ({
                                 <Button
                                     size={'sm'}
                                     disabled={isSeeding}
-                                    onClick={() => {
-                                        handleDeleteBranch(userOrgId)
-                                    }}
+                                    onClick={() =>
+                                        onOpen({
+                                            title: 'Delete Branch',
+                                            description: `You are about delete this branch, are you sure you want to proceed?`,
+                                            onConfirm: () => {
+                                                deleteBranch(branch.id)
+                                            },
+                                            confirmString: 'Proceed',
+                                        })
+                                    }
                                     variant={'destructive'}
                                     className={cn(
                                         'flex max-h-7 space-x-2 text-xs'

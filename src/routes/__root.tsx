@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store/user-auth-store'
 import { useAuthContext } from '@/hooks/api-hooks/use-auth'
 import ConnectionProvider from '@/providers/connection-provider'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
+import InfoModal from '@/components/modals/info-modal'
 
 export const Route = createRootRoute({
     component: RootLayout,
@@ -61,6 +62,7 @@ function RootLayout() {
             <CookieConsent />
             <ImagePreviewModal />
             <ConfirmModal />
+            <InfoModal />
             <TanStackRouterDevtools />
             <ActionSecurityProvider />
         </div>
