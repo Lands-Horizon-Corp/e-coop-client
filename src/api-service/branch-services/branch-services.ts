@@ -1,12 +1,12 @@
 import APIService from '../api-service'
 import { IBranch, IBranchRequest, IUserOrganization, TEntityId } from '@/types'
 
-export const createBranch = async (
+export const createBranchByOrgId = async (
     branchData: IBranchRequest,
-    userOrganizationId: TEntityId
+    organizationId: TEntityId
 ) => {
     const response = await APIService.post<IBranchRequest, IBranch>(
-        `/branch/user-organization/${userOrganizationId}`,
+        `/branch/organization/${organizationId}`,
         branchData
     )
     return response.data
@@ -16,10 +16,8 @@ export const getAllBranches = async () => {
     const response = await APIService.get<IBranch[]>(`/branch`)
     return response.data
 }
-export const deleteBranch = async (userOrganizationId: TEntityId) => {
-    const response = await APIService.delete(
-        `/branch/user-organization/${userOrganizationId}`
-    )
+export const deleteBranch = async (branchId: TEntityId) => {
+    const response = await APIService.delete(`/branch/${branchId}`)
     return response.data
 }
 export const updateBranch = async (

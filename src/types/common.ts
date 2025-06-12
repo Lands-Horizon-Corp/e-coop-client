@@ -7,11 +7,12 @@ import {
     FAMILY_RELATIONSHIP,
     AccountClosureReasons,
     EDUCATIONAL_ATTAINMENT,
+    USER_TYPE,
 } from '@/constants'
 
 export type TEntityId = string
 
-export type TUserType = 'owner' | 'employee' | 'member' | 'ban'
+export type TUserType = (typeof USER_TYPE)[number]
 
 export type TGeneralStatus = (typeof GENERAL_STATUS)[number]
 
