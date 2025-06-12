@@ -35,8 +35,6 @@ const QrCodeDownloadable = ({
 
     const { download, isDownloading } = useDownloadElement()
 
-    console.log('Valuie', other.value)
-
     return (
         <div className={cn('w-fit space-y-2', containerClassName)}>
             <QrCode ref={qrRef} {...other}></QrCode>

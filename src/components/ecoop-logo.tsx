@@ -46,7 +46,11 @@ const EcoopLogo = ({
 
     return (
         <div className={cn('relative size-8', className)}>
-            <img src={finalUrl} alt="logo" className="h-full w-full" />
+            <img
+                src={finalUrl}
+                alt="logo"
+                className="h-full w-full rounded-md"
+            />
             {!blurDisabled && (
                 <img
                     src={finalUrl}
