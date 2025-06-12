@@ -1,12 +1,17 @@
 import { useState } from 'react'
 
+import { QrCodeIcon } from '@/components/icons'
+import CopyURL from '@/components/elements/copy-url'
+import { QrCodeDownloadable } from '@/components/qr-code'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { InivationCodeFormModal } from '@/components/forms/inivitation-code-create-update.form'
 
+import { IInvitationTableActionComponentProp } from './columns'
+
+import { useInfoModalStore } from '@/store/info-modal-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteInvitationCode } from '@/hooks/api-hooks/use-invitation-code'
-
-import { IInvitationTableActionComponentProp } from './columns'
 
 interface IInvitationCodeTableActionProps
     extends IInvitationTableActionComponentProp {
@@ -21,11 +26,16 @@ const InvitationCodeAction = ({
     const [updateModalForm, setUpdateModalForm] = useState(false)
     const invitationCode = row.original
     const { onOpen } = useConfirmModalStore()
+    const { onOpen: openInfoModal } = useInfoModalStore()
 
     const {
         mutate: deleteInvitationCodeMutation,
         isPending: isDeletingInvitationCode,
     } = useDeleteInvitationCode()
+
+    const selfUrl = window.location.origin
+
+    const invitationUrl = `${selfUrl}/onboarding/organization?invitation_code=${invitationCode.code}`
 
     return (
         <>
@@ -38,9 +48,8 @@ const InvitationCodeAction = ({
                     description="Update details for this invitation code."
                     titleClassName="font-bold"
                     formProps={{
-                        defaultValues: {
-                            ...invitationCode,
-                        },
+                        invitationCodeId: invitationCode.id,
+                        defaultValues: invitationCode,
                         onSuccess: () => {
                             onDeleteSuccess?.()
                             setUpdateModalForm(false)
@@ -67,7 +76,40 @@ const InvitationCodeAction = ({
                     isAllowed: true,
                     onClick: () => setUpdateModalForm(true),
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
+                otherActions={
+                    <>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                openInfoModal({
+                                    title: 'Invitation Code QR',
+                                    description:
+                                        'Share this invitation QR Code.',
+                                    classNames: {
+                                        className: 'w-fit',
+                                    },
+                                    component: (
+                                        <div className="space-y-2">
+                                            <QrCodeDownloadable
+                                                className="size-80 p-3"
+                                                containerClassName="mx-auto"
+                                                fileName={`invitation_code_${invitationCode.code}`}
+                                                value={invitationUrl}
+                                            />
+                                            <CopyURL
+                                                url={invitationUrl}
+                                                className="mx-auto w-fit"
+                                                displayText="Click here to copy invitation URL"
+                                            />
+                                        </div>
+                                    ),
+                                })
+                            }
+                        >
+                            <QrCodeIcon className="mr-2" />
+                            Show QR
+                        </DropdownMenuItem>
+                    </>
+                }
             />
         </>
     )

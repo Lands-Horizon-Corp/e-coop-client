@@ -37,5 +37,9 @@ export interface UserOrganizationGroup {
     isPending: 'pending' | 'reported' | 'accepted' | 'ban'
 }
 
+export interface IOrgUserOrganizationGroup extends IOrganization {
+    user_organizations: IUserOrganization[]
+}
+
 export interface IUserOrganizationPaginated<TUser = IUserBase>
     extends IPaginatedResult<IUserOrganization<TUser>> {}

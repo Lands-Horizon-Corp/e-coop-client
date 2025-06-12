@@ -11,7 +11,7 @@ export const verifyInvitationCode = async (code: string) => {
     const response = await APIService.get<IInvitationCode>(
         `/invitation-code/code/${code}`
     )
-    return response.status === 202
+    return response.data
 }
 
 // GET /invitation-code/
@@ -30,7 +30,7 @@ export const getPaginatedInvitationCode = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/invitation-code`,
+            url: `/invitation-code/search`,
             query: {
                 sort,
                 filter: filters,
@@ -71,7 +71,7 @@ export const updateInvitationCode = async (
 // DELETE /invitation-code/:invitation_code_id
 export const deleteInvitationCode = async (inviationCodeId: TEntityId) => {
     const response = await APIService.delete<IInvitationCode>(
-        ` /invitation-code/${inviationCodeId}`
+        `/invitation-code/${inviationCodeId}`
     )
     return response.data
 }

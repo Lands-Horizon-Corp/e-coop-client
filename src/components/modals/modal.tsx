@@ -10,18 +10,22 @@ import {
 import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib'
-import { IBaseProps } from '@/types'
 import { ReactNode } from 'react'
+
+import { IBaseProps, IClassProps } from '@/types'
+
+export interface IModalClassNames extends DialogExtraProps, IClassProps {
+    titleClassName?: string
+    descriptionClassName?: string
+}
 
 export interface IModalProps
     extends IBaseProps,
         DialogPrimitive.DialogProps,
-        DialogExtraProps {
+        IModalClassNames {
     title?: string | ReactNode
     description?: string | ReactNode
     footer?: React.ReactNode
-    titleClassName?: string
-    descriptionClassName?: string
 }
 
 const Modal = ({

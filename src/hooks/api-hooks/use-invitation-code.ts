@@ -1,11 +1,12 @@
 import { InvitationCodeService } from '@/api-service/invitation-code-services'
 import { serverRequestErrExtractor } from '@/helpers'
 import { toBase64, withCatchAsync } from '@/utils'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { createMutationHook } from './api-hook-factory'
 import {
     IAPIFilteredPaginatedHook,
+    IAPIHook,
     IInvitationCode,
     IInvitationCodePaginated,
     IInvitationCodeRequest,
@@ -13,23 +14,36 @@ import {
     TEntityId,
 } from '@/types'
 
-export const useVerifyInvitationCode = () => {
-    return useMutation<boolean, unknown, string>({
-        mutationKey: ['verify-invitation-code'],
-        mutationFn: async (code) => {
-            const [error, response] = await withCatchAsync(
+export const useInvitationCodeByCode = ({
+    code,
+    onError,
+    onSuccess,
+    showMessage,
+    ...other
+}: IAPIHook<IInvitationCode> &
+    IQueryProps<IInvitationCode> & { code: string }) => {
+    return useQuery<IInvitationCode, string>({
+        queryKey: ['invitation-code', code],
+        queryFn: async () => {
+            const [error, data] = await withCatchAsync(
                 InvitationCodeService.verifyInvitationCode(code)
             )
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(
-                    errorMessage +
-                        ' Branch might not exist or you are not allowed to join any branches'
-                )
+                if (showMessage)
+                    toast.error(
+                        errorMessage +
+                            ' Branch might not exist or you are not allowed to join any branches'
+                    )
+                onError?.(errorMessage, error)
                 throw new Error(errorMessage)
             }
-            return response
+
+            if (showMessage) toast.success('Invitation code found')
+            onSuccess?.(data)
+            return data
         },
+        ...other,
     })
 }
 
@@ -42,7 +56,13 @@ export const useFilteredPaginatedInvitationCode = ({
 }: IAPIFilteredPaginatedHook<IInvitationCodePaginated, string> &
     IQueryProps = {}) => {
     return useQuery<IInvitationCodePaginated, string>({
-        queryKey: ['bank', 'resource-query', filterPayload, pagination, sort],
+        queryKey: [
+            'invitation-code',
+            'resource-query',
+            filterPayload,
+            pagination,
+            sort,
+        ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 InvitationCodeService.getPaginatedInvitationCode({

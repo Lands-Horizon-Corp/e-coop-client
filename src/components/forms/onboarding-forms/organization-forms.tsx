@@ -102,10 +102,9 @@ const OrganizationForm = () => {
     } = useCreateOrganization({
         onSuccess: (data: ICreateOrganizationResponse) => {
             const organizationId = data.organization.id
-            const userOrganizationId = data.user_organization.id
 
             navigate({
-                to: `/onboarding/create-branch/${userOrganizationId}/${organizationId}`,
+                to: `/onboarding/create-branch/${organizationId}`,
             })
 
             clearCategories()

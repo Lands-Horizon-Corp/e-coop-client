@@ -9,11 +9,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import FormFieldWrapper from '../ui/form-field-wrapper'
-import { useAuthUserWithOrg } from '@/store/user-auth-store'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-
-import InputDatePicker from '../date-time-pickers/input-date-picker'
 
 import {
     useCreateInvitationCode,
@@ -22,39 +19,38 @@ import {
 
 import { cn } from '@/lib/utils'
 
-import {
-    IForm,
-    IClassProps,
-    IInvitationCode,
-    IInvitationCodeRequest,
-    TEntityId,
-} from '@/types'
+import { IForm, IClassProps, IInvitationCode, TEntityId } from '@/types'
+import { stringDateSchema, userAccountTypeSchema } from '@/validations/common'
+import { setHours } from 'date-fns'
+import { toReadableDate } from '@/utils'
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+import { Label } from '../ui/label'
+import { UserIcon, UsersAddIcon } from '../icons'
 
 const InviationCodeSchema = z.object({
     code: z.string().min(1, 'invitation code is required'),
-    expiration_date: z.date().refine((date) => date !== undefined, {
-        message: 'Expiration date is Required',
-    }),
+    expiration_date: stringDateSchema,
     current_use: z.coerce.number().min(0, 'Current use cannot be negative'),
     max_use: z.coerce.number().min(0, 'Current use cannot be negative'),
     description: z.string(),
+    user_type: userAccountTypeSchema,
 })
 
-type InvitationCodeFormValues = z.infer<typeof InviationCodeSchema>
+type TInvitationCodeFormValues = z.infer<typeof InviationCodeSchema>
 
 export interface InvitationCodeFormProps
     extends IClassProps,
         IForm<
-            Partial<IInvitationCodeRequest>,
+            Partial<TInvitationCodeFormValues>,
             IInvitationCode,
             string,
-            InvitationCodeFormValues
+            TInvitationCodeFormValues
         > {
-    InvitationCodeId?: TEntityId
+    invitationCodeId?: TEntityId
 }
 
 const InvitationCodeCreateUpdateForm = ({
-    InvitationCodeId,
+    invitationCodeId,
     readOnly,
     className,
     disabledFields,
@@ -62,34 +58,22 @@ const InvitationCodeCreateUpdateForm = ({
     onSuccess,
     defaultValues,
 }: InvitationCodeFormProps) => {
-    const { currentAuth: user } = useAuthUserWithOrg()
-    const userType = user.user_organization.user_type
-    const branchId = user.user_organization.branch_id
-    const organizationId = user.user_organization.organization_id
-
-    const formDefaultValues: InvitationCodeFormValues = defaultValues
-        ? {
-              code: defaultValues.code || '',
-              expiration_date: defaultValues.expiration_date
-                  ? new Date(defaultValues.expiration_date)
-                  : new Date(),
-              current_use: defaultValues.current_use || 0,
-              max_use: defaultValues.max_use || 0,
-              description: defaultValues.description || '',
-          }
-        : {
-              max_use: 0,
-              code: '',
-              description: '',
-              current_use: 0,
-              expiration_date: new Date(),
-          }
-
-    const form = useForm<InvitationCodeFormValues>({
+    const form = useForm<TInvitationCodeFormValues>({
         resolver: zodResolver(InviationCodeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: formDefaultValues,
+        defaultValues: {
+            code: toReadableDate(new Date(), `'code'-hhmmsssyyyyMMdd`),
+            user_type: 'member',
+            current_use: 0,
+            max_use: 1,
+            description: '',
+            ...defaultValues,
+            expiration_date: toReadableDate(
+                defaultValues?.expiration_date ?? new Date(),
+                'yyyy-MM-dd'
+            ),
+        },
     })
 
     const {
@@ -107,21 +91,17 @@ const InvitationCodeCreateUpdateForm = ({
     } = useUpdateInvitationCode({ onSuccess, onError })
 
     const onSubmit = form.handleSubmit((formData) => {
-        if (!userType) {
-            onError?.('User type is not defined')
-            return
-        }
         const requestData = {
             ...formData,
-            user_type: userType,
-            branchId: branchId,
-            organizationId: organizationId,
-            expiration_date: formData.expiration_date.toISOString(),
+            expiration_date: setHours(
+                new Date(formData.expiration_date),
+                24
+            ).toISOString(),
         }
-        if (InvitationCodeId) {
+        if (invitationCodeId) {
             updateInvitationCode({
                 data: requestData,
-                invitationCodeId: InvitationCodeId,
+                invitationCodeId: invitationCodeId,
             })
         } else {
             createInvitationCode({
@@ -133,11 +113,11 @@ const InvitationCodeCreateUpdateForm = ({
     const isPending = isCreating || isUpdating
     const error = createError || updateError
 
-    const isDisabled = (field: Path<InvitationCodeFormValues>) =>
+    const isDisabled = (field: Path<TInvitationCodeFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
     const isInvitationOnChanged =
-        JSON.stringify(form.watch()) !== JSON.stringify(formDefaultValues)
+        JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
 
     return (
         <Form {...form}>
@@ -150,6 +130,92 @@ const InvitationCodeCreateUpdateForm = ({
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="user_type"
+                            label="User Type *"
+                            render={({ field }) => (
+                                <RadioGroup
+                                    value={field.value}
+                                    onValueChange={field.onChange}
+                                    disabled={isDisabled(field.name)}
+                                    className="flex items-center gap-x-3"
+                                >
+                                    <div
+                                        className={`shadow-xs relative flex w-full cursor-pointer items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out ${
+                                            field.value === 'employee'
+                                                ? 'border-primary/30 bg-primary/40'
+                                                : 'hover:border-primary/20'
+                                        }`}
+                                    >
+                                        <RadioGroupItem
+                                            value="employee"
+                                            id="employee"
+                                            className="order-1 after:absolute after:inset-0"
+                                            aria-describedby="employee-description"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <UsersAddIcon className="h-4 w-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label
+                                                    htmlFor="employee"
+                                                    className="cursor-pointer"
+                                                >
+                                                    Employee
+                                                    <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
+                                                </Label>
+                                                <p
+                                                    id="employee-description"
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    Staff member with
+                                                    administrative access and
+                                                    responsibilities.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className={`shadow-xs relative flex w-full cursor-pointer items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out ${
+                                            field.value === 'member'
+                                                ? 'border-primary/30 bg-primary/40'
+                                                : 'hover:border-primary/20'
+                                        }`}
+                                    >
+                                        <RadioGroupItem
+                                            value="member"
+                                            id="member"
+                                            className="order-1 after:absolute after:inset-0"
+                                            aria-describedby="member-description"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <UserIcon className="h-4 w-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label
+                                                    htmlFor="member"
+                                                    className="cursor-pointer"
+                                                >
+                                                    Member
+                                                    <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
+                                                </Label>
+                                                <p
+                                                    id="member-description"
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    Community member with
+                                                    standard user privileges and
+                                                    access.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </RadioGroup>
+                            )}
+                        />
                         <FormFieldWrapper
                             control={form.control}
                             name="code"
@@ -168,12 +234,11 @@ const InvitationCodeCreateUpdateForm = ({
                             label="Expiration Date"
                             render={({ field }) => {
                                 return (
-                                    <InputDatePicker
-                                        id={field.name}
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        captionLayout="dropdown-buttons"
-                                        disabled={(date) => date < new Date()}
+                                    <Input
+                                        type="date"
+                                        {...field}
+                                        value={field.value ?? ''}
+                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
                                     />
                                 )
                             }}
@@ -217,6 +282,9 @@ const InvitationCodeCreateUpdateForm = ({
                                 control={form.control}
                                 name="current_use"
                                 label="curent Use"
+                                hiddenFields={
+                                    invitationCodeId ? ['max_use'] : []
+                                }
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -259,7 +327,7 @@ const InvitationCodeCreateUpdateForm = ({
                         >
                             {isPending ? (
                                 <LoadingSpinner />
-                            ) : InvitationCodeId ? (
+                            ) : invitationCodeId ? (
                                 'Update'
                             ) : (
                                 'Create'

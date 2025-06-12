@@ -10,6 +10,8 @@ import { IInvitationCode } from '@/types'
 import InvitationCodeAction from './action'
 
 import { ColumnDef, Row } from '@tanstack/react-table'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import { toReadableDate } from '@/utils'
 
 export const InvitationCodeGlobalSearchTargets: IGlobalSearchTargets<IInvitationCode>[] =
     [
@@ -91,6 +93,31 @@ const InvitationCodeTableColumns = (
         minSize: 180,
     },
     {
+        id: 'expiry',
+        accessorKey: 'expiration_date',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Expiration Date">
+                <ColumnActions {...props}>
+                    <DateFilter
+                        displayText="Date Created"
+                        field="expiration_date"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { created_at },
+            },
+        }) => <div>{toReadableDate(created_at)}</div>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 180,
+        minSize: 180,
+    },
+    {
         id: 'description',
         accessorKey: 'description',
         header: (props) => (
@@ -162,6 +189,52 @@ const InvitationCodeTableColumns = (
         enableHiding: false,
         size: 180,
         minSize: 150,
+    },
+
+    {
+        id: 'created_at',
+        accessorKey: 'created_at',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Date Created">
+                <ColumnActions {...props}>
+                    <DateFilter displayText="Date Updated" field="created_at" />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { created_at },
+            },
+        }) => <div>{created_at ? toReadableDate(created_at) : ''}</div>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 180,
+        minSize: 180,
+    },
+
+    {
+        id: 'updated_at',
+        accessorKey: 'updated_at',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Date Updated">
+                <ColumnActions {...props}>
+                    <DateFilter displayText="Date Updated" field="updated_at" />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { updated_at },
+            },
+        }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 180,
+        minSize: 180,
     },
     {
         id: 'actions',

@@ -1,5 +1,6 @@
-import { IUserOrganization, TEntityId } from '@/types'
 import APIService from '../api-service'
+
+import { TEntityId, IUserOrganization } from '@/types'
 
 export const getUserOrganizationUserId = async (userId: TEntityId) => {
     const response = await APIService.get<IUserOrganization[]>(
@@ -81,15 +82,15 @@ export const getAllJoinRequests = async () => {
 }
 
 export const acceptJoinRequest = async (userOrganizationId: TEntityId) => {
-    const response = await APIService.put<void, IUserOrganization>(
-        `/user-organization/join-request/${userOrganizationId}/accept`
+    const response = await APIService.post<void, IUserOrganization>(
+        `/user-organization/${userOrganizationId}/accept`
     )
     return response.data
 }
 
 export const rejectJoinRequest = async (userOrganizationId: TEntityId) => {
-    const response = await APIService.put<void, IUserOrganization>(
-        `/user-organization/join-request/${userOrganizationId}/reject`
+    const response = await APIService.delete<IUserOrganization>(
+        `/user-organization/${userOrganizationId}/reject`
     )
     return response.data
 }

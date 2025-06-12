@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query'
+
 import { Button } from '@/components/ui/button'
 import KanbanTitle from '../kanban/kanban-title'
 import { Separator } from '@/components/ui/separator'
@@ -12,21 +14,64 @@ import {
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import KanbanItemsContainer from '../kanban/kanban-items-container'
 
+import { cn } from '@/lib'
 import {
     useUserOrgJoinRequests,
     useUserOrgAcceptJoinRequest,
     useUserOrgRejectJoinRequest,
 } from '@/hooks/api-hooks/use-user-organization'
 import { toReadableDate } from '@/utils'
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IClassProps, IUserOrganization } from '@/types'
-import { cn } from '@/lib'
 
 interface Props extends IClassProps {}
 
 const UserJoinRequestKanban = (_props: Props) => {
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+    const queryClient = useQueryClient()
     const { data, isPending } = useUserOrgJoinRequests()
+
+    useSubscribe<IUserOrganization>(
+        `user_organization.create.branch.${branch_id}`,
+        (newData) => {
+            queryClient.setQueryData<IUserOrganization[]>(
+                ['user-organization', 'join-request', 'all'],
+                (oldData) => {
+                    return [newData, ...(oldData ?? [])]
+                }
+            )
+        }
+    )
+
+    useSubscribe<IUserOrganization>(
+        `user_organization.update.branch.${branch_id}`,
+        () => {
+            queryClient.invalidateQueries({
+                queryKey: ['user-organization', 'join-request', 'all'],
+            })
+        }
+    )
+
+    useSubscribe<IUserOrganization>(
+        `user_organization.delete.branch.${branch_id}`,
+        (deletedData) => {
+            queryClient.setQueryData<IUserOrganization[]>(
+                ['user-organization', 'join-request', 'all'],
+                (oldData) => {
+                    return (oldData ?? []).filter(
+                        (old) => old.id !== deletedData.id
+                    )
+                }
+            )
+        }
+    )
 
     return (
         <KanbanContainer className="w-[360px]">
@@ -69,7 +114,9 @@ const JoinRequestCard = ({ userOrg }: { userOrg: IUserOrganization }) => {
                 <div className="w-full">
                     <div className="flex justify-between gap-x-2">
                         <p className="truncate">
-                            {userOrg?.user?.full_name ?? '-'}
+                            {userOrg?.user?.full_name ??
+                                userOrg?.user.user_name ??
+                                '-'}
                         </p>
                         <p className="text-xs text-muted-foreground">
                             Joining as{' '}

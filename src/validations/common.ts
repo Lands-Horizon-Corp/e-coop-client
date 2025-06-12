@@ -7,6 +7,7 @@ import {
     LETTERS_REGEX,
     NUMBER_LETTER_REGEX,
     PASSWORD_MIN_LENGTH,
+    USER_TYPE,
 } from '@/constants'
 
 export const entityIdSchema = z.coerce.string().uuid('Invalid')
@@ -25,12 +26,10 @@ export const mediaSchema = z.object({
     deleted_at: z.string().optional(),
 })
 
-const AccountTypes = ['Member', 'Owner', 'Admin', 'Employee'] as const
-
-export const userAccountTypeSchema = z.enum(AccountTypes, {
+export const userAccountTypeSchema = z.enum(USER_TYPE, {
     required_error: 'Account type is required',
-    message: `Valid options are ${AccountTypes.join(',')}`,
-    invalid_type_error: `Valid options are ${AccountTypes.join(',')}`,
+    message: `Valid options are ${USER_TYPE.join(',')}`,
+    invalid_type_error: `Valid options are ${USER_TYPE.join(',')}`,
 })
 
 export const emailSchema = z

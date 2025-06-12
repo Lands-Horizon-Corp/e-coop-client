@@ -21,9 +21,10 @@ import { flatSidebarGroupItem } from '@/components/ui/app-sidebar/app-sidebar-ut
 import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
 
 import { generateSidebarGroups } from './sidebar-routes'
-// import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 import { IBaseProps, TUserType } from '@/types'
+import { Badge } from '@/components/ui/badge'
 
 const OrgBranchSidebar = (props: IBaseProps) => {
     const router = useRouter()
@@ -34,9 +35,9 @@ const OrgBranchSidebar = (props: IBaseProps) => {
         orgname?: string
         branchname?: string
     }
-    // const {
-    //     currentAuth: { user },
-    // } = useAuthUserWithOrgBranch()
+    const {
+        currentAuth: { user_organization },
+    } = useAuthUserWithOrgBranch()
 
     const baseUrl = `/org/${orgname}/branch/${branchname}`
 
@@ -61,6 +62,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
         [memoizedSidebarRouteGroup, router]
     )
 
+    const orgLogo = user_organization.organization.media?.download_url
+
     return (
         <Sidebar variant="inset" {...props}>
             <SidebarHeader>
@@ -68,13 +71,23 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
                             <Link to={baseUrl}>
-                                <EcoopLogo className="size-9" />
+                                <EcoopLogo
+                                    lightUrl={orgLogo}
+                                    darkUrl={orgLogo}
+                                    className="size-9 rounded-md"
+                                />
                                 <div className="grid flex-1 text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">
-                                        eCOOP
+                                        {user_organization.organization.name}
                                     </span>
                                     <span className="truncate text-xs text-muted-foreground/80">
-                                        Employee
+                                        {user_organization.branch.name}{' '}
+                                        <Badge
+                                            variant="outline"
+                                            className="capitalize"
+                                        >
+                                            {user_organization.user_type}
+                                        </Badge>
                                     </span>
                                 </div>
                             </Link>

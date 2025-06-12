@@ -2,6 +2,7 @@
 
 import { toast } from 'sonner'
 import { useRouter } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
 
 import {
     GearIcon,
@@ -36,7 +37,6 @@ import { useGetCurrentUserOrganizations } from '@/hooks/api-hooks/use-user-organ
 import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
 
 import type { IUserOrganization } from '@/types'
-import { useQueryClient } from '@tanstack/react-query'
 
 const slugify = (str: string) =>
     str
@@ -44,27 +44,12 @@ const slugify = (str: string) =>
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^[-]+|[-]+$/g, '')
 
-const isActive = (userOrg: IUserOrganization, branchId?: string) => {
-    const currentUserOrg = useAuthStore.getState().currentAuth.user_organization
-
-    if (!currentUserOrg) return false
-
-    if (branchId) {
-        return currentUserOrg.branch_id === branchId
-    }
-
-    return (
-        currentUserOrg.id === userOrg.id &&
-        currentUserOrg.branch_id === userOrg.branch_id
-    )
-}
-
 const NavProfileMenu = () => {
     const router = useRouter()
     const queryClient = useQueryClient()
     const { onOpen } = useConfirmModalStore()
     const {
-        currentAuth: { user, user_organization: userOrg },
+        currentAuth: { user, user_organization: currentUserOrg },
         authStatus,
         resetAuth,
         updateCurrentAuth,
@@ -139,7 +124,7 @@ const NavProfileMenu = () => {
                         <LoadingSpinner />
                     ) : (
                         <UserAvatar
-                            className="size-full"
+                            className="size-full capitalize"
                             fallbackClassName="bg-transparent"
                             src={user.media?.download_url ?? ''}
                             fallback={user.user_name.charAt(0) ?? '-'}
@@ -155,8 +140,8 @@ const NavProfileMenu = () => {
                 <div className="p-4">
                     <div className="flex flex-col items-center space-y-2">
                         <ImageDisplay
-                            className="size-20"
-                            fallback={user.user_name}
+                            className="size-20 capitalize"
+                            fallback={user.user_name.charAt(0) ?? '-'}
                             src={user.media?.download_url}
                         />
                         <p className="text-sm font-medium leading-none">
@@ -200,12 +185,11 @@ const NavProfileMenu = () => {
                                 className="w-full"
                             >
                                 {userOrganizations.map((orgGroup, index) => {
-                                    const orgName =
-                                        orgGroup.organizationDetails.name
+                                    const orgName = orgGroup.name
 
                                     return (
                                         <AccordionItem
-                                            key={orgGroup.orgnizationId}
+                                            key={orgGroup.id}
                                             value={`org-${index}`}
                                             className="border-none"
                                         >
@@ -215,17 +199,8 @@ const NavProfileMenu = () => {
                                                     <span className="text-sm font-medium">
                                                         {orgName}
                                                     </span>
-                                                    {orgGroup.isPending !==
-                                                        'accepted' && (
-                                                        <Badge
-                                                            variant="warning"
-                                                            className="ml-auto text-xs"
-                                                        >
-                                                            Pending
-                                                        </Badge>
-                                                    )}
-                                                    {userOrg?.organization_id ===
-                                                        orgGroup.orgnizationId && (
+                                                    {currentUserOrg?.organization_id ===
+                                                        orgGroup.id && (
                                                         <Badge
                                                             variant="default"
                                                             className="bg-primary text-xs text-primary-foreground"
@@ -237,30 +212,28 @@ const NavProfileMenu = () => {
                                             </AccordionTrigger>
                                             <AccordionContent className="pb-2">
                                                 <div className="ml-4 space-y-2">
-                                                    {orgGroup.branches.length >
-                                                        0 && (
+                                                    {orgGroup.user_organizations
+                                                        .length > 0 && (
                                                         <div className="space-y-1">
                                                             <div className="px-2 text-xs font-medium text-muted-foreground">
                                                                 Branches (
                                                                 {
                                                                     orgGroup
-                                                                        .branches
+                                                                        .user_organizations
                                                                         .length
                                                                 }
                                                                 )
                                                             </div>
-                                                            {orgGroup.branches.map(
-                                                                (branch) => {
+                                                            {orgGroup.user_organizations.map(
+                                                                (userOrg) => {
                                                                     return (
                                                                         <div
                                                                             key={
-                                                                                branch.id
+                                                                                userOrg.id
                                                                             }
                                                                             className={`flex items-center justify-between rounded-md p-2 transition-colors ${
-                                                                                isActive(
-                                                                                    orgGroup.userOrganization,
-                                                                                    branch.id
-                                                                                )
+                                                                                currentUserOrg?.branch_id ===
+                                                                                userOrg.branch_id
                                                                                     ? 'border border-primary bg-primary/20'
                                                                                     : 'hover:bg-muted/50'
                                                                             }`}
@@ -270,10 +243,14 @@ const NavProfileMenu = () => {
                                                                                     <BuildingBranchIcon className="h-3 w-3 flex-shrink-0 text-muted-foreground" />
                                                                                     <span className="truncate text-xs font-medium">
                                                                                         {
-                                                                                            branch.name
+                                                                                            userOrg
+                                                                                                .branch
+                                                                                                .name
                                                                                         }
                                                                                     </span>
-                                                                                    {branch.is_main_branch && (
+                                                                                    {userOrg
+                                                                                        .branch
+                                                                                        .is_main_branch && (
                                                                                         <Badge
                                                                                             variant="outline"
                                                                                             className="text-xs"
@@ -282,7 +259,7 @@ const NavProfileMenu = () => {
                                                                                         </Badge>
                                                                                     )}
 
-                                                                                    {orgGroup.isPending !==
+                                                                                    {userOrg.application_status !==
                                                                                         'accepted' && (
                                                                                         <Badge
                                                                                             variant="warning"
@@ -294,17 +271,23 @@ const NavProfileMenu = () => {
                                                                                 </div>
                                                                                 <div className="ml-5 truncate text-xs text-muted-foreground">
                                                                                     {
-                                                                                        branch.city
+                                                                                        userOrg
+                                                                                            .branch
+                                                                                            .city
                                                                                     }
 
                                                                                     ,{' '}
                                                                                     {
-                                                                                        branch.province
+                                                                                        userOrg
+                                                                                            .branch
+                                                                                            .province
                                                                                     }
                                                                                 </div>
                                                                                 <div className="ml-5 text-xs capitalize text-muted-foreground">
                                                                                     {
-                                                                                        branch.type
+                                                                                        userOrg
+                                                                                            .branch
+                                                                                            .type
                                                                                     }
                                                                                 </div>
                                                                             </div>
@@ -312,23 +295,18 @@ const NavProfileMenu = () => {
                                                                                 <p className="text-xs text-muted-foreground">
                                                                                     as{' '}
                                                                                     {
-                                                                                        orgGroup
-                                                                                            .userOrganization
-                                                                                            .user_type
+                                                                                        userOrg.user_type
                                                                                     }
                                                                                 </p>
-                                                                                {!isActive(
-                                                                                    orgGroup.userOrganization,
-                                                                                    branch.id
-                                                                                ) && (
+                                                                                {currentUserOrg?.branch_id !==
+                                                                                    userOrg.branch_id && (
                                                                                     <Button
                                                                                         size="sm"
                                                                                         variant="outline"
                                                                                         className="ml-2 h-6 flex-shrink-0 px-2 text-xs"
                                                                                         onClick={() =>
                                                                                             handleSwitch(
-                                                                                                orgGroup.userOrganization,
-                                                                                                branch
+                                                                                                userOrg
                                                                                             )
                                                                                         }
                                                                                         disabled={
