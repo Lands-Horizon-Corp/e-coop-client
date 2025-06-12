@@ -6,5 +6,5 @@ export const signInSchema = z.object({
     password: z
         .string({ required_error: 'Password is required' })
         .min(1, 'Password is empty'),
-    accountType: userAccountTypeSchema.default('Member'),
+    accountType: userAccountTypeSchema.default('member'),
 })

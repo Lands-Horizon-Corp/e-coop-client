@@ -2,7 +2,6 @@ import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { groupBy, withCatchAsync } from '@/utils'
-import { useAuthStore } from '@/store/user-auth-store'
 import { createMutationHook } from './api-hook-factory'
 import { BranchService } from '@/api-service/branch-services'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
@@ -14,22 +13,16 @@ import {
     IQueryProps,
     IUserOrganization,
     IOperationCallbacks,
-    UserOrganizationGroup,
+    IOrgUserOrganizationGroup,
+    IMutationProps,
 } from '@/types'
 
-export const useGetUserOrganizationByUserId = () => {
-    const { currentAuth } = useAuthStore.getState()
-    const userId = currentAuth?.user?.id
-
-    return useQuery<UserOrganizationGroup[], string>({
-        queryKey: ['user-organization', 'details', userId],
-        enabled: !!userId,
+export const useGetUserOrganizationByUserId = (id: TEntityId) => {
+    return useQuery<IOrgUserOrganizationGroup[], string>({
+        queryKey: ['user-organization', id],
         queryFn: async () => {
-            if (!userId) {
-                throw new Error('User ID is missing')
-            }
             const [error, result] = await withCatchAsync(
-                UserOrganization.getUserOrganizationUserId(userId)
+                UserOrganization.getUserOrganizationUserId(id)
             )
 
             if (error || !result) {
@@ -40,22 +33,14 @@ export const useGetUserOrganizationByUserId = () => {
 
             const grouped = groupBy(result, (item) => item.organization_id)
 
-            return Object.keys(grouped).reduce<UserOrganizationGroup[]>(
+            return Object.keys(grouped).reduce<IOrgUserOrganizationGroup[]>(
                 (acc, orgKey) => {
-                    const orgGroup = grouped[orgKey]
-                    const firstItem = orgGroup?.[0]
-
-                    if (!firstItem || !firstItem.organization) return acc
+                    const userOrgs = grouped[orgKey]
+                    const userOrganization = userOrgs?.[0]
 
                     acc.push({
-                        userOrganizationId: firstItem.id,
-                        organizationDetails: firstItem.organization,
-                        branches: orgGroup
-                            .map((org) => org.branch)
-                            .filter((branch): branch is IBranch => !!branch),
-                        orgnizationId: firstItem.organization.id,
-                        isPending: firstItem.application_status,
-                        userOrganization: firstItem,
+                        ...userOrganization.organization,
+                        user_organizations: userOrgs,
                     })
 
                     return acc
@@ -63,12 +48,13 @@ export const useGetUserOrganizationByUserId = () => {
                 []
             )
         },
+        initialData: [],
     })
 }
 
 export const useGetCurrentUserOrganizations = () => {
-    return useQuery<UserOrganizationGroup[], string>({
-        queryKey: ['user-organization', 'details'],
+    return useQuery<IOrgUserOrganizationGroup[], string>({
+        queryKey: ['user-organization', 'current'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 UserOrganization.getCurrentUserOrganizations()
@@ -82,22 +68,14 @@ export const useGetCurrentUserOrganizations = () => {
 
             const grouped = groupBy(result, (item) => item.organization_id)
 
-            return Object.keys(grouped).reduce<UserOrganizationGroup[]>(
+            return Object.keys(grouped).reduce<IOrgUserOrganizationGroup[]>(
                 (acc, orgKey) => {
-                    const orgGroup = grouped[orgKey]
-                    const firstItem = orgGroup?.[0]
-
-                    if (!firstItem || !firstItem.organization) return acc
+                    const userOrgs = grouped[orgKey]
+                    const userOrganization = userOrgs?.[0]
 
                     acc.push({
-                        userOrganizationId: firstItem.id,
-                        organizationDetails: firstItem.organization,
-                        branches: orgGroup
-                            .map((org) => org.branch)
-                            .filter((branch): branch is IBranch => !!branch),
-                        orgnizationId: firstItem.organization.id,
-                        isPending: firstItem.application_status,
-                        userOrganization: firstItem,
+                        ...userOrganization.organization,
+                        user_organizations: userOrgs,
                     })
 
                     return acc
@@ -105,6 +83,7 @@ export const useGetCurrentUserOrganizations = () => {
                 []
             )
         },
+        initialData: [],
     })
 }
 
@@ -150,7 +129,8 @@ export const useJoinOrganization = ({
 export const useJoinWithCode = ({
     onSuccess,
     onError,
-}: IOperationCallbacks<IUserOrganization>) => {
+    showMessage = false,
+}: IOperationCallbacks<IUserOrganization> & IMutationProps) => {
     const queryClient = useQueryClient()
     return useMutation<IUserOrganization, string, string>({
         mutationKey: ['join-with-code'],
@@ -161,11 +141,16 @@ export const useJoinWithCode = ({
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
                 onError?.(errorMessage)
+                if (showMessage) toast.error('Failed to Join: ' + errorMessage)
                 throw errorMessage
             }
             queryClient.invalidateQueries({
                 queryKey: ['user-organization', 'details'],
             })
+            if (showMessage)
+                toast.success(
+                    `Successfully Joined on ${result.branch?.name} Branch`
+                )
             onSuccess?.(result)
             return result
         },

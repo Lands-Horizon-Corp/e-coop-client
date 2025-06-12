@@ -67,7 +67,7 @@ export const endCurrentBatch = async (data: ITransactionBatchEndRequest) => {
 
 export const getAllTransactionBatchViewRequest = async () => {
     const response = await APIService.get<ITransactionBatch[]>(
-        '/transaction-batch/view-requests'
+        '/transaction-batch/view-request'
     )
     return response.data
 }

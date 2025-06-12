@@ -10,9 +10,7 @@ import {
 } from '@/types'
 
 export const deleteEmployee = async (id: TEntityId) => {
-    const response = await APIService.delete<void>(
-        `/user-organization/employee/${id}`
-    )
+    const response = await APIService.delete<void>(`/user-organization/${id}`)
     return response.data
 }
 
@@ -50,8 +48,5 @@ export const getPaginatedEmployees = async (props?: {
 
 export const deleteManyEmployees = async (ids: TEntityId[]) => {
     const payload = { ids }
-    await APIService.delete<void>(
-        'user-organization/employee/bulk-delete',
-        payload
-    )
+    await APIService.delete<void>('user-organization/bulk-delete', payload)
 }

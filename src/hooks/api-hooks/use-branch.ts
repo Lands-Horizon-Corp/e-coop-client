@@ -1,21 +1,26 @@
-import { BranchService } from '@/api-service/branch-services'
-import { serverRequestErrExtractor } from '@/helpers'
-import { IAPIHook, IBranch, IBranchRequest, TEntityId } from '@/types'
-import { withCatchAsync } from '@/utils'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-export const useCreateBranch = (
-    { onError, onSuccess }: IAPIHook<IBranch, string>,
-    userOrganizationId: TEntityId
-) => {
+import { withCatchAsync } from '@/utils'
+import { serverRequestErrExtractor } from '@/helpers'
+import { BranchService } from '@/api-service/branch-services'
+
+import { IAPIHook, IBranch, IBranchRequest, TEntityId } from '@/types'
+
+export const useCreateBranchByOrg = ({
+    onError,
+    onSuccess,
+}: IAPIHook<IBranch, string>) => {
     const queryClient = useQueryClient()
 
-    return useMutation<IBranch, string, IBranchRequest>({
-        mutationKey: ['create-request', 'create'],
-        mutationFn: async (branchData) => {
+    return useMutation<
+        IBranch,
+        string,
+        { organizationId: TEntityId; data: IBranchRequest }
+    >({
+        mutationFn: async ({ organizationId, data }) => {
             const [error, response] = await withCatchAsync(
-                BranchService.createBranch(branchData, userOrganizationId)
+                BranchService.createBranchByOrgId(data, organizationId)
             )
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -47,7 +52,6 @@ export const useUpdateBranch = ({
         string,
         { id: TEntityId; data: IBranchRequest }
     >({
-        mutationKey: ['update-branch', 'update'],
         mutationFn: async ({ id, data }) => {
             const [error, response] = await withCatchAsync(
                 BranchService.updateBranch(id, data)
@@ -133,7 +137,6 @@ export const useDeleteBranch = ({ onSuccess }: IAPIHook<unknown, string>) => {
     const queryClient = useQueryClient()
 
     return useMutation<unknown, string, TEntityId>({
-        mutationKey: ['delete-branch-with-user-org-id'],
         mutationFn: async (branchId) => {
             const [error, result] = await withCatchAsync(
                 BranchService.deleteBranch(branchId)
