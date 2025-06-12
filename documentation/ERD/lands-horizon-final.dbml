@@ -502,7 +502,7 @@ Table invitation_code {
 
   user_type user_type [not null]
   code varchar(50) [not null, unique]
-  expiry_date timestamp
+  expiry_date timestamp [not null]
   max_use integer [default: -1] // -1 = unlimited
   current_use integer [default: 0]
 
