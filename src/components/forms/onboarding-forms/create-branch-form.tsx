@@ -5,14 +5,14 @@ import { SinglePictureUploadModal } from '@/components/single-image-uploader/sin
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import TextEditor from '@/components/text-editor'
 import MapPicker from '@/components/map-picker'
+import TextEditor from '@/components/text-editor'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 
 import {
     HouseIcon,
@@ -24,13 +24,15 @@ import {
 import {
     branchTypeEnum,
     IBranch,
-    IBranchRequest,
     IClassProps,
     IForm,
     IMedia,
     TEntityId,
 } from '@/types'
-import { useCreateBranch, useUpdateBranch } from '@/hooks/api-hooks/use-branch'
+import {
+    useCreateBranchByOrg,
+    useUpdateBranch,
+} from '@/hooks/api-hooks/use-branch'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { branchRequestSchema } from '@/validations/form-validation/branch/create-branch-schema'
 import { base64ImagetoFile } from '@/helpers'
@@ -46,8 +48,8 @@ import ImageDisplay from '@/components/image-display'
 import { useLocationInfo } from '@/hooks/use-location-info'
 import {
     Select,
-    SelectContent,
     SelectItem,
+    SelectContent,
     SelectTrigger,
 } from '@/components/ui/select'
 
@@ -55,16 +57,17 @@ type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
 
 export interface ICreateBranchFormProps
     extends IClassProps,
-        IForm<Partial<IBranchRequest>, IBranch, string>,
+        IForm<Partial<ICreateBranchSchema>, IBranch, string>,
         IModalProps {
     branchId?: TEntityId
-    useOrganizationId?: TEntityId
+    organizationId: TEntityId
 }
 
-export const CreateUpdateBranchForm = ({
+export const CreateUpdateBranchByOrgForm = ({
     branchId,
     defaultValues,
-    useOrganizationId,
+    organizationId,
+    hiddenFields,
     onSuccess,
     onError,
 }: ICreateBranchFormProps) => {
@@ -87,20 +90,17 @@ export const CreateUpdateBranchForm = ({
         mutate: createBranch,
         isPending: isPedingCreateBranch,
         error,
-    } = useCreateBranch(
-        {
-            onSuccess: (data) => {
-                toast.success('Branch created successfully')
-                form.reset()
-                onSuccess?.(data)
-            },
-            onError: (err) => {
-                toast.error(<>{err}</>)
-                onError?.(err)
-            },
+    } = useCreateBranchByOrg({
+        onSuccess: (data) => {
+            toast.success('Branch created successfully')
+            form.reset()
+            onSuccess?.(data)
         },
-        useOrganizationId as TEntityId
-    )
+        onError: (err) => {
+            toast.error(<>{err}</>)
+            onError?.(err)
+        },
+    })
 
     const { mutate: updateBranch, isPending: isLoadingUpdateBranch } =
         useUpdateBranch({
@@ -122,12 +122,11 @@ export const CreateUpdateBranchForm = ({
         const uploadedMedia = await uploadPhoto(
             base64ImagetoFile(mediaId, `bg-banner.jpg`) as File
         )
-        console.log(uploadedMedia.id)
         return uploadedMedia.id
     }
 
     const handleSubmit = async (data: ICreateBranchSchema) => {
-        if (useOrganizationId) {
+        if (organizationId) {
             if (branchId) {
                 const isMediaFromDB =
                     data.media.download_url?.startsWith('http')
@@ -144,7 +143,7 @@ export const CreateUpdateBranchForm = ({
                     ...data,
                     media_id: mediaId,
                 }
-                createBranch(request)
+                createBranch({ data: request, organizationId })
             }
         } else {
             console.error('Organization ID is missing.')
@@ -343,8 +342,9 @@ export const CreateUpdateBranchForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 name="is_main_branch"
-                                label="Set as Main Branch"
                                 className="col-span-2"
+                                label="Set as Main Branch"
+                                hiddenFields={hiddenFields}
                                 render={({ field }) => {
                                     return (
                                         <GradientBackground gradientOnly>
@@ -597,11 +597,9 @@ export const CreateUpdateFormFormModal = ({
     description = 'Fill out the form to add new branch',
     className,
     formProps,
-    useOrganizationId,
     ...props
 }: IModalProps & {
-    formProps?: Omit<ICreateBranchFormProps, 'className' | 'useOrganizationId'>
-    useOrganizationId?: TEntityId
+    formProps: Omit<ICreateBranchFormProps, 'className' | 'useOrganizationId'>
 }) => {
     return (
         <Modal
@@ -610,8 +608,7 @@ export const CreateUpdateFormFormModal = ({
             className={cn('max-w-[75rem] p-10', className)}
             {...props}
         >
-            <CreateUpdateBranchForm
-                useOrganizationId={useOrganizationId}
+            <CreateUpdateBranchByOrgForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
