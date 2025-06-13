@@ -1,9 +1,12 @@
 import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
 
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+} from './api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from './api-hook-factory'
 import * as TimesheetService from '@/api-service/timesheet-service'
 
 import {
@@ -129,4 +132,8 @@ export const useTimeInOut = createMutationHook<
     ITimesheet,
     string,
     ITimesheetInOutRequest
->((data) => TimesheetService.timeInOut(data), 'Timesheet has been save.')
+>(
+    (data) => TimesheetService.timeInOut(data),
+    'Timesheet has been save.',
+    (args) => createMutationInvalidateFn('timesheet', args)
+)

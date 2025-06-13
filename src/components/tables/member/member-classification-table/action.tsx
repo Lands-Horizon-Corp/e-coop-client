@@ -1,21 +1,22 @@
 import { useState } from 'react'
-import { IMemberClassificationTableActionComponentProp } from '../columns'
+
+import { IMemberClassificationTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+import { MemberClassificationCreateUpdateFormModal } from '@/components/forms/member-forms/member-classification-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberClassification } from '@/hooks/api-hooks/member/use-member-classification'
-import { MemberClassificationCreateUpdateFormModal } from '@/components/forms/member-forms/member-classification-create-update-form'
 
-interface IMemberClassificationTableOwnerActionProps
+interface IMemberClassificationTableActionProps
     extends IMemberClassificationTableActionComponentProp {
     onMemberClassificationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const MemberClassificationTableOwnerAction = ({
+const MemberClassificationTableAction = ({
     row,
     onDeleteSuccess,
-}: IMemberClassificationTableOwnerActionProps) => {
+}: IMemberClassificationTableActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
     const memberClassification = row.original
 
@@ -72,4 +73,4 @@ const MemberClassificationTableOwnerAction = ({
     )
 }
 
-export default MemberClassificationTableOwnerAction
+export default MemberClassificationTableAction

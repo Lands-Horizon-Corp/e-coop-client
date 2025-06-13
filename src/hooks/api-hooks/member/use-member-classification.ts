@@ -1,11 +1,13 @@
-import {
-    useQuery,
-    useMutation,
-    queryOptions,
-    useQueryClient,
-} from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useQuery, queryOptions } from '@tanstack/react-query'
 
+import {
+    createQueryHook,
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberClassificationService from '@/api-service/member-services/member-classification-service'
@@ -14,8 +16,6 @@ import {
     IAPIHook,
     TEntityId,
     IQueryProps,
-    IMutationProps,
-    IOperationCallbacks,
     IMemberClassification,
     IAPIFilteredPaginatedHook,
     IMemberClassificationRequest,
@@ -35,137 +35,52 @@ export const memberClassificationLoader = (classificationId: TEntityId) =>
         retry: 0,
     })
 
-export const useCreateMemberClassification = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: IAPIHook<IMemberClassification, string> & IMutationProps) => {
-    const queryClient = useQueryClient()
+export const useCreateMemberClassification = createMutationHook<
+    IMemberClassification,
+    string,
+    IMemberClassificationRequest
+>(
+    (args) => MemberClassificationService.createMemberClassification(args),
+    'Member Center Created',
+    (args) => createMutationInvalidateFn('member-center', args)
+)
 
-    return useMutation<
-        IMemberClassification,
-        string,
-        IMemberClassificationRequest
-    >({
-        mutationKey: ['member-classification', 'create'],
-        mutationFn: async (data) => {
-            const [error, newClassification] = await withCatchAsync(
-                MemberClassificationService.createMemberClassification(data)
-            )
+export const useUpdateMemberClassification = createMutationHook<
+    IMemberClassification,
+    string,
+    { classificationId: TEntityId; data: IMemberClassificationRequest }
+>(
+    ({ classificationId, data }) =>
+        MemberClassificationService.updateMemberClassification(
+            classificationId,
+            data
+        ),
+    'Member Classification Updated',
+    (args) => updateMutationInvalidationFn('member-classification', args)
+)
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
+export const useDeleteMemberClassification = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (classificationId) =>
+        MemberClassificationService.deleteMemberClassification(
+            classificationId
+        ),
+    'Member Classifcation Deleted',
+    (args) => deleteMutationInvalidationFn('member-classification', args)
+)
 
-            queryClient.invalidateQueries({
-                queryKey: ['member-classification', 'resource-query'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['member-classification', newClassification.id],
-            })
-            queryClient.removeQueries({
-                queryKey: [
-                    'member-classification',
-                    'loader',
-                    newClassification.id,
-                ],
-            })
-
-            if (showMessage) toast.success('New Member Classification Created')
-            onSuccess?.(newClassification)
-
-            return newClassification
-        },
-    })
-}
-
-export const useUpdateMemberClassification = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: IAPIHook<IMemberClassification, string> & IMutationProps) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberClassification,
-        string,
-        { classificationId: TEntityId; data: IMemberClassificationRequest }
-    >({
-        mutationKey: ['member-classification', 'update'],
-        mutationFn: async ({ classificationId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberClassificationService.updateMemberClassification(
-                    classificationId,
-                    data
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-classification', 'resource-query'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['member-classification', classificationId],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-classification', 'loader', classificationId],
-            })
-
-            if (showMessage) toast.success('Member Classification updated')
-            onSuccess?.(result)
-
-            return result
-        },
-    })
-}
-
-export const useDeleteMemberClassification = ({
-    showMessage = true,
-    onError,
-    onSuccess,
-}: IOperationCallbacks & Omit<IQueryProps, 'enabled'>) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<void, string, TEntityId>({
-        mutationKey: ['member-classification', 'delete'],
-        mutationFn: async (classificationId) => {
-            const [error] = await withCatchAsync(
-                MemberClassificationService.deleteMemberClassification(
-                    classificationId
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-classification', 'resource-query'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['member-classification', classificationId],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-classification', 'loader', classificationId],
-            })
-
-            if (showMessage) toast.success('Member Classification deleted')
-            onSuccess?.(undefined)
-        },
-    })
-}
+export const useMemberTypes = createQueryHook<
+    IMemberClassification[],
+    string,
+    IQueryProps & IAPIHook<IMemberClassification[]>
+>(
+    ['member-classification', 'all'],
+    () => MemberClassificationService.getMemberClassifications(),
+    []
+)
 
 export const useFilteredPaginatedMemberClassifications = ({
     sort,
@@ -206,31 +121,6 @@ export const useFilteredPaginatedMemberClassifications = ({
             totalPage: 1,
             ...pagination,
         },
-        enabled,
-        retry: 1,
-    })
-}
-
-export const useMemberClassifications = ({
-    enabled,
-    showMessage,
-}: IAPIHook<IMemberClassification[], string> & IQueryProps = {}) => {
-    return useQuery<IMemberClassification[], string>({
-        queryKey: ['member-classification', 'resource-query', 'all'],
-        queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                MemberClassificationService.getMemberClassifications()
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                throw errorMessage
-            }
-
-            return result
-        },
-        initialData: [],
         enabled,
         retry: 1,
     })

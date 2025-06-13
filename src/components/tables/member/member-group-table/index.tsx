@@ -147,7 +147,7 @@ const MemberGroupTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['group', 'resource-query'],
+                                queryKey: ['member-group', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
                             MemberGroupService.deleteMany(

@@ -1,22 +1,22 @@
 import { useState } from 'react'
 
-import { IMemberOccupationTableActionComponentProp } from '../columns'
+import { IMemberOccupationTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { MemberOccupationCreateUpdateFormModal } from '@/components/forms/member-forms/member-occupation-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberOccupation } from '@/hooks/api-hooks/member/use-member-occupation'
 
-interface IMemberOccupationTableOwnerActionProps
+interface IMemberOccupationTableActionProps
     extends IMemberOccupationTableActionComponentProp {
     onMemberOccupationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const MemberOccupationTableOwnerAction = ({
+const MemberOccupationTableAction = ({
     row,
     onDeleteSuccess,
-}: IMemberOccupationTableOwnerActionProps) => {
+}: IMemberOccupationTableActionProps) => {
     const [updateModalForm, setUpdateModalForm] = useState(false)
     const memberOccupation = row.original
 
@@ -74,4 +74,4 @@ const MemberOccupationTableOwnerAction = ({
     )
 }
 
-export default MemberOccupationTableOwnerAction
+export default MemberOccupationTableAction

@@ -298,29 +298,30 @@ const NavProfileMenu = () => {
                                                                                         userOrg.user_type
                                                                                     }
                                                                                 </p>
-                                                                                {currentUserOrg?.branch_id !==
-                                                                                    userOrg.branch_id && (
-                                                                                    <Button
-                                                                                        size="sm"
-                                                                                        variant="outline"
-                                                                                        className="ml-2 h-6 flex-shrink-0 px-2 text-xs"
-                                                                                        onClick={() =>
-                                                                                            handleSwitch(
-                                                                                                userOrg
-                                                                                            )
-                                                                                        }
-                                                                                        disabled={
-                                                                                            isLoading
-                                                                                        }
-                                                                                    >
-                                                                                        Switch
-                                                                                        {isLoading ? (
-                                                                                            <LoadingSpinner className="ml-1 h-3 w-3" />
-                                                                                        ) : (
-                                                                                            <ArrowRightIcon className="ml-1 h-3 w-3" />
-                                                                                        )}
-                                                                                    </Button>
-                                                                                )}
+
+                                                                                <Button
+                                                                                    size="sm"
+                                                                                    variant="outline"
+                                                                                    className="ml-2 h-6 flex-shrink-0 px-2 text-xs"
+                                                                                    onClick={() =>
+                                                                                        handleSwitch(
+                                                                                            userOrg
+                                                                                        )
+                                                                                    }
+                                                                                    disabled={
+                                                                                        isLoading
+                                                                                    }
+                                                                                >
+                                                                                    {currentUserOrg?.branch_id ===
+                                                                                    userOrg.branch_id
+                                                                                        ? 'Go'
+                                                                                        : 'Switch'}
+                                                                                    {isLoading ? (
+                                                                                        <LoadingSpinner className="ml-1 h-3 w-3" />
+                                                                                    ) : (
+                                                                                        <ArrowRightIcon className="ml-1 h-3 w-3" />
+                                                                                    )}
+                                                                                </Button>
                                                                             </div>
                                                                         </div>
                                                                     )

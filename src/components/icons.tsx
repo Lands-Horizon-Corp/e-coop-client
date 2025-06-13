@@ -207,6 +207,7 @@ import {
     IoReturnDownBackOutline as BackIcon,
     IoLocation as PinLocationIcon,
     IoLanguage as LanguageIcon,
+    IoKeySharp as KeySharpIcon,
 } from 'react-icons/io5'
 
 import {
@@ -406,6 +407,7 @@ export {
     FileFillIcon,
     UsersAddIcon,
     TreeCityIcon,
+    KeySharpIcon,
     MoneyBagIcon,
     HandCoinsIcon,
     MapMarkedIcon,

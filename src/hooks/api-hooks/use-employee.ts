@@ -14,7 +14,10 @@ import {
     IAPIFilteredPaginatedHook,
     IUserOrganizationPaginated,
 } from '@/types'
-import { createMutationHook } from './api-hook-factory'
+import {
+    createMutationHook,
+    deleteMutationInvalidationFn,
+} from './api-hook-factory'
 
 export const useEmployees = ({
     enabled,
@@ -88,5 +91,6 @@ export const useFilteredPaginatedEmployees = ({
 
 export const useDeleteEmployee = createMutationHook<void, string, TEntityId>(
     (vars) => UserOrganizationService.deleteEmployee(vars),
-    'User deleted.'
+    'User deleted.',
+    (args) => deleteMutationInvalidationFn('employee', args)
 )
