@@ -11,7 +11,7 @@ import InvitationCodeAction from './action'
 
 import { ColumnDef, Row } from '@tanstack/react-table'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
-import { toReadableDate } from '@/utils'
+import { toReadableDate, toReadableDateShort } from '@/utils'
 
 export const InvitationCodeGlobalSearchTargets: IGlobalSearchTargets<IInvitationCode>[] =
     [
@@ -107,9 +107,13 @@ const InvitationCodeTableColumns = (
         ),
         cell: ({
             row: {
-                original: { created_at },
+                original: { expiration_date },
             },
-        }) => <div>{toReadableDate(created_at)}</div>,
+        }) => (
+            <div>
+                {expiration_date ? toReadableDateShort(expiration_date) : ''}
+            </div>
+        ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,

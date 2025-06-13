@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 // import { ArrowTrendUpIcon } from '@/components/icons'
-import { IMemberTypeTableActionComponentProp } from '../columns'
+import { IMemberTypeTableActionComponentProp } from './columns'
 // import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
@@ -12,18 +13,17 @@ import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberType } from '@/hooks/api-hooks/member/use-member-type'
-import { useQueryClient } from '@tanstack/react-query'
 
-interface IMemberTypeTableOwnerActionProps
+interface IMemberTypeTableActionProps
     extends IMemberTypeTableActionComponentProp {
     onMemberTypeUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
-const MemberTypeTableOwnerAction = ({
+const MemberTypeTableAction = ({
     row,
     onDeleteSuccess,
-}: IMemberTypeTableOwnerActionProps) => {
+}: IMemberTypeTableActionProps) => {
     const queryClient = useQueryClient()
     const [updateModalForm, setUpdateModalForm] = useState(false)
     // const [createModalForm, setCreateModalForm] = useState(false)
@@ -46,19 +46,6 @@ const MemberTypeTableOwnerAction = ({
                         defaultValues: memberType,
                         onSuccess: () => {
                             setUpdateModalForm(false)
-                            queryClient.invalidateQueries({
-                                queryKey: ['member-type', 'resource-query'],
-                            })
-                            queryClient.invalidateQueries({
-                                queryKey: ['member-type'],
-                            })
-                            queryClient.removeQueries({
-                                queryKey: [
-                                    'member-type',
-                                    'loader',
-                                    memberType.id,
-                                ],
-                            })
                         },
                     }}
                     title="Update Member Type"
@@ -126,4 +113,4 @@ const MemberTypeTableOwnerAction = ({
     )
 }
 
-export default MemberTypeTableOwnerAction
+export default MemberTypeTableAction
