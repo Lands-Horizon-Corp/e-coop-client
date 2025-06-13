@@ -2,7 +2,6 @@ import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
 
 import {
-    createQueryHook,
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
@@ -13,6 +12,7 @@ import { serverRequestErrExtractor } from '@/helpers'
 import * as HolidayService from '@/api-service/holiday-service'
 
 import {
+    IAPIHook,
     IHoliday,
     TEntityId,
     IQueryProps,
@@ -51,11 +51,30 @@ export const useDeleteHoliday = createMutationHook<void, string, TEntityId>(
 )
 
 // Get all holidays
-export const useHolidays = createQueryHook<IHoliday[], string>(
-    ['holiday', 'resource-query', 'all'],
-    () => HolidayService.getAllHolidays(),
-    []
-)
+export const useMemberClassifications = ({
+    enabled,
+    showMessage,
+}: IAPIHook<IHoliday[], string> & IQueryProps = {}) => {
+    return useQuery<IHoliday[], string>({
+        queryKey: ['holiday', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                HolidayService.getAllHolidays()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
 
 // Paginated/filtered holidays
 export const useFilteredPaginatedHolidays = ({
