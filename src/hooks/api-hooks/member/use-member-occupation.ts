@@ -2,7 +2,6 @@ import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
 
 import {
-    createQueryHook,
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
@@ -13,7 +12,9 @@ import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberOccupationService from '@/api-service/member-services/member-occupation-service'
 
 import {
+    IAPIHook,
     TEntityId,
+    IQueryProps,
     IMemberOccupation,
     IMemberOccupationRequest,
     IAPIFilteredPaginatedHook,
@@ -52,14 +53,30 @@ export const useDeleteMemberOccupation = createMutationHook<
     (args) => deleteMutationInvalidationFn('member-occupation', args)
 )
 
-export const useMemberOccupations = createQueryHook<
-    IMemberOccupation[],
-    string
->(
-    ['member-occupation', 'all'],
-    () => MemberOccupationService.getAllMemberOccupation(),
-    []
-)
+export const useMemberOccupations = ({
+    enabled,
+    showMessage,
+}: IAPIHook<IMemberOccupation[], string> & IQueryProps = {}) => {
+    return useQuery<IMemberOccupation[], string>({
+        queryKey: ['member-occupation', 'resource-query', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberOccupationService.getAllMemberOccupation()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
 
 export const useFilteredPaginatedMemberOccupations = ({
     sort,

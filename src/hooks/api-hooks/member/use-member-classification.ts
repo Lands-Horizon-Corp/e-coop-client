@@ -2,7 +2,6 @@ import { toast } from 'sonner'
 import { useQuery, queryOptions } from '@tanstack/react-query'
 
 import {
-    createQueryHook,
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
@@ -72,15 +71,30 @@ export const useDeleteMemberClassification = createMutationHook<
     (args) => deleteMutationInvalidationFn('member-classification', args)
 )
 
-export const useMemberTypes = createQueryHook<
-    IMemberClassification[],
-    string,
-    IQueryProps & IAPIHook<IMemberClassification[]>
->(
-    ['member-classification', 'all'],
-    () => MemberClassificationService.getMemberClassifications(),
-    []
-)
+export const useMemberClassifications = ({
+    enabled,
+    showMessage,
+}: IAPIHook<IMemberClassification[], string> & IQueryProps = {}) => {
+    return useQuery<IMemberClassification[], string>({
+        queryKey: ['member-classification', 'resource-query', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberClassificationService.getMemberClassifications()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
 
 export const useFilteredPaginatedMemberClassifications = ({
     sort,
