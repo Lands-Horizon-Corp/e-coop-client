@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 // import { ArrowTrendUpIcon } from '@/components/icons'
 import { IMemberTypeTableActionComponentProp } from './columns'
@@ -24,7 +23,6 @@ const MemberTypeTableAction = ({
     row,
     onDeleteSuccess,
 }: IMemberTypeTableActionProps) => {
-    const queryClient = useQueryClient()
     const [updateModalForm, setUpdateModalForm] = useState(false)
     // const [createModalForm, setCreateModalForm] = useState(false)
     // const [viewReferencesTable, setViewReferencesTable] = useState(false)
@@ -44,9 +42,6 @@ const MemberTypeTableAction = ({
                     formProps={{
                         memberTypeId: memberType.id,
                         defaultValues: memberType,
-                        onSuccess: () => {
-                            setUpdateModalForm(false)
-                        },
                     }}
                     title="Update Member Type"
                     description="Modify/Update members type..."
