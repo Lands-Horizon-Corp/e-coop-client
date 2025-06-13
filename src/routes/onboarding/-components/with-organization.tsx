@@ -1,7 +1,12 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import PlainTextEditor from '@/components/plain-text-editor'
-import { GearIcon, PinLocationIcon } from '@/components/icons'
+import {
+    BuildingIcon,
+    GearIcon,
+    PinLocationIcon,
+    PlusIcon,
+} from '@/components/icons'
 import { StatusBadge } from '@/components/status-badge'
 import { Button } from '@/components/ui/button'
 
@@ -75,8 +80,9 @@ const WithOrganization = ({
                     onClick={() => {
                         handleProceedToSetupOrg(navigate)
                     }}
-                    className={cn('w-[300px] rounded-xl')}
+                    className={cn('w-[300px] gap-x-2 rounded-xl')}
                 >
+                    <PlusIcon />
                     Create your own Organization
                 </Button>
                 <Button
@@ -84,8 +90,9 @@ const WithOrganization = ({
                     onClick={() => {
                         navigate({ to: '/onboarding/organization' })
                     }}
-                    className={cn('w-[300px] rounded-xl')}
+                    className={cn('w-[300px] gap-x-2 rounded-xl')}
                 >
+                    <BuildingIcon />
                     Join an Organization
                 </Button>
             </div>

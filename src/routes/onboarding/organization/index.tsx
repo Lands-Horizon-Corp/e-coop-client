@@ -4,7 +4,7 @@ import { createFileRoute, useSearch } from '@tanstack/react-router'
 import { useOrganizations } from '@/hooks/api-hooks/use-organization'
 
 import { Button } from '@/components/ui/button'
-import { CodeSandBox } from '@/components/icons'
+import { QrCodeIcon } from '@/components/icons'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import OrganizationItem from '../-components/-organization-list/organization-item'
 import OrganizationItemSkeleton from '@/components/Skeleton/organization-item-skeleton'
@@ -75,7 +75,7 @@ function RouteComponent() {
                     onClick={() => setOpenJoinWithCodeModal(true)}
                 >
                     Join with Code
-                    <CodeSandBox className="ml-2" />
+                    <QrCodeIcon className="ml-2" />
                 </Button>
             </div>
             <div className="w-full py-2">
