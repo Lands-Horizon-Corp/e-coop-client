@@ -19,20 +19,17 @@ const TEntityIdSchema = z.string().min(1, 'Name is required')
 
 export enum AccountExclusiveSettingTypeEnum {
     None = 'None',
-    IsInternal = 'IsInternal',
-    CashOnHand = 'CashOnHand',
-    PaidUpShareCapital = 'PaidUpShareCapital',
+    IsInternal = 'Is Internal',
+    CashOnHand = 'Cash on Hand',
+    PaidUpShareCapital = 'Paid up share capital',
 }
 
 export const IAccountRequestSchema = z.object({
-    organization_id: TEntityIdSchema,
-    branch_id: TEntityIdSchema,
-
     general_ledger_definition_id: TEntityIdSchema.optional(),
     financial_statement_definition_id: TEntityIdSchema.optional(),
     account_classification_id: TEntityIdSchema.optional(),
     account_category_id: TEntityIdSchema.optional(),
-    member_type_id: TEntityIdSchema,
+    member_type_id: TEntityIdSchema.optional(),
 
     name: z.string().min(1, 'Name is required'),
     description: z.string().min(1, 'Description is required'),
