@@ -2,7 +2,6 @@ import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
 
 import {
-    createQueryHook,
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
@@ -13,6 +12,7 @@ import { serverRequestErrExtractor } from '@/helpers'
 import * as GenderService from '@/api-service/member-services/member-gender-service'
 
 import {
+    IAPIHook,
     TEntityId,
     IQueryProps,
     IMemberGender,
@@ -47,11 +47,30 @@ export const useDeleteGender = createMutationHook<void, string, TEntityId>(
     (args) => deleteMutationInvalidationFn('member-gender', args)
 )
 
-export const useGenders = createQueryHook<IMemberGender[], string>(
-    ['gender', 'all'],
-    () => GenderService.getAllMemberGenders(),
-    []
-)
+export const useGenders = ({
+    enabled,
+    showMessage = true,
+}: IAPIHook<IMemberGender[], string> & IQueryProps = {}) => {
+    return useQuery<IMemberGender[], string>({
+        queryKey: ['gender', 'resource-query', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                GenderService.getAllMemberGenders()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
 
 export const useFilteredPaginatedGenders = ({
     sort,
