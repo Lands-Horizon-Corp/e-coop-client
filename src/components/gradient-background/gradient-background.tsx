@@ -1,8 +1,10 @@
-import { useRandomGradient } from '@/hooks/use-random-gradient'
-import { memo } from 'react'
-import SafeImage from '../safe-image'
 import { cn } from '@/lib'
+import React, { memo } from 'react'
+
+import SafeImage from '../safe-image'
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
+
+import { useRandomGradient } from '@/hooks/use-random-gradient'
 
 export const colorPalette = [
     '#073B3A', // Midnight green
@@ -11,6 +13,16 @@ export const colorPalette = [
     '#6BBF59', // Mantis
     '#21D375', // Emerald
 ]
+interface GradientBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
+    className?: string
+    children: React.ReactNode
+    gradientColor?: string
+    opacity?: number
+    mediaUrl?: string
+    gradientOnly?: boolean
+    imageBackgroundOpacity?: number
+    colorPalettes?: string[]
+}
 
 export const getRandomGradient = (colors: string[]): string => {
     if (colors.length < 2) {
@@ -40,15 +52,7 @@ export const getRandomGradient = (colors: string[]): string => {
 
     return `linear-gradient(${randomDirection}, ${'#FFFFFF00'}, ${color2})`
 }
-type GradientBackgroundProps = {
-    className?: string
-    children: React.ReactNode
-    gradientColor?: string
-    opacity?: number
-    mediaUrl?: string
-    gradientOnly?: boolean
-    imageBackgroundOpacity?: number
-}
+
 export const GradientBackground = memo(
     ({
         children,
@@ -58,9 +62,10 @@ export const GradientBackground = memo(
         gradientOnly = false,
         imageBackgroundOpacity = 0.5,
         className,
+        colorPalettes = colorPalette,
         ...props
     }: GradientBackgroundProps) => {
-        const randomGradient = useRandomGradient()
+        const randomGradient = useRandomGradient(colorPalettes)
         return (
             <div
                 {...props}

@@ -87,7 +87,12 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
         }
 
         return (
-            <div className={cn('w-full space-y-2', className)}>
+            <div
+                className={cn(
+                    `relative w-full after:absolute after:top-0 after:size-full after:rounded-lg after:bg-background/20 after:content-[''] ${disabled ? 'cursor-not-allowed after:block after:blur-sm' : 'after:hidden'}`,
+                    className
+                )}
+            >
                 {showToolbar && editor && (
                     <Toolbar
                         editor={editor}
