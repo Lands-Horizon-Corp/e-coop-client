@@ -36,7 +36,7 @@ export const useInvitationCodeByCode = ({
                             ' Branch might not exist or you are not allowed to join any branches'
                     )
                 onError?.(errorMessage, error)
-                throw new Error(errorMessage)
+                throw errorMessage
             }
 
             if (showMessage) toast.success('Invitation code found')

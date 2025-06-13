@@ -1,168 +1,65 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useQuery } from '@tanstack/react-query'
 
+import {
+    createQueryHook,
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberOccupationService from '@/api-service/member-services/member-occupation-service'
 
 import {
-    IAPIHook,
-    IQueryProps,
-    IMutationProps,
-    IOperationCallbacks,
-    IAPIFilteredPaginatedHook,
     TEntityId,
     IMemberOccupation,
     IMemberOccupationRequest,
+    IAPIFilteredPaginatedHook,
     IMemberOccupationPaginated,
 } from '@/types'
 
-export const useCreateMemberOccupation = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: IAPIHook<IMemberOccupation, string> & IMutationProps) => {
-    const queryClient = useQueryClient()
+export const useCreateMemberOccupation = createMutationHook<
+    IMemberOccupation,
+    string,
+    IMemberOccupationRequest
+>(
+    (data) => MemberOccupationService.createMemberOccupation(data),
+    'Member Occupation Created',
+    (args) => createMutationInvalidateFn('member-occupation', args)
+)
 
-    return useMutation<IMemberOccupation, string, IMemberOccupationRequest>({
-        mutationKey: ['member-occupation', 'create'],
-        mutationFn: async (data) => {
-            const [error, newOccupation] = await withCatchAsync(
-                MemberOccupationService.createMemberOccupation(data)
-            )
+export const useUpdateMemberOccupation = createMutationHook<
+    IMemberOccupation,
+    string,
+    { occupationId: TEntityId; data: IMemberOccupationRequest }
+>(
+    ({ occupationId, data }) =>
+        MemberOccupationService.updateMemberOccupation(occupationId, data),
+    'Member Occupation Updated',
+    (args) => updateMutationInvalidationFn('member-occupation', args)
+)
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
+export const useDeleteMemberOccupation = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (occupationId) =>
+        MemberOccupationService.removeMemberOccupation(occupationId),
+    'Member Occupation Deleted',
+    (args) => deleteMutationInvalidationFn('member-occupation', args)
+)
 
-            queryClient.invalidateQueries({
-                queryKey: ['member-occupation', 'resource-query'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['member-occupation', newOccupation.id],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-occupation', 'loader', newOccupation.id],
-            })
-
-            if (showMessage) toast.success('New Member Occupation Created')
-            onSuccess?.(newOccupation)
-
-            return newOccupation
-        },
-    })
-}
-
-export const useUpdateMemberOccupation = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: IAPIHook<IMemberOccupation, string> & IMutationProps) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberOccupation,
-        string,
-        { occupationId: TEntityId; data: IMemberOccupationRequest }
-    >({
-        mutationKey: ['member-occupation', 'update'],
-        mutationFn: async ({ occupationId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberOccupationService.updateMemberOccupation(
-                    occupationId,
-                    data
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-occupation', 'resource-query'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['member-occupation', occupationId],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-occupation', 'loader', occupationId],
-            })
-
-            if (showMessage) toast.success('Member Occupation updated')
-            onSuccess?.(result)
-
-            return result
-        },
-    })
-}
-
-export const useDeleteMemberOccupation = ({
-    showMessage = true,
-    onError,
-    onSuccess,
-}: IOperationCallbacks & Omit<IQueryProps, 'enabled'>) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<void, string, TEntityId>({
-        mutationKey: ['member-occupation', 'delete'],
-        mutationFn: async (occupationId) => {
-            const [error] = await withCatchAsync(
-                MemberOccupationService.removeMemberOccupation(occupationId)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-occupation', 'resource-query'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['member-occupation', occupationId],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-occupation', 'loader', occupationId],
-            })
-
-            if (showMessage) toast.success('Member Occupation deleted')
-            onSuccess?.(undefined)
-        },
-    })
-}
-
-export const useMemberOccupations = ({
-    enabled,
-    showMessage,
-}: IAPIHook<IMemberOccupation[], string> & IQueryProps = {}) => {
-    return useQuery<IMemberOccupation[], string>({
-        queryKey: ['member-occupation', 'resource-query', 'all'],
-        queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                MemberOccupationService.getAllMemberOccupation()
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                throw errorMessage
-            }
-
-            return result
-        },
-        initialData: [],
-        enabled,
-        retry: 1,
-    })
-}
+export const useMemberOccupations = createQueryHook<
+    IMemberOccupation[],
+    string
+>(
+    ['member-occupation', 'all'],
+    () => MemberOccupationService.getAllMemberOccupation(),
+    []
+)
 
 export const useFilteredPaginatedMemberOccupations = ({
     sort,

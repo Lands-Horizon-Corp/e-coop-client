@@ -6,18 +6,16 @@ import { serverRequestErrExtractor } from '@/helpers'
 import * as OrganizationService from '@/api-service/organization-services/organization-service'
 
 import {
+    IAPIHook,
     TEntityId,
+    IQueryProps,
     IOrganization,
+    IOperationCallbacks,
     IOrganizationRequest,
     IOrganizationPaginated,
+    IAPIFilteredPaginatedHook,
     ICreateOrganizationResponse,
 } from '@/types'
-import {
-    IAPIHook,
-    IQueryProps,
-    IOperationCallbacks,
-    IAPIFilteredPaginatedHook,
-} from '@/types/api-hooks-types'
 
 export const useCreateOrganization = ({
     showMessage = true,
