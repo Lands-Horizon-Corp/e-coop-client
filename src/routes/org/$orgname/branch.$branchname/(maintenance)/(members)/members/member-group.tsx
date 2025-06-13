@@ -1,9 +1,14 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
+
 import PageContainer from '@/components/containers/page-container'
-import { MemberGroupCreateUpdateFormModal } from '@/components/forms/member-forms/member-group-create-update-form'
 import MemberGroupTable from '@/components/tables/member/member-group-table'
 import MemberGroupTableAction from '@/components/tables/member/member-group-table/member-group-table-action'
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { MemberGroupCreateUpdateFormModal } from '@/components/forms/member-forms/member-group-create-update-form'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useModalState } from '@/hooks/use-modal-state'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
@@ -12,22 +17,39 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const [modalState, setModalState] = useState(false)
+    const createModal = useModalState()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+    const queryClient = useQueryClient()
+
+    useSubscribe(`member_group.created.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-group', 'resource-query'],
+        })
+    })
+
+    useSubscribe(`member_group.updated.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-group', 'resource-query'],
+        })
+    })
+
+    useSubscribe(`member_group.deleted.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-group', 'resource-query'],
+        })
+    })
+
     return (
         <PageContainer>
-            <MemberGroupCreateUpdateFormModal
-                open={modalState}
-                onOpenChange={setModalState}
-                formProps={{
-                    onSuccess() {
-                        setModalState(false)
-                    },
-                }}
-            />
+            <MemberGroupCreateUpdateFormModal {...createModal} />
             <MemberGroupTable
                 toolbarProps={{
                     createActionProps: {
-                        onClick: () => setModalState(true),
+                        onClick: () => createModal.onOpenChange(true),
                     },
                 }}
                 actionComponent={(prop) => <MemberGroupTableAction {...prop} />}

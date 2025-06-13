@@ -5,7 +5,10 @@ import PageContainer from '@/components/containers/page-container'
 import HolidayTableAction from '@/components/tables/holidays-table/action'
 import { BankCreateUpdateFormModal } from '@/components/forms/bank-create-update-form'
 
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useQueryClient } from '@tanstack/react-query'
 import { useModalState } from '@/hooks/use-modal-state'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
@@ -14,7 +17,31 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const createModal = useModalState()
+    const queryClient = useQueryClient()
+    const createModal = useModalState(false)
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+
+    useSubscribe(`holiday.created.branch.${branch_id}`, () =>
+        queryClient.invalidateQueries({
+            queryKey: ['holiday', 'resource-query'],
+        })
+    )
+
+    useSubscribe(`bills_and_coins.updated.branch.${branch_id}`, () =>
+        queryClient.invalidateQueries({
+            queryKey: ['holiday', 'resource-query'],
+        })
+    )
+
+    useSubscribe(`bills_and_coins.deleted.branch.${branch_id}`, () =>
+        queryClient.invalidateQueries({
+            queryKey: ['holiday', 'resource-query'],
+        })
+    )
 
     return (
         <PageContainer>
