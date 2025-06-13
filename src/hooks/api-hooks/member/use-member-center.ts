@@ -1,24 +1,24 @@
-import {
-    useQuery,
-    useMutation,
-    queryOptions,
-    useQueryClient,
-} from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { useQuery, queryOptions } from '@tanstack/react-query'
 
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberCenterService from '@/api-service/member-services/member-center-service'
 
 import {
     IAPIHook,
-    IQueryProps,
-    IMutationProps,
-    IAPIFilteredPaginatedHook,
     TEntityId,
-    IMemberCenterRequest,
+    IQueryProps,
     IMemberCenter,
+    IMemberCenterRequest,
     IMemberCenterPaginated,
+    IAPIFilteredPaginatedHook,
 } from '@/types'
 
 export const memberCenterLoader = (memberCenterId: TEntityId) =>
@@ -32,125 +32,36 @@ export const memberCenterLoader = (memberCenterId: TEntityId) =>
         retry: 0,
     })
 
-export const useCreateMemberCenter = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: undefined | (IAPIHook<IMemberCenter, string> & IQueryProps) = {}) => {
-    const queryClient = useQueryClient()
+export const useCreateMemberCenter = createMutationHook<
+    IMemberCenter,
+    string,
+    IMemberCenterRequest
+>(
+    (data) => MemberCenterService.createMemberCenter(data),
+    'New member center created',
+    (args) => createMutationInvalidateFn('member-center', args)
+)
 
-    return useMutation<IMemberCenter, string, IMemberCenterRequest>({
-        mutationKey: ['member-center', 'create'],
-        mutationFn: async (data) => {
-            const [error, newMemberCenter] = await withCatchAsync(
-                MemberCenterService.createMemberCenter(data)
-            )
+export const useUpdateMemberCenter = createMutationHook<
+    IMemberCenter,
+    string,
+    { memberCenterId: TEntityId; data: IMemberCenterRequest }
+>(
+    ({ memberCenterId, data }) =>
+        MemberCenterService.updateMemberCenter(memberCenterId, data),
+    'Member center updated',
+    (args) => updateMutationInvalidationFn('member-center', args)
+)
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-center', 'resource-query'],
-            })
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-center', newMemberCenter.id],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-center', 'loader', newMemberCenter.id],
-            })
-
-            if (showMessage) toast.success('New Member Center Created')
-            onSuccess?.(newMemberCenter)
-
-            return newMemberCenter
-        },
-    })
-}
-
-export const useUpdateMemberCenter = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: IAPIHook<IMemberCenter, string> & IMutationProps) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        void,
-        string,
-        { memberCenterId: TEntityId; data: IMemberCenterRequest }
-    >({
-        mutationKey: ['member-center', 'update'],
-        mutationFn: async ({ memberCenterId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberCenterService.updateMemberCenter(memberCenterId, data)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-center', 'resource-query'],
-            })
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-center', memberCenterId],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-center', 'loader', memberCenterId],
-            })
-
-            if (showMessage) toast.success('Member Center updated')
-            onSuccess?.(result)
-        },
-    })
-}
-
-export const useDeleteMemberCenter = ({
-    showMessage = false,
-    onSuccess,
-    onError,
-}: IAPIHook & IMutationProps) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<void, string, TEntityId>({
-        mutationKey: ['member-center', 'delete'],
-        mutationFn: async (memberCenterId) => {
-            const [error] = await withCatchAsync(
-                MemberCenterService.deleteMemberCenter(memberCenterId)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-center', 'resource-query'],
-            })
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-center', memberCenterId],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member-center', 'loader', memberCenterId],
-            })
-
-            if (showMessage) toast.success('Member Center deleted')
-            onSuccess?.(undefined)
-        },
-    })
-}
+export const useDeleteMemberCenter = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (memberCenterId) => MemberCenterService.deleteMemberCenter(memberCenterId),
+    'Member center deleted',
+    (args) => deleteMutationInvalidationFn('member-center', args)
+)
 
 export const useFilteredPaginatedMemberCenters = ({
     sort,
@@ -202,7 +113,7 @@ export const useMemberCenter = ({
     showMessage = true,
 }: IAPIHook<IMemberCenter[], string> & IQueryProps = {}) => {
     return useQuery<IMemberCenter[], string>({
-        queryKey: ['member-center', 'resource-query', 'all'],
+        queryKey: ['member-center', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterService.getAllMemberCenters()
