@@ -37,6 +37,6 @@ export const getRandomGradient = (colors: string[]): string => {
     return `linear-gradient(${randomDirection}, ${'#FFFFFF00'}, ${color2})`
 }
 
-export const useRandomGradient = () => {
+export const useRandomGradient = (colorPalette: string[]) => {
     return useMemo(() => getRandomGradient(colorPalette), [])
 }

@@ -1,14 +1,18 @@
 import { TEntityId } from '@/types'
-import { IQueryProps } from '@/types/api-hooks-types'
-import { IAccount, IAccountRequest } from '@/types/coop-types/accounts/account'
+import {
+    IAccount,
+    IAccountRequest,
+    IAccountPaginated,
+} from '@/types/coop-types/accounts/account'
+import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
 
 import { createMutationHook } from './api-hook-factory'
-
-import { serverRequestErrExtractor } from '@/helpers'
-import { withCatchAsync } from '@/utils'
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'sonner'
 import { AccountServices } from '@/api-service/accounting-services'
+
+import { toast } from 'sonner'
+import { useQuery } from '@tanstack/react-query'
+import { toBase64, withCatchAsync } from '@/utils'
+import { serverRequestErrExtractor } from '@/helpers'
 
 export const useAccountById = (
     id: TEntityId,
@@ -33,22 +37,50 @@ export const useAccountById = (
     })
 }
 
-export const useAllAccounts = ({ enabled = true }: IQueryProps = {}) => {
-    return useQuery<IAccount[], string>({
-        queryKey: ['accounts', 'all'],
+export const useFilteredPaginatedAccount = ({
+    sort,
+    enabled,
+    initialData,
+    mode = 'all',
+    filterPayload,
+    showMessage = true,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<IAccount, string> &
+    IQueryProps<IAccountPaginated> & { mode?: 'all' | 'pendings' }) => {
+    return useQuery<IAccountPaginated, string>({
+        queryKey: [
+            'gender',
+            'resource-query',
+            mode,
+            filterPayload,
+            pagination,
+            sort,
+        ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                AccountServices.getAllAccounts()
+                AccountServices.getPaginatedAccount({
+                    mode,
+                    pagination,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
             )
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(errorMessage)
+                if (showMessage) toast.error(errorMessage)
                 throw errorMessage
             }
+
             return result
         },
-        initialData: [],
+        initialData: initialData ?? {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
         enabled,
         retry: 1,
     })

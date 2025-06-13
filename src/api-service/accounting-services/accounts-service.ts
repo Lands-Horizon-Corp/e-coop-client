@@ -1,6 +1,13 @@
-import { TEntityId } from '@/types'
+import qs from 'query-string'
+
 import APIService from '../api-service'
-import { IAccount, IAccountRequest } from '@/types/coop-types/accounts/account'
+
+import { TEntityId } from '@/types'
+import {
+    IAccount,
+    IAccountPaginated,
+    IAccountRequest,
+} from '@/types/coop-types/accounts/account'
 
 export const getAccountById = async (id: TEntityId) => {
     const response = await APIService.get<IAccount>(`/account/${id}`)
@@ -9,6 +16,33 @@ export const getAccountById = async (id: TEntityId) => {
 
 export const getAllAccounts = async () => {
     const response = await APIService.get<IAccount[]>(`/account`)
+    return response.data
+}
+
+export const getPaginatedAccount = async ({
+    sort,
+    filters,
+    pagination,
+}: {
+    mode: 'all' | 'pendings'
+    sort?: string
+    filters?: string
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const finalUrl = qs.stringifyUrl(
+        {
+            url: `invitation-code/paginated`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IAccountPaginated>(finalUrl)
     return response.data
 }
 
