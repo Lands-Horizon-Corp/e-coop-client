@@ -24,6 +24,7 @@ import { MoneyBagIcon } from '@/components/icons'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 import {
+    GeneralLedgerFinancialStatementNodeType,
     GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
@@ -32,6 +33,7 @@ import { cn } from '@/lib'
 import { Path, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import TextEditor from '@/components/text-editor'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 interface IGeneralLedgerDefinitionCreateUpdateFormProps
     extends IClassProps,
@@ -55,17 +57,6 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
-            name: defaultValues?.name || '',
-            name_in_total: defaultValues?.name_in_total || '',
-            general_ledger_type:
-                defaultValues?.general_ledger_type ||
-                GeneralLedgerTypeEnum.Assets,
-            is_posting: defaultValues?.is_posting ?? false,
-            beginning_balance_of_the_year_credit:
-                defaultValues?.beginning_balance_of_the_year_credit ??
-                undefined,
-            beginning_balance_of_the_year_debit:
-                defaultValues?.beginning_balance_of_the_year_debit ?? undefined,
         },
     })
 
@@ -176,6 +167,57 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         )}
                     />
                 </div>
+                <FormFieldWrapper
+                    control={form.control}
+                    name="type"
+                    label="General Ledger Type"
+                    className="col-span-2"
+                    render={({ field }) => (
+                        <RadioGroup
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={isDisabled(field.name)}
+                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                        >
+                            {Object.values(
+                                GeneralLedgerFinancialStatementNodeType
+                            ).map((type) => (
+                                <GradientBackground gradientOnly>
+                                    <div
+                                        key={type}
+                                        className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                    >
+                                        <RadioGroupItem
+                                            value={type}
+                                            id={`interest-fines-diminishing-${type}`}
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="grid gap-2">
+                                                <Label
+                                                    htmlFor={`interest-fines-diminishing-${type}`}
+                                                >
+                                                    {type}
+                                                </Label>
+                                                <p
+                                                    id={`interest-fines-diminishing-${type}-description`}
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    {type ===
+                                                        GeneralLedgerFinancialStatementNodeType.DEFINITION &&
+                                                        'General Ledger Definition'}
+                                                    {type ===
+                                                        GeneralLedgerFinancialStatementNodeType.ACCOUNT &&
+                                                        'General Ledger Account.'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </GradientBackground>
+                            ))}
+                        </RadioGroup>
+                    )}
+                />
                 <FormFieldWrapper
                     control={form.control}
                     name="is_posting"
