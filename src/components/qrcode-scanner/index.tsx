@@ -88,6 +88,7 @@ export const QrCodeScannerModal = <TData, TErr>({
     return (
         <Modal
             title={title}
+            hideCloseButton
             className={cn('max-h[98vh] size-fit max-w-[98vw]', className)}
             {...props}
         >
