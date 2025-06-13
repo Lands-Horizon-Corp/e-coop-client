@@ -1,0 +1,389 @@
+[
+    {
+        "id": "fsd-type-assets",
+        "organization_id": "org-123",
+        "branch_id": "branch-001",
+        "name": "Assets",
+        "description": "All financial accounts representing resources owned by the company.",
+        "created_at": "2025-06-14T08:00:00Z",
+        "type": "DEFINITION",
+        "index": 1,
+        "exclude": false,
+        "financial_statement_type": "Assets",
+        "financial_statement_accounts": [
+            {
+                "id": "fsd-001-1-1",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-assets",
+                "name": "Current Assets",
+                "description": "Assets expected to be converted into cash or used up within one year or one operating cycle.",
+                "parent_id": "fsd-type-assets",
+                "created_at": "2025-06-14T08:01:30Z",
+                "type": "ACCOUNT",
+                "index": 1,
+                "exclude": false,
+                "financial_statement_accounts": [
+                    {
+                        "id": "fsd-001-1-1-1",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-assets",
+                        "name": "Cash and Cash Equivalents",
+                        "description": "Highly liquid assets that can be readily converted into cash.",
+                        "parent_id": "fsd-001-1-1",
+                        "created_at": "2025-06-14T08:02:00Z",
+                        "type": "ACCOUNT",
+                        "index": 1,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    },
+                    {
+                        "id": "fsd-001-1-1-2",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-assets",
+                        "name": "Accounts Receivable",
+                        "description": "Money owed to the company by customers for goods or services delivered.",
+                        "parent_id": "fsd-001-1-1",
+                        "created_at": "2025-06-14T08:03:00Z",
+                        "type": "ACCOUNT",
+                        "index": 2,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    },
+                    {
+                        "id": "fsd-001-1-1-3",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-assets",
+                        "name": "Inventory",
+                        "description": "Raw materials, work-in-progress, and finished goods held for sale.",
+                        "parent_id": "fsd-001-1-1",
+                        "created_at": "2025-06-14T08:04:00Z",
+                        "type": "ACCOUNT",
+                        "index": 3,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    }
+                ]
+            },
+            {
+                "id": "fsd-001-1-2",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-assets",
+                "name": "Non-Current Assets",
+                "description": "Assets not expected to be converted into cash or used up within one year, such as property, plant, and equipment.",
+                "parent_id": "fsd-type-assets",
+                "created_at": "2025-06-14T08:05:00Z",
+                "type": "ACCOUNT",
+                "index": 2,
+                "exclude": false,
+                "financial_statement_accounts": [
+                    {
+                        "id": "fsd-001-1-2-1",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-assets",
+                        "name": "Property, Plant, and Equipment (PPE)",
+                        "description": "Tangible assets used in the operations of a business, including land, buildings, and machinery.",
+                        "parent_id": "fsd-001-1-2",
+                        "created_at": "2025-06-14T08:06:00Z",
+                        "type": "ACCOUNT",
+                        "index": 1,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    }
+                ]
+            },
+            {
+                "id": "fsd-003-2",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-assets",
+                "name": "Cash from Investing Activities",
+                "description": "Cash flows from the purchase or sale of assets like property, plant, and equipment.",
+                "parent_id": "fsd-type-assets",
+                "created_at": "2025-06-14T08:42:00Z",
+                "type": "ACCOUNT",
+                "index": 3,
+                "is_posting": false,
+                "financial_statement_type": "Assets",
+                "financial_statement_accounts": []
+            }
+        ]
+    },
+    {
+        "id": "fsd-type-liabilities",
+        "organization_id": "org-123",
+        "branch_id": "branch-001",
+        "name": "Liabilities",
+        "description": "All financial accounts representing obligations of the company.",
+        "created_at": "2025-06-14T08:07:00Z",
+        "type": "DEFINITION",
+        "index": 2,
+        "exclude": false,
+        "financial_statement_type": "Liabilities",
+        "financial_statement_accounts": [
+            {
+                "id": "fsd-001-2-1",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-liabilities",
+                "name": "Current Liabilities",
+                "description": "Obligations due within one year or one operating cycle.",
+                "parent_id": "fsd-type-liabilities",
+                "created_at": "2025-06-14T08:08:00Z",
+                "type": "ACCOUNT",
+                "index": 1,
+                "exclude": false,
+                "financial_statement_accounts": [
+                    {
+                        "id": "fsd-001-2-1-1",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-liabilities",
+                        "name": "Accounts Payable",
+                        "description": "Money owed by the company to suppliers for goods or services purchased on credit.",
+                        "parent_id": "fsd-001-2-1",
+                        "created_at": "2025-06-14T08:09:00Z",
+                        "type": "ACCOUNT",
+                        "index": 1,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    },
+                    {
+                        "id": "fsd-001-2-1-2",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-liabilities",
+                        "name": "Salaries Payable",
+                        "description": "Wages owed to employees for work performed but not yet paid.",
+                        "parent_id": "fsd-001-2-1",
+                        "created_at": "2025-06-14T08:10:00Z",
+                        "type": "ACCOUNT",
+                        "index": 2,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    }
+                ]
+            },
+            {
+                "id": "fsd-001-2-2",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-liabilities",
+                "name": "Non-Current Liabilities",
+                "description": "Obligations due beyond one year or one operating cycle.",
+                "parent_id": "fsd-type-liabilities",
+                "created_at": "2025-06-14T08:11:00Z",
+                "type": "ACCOUNT",
+                "index": 2,
+                "exclude": false,
+                "financial_statement_accounts": [
+                    {
+                        "id": "fsd-001-2-2-1",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-liabilities",
+                        "name": "Long-Term Debt",
+                        "description": "Debts or obligations that are not due within the current accounting period.",
+                        "parent_id": "fsd-001-2-2",
+                        "created_at": "2025-06-14T08:12:00Z",
+                        "type": "ACCOUNT",
+                        "index": 1,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    }
+                ]
+            },
+            {
+                "id": "fsd-003-3",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-liabilities",
+                "name": "Cash from Financing Activities",
+                "description": "Cash flows from debt, equity, and dividends.",
+                "parent_id": "fsd-type-liabilities",
+                "created_at": "2025-06-14T08:43:00Z",
+                "type": "ACCOUNT",
+                "index": 3,
+                "is_posting": false,
+                "financial_statement_type": "Liabilities",
+                "financial_statement_accounts": []
+            }
+        ]
+    },
+    {
+        "id": "fsd-type-equity",
+        "organization_id": "org-123",
+        "branch_id": "branch-001",
+        "name": "Equity",
+        "description": "All financial accounts representing the residual interest in the assets after deducting liabilities.",
+        "created_at": "2025-06-14T08:13:00Z",
+        "type": "DEFINITION",
+        "index": 3,
+        "exclude": false,
+        "financial_statement_type": "Equity",
+        "financial_statement_accounts": [
+            {
+                "id": "fsd-001-3-1",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-equity",
+                "name": "Share Capital",
+                "description": "The amount of capital invested by the owners of the company.",
+                "parent_id": "fsd-type-equity",
+                "created_at": "2025-06-14T08:14:00Z",
+                "type": "ACCOUNT",
+                "index": 1,
+                "is_posting": true,
+                "financial_statement_accounts": []
+            },
+            {
+                "id": "fsd-001-3-2",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-equity",
+                "name": "Retained Earnings",
+                "description": "Accumulated net income of the company that has not been distributed to shareholders as dividends.",
+                "parent_id": "fsd-type-equity",
+                "created_at": "2025-06-14T08:15:00Z",
+                "type": "ACCOUNT",
+                "index": 2,
+                "is_posting": true,
+                "financial_statement_accounts": []
+            }
+        ]
+    },
+    {
+        "id": "fsd-type-revenue",
+        "organization_id": "org-123",
+        "branch_id": "branch-001",
+        "name": "Revenue",
+        "description": "All financial accounts representing income generated from primary operations.",
+        "created_at": "2025-06-14T08:21:00Z",
+        "type": "DEFINITION",
+        "index": 4,
+        "exclude": false,
+        "financial_statement_type": "Revenue",
+        "financial_statement_accounts": [
+            {
+                "id": "fsd-002-1-1",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-revenue",
+                "name": "Sales Revenue",
+                "description": "Income from the primary business activities.",
+                "parent_id": "fsd-type-revenue",
+                "created_at": "2025-06-14T08:22:00Z",
+                "type": "ACCOUNT",
+                "index": 1,
+                "is_posting": true,
+                "financial_statement_accounts": []
+            },
+            {
+                "id": "fsd-002-1-2",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-revenue",
+                "name": "Service Revenue",
+                "description": "Income generated from providing services.",
+                "parent_id": "fsd-002-1",
+                "created_at": "2025-06-14T08:23:00Z",
+                "type": "ACCOUNT",
+                "index": 2,
+                "is_posting": true,
+                "financial_statement_accounts": []
+            },
+            {
+                "id": "fsd-003-1",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-revenue",
+                "name": "Cash from Operating Activities",
+                "description": "Cash generated or used from a company's normal business operations.",
+                "parent_id": "fsd-type-revenue",
+                "created_at": "2025-06-14T08:41:00Z",
+                "type": "ACCOUNT",
+                "index": 3,
+                "is_posting": false,
+                "financial_statement_type": "Revenue",
+                "financial_statement_accounts": []
+            }
+        ]
+    },
+    {
+        "id": "fsd-type-expenses",
+        "organization_id": "org-123",
+        "branch_id": "branch-001",
+        "name": "Expenses",
+        "description": "All financial accounts representing costs incurred during operations.",
+        "created_at": "2025-06-14T08:24:00Z",
+        "type": "DEFINITION",
+        "index": 5,
+        "exclude": false,
+        "financial_statement_type": "Expenses",
+        "financial_statement_accounts": [
+            {
+                "id": "fsd-002-2",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-expenses",
+                "name": "Cost of Goods Sold (COGS)",
+                "description": "The direct costs attributable to the production of the goods sold by a company.",
+                "parent_id": "fsd-type-expenses",
+                "created_at": "2025-06-14T08:24:00Z",
+                "type": "ACCOUNT",
+                "index": 1,
+                "is_posting": true,
+                "financial_statement_type": "Expenses",
+                "financial_statement_accounts": []
+            },
+            {
+                "id": "fsd-002-3",
+                "organization_id": "org-123",
+                "branch_id": "branch-001",
+                "financial_statement_definition_id": "fsd-type-expenses",
+                "name": "Operating Expenses",
+                "description": "Costs incurred from a company's normal day-to-day operations.",
+                "parent_id": "fsd-type-expenses",
+                "created_at": "2025-06-14T08:25:00Z",
+                "type": "ACCOUNT",
+                "index": 2,
+                "exclude": false,
+                "financial_statement_accounts": [
+                    {
+                        "id": "fsd-002-3-1",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-expenses",
+                        "name": "Salaries Expense",
+                        "description": "Costs associated with employee wages and benefits.",
+                        "parent_id": "fsd-002-3",
+                        "created_at": "2025-06-14T08:26:00Z",
+                        "type": "ACCOUNT",
+                        "index": 1,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    },
+                    {
+                        "id": "fsd-002-3-2",
+                        "organization_id": "org-123",
+                        "branch_id": "branch-001",
+                        "financial_statement_definition_id": "fsd-type-expenses",
+                        "name": "Rent Expense",
+                        "description": "Costs incurred for the use of property or equipment.",
+                        "parent_id": "fsd-002-3",
+                        "created_at": "2025-06-14T08:27:00Z",
+                        "type": "ACCOUNT",
+                        "index": 2,
+                        "is_posting": true,
+                        "financial_statement_accounts": []
+                    }
+                ]
+            }
+        ]
+    }
+]

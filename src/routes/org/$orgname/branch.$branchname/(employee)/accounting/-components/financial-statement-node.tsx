@@ -1,7 +1,7 @@
-import { AccountCreateUpdateFormModal } from '@/components/forms/accounting-forms/account-create-update-form'
-import { FSDefinitionCreateUpdateFormModal } from '@/components/forms/financial-statement-definition/financial-statement-definition-create-update-form'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import PlainTextEditor from '@/components/plain-text-editor'
+import { useRef, useState } from 'react'
+
+import { ChevronDown, ChevronRight } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -11,49 +11,247 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { IFinancialStatementDefinition } from '@/types/coop-types/financial-statement-definition'
-import { ChevronDown, ChevronRight } from 'lucide-react'
-import { useState } from 'react'
+import PlainTextEditor from '@/components/plain-text-editor'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { FSDefinitionCreateUpdateFormModal } from '@/components/forms/financial-statement-definition/financial-statement-definition-create-update-form'
+
+import {
+    FinancialStatementTypeEnum,
+    IFinancialStatementDefinition,
+} from '@/types/coop-types/financial-statement-definition'
+import { GeneralLedgerFinancialStatementNodeType } from '@/types/coop-types/general-ledger-definitions'
+import { FinancialStatementTypeBadge } from '@/components/financial-statement-type-badge'
+import { toast } from 'sonner'
+import { useDrag, useDrop, XYCoord } from 'react-dnd'
+
+export const blueGradientPalette = ['#0A1D36', '#133C6B', '#3B7EC0', '#5C9CDC']
 
 type FinancialStatementTreeNodeProps = {
     node: IFinancialStatementDefinition
     depth?: number
+    handleOpenAccountPicker?: () => void
+    onMoveNode: (draggedId: string, targetId: string) => void
+}
+export interface IFinancialStatementAccount
+    extends IFinancialStatementDefinition {
+    type: GeneralLedgerFinancialStatementNodeType.ACCOUNT
+}
+
+export type GeneralLedgerTree =
+    | IFinancialStatementDefinition
+    | IFinancialStatementAccount
+
+const ItemTypes = {
+    GL_NODE: 'gl_node',
+}
+export function addFSPositionIndexes(
+    nodes: (IFinancialStatementDefinition | IFinancialStatementAccount)[]
+) {
+    nodes.forEach((node, idx) => {
+        node.index = idx
+        if (
+            node.financial_statement_accounts &&
+            node.financial_statement_accounts.length > 0
+        ) {
+            addFSPositionIndexes(node.financial_statement_accounts)
+        }
+    })
+}
+
+export function findFSNodeAndParent(
+    tree: (IFinancialStatementDefinition | IFinancialStatementAccount)[],
+    id: string,
+    parent:
+        | IFinancialStatementDefinition
+        | IFinancialStatementAccount
+        | null = null
+): {
+    node: GeneralLedgerTree | null
+    parent: GeneralLedgerTree | null
+    index: number | null
+} {
+    for (let i = 0; i < tree.length; i++) {
+        const current = tree[i]
+        if (current.id === id) {
+            return { node: current, parent: parent, index: i }
+        }
+        if (
+            current.financial_statement_accounts &&
+            current.financial_statement_accounts.length > 0
+        ) {
+            const found = findFSNodeAndParent(
+                current.financial_statement_accounts,
+                id,
+                current
+            )
+            if (found.node) {
+                return found
+            }
+        }
+    }
+    return { node: null, parent: null, index: null }
+}
+
+export function moveFSNodeInTree(
+    tree: IFinancialStatementDefinition[],
+    draggedId: string,
+    targetId: string
+): IFinancialStatementDefinition[] {
+    const newTree = JSON.parse(JSON.stringify(tree))
+
+    const {
+        node: draggedNode,
+        parent: draggedParent,
+        index: draggedIndex,
+    } = findFSNodeAndParent(newTree, draggedId)
+    const {
+        node: targetNode,
+        parent: targetParent,
+        index: targetIndex,
+    } = findFSNodeAndParent(newTree, targetId)
+
+    if (
+        !draggedNode ||
+        !targetNode ||
+        !draggedParent ||
+        !targetParent ||
+        draggedIndex === null ||
+        targetIndex === null
+    ) {
+        toast.warning(
+            'Drag or target node/parent not found, or indices are null. Aborting move.'
+        )
+        return tree
+    }
+
+    if (draggedParent.id !== targetParent.id) {
+        toast.warning(
+            'Cannot drag between different parents (only sibling reordering allowed).'
+        )
+        return tree
+    }
+
+    const parentAccounts = draggedParent.financial_statement_accounts
+    if (!parentAccounts) {
+        toast.error('Parent accounts array is missing for dragged node.')
+        return tree
+    }
+
+    const [removed] = parentAccounts.splice(draggedIndex, 1)
+    parentAccounts.splice(targetIndex, 0, removed)
+
+    addFSPositionIndexes(parentAccounts)
+
+    return newTree
 }
 
 const FinancialStatementTreeNode = ({
     node,
     depth = 1,
+    handleOpenAccountPicker,
+    onMoveNode,
 }: FinancialStatementTreeNodeProps) => {
+    const ref = useRef<HTMLDivElement>(null)
+
     const [isExpanded, setIsExpanded] = useState(false)
-    const [openCreateItemModal, setOpenCreateItemModal] = useState(false)
     const [openFSDefinition, setOpenFSDefinition] = useState(false)
 
     const hasChildren =
         node.financial_statement_accounts &&
         node.financial_statement_accounts.length > 0
 
-    const paddingLeft = depth * 20
-
     const isFirstLevel = depth > 0
 
+    const isAccount =
+        node.type === GeneralLedgerFinancialStatementNodeType.ACCOUNT
+    const isDefinition =
+        node.type === GeneralLedgerFinancialStatementNodeType.DEFINITION
+
+    const childLength = node.financial_statement_accounts.length
+
+    const canDrag = depth > 0
+
+    const hasOnlyOneChild = node.financial_statement_accounts.length === 1
+
+    const [{ isDragging }, drag] = useDrag({
+        type: ItemTypes.GL_NODE,
+        item: { id: node.id, parent_id: node.parent_id, index: node.index },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+        canDrag: canDrag || hasOnlyOneChild,
+    })
+
+    const [, drop] = useDrop({
+        accept: ItemTypes.GL_NODE,
+        hover(
+            item: { id: string; parent_id?: string; index: number },
+            monitor
+        ) {
+            if (!ref.current || !canDrag) {
+                return
+            }
+
+            if (item.parent_id === node.parent_id && item.id !== node.id) {
+                const dragIndex = item.index
+                const hoverIndex = node.index
+
+                if (
+                    typeof dragIndex === 'undefined' ||
+                    typeof hoverIndex === 'undefined'
+                ) {
+                    console.warn(
+                        'Drag or hover index is undefined. Skipping hover reorder.'
+                    )
+                    return
+                }
+
+                if (dragIndex === hoverIndex) {
+                    return
+                }
+
+                const hoverBoundingRect = ref.current?.getBoundingClientRect()
+                const hoverMiddleY =
+                    (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+                const clientOffset = monitor.getClientOffset()
+                const hoverClientY =
+                    (clientOffset as XYCoord).y - hoverBoundingRect.top
+
+                if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+                    return
+                }
+                if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+                    return
+                }
+
+                onMoveNode(item.id, node.id)
+
+                item.index = hoverIndex
+            }
+        },
+        canDrop: (item: { id: string; parent_id?: string; index: number }) => {
+            return (
+                canDrag &&
+                item.id !== node.id &&
+                item.parent_id === node.parent_id
+            )
+        },
+    })
+
+    drag(drop(ref))
+
     return (
-        <GradientBackground
-            opacity={isFirstLevel ? 0.02 : 0.05}
-            gradientOnly
-            className="p-3"
-        >
-            <AccountCreateUpdateFormModal
-                onOpenChange={setOpenCreateItemModal}
-                open={openCreateItemModal}
-            />
+        <div className={`${isFirstLevel ? '' : 'pt-1.5'} `}>
             <FSDefinitionCreateUpdateFormModal
                 onOpenChange={setOpenFSDefinition}
                 open={openFSDefinition}
             />
-            <div className="flex flex-col">
-                <div
-                    className="flex cursor-pointer items-center rounded-md px-3 py-2 transition-colors duration-200 hover:bg-secondary"
-                    style={{ paddingLeft: `${paddingLeft}px` }}
+            <div className="flex flex-col" ref={ref}>
+                <GradientBackground
+                    gradientOnly
+                    opacity={isAccount ? 0.3 : 0.3}
+                    colorPalettes={isAccount ? blueGradientPalette : undefined}
+                    className={`flex cursor-pointer items-center rounded-md px-3 py-2 transition-colors duration-200 ${isFirstLevel ? 'mt-1' : 'pt-0'} ${isDragging && canDrag ? 'rounded-lg border-2 border-primary' : ''}`}
                     onClick={() => hasChildren && setIsExpanded(!isExpanded)}
                 >
                     {hasChildren && (
@@ -68,18 +266,37 @@ const FinancialStatementTreeNode = ({
                         </div>
                     )}
                     <div className="flex flex-1 flex-col">
-                        <span className="font-semibold">{node.name}</span>
-                        {node.description && (
-                            <span className="text-sm text-accent-foreground/70">
-                                <PlainTextEditor content={node.description} />
+                        <div className="flex gap-x-2">
+                            <span className="font-semibold">{node.name}</span>
+                        </div>
+                        {!isFirstLevel && (
+                            <>
+                                {node.description && (
+                                    <span className="text-xs text-accent-foreground/70">
+                                        <PlainTextEditor
+                                            content={node.description}
+                                        />
+                                    </span>
+                                )}
+                            </>
+                        )}
+                        {isFirstLevel && (
+                            <span className="mt-1 text-xs text-accent-foreground/50">
+                                <FinancialStatementTypeBadge
+                                    type={
+                                        node.financial_statement_type ??
+                                        FinancialStatementTypeEnum.Assets
+                                    }
+                                />
                             </span>
                         )}
-                        <span className="text-xs text-accent-foreground/50">
-                            ID: {node.id} | Type:{' '}
-                            {node.financial_statement_type}
-                        </span>
+                        {!isFirstLevel && (
+                            <p className="text-xs text-accent-foreground/30">
+                                {childLength} items
+                            </p>
+                        )}
                     </div>
-                    {isFirstLevel && (
+                    {isDefinition || isAccount ? (
                         <>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -97,9 +314,10 @@ const FinancialStatementTreeNode = ({
                                 >
                                     <DropdownMenuGroup>
                                         <DropdownMenuItem
-                                            onClick={() =>
-                                                setOpenCreateItemModal(true)
-                                            }
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                handleOpenAccountPicker?.()
+                                            }}
                                         >
                                             Add Account
                                             <DropdownMenuShortcut className="text-xl">
@@ -108,7 +326,7 @@ const FinancialStatementTreeNode = ({
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             onClick={(e) => {
-                                                e.preventDefault()
+                                                e.stopPropagation()
                                                 setOpenFSDefinition(true)
                                             }}
                                         >
@@ -117,33 +335,46 @@ const FinancialStatementTreeNode = ({
                                                 +
                                             </DropdownMenuShortcut>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                setOpenFSDefinition(true)
-                                            }}
-                                        >
-                                            edit
-                                        </DropdownMenuItem>
+                                        {isFirstLevel && (
+                                            <DropdownMenuItem
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setOpenFSDefinition(true)
+                                                }}
+                                            >
+                                                edit
+                                            </DropdownMenuItem>
+                                        )}
+                                        {isFirstLevel && (
+                                            <DropdownMenuItem>
+                                                View Details
+                                            </DropdownMenuItem>
+                                        )}
                                     </DropdownMenuGroup>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </>
+                    ) : (
+                        ''
                     )}
-                </div>
+                </GradientBackground>
                 {isExpanded && hasChildren && (
-                    <div className="ml-4 border-l-[0.1px] border-gray-200/20">
+                    <div className="ml-4">
                         {node.financial_statement_accounts!.map((childNode) => (
                             <FinancialStatementTreeNode
+                                handleOpenAccountPicker={
+                                    handleOpenAccountPicker
+                                }
                                 key={childNode.id}
                                 node={childNode}
                                 depth={depth + 1}
+                                onMoveNode={onMoveNode}
                             />
                         ))}
                     </div>
                 )}
             </div>
-        </GradientBackground>
+        </div>
     )
 }
 
