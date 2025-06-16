@@ -37,12 +37,7 @@ import { useGetCurrentUserOrganizations } from '@/hooks/api-hooks/use-user-organ
 import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
 
 import type { IUserOrganization } from '@/types'
-
-const slugify = (str: string) =>
-    str
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^[-]+|[-]+$/g, '')
+import { getOrgBranchSafeURLNames } from '@/utils'
 
 const NavProfileMenu = () => {
     const router = useRouter()
@@ -90,11 +85,13 @@ const NavProfileMenu = () => {
                 user: nextUserOrg.user,
             })
 
-            const orgSlug = slugify(nextUserOrg.organization.name)
-            const branchSlug = slugify(nextUserOrg.branch.name)
+            const { orgName, branchName } = getOrgBranchSafeURLNames(
+                nextUserOrg.organization.name,
+                nextUserOrg.branch.name
+            )
 
             router.navigate({
-                to: `/org/${orgSlug}/branch/${branchSlug}`,
+                to: `/org/${orgName}/branch/${branchName}/dashboard`,
                 params: {
                     user_organization_id: nextUserOrg.id,
                     organization_id: nextUserOrg.organization.id,
