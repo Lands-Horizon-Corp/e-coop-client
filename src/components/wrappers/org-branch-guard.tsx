@@ -17,8 +17,8 @@ import { IChildProps } from '@/types'
 const OrgBranchUrlGuard = ({ children }: IChildProps) => {
     const router = useRouter()
     const { orgname, branchname } = useParams({
-        from: '/org/$orgname/branch/$branchname',
-    })
+        strict: false,
+    }) as { orgname: string; branchname: string }
 
     const {
         currentAuth: { user_organization },

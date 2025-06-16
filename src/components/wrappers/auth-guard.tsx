@@ -7,12 +7,14 @@ import {
     ShieldExclamationIcon,
     BadgeExclamationFillIcon,
 } from '@/components/icons'
+import ImageDisplay from '../image-display'
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { FlickeringGrid } from '../elements/backgrounds/flickering-grid'
 
 import { useAuthStore } from '@/store/user-auth-store'
+
+import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 
 import { IBaseProps, TPageType, IUserBase } from '@/types'
 
@@ -28,8 +30,16 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     if (pageType === 'AUTHENTICATED') {
         if (authStatus === 'loading')
             return (
-                <div className="relative flex h-screen w-full items-center justify-center">
-                    <LoadingSpinner />
+                <div className="relative flex h-screen w-full flex-col items-center justify-center">
+                    <ImageDisplay
+                        src={LOADING_ARTWORK_GIF}
+                        className="block size-48 rounded-none !bg-transparent"
+                        fallbackClassName="!bg-transparent rounded-none"
+                    />
+                    <p className="mt-4 animate-pulse text-sm text-muted-foreground drop-shadow-lg">
+                        {/* <LoadingSpinner className="mr-2 inline size-3" /> */}
+                        loading authentication info
+                    </p>
                 </div>
             )
 
@@ -94,24 +104,6 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
                 </BannerContainer>
             )
         }
-
-        // if (!allowedAccountTypes.includes(currentAuth.user.type) || allowNoRole) {
-        //     return (
-        //         <BannerContainer>
-        //             <AccountInfoContent
-        //                 currentUser={currentAuth.user}
-        //                 infoTitle="Not Allowed"
-        //                 infoDescription="It looks like your account is not allowed on this page."
-        //             />
-        //             <Button
-        //                 className="rounded-full"
-        //                 onClick={() => router.history.back()}
-        //             >
-        //                 Go Back
-        //             </Button>
-        //         </BannerContainer>
-        //     )
-        // }
     }
 
     return children
