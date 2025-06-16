@@ -2,13 +2,14 @@ import qs from 'query-string'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
 
 import {
+    XIcon,
     KeySharpIcon,
     AddressCardIcon,
     BarcodeScanIcon,
     PinLocationIcon,
-    XIcon,
 } from '@/components/icons'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -25,7 +26,6 @@ import { GradientBackground } from '@/components/gradient-background/gradient-ba
 import { cn } from '@/lib'
 import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
 import { useInvitationCodeByCode } from '@/hooks/api-hooks/use-invitation-code'
-import { useQueryClient } from '@tanstack/react-query'
 
 const JoinBranchWithCodeFormModal = ({
     title,
@@ -164,7 +164,10 @@ const JoinBranchWithCodeFormModal = ({
                                 <div className="flex">
                                     <ImageDisplay
                                         className="aspect-square size-16 rounded-lg"
-                                        src={data.organization.media?.url}
+                                        src={
+                                            data.organization.media
+                                                ?.download_url
+                                        }
                                     />
                                     <div className="p-2">
                                         <h1>{data.organization.name}</h1>
@@ -191,8 +194,8 @@ const JoinBranchWithCodeFormModal = ({
                                             <ImageDisplay
                                                 className="size-16 rounded-lg"
                                                 src={
-                                                    data.organization?.media
-                                                        ?.url
+                                                    data.branch?.media
+                                                        ?.download_url
                                                 }
                                             />
                                             <div className="flex grow items-center px-2">

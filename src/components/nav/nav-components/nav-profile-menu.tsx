@@ -36,8 +36,9 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useGetCurrentUserOrganizations } from '@/hooks/api-hooks/use-user-organization'
 import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
 
-import type { IUserOrganization } from '@/types'
 import { getOrgBranchSafeURLNames } from '@/utils'
+
+import type { IUserOrganization } from '@/types'
 
 const NavProfileMenu = () => {
     const router = useRouter()
@@ -306,7 +307,14 @@ const NavProfileMenu = () => {
                                                                                         )
                                                                                     }
                                                                                     disabled={
-                                                                                        isLoading
+                                                                                        isLoading ||
+                                                                                        [
+                                                                                            'pending',
+                                                                                            'ban',
+                                                                                            'reported',
+                                                                                        ].includes(
+                                                                                            userOrg.application_status
+                                                                                        )
                                                                                     }
                                                                                 >
                                                                                     {currentUserOrg?.branch_id ===
