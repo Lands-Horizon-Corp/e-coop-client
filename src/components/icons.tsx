@@ -23,6 +23,7 @@ import {
     GoArrowLeft as ArrowLeftIcon,
     GoArrowRight as ArrowRightIcon,
     GoSearch as MagnifyingGlassIcon,
+    GoOrganization as OrganizationIcon,
 } from 'react-icons/go'
 
 import {
@@ -487,6 +488,7 @@ export {
     PDFFileFillIcon,
     BankDuoToneIcon,
     BarcodeScanIcon,
+    OrganizationIcon,
     CalendarDotsIcon,
     BracketErrorIcon,
     ArrowTrendUpIcon,
