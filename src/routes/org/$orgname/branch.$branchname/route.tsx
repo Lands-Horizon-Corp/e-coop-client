@@ -3,7 +3,7 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 import UserNav from '@/components/nav/navs/user-nav'
 import AuthGuard from '@/components/wrappers/auth-guard'
 import OrgBranchSidebar from '@/components/sidebar/org-branch-sidebar'
-import OrgBranchUrlGuard from '@/components/wrappers/branch-org-guard'
+import OrgBranchUrlGuard from '@/components/wrappers/org-branch-guard'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 export const Route = createFileRoute('/org/$orgname/branch/$branchname')({
