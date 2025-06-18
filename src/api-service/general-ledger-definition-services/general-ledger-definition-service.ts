@@ -2,43 +2,14 @@ import { TEntityId } from '@/types'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
-    IPaginatedGeneralLedgerDefinition,
 } from '@/types/coop-types/general-ledger-definitions'
 
 import APIService from '../api-service'
-import { TPagination } from '@/hooks/use-pagination'
-
-import qs from 'query-string'
 
 export const getAllGeneralLedgerDefinition = async () => {
     const response = await APIService.get<IGeneralLedgerDefinition[]>(
         `/general-ledger-definition`
     )
-    return response.data
-}
-
-export const getPaginatedGeneralLedgerDefinition = async (props?: {
-    sort?: string
-    filters?: string
-    pagination?: TPagination
-}): Promise<IPaginatedGeneralLedgerDefinition> => {
-    const { filters, pagination, sort } = props || {}
-
-    const url = qs.stringifyUrl(
-        {
-            url: `/payment-type`,
-            query: {
-                sort,
-                filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response =
-        await APIService.get<IPaginatedGeneralLedgerDefinition>(url)
     return response.data
 }
 

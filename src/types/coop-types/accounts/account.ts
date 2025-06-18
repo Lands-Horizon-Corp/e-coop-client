@@ -16,7 +16,7 @@ export enum AccountTypeEnum {
 
 export enum ComputationTypeEnum {
     Straight = 'Straight',
-    Deminishing = 'Deminishing',
+    Diminishing = 'Diminishing',
     DiminishingAddOn = 'Diminishing Add-On',
     DiminishingYearly = 'Diminishing Yearly',
     DiminishingStraight = 'Diminishing Straight',
