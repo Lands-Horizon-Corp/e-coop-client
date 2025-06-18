@@ -25,21 +25,21 @@ function RouteComponent() {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`member_type.created.branch.${branch_id}`, () => {
+    useSubscribe(`member_profile.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-type', 'resource-query'],
+            queryKey: ['member-profile', 'resource-query'],
         })
     })
 
-    useSubscribe(`member_type.updated.branch.${branch_id}`, () => {
+    useSubscribe(`member_profile.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-type', 'resource-query'],
+            queryKey: ['member-profile', 'resource-query'],
         })
     })
 
-    useSubscribe(`member_type.deleted.branch.${branch_id}`, () => {
+    useSubscribe(`member_profile.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-type', 'resource-query'],
+            queryKey: ['member-profile', 'resource-query'],
         })
     })
 
