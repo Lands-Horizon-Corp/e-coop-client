@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { useRouter } from '@tanstack/react-router'
 
 import {
     PencilFillIcon,
@@ -12,36 +13,27 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import ImageDisplay from '@/components/image-display'
 import CopyTextButton from '@/components/copy-text-button'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/member-profile-close-form'
-// import { MemberProfileCreateUpdateFormModal } from '@/components/forms/member-forms/member-application-form/member-profile-create-update-form'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberProfile } from '@/types'
 import { useImagePreview } from '@/store/image-preview-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import ProfileClosureContent from '@/components/elements/modal-displays/profile-closure-content'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile
 }
 
 const MemberInfoBanner = ({ className, memberProfile }: Props) => {
+    const router = useRouter()
     const { onOpen } = useConfirmModalStore()
     const { onOpen: onOpenImage } = useImagePreview()
-    const [_editProfile, setEditProfile] = useState(false)
     const [closeMemberAccount, setCloseMemberAccount] = useState(false)
 
     return (
         <div className={cn('flex justify-between', className)}>
-            {/* <MemberProfileCreateUpdateFormModal
-                open={editProfile}
-                onOpenChange={setEditProfile}
-                formProps={{
-                    profileId: memberProfile.id,
-                    defaultValues: memberProfile,
-                }}
-            /> */}
             <MemberProfileCloseFormModal
                 open={closeMemberAccount}
                 onOpenChange={setCloseMemberAccount}
@@ -104,7 +96,11 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                             size="sm"
                             variant="outline"
                             hoverVariant="secondary"
-                            onClick={() => setEditProfile(true)}
+                            onClick={() => {
+                                router.navigate({
+                                    to: `/org/$orgname/branch/$branchname/member-profile/${memberProfile.id}/personal-info` as string,
+                                })
+                            }}
                             className="rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
                         >
                             <PencilFillIcon className="mr-2 size-4" /> Edit
@@ -126,49 +122,7 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                                     ),
                                     description:
                                         'Closing this member’s account will permanently deactivate their membership and revoke all associated benefits and privileges. This includes:',
-                                    content: (
-                                        <div className="space-y-4">
-                                            <ul className="list-disc space-y-2 pl-6 text-sm">
-                                                <li>
-                                                    Loss of access to
-                                                    cooperative services,
-                                                    including loans, savings,
-                                                    and other financial
-                                                    benefits.
-                                                </li>
-                                                <li>
-                                                    Removal from all
-                                                    member-related activities,
-                                                    voting rights, and dividends
-                                                    (if applicable).
-                                                </li>
-                                                <li>
-                                                    Any outstanding obligations,
-                                                    such as unpaid loans or
-                                                    fees, must be settled before
-                                                    closure.
-                                                </li>
-                                                <li>
-                                                    Funds from the member’s
-                                                    account will be processed
-                                                    according to cooperative
-                                                    policies.
-                                                </li>
-                                            </ul>
-                                            <Alert
-                                                variant="default"
-                                                className="bg-rose-400/40 text-foreground dark:bg-rose-400"
-                                            >
-                                                <WarningFillIcon />
-                                                <AlertDescription>
-                                                    This action is irreversible.
-                                                    Please confirm that all
-                                                    necessary checks have been
-                                                    completed before proceeding.
-                                                </AlertDescription>
-                                            </Alert>
-                                        </div>
-                                    ),
+                                    content: <ProfileClosureContent />,
                                     onConfirm: () => {
                                         setCloseMemberAccount(true)
                                         toast(

@@ -33,6 +33,7 @@ const BillsAndCoinsAction = ({
                     open={updateModalForm}
                     onOpenChange={setUpdateModalForm}
                     formProps={{
+                        billsAndCoinId: billsAndCoin.id,
                         defaultValues: billsAndCoin,
                     }}
                 />

@@ -19,181 +19,112 @@ import {
     IMemberIncomeRequest,
     IMemberExpenseRequest,
     IMemberAddressRequest,
+    IMemberRelativeAccount,
     IMemberContactReference,
     IMemberGovernmentBenefit,
     IMemberJointAccountRequest,
-    IMemberProfileMediasRequest,
-    IMemberProfileAccountRequest,
     IMemberEducationalAttainment,
+    IMemberRelativeAccountRequest,
     IMemberContactReferenceRequest,
     IMemberGovernmentBenefitRequest,
+    IMemberProfileUserAccountRequest,
     IMemberProfilePersonalInfoRequest,
     IMemberProfileMembershipInfoRequest,
     IMemberEducationalAttainmentRequest,
-    IMemberRelativeAccount,
-    IMemberRelativeAccountRequest,
 } from '@/types'
-import { createMutationHook } from '../api-hook-factory'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    updateMutationInvalidationFn,
+} from '../api-hook-factory'
 
-export const useUpdateMemberProfilePersonalInfo = ({
-    onError,
-    onSuccess,
-    showMessage,
-}: IAPIHook<IMemberProfile, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
+export const useUpdateMemberProfilePersonalInfo = createMutationHook<
+    IMemberProfile,
+    string,
+    { memberId: TEntityId; data: IMemberProfilePersonalInfoRequest }
+>(
+    ({ memberId, data }) =>
+        MemberProfileService.updateMemberProfilePersonalInfo(memberId, data),
+    'Member general info has been saved',
+    (args) => updateMutationInvalidationFn('member-profile', args)
+)
 
-    return useMutation<
-        IMemberProfile,
-        string,
-        { memberId: TEntityId; data: IMemberProfilePersonalInfoRequest }
-    >({
-        mutationKey: ['member-profile', 'update-personal-info'],
-        mutationFn: async ({ memberId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberProfileService.updateMemberProfilePersonalInfo(
-                    memberId,
-                    data
-                )
-            )
+export const useUpdateMemberProfileMembershipInfo = createMutationHook<
+    IMemberProfile,
+    string,
+    { memberId: TEntityId; data: IMemberProfileMembershipInfoRequest }
+>(
+    ({ memberId, data }) =>
+        MemberProfileService.updateMemberProfileMembershipInfo(memberId, data),
+    'Updated membership info.',
+    (args) => updateMutationInvalidationFn('member-profile', args)
+)
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
+// MEMBER PROFILE ACCOUNT CONNECTION
 
-            queryClient.invalidateQueries({
-                queryKey: ['member-profile', memberId],
-            })
+export const useCreateMemberProfileUserAccount = createMutationHook<
+    IMemberProfile,
+    string,
+    {
+        memberProfileId: TEntityId
+        data: IMemberProfileUserAccountRequest
+    }
+>(
+    ({ memberProfileId, data }) =>
+        MemberProfileService.createMemberProfileUserAccount(
+            memberProfileId,
+            data
+        ),
+    'User account created for Member Profile',
+    (args) => createMutationInvalidateFn('member-profile', args)
+)
 
-            if (showMessage) toast.success('Personal info updated')
-            onSuccess?.(result)
+export const useUpdateMemberProfileUserAccount = createMutationHook<
+    IMemberProfile,
+    string,
+    {
+        userId: TEntityId
+        memberProfileId: TEntityId
+        data: IMemberProfileUserAccountRequest
+    }
+>(
+    ({ userId, data }) =>
+        MemberProfileService.updateMemberProfileUserAccount(userId, data),
+    'Member profile user account updated',
+    (args) => updateMutationInvalidationFn('member-profile', args)
+)
 
-            return result
-        },
-    })
-}
+export const useDisconnectMemberProfileUserAccount = createMutationHook<
+    IMemberProfile,
+    string,
+    {
+        memberProfileId: TEntityId
+    }
+>(
+    ({ memberProfileId }) =>
+        MemberProfileService.disconnectMemberProfileUserAccount(
+            memberProfileId
+        ),
+    'Disconnected member profile user account',
+    ({ queryClient, payload }) =>
+        queryClient.invalidateQueries({
+            queryKey: ['member-profile', payload.memberProfileId],
+        })
+)
 
-export const useUpdateMemberProfileMembershipInfo = ({
-    onError,
-    onSuccess,
-    showMessage,
-}: IAPIHook<IMemberProfile, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberProfile,
-        string,
-        { memberId: TEntityId; data: IMemberProfileMembershipInfoRequest }
-    >({
-        mutationKey: ['member-profile', 'update-membership-info'],
-        mutationFn: async ({ memberId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberProfileService.updateMemberProfileMembershipInfo(
-                    memberId,
-                    data
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-profile', memberId],
-            })
-
-            if (showMessage) toast.success('Membership info updated')
-            onSuccess?.(result)
-
-            return result
-        },
-    })
-}
-
-export const useUpdateMemberProfileAccountInfo = ({
-    onError,
-    onSuccess,
-    showMessage,
-}: IAPIHook<IMemberProfile, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberProfile,
-        string,
-        { memberId: TEntityId; data: IMemberProfileAccountRequest }
-    >({
-        mutationKey: ['member-profile', 'update-account-info'],
-        mutationFn: async ({ memberId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberProfileService.updateMemberProfileAccountInfo(
-                    memberId,
-                    data
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-profile', memberId],
-            })
-
-            if (showMessage) toast.success('Account info updated')
-            onSuccess?.(result)
-
-            return result
-        },
-    })
-}
-
-export const useUpdateMemberProfilePhotoSignature = ({
-    onError,
-    onSuccess,
-    showMessage,
-}: IAPIHook<IMemberProfile, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberProfile,
-        string,
-        { memberId: TEntityId; data: IMemberProfileMediasRequest }
-    >({
-        mutationKey: ['member-profile', 'update-medias'],
-        mutationFn: async ({ memberId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberProfileService.updateMemberProfileMediasPhotoSignature(
-                    memberId,
-                    data
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-profile', memberId],
-            })
-
-            if (showMessage) toast.success('Account info updated')
-            onSuccess?.(result)
-
-            return result
-        },
-    })
-}
+export const useConnectMemberProfileToUserAccount = createMutationHook<
+    IMemberProfile,
+    string,
+    { memberProfileId: TEntityId; userId: TEntityId }
+>(
+    ({ memberProfileId, userId }) =>
+        MemberProfileService.connectMemberProfileToUserAccount(
+            memberProfileId,
+            userId
+        ),
+    'Member Profile Connected to User',
+    (args) => updateMutationInvalidationFn('member-profile', args)
+)
 
 // EDUC ATTAINMENT UPDATE MEMBER_PROFILE > SETTINGS
 

@@ -15,6 +15,7 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberProfileContactReference } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberProfile } from '@/types'
+import EmptyListIndicator from '../empty-list-indicator'
 
 const MemberContactReferences = ({
     memberProfile,
@@ -161,9 +162,7 @@ const MemberContactReferences = ({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={4}>
-                                    <div className="py-6 text-center text-muted-foreground">
-                                        Empty Contact Number References
-                                    </div>
+                                    <EmptyListIndicator message="No Contact References yet" />
                                 </TableCell>
                             </TableRow>
                         )}

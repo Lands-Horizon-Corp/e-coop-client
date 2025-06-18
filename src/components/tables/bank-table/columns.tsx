@@ -1,6 +1,5 @@
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import BankAction from './action'
 import { Checkbox } from '@/components/ui/checkbox'
 import ImageDisplay from '@/components/image-display'
 import { PushPinSlashIcon } from '@/components/icons'
@@ -13,6 +12,7 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import { toReadableDate } from '@/utils'
 
 import { IBank } from '@/types'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 
 export const bankGlobalSearchTargets: IGlobalSearchTargets<IBank>[] = [
     { field: 'name', displayText: 'Bank Name' },
@@ -124,34 +124,41 @@ const BankTableColumns = (opts?: IBankTableColumnProps): ColumnDef<IBank>[] => [
         accessorKey: 'created_at',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Date Created">
-                <ColumnActions {...props} />
+                <ColumnActions {...props}>
+                    <DateFilter displayText="Date Created" field="created_at" />
+                </ColumnActions>
             </DataTableColumnHeader>
         ),
         cell: ({
             row: {
                 original: { created_at },
             },
-        }) => (
-            <span className="text-sm font-semibold">
-                {created_at ? toReadableDate(created_at) : '-'}
-            </span>
+        }) => <div>{toReadableDate(created_at)}</div>,
+        enableMultiSort: true,
+        enableResizing: true,
+        minSize: 150,
+    },
+    {
+        id: 'updated_at',
+        accessorKey: 'updated_at',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Date Updated">
+                <ColumnActions {...props}>
+                    <DateFilter displayText="Date Updated" field="updated_at" />
+                </ColumnActions>
+            </DataTableColumnHeader>
         ),
+        cell: ({
+            row: {
+                original: { updated_at },
+            },
+        }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
         size: 180,
-        minSize: 150,
-    },
-    {
-        id: 'actions',
-        header: () => null,
-        cell: ({ row }) => <BankAction row={row} />,
-        enableSorting: false,
-        enableResizing: false,
-        enableHiding: false,
-        size: 80,
-        minSize: 80,
+        minSize: 180,
     },
 ]
 

@@ -142,10 +142,7 @@ const BillsAndCoinsTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Date Created">
                 <ColumnActions {...props}>
-                    <DateFilter<IBillsAndCoin>
-                        displayText="Date Created"
-                        field="created_at"
-                    />
+                    <DateFilter displayText="Date Created" field="created_at" />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
@@ -153,19 +150,32 @@ const BillsAndCoinsTableColumns = (
             row: {
                 original: { created_at },
             },
-        }) => (
-            <div>
-                <span className="text-sm font-semibold">
-                    {created_at ? toReadableDate(created_at) : '-'}
-                </span>
-            </div>
+        }) => <div>{toReadableDate(created_at)}</div>,
+        enableMultiSort: true,
+        enableResizing: true,
+        minSize: 150,
+    },
+    {
+        id: 'updated_at',
+        accessorKey: 'updated_at',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Date Updated">
+                <ColumnActions {...props}>
+                    <DateFilter displayText="Date Updated" field="updated_at" />
+                </ColumnActions>
+            </DataTableColumnHeader>
         ),
+        cell: ({
+            row: {
+                original: { updated_at },
+            },
+        }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
         size: 180,
-        minSize: 150,
+        minSize: 180,
     },
 ]
 

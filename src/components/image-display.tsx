@@ -30,7 +30,9 @@ const ImageDisplay = ({
                 className={cn('object-cover', imageClassName)}
                 src={src ?? '-'}
             />
-            <AvatarFallback className={cn('rounded-none', fallbackClassName)}>
+            <AvatarFallback
+                className={cn('rounded-none capitalize', fallbackClassName)}
+            >
                 {fallback ? (
                     fallback
                 ) : (

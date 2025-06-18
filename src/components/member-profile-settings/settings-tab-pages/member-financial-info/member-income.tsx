@@ -139,7 +139,10 @@ const MemberIncome = ({ memberProfile }: Props) => {
                 ))}
                 {(!memberProfile.member_income ||
                     memberProfile.member_income.length === 0) && (
-                    <EmptyListIndicator message="No income yet" />
+                    <EmptyListIndicator
+                        message="No income yet"
+                        className="col-span-3"
+                    />
                 )}
             </div>
         </div>

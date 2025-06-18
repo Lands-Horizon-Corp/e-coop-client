@@ -28,6 +28,7 @@ import {
     IMemberRelativeAccountRequest,
     IMemberContactReferenceRequest,
     IMemberGovernmentBenefitRequest,
+    IMemberProfileUserAccountRequest,
     IMemberProfileQuickCreateRequest,
     IMemberProfilePersonalInfoRequest,
     IMemberProfileMembershipInfoRequest,
@@ -208,6 +209,52 @@ export const exportSelected = async (ids: TEntityId[]) => {
     )
 
     await downloadFileService(url, 'selected_members_export.csv')
+}
+
+// MEMBER PROFILE USER ACCOUNT CONNECTION
+
+export const createMemberProfileUserAccount = async (
+    memberProfileId: TEntityId,
+    data: IMemberProfileUserAccountRequest
+) => {
+    const response = await APIService.post<
+        IMemberProfileUserAccountRequest,
+        IMemberProfile
+    >(`/member-profile/${memberProfileId}/user-account`, data)
+
+    return response.data
+}
+
+export const updateMemberProfileUserAccount = async (
+    userId: TEntityId,
+    data: IMemberProfileUserAccountRequest
+) => {
+    const response = await APIService.put<
+        IMemberProfileUserAccountRequest,
+        IMemberProfile
+    >(`/member-profile/user-account/${userId}`, data)
+
+    return response.data
+}
+
+export const connectMemberProfileToUserAccount = async (
+    memberProfileId: TEntityId,
+    userId: TEntityId
+) => {
+    const response = await APIService.put<TEntityId, IMemberProfile>(
+        `/member-profile/${memberProfileId}/connect-user-account`,
+        userId
+    )
+    return response.data
+}
+
+export const disconnectMemberProfileUserAccount = async (
+    memberProfileId: TEntityId
+) => {
+    const response = await APIService.put<TEntityId, IMemberProfile>(
+        `/member-profile/${memberProfileId}/disconnect-user-account`
+    )
+    return response.data
 }
 
 // FOR UPDATING

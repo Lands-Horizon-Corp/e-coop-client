@@ -12,6 +12,7 @@ export interface IMemberProfilePersonalInfoRequest {
     member_gender_id?: TEntityId
     birth_date?: string
     contact_number?: string
+    business_contact_number?: string
 
     civil_status: TCivilStatus
 

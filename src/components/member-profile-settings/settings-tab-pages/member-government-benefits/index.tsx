@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 
 import {
     PlusIcon,
@@ -153,45 +153,52 @@ interface Props {
     memberProfile: IMemberProfile
 }
 
-const MemberGovernmentBenefits = ({ memberProfile }: Props) => {
-    const [create, setCreate] = useState(false)
+const MemberGovernmentBenefits = forwardRef<HTMLDivElement, Props>(
+    ({ memberProfile }, ref) => {
+        const [create, setCreate] = useState(false)
 
-    return (
-        <div>
-            <MemberGovernmentBenefitCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Create Government Benefit"
-                description="Add new government benefit information."
-                formProps={{
-                    memberProfileId: memberProfile.id,
-                    defaultValues: {
-                        member_profile_id: memberProfile.id,
-                        branch_id: memberProfile.branch_id,
-                        organization_id: memberProfile.organization_id,
-                    },
-                }}
-            />
-            <div className="mb-2 flex items-start justify-between">
-                <p>Government Benefits</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
-                    Add Benefit <PlusIcon className="ml-1" />
-                </Button>
+        return (
+            <div ref={ref}>
+                <MemberGovernmentBenefitCreateUpdateFormModal
+                    open={create}
+                    onOpenChange={setCreate}
+                    title="Create Government Benefit"
+                    description="Add new government benefit information."
+                    formProps={{
+                        memberProfileId: memberProfile.id,
+                        defaultValues: {
+                            member_profile_id: memberProfile.id,
+                            branch_id: memberProfile.branch_id,
+                            organization_id: memberProfile.organization_id,
+                        },
+                    }}
+                />
+                <div className="mb-2 flex items-start justify-between">
+                    <p>Government Benefits</p>
+                    <Button size="sm" onClick={() => setCreate(true)}>
+                        Add Benefit <PlusIcon className="ml-1" />
+                    </Button>
+                </div>
+                <div className="space-y-4">
+                    {memberProfile.member_government_benefits?.map(
+                        (benefit) => (
+                            <MemberGovernmentBenefitCard
+                                key={benefit.id}
+                                benefit={benefit}
+                            />
+                        )
+                    )}
+                    {(!memberProfile.member_government_benefits ||
+                        memberProfile.member_government_benefits.length ===
+                            0) && (
+                        <EmptyListIndicator message="No government benefits yet" />
+                    )}
+                </div>
             </div>
-            <div className="space-y-4">
-                {memberProfile.member_government_benefits?.map((benefit) => (
-                    <MemberGovernmentBenefitCard
-                        key={benefit.id}
-                        benefit={benefit}
-                    />
-                ))}
-                {(!memberProfile.member_government_benefits ||
-                    memberProfile.member_government_benefits.length === 0) && (
-                    <EmptyListIndicator message="No government benefits yet" />
-                )}
-            </div>
-        </div>
-    )
-}
+        )
+    }
+)
+
+MemberGovernmentBenefits.displayName = 'MemberFinancial'
 
 export default MemberGovernmentBenefits

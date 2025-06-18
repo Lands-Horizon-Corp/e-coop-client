@@ -22,7 +22,7 @@ export const updateBillsCoin = async (
     id: TEntityId,
     data: IBillsAndCoinRequest
 ) => {
-    const response = await APIService.post<IBillsAndCoinRequest, IBillsAndCoin>(
+    const response = await APIService.put<IBillsAndCoinRequest, IBillsAndCoin>(
         `/bills-and-coins/${id}`,
         data
     )

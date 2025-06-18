@@ -1,0 +1,191 @@
+import { forwardRef } from 'react'
+
+import MemberUserAccountCreateUpdateForm, {
+    MemberUserAccountCreateUpdateFormModal,
+} from './member-account-create-update-form'
+import { Button } from '@/components/ui/button'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { LinkIcon, UserPlusIcon, PlugConnectFillIcon } from '@/components/icons'
+import UserOrganizationPicker from '@/components/pickers/user-organization-picker'
+import ProfileConnectUserModalDisplay from '@/components/elements/modal-displays/profile-connect-user-content'
+
+import { cn } from '@/lib'
+import { useModalState } from '@/hooks/use-modal-state'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useConnectMemberProfileToUserAccount } from '@/hooks/api-hooks/member/use-member-profile-settings'
+
+import { IMember, IMemberProfile, IUserOrganization } from '@/types'
+
+interface Props {
+    memberProfile: IMemberProfile
+}
+
+const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
+    ({ memberProfile }, ref) => {
+        const createUserModal = useModalState()
+        const connectUserModal = useModalState()
+
+        const { onOpen } = useConfirmModalStore()
+
+        const { mutate: connect, isPending: isConnecting } =
+            useConnectMemberProfileToUserAccount()
+
+        return (
+            <div ref={ref}>
+                <p className="mb-2">Member User Account</p>
+                {memberProfile.user !== undefined ? (
+                    <div>
+                        <MemberUserAccountCreateUpdateForm
+                            className="mt-4"
+                            userId={memberProfile.user_id}
+                            memberProfileId={memberProfile.id}
+                            defaultValues={{
+                                birthdate: memberProfile.birth_date,
+                                contact_number: memberProfile.contact_number,
+                                first_name: memberProfile.first_name,
+                                middle_name: memberProfile.middle_name,
+                                last_name: memberProfile.full_name,
+                                suffix: memberProfile.suffix,
+                                full_name: memberProfile.full_name,
+                                user_name: memberProfile.first_name,
+                            }}
+                        />
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        <p className="text-sm text-muted-foreground">
+                            This member does not have a user account for logging
+                            in. To enable login access, create a new user
+                            account or connect an existing one.
+                        </p>
+                        <fieldset
+                            disabled={isConnecting}
+                            className="flex gap-x-2"
+                        >
+                            <MemberUserAccountCreateUpdateFormModal
+                                {...createUserModal}
+                                formProps={{
+                                    memberProfileId: memberProfile.id,
+                                    defaultValues: {
+                                        birthdate: memberProfile.birth_date,
+                                        contact_number:
+                                            memberProfile.contact_number,
+                                        first_name: memberProfile.first_name,
+                                        middle_name: memberProfile.middle_name,
+                                        last_name: memberProfile.full_name,
+                                        suffix: memberProfile.suffix,
+                                        full_name: memberProfile.full_name,
+                                        user_name: memberProfile.first_name,
+                                    },
+                                }}
+                            />
+                            <UserOrganizationPicker
+                                defaultFilter={{
+                                    user_type: {
+                                        dataType: 'text',
+                                        displayText: 'User Type',
+                                        mode: 'equal',
+                                        isStaticFilter: true,
+                                        value: 'member',
+                                    },
+                                }}
+                                triggerClassName="hidden"
+                                modalState={connectUserModal}
+                                onSelect={(value) => {
+                                    const userOrg =
+                                        value as unknown as IUserOrganization<IMember>
+
+                                    onOpen({
+                                        title: (
+                                            <p className="flex items-center truncate">
+                                                <span className="mr-2 inline-flex items-center justify-center rounded-md bg-accent p-1">
+                                                    <LinkIcon className="text-primary" />
+                                                </span>
+                                                Connect Member Profile User
+                                                Account
+                                            </p>
+                                        ),
+                                        description:
+                                            "You're about to connect a member profile to a user account. This action will link these profiles together permanently.",
+                                        confirmString: (
+                                            <p>
+                                                <LinkIcon className="mr-2 inline" />
+                                                Connect
+                                            </p>
+                                        ),
+                                        content: (
+                                            <ProfileConnectUserModalDisplay
+                                                userOrg={userOrg}
+                                                memberProfile={memberProfile}
+                                            />
+                                        ),
+                                        onConfirm: () =>
+                                            connect({
+                                                memberProfileId:
+                                                    memberProfile.id,
+                                                userId: userOrg.user_id,
+                                            }),
+                                    })
+                                }}
+                            />
+
+                            <Button
+                                variant="outline"
+                                onClick={() =>
+                                    createUserModal.onOpenChange(true)
+                                }
+                                className="group !h-auto w-1/2 flex-col items-start space-y-2 rounded-xl from-primary/40 to-transparent to-80% py-4 hover:bg-gradient-to-tr"
+                            >
+                                <div className="flex w-full items-center justify-between">
+                                    <p className="shrink truncate">
+                                        Create New User Account
+                                    </p>
+                                    <UserPlusIcon className="size-4 shrink-0 text-muted-foreground/60 duration-200 ease-out group-hover:text-primary" />
+                                </div>
+                                <p className="text-wrap text-left text-xs text-muted-foreground/90">
+                                    Create a new user account for this member
+                                    profile.
+                                </p>
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() =>
+                                    connectUserModal.onOpenChange(true)
+                                }
+                                className={cn(
+                                    'group !h-auto w-1/2 flex-col items-start space-y-2 rounded-xl from-primary/40 to-transparent to-80% py-4 hover:bg-gradient-to-tr',
+                                    isConnecting && 'bg-gradient-to-tr'
+                                )}
+                            >
+                                <div className="flex w-full items-center justify-between">
+                                    <p className="shrink truncate">
+                                        Connect to existing User Account
+                                    </p>
+                                    {!isConnecting ? (
+                                        <PlugConnectFillIcon className="size-4 shrink-0 text-muted-foreground/60 duration-200 ease-out group-hover:text-primary" />
+                                    ) : (
+                                        <LoadingSpinner className="inline" />
+                                    )}
+                                </div>
+                                <p
+                                    className={cn(
+                                        'text-wrap text-left text-xs text-muted-foreground/80',
+                                        isConnecting && 'animate-pulse'
+                                    )}
+                                >
+                                    {isConnecting
+                                        ? 'Connecting...'
+                                        : 'Connect this Profile to an existing User Account that has no profile yet.'}
+                                </p>
+                            </Button>
+                        </fieldset>
+                    </div>
+                )}
+            </div>
+        )
+    }
+)
+
+MemberUserAccount.displayName = 'MembershipInfo'
+
+export default MemberUserAccount

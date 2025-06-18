@@ -227,8 +227,7 @@ const MemberMembershipForm = ({
                                                         className="text-xs text-muted-foreground"
                                                     >
                                                         Contributes to a pooled
-                                                        investment (mutual
-                                                        fund).
+                                                        investment.
                                                     </p>
                                                 </div>
                                             </div>

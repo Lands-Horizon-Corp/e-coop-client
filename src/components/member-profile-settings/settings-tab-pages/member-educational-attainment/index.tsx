@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 
 import {
     PlusIcon,
@@ -140,43 +140,47 @@ interface Props extends IClassProps {
     memberProfile: IMemberProfile
 }
 
-const MemberEducationalAttainment = ({ memberProfile }: Props) => {
-    const [create, setCreate] = useState(false)
+const MemberEducationalAttainment = forwardRef<HTMLDivElement, Props>(
+    ({ memberProfile }, ref) => {
+        const [create, setCreate] = useState(false)
 
-    return (
-        <div>
-            <MemberEducationalAttainmentCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                formProps={{
-                    memberProfileId: memberProfile.id,
-                    defaultValues: {
-                        member_profile_id: memberProfile.id,
-                    },
-                }}
-            />
-            <div className="mb-2 flex items-start justify-between">
-                <p>Educational Attainments</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
-                    Add Education <PlusIcon className="ml-1" />
-                </Button>
+        return (
+            <div ref={ref}>
+                <MemberEducationalAttainmentCreateUpdateFormModal
+                    open={create}
+                    onOpenChange={setCreate}
+                    formProps={{
+                        memberProfileId: memberProfile.id,
+                        defaultValues: {
+                            member_profile_id: memberProfile.id,
+                        },
+                    }}
+                />
+                <div className="mb-2 flex items-start justify-between">
+                    <p>Educational Attainments</p>
+                    <Button size="sm" onClick={() => setCreate(true)}>
+                        Add Education <PlusIcon className="ml-1" />
+                    </Button>
+                </div>
+                <div className="space-y-4">
+                    {memberProfile.member_educational_attainment?.map(
+                        (educationalAttainmentId) => (
+                            <MemberEducationalAttainmentCard
+                                key={educationalAttainmentId.id}
+                                educationalAttainment={educationalAttainmentId}
+                            />
+                        )
+                    )}
+                    {(!memberProfile.member_educational_attainment ||
+                        memberProfile.member_assets?.length) && (
+                        <EmptyListIndicator message="Empty Educational Attainment" />
+                    )}
+                </div>
             </div>
-            <div className="space-y-4">
-                {memberProfile.member_educational_attainment?.map(
-                    (educationalAttainmentId) => (
-                        <MemberEducationalAttainmentCard
-                            key={educationalAttainmentId.id}
-                            educationalAttainment={educationalAttainmentId}
-                        />
-                    )
-                )}
-                {(!memberProfile.member_educational_attainment ||
-                    memberProfile.member_assets?.length) && (
-                    <EmptyListIndicator message="Empty Educational Attainment" />
-                )}
-            </div>
-        </div>
-    )
-}
+        )
+    }
+)
+
+MemberEducationalAttainment.displayName = 'MemberEducationalAttainment'
 
 export default MemberEducationalAttainment

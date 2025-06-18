@@ -26,6 +26,7 @@ import {
     IClassProps,
     IHolidayRequest,
 } from '@/types'
+import { toInputDateString } from '@/utils'
 
 const holidaySchema = z.object({
     name: z.string().min(1, 'Holiday name is required'),
@@ -55,9 +56,11 @@ const HolidayCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             name: '',
-            entry_date: '',
             description: '',
             ...defaultValues,
+            entry_date: toInputDateString(
+                defaultValues?.entry_date ?? new Date()
+            ),
         },
     })
 
@@ -65,10 +68,18 @@ const HolidayCreateUpdateForm = ({
     const updateMutation = useUpdateHoliday({ onSuccess, onError })
 
     const onSubmit = form.handleSubmit((formData) => {
+        const data = {
+            ...formData,
+            entry_date: new Date(formData.entry_date).toISOString(),
+        }
+
         if (holidayId) {
-            updateMutation.mutate({ holidayId, data: formData })
+            updateMutation.mutate({
+                holidayId,
+                data,
+            })
         } else {
-            createMutation.mutate(formData)
+            createMutation.mutate(data)
         }
     })
 
