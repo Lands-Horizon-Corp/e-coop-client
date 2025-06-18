@@ -128,9 +128,16 @@ export const quickCreateMemberProfileSchema = z
         full_name: z.string().optional(),
         suffix: z.string().max(15).optional(),
         contact_number: z.string().optional(),
-        birth_date: stringDateSchema.transform((val) =>
-            new Date(val).toISOString()
-        ),
+        birth_date: stringDateSchema
+            .refine(
+                (val) => {
+                    const date = startOfDay(new Date(val))
+                    const now = startOfDay(new Date())
+                    return isBefore(date, now)
+                },
+                { message: 'Birthdate must be in the past' }
+            )
+            .transform((val) => new Date(val).toISOString()),
         member_gender_id: entityIdSchema.optional(),
 
         civil_status: civilStatusSchema,

@@ -1,4 +1,3 @@
-import React from 'react'
 import { cn } from '@/lib'
 
 import { Badge } from '@/components/ui/badge'
@@ -21,12 +20,12 @@ const generalLedgerTypeStyles: Record<
 > = {
     [GeneralLedgerTypeEnum.Assets]: {
         label: 'Assets',
-        bgColor: 'bg-emerald-500',
+        bgColor: 'bg-emerald-700',
         textColor: 'text-emerald-50',
     },
     [GeneralLedgerTypeEnum.LiabilitiesEquityAndReserves]: {
-        label: 'Liabilities/Equity',
-        bgColor: 'bg-purple-600',
+        label: 'Liabilities, Equity & Reserves',
+        bgColor: 'bg-purple-700',
         textColor: 'text-purple-50',
     },
     [GeneralLedgerTypeEnum.Income]: {
@@ -41,21 +40,20 @@ const generalLedgerTypeStyles: Record<
     },
 }
 
-export const GeneralLedgerTypeBadge: React.FC<GeneralLedgerTypeBadgeProps> = ({
+export const GeneralLedgerTypeBadge = ({
     type,
     className,
     description,
-}) => {
-    if (!type) return
-
+}: GeneralLedgerTypeBadgeProps) => {
     const { label, bgColor, textColor } = generalLedgerTypeStyles[type]
-
+    const hover = `hover:${bgColor}`
     return (
         <Badge
             className={cn(
-                `py-0.1 text-[10.5px] hover:bg-black`,
+                `py-0.1 text-[10.5px] hover:bg-transparent`,
                 bgColor,
                 textColor,
+                hover,
                 className
             )}
         >

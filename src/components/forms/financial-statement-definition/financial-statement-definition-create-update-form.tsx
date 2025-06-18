@@ -5,32 +5,37 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 import { cn } from '@/lib'
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 
-import { Form, FormControl } from '@/components/ui/form'
-
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { Checkbox } from '@/components/ui/checkbox'
-import { CloseIcon, NoteIcon } from '@/components/icons'
-import { Label } from '@/components/ui/label'
-import {
-    FinancialStatementTypeEnum,
-    IFinancialStatementDefinition,
-    IFinancialStatementDefinitionRequest,
-} from '@/types/coop-types/financial-statement-definition'
-import { FinancialStatementDefinitionSchema } from '@/validations/financial-statement-definition/financial-statement-definition-schema'
-import TextEditor from '@/components/text-editor'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl } from '@/components/ui/form'
+import { CloseIcon, NoteIcon } from '@/components/icons'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import TextEditor from '@/components/text-editor'
+import {
+    FinancialStatementTypeEnum,
+    IFinancialStatementDefinition,
+    IFinancialStatementDefinitionRequest,
+} from '@/types/coop-types/financial-statement-definition'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { FinancialStatementDefinitionSchema } from '@/validations/financial-statement-definition/financial-statement-definition-schema'
+
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { GeneralLedgerFinancialStatementNodeType } from '@/types/coop-types/general-ledger-definitions'
+import { useCreateFinancialStatementDefinition } from '@/hooks/api-hooks/financial-statement-definition'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 type TFinancialStatementDefinitionFormValues = z.infer<
     typeof FinancialStatementDefinitionSchema
@@ -44,7 +49,7 @@ interface IFinancialStatementDefinitionCreateUpdateFormProps
             string,
             TFinancialStatementDefinitionFormValues
         > {
-    accountId?: TEntityId
+    fsAccountId?: TEntityId
 }
 
 const FSDefinitionCreateUpdateForm = ({
@@ -52,30 +57,34 @@ const FSDefinitionCreateUpdateForm = ({
     className,
     readOnly,
     disabledFields,
+    fsAccountId,
 }: IFinancialStatementDefinitionCreateUpdateFormProps) => {
-    // const { currentAuth } = useAuthUserWithOrgBranch()
-    // const organizationId = currentAuth.user_organization.organization_id
-    // const branchId = currentAuth.user_organization.branch_id
+    const { currentAuth } = useAuthUserWithOrgBranch()
+
+    const organizationId = currentAuth.user_organization.organization_id
+    const branchId = currentAuth.user_organization.branch_id
 
     const form = useForm<TFinancialStatementDefinitionFormValues>({
         resolver: zodResolver(FinancialStatementDefinitionSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            name: '',
-            name_in_total: '',
-            index: 0,
-            is_posting: false,
-            exclude: false,
-            financial_statement_type: FinancialStatementTypeEnum.Assets,
             ...defaultValues,
         },
     })
     const isDisabled = (field: Path<TFinancialStatementDefinitionFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
+    const { mutate: createFSDefinition, isPending: isCreating } =
+        useCreateFinancialStatementDefinition()
+
     const handleSubmit = form.handleSubmit((data) => {
-        console.log('Form submitted:', data)
+        const request = {
+            organization_id: organizationId,
+            branch_id: branchId,
+            ...data,
+        }
+        createFSDefinition(request)
     })
 
     return (
@@ -143,6 +152,57 @@ const FSDefinitionCreateUpdateForm = ({
                         />
                     )}
                 />
+                <FormFieldWrapper
+                    control={form.control}
+                    name="type"
+                    label="General Ledger Type"
+                    className="col-span-2"
+                    render={({ field }) => (
+                        <RadioGroup
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            disabled={isDisabled(field.name)}
+                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                        >
+                            {Object.values(
+                                GeneralLedgerFinancialStatementNodeType
+                            ).map((type) => (
+                                <GradientBackground gradientOnly>
+                                    <div
+                                        key={type}
+                                        className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                    >
+                                        <RadioGroupItem
+                                            value={type}
+                                            id={`interest-fines-diminishing-${type}`}
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="grid gap-2">
+                                                <Label
+                                                    htmlFor={`interest-fines-diminishing-${type}`}
+                                                >
+                                                    {type}
+                                                </Label>
+                                                <p
+                                                    id={`interest-fines-diminishing-${type}-description`}
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    {type ===
+                                                        GeneralLedgerFinancialStatementNodeType.DEFINITION &&
+                                                        'General Ledger Definition'}
+                                                    {type ===
+                                                        GeneralLedgerFinancialStatementNodeType.ACCOUNT &&
+                                                        'General Ledger Account.'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </GradientBackground>
+                            ))}
+                        </RadioGroup>
+                    )}
+                />
                 <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-2">
                     <FormFieldWrapper
                         control={form.control}
@@ -159,6 +219,7 @@ const FSDefinitionCreateUpdateForm = ({
                                             parseFloat(e.target.value)
                                         )
                                     }
+                                    disabled={isDisabled(field.name)}
                                     placeholder="e.g., 10 (for sorting)"
                                 />
                             </div>
@@ -255,31 +316,42 @@ const FSDefinitionCreateUpdateForm = ({
                         )
                     }}
                 />
-                <div className="grid w-full grid-cols-1 gap-2 py-2 md:grid-cols-2">
-                    <div className="col-span-2 space-y-2">
-                        <FormErrorMessage errorMessage={''} />
-                        <div className="flex items-center justify-end gap-x-2">
-                            <Button
-                                size="sm"
-                                type="button"
-                                variant="ghost"
-                                onClick={() => {
-                                    form.reset()
-                                }}
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                Reset
-                            </Button>
-                            <Button
-                                size="sm"
-                                type="submit"
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                Create
-                            </Button>
+                {!readOnly && (
+                    <>
+                        <div className="grid w-full grid-cols-1 gap-2 py-2 md:grid-cols-2">
+                            <div className="col-span-2 space-y-2">
+                                <FormErrorMessage errorMessage={''} />
+                                <div className="flex items-center justify-end gap-x-2">
+                                    <Button
+                                        size="sm"
+                                        type="button"
+                                        variant="ghost"
+                                        onClick={() => {
+                                            form.reset()
+                                        }}
+                                        className="w-full self-end px-8 sm:w-fit"
+                                    >
+                                        Reset
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        type="submit"
+                                        disabled={isCreating}
+                                        className="w-full self-end px-8 sm:w-fit"
+                                    >
+                                        {isCreating ? (
+                                            <LoadingSpinner />
+                                        ) : fsAccountId ? (
+                                            'Update'
+                                        ) : (
+                                            'Create'
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
             </form>
         </Form>
     )

@@ -1,6 +1,5 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { GeneralLedgerFinancialStatementNodeType } from './general-ledger-definitions'
-import { IPaginatedResult } from './paginated-result'
 
 export enum FinancialStatementTypeEnum {
     Assets = 'Assets',
@@ -40,16 +39,14 @@ export interface IFinancialStatementDefinitionRequest {
     index?: number
     name_in_total?: string
     is_posting?: boolean
+    exclude?: boolean
+    type: GeneralLedgerFinancialStatementNodeType
     financial_statement_type?: FinancialStatementTypeEnum
-    exclude: boolean
 
     organization_id?: TEntityId
     branch_id?: TEntityId
     financial_statement_definition_id?: TEntityId
 }
-
-export interface IPaginatedFinancialStatementDefinitionResource
-    extends IPaginatedResult<IFinancialStatementDefinition> {}
 
 export interface IFinancialStatementDefinitionNode
     extends IFinancialStatementDefinition {

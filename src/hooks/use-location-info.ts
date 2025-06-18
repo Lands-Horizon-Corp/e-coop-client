@@ -1,13 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { countries } from 'country-data-list'
 import { Country } from 'react-phone-number-input'
-import { useQuery } from '@tanstack/react-query'
-
-interface TimezoneData {
-    c: string[]
-    n: string
-    u: number
-}
+import { TimezoneData } from '@/helpers/time-zones/time-zone-type'
+import { useGetTimeZones } from '@/helpers/time-zones'
 
 export interface CountryOptionsProps {
     alpha2: string
@@ -34,20 +29,6 @@ const getCountryAlpha2Code = (
             country.alpha2.toLowerCase() === countryNameOrAlpha2.toLowerCase()
     )
     return (foundCountry?.alpha2 as Country) ?? null
-}
-
-export const useGetTimeZones = () => {
-    return useQuery<Record<string, TimezoneData>>({
-        queryKey: ['timezones'],
-        queryFn: async () => {
-            const response = await fetch('/data/timeZones.json')
-            if (!response.ok) {
-                throw new Error('Failed to fetch timezones data')
-            }
-            return response.json()
-        },
-        staleTime: Infinity,
-    })
 }
 
 export const useLocationInfo = () => {

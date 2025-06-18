@@ -52,16 +52,19 @@ const CopyTextButton = <TErr = unknown,>({
         )
 
     return (
-        <>
-            <CopyIcon
-                onClick={() => handleCopy()}
-                className={cn(
-                    'inline cursor-pointer text-foreground/40 duration-150 ease-in-out hover:text-foreground',
-                    copied && 'pointer-events-none',
-                    className
-                )}
-            />
-        </>
+        <button
+            className={cn(
+                'inline cursor-pointer text-foreground/40 duration-150 ease-in-out hover:text-foreground',
+                copied && 'pointer-events-none',
+                className
+            )}
+            onClick={(e) => {
+                e.stopPropagation()
+                handleCopy()
+            }}
+        >
+            <CopyIcon className="size-full" />
+        </button>
     )
 }
 
