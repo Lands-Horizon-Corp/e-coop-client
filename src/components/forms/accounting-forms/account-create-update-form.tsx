@@ -80,7 +80,7 @@ const AccountCreateUpdateForm = ({
     const organizationId = currentAuth.user_organization.organization_id
     const branchId = currentAuth.user_organization.branch_id
 
-    const [selectedItem, setSelectedItem] = useState('Deposit')
+    const [selectedItem, setSelectedItem] = useState(defaultValues?.type || '')
     type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
     const form = useForm<TAccountFormValues>({

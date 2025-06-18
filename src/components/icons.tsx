@@ -238,6 +238,7 @@ import {
     FaCreditCard as CreditCardIcon,
     FaUserClock as UserClockFillIcon,
     FaCalendarCheck as FaCalendarCheckIcon,
+    FaTimesCircle as FaTimesIcon,
 } from 'react-icons/fa'
 
 import {
@@ -258,6 +259,8 @@ import {
     FaBoxesStacked as BoxesStackedIcon,
     FaHouseChimneyWindow as HouseIcon,
     FaBusinessTime as BriefCaseClockIcon,
+    FaCircleCheck as FaCheckIcon,
+    FaArrowUpLong as ArrowUpLong,
 } from 'react-icons/fa6'
 
 import {
@@ -299,6 +302,7 @@ import { RxDotFilled as DotMediumIcon } from 'react-icons/rx'
 import {
     GrFormNextLink as NextIcon,
     GrPowerReset as PowerResetIcon,
+    GrView as EyeViewIcon,
 } from 'react-icons/gr'
 
 import {
@@ -389,6 +393,7 @@ export {
     SchoolIcon,
     Image2Icon,
     IdCardIcon,
+    EyeViewIcon,
     CodeSandBox,
     ExcludeIcon,
     ReceiptIcon,
@@ -412,6 +417,9 @@ export {
     EyeNoneIcon,
     UserTagIcon,
     UserPlusIcon,
+    FaCheckIcon,
+    FaTimesIcon,
+    ArrowUpLong,
     LandmarkIcon,
     SignPostIcon,
     InternalIcon,

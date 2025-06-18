@@ -1,39 +1,44 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Form, FormControl } from '@/components/ui/form'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import {
-    GeneralLedgerDefinitionSchema,
-    IGeneralLedgerDefinitionFormValues,
-} from '@/validations/general-ledger-definition/general-ledger-definition-schema'
-
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import TextEditor from '@/components/text-editor'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Separator } from '@/components/ui/separator'
+import { Form, FormControl } from '@/components/ui/form'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 
 import { MoneyBagIcon } from '@/components/icons'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 import {
-    GeneralLedgerFinancialStatementNodeType,
     GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
+    GeneralLedgerFinancialStatementNodeType,
 } from '@/types/coop-types/general-ledger-definitions'
+
+import {
+    GeneralLedgerDefinitionSchema,
+    IGeneralLedgerDefinitionFormValues,
+} from '@/validations/general-ledger-definition/general-ledger-definition-schema'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { useCreateGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definition/use-general-ledger-definition'
+
 import { cn } from '@/lib'
 import { Path, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import TextEditor from '@/components/text-editor'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 interface IGeneralLedgerDefinitionCreateUpdateFormProps
     extends IClassProps,
@@ -50,7 +55,13 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
     className,
     readOnly,
     disabledFields,
+    generalLedgerId,
 }: IGeneralLedgerDefinitionCreateUpdateFormProps) => {
+    const { currentAuth } = useAuthUserWithOrgBranch()
+
+    const organizationId = currentAuth.user_organization.organization_id
+    const branchId = currentAuth.user_organization.branch_id
+
     const form = useForm<IGeneralLedgerDefinitionFormValues>({
         resolver: zodResolver(GeneralLedgerDefinitionSchema),
         reValidateMode: 'onChange',
@@ -63,10 +74,24 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
     const isDisabled = (field: Path<IGeneralLedgerDefinitionFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
+    const { mutate: CreateGeneralLedgerDefinition, isPending: isCreating } =
+        useCreateGeneralLedgerDefinition({
+            onSuccess: () => {
+                form.reset()
+            },
+        })
+
     // Handle form submission
     const handleSubmit = form.handleSubmit((data) => {
-        console.log('Form submitted:', data)
+        const request = {
+            organization_id: organizationId,
+            branch_id: branchId,
+            ...data,
+        }
+        CreateGeneralLedgerDefinition(request)
     })
+
+    const isFormChange = form.formState.isDirty
 
     return (
         <Form {...form}>
@@ -77,20 +102,20 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 <FormFieldWrapper
                     control={form.control}
                     name="name"
-                    label="General Ledger Name"
+                    label="Name *"
                     render={({ field }) => (
                         <Input
                             {...field}
                             id={field.name}
+                            value={field.value || ''}
                             disabled={isDisabled(field.name)}
                             placeholder="e.g., Cash in Bank, Accounts Payable"
-                            autoComplete="off"
                         />
                     )}
                 />
                 <FormFieldWrapper
                     control={form.control}
-                    label="GL Type"
+                    label="Type *"
                     name="general_ledger_type"
                     className="col-span-4"
                     render={({ field }) => (
@@ -121,7 +146,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 <FormFieldWrapper
                     control={form.control}
                     name="description"
-                    label="Description (Optional)"
+                    label="Description "
                     render={({ field }) => (
                         <TextEditor
                             {...field}
@@ -135,13 +160,13 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
                     <FormFieldWrapper
                         control={form.control}
-                        label="Index (Optional)"
+                        label="Index "
                         name="index"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                type="number"
                                 value={field.value ?? ''}
+                                pattern="\d*"
                                 onChange={(e) =>
                                     field.onChange(
                                         parseFloat(e.target.value) || undefined
@@ -154,12 +179,13 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        label="Name in Total (Optional)"
+                        label="Name in Total"
                         name="name_in_total"
                         render={({ field }) => (
                             <Input
                                 {...field}
                                 id={field.name}
+                                value={field.value || ''}
                                 disabled={isDisabled(field.name)}
                                 placeholder="e.g., Total Current Assets"
                                 autoComplete="off"
@@ -170,12 +196,11 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 <FormFieldWrapper
                     control={form.control}
                     name="type"
-                    label="General Ledger Type"
                     className="col-span-2"
                     render={({ field }) => (
                         <RadioGroup
                             onValueChange={field.onChange}
-                            value={field.value}
+                            value={field.value || ''}
                             disabled={isDisabled(field.name)}
                             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                         >
@@ -231,7 +256,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                 <Checkbox
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
-                                    checked={field.value}
+                                    checked={field.value || false}
                                     onCheckedChange={field.onChange}
                                     name={field.name}
                                     className="order-1 after:absolute after:inset-0"
@@ -261,13 +286,13 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
                     <FormFieldWrapper
                         control={form.control}
-                        label="Beginning Balance (Credit - Optional)"
+                        label="Beginning Balance (Credit)"
                         name="beginning_balance_of_the_year_credit"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                type="number"
                                 value={field.value ?? ''}
+                                pattern="\d*"
                                 onChange={(e) =>
                                     field.onChange(
                                         parseFloat(e.target.value) || undefined
@@ -280,12 +305,12 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        label="Beginning Balance (Debit - Optional)"
+                        label="Beginning Balance"
                         name="beginning_balance_of_the_year_debit"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                type="number"
+                                pattern="\d*"
                                 value={field.value ?? ''}
                                 onChange={(e) =>
                                     field.onChange(
@@ -298,55 +323,60 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         )}
                     />
                 </div>
-                <Separator />
-                <div className="space-y-2">
-                    <FormErrorMessage
-                        errorMessage={form.formState.errors.root?.message || ''}
-                    />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            onClick={() => form.reset()}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            // disabled={isPending} // Uncomment if you have a loading state
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {/* {isPending ? (
-                                <LoadingSpinner />
-                            ) : generalLedgerId ? (
-                                'Update'
-                            ) : (
-                                'Create'
-                            )} */}
-                            {/* {generalLedgerId ? 'Update' : 'Create'} */}
-                            Create
-                        </Button>
-                    </div>
-                </div>
+                {!readOnly && (
+                    <>
+                        <Separator />
+                        <div className="space-y-2">
+                            <FormErrorMessage
+                                errorMessage={
+                                    form.formState.errors.root?.message || ''
+                                }
+                            />
+                            <div className="flex items-center justify-end gap-x-2">
+                                <Button
+                                    size="sm"
+                                    type="button"
+                                    variant="ghost"
+                                    onClick={() => form.reset()}
+                                    className="w-full self-end px-8 sm:w-fit"
+                                >
+                                    Reset
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    type="submit"
+                                    disabled={
+                                        generalLedgerId
+                                            ? !isFormChange
+                                            : isCreating
+                                    }
+                                    className="w-full self-end px-8 sm:w-fit"
+                                >
+                                    {isCreating ? (
+                                        <LoadingSpinner />
+                                    ) : generalLedgerId ? (
+                                        'Update'
+                                    ) : (
+                                        'Create'
+                                    )}
+                                </Button>
+                            </div>
+                        </div>
+                    </>
+                )}
             </form>
         </Form>
     )
 }
 
 export const GeneralLedgerDefinitionCreateUpdateFormModal = ({
-    title = 'Create General Ledger Definition',
-    description = 'Fill out the form to add a new General Ledger Definition.',
+    title,
+    description,
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<
-        IGeneralLedgerDefinitionCreateUpdateFormProps,
-        'className' | 'generalLedgerId'
-    >
+    formProps?: Omit<IGeneralLedgerDefinitionCreateUpdateFormProps, 'className'>
 }) => {
     return (
         <Modal

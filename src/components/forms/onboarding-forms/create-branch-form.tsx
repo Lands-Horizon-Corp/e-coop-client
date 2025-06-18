@@ -156,6 +156,11 @@ export const CreateUpdateBranchByOrgForm = ({
     const isLoading =
         isPedingCreateBranch || isLoadingUpdateBranch || isUploadingPhoto
 
+    const updateDisabled =
+        isLoadingUpdateBranch || isUploadingPhoto || !isBranchOnChanged
+
+    const createDisabled = isPedingCreateBranch || isUploadingPhoto
+
     const combinedError = error
 
     return (
@@ -186,6 +191,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter branch name"
                                     />
@@ -198,6 +204,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter email"
                                     />
@@ -258,6 +265,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter address"
                                     />
@@ -271,6 +279,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                     <Input
                                         {...field}
                                         disabled={isLoading}
+                                        value={field.value || ''}
                                         placeholder="Enter province"
                                     />
                                 )}
@@ -282,6 +291,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter city"
                                     />
@@ -295,6 +305,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                     <Input
                                         {...field}
                                         disabled={isLoading}
+                                        value={field.value || ''}
                                         placeholder="Enter barangay"
                                     />
                                 )}
@@ -307,6 +318,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                     render={({ field }) => (
                                         <Input
                                             {...field}
+                                            value={field.value || ''}
                                             disabled={isLoading}
                                             placeholder="Enter region"
                                         />
@@ -320,6 +332,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                         <Input
                                             {...field}
                                             disabled={isLoading}
+                                            value={field.value || ''}
                                             placeholder="Enter postal code"
                                         />
                                     )}
@@ -500,15 +513,9 @@ export const CreateUpdateBranchByOrgForm = ({
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
-                                                value={field.value}
+                                                value={field.value || ''}
                                                 disabled={isLoading}
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        parseFloat(
-                                                            e.target.value
-                                                        )
-                                                    )
-                                                }
+                                                onChange={field.onChange}
                                                 placeholder="latitude"
                                             />
                                         </div>
@@ -523,15 +530,9 @@ export const CreateUpdateBranchByOrgForm = ({
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
-                                                value={field.value}
+                                                value={field.value || ''}
                                                 disabled={isLoading}
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        parseFloat(
-                                                            e.target.value
-                                                        )
-                                                    )
-                                                }
+                                                onChange={field.onChange}
                                                 placeholder="Longitude"
                                             />
                                         </div>
@@ -571,7 +572,9 @@ export const CreateUpdateBranchByOrgForm = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isLoading || !isBranchOnChanged}
+                            disabled={
+                                branchId ? updateDisabled : createDisabled
+                            }
                             className=""
                         >
                             {isLoading ? (

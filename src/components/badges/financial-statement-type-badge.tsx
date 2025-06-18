@@ -1,4 +1,3 @@
-import React from 'react'
 import { cn } from '@/lib'
 
 import { Badge } from '@/components/ui/badge'
@@ -46,16 +45,22 @@ const financialStatementTypeStyles: Record<
     },
 }
 
-export const FinancialStatementTypeBadge: React.FC<
-    FinancialStatementTypeBadgeProps
-> = ({ type, className, description }) => {
+export const FinancialStatementTypeBadge = ({
+    type,
+    className,
+    description,
+}: FinancialStatementTypeBadgeProps) => {
     const { label, bgColor, textColor } = financialStatementTypeStyles[type]
+
+    const hover = `hover:${bgColor}`
+
     return (
         <Badge
             className={cn(
-                `py-0.1 text-[10.5px] hover:bg-black`,
+                `py-0.1 text-[10.5px]`,
                 bgColor,
                 textColor,
+                hover,
                 className
             )}
         >
