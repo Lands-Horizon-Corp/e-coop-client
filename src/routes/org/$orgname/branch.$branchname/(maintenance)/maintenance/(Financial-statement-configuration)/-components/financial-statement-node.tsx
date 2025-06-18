@@ -1,18 +1,15 @@
-import { useRef, useState } from 'react'
-
-import { ChevronDown, ChevronRight } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 import PlainTextEditor from '@/components/plain-text-editor'
+import { blueGradientPalette } from '@/components/color-palettes'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { FinancialStatementTypeBadge } from '@/components/badges/financial-statement-type-badge'
 import { FSDefinitionCreateUpdateFormModal } from '@/components/forms/financial-statement-definition/financial-statement-definition-create-update-form'
 
 import {
@@ -20,11 +17,20 @@ import {
     IFinancialStatementDefinition,
 } from '@/types/coop-types/financial-statement-definition'
 import { GeneralLedgerFinancialStatementNodeType } from '@/types/coop-types/general-ledger-definitions'
-import { FinancialStatementTypeBadge } from '@/components/financial-statement-type-badge'
-import { toast } from 'sonner'
-import { useDrag, useDrop, XYCoord } from 'react-dnd'
 
-export const blueGradientPalette = ['#0A1D36', '#133C6B', '#3B7EC0', '#5C9CDC']
+import { toast } from 'sonner'
+import { useEffect, useRef, useState } from 'react'
+import { useDrag, useDrop, XYCoord } from 'react-dnd'
+import {
+    ArrowChevronDown,
+    ArrowChevronRight,
+    EditPencilIcon,
+    EyeViewIcon,
+    PlusIcon,
+    TrashIcon,
+} from '@/components/icons'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
 
 type FinancialStatementTreeNodeProps = {
     node: IFinancialStatementDefinition
@@ -152,15 +158,16 @@ const FinancialStatementTreeNode = ({
     onMoveNode,
 }: FinancialStatementTreeNodeProps) => {
     const ref = useRef<HTMLDivElement>(null)
-
-    const [isExpanded, setIsExpanded] = useState(false)
+    const { onOpen } = useConfirmModalStore()
     const [openFSDefinition, setOpenFSDefinition] = useState(false)
+    const [onCreate, setOnCreate] = useState(true)
+    const [isReadOnly, setIsReadyOnly] = useState(false)
 
     const hasChildren =
         node.financial_statement_accounts &&
         node.financial_statement_accounts.length > 0
 
-    const isFirstLevel = depth > 0
+    const isFirstLevel = depth === 0
 
     const isAccount =
         node.type === GeneralLedgerFinancialStatementNodeType.ACCOUNT
@@ -239,37 +246,81 @@ const FinancialStatementTreeNode = ({
     })
 
     drag(drop(ref))
+    const {
+        expandedNodeIds,
+        targetNodeId,
+        toggleNode,
+        clearTargetNodeIdAfterScroll,
+    } = useFinancialStatementStore()
+
+    const isNodeExpanded = expandedNodeIds.has(node.id)
+
+    useEffect(() => {
+        if (targetNodeId === node.id && ref.current) {
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            clearTargetNodeIdAfterScroll(node.id)
+        }
+    }, [targetNodeId, node.id, clearTargetNodeIdAfterScroll])
 
     return (
         <div className={`${isFirstLevel ? '' : 'pt-1.5'} `}>
             <FSDefinitionCreateUpdateFormModal
                 onOpenChange={setOpenFSDefinition}
                 open={openFSDefinition}
+                title={`${onCreate ? 'Create' : 'Update'} Financial Statement Definition`}
+                description={`Fill out the form to ${onCreate ? 'add a new' : 'edit'} Financial Statement Definition.`}
+                formProps={{
+                    defaultValues: onCreate ? {} : node,
+                    fsAccountId: onCreate ? undefined : node.id,
+                    readOnly: isReadOnly,
+                }}
             />
             <div className="flex flex-col" ref={ref}>
                 <GradientBackground
                     gradientOnly
                     opacity={isAccount ? 0.3 : 0.3}
                     colorPalettes={isAccount ? blueGradientPalette : undefined}
-                    className={`flex cursor-pointer items-center rounded-md px-3 py-2 transition-colors duration-200 ${isFirstLevel ? 'mt-1' : 'pt-0'} ${isDragging && canDrag ? 'rounded-lg border-2 border-primary' : ''}`}
-                    onClick={() => hasChildren && setIsExpanded(!isExpanded)}
+                    className={`flex cursor-pointer items-center rounded-md px-3 py-2 transition-colors duration-200 ${isFirstLevel ? 'mt-1' : 'mt-0'} ${
+                        isDragging && canDrag
+                            ? 'rounded-lg border-2 border-primary'
+                            : ''
+                    }`}
+                    onClick={() =>
+                        hasChildren && toggleNode(node.id, !isNodeExpanded)
+                    }
                 >
                     {hasChildren && (
                         <div className="flex h-full items-center">
                             <span className="mr-2">
-                                {isExpanded ? (
-                                    <ChevronDown size={16} />
+                                {isNodeExpanded ? (
+                                    <ArrowChevronDown size={16} />
                                 ) : (
-                                    <ChevronRight size={16} />
+                                    <ArrowChevronRight size={16} />
                                 )}
                             </span>
                         </div>
                     )}
                     <div className="flex flex-1 flex-col">
-                        <div className="flex gap-x-2">
-                            <span className="font-semibold">{node.name}</span>
+                        <div
+                            className={`flex items-center gap-x-2 ${
+                                isFirstLevel
+                                    ? 'gap-x-2 text-lg font-semibold'
+                                    : `text-md ${isAccount ? 'text-sm font-normal' : 'font-semibold'}`
+                            }`}
+                        >
+                            <p>{node.name}</p>
+                            {!isFirstLevel && (
+                                <span className="mt-1 text-xs text-accent-foreground/50">
+                                    <FinancialStatementTypeBadge
+                                        type={
+                                            node.financial_statement_type ??
+                                            FinancialStatementTypeEnum.Assets
+                                        }
+                                    />
+                                </span>
+                            )}
                         </div>
-                        {!isFirstLevel && (
+                        {isFirstLevel && (
                             <>
                                 {node.description && (
                                     <span className="text-xs text-accent-foreground/70">
@@ -281,16 +332,6 @@ const FinancialStatementTreeNode = ({
                             </>
                         )}
                         {isFirstLevel && (
-                            <span className="mt-1 text-xs text-accent-foreground/50">
-                                <FinancialStatementTypeBadge
-                                    type={
-                                        node.financial_statement_type ??
-                                        FinancialStatementTypeEnum.Assets
-                                    }
-                                />
-                            </span>
-                        )}
-                        {!isFirstLevel && (
                             <p className="text-xs text-accent-foreground/30">
                                 {childLength} items
                             </p>
@@ -319,36 +360,63 @@ const FinancialStatementTreeNode = ({
                                                 handleOpenAccountPicker?.()
                                             }}
                                         >
+                                            <PlusIcon className="mr-2" />
                                             Add Account
-                                            <DropdownMenuShortcut className="text-xl">
-                                                +
-                                            </DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             onClick={(e) => {
                                                 e.stopPropagation()
+                                                setOnCreate(true)
                                                 setOpenFSDefinition(true)
+                                                setIsReadyOnly(false)
                                             }}
                                         >
+                                            <PlusIcon className="mr-2" />
                                             Add Financial Statement
-                                            <DropdownMenuShortcut className="text-xl">
-                                                +
-                                            </DropdownMenuShortcut>
                                         </DropdownMenuItem>
-                                        {isFirstLevel && (
-                                            <DropdownMenuItem
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    setOpenFSDefinition(true)
-                                                }}
-                                            >
-                                                edit
-                                            </DropdownMenuItem>
-                                        )}
-                                        {isFirstLevel && (
-                                            <DropdownMenuItem>
-                                                View Details
-                                            </DropdownMenuItem>
+                                        {!isFirstLevel && (
+                                            <>
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setOpenFSDefinition(
+                                                            true
+                                                        )
+                                                        setOnCreate(false)
+                                                        setIsReadyOnly(false)
+                                                    }}
+                                                >
+                                                    <EditPencilIcon className="mr-2" />
+                                                    edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setIsReadyOnly(true)
+                                                        setOpenFSDefinition(
+                                                            true
+                                                        )
+                                                    }}
+                                                >
+                                                    <EyeViewIcon className="mr-2" />
+                                                    View Details
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpen({
+                                                            title: `Delete ${isDefinition ? 'Definition' : 'Account'}`,
+                                                            description: `You are about this ${isDefinition ? 'definition' : 'Account'}, are you sure you want to proceed?`,
+                                                            onConfirm: () => {},
+                                                            confirmString:
+                                                                'Proceed',
+                                                        })
+                                                    }}
+                                                >
+                                                    <TrashIcon className="mr-2 text-destructive" />
+                                                    Remove
+                                                </DropdownMenuItem>
+                                            </>
                                         )}
                                     </DropdownMenuGroup>
                                 </DropdownMenuContent>
@@ -358,7 +426,7 @@ const FinancialStatementTreeNode = ({
                         ''
                     )}
                 </GradientBackground>
-                {isExpanded && hasChildren && (
+                {isNodeExpanded && hasChildren && (
                     <div className="ml-4">
                         {node.financial_statement_accounts!.map((childNode) => (
                             <FinancialStatementTreeNode

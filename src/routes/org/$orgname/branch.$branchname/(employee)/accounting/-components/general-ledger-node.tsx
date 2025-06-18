@@ -1,5 +1,3 @@
-import { useRef, useState } from 'react'
-
 import {
     GeneralLedgerFinancialStatementNodeType,
     IGeneralLedgerDefinition,
@@ -10,24 +8,32 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { blueGradientPalette } from '@/components/color-palettes'
+import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { AccountCreateUpdateFormModal } from '@/components/forms/accounting-forms/account-create-update-form'
 import { GeneralLedgerDefinitionCreateUpdateFormModal } from '@/components/forms/general-ledger-definition/general-ledger-definition-create-update-form'
 
-import { toast } from 'sonner'
 import {
     ArrowChevronDown,
     ArrowChevronRight,
+    EditPencilIcon,
+    EyeViewIcon,
     PlusIcon,
+    TrashIcon,
 } from '@/components/icons'
-import { useDrag, useDrop, XYCoord } from 'react-dnd'
-import { blueGradientPalette } from './financial-statement-node'
+
 import { colorPalette } from '@/hooks/use-random-gradient'
-import { GeneralLedgerTypeBadge } from '@/components/general-ledger-type-badge'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definition/use-general-ledger-definition'
+
+import { toast } from 'sonner'
+import { useEffect, useRef, useState } from 'react'
+import { useDrag, useDrop, XYCoord } from 'react-dnd'
+import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
 
 export interface IGeneralLedgerAccount extends IGeneralLedgerDefinition {
     type: GeneralLedgerFinancialStatementNodeType.ACCOUNT
@@ -149,12 +155,12 @@ const GeneralLedgerTreeNode = ({
     onMoveNode,
 }: GeneralLedgerTreeNodeProps) => {
     const ref = useRef<HTMLDivElement>(null)
-
-    const [isExpanded, setIsExpanded] = useState(false)
+    const { onOpen } = useConfirmModalStore()
     const [openCreateAccountModal, setOpenCreateAccountModal] = useState(false)
     const [openCreateGeneralLedgerModal, setOpenCreateGeneralLedgerModal] =
         useState(false)
-
+    const [onCreate, setOnCreate] = useState(true)
+    const [isReadOnly, setIsReadyOnly] = useState(false)
     const hasChildren =
         node.general_ledger_accounts && node.general_ledger_accounts.length > 0
 
@@ -229,13 +235,36 @@ const GeneralLedgerTreeNode = ({
 
     drag(drop(ref))
 
+    const {
+        mutate: deleteGeneralLedgerDefinition,
+        isPending: isDeletingGLDefinition,
+    } = useDeleteGeneralLedgerDefinition()
+
     const isFirstLevel = depth === 0
+
     const isAccount =
         node.type === GeneralLedgerFinancialStatementNodeType.ACCOUNT
+
     const isDefinition =
         node.type === GeneralLedgerFinancialStatementNodeType.DEFINITION
 
     const childLength = node.general_ledger_accounts.length
+    const {
+        expandedNodeIds,
+        targetNodeId,
+        toggleNode,
+        clearTargetNodeIdAfterScroll,
+    } = useFinancialStatementStore()
+
+    const isNodeExpanded = expandedNodeIds.has(node.id)
+
+    useEffect(() => {
+        if (targetNodeId === node.id && ref.current) {
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            clearTargetNodeIdAfterScroll(node.id)
+        }
+    }, [targetNodeId, node.id, clearTargetNodeIdAfterScroll])
+
     return (
         <div
             className={`${isFirstLevel ? '' : 'pt-1.5'} ${isDragging && canDrag ? 'rounded-lg border-2 border-primary' : ''} `}
@@ -247,6 +276,13 @@ const GeneralLedgerTreeNode = ({
             <GeneralLedgerDefinitionCreateUpdateFormModal
                 onOpenChange={setOpenCreateGeneralLedgerModal}
                 open={openCreateGeneralLedgerModal}
+                title={`${onCreate ? 'Create' : 'Update'} General Ledger Definition`}
+                description={`Fill out the form to ${onCreate ? 'add a new' : 'edit'} General Ledger Definition.`}
+                formProps={{
+                    defaultValues: onCreate ? {} : node,
+                    generalLedgerId: onCreate ? undefined : node.id,
+                    readOnly: isReadOnly,
+                }}
             />
             <div className={`flex flex-col`} ref={ref}>
                 <GradientBackground
@@ -255,13 +291,15 @@ const GeneralLedgerTreeNode = ({
                     colorPalettes={
                         isAccount ? blueGradientPalette : colorPalette
                     }
-                    className={`flex h-fit cursor-pointer items-center rounded-md px-3 py-2 transition-colors duration-200 ${isFirstLevel ? 'mt-1' : 'pt-0'} `}
-                    onClick={() => hasChildren && setIsExpanded(!isExpanded)}
+                    className={`flex h-fit cursor-pointer items-center rounded-md px-3 py-2 transition-colors duration-200 ${isFirstLevel ? 'mt-1' : 'mt-0'} `}
+                    onClick={() =>
+                        hasChildren && toggleNode(node.id, !isNodeExpanded)
+                    }
                 >
                     {hasChildren && (
                         <div className="flex h-full items-center">
                             <span className="mr-2">
-                                {isExpanded ? (
+                                {isNodeExpanded ? (
                                     <ArrowChevronDown size={16} />
                                 ) : (
                                     <ArrowChevronRight size={16} />
@@ -270,19 +308,35 @@ const GeneralLedgerTreeNode = ({
                         </div>
                     )}
                     <div className="flex flex-1 flex-col">
-                        <span className="font-semibold">{node.name}</span>
+                        <span
+                            className={` ${isFirstLevel ? 'text-lg font-semibold' : `text-md ${isAccount ? 'text-sm font-normal' : 'font-semibold'}`}`}
+                        >
+                            <div className="flex items-center gap-x-2">
+                                <p>{node.name}</p>
+                                {!isFirstLevel && (
+                                    <span className="text-xs text-accent-foreground/50">
+                                        {node && node.general_ledger_type && (
+                                            <GeneralLedgerTypeBadge
+                                                type={node.general_ledger_type}
+                                            />
+                                        )}
+                                        {!node ||
+                                            (!node.general_ledger_type && (
+                                                <div>
+                                                    Loading type... or Type not
+                                                    found
+                                                </div>
+                                            ))}
+                                    </span>
+                                )}
+                            </div>
+                        </span>
                         {node.description && (
                             <span className="text-xs text-accent-foreground/70">
                                 {node.description}
                             </span>
                         )}
-                        {!isFirstLevel && (
-                            <span className="text-xs text-accent-foreground/50">
-                                <GeneralLedgerTypeBadge
-                                    type={node.general_ledger_type}
-                                />
-                            </span>
-                        )}
+
                         {isFirstLevel && (
                             <p className="text-xs text-accent-foreground/30">
                                 {childLength} items
@@ -306,40 +360,84 @@ const GeneralLedgerTreeNode = ({
                                     align="start"
                                 >
                                     <DropdownMenuGroup>
+                                        <DropdownMenuItem
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setIsReadyOnly(false)
+                                                setOpenCreateAccountModal(true)
+                                                setIsReadyOnly(false)
+                                            }}
+                                        >
+                                            <PlusIcon className="mr-2">
+                                                +
+                                            </PlusIcon>
+                                            Add Account
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setIsReadyOnly(false)
+                                                setOnCreate(true)
+                                                setOpenCreateGeneralLedgerModal(
+                                                    true
+                                                )
+                                            }}
+                                        >
+                                            <PlusIcon className="mr-2">
+                                                +
+                                            </PlusIcon>
+                                            Add GL Definition
+                                        </DropdownMenuItem>
                                         {!isFirstLevel && (
-                                            <DropdownMenuItem
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    setOpenCreateAccountModal(
-                                                        true
-                                                    )
-                                                }}
-                                            >
-                                                Add Account
-                                                <DropdownMenuShortcut className="text-xl">
-                                                    +
-                                                </DropdownMenuShortcut>
-                                            </DropdownMenuItem>
-                                        )}
-                                        {isFirstLevel && isDefinition && (
-                                            <DropdownMenuItem
-                                                onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    setOpenCreateGeneralLedgerModal(
-                                                        true
-                                                    )
-                                                }}
-                                            >
-                                                <PlusIcon className="mr-2">
-                                                    +
-                                                </PlusIcon>
-                                                Add GL Definition
-                                            </DropdownMenuItem>
-                                        )}
-                                        {!isFirstLevel && (
-                                            <DropdownMenuItem>
-                                                View Details
-                                            </DropdownMenuItem>
+                                            <div>
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setOnCreate(false)
+                                                        setOpenCreateGeneralLedgerModal(
+                                                            true
+                                                        )
+                                                    }}
+                                                >
+                                                    <EditPencilIcon className="mr-2" />
+                                                    edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setOnCreate(false)
+                                                        setOpenCreateGeneralLedgerModal(
+                                                            true
+                                                        )
+                                                        setIsReadyOnly(true)
+                                                    }}
+                                                >
+                                                    <EyeViewIcon className="mr-2" />
+                                                    View Details
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    disabled={
+                                                        isDeletingGLDefinition
+                                                    }
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        onOpen({
+                                                            title: `Delete  ${isDefinition ? 'definition' : 'Account'}`,
+                                                            description: `You are about this ${isDefinition ? 'definition' : 'Account'}, are you sure you want to proceed?`,
+                                                            onConfirm: () => {
+                                                                deleteGeneralLedgerDefinition(
+                                                                    node.id
+                                                                )
+                                                            },
+                                                            confirmString:
+                                                                'Proceed',
+                                                        })
+                                                    }}
+                                                >
+                                                    <TrashIcon className="mr-2 text-destructive" />
+                                                    Remove
+                                                </DropdownMenuItem>
+                                            </div>
                                         )}
                                     </DropdownMenuGroup>
                                 </DropdownMenuContent>
@@ -349,7 +447,7 @@ const GeneralLedgerTreeNode = ({
                         ''
                     )}
                 </GradientBackground>
-                {isExpanded && hasChildren && (
+                {isNodeExpanded && hasChildren && (
                     <div className="ml-4">
                         {node.general_ledger_accounts!.map((childNode) => (
                             <GeneralLedgerTreeNode

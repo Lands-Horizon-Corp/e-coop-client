@@ -1,6 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
 
+import { Input } from '@/components/ui/input'
 import AccountPicker from '@/components/pickers/account-picker'
+import { Button } from '@/components/ui/button'
 
 import FinancialStatementTreeNode, {
     addFSPositionIndexes,
@@ -8,7 +10,12 @@ import FinancialStatementTreeNode, {
     moveFSNodeInTree,
 } from './financial-statement-node'
 
+import { MagnifyingGlassIcon } from '@/components/icons'
+
+import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
 import { IFinancialStatementDefinition } from '@/types/coop-types/financial-statement-definition'
+
+import { toast } from 'sonner'
 
 type FinancialStatementTreeViewerProps = {
     treeData: IFinancialStatementDefinition[]
@@ -17,9 +24,55 @@ const FinancialStatementTreeViewer = ({
     treeData,
 }: FinancialStatementTreeViewerProps) => {
     const [openAccountPicker, setOpenAccountPicker] = useState(false)
+
     const [financialStatement, setFinancialStatement] =
         useState<IFinancialStatementDefinition[]>(treeData)
     const initialLedgerData = useRef<IFinancialStatementDefinition[]>([])
+
+    const [searchTerm, setSearchTerm] = useState('')
+    const { expandPath, setTargetNodeId, resetExpansion } =
+        useFinancialStatementStore()
+
+    const findNodePath = (
+        nodes: IFinancialStatementDefinition[],
+        name: string,
+        path: string[] = []
+    ): string[] | null => {
+        for (const node of nodes) {
+            const newPath = [...path, node.id]
+            if (node.name.toLowerCase().includes(name.toLowerCase())) {
+                return newPath
+            }
+            if (node.financial_statement_accounts) {
+                const foundPath = findNodePath(
+                    node.financial_statement_accounts,
+                    name,
+                    newPath
+                )
+                if (foundPath) {
+                    return foundPath
+                }
+            }
+        }
+        return null
+    }
+
+    const handleSearch = () => {
+        if (!searchTerm.trim()) {
+            resetExpansion()
+            return
+        }
+
+        const path = findNodePath(treeData, searchTerm)
+
+        if (path) {
+            expandPath(path)
+            setTargetNodeId(path[path.length - 1])
+        } else {
+            toast.error('Item not found!')
+            resetExpansion()
+        }
+    }
 
     const addPositionIndexesToTree = useCallback(
         (
@@ -68,12 +121,15 @@ const FinancialStatementTreeViewer = ({
             </div>
         )
     }
+
     const handleOpenAccountPicker = () => {
         setOpenAccountPicker(true)
     }
 
+    const isSearchOnChanged = searchTerm.length > 0
+
     return (
-        <div className="w-1/2 rounded-lg p-4 shadow-md">
+        <div className="w-full rounded-lg p-4 shadow-md">
             <AccountPicker
                 open={openAccountPicker}
                 onOpenChange={setOpenAccountPicker}
@@ -82,6 +138,28 @@ const FinancialStatementTreeViewer = ({
             <h3 className="mb-4 text-xl font-bold">
                 Financial Statement Definition
             </h3>
+            <div className="flex gap-2 border-b p-4">
+                <Input
+                    type="text"
+                    placeholder="Search financial statement..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && isSearchOnChanged) {
+                            handleSearch()
+                        }
+                    }}
+                />
+                <Button
+                    onClick={handleSearch}
+                    variant={'ghost'}
+                    className="flex items-center space-x-2"
+                    disabled={!isSearchOnChanged}
+                >
+                    <MagnifyingGlassIcon className="mr-2" />
+                    Search
+                </Button>
+            </div>
             {financialStatement.map((node) => (
                 <FinancialStatementTreeNode
                     handleOpenAccountPicker={handleOpenAccountPicker}

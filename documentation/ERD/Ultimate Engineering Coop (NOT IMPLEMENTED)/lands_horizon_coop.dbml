@@ -1027,7 +1027,7 @@ enum account_type {
 
 enum computation_type {
   "Straight"
-  "Deminishing"
+  "Diminishing"
   "Diminishing Add-On"
   "Diminishing Yearly"
   "Diminishing Straight"

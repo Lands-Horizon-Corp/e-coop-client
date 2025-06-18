@@ -13,6 +13,7 @@ const LocationBack = ({ className }: { className: string }) => {
         <Button
             onClick={handleBack}
             variant="ghost"
+            size="sm"
             className={`flex w-fit items-center rounded-full ${className}`}
         >
             <BackIcon size={25} />
