@@ -21,13 +21,15 @@ import { memberProfilePersonalInfoSchema } from '@/validations/member/member-pro
 import { useUpdateMemberProfilePersonalInfo } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
-    IClassProps,
     IMedia,
+    IClassProps,
     IMemberProfile,
     IMemberProfilePersonalInfoRequest,
 } from '@/types'
 import { IForm, TEntityId } from '@/types'
 import SignatureField from '@/components/ui/signature-field'
+import { toInputDateString } from '@/utils'
+import MemberOccupationCombobox from '@/components/comboboxes/member-occupation-combobox'
 
 type TMemberProfilePersonalInfoFormValues = z.infer<
     typeof memberProfilePersonalInfoSchema
@@ -60,6 +62,9 @@ const MemberPersonalInfoForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
+            birth_date: toInputDateString(
+                defaultValues?.birth_date ?? new Date()
+            ),
         },
     })
 
@@ -69,7 +74,13 @@ const MemberPersonalInfoForm = ({
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        mutate({ memberId: memberProfileId, data: formData })
+        mutate({
+            memberId: memberProfileId,
+            data: {
+                ...formData,
+                full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+            },
+        })
     })
 
     const isDisabled = (field: Path<TMemberProfilePersonalInfoFormValues>) =>
@@ -85,7 +96,7 @@ const MemberPersonalInfoForm = ({
                     <div className="space-y-4">
                         <div className="space-y-4">
                             <p>Photo & Signature</p>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-x-3">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="media_id"
@@ -310,17 +321,21 @@ const MemberPersonalInfoForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="occupation_id"
+                                name="member_occupation_id"
                                 label="Occupation"
                                 hiddenFields={hiddenFields}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        id={field.name}
-                                        placeholder="Occupation"
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                )}
+                                render={({ field }) => {
+                                    return (
+                                        <MemberOccupationCombobox
+                                            {...field}
+                                            onChange={(occupation) => {
+                                                field.onChange(occupation.id)
+                                            }}
+                                            placeholder="Occupation"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )
+                                }}
                             />
                         </div>
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -340,7 +355,7 @@ const MemberPersonalInfoForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="business_contact"
+                                name="business_contact_number"
                                 label="Business Contact"
                                 hiddenFields={hiddenFields}
                                 render={({ field }) => (
