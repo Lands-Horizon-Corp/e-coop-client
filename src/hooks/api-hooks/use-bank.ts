@@ -3,7 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from './api-hook-factory'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from './api-hook-factory'
 import * as BankService from '@/api-service/bank-service'
 
 import {
@@ -18,18 +23,24 @@ import {
 
 export const useCreateBank = createMutationHook<IBank, string, IBankRequest>(
     (data) => BankService.createBank(data),
-    'Bank created'
+    'Bank created',
+    (args) => createMutationInvalidateFn('bank', args)
 )
 
 export const useUpdateBank = createMutationHook<
     IBank,
     string,
     { bankId: TEntityId; data: IBankRequest }
->(({ bankId, data }) => BankService.updateBank(bankId, data), 'Bank updated')
+>(
+    ({ bankId, data }) => BankService.updateBank(bankId, data),
+    'Bank updated',
+    (args) => updateMutationInvalidationFn('bank', args)
+)
 
 export const useDeleteBank = createMutationHook<void, string, TEntityId>(
     (id) => BankService.deleteBank(id),
-    'Bank deleted'
+    'Bank deleted',
+    (args) => deleteMutationInvalidationFn('bank', args)
 )
 
 export const useBanks = ({
@@ -37,7 +48,7 @@ export const useBanks = ({
     showMessage = true,
 }: IAPIHook<IBank[], string> & IQueryProps = {}) => {
     return useQuery<IBank[], string>({
-        queryKey: ['bank', 'resource-query', 'all'],
+        queryKey: ['bank', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 BankService.getAllBanks()

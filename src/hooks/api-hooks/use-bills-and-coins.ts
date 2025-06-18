@@ -3,17 +3,22 @@ import { useQuery } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from './api-hook-factory'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from './api-hook-factory'
 import * as BillsAndCoinService from '@/api-service/bills-and-coins-service'
 
 import {
+    IAPIHook,
     TEntityId,
     IQueryProps,
     IBillsAndCoin,
     IBillsAndCoinRequest,
     IBillsAndCoinPaginated,
     IAPIFilteredPaginatedHook,
-    IAPIHook,
 } from '@/types'
 
 export const useCreateBillsAndCoin = createMutationHook<
@@ -22,7 +27,8 @@ export const useCreateBillsAndCoin = createMutationHook<
     IBillsAndCoinRequest
 >(
     (data) => BillsAndCoinService.createBillsCoin(data),
-    'New Member Type Created'
+    'New Bill/Coin Created',
+    (args) => createMutationInvalidateFn('bills-and-coin', args)
 )
 
 export const useUpdateBillsAndCoin = createMutationHook<
@@ -31,14 +37,19 @@ export const useUpdateBillsAndCoin = createMutationHook<
     { id: TEntityId; data: IBillsAndCoinRequest }
 >(
     ({ id, data }) => BillsAndCoinService.updateBillsCoin(id, data),
-    'Member Type updated'
+    'New Bill/Coin Created',
+    (args) => updateMutationInvalidationFn('bills-and-coin', args)
 )
 
 export const useDeleteBillsAndCoins = createMutationHook<
     void,
     string,
     TEntityId
->((id) => BillsAndCoinService.deleteBillsAndCoin(id), 'Bills and coins deleted')
+>(
+    (id) => BillsAndCoinService.deleteBillsAndCoin(id),
+    'Bills and coins deleted',
+    (args) => deleteMutationInvalidationFn('bills-and-coin', args)
+)
 
 export const useDeleteManyBillsAndCoins = createMutationHook<
     void,
@@ -54,7 +65,7 @@ export const useBillsAndCoins = ({
     showMessage = true,
 }: IAPIHook<IBillsAndCoin[], string> & IQueryProps = {}) => {
     return useQuery<IBillsAndCoin[], string>({
-        queryKey: [' bills-and-coin', 'all'],
+        queryKey: ['bills-and-coin', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 BillsAndCoinService.getAllBillsCoins()

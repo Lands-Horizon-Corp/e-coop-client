@@ -25,3 +25,9 @@ export const toDateTimeFormatFile = (
 ) => {
     return toReadableDate(args[0], args[1] ?? 'yyyyMMdd_HHmmss')
 }
+
+export const toInputDateString = (
+    ...args: Parameters<typeof toReadableDate>
+) => {
+    return toReadableDate(args[0], args[1] ?? 'yyyy-MM-dd')
+}
