@@ -153,7 +153,10 @@ const MemberAssets = ({ memberProfile }: Props) => {
                 ))}
                 {(!memberProfile.member_assets ||
                     memberProfile.member_assets?.length === 0) && (
-                    <EmptyListIndicator message="No assets yet" />
+                    <EmptyListIndicator
+                        message="No assets yet"
+                        className="col-span-3"
+                    />
                 )}
             </div>
         </div>

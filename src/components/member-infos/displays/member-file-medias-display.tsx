@@ -10,7 +10,7 @@ import SectionTitle from '../section-title'
 import DataTable from '@/components/data-table'
 import { Button } from '@/components/ui/button'
 import CopyTextButton from '@/components/copy-text-button'
-import { DownloadIcon, FolderFillIcon } from '@/components/icons'
+import { DownloadIcon, FolderFillIcon, WarningIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import MediaResourceFileIcon from '@/components/media-resource-file-icon'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -288,8 +288,17 @@ const MemberFileMediaDisplay = ({ userId, className }: Props) => {
                     {error}
                 </p>
             )}
-            {isPending && <LoadingSpinner className="mx-auto" />}
+            {isPending && userId && <LoadingSpinner className="mx-auto" />}
             {data && <FilesTableView className="!p-0" files={data ?? []} />}
+            {!userId && (
+                <div className="mx-auto max-w-md items-center gap-3 space-y-4 rounded-lg text-sm text-muted-foreground">
+                    <WarningIcon className="mx-auto size-4" />
+                    <p className="text-center">
+                        We are unable to locate files since this member profile
+                        has no User Account.
+                    </p>
+                </div>
+            )}
         </div>
     )
 }

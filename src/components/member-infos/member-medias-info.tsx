@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import MemberFileMediaDisplay from './displays/member-file-medias-display'
 
 import { cn } from '@/lib'
@@ -10,22 +11,27 @@ interface Props extends IBaseProps {
     defaultData?: IMemberProfile
 }
 
-const MemberMediasInfo = ({ profileId, className, defaultData }: Props) => {
-    const { data: data } = useMemberProfile({
-        profileId,
-        initialData: defaultData,
-    })
+const MemberMediasInfo = forwardRef<HTMLDivElement, Props>(
+    ({ profileId, className, defaultData }, ref) => {
+        const { data } = useMemberProfile({
+            profileId,
+            initialData: defaultData,
+        })
 
-    return (
-        <div
-            className={cn(
-                'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
-                className
-            )}
-        >
-            <MemberFileMediaDisplay userId={data?.user_id} />
-        </div>
-    )
-}
+        return (
+            <div
+                ref={ref}
+                className={cn(
+                    'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <MemberFileMediaDisplay userId={data?.user_id} />
+            </div>
+        )
+    }
+)
+
+MemberMediasInfo.displayName = 'MemberMediasInfo'
 
 export default MemberMediasInfo
