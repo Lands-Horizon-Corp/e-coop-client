@@ -1,4 +1,4 @@
-export const PAGINATION_INITIAL_INDEX = 1
+export const PAGINATION_INITIAL_INDEX = 0
 export const PAGINATION_INITIAL_PAGE_SIZE = 10
 
 export const PAGE_SIZES_SMALL = [10, 20, 50, 100]
