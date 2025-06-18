@@ -110,6 +110,7 @@ const MemberProfileSettings = ({
 
     const { data: memberProfile, isPending } = useMemberProfile({
         profileId: memberProfileId,
+        refetchOnWindowFocus: false,
         // initialData: {
         //     id: '1c7b72ef-6678-4607-9c65-77e889916ce8',
         //     created_at: '2025-06-16T18:26:56+08:00',

@@ -199,6 +199,7 @@ const MemberUserAccountCreateUpdateForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="contact_number"
+                            label="Contact Number"
                             render={({
                                 field,
                                 fieldState: { invalid, error },
