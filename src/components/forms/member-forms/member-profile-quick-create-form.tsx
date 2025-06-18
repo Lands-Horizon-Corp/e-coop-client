@@ -29,6 +29,9 @@ import { useQuickCreateMemberProfile } from '@/hooks/api-hooks/member/use-member
 import { quickCreateMemberProfileSchema } from '@/validations/member/member-profile-schema'
 
 import { IForm, IClassProps, IMemberProfile } from '@/types'
+import { VerifiedPatchIcon } from '@/components/icons'
+import { PhoneInput } from '@/components/contact-input/contact-input'
+import { toInputDateString } from '@/utils'
 
 type TMemberProfileQuickFormValues = z.infer<
     typeof quickCreateMemberProfileSchema
@@ -60,6 +63,9 @@ const MemberProfileQuickCreateForm = ({
             is_micro_finance_member: false,
             create_new_user: false,
             ...defaultValues,
+            birth_date: toInputDateString(
+                defaultValues?.birth_date ?? new Date()
+            ),
         },
     })
 
@@ -74,7 +80,10 @@ const MemberProfileQuickCreateForm = ({
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        mutate(formData)
+        mutate({
+            ...formData,
+            full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+        })
     })
 
     const createNewUser = form.watch('create_new_user')
@@ -268,6 +277,30 @@ const MemberProfileQuickCreateForm = ({
                                         className="block [&::-webkit-calendar-picker-indicator]:hidden"
                                         value={field.value ?? ''}
                                     />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="contact_number"
+                                label="Contact Number"
+                                render={({
+                                    field,
+                                    fieldState: { invalid, error },
+                                }) => (
+                                    <div className="relative flex flex-1 items-center gap-x-2">
+                                        <VerifiedPatchIcon
+                                            className={cn(
+                                                'absolute right-2 top-1/2 z-20 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
+                                                (invalid || error) &&
+                                                    'text-destructive'
+                                            )}
+                                        />
+                                        <PhoneInput
+                                            {...field}
+                                            className="w-full"
+                                            defaultCountry="PH"
+                                        />
+                                    </div>
                                 )}
                             />
                         </div>

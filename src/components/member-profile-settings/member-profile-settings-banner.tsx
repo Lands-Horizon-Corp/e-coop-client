@@ -121,7 +121,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                                     Contact Number
                                 </h3>
                                 <div className="flex items-center gap-2">
-                                    <PhoneIcon className="400 h-4 w-4" />
+                                    <PhoneIcon className="400 size-3" />
                                     <span>
                                         <CopyWrapper iconSide="right">
                                             {memberProfile.contact_number}
