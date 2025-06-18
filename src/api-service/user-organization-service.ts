@@ -7,6 +7,8 @@ import {
     IEmployee,
     IUserOrganization,
     IUserOrganizationPaginated,
+    IMember,
+    IOwner,
 } from '@/types'
 
 export const deleteEmployee = async (id: TEntityId) => {
@@ -43,6 +45,32 @@ export const getPaginatedEmployees = async (props?: {
 
     const response =
         await APIService.get<IUserOrganizationPaginated<IEmployee>>(url)
+    return response.data
+}
+
+export const getPaginatedUserOrg = async <
+    T = unknown | IEmployee | IMember | IOwner,
+>(props?: {
+    sort?: string
+    filters?: string
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const { filters, pagination, sort } = props || {}
+
+    const url = qs.stringifyUrl(
+        {
+            url: `/user-organization/search`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IUserOrganizationPaginated<T>>(url)
     return response.data
 }
 
