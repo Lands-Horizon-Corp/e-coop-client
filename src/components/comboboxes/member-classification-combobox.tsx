@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import * as React from 'react'
 import { Check } from 'lucide-react'
 
 import {
@@ -33,7 +33,8 @@ export interface IMemberClassificationComboboxCreateProps
         'defaultValues' | 'disabledFields' | 'hiddenFields'
     > {}
 
-interface Props {
+interface Props
+    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
     value?: TEntityId
     disabled?: boolean
     className?: string
@@ -42,112 +43,127 @@ interface Props {
     onChange?: (selected: IMemberClassification) => void
 }
 
-const MemberClassificationCombobox = ({
-    value,
-    placeholder = 'Select Member Classification...',
-    disabled = false,
-    className,
-    memberClassificationCreateProps,
-    onChange,
-}: Props) => {
-    const [open, setOpen] = useState(false)
-    const [createModal, setCreateModal] = useState(false)
+const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
+    (
+        {
+            value,
+            placeholder = 'Select Member Classification...',
+            disabled = false,
+            className,
+            memberClassificationCreateProps,
+            onChange,
+            ...other
+        },
+        ref
+    ) => {
+        const [open, setOpen] = React.useState(false)
+        const [createModal, setCreateModal] = React.useState(false)
 
-    const { data, isLoading } = useMemberClassifications({
-        enabled: !disabled,
-        showMessage: false,
-    })
+        const { data, isLoading } = useMemberClassifications({
+            enabled: !disabled,
+            showMessage: false,
+        })
 
-    return (
-        <>
-            <MemberClassificationCreateUpdateFormModal
-                open={createModal}
-                onOpenChange={setCreateModal}
-                formProps={{
-                    ...memberClassificationCreateProps,
-                    onSuccess: (data) => {
-                        onChange?.(data)
-                        setOpen(false)
-                    },
-                }}
-            />
-            <Popover modal open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                    <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className={cn('w-full justify-between px-3', className)}
-                        disabled={disabled || isLoading}
-                    >
-                        {value ? (
-                            data.find((option) => option.id === value)?.name
-                        ) : (
-                            <span className="text-muted-foreground">
-                                {placeholder}
-                            </span>
-                        )}
-                        <ChevronDownIcon className="opacity-50" />
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
-                    <Command>
-                        <CommandInput
-                            placeholder="Search Member Classification..."
-                            className="h-9"
-                        />
-                        {isLoading ? (
-                            <CommandEmpty>
-                                <LoadingSpinner className="mr-2 inline-block" />{' '}
-                                Loading...
-                            </CommandEmpty>
-                        ) : (
-                            <CommandList className="ecoop-scroll">
+        return (
+            <>
+                <MemberClassificationCreateUpdateFormModal
+                    open={createModal}
+                    onOpenChange={setCreateModal}
+                    formProps={{
+                        ...memberClassificationCreateProps,
+                        onSuccess: (data) => {
+                            onChange?.(data)
+                            setOpen(false)
+                        },
+                    }}
+                />
+                <Popover modal open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            {...other}
+                            ref={ref}
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className={cn(
+                                'w-full justify-between px-3',
+                                className
+                            )}
+                            disabled={disabled || isLoading}
+                        >
+                            {value ? (
+                                data.find((option) => option.id === value)?.name
+                            ) : (
+                                <span className="text-muted-foreground">
+                                    {placeholder}
+                                </span>
+                            )}
+                            <ChevronDownIcon className="opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
+                        <Command>
+                            <CommandInput
+                                placeholder="Search Member Classification..."
+                                className="h-9"
+                            />
+                            {isLoading ? (
                                 <CommandEmpty>
-                                    No Member Classification found.
+                                    <LoadingSpinner className="mr-2 inline-block" />{' '}
+                                    Loading...
                                 </CommandEmpty>
-                                {memberClassificationCreateProps && (
+                            ) : (
+                                <CommandList className="ecoop-scroll">
+                                    <CommandEmpty>
+                                        No Member Classification found.
+                                    </CommandEmpty>
+                                    {memberClassificationCreateProps && (
+                                        <CommandGroup>
+                                            <CommandItem
+                                                onClick={(e) =>
+                                                    e.stopPropagation()
+                                                }
+                                                onSelect={() =>
+                                                    setCreateModal(true)
+                                                }
+                                            >
+                                                <PlusIcon /> Create Member
+                                                Classification
+                                            </CommandItem>
+                                        </CommandGroup>
+                                    )}
                                     <CommandGroup>
-                                        <CommandItem
-                                            onClick={(e) => e.stopPropagation()}
-                                            onSelect={() =>
-                                                setCreateModal(true)
-                                            }
-                                        >
-                                            <PlusIcon /> Create Member
-                                            Classification
-                                        </CommandItem>
+                                        {data.map((option) => (
+                                            <CommandItem
+                                                key={option.id}
+                                                value={option.name}
+                                                onSelect={() => {
+                                                    setOpen(false)
+                                                    onChange?.(option)
+                                                }}
+                                            >
+                                                {option.name}
+                                                <Check
+                                                    className={cn(
+                                                        'ml-auto',
+                                                        value === option.id
+                                                            ? 'opacity-100'
+                                                            : 'opacity-0'
+                                                    )}
+                                                />
+                                            </CommandItem>
+                                        ))}
                                     </CommandGroup>
-                                )}
-                                <CommandGroup>
-                                    {data.map((option) => (
-                                        <CommandItem
-                                            key={option.id}
-                                            value={option.name}
-                                            onSelect={() => {
-                                                setOpen(false)
-                                                onChange?.(option)
-                                            }}
-                                        >
-                                            {option.name}
-                                            <Check
-                                                className={cn(
-                                                    'ml-auto',
-                                                    value === option.id
-                                                        ? 'opacity-100'
-                                                        : 'opacity-0'
-                                                )}
-                                            />
-                                        </CommandItem>
-                                    ))}
-                                </CommandGroup>
-                            </CommandList>
-                        )}
-                    </Command>
-                </PopoverContent>
-            </Popover>
-        </>
-    )
-}
+                                </CommandList>
+                            )}
+                        </Command>
+                    </PopoverContent>
+                </Popover>
+            </>
+        )
+    }
+)
+
+MemberClassificationCombobox.displayName = 'MemberClassificationCombobox'
 
 export default MemberClassificationCombobox

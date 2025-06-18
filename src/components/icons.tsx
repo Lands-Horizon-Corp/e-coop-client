@@ -94,6 +94,7 @@ import {
     PiGraduationCapFill as GraduationCapIcon,
     PiWarningCircleFill as WarningCircleIcon,
     PiHandWithdrawDuotone as HandWithdrawIcon,
+    PiPlugsConnectedFill as PlugConnectFillIcon,
     PiContactlessPaymentDuotone as OnlinePaymentIcon,
     PiTextStrikethroughLight as TextStrikethroughLightIcon,
 } from 'react-icons/pi'
@@ -196,6 +197,7 @@ import {
 } from 'react-icons/bs'
 
 import {
+    IoLink as LinkIcon,
     IoLayers as LayersIcon,
     IoReload as ReloadIcon,
     IoStorefront as StoreIcon,
@@ -244,6 +246,7 @@ import {
     FaIdCard as IdCardIcon,
     FaSchool as SchoolIcon,
     FaCheck as CheckFillIcon,
+    FaUserPlus as UserPlusIcon,
     FaUserLock as UserLockIcon,
     FaTreeCity as TreeCityIcon,
     FaVenusMars as GendersIcon,
@@ -266,6 +269,7 @@ import {
 } from 'react-icons/ri'
 
 import {
+    FiHash as HashIcon,
     FiCamera as CameraIcon,
     FiDownload as DownloadIcon,
     FiCodesandbox as CodeSandBox,
@@ -343,7 +347,9 @@ export {
     MoonIcon,
     DrawIcon,
     ParkIcon,
+    LinkIcon,
     GearIcon,
+    HashIcon,
     BackIcon,
     NextIcon,
     GlobeIcon,
@@ -405,6 +411,7 @@ export {
     PushPinIcon,
     EyeNoneIcon,
     UserTagIcon,
+    UserPlusIcon,
     LandmarkIcon,
     SignPostIcon,
     InternalIcon,
@@ -543,6 +550,7 @@ export {
     MessageOutlineIcon,
     HeartBreakFillIcon,
     BriefCaseClockIcon,
+    PlugConnectFillIcon,
     FaCalendarCheckIcon,
     MagnifyingGlassIcon,
     SpreadSheetFileIcon,
