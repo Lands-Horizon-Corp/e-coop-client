@@ -181,7 +181,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     recruited_by_member_profile_id: TEntityId
     recruited_by_member_profile: IMemberProfile
 
-    is_close: boolean
+    is_closed: boolean
     is_mutual_fund_member: boolean
     is_micro_finance_member: boolean
 

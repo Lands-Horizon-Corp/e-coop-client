@@ -280,12 +280,14 @@ export const useUserOrgRejectJoinRequest = createMutationHook<
 export const useFilteredPaginatedUserOrganization = <
     T = IUserBase | IEmployee | IOwner | IMember,
 >({
+    mode,
     sort,
     enabled,
     filterPayload,
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IUserOrganization, string> & IQueryProps = {}) => {
+}: IAPIFilteredPaginatedHook<IUserOrganization, string> &
+    IQueryProps & { mode?: 'all' | 'none-member-profile' } = {}) => {
     return useQuery<IUserOrganizationPaginated<T>, string>({
         queryKey: [
             'user-organization',
@@ -297,6 +299,7 @@ export const useFilteredPaginatedUserOrganization = <
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 UserOrganizationService.getPaginatedUserOrg<T>({
+                    mode,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

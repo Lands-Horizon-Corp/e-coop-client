@@ -47,6 +47,7 @@ export const memberProfileMembershipInfoSchema = z.object({
     member_classification_id: entityIdSchema.optional(),
     member_center_id: entityIdSchema.optional(),
 
+    recruited_by_member_profile: z.any(),
     recruited_by_member_profile_id: entityIdSchema.optional(),
 
     is_mutual_fund_member: z.boolean().optional(),

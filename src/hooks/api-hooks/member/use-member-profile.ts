@@ -112,6 +112,16 @@ export const useQuickCreateMemberProfile = createMutationHook<
     (args) => createMutationInvalidateFn('member-profile', args)
 )
 
+export const useDeleteMemberProfile = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (id) => MemberProfileService.deleteMemberProfile(id),
+    'Member profile deleted',
+    (args) => deleteMutationInvalidationFn('member-profile', args)
+)
+
 export const useUpdateMemberProfile = createMutationHook<
     IMemberProfile,
     string,
@@ -130,7 +140,12 @@ export const useCloseMemberProfile = createMutationHook<
     ({ profileId, data }) =>
         MemberProfileService.closeMemberProfileAccount(profileId, data),
     'Member profile closed',
-    (args) => deleteMutationInvalidationFn('member-profile', args)
+    (args) => {
+        deleteMutationInvalidationFn('member-profile', args)
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.profileId],
+        })
+    }
 )
 
 export const useApproveMemberProfile = createMutationHook<

@@ -69,6 +69,13 @@ export const createMemberProfile = async (data: IMemberProfileRequest) => {
     return response.data
 }
 
+export const deleteMemberProfile = async (memberProfileId: TEntityId) => {
+    const response = await APIService.delete<void>(
+        `/member-profile/${memberProfileId}`
+    )
+    return response.data
+}
+
 export const getMemberProfileById = async (id: TEntityId) => {
     const url = qs.stringifyUrl({
         url: `${BASE_ENDPOINT}/${id}`,
@@ -101,18 +108,10 @@ export const closeMemberProfileAccount = async (
     id: TEntityId,
     closeRemark: IMemberCloseRemarkRequest[]
 ) => {
-    const url = qs.stringifyUrl({
-        url: `${BASE_ENDPOINT}/${id}/close-account`,
-    })
-
     const response = await APIService.put<
         IMemberCloseRemarkRequest[],
         IMemberProfile
-    >(url, closeRemark, {
-        headers: {
-            Authorization: `Bearer YOUR_TOKEN`, // Replace with dynamic token if applicable
-        },
-    })
+    >(`/member-profile/${id}/close`, closeRemark)
     return response.data
 }
 
@@ -241,9 +240,8 @@ export const connectMemberProfileToUserAccount = async (
     memberProfileId: TEntityId,
     userId: TEntityId
 ) => {
-    const response = await APIService.put<TEntityId, IMemberProfile>(
-        `/member-profile/${memberProfileId}/connect-user-account`,
-        userId
+    const response = await APIService.put<void, IMemberProfile>(
+        `/member-profile/${memberProfileId}/connect-user-account/${userId}`
     )
     return response.data
 }
@@ -252,7 +250,7 @@ export const disconnectMemberProfileUserAccount = async (
     memberProfileId: TEntityId
 ) => {
     const response = await APIService.put<TEntityId, IMemberProfile>(
-        `/member-profile/${memberProfileId}/disconnect-user-account`
+        `/member-profile/${memberProfileId}/disconnect`
     )
     return response.data
 }
@@ -325,7 +323,7 @@ export const createEducationalAttainmentForMember = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainment`
+    const url = `/member-profile/${memberProfileId}/educational-attainment`
     const res = await APIService.post<
         Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>,
         IMemberEducationalAttainment

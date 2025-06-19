@@ -1,10 +1,12 @@
 import { IBranch } from '../branch'
 import { IMemberProfile } from './member-profile'
-import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IPaginatedResult } from '../paginated-result'
 import { IMemberOccupation } from './member-occupation'
 
+import { TEntityId, IBaseEntityMeta } from '../../common'
+
 // LATEST FROM ERD
-export interface IMemberOccupationHistory extends ITimeStamps, IAuditable {
+export interface IMemberOccupationHistory extends IBaseEntityMeta {
     id: TEntityId
 
     branch_id: TEntityId
@@ -16,3 +18,6 @@ export interface IMemberOccupationHistory extends ITimeStamps, IAuditable {
     member_occupation_id: TEntityId
     member_occupation: IMemberOccupation
 }
+
+export interface IMemberOccupationHistoryPaginated
+    extends IPaginatedResult<IMemberOccupationHistory> {}
