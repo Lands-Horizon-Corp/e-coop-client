@@ -41,7 +41,7 @@ export const useCreateMemberClassification = createMutationHook<
 >(
     (args) => MemberClassificationService.createMemberClassification(args),
     'Member Center Created',
-    (args) => createMutationInvalidateFn('member-center', args)
+    (args) => createMutationInvalidateFn('member-classification', args)
 )
 
 export const useUpdateMemberClassification = createMutationHook<
