@@ -3376,8 +3376,8 @@ Table member_classification_interest_rate {
 
 Ref: member_classification_interest_rate.organization_id > organization.id [delete: cascade, update: cascade]
 Ref: member_classification_interest_rate.branch_id > branch.id [delete:cascade, update:cascade]
-// Ref: member_classification_interest_rate.interest_rate_scheme_id > interest_rate_scheme.id [delete: restrict, update: cascade]
 Ref: member_classification_interest_rate.member_classification_id - member_classification.id [delete: restrict, update: cascade]
+// Ref: member_classification_interest_rate.interest_rate_scheme_id > interest_rate_scheme.id [delete: restrict, update: cascade]
 // Ref: member_classification_interest_rate.interest_rate_by_terms_header_id - interest_rate_by_terms_header.id [delete: restrict, update: cascade]
 
 
