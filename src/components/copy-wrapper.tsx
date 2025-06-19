@@ -7,6 +7,7 @@ import { CheckIcon, CopyIcon } from './icons'
 import { cn } from '@/lib/utils'
 
 interface CopyWrapperProps {
+    hidden?: boolean
     children: ReactNode
     asChild?: boolean
     copyInterval?: number
@@ -23,6 +24,7 @@ export const CopyWrapper = forwardRef<
 >(
     (
         {
+            hidden = false,
             children,
             asChild = false,
             copyInterval = 500,
@@ -91,11 +93,11 @@ export const CopyWrapper = forwardRef<
 
         const content = (
             <>
-                {iconSide === 'left' && (
+                {iconSide === 'left' && !hidden && (
                     <span className="flex-shrink-0">{currentIcon}</span>
                 )}
                 <span className="flex-1">{children}</span>
-                {iconSide === 'right' && (
+                {iconSide === 'right' && !hidden && (
                     <span className="flex-shrink-0">{currentIcon}</span>
                 )}
             </>

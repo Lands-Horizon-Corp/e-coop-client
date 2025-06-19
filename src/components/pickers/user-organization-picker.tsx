@@ -8,25 +8,19 @@ import ImageDisplay from '@/components/image-display'
 import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 
+import { cn } from '@/lib'
 import useFilterState from '@/hooks/use-filter-state'
 import { TFilterObject } from '@/contexts/filter-context'
 import { useInternalState } from '@/hooks/use-internal-state'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedUserOrganization } from '@/hooks/api-hooks/use-user-organization'
 
-import { IUserOrganization, IUserBase } from '@/types'
-import { cn } from '@/lib'
-import { useModalState } from '@/hooks/use-modal-state'
+import { IUserOrganization, IUserBase, IPickerBaseProps } from '@/types'
 
-interface Props<T = IUserBase> {
+interface Props<T = IUserBase> extends IPickerBaseProps<IUserOrganization<T>> {
+    userOrgSearchMode?: 'all' | 'none-member-profile'
     value?: IUserOrganization<T>
-    disabled?: boolean
-    placeholder?: string
-    triggerClassName?: string
-    onSelect?: (selected: IUserOrganization<T>) => void
-    allowShorcutCommand?: boolean
     defaultFilter?: TFilterObject
-    modalState?: ReturnType<typeof useModalState>
 }
 
 const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
@@ -38,16 +32,16 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
             placeholder,
             defaultFilter,
             triggerClassName,
-            allowShorcutCommand = false,
+            userOrgSearchMode,
             onSelect,
         },
         ref
     ) => {
         const queryClient = useQueryClient()
         const [state, setState] = useInternalState(
+            false,
             modalState?.open,
-            modalState?.onOpenChange,
-            false
+            modalState?.onOpenChange
         )
 
         const [pagination, setPagination] = useState<PaginationState>({
@@ -67,8 +61,9 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
 
         const { data, isPending, isLoading, isFetching } =
             useFilteredPaginatedUserOrganization({
+                mode: userOrgSearchMode,
                 pagination,
-                enabled: !disabled,
+                enabled: !disabled && state,
                 showMessage: false,
                 filterPayload: finalFilterPayload,
             })
@@ -100,7 +95,7 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                                 { displayText: 'email', field: 'user.email' },
                                 {
                                     displayText: 'username',
-                                    field: 'user.username',
+                                    field: 'user.user_name',
                                 },
                             ],
                             {
@@ -171,9 +166,6 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                                 <span>{value?.user?.full_name}</span>
                             )}
                         </span>
-                        {allowShorcutCommand && (
-                            <span className="mr-2 text-sm">⌘ ↵ </span>
-                        )}
                     </span>
                     <ChevronDownIcon />
                 </Button>
