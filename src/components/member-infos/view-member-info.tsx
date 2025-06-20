@@ -101,7 +101,7 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
                     )}
                 </>
             )}
-            <Tabs defaultValue="general-infos" className="flex-1 mt-2 flex-col">
+            <Tabs defaultValue="general-infos" className="mt-2 flex-1 flex-col">
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {memberInfoTabs.map((tab) => (
