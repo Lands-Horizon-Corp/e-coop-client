@@ -1,12 +1,10 @@
 import { z } from 'zod'
+import { GeneralLedgerFinancialStatementNodeTypeEnumSchema } from '../general-ledger-definition/general-ledger-definition-schema'
+import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 
-export const FinancialStatementDefinitionTypesEnumSchema = z.enum([
-    'Assets',
-    'Liabilities',
-    'Equity',
-    'Revenue',
-    'Expenses',
-])
+export const FinancialStatementDefinitionTypesEnumSchema = z.nativeEnum(
+    FinancialStatementTypeEnum
+)
 
 export const FinancialStatementDefinitionSchema = z.object({
     name: z.string().min(1, 'The name is required!'),
@@ -14,7 +12,7 @@ export const FinancialStatementDefinitionSchema = z.object({
 
     exclude: z.boolean().optional(),
     index: z.coerce.number().optional(),
-
+    type: GeneralLedgerFinancialStatementNodeTypeEnumSchema,
     name_in_total: z.string().optional(),
     is_posting: z.boolean().optional(),
     financial_statement_type: FinancialStatementDefinitionTypesEnumSchema,

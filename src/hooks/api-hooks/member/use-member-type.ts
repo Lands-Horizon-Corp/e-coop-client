@@ -1,7 +1,14 @@
+import { toast } from 'sonner'
 import { queryOptions, useQuery } from '@tanstack/react-query'
 
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
-import { createQueryHook, createMutationHook } from '../api-hook-factory'
+import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 
 import {
@@ -13,8 +20,6 @@ import {
     IMemberTypePaginated,
     IAPIFilteredPaginatedHook,
 } from '@/types'
-import { serverRequestErrExtractor } from '@/helpers'
-import { toast } from 'sonner'
 
 export const memberTypeLoader = (memberTypeId: TEntityId) =>
     queryOptions<IMemberType>({
@@ -30,7 +35,11 @@ export const useCreateMemberType = createMutationHook<
     IMemberType,
     string,
     IMemberTypeRequest
->((data) => MemberTypeService.createMemberType(data), 'New Member Type Created')
+>(
+    (data) => MemberTypeService.createMemberType(data),
+    'New Member Type Created',
+    (args) => createMutationInvalidateFn('member-type', args)
+)
 
 export const useUpdateMemberType = createMutationHook<
     IMemberType,
@@ -39,19 +48,40 @@ export const useUpdateMemberType = createMutationHook<
 >(
     ({ memberTypeId, data }) =>
         MemberTypeService.updateMemberType(memberTypeId, data),
-    'Member Type updated'
+    'Member Type updated',
+    (args) => updateMutationInvalidationFn('member-type', args)
 )
 
 export const useDeleteMemberType = createMutationHook<void, string, TEntityId>(
     (memberTypeId) => MemberTypeService.deleteMemberType(memberTypeId),
-    'Member Type deleted'
+    'Member Type deleted',
+    (args) => deleteMutationInvalidationFn('member-type', args)
 )
 
-export const useMemberTypes = createQueryHook<
-    IMemberType[],
-    string,
-    IQueryProps & IAPIHook<IMemberType[]>
->(['member-type', 'all'], () => MemberTypeService.getAllMemberTypes(), [])
+export const useMemberTypes = ({
+    enabled,
+    showMessage,
+}: IAPIHook<IMemberType[], string> & IQueryProps = {}) => {
+    return useQuery<IMemberType[], string>({
+        queryKey: ['member-classification', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberTypeService.getAllMemberTypes()
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
+        retry: 1,
+    })
+}
 
 export const useFilteredPaginatedMemberTypes = ({
     sort,

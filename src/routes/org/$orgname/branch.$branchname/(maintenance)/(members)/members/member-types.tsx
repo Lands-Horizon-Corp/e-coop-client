@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
 import MemberTypeTable from '@/components/tables/member/member-type-table'
-import MemberTypeTableOwnerAction from '@/components/tables/member/member-type-table/row-actions/member-type-owner-action'
+import MemberTypeTableAction from '@/components/tables/member/member-type-table/action'
+import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
+
+import { useModalState } from '@/hooks/use-modal-state'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
@@ -13,27 +17,42 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const [modalState, setModalState] = useState(false)
+    const createModal = useModalState()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+    const queryClient = useQueryClient()
+
+    useSubscribe(`member_type.created.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-type', 'resource-query'],
+        })
+    })
+
+    useSubscribe(`member_type.updated.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-type', 'resource-query'],
+        })
+    })
+
+    useSubscribe(`member_type.deleted.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-type', 'resource-query'],
+        })
+    })
+
     return (
         <PageContainer>
-            <MemberTypeCreateUpdateFormModal
-                open={modalState}
-                onOpenChange={setModalState}
-                formProps={{
-                    onSuccess() {
-                        setModalState(false)
-                    },
-                }}
-            />
+            <MemberTypeCreateUpdateFormModal {...createModal} />
             <MemberTypeTable
                 toolbarProps={{
                     createActionProps: {
-                        onClick: () => setModalState(true),
+                        onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                actionComponent={(prop) => (
-                    <MemberTypeTableOwnerAction {...prop} />
-                )}
+                actionComponent={(prop) => <MemberTypeTableAction {...prop} />}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>

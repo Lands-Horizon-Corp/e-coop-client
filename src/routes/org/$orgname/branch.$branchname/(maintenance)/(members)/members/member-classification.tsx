@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import MemberClassificationTable from '@/components/tables/member/member-classification-table'
 import { MemberClassificationCreateUpdateFormModal } from '@/components/forms/member-forms/member-classification-create-update-form'
-import MemberClassificationTableOwnerAction from '@/components/tables/member/member-classification-table/row-actions/member-classification-table-owner-action'
+import MemberClassificationTableAction from '@/components/tables/member/member-classification-table/action'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useModalState } from '@/hooks/use-modal-state'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
@@ -13,27 +17,44 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const [modalState, setModalState] = useState(false)
+    const createModal = useModalState()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+
+    const queryClient = useQueryClient()
+
+    useSubscribe(`member_classification.created.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-classification', 'resource-query'],
+        })
+    })
+
+    useSubscribe(`member_classification.updated.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-classification', 'resource-query'],
+        })
+    })
+
+    useSubscribe(`member_classification.deleted.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-classification', 'resource-query'],
+        })
+    })
 
     return (
         <PageContainer>
-            <MemberClassificationCreateUpdateFormModal
-                open={modalState}
-                onOpenChange={setModalState}
-                formProps={{
-                    onSuccess() {
-                        setModalState(false)
-                    },
-                }}
-            />
+            <MemberClassificationCreateUpdateFormModal {...createModal} />
             <MemberClassificationTable
                 toolbarProps={{
                     createActionProps: {
-                        onClick: () => setModalState(true),
+                        onClick: () => createModal.onOpenChange(true),
                     },
                 }}
                 actionComponent={(prop) => (
-                    <MemberClassificationTableOwnerAction {...prop} />
+                    <MemberClassificationTableAction {...prop} />
                 )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />

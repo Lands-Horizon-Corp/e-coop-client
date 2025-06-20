@@ -32,37 +32,37 @@ const AddressesDisplay = ({ className, addresses }: Props) => {
                             key={address.id}
                         >
                             <div className="flex flex-wrap gap-x-24 gap-y-2">
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>{address.label}</p>
                                     <p className="text-xs text-muted-foreground/70">
                                         Name
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>{address.address}</p>
                                     <p className="text-xs text-muted-foreground/70">
                                         Province
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>{address.city}</p>
                                     <p className="text-xs text-muted-foreground/70">
                                         City
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>{address.barangay}</p>
                                     <p className="text-xs text-muted-foreground/70">
                                         Barangay
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>{address.postal_code}</p>
                                     <p className="text-xs text-muted-foreground/70">
                                         Postal Code
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>
                                         {address.created_at
                                             ? toReadableDate(

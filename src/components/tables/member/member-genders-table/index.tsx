@@ -153,7 +153,7 @@ const MemberGenderTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['gender', 'resource-query'],
+                                queryKey: ['member-gender', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
                             deleteMany(selectedData.map((data) => data.id)),

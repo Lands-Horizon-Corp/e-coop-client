@@ -8,10 +8,9 @@ import { WarningFillIcon } from '@/components/icons'
 import RawDescription from '../../raw-description'
 
 import { cn } from '@/lib'
-import { toReadableDate } from '@/utils'
 import { IClassProps } from '@/types'
+import { toReadableDate } from '@/utils'
 import { IMemberCloseRemark } from '@/types'
-import { abbreviateUUID } from '@/utils/formatting-utils'
 
 const MemberCloseAccountBanner = ({
     className,
@@ -58,13 +57,8 @@ const MemberCloseAccountBanner = ({
                                     >
                                         <div className="flex items-center justify-between">
                                             <p className="text-sm text-foreground">
-                                                ID:{' '}
                                                 <span className="text-xs text-muted-foreground/60">
-                                                    {closeRemark?.id
-                                                        ? abbreviateUUID(
-                                                              closeRemark?.id
-                                                          )
-                                                        : '-'}
+                                                    {closeRemark.reason}
                                                 </span>
                                             </p>
 

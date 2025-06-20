@@ -106,7 +106,6 @@ const TransactionBatchCreateForm = ({
                                     {...field}
                                     id={field.name}
                                     placeholder="Batch Name"
-                                    autoComplete="off"
                                     disabled={isDisabled(field.name)}
                                 />
                             )}
@@ -125,7 +124,6 @@ const TransactionBatchCreateForm = ({
                                             type="number"
                                             step="1"
                                             placeholder="Amount"
-                                            autoComplete="off"
                                             disabled={isDisabled(field.name)}
                                         />
                                     )}

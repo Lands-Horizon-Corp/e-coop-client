@@ -18,9 +18,9 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
 import { signInSchema } from '@/validations'
+import { useSignIn } from '@/hooks/api-hooks/use-auth'
 
 import { IForm, IClassProps, IAuthContext } from '@/types'
-import { useSignIn } from '@/hooks/api-hooks/use-auth'
 
 type TSignIn = z.infer<typeof signInSchema>
 
@@ -33,6 +33,7 @@ const SignInForm = ({
     className,
     defaultValues,
     onError,
+    onSubmit,
     onSuccess,
 }: ISignInFormProps) => {
     const { mutate, error, isPending } = useSignIn({ onSuccess, onError })
@@ -51,7 +52,10 @@ const SignInForm = ({
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((data) => mutate(data))}
+                onSubmit={form.handleSubmit((data) => {
+                    mutate(data)
+                    onSubmit?.(data)
+                })}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <div className="flex items-center gap-x-2 py-4 font-medium">

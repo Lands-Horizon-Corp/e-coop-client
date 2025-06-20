@@ -104,17 +104,17 @@ const HolidayTableColumns = (
             enableSorting: true,
             enableResizing: true,
             enableHiding: false,
-            size: 180,
-            minSize: 180,
+            minSize: 300,
+            maxSize: 500,
         },
         {
             id: 'entry_date',
             accessorKey: 'entry_date',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Date">
+                <DataTableColumnHeader {...props} title="Calendar Date">
                     <ColumnActions {...props}>
                         <DateFilter<IHoliday>
-                            displayText="Date"
+                            displayText="Calendar Date"
                             field="entry_date"
                         />
                     </ColumnActions>
@@ -138,7 +138,7 @@ const HolidayTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter<IHoliday>
+                        <DateFilter
                             displayText="Date Created"
                             field="created_at"
                         />
@@ -150,6 +150,28 @@ const HolidayTableColumns = (
                     original: { created_at },
                 },
             }) => <div>{toReadableDate(created_at)}</div>,
+            enableMultiSort: true,
+            enableResizing: true,
+            minSize: 150,
+        },
+        {
+            id: 'updated_at',
+            accessorKey: 'updated_at',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Updated">
+                    <ColumnActions {...props}>
+                        <DateFilter
+                            displayText="Date Updated"
+                            field="updated_at"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { updated_at },
+                },
+            }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,

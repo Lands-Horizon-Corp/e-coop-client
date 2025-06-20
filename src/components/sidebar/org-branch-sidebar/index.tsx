@@ -25,6 +25,7 @@ import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 import { IBaseProps, TUserType } from '@/types'
 import { Badge } from '@/components/ui/badge'
+import ActionTooltip from '@/components/action-tooltip'
 
 const OrgBranchSidebar = (props: IBaseProps) => {
     const router = useRouter()
@@ -80,15 +81,39 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                     <span className="truncate font-semibold">
                                         {user_organization.organization.name}
                                     </span>
-                                    <span className="truncate text-xs text-muted-foreground/80">
-                                        {user_organization.branch.name}{' '}
-                                        <Badge
-                                            variant="outline"
-                                            className="capitalize"
-                                        >
-                                            {user_organization.user_type}
-                                        </Badge>
-                                    </span>
+                                    <ActionTooltip
+                                        tooltipContent={
+                                            <>
+                                                <span className="space-y-2 text-xs text-muted-foreground/80">
+                                                    As{' '}
+                                                    <Badge
+                                                        variant="outline"
+                                                        className="capitalize"
+                                                    >
+                                                        {
+                                                            user_organization.user_type
+                                                        }
+                                                    </Badge>{' '}
+                                                    Role
+                                                </span>
+                                            </>
+                                        }
+                                    >
+                                        <span className="truncate text-xs text-muted-foreground/80">
+                                            <span>
+                                                {
+                                                    user_organization.branch
+                                                        .name
+                                                }{' '}
+                                            </span>
+                                            <Badge
+                                                variant="outline"
+                                                className="capitalize"
+                                            >
+                                                {user_organization.user_type}
+                                            </Badge>
+                                        </span>
+                                    </ActionTooltip>
                                 </div>
                             </Link>
                         </SidebarMenuButton>

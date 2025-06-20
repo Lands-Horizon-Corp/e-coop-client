@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { countries } from 'country-data-list'
-import { TimezoneData, timezones } from '@/lib/time-zones'
 import { Country } from 'react-phone-number-input'
+import { TimezoneData } from '@/helpers/time-zones/time-zone-type'
+import { useGetTimeZones } from '@/helpers/time-zones'
 
 export interface CountryOptionsProps {
     alpha2: string
@@ -37,6 +38,12 @@ export const useLocationInfo = () => {
         Country | undefined
     >()
 
+    const {
+        data: timezonesData,
+        isLoading: isLoadingTimezones,
+        isError: isErrorTimezones,
+    } = useGetTimeZones()
+
     const availableCountryOptions = useMemo(() => {
         return countries.all.filter(
             (country: CountryOptionsProps) =>
@@ -47,6 +54,16 @@ export const useLocationInfo = () => {
     }, [])
 
     useEffect(() => {
+        if (isLoadingTimezones || isErrorTimezones || !timezonesData) {
+            if (isErrorTimezones) {
+                console.error('Error loading timezone data.')
+            }
+            setCountryName(null)
+            setStateName(null)
+            setCountryAlpha2Code(undefined)
+            return
+        }
+
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
         if (!timezone) {
@@ -58,14 +75,14 @@ export const useLocationInfo = () => {
         }
 
         let detectedAlpha2: Country | undefined = undefined
-        const timezoneData: TimezoneData | undefined = timezones[timezone]
+        const timezoneInfo: TimezoneData | undefined = timezonesData[timezone]
 
         if (
-            timezoneData &&
-            Array.isArray(timezoneData.c) &&
-            timezoneData.c.length > 0
+            timezoneInfo &&
+            Array.isArray(timezoneInfo.c) &&
+            timezoneInfo.c.length > 0
         ) {
-            const primaryCountryAlpha2FromTimezone = timezoneData.c[0]
+            const primaryCountryAlpha2FromTimezone = timezoneInfo.c[0]
             const selectedCountry = availableCountryOptions.find(
                 (item) => item.alpha2 === primaryCountryAlpha2FromTimezone
             )
@@ -100,11 +117,18 @@ export const useLocationInfo = () => {
         } else {
             setStateName(null)
         }
-    }, [availableCountryOptions])
+    }, [
+        availableCountryOptions,
+        timezonesData,
+        isLoadingTimezones,
+        isErrorTimezones,
+    ])
 
     return {
         country: countryName,
         state: stateName,
         countryCode: countryAlpha2Code,
+        isLoading: isLoadingTimezones,
+        isError: isErrorTimezones,
     }
 }

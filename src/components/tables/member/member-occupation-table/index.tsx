@@ -135,7 +135,7 @@ const MemberOccupationTable = ({
             >
                 <DataTableToolbar
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: memberOccupationGlobalSearchTargets,
                     }}
                     table={table}

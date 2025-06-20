@@ -1,61 +1,65 @@
-import Modal, { IModalProps } from '@/components/modals/modal'
+import { z } from 'zod'
+import { cn } from '@/lib'
+import { useState } from 'react'
 
-import { IClassProps, IForm, TEntityId } from '@/types'
 import {
-    AccountTypeEnum,
-    ComputationTypeEnum,
-    EarnedUnearnedInterestEnum,
-    FinancialStatementTypeEnum,
-    GeneralLedgerTypeEnum,
+    ExcludeIcon,
+    FaCalendarCheckIcon,
+    InternalIcon,
+    LoadingSpinnerIcon,
+    MoneyBagIcon,
+    MoneyIcon,
+} from '@/components/icons'
+
+import {
+    IAccountRequestSchema,
+    AccountExclusiveSettingTypeEnum,
+} from '@/validations/accounting/account-schema'
+
+import { Path, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useCreateAccount } from '@/hooks/api-hooks/use-account'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+
+import {
     IAccount,
     IAccountRequest,
-    InterestDeductionEnum,
-    InterestFinesComputationDiminishingEnum,
-    InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
-    InterestSavingTypeDiminishingStraightEnum,
+    AccountTypeEnum,
     LoanSavingTypeEnum,
-    LumpsumComputationTypeEnum,
+    ComputationTypeEnum,
+    InterestDeductionEnum,
+    GeneralLedgerTypeEnum,
     OtherDeductionEntryEnum,
+    LumpsumComputationTypeEnum,
+    FinancialStatementTypeEnum,
+    EarnedUnearnedInterestEnum,
     OtherInformationOfAnAccountEnum,
+    InterestFinesComputationDiminishingEnum,
+    InterestSavingTypeDiminishingStraightEnum,
+    InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
 } from '@/types/coop-types/accounts/account'
+import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { cn } from '@/lib'
-import { Path, useForm } from 'react-hook-form'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import {
-    AccountExclusiveSettingTypeEnum,
-    IAccountRequestSchema,
-} from '@/validations/accounting/account-schema'
-import TextEditor from '@/components/text-editor'
-import { Form, FormControl } from '@/components/ui/form'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
-import { useState } from 'react'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-    ExcludeIcon,
-    FaCalendarCheckIcon,
-    InternalIcon,
-    MoneyBagIcon,
-    MoneyIcon,
-} from '@/components/icons'
 import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import TextEditor from '@/components/text-editor'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl } from '@/components/ui/form'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import AccountClassificationPicker from '@/components/pickers/account-classification-picker'
 import AccountCategoryPicker from '@/components/pickers/account-category-picker'
 import MemberTypePicker from '@/components/pickers/account-classification-picker'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import AccountClassificationPicker from '@/components/pickers/account-classification-picker'
 
 type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
@@ -70,12 +74,13 @@ const AccountCreateUpdateForm = ({
     className,
     readOnly,
     disabledFields,
+    accountId,
 }: IAccountCreateUpdateFormProps) => {
-    // const { currentAuth } = useAuthUserWithOrgBranch()
-    // const organizationId = currentAuth.user_organization.organization_id
-    // const branchId = currentAuth.user_organization.branch_id
+    const { currentAuth } = useAuthUserWithOrgBranch()
+    const organizationId = currentAuth.user_organization.organization_id
+    const branchId = currentAuth.user_organization.branch_id
 
-    const [selectedItem, setSelectedItem] = useState('Deposit')
+    const [selectedItem, setSelectedItem] = useState(defaultValues?.type || '')
     type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
     const form = useForm<TAccountFormValues>({
@@ -93,19 +98,33 @@ const AccountCreateUpdateForm = ({
     const isDisabled = (field: Path<TAccountFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
-    const handleSubmit = form.handleSubmit((data: IAccountRequest) => {
-        console.log(data)
+    const { mutate: createAccount, isPending, error } = useCreateAccount()
+
+    const isLoading = isPending
+
+    const handleSubmit = form.handleSubmit((data: TAccountFormValues) => {
+        const request = {
+            branch_id: branchId,
+            organization_id: organizationId,
+            ...data,
+        }
+        createAccount(request)
     })
 
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit} className={cn('w-full', className)}>
-                <div className="flex w-full gap-x-5">
-                    <fieldset disabled={readOnly} className="w-[40%] space-y-3">
+                <FormErrorMessage errorMessage={error} />
+                <div className="flex w-full flex-col gap-5 md:flex-row">
+                    <fieldset
+                        disabled={readOnly}
+                        className="space-y-3 md:w-[80%]"
+                    >
                         <FormFieldWrapper
                             control={form.control}
                             name="name"
-                            label="Account Name"
+                            label="Account Name *"
+                            disabled={isLoading}
                             render={({ field }) => (
                                 <Input
                                     {...field}
@@ -119,6 +138,7 @@ const AccountCreateUpdateForm = ({
                             control={form.control}
                             name="alternative_code"
                             label="Alternative Code"
+                            disabled={isLoading}
                             render={({ field }) => (
                                 <Input
                                     {...field}
@@ -141,7 +161,9 @@ const AccountCreateUpdateForm = ({
                                         )
                                     }
                                     placeholder="Select Account Classification"
-                                    disabled={isDisabled(field.name)}
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
                                 />
                             )}
                         />
@@ -149,6 +171,7 @@ const AccountCreateUpdateForm = ({
                             control={form.control}
                             name="account_category_id"
                             label="Account Category"
+                            disabled={isLoading}
                             render={({ field }) => (
                                 <AccountCategoryPicker
                                     {...field}
@@ -158,14 +181,17 @@ const AccountCreateUpdateForm = ({
                                         )
                                     }
                                     placeholder="Select Account Category"
-                                    disabled={isDisabled(field.name)}
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
                             name="member_type_id"
-                            label="Member Type"
+                            label="Member Type *"
+                            disabled={isLoading}
                             render={({ field }) => (
                                 <MemberTypePicker
                                     {...field}
@@ -173,7 +199,9 @@ const AccountCreateUpdateForm = ({
                                         field.onChange(selectedMemberType.id)
                                     }
                                     placeholder="Select Member Type"
-                                    disabled={isDisabled(field.name)}
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
                                 />
                             )}
                         />
@@ -182,9 +210,13 @@ const AccountCreateUpdateForm = ({
                             label="Account type"
                             name="type"
                             className="col-span-4"
+                            disabled={isLoading}
                             render={({ field }) => (
                                 <FormControl>
                                     <Select
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                         onValueChange={(selectedValue) => {
                                             field.onChange(selectedValue)
                                             setSelectedItem(selectedValue)
@@ -215,23 +247,7 @@ const AccountCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            label="Index"
-                            name="index"
-                            className="grow"
-                            render={({ field }) => (
-                                <div className="flex grow flex-col gap-y-2">
-                                    <Input
-                                        {...field}
-                                        type="number"
-                                        value={field.value}
-                                        placeholder="Index"
-                                    />
-                                </div>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Account Description"
+                            label="Account Description *"
                             name="description"
                             className="col-span-4"
                             render={({ field }) => {
@@ -240,7 +256,7 @@ const AccountCreateUpdateForm = ({
                                     <TextEditor
                                         {...rest}
                                         content={field.value ?? ''}
-                                        className="w-full"
+                                        disabled={isLoading}
                                         textEditorClassName="!max-w-none !h-32"
                                         placeholder="Write some description about the account..."
                                     />
@@ -258,6 +274,7 @@ const AccountCreateUpdateForm = ({
                                         <GradientBackground gradientOnly>
                                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                 <Checkbox
+                                                    disabled={isLoading}
                                                     id="is_internal_checkbox"
                                                     checked={
                                                         field.value ===
@@ -306,6 +323,7 @@ const AccountCreateUpdateForm = ({
                                                         field.value ===
                                                         AccountExclusiveSettingTypeEnum.CashOnHand
                                                     }
+                                                    disabled={isLoading}
                                                     onCheckedChange={(
                                                         checked: boolean
                                                     ) =>
@@ -344,6 +362,7 @@ const AccountCreateUpdateForm = ({
                                         <GradientBackground gradientOnly>
                                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                 <Checkbox
+                                                    disabled={isLoading}
                                                     id="paid_up_share_capital_checkbox"
                                                     checked={
                                                         field.value ===
@@ -394,6 +413,7 @@ const AccountCreateUpdateForm = ({
                                 label="Header Row"
                                 name="header_row"
                                 className="grow"
+                                disabled={isLoading}
                                 render={({ field }) => (
                                     <div className="flex grow flex-col gap-y-2">
                                         <Input
@@ -419,6 +439,7 @@ const AccountCreateUpdateForm = ({
                                 label="Center Row"
                                 name="center_row"
                                 className="grow"
+                                disabled={isLoading}
                                 render={({ field }) => (
                                     <div className="flex grow flex-col gap-y-2">
                                         <Input
@@ -444,6 +465,7 @@ const AccountCreateUpdateForm = ({
                                 label="Total Row"
                                 name="total_row"
                                 className="grow"
+                                disabled={isLoading}
                                 render={({ field }) => (
                                     <div className="flex grow flex-col gap-y-2">
                                         <Input
@@ -478,6 +500,7 @@ const AccountCreateUpdateForm = ({
                                     <RadioGroup
                                         onValueChange={field.onChange}
                                         value={field.value}
+                                        disabled={isLoading}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                     >
                                         {Object.values(
@@ -526,12 +549,14 @@ const AccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <GradientBackground
                                     gradientOnly
+                                    opacity={0.03}
                                     className="p-5"
                                 >
                                     <RadioGroup
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         className="grid grid-cols-1 gap-4"
+                                        disabled={isLoading}
                                     >
                                         {Object.values(
                                             InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
@@ -572,15 +597,16 @@ const AccountCreateUpdateForm = ({
                             )}
                         />
                     </fieldset>
-                    <div className="w-[60%]">
+                    <div className="md:w-full">
                         {selectedItem === AccountTypeEnum.Deposit && (
-                            <fieldset className="grid w-full grid-cols-2">
+                            <fieldset className="grid w-full grid-cols-2 gap-x-2">
                                 <legend>Deposit</legend>
                                 <FormFieldWrapper
                                     control={form.control}
                                     label="Min Amount"
                                     name="minAmount"
                                     className="grow"
+                                    disabled={isLoading}
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
@@ -605,6 +631,7 @@ const AccountCreateUpdateForm = ({
                                     label="Max Amount"
                                     name="maxAmount"
                                     className="grow"
+                                    disabled={isLoading}
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
@@ -637,13 +664,11 @@ const AccountCreateUpdateForm = ({
                                     render={({ field }) => (
                                         <FormControl>
                                             <Select
+                                                disabled={isLoading}
                                                 onValueChange={(
                                                     selectedValue
                                                 ) => {
                                                     field.onChange(
-                                                        selectedValue
-                                                    )
-                                                    setSelectedItem(
                                                         selectedValue
                                                     )
                                                 }}
@@ -677,6 +702,7 @@ const AccountCreateUpdateForm = ({
                                         label="Fines Amortization"
                                         name="fines_amort"
                                         className="grow"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
@@ -703,6 +729,7 @@ const AccountCreateUpdateForm = ({
                                         label="Fines Maturity"
                                         name="fines_maturity"
                                         className="grow"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
@@ -730,6 +757,7 @@ const AccountCreateUpdateForm = ({
                                         label="Interest Standard"
                                         name="interest_standard"
                                         className="grow"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
@@ -757,6 +785,7 @@ const AccountCreateUpdateForm = ({
                                         label="Interest Secured"
                                         name="interest_secured"
                                         className="grow"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
@@ -779,12 +808,13 @@ const AccountCreateUpdateForm = ({
                                         )}
                                     />
                                 </div>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="flex flex-col gap-x-2 md:flex-row">
                                     <FormFieldWrapper
                                         control={form.control}
                                         label="Fines Grace Period Maturity (Days)"
                                         name="fines_grace_period_maturity"
-                                        className="grow"
+                                        className="w-[120%]"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
@@ -807,12 +837,11 @@ const AccountCreateUpdateForm = ({
                                             </div>
                                         )}
                                     />
-
                                     <FormFieldWrapper
                                         control={form.control}
                                         label="Yearly Subscription Fee"
                                         name="yearly_subscription_fee"
-                                        className="grow"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
@@ -834,12 +863,11 @@ const AccountCreateUpdateForm = ({
                                             </div>
                                         )}
                                     />
-
                                     <FormFieldWrapper
                                         control={form.control}
                                         label="Loan Cut-Off Days"
                                         name="loan_cut_off_days"
-                                        className="grow"
+                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
@@ -877,6 +905,7 @@ const AccountCreateUpdateForm = ({
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                                disabled={isLoading}
                                             >
                                                 {Object.values(
                                                     EarnedUnearnedInterestEnum
@@ -934,7 +963,8 @@ const AccountCreateUpdateForm = ({
                                             <RadioGroup
                                                 onValueChange={field.onChange}
                                                 value={field.value}
-                                                className="grid grid-cols-1 gap-4 sm:grid-cols-2" // Adjust grid for fewer options
+                                                className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                                disabled={isLoading}
                                             >
                                                 {Object.values(
                                                     LoanSavingTypeEnum
@@ -992,7 +1022,8 @@ const AccountCreateUpdateForm = ({
                                             <RadioGroup
                                                 onValueChange={field.onChange}
                                                 value={field.value}
-                                                className="grid grid-cols-1 gap-4 sm:grid-cols-2" // Adjust grid for fewer options
+                                                className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                                disabled={isLoading}
                                             >
                                                 {Object.values(
                                                     InterestDeductionEnum
@@ -1047,6 +1078,7 @@ const AccountCreateUpdateForm = ({
                                             onValueChange={(selectedValue) => {
                                                 field.onChange(selectedValue)
                                             }}
+                                            disabled={isLoading}
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger className="w-full">
@@ -1083,6 +1115,7 @@ const AccountCreateUpdateForm = ({
                                                 field.onChange(selectedValue)
                                             }}
                                             defaultValue={field.value}
+                                            disabled={isLoading}
                                         >
                                             <SelectTrigger className="w-full">
                                                 {field.value ||
@@ -1106,94 +1139,100 @@ const AccountCreateUpdateForm = ({
                                     </FormControl>
                                 )}
                             />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="general_ledger_grouping_exclude_account"
-                                className="col-span-2"
-                                render={({ field }) => {
-                                    return (
-                                        <GradientBackground gradientOnly>
-                                            <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
-                                                <Checkbox
-                                                    id={field.name}
-                                                    checked={field.value}
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
-                                                    name={field.name}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                    aria-describedby={`${field.name}`}
-                                                />
-                                                <div className="flex grow items-center gap-3">
-                                                    <div className="size-fit rounded-full bg-secondary p-2">
-                                                        <ExcludeIcon />
-                                                    </div>
-                                                    <div className="grid gap-2">
-                                                        <Label
-                                                            htmlFor={field.name}
-                                                        >
-                                                            Exclude general
-                                                            ledger grouping
-                                                        </Label>
-                                                        <p
-                                                            id={`${field.name}`}
-                                                            className="text-xs text-muted-foreground"
-                                                        >
-                                                            This account will
-                                                            exclude on the
-                                                            General ledger
-                                                            Grouping.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </GradientBackground>
-                                    )
-                                }}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="number_grace_period_daily"
-                                className="col-span-2"
-                                render={({ field }) => {
-                                    return (
-                                        <GradientBackground gradientOnly>
-                                            <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
-                                                <Checkbox
-                                                    id={field.name}
-                                                    checked={field.value}
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
-                                                    name={field.name}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                    aria-describedby={`${field.name}`}
-                                                />
-                                                <div className="flex grow items-center gap-3">
-                                                    <div className="size-fit rounded-full bg-secondary p-2">
-                                                        <FaCalendarCheckIcon />{' '}
-                                                    </div>
-                                                    <div className="grid gap-2">
-                                                        <Label
-                                                            htmlFor={field.name}
-                                                        >
-                                                            Number Grace Period
-                                                            Daily
-                                                        </Label>
-                                                        <p
-                                                            id={`${field.name}`}
-                                                            className="text-xs text-muted-foreground"
-                                                        >
-                                                            Enable daily grace
-                                                            period calculation.
-                                                        </p>
+                            <div className="grid w-full grid-cols-1 gap-x-2 gap-y-2 md:grid-cols-2 md:gap-y-0">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="general_ledger_grouping_exclude_account"
+                                    render={({ field }) => {
+                                        return (
+                                            <GradientBackground gradientOnly>
+                                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                                    <Checkbox
+                                                        id={field.name}
+                                                        checked={field.value}
+                                                        onCheckedChange={
+                                                            field.onChange
+                                                        }
+                                                        disabled={isLoading}
+                                                        name={field.name}
+                                                        className="order-1 after:absolute after:inset-0"
+                                                        aria-describedby={`${field.name}`}
+                                                    />
+                                                    <div className="flex grow items-center gap-3">
+                                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                                            <ExcludeIcon />
+                                                        </div>
+                                                        <div className="grid gap-2">
+                                                            <Label
+                                                                htmlFor={
+                                                                    field.name
+                                                                }
+                                                            >
+                                                                Exclude general
+                                                                ledger grouping
+                                                            </Label>
+                                                            <p
+                                                                id={`${field.name}`}
+                                                                className="text-xs text-muted-foreground"
+                                                            >
+                                                                Exclude the
+                                                                General ledger
+                                                                Grouping.
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </GradientBackground>
-                                    )
-                                }}
-                            />
+                                            </GradientBackground>
+                                        )
+                                    }}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="number_grace_period_daily"
+                                    render={({ field }) => {
+                                        return (
+                                            <GradientBackground gradientOnly>
+                                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                                    <Checkbox
+                                                        id={field.name}
+                                                        checked={field.value}
+                                                        onCheckedChange={
+                                                            field.onChange
+                                                        }
+                                                        name={field.name}
+                                                        disabled={isLoading}
+                                                        className="order-1 after:absolute after:inset-0"
+                                                        aria-describedby={`${field.name}`}
+                                                    />
+                                                    <div className="flex grow items-center gap-3">
+                                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                                            <FaCalendarCheckIcon />{' '}
+                                                        </div>
+                                                        <div className="grid gap-2">
+                                                            <Label
+                                                                htmlFor={
+                                                                    field.name
+                                                                }
+                                                            >
+                                                                Number Grace
+                                                                Period Daily
+                                                            </Label>
+                                                            <p
+                                                                id={`${field.name}`}
+                                                                className="text-xs text-muted-foreground"
+                                                            >
+                                                                Enable daily
+                                                                grace period
+                                                                calculation.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </GradientBackground>
+                                        )
+                                    }}
+                                />
+                            </div>
                             <FormFieldWrapper
                                 control={form.control}
                                 name="lumpsum_computation_type"
@@ -1205,8 +1244,9 @@ const AccountCreateUpdateForm = ({
                                         className="p-5"
                                     >
                                         <RadioGroup
-                                            onValueChange={field.onChange}
                                             value={field.value}
+                                            disabled={isLoading}
+                                            onValueChange={field.onChange}
                                             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                         >
                                             {Object.values(
@@ -1266,9 +1306,10 @@ const AccountCreateUpdateForm = ({
                                     className="p-5"
                                 >
                                     <RadioGroup
-                                        onValueChange={field.onChange}
                                         value={field.value}
-                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                                        disabled={isLoading}
+                                        onValueChange={field.onChange}
+                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                     >
                                         {Object.values(
                                             OtherDeductionEntryEnum
@@ -1323,7 +1364,8 @@ const AccountCreateUpdateForm = ({
                                     <RadioGroup
                                         onValueChange={field.onChange}
                                         value={field.value}
-                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2" // Adjust grid for fewer options
+                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                        disabled={isLoading}
                                     >
                                         {Object.values(
                                             InterestSavingTypeDiminishingStraightEnum
@@ -1373,12 +1415,14 @@ const AccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <GradientBackground
                                     gradientOnly
+                                    opacity={0.03}
                                     className="p-5"
                                 >
                                     <RadioGroup
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                                        disabled={isLoading}
                                     >
                                         {Object.values(
                                             OtherInformationOfAnAccountEnum
@@ -1424,436 +1468,34 @@ const AccountCreateUpdateForm = ({
                                 </GradientBackground>
                             )}
                         />
-
-                        {/* <fieldset>
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Daily Amortization (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_daily_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Daily Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Daily Maturity (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_daily_maturity"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Daily Maturity"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Weekly Amortization (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_weekly_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Weekly Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Weekly Maturity (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_weekly_maturity"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Weekly Maturity"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Monthly Amortization (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_monthly_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Monthly Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Monthly Maturity (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_monthly_maturity"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Monthly Maturity"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Semi-Monthly Amortization (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_semi_monthly_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Semi-Monthly Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Semi-Monthly Maturity (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_semi_monthly_maturity"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Semi-Monthly Maturity"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Quarterly Amortization (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_quarterly_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Quarterly Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Quarterly Maturity (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_quarterly_maturity"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Quarterly Maturity"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Semi-Annual Amortization (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_semi_anual_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Semi-Annual Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Semi-Annual Maturity (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_semi_anual_maturity"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Semi-Annual Maturity"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Lumpsum Amortization (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_lumpsum_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Lumpsum Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Lumpsum Maturity (Fines Grace Period)"
-                                name="coh_cib_fines_grace_period_entry_lumpsum_maturity"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Lumpsum Maturity"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Fines Grace Period Amortization (Days)"
-                                name="fines_grace_period_amortization"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseInt(
-                                                              e.target.value,
-                                                              10
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Fines Grace Period Amortization"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Additional Grace Period (Days)"
-                                name="additional_grace_period"
-                                className="grow"
-                                render={({ field }) => (
-                                    <div className="flex grow flex-col gap-y-2">
-                                        <Input
-                                            {...field}
-                                            value={field.value ?? ''}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? undefined
-                                                        : parseInt(
-                                                              e.target.value,
-                                                              10
-                                                          )
-                                                )
-                                            }
-                                            placeholder="Additional Grace Period"
-                                        />
-                                    </div>
-                                )}
-                            />
-
-                         
-                        </fieldset> */}
                     </div>
                 </div>
-                <Separator />
                 <div className="space-y-2">
-                    <FormErrorMessage errorMessage={''} />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
                             size="sm"
                             type="button"
                             variant="ghost"
+                            disabled={isLoading}
                             onClick={() => {
                                 form.reset()
-                                // reset()
                             }}
                             className="w-full self-end px-8 sm:w-fit"
                         >
                             Reset
                         </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {/* {isPending ? (
-                        <LoadingSpinner />
-                    ) : bankId ? (
-                        'Update'
-                    ) : (
-                        'Create'
-                    )} */}
-                            Create
+                        <Button type="submit" disabled={isLoading} className="">
+                            {isLoading ? (
+                                <div className="flex space-x-2">
+                                    {accountId ? 'updating ' : 'Creating '}{' '}
+                                    <LoadingSpinnerIcon
+                                        size={18}
+                                        className="ml-2 animate-spin"
+                                    />
+                                </div>
+                            ) : (
+                                `${accountId ? 'Update' : 'Create'} Account `
+                            )}
                         </Button>
                     </div>
                 </div>

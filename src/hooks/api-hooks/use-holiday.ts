@@ -1,14 +1,19 @@
 import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
 
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from './api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from './api-hook-factory'
 import * as HolidayService from '@/api-service/holiday-service'
 
 import {
-    IHoliday,
     IAPIHook,
+    IHoliday,
     TEntityId,
     IQueryProps,
     IHolidayRequest,
@@ -21,7 +26,11 @@ export const useCreateHoliday = createMutationHook<
     IHoliday,
     string,
     IHolidayRequest
->((data) => HolidayService.createHoliday(data), 'Holiday created')
+>(
+    (data) => HolidayService.createHoliday(data),
+    'Holiday created',
+    (args) => createMutationInvalidateFn('holiday', args)
+)
 
 // Update
 export const useUpdateHoliday = createMutationHook<
@@ -30,22 +39,24 @@ export const useUpdateHoliday = createMutationHook<
     { holidayId: TEntityId; data: IHolidayRequest }
 >(
     ({ holidayId, data }) => HolidayService.updateHoliday(holidayId, data),
-    'Holiday updated'
+    'Holiday updated',
+    (args) => updateMutationInvalidationFn('holiday', args)
 )
 
 // Delete
 export const useDeleteHoliday = createMutationHook<void, string, TEntityId>(
     (id) => HolidayService.deleteHoliday(id),
-    'Holiday deleted'
+    'Holiday deleted',
+    (args) => deleteMutationInvalidationFn('holiday', args)
 )
 
 // Get all holidays
-export const useHolidays = ({
+export const useMemberClassifications = ({
     enabled,
-    showMessage = true,
+    showMessage,
 }: IAPIHook<IHoliday[], string> & IQueryProps = {}) => {
     return useQuery<IHoliday[], string>({
-        queryKey: ['holiday', 'resource-query', 'all'],
+        queryKey: ['holiday', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 HolidayService.getAllHolidays()

@@ -1,11 +1,12 @@
 import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { groupBy, withCatchAsync } from '@/utils'
+import { groupBy, toBase64, withCatchAsync } from '@/utils'
 import { createMutationHook } from './api-hook-factory'
 import { BranchService } from '@/api-service/branch-services'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
 import { UserOrganization } from '@/api-service/user-organization-services'
+import * as UserOrganizationService from '@/api-service/user-organization-service'
 
 import {
     IBranch,
@@ -15,6 +16,12 @@ import {
     IOperationCallbacks,
     IOrgUserOrganizationGroup,
     IMutationProps,
+    IAPIFilteredPaginatedHook,
+    IEmployee,
+    IOwner,
+    IMember,
+    IUserOrganizationPaginated,
+    IUserBase,
 } from '@/types'
 
 export const useGetUserOrganizationByUserId = (id: TEntityId) => {
@@ -269,3 +276,52 @@ export const useUserOrgRejectJoinRequest = createMutationHook<
     string,
     TEntityId
 >((id) => UserOrganization.rejectJoinRequest(id), 'Join request rejected.')
+
+export const useFilteredPaginatedUserOrganization = <
+    T = IUserBase | IEmployee | IOwner | IMember,
+>({
+    mode,
+    sort,
+    enabled,
+    filterPayload,
+    showMessage = true,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<IUserOrganization, string> &
+    IQueryProps & { mode?: 'all' | 'none-member-profile' } = {}) => {
+    return useQuery<IUserOrganizationPaginated<T>, string>({
+        queryKey: [
+            'user-organization',
+            'resource-query',
+            filterPayload,
+            pagination,
+            sort,
+        ],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                UserOrganizationService.getPaginatedUserOrg<T>({
+                    mode,
+                    pagination,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: {
+            data: [],
+            pages: [],
+            totalSize: 3,
+            totalPage: 1,
+            ...pagination,
+        },
+        enabled,
+        retry: 1,
+    })
+}

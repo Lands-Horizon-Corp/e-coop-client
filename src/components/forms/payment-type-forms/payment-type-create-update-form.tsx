@@ -34,7 +34,10 @@ import { useAuthUserWithOrg } from '@/store/user-auth-store'
 
 const PaymentTypeSchema = z.object({
     name: z.string().min(1, 'Payment type name is required'),
-    description: z.string().optional(),
+    description: z
+        .string()
+        .max(50, 'Description must contain at most 50 character(s)')
+        .optional(),
     number_of_days: z
         .number()
         .int()

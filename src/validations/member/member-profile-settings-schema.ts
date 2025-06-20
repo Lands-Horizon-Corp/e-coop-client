@@ -3,6 +3,7 @@ import {
     entityIdSchema,
     civilStatusSchema,
     generalStatusSchema,
+    stringDateSchema,
 } from '../common'
 
 // 📌 Identity & Personal Info
@@ -13,15 +14,17 @@ export const memberProfilePersonalInfoSchema = z.object({
     full_name: z.string().optional(),
     suffix: z.string().optional(),
     member_gender_id: entityIdSchema.optional(),
-    birth_date: z.string().optional(),
+    birth_date: stringDateSchema.transform((val) =>
+        new Date(val).toISOString()
+    ),
     contact_number: z.string().optional(),
 
     civil_status: civilStatusSchema,
 
-    occupation_id: entityIdSchema.optional(),
+    member_occupation_id: entityIdSchema.optional(),
 
     business_address: z.string().optional(),
-    business_contact: z.string().optional(),
+    business_contact_number: z.string().optional(),
 
     notes: z.string().optional(),
     description: z.string().optional(),
@@ -44,6 +47,7 @@ export const memberProfileMembershipInfoSchema = z.object({
     member_classification_id: entityIdSchema.optional(),
     member_center_id: entityIdSchema.optional(),
 
+    recruited_by_member_profile: z.any(),
     recruited_by_member_profile_id: entityIdSchema.optional(),
 
     is_mutual_fund_member: z.boolean().optional(),

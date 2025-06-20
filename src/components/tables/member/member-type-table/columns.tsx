@@ -11,7 +11,9 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
 import { toReadableDate } from '@/utils'
+
 import { IMemberType } from '@/types'
+import { Badge } from '@/components/ui/badge'
 
 export const memberTypeGlobalSearchTargets: IGlobalSearchTargets<IMemberType>[] =
     [
@@ -102,10 +104,10 @@ const memberTypeTableColumns = (
                 row: {
                     original: { prefix },
                 },
-            }) => <div>{prefix}</div>,
+            }) => <Badge variant="secondary">{prefix}</Badge>,
             enableMultiSort: true,
             enableResizing: true,
-            maxSize: 180,
+            maxSize: 100,
             minSize: 100,
         },
         {

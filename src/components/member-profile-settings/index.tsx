@@ -11,13 +11,14 @@ import {
     MapMarkedIcon,
     GraduationCapIcon,
 } from '../icons'
-import MemberProfileSettingsBanner, {
-    MemberProfileSettingsBannerSkeleton,
-} from './member-profile-settings-banner'
-import { Separator } from '../ui/separator'
 import { ScrollArea, ScrollBar } from '../ui/scroll-area'
-import MembershipInfo from './settings-tab-pages/membership-info'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+
+import MemberProfileMiniInfoCard, {
+    MemberProfileMiniInfoCardSkeleton,
+} from '../elements/member-profile-settings-banner'
+import MembershipInfo from './settings-tab-pages/membership-info'
+import MemberUserAccount from './settings-tab-pages/member-user-account'
 import MemberFinancial from './settings-tab-pages/member-financial-info'
 import MemberAddressContact from './settings-tab-pages/member-address-contact'
 import MemberAccountRelationship from './settings-tab-pages/account-relationship'
@@ -85,6 +86,12 @@ const SettingsTabs: {
         Icon: Users3Icon,
         Component: (props) => <MemberAccountRelationship {...props} />,
     },
+    {
+        value: 'use-account',
+        title: 'User Account',
+        Icon: UserIcon,
+        Component: (props) => <MemberUserAccount {...props} />,
+    },
 ]
 
 interface Props extends IClassProps {
@@ -103,27 +110,42 @@ const MemberProfileSettings = ({
 
     const { data: memberProfile, isPending } = useMemberProfile({
         profileId: memberProfileId,
+        refetchOnWindowFocus: false,
     })
 
     useSubscribe(
         `member-profile.${memberProfileId}.update`,
         (newMemberProfileData) => {
             queryClient.setQueryData(
-                ['member-profile', memberProfileId, 'current-user'],
+                ['member-profile', memberProfileId],
                 newMemberProfileData
             )
         }
     )
 
     const [value, handleChange] = useInternalState(
+        SettingsTabs[0].value,
         activeTab,
-        onTabChange,
-        SettingsTabs[0].value
+        onTabChange
     )
 
     return (
-        <div className={cn('w-full flex-1', className)}>
+        <div className={cn('w-full flex-1 space-y-4', className)}>
             <p className="my-4 text-muted-foreground">Edit Member Profile</p>
+            {!memberProfile && isPending && (
+                <MemberProfileMiniInfoCardSkeleton />
+            )}
+            {memberProfile && (
+                <>
+                    <MemberProfileMiniInfoCard memberProfile={memberProfile} />
+                    {memberProfile.is_closed && (
+                        <MemberCloseAccountBanner
+                            showRemarksList
+                            closeRemarks={memberProfile.member_close_remarks}
+                        />
+                    )}
+                </>
+            )}
             <Tabs
                 value={value}
                 className="flex w-full gap-x-4"
@@ -131,30 +153,11 @@ const MemberProfileSettings = ({
             >
                 <ScrollArea>
                     <TabsList className="border-bx mb-3 h-auto min-w-full flex-col justify-start gap-x-2 gap-y-1 rounded-none bg-transparent px-0 py-1 text-foreground">
-                        {!memberProfile && isPending && (
-                            <MemberProfileSettingsBannerSkeleton />
-                        )}
-                        {memberProfile && (
-                            <>
-                                <MemberProfileSettingsBanner
-                                    memberProfile={memberProfile}
-                                />
-                                {memberProfile.is_close && (
-                                    <MemberCloseAccountBanner
-                                        showRemarksList
-                                        closeRemarks={
-                                            memberProfile.member_close_remarks
-                                        }
-                                    />
-                                )}
-                            </>
-                        )}
-                        <Separator className="mb-2" />
                         {SettingsTabs.map((tab) => (
                             <TabsTrigger
                                 key={tab.value}
                                 value={tab.value}
-                                className="dara-[state=active]:border relative w-full justify-start rounded-md text-muted-foreground after:absolute after:inset-y-0 after:left-0 after:w-0.5 after:content-[''] hover:text-foreground data-[state=active]:bg-secondary data-[state=active]:shadow-none data-[state=active]:after:bg-primary dark:bg-transparent data-[state=active]:dark:bg-popover"
+                                className="dara-[state=active]:border relative w-full justify-start rounded-md from-primary/20 to-transparent text-muted-foreground after:absolute after:inset-y-0 after:left-0 after:w-0.5 after:content-[''] hover:text-foreground data-[state=active]:bg-secondary data-[state=active]:bg-gradient-to-r data-[state=active]:shadow-none data-[state=active]:after:bg-primary dark:bg-transparent"
                             >
                                 {tab.Icon && (
                                     <tab.Icon
@@ -173,14 +176,19 @@ const MemberProfileSettings = ({
                     <ScrollBar orientation="vertical" />
                 </ScrollArea>
                 <div className="tst flex-1 rounded-md bg-secondary p-4 text-start dark:bg-popover/70">
-                    {SettingsTabs.map((tab) => (
-                        <TabsContent value={tab.value} key={tab.value} asChild>
-                            {tab.Component({
-                                memberProfile:
-                                    memberProfile as unknown as IMemberProfile,
-                            })}
-                        </TabsContent>
-                    ))}
+                    {memberProfile &&
+                        SettingsTabs.map((tab) => (
+                            <TabsContent
+                                value={tab.value}
+                                key={tab.value}
+                                asChild
+                            >
+                                {tab.Component({
+                                    memberProfile:
+                                        memberProfile as unknown as IMemberProfile,
+                                })}
+                            </TabsContent>
+                        ))}
                 </div>
             </Tabs>
         </div>

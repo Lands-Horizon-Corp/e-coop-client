@@ -1,3 +1,5 @@
+import { ArrowRight } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useState } from 'react'
 
 import {
@@ -73,11 +75,24 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                             {groupItem.icon && (
                                                 <groupItem.icon className="text-foreground/50 delay-150 duration-200 ease-out group-hover:text-foreground" />
                                             )}
-                                            <div className="space-y-1">
+                                            <div className="flex-1 space-y-1">
                                                 <p>{groupItem.title}</p>
                                                 <p className="text-xs text-muted-foreground/70">
-                                                    {groupItem.url}
+                                                    {groupItem.shortDescription}
                                                 </p>
+                                            </div>
+                                            <div className="w-fit">
+                                                <Link
+                                                    target="_blank"
+                                                    to={groupItem.url}
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                    className="text-xs text-muted-foreground duration-200 hover:text-foreground"
+                                                >
+                                                    Open new tab{' '}
+                                                    <ArrowRight className="inline !size-3 -rotate-45" />
+                                                </Link>
                                             </div>
                                         </CommandItem>
                                     ))}

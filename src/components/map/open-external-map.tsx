@@ -17,7 +17,7 @@ const OpenExternalMap = forwardRef<HTMLAnchorElement, Props>(
                 target="_blank"
                 className={cn('', className)}
                 {...props}
-            ></a>
+            />
         )
     }
 )

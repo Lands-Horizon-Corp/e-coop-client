@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { IconType } from 'react-icons/lib'
+import { useQueryClient } from '@tanstack/react-query'
 
 import {
     UserIcon,
@@ -9,6 +10,7 @@ import {
     CreditCardIcon,
     FolderFillIcon,
 } from '../icons'
+import { useSubscribe } from '@/hooks/use-pubsub'
 import MemberMediasInfo from './member-medias-info'
 import Modal, { IModalProps } from '../modals/modal'
 import MemberPersonalInfo from './member-personal-info'
@@ -18,12 +20,12 @@ import MemberInfoBanner from './banners/member-info-banner'
 import MemberMembershipInfo from './member-general-membership-info'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import MemberGovernmentBenefits from './member-government-benefits-info'
+import MemberCloseAccountBanner from './banners/member-closed-account-banner'
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
@@ -84,16 +86,28 @@ const memberInfoTabs: {
 ]
 
 const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
+    const queryClient = useQueryClient()
+
     const { data: memberProfile } = useMemberProfile({
         profileId: memberProfileId,
     })
+
+    useSubscribe(
+        `member_profile.update.${memberProfileId}`,
+        (newMemberProfileData) => {
+            queryClient.setQueryData(
+                ['member-profile', memberProfileId],
+                newMemberProfileData
+            )
+        }
+    )
 
     return (
         <div className="min-h-[80vh] min-w-[80vw] space-y-4 pt-4">
             {memberProfile && (
                 <>
                     <MemberInfoBanner memberProfile={memberProfile} />
-                    {memberProfile.is_close && (
+                    {memberProfile.is_closed && (
                         <MemberCloseAccountBanner
                             showRemarksList
                             closeRemarks={memberProfile.member_close_remarks}
@@ -101,7 +115,7 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
                     )}
                 </>
             )}
-            <Tabs defaultValue="general-infos" className="flex-1 flex-col">
+            <Tabs defaultValue="general-infos" className="mt-2 flex-1 flex-col">
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {memberInfoTabs.map((tab) => (

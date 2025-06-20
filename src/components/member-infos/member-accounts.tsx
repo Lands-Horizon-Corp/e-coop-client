@@ -25,7 +25,7 @@ const MemberFinancialInfo = ({ profileId, className, defaultData }: Props) => {
                 className
             )}
         >
-            <MemberIncomeDisplay incomes={data?.member_income} />
+            <MemberIncomeDisplay incomes={data?.member_incomes} />
             <Separator />
             <MemberAssetsDisplay assets={data?.member_assets} />
         </div>

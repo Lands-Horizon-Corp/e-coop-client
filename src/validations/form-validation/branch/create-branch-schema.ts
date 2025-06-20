@@ -10,7 +10,8 @@ export const branchRequestSchema = z.object({
     email: z.string().email('Invalid Email').min(1, 'Email is Required'),
     description: z
         .string()
-        .min(15, 'Description is Required, Min of 15 Characters'),
+        .min(15, 'Description is Required, Min of 15 Characters')
+        .max(150, 'Description only 150 characters long'),
     country_code: z.string().min(2, 'Country code is required'),
     contact_number: z
         .string()

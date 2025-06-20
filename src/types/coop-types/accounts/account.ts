@@ -1,4 +1,5 @@
 import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
+import { IPaginatedResult } from '../paginated-result'
 
 export enum AccountTypeEnum {
     Deposit = 'Deposit',
@@ -15,7 +16,7 @@ export enum AccountTypeEnum {
 
 export enum ComputationTypeEnum {
     Straight = 'Straight',
-    Deminishing = 'Deminishing',
+    Diminishing = 'Diminishing',
     DiminishingAddOn = 'Diminishing Add-On',
     DiminishingYearly = 'Diminishing Yearly',
     DiminishingStraight = 'Diminishing Straight',
@@ -101,26 +102,24 @@ export interface IAccount extends IAuditable, ITimeStamps {
     organization_id?: TEntityId
     branch_id?: TEntityId
 
-    general_ledger_definition_id?: TEntityId // other
-    financial_statement_definition_id?: TEntityId // other
+    general_ledger_definition_id?: TEntityId
+    financial_statement_definition_id?: TEntityId
     account_classification_id?: TEntityId
     account_category_id?: TEntityId
     member_type_id: TEntityId
 
-    name: string // general,
-    description: string // general, other
+    name: string
+    description: string
 
-    minAmount?: number // For deposit
-    maxAmount?: number // For deposit
+    minAmount?: number
+    maxAmount?: number
     index?: number
     type: AccountTypeEnum
 
-    // Settings only one of them must be true
-    is_internal?: boolean //[default: false]
-    cash_on_hand?: boolean //[default: false]
-    paid_up_share_capital?: boolean //[default:false]
+    is_internal?: boolean
+    cash_on_hand?: boolean
+    paid_up_share_capital?: boolean
 
-    // pang loan
     computation_type?: ComputationTypeEnum
 
     fines_amort?: number
@@ -130,7 +129,6 @@ export interface IAccount extends IAuditable, ITimeStamps {
     interest_secured?: number
 
     computation_sheet_id?: TEntityId
-    // for loan, until here
 
     coh_cib_fines_grace_period_entry_daily_amortization?: number
     coh_cib_fines_grace_period_entry_daily_maturity?: number
@@ -156,16 +154,16 @@ export interface IAccount extends IAuditable, ITimeStamps {
     financial_statement_type?: FinancialStatementTypeEnum
     general_ledger_type?: GeneralLedgerTypeEnum
 
-    alternative_code?: string // general, other, loan
+    alternative_code?: string
 
-    fines_grace_period_amortization?: number // number of days schedule of payment, ex: april 10, if di nakabhayad meron pang 2 days // For loan
-    additional_grace_period?: number //number of days
-    // cut_off_days // wla muna
+    fines_grace_period_amortization?: number
+    additional_grace_period?: number
+    // cut_off_days
     // cut_off_months
 
     number_grace_period_daily?: boolean
 
-    fines_grace_period_maturity?: number // number of days
+    fines_grace_period_maturity?: number
     yearly_subscription_fee?: number
     loan_cut_off_days?: number
 
@@ -194,7 +192,7 @@ export interface IAccountRequest {
     financial_statement_definition_id?: TEntityId
     account_classification_id?: TEntityId
     account_category_id?: TEntityId
-    member_type_id: TEntityId
+    member_type_id?: TEntityId
 
     name: string
     description: string
@@ -264,3 +262,5 @@ export interface IAccountRequest {
 
     general_ledger_grouping_exclude_account?: boolean
 }
+
+export interface IAccountPaginated extends IPaginatedResult<IAccount> {}

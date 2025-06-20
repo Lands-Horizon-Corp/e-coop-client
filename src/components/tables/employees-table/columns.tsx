@@ -1,6 +1,5 @@
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import EmployeesAction from './action'
 import { Checkbox } from '@/components/ui/checkbox'
 import ImageDisplay from '@/components/image-display'
 import { PushPinSlashIcon } from '@/components/icons'
@@ -254,16 +253,6 @@ const EmployeesTableColumns = (
         enableHiding: false,
         size: 180,
         minSize: 150,
-    },
-    {
-        id: 'actions',
-        header: () => null,
-        cell: ({ row }) => <EmployeesAction row={row} />,
-        enableSorting: false,
-        enableResizing: false,
-        enableHiding: false,
-        size: 80,
-        minSize: 80,
     },
 ]
 

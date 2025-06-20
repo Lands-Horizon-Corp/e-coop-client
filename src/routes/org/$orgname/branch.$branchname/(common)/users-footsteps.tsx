@@ -1,8 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
 import FootstepTable from '@/components/tables/footsteps-table'
 import PageContainer from '@/components/containers/page-container'
 import FootstepTableAction from '@/components/tables/footsteps-table/action'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(common)/users-footsteps'
@@ -11,6 +15,31 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+    const queryClient = useQueryClient()
+
+    useSubscribe(`footstep.create.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['timesheet', 'resource-query', 'branch'],
+        })
+    })
+
+    useSubscribe(`footstep.update.user.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['timesheet', 'resource-query', 'branch'],
+        })
+    })
+
+    useSubscribe(`footstep.delete.user.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['timesheet', 'resource-query', 'branch'],
+        })
+    })
+
     return (
         <PageContainer>
             <FootstepTable

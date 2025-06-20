@@ -7,3 +7,5 @@ export const WS_URL =
     import.meta.env.VITE_WS_URL ??
     process.env.VITE_WS_URL ??
     'ws://localhost:8080'
+
+export const APP_ENV = import.meta.env.VITE_APP_ENV

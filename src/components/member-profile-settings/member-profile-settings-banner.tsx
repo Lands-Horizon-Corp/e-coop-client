@@ -1,82 +1,169 @@
+import { Badge } from '../ui/badge'
+import { Skeleton } from '../ui/skeleton'
 import ImageDisplay from '../image-display'
+import { Card, CardContent } from '../ui/card'
+import {
+    XIcon,
+    UserIcon,
+    PhoneIcon,
+    CheckIcon,
+    ClockIcon,
+    IdCardIcon,
+} from '../icons'
 
 import { cn } from '@/lib'
 
 import { IClassProps, IMemberProfile } from '@/types'
-import CopyTextButton from '../copy-text-button'
-import { Skeleton } from '../ui/skeleton'
+import { CopyWrapper } from '../copy-wrapper'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile
 }
 
-const MissingValue = ({ fullDescription }: { fullDescription?: string }) => {
-    return (
-        <span className="text-xs italic text-muted-foreground/40">
-            {fullDescription ?? 'missing'}
-        </span>
-    )
+const getStatusConfig = (status: string) => {
+    switch (status) {
+        case 'pending':
+            return {
+                label: 'Pending',
+                variant: 'outline' as const,
+                className:
+                    'border-yellow-500/20 bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20 dark:text-yellow-400 dark:bg-yellow-500/10 dark:hover:bg-yellow-500/20',
+                icon: <ClockIcon className="h-3 w-3" />,
+            }
+        case 'for review':
+            return {
+                label: 'For Review',
+                variant: 'outline' as const,
+                className:
+                    'border-blue-500/20 bg-blue-500/10 text-blue-700 hover:bg-blue-500/20 dark:text-blue-400 dark:bg-blue-500/10 dark:hover:bg-blue-500/20',
+                icon: <ClockIcon className="h-3 w-3" />,
+            }
+        case 'verified':
+            return {
+                label: 'Verified',
+                variant: 'default' as const,
+                className:
+                    'border-green-500/20 bg-green-500/10 text-green-700 hover:bg-green-500/20 dark:text-green-400 dark:bg-green-500/10 dark:hover:bg-green-500/20',
+                icon: <CheckIcon className="h-3 w-3" />,
+            }
+        case 'not allowed':
+            return {
+                label: 'Not Allowed',
+                variant: 'destructive' as const,
+                className:
+                    'border-red-500/20 bg-red-500/10 text-red-700 hover:bg-red-500/20 dark:text-red-400 dark:bg-red-500/10 dark:hover:bg-red-500/20',
+                icon: <XIcon className="h-3 w-3" />,
+            }
+        default:
+            return {
+                label: status,
+                variant: 'secondary' as const,
+                className:
+                    'border-muted bg-muted/50 text-muted-foreground hover:bg-muted/80',
+                icon: <ClockIcon className="h-3 w-3" />,
+            }
+    }
 }
 
 const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
+    const statusConfig = getStatusConfig(memberProfile.status)
+
     return (
-        <div className={cn('max-w-[280px] p-2 [&_*]:truncate', className)}>
-            <div className="flex gap-x-2">
-                <ImageDisplay
-                    src={memberProfile.media?.download_url}
-                    className="block size-20 rounded-lg"
-                />
-                <div>
-                    <div className="space-y-2">
-                        <p className="text-lg">
-                            {memberProfile.full_name ?? <MissingValue />}
-                        </p>
-                        <div className="space-y-1">
-                            <p className="text-sm text-muted-foreground">
-                                <span className="opacity-40">PB No : </span>
-                                {memberProfile.passbook ? (
-                                    <>
-                                        <CopyTextButton
-                                            className="mr-1.5"
-                                            successText="Passbook Copied"
-                                            textContent={memberProfile.passbook}
-                                        />
-                                        {memberProfile.passbook}
-                                    </>
+        <Card
+            className={cn(
+                'mx-auto w-full bg-gradient-to-r from-primary/20 to-card/10 ring-2 ring-card dark:ring-primary/40',
+                className,
+                memberProfile.is_closed &&
+                    'from-destructive/20 !ring-destructive'
+            )}
+        >
+            <CardContent className="p-4">
+                <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                        <ImageDisplay
+                            src={memberProfile.media?.download_url}
+                            fallback={memberProfile.first_name.charAt(0) ?? '-'}
+                            className="size-12"
+                        />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <div className="mb-4 flex items-center justify-between">
+                            <h2 className="truncate font-bold">
+                                {memberProfile.full_name}
+                            </h2>
+                            <div className="space-x-2">
+                                <Badge variant="outline">
+                                    {memberProfile.member_type.name}
+                                </Badge>
+                                {memberProfile.is_closed ? (
+                                    <Badge variant="destructive">Closed</Badge>
                                 ) : (
-                                    <MissingValue />
+                                    <Badge className={statusConfig.className}>
+                                        {statusConfig.label}
+                                    </Badge>
                                 )}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                <span className="opacity-40">
-                                    Profile No :{' '}
-                                </span>
-                                {memberProfile.id ? (
-                                    <>
-                                        <CopyTextButton
-                                            className="mr-1.5"
-                                            successText="Profile ID Copied"
-                                            textContent={memberProfile.passbook}
-                                        />
-                                        {memberProfile.id}
-                                    </>
-                                ) : (
-                                    <MissingValue />
-                                )}
-                            </p>
-                            {/* <p className="text-sm text-muted-foreground">
-                                <span className="opacity-40">
-                                    Member Type : {' '}
-                                </span>
-                                {memberProfile.member_type?.name ?? (
-                                    <MissingValue />
-                                )}
-                            </p> */}
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-x-12 gap-y-4 text-xs lg:grid-cols-4">
+                            <div>
+                                <h3 className="mb-1 font-medium text-muted-foreground">
+                                    Member Profile ID
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <span className="truncate font-mono">
+                                        <CopyWrapper iconSide="right">
+                                            {memberProfile.id}
+                                        </CopyWrapper>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="mb-1 font-medium text-muted-foreground">
+                                    Contact Number
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <PhoneIcon className="400 size-3" />
+                                    <span>
+                                        <CopyWrapper iconSide="right">
+                                            {memberProfile.contact_number}
+                                        </CopyWrapper>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="mb-1 font-medium text-muted-foreground">
+                                    Passbook Number
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <IdCardIcon className="size-3" />
+                                    <span className="font-mono">
+                                        <CopyWrapper iconSide="right">
+                                            {memberProfile.passbook}
+                                        </CopyWrapper>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="mb-1 font-medium text-muted-foreground">
+                                    Member Type
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <UserIcon className="size-3" />
+                                    <span>
+                                        <CopyWrapper iconSide="right">
+                                            {memberProfile.member_type.name}
+                                        </CopyWrapper>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     )
 }
 

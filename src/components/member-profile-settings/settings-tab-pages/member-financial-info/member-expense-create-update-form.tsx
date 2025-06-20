@@ -11,8 +11,8 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import { cn } from '@/lib/utils'
 import { entityIdSchema } from '@/validations/common'
+import { cn } from '@/lib/utils'
 import {
     useCreateMemberProfileExpense,
     useUpdateMemberProfileExpense,
@@ -27,7 +27,6 @@ export const memberExpenseSchema = z.object({
     branch_id: entityIdSchema.optional(),
     name: z.string().min(1, 'Expense name is required'),
     amount: z.coerce.number(),
-    date: z.string().min(1, 'Date is required'),
     description: z.string().min(1, 'Description is required'),
 })
 
@@ -36,7 +35,7 @@ type TMemberExpenseFormValues = z.infer<typeof memberExpenseSchema>
 export interface IMemberExpenseFormProps
     extends IClassProps,
         IForm<
-            Partial<IMemberExpense>,
+            Partial<TMemberExpenseFormValues>,
             IMemberExpense,
             string,
             TMemberExpenseFormValues
@@ -62,7 +61,6 @@ const MemberExpenseCreateUpdateForm = ({
         defaultValues: {
             name: '',
             amount: 0,
-            date: '',
             description: '',
             member_profile_id: memberProfileId,
             ...defaultValues,
@@ -126,37 +124,20 @@ const MemberExpenseCreateUpdateForm = ({
                                 />
                             )}
                         />
-                        <div className="grid grid-cols-2 gap-x-2">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="amount"
-                                label="Amount *"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        id={field.name}
-                                        type="number"
-                                        placeholder="Amount"
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="date"
-                                label="Date *"
-                                render={({ field }) => (
-                                    <Input
-                                        type="date"
-                                        {...field}
-                                        placeholder="Date"
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
-                                        value={field.value ?? ''}
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                )}
-                            />
-                        </div>
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="amount"
+                            label="Amount *"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    type="number"
+                                    placeholder="Amount"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
                         <FormFieldWrapper
                             control={form.control}
                             name="description"

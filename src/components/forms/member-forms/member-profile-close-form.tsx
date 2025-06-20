@@ -255,7 +255,13 @@ export const MemberProfileCloseFormModal = ({
             className={cn('sm:max-w-full lg:max-w-3xl', className)}
             {...props}
         >
-            <MemberProfileCloseForm {...formProps} />
+            <MemberProfileCloseForm
+                {...formProps}
+                onSuccess={(createdData) => {
+                    formProps?.onSuccess?.(createdData)
+                    props.onOpenChange?.(false)
+                }}
+            />
         </Modal>
     )
 }

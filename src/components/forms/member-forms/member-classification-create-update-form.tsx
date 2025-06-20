@@ -178,7 +178,13 @@ export const MemberClassificationCreateUpdateFormModal = ({
             className={cn('', className)}
             {...props}
         >
-            <MemberClassificationCreateUpdateForm {...formProps} />
+            <MemberClassificationCreateUpdateForm
+                {...formProps}
+                onSuccess={(createdData) => {
+                    formProps?.onSuccess?.(createdData)
+                    props.onOpenChange?.(false)
+                }}
+            />
         </Modal>
     )
 }

@@ -14,6 +14,9 @@ import { useAuthStore } from '@/store/user-auth-store'
 import { useAuthContext } from '@/hooks/api-hooks/use-auth'
 import ConnectionProvider from '@/providers/connection-provider'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
+
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import InfoModal from '@/components/modals/info-modal'
 
 export const Route = createRootRoute({
@@ -50,21 +53,23 @@ function RootLayout() {
 
     return (
         <div className="relative">
-            <Toaster
-                expand
-                richColors
-                closeButton
-                theme="system"
-                className="z-[9999]"
-            />
-            <Outlet />
-            <ConnectionProvider />
-            <CookieConsent />
-            <ImagePreviewModal />
-            <ConfirmModal />
-            <InfoModal />
-            <TanStackRouterDevtools />
-            <ActionSecurityProvider />
+            <DndProvider backend={HTML5Backend}>
+                <Toaster
+                    expand
+                    richColors
+                    closeButton
+                    theme="system"
+                    className="z-[9999]"
+                />
+                <Outlet />
+                <ConnectionProvider />
+                <CookieConsent />
+                <ImagePreviewModal />
+                <ConfirmModal />
+                <InfoModal />
+                <TanStackRouterDevtools />
+                <ActionSecurityProvider />
+            </DndProvider>
         </div>
     )
 }

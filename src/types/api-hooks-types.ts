@@ -1,3 +1,5 @@
+import { QueryClient } from '@tanstack/react-query'
+
 import { TSortingState } from '@/hooks/use-sorting-state'
 
 export interface IOperationCallbacks<
@@ -33,3 +35,9 @@ export interface IAPIFilteredPaginatedHook<TData = unknown, TError = unknown>
     extends IQueryProps,
         IOperationCallbacks<TData, TError>,
         IFilterPaginatedHookProps {}
+
+export interface IInvalidateFnArgs<TData = unknown, TVariables = unknown> {
+    queryClient: QueryClient
+    payload: TVariables
+    resultData: TData
+}

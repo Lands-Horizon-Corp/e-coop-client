@@ -1,13 +1,14 @@
+import { ReactNode } from 'react'
+
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { ReactNode } from '@tanstack/react-router'
 
 export interface IActionTooltipProps {
-    tooltipContent: string
+    tooltipContent: string | ReactNode
     children?: ReactNode
     delayDuration?: number
     side?: 'top' | 'right' | 'bottom' | 'left' | undefined

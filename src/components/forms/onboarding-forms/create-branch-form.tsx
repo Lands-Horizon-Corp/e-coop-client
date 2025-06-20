@@ -1,57 +1,58 @@
-import ActionTooltip from '@/components/action-tooltip'
-import { PhoneInput } from '@/components/contact-input/contact-input'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormControl } from '@/components/ui/form'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import MapPicker from '@/components/map-picker'
+import { Button } from '@/components/ui/button'
 import TextEditor from '@/components/text-editor'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Checkbox } from '@/components/ui/checkbox'
+import ImageDisplay from '@/components/image-display'
+import ActionTooltip from '@/components/action-tooltip'
+import { Form, FormControl } from '@/components/ui/form'
+import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { PhoneInput } from '@/components/contact-input/contact-input'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 
 import {
     HouseIcon,
-    LoadingSpinnerIcon,
     PlusIcon,
     ReplaceIcon,
+    LoadingSpinnerIcon,
 } from '@/components/icons'
 
 import {
-    branchTypeEnum,
     IBranch,
-    IClassProps,
     IForm,
     IMedia,
     TEntityId,
+    IClassProps,
+    branchTypeEnum,
 } from '@/types'
+
+import { base64ImagetoFile } from '@/helpers'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useLocationInfo } from '@/hooks/use-location-info'
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import {
     useCreateBranchByOrg,
     useUpdateBranch,
 } from '@/hooks/api-hooks/use-branch'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { branchRequestSchema } from '@/validations/form-validation/branch/create-branch-schema'
-import { base64ImagetoFile } from '@/helpers'
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { LatLngLiteral } from 'leaflet'
 import { cn } from '@/lib'
-import ImageDisplay from '@/components/image-display'
-import { useLocationInfo } from '@/hooks/use-location-info'
-import {
-    Select,
-    SelectItem,
-    SelectContent,
-    SelectTrigger,
-} from '@/components/ui/select'
+import { toast } from 'sonner'
+import { useState } from 'react'
+import { LatLngLiteral } from 'leaflet'
+import { useForm } from 'react-hook-form'
 
 type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
 
@@ -155,6 +156,11 @@ export const CreateUpdateBranchByOrgForm = ({
     const isLoading =
         isPedingCreateBranch || isLoadingUpdateBranch || isUploadingPhoto
 
+    const updateDisabled =
+        isLoadingUpdateBranch || isUploadingPhoto || !isBranchOnChanged
+
+    const createDisabled = isPedingCreateBranch || isUploadingPhoto
+
     const combinedError = error
 
     return (
@@ -185,6 +191,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter branch name"
                                     />
@@ -197,6 +204,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter email"
                                     />
@@ -257,6 +265,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter address"
                                     />
@@ -270,6 +279,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                     <Input
                                         {...field}
                                         disabled={isLoading}
+                                        value={field.value || ''}
                                         placeholder="Enter province"
                                     />
                                 )}
@@ -281,6 +291,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter city"
                                     />
@@ -294,6 +305,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                     <Input
                                         {...field}
                                         disabled={isLoading}
+                                        value={field.value || ''}
                                         placeholder="Enter barangay"
                                     />
                                 )}
@@ -306,6 +318,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                     render={({ field }) => (
                                         <Input
                                             {...field}
+                                            value={field.value || ''}
                                             disabled={isLoading}
                                             placeholder="Enter region"
                                         />
@@ -319,6 +332,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                         <Input
                                             {...field}
                                             disabled={isLoading}
+                                            value={field.value || ''}
                                             placeholder="Enter postal code"
                                         />
                                     )}
@@ -479,8 +493,8 @@ export const CreateUpdateBranchByOrgForm = ({
                                             <>
                                                 <TextEditor
                                                     {...rest}
+                                                    disabled={isLoading}
                                                     content={field.value ?? ''}
-                                                    className={`relative w-full after:absolute after:top-0 after:size-full after:rounded-lg after:bg-background/20 after:content-[''] ${isLoading ? 'cursor-not-allowed after:block after:blur-sm' : 'after:hidden'}`}
                                                     textEditorClassName="!h-32"
                                                     placeholder="Write some description about your branch..."
                                                 />
@@ -499,15 +513,9 @@ export const CreateUpdateBranchByOrgForm = ({
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
-                                                value={field.value}
+                                                value={field.value || ''}
                                                 disabled={isLoading}
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        parseFloat(
-                                                            e.target.value
-                                                        )
-                                                    )
-                                                }
+                                                onChange={field.onChange}
                                                 placeholder="latitude"
                                             />
                                         </div>
@@ -522,15 +530,9 @@ export const CreateUpdateBranchByOrgForm = ({
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
-                                                value={field.value}
+                                                value={field.value || ''}
                                                 disabled={isLoading}
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        parseFloat(
-                                                            e.target.value
-                                                        )
-                                                    )
-                                                }
+                                                onChange={field.onChange}
                                                 placeholder="Longitude"
                                             />
                                         </div>
@@ -570,7 +572,9 @@ export const CreateUpdateBranchByOrgForm = ({
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isLoading || !isBranchOnChanged}
+                            disabled={
+                                branchId ? updateDisabled : createDisabled
+                            }
                             className=""
                         >
                             {isLoading ? (

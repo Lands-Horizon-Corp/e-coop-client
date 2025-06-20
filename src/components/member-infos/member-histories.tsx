@@ -4,14 +4,26 @@ import { IconType } from 'react-icons/lib'
 import Modal, { IModalProps } from '../modals/modal'
 import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import { BankIcon, UserIcon, GendersIcon, UserCogIcon } from '../icons'
+import {
+    // BankIco,
+    UserIcon,
+    GendersIcon,
+    UserCogIcon,
+    UserGroupIcon,
+    BriefCaseIcon,
+} from '../icons'
 import MemberCenterHistoryTable from '../tables/member/members-profile-table/member-histories/center-history'
 import MemberGenderHistoryTable from '../tables/member/members-profile-table/member-histories/gender-history'
 import MemberTypeHistoryTable from '../tables/member/members-profile-table/member-histories/member-type-history'
-import MemberMutualFundsHistoryTable from '../tables/member/members-profile-table/member-histories/mutualfunds-history'
+// import MemberMutualFundsHistoryTable from '../tables/member/members-profile-table/member-histories/mutualfunds-history'
 
 import { cn } from '@/lib'
 import { TEntityId, IClassProps } from '@/types'
+import MemberGroupHistoryTable from '../tables/member/members-profile-table/member-histories/group-history'
+import MemberClassificationHistoryTable from '../tables/member/members-profile-table/member-histories/classification-history'
+import MemberOccupationHistoryTable from '../tables/member/members-profile-table/member-histories/occupation-history'
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface IMemberHistoriesProps {
     profileId: TEntityId
@@ -24,77 +36,220 @@ const historyTabs: {
     Component: (props: { profileId: TEntityId } & IClassProps) => ReactNode
 }[] = [
     {
+        value: 'member-occupation-history',
+        title: 'Member Occupation',
+        Icon: BriefCaseIcon,
+        Component: ({ profileId }) => {
+            const queryClient = useQueryClient()
+            useSubscribe(
+                `member_occupation_history.create.member_profile.${profileId}`,
+                () =>
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'member-occupation-history',
+                            'resource-query',
+                            profileId,
+                        ],
+                    })
+            )
+
+            return (
+                <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                    <p className="text-sm">
+                        Member Occupation History of this member
+                    </p>
+                    <MemberOccupationHistoryTable
+                        className="grow"
+                        profileId={profileId}
+                    />
+                </div>
+            )
+        },
+    },
+    {
         value: 'member-center-history',
         title: 'Member Center',
         Icon: UserIcon,
-        Component: ({ profileId }) => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">Member Center History of this member</p>
-                <MemberCenterHistoryTable
-                    className="grow"
-                    profileId={profileId}
-                />
-            </div>
-        ),
+        Component: ({ profileId }) => {
+            const queryClient = useQueryClient()
+            useSubscribe(
+                `member_center_history.create.member_profile.${profileId}`,
+                () =>
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'member-center-history',
+                            'resource-query',
+                            profileId,
+                        ],
+                    })
+            )
+
+            return (
+                <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                    <p className="text-sm">
+                        Member Center History of this member
+                    </p>
+                    <MemberCenterHistoryTable
+                        className="grow"
+                        profileId={profileId}
+                    />
+                </div>
+            )
+        },
     },
     {
         value: 'member-classification-history',
         title: 'Member Classification',
         Icon: UserCogIcon,
-        Component: ({ profileId }) => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">
-                    Member Classification history of this member
-                </p>
-                <MemberCenterHistoryTable
-                    className="grow"
-                    profileId={profileId}
-                />
-            </div>
-        ),
+        Component: ({ profileId }) => {
+            const queryClient = useQueryClient()
+            useSubscribe(
+                `member_classification_history.create.member_profile.${profileId}`,
+                () =>
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'member-classification-history',
+                            'resource-query',
+                            profileId,
+                        ],
+                    })
+            )
+
+            return (
+                <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                    <p className="text-sm">
+                        Member Classification history of this member
+                    </p>
+                    <MemberClassificationHistoryTable
+                        className="grow"
+                        profileId={profileId}
+                    />
+                </div>
+            )
+        },
     },
     {
         value: 'member-type-history',
         title: 'Member Type',
         Icon: UserCogIcon,
-        Component: ({ profileId }) => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">Member Type history of this member</p>
-                <MemberTypeHistoryTable
-                    className="grow"
-                    profileId={profileId}
-                />
-            </div>
-        ),
+        Component: ({ profileId }) => {
+            const queryClient = useQueryClient()
+            useSubscribe(
+                `member_type_history.create.member_profile.${profileId}`,
+                () =>
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'member-type-history',
+                            'resource-query',
+                            profileId,
+                        ],
+                    })
+            )
+
+            return (
+                <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                    <p className="text-sm">
+                        Member Type history of this member
+                    </p>
+                    <MemberTypeHistoryTable
+                        className="grow"
+                        profileId={profileId}
+                    />
+                </div>
+            )
+        },
+    },
+    {
+        value: 'member-group-history',
+        title: 'Member Group',
+        Icon: UserGroupIcon,
+        Component: ({ profileId }) => {
+            const queryClient = useQueryClient()
+            useSubscribe(
+                `member_group_history.create.member_profile.${profileId}`,
+                () =>
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'member-group-history',
+                            'resource-query',
+                            profileId,
+                        ],
+                    })
+            )
+            return (
+                <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                    <p className="text-sm">
+                        Member Group history of this member
+                    </p>
+                    <MemberGroupHistoryTable
+                        className="grow"
+                        profileId={profileId}
+                    />
+                </div>
+            )
+        },
     },
     {
         value: 'member-gender-history',
         title: 'Gender',
         Icon: GendersIcon,
-        Component: ({ profileId }) => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">Member Gender history for this member</p>
-                <MemberGenderHistoryTable
-                    className="grow"
-                    profileId={profileId}
-                />
-            </div>
-        ),
+        Component: ({ profileId }) => {
+            const queryClient = useQueryClient()
+            useSubscribe(
+                `member_gender_history.create.member_profile.${profileId}`,
+                () =>
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'member-gender-history',
+                            'resource-query',
+                            profileId,
+                        ],
+                    })
+            )
+            return (
+                <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                    <p className="text-sm">
+                        Member Gender history for this member
+                    </p>
+                    <MemberGenderHistoryTable
+                        className="grow"
+                        profileId={profileId}
+                    />
+                </div>
+            )
+        },
     },
-    {
-        value: 'member-mutualfunds-history',
-        title: 'Mutual Funds',
-        Icon: BankIcon,
-        Component: ({ profileId }) => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">Member Gender history for this member</p>
-                <MemberMutualFundsHistoryTable
-                    className="grow"
-                    profileId={profileId}
-                />
-            </div>
-        ),
-    },
+    // {
+    //     value: 'member-mutualfunds-history',
+    //     title: 'Mutual Funds',
+    //     Icon: BankIcon,
+    //     Component: ({ profileId }) => {
+    //         const queryClient = useQueryClient()
+    //         useSubscribe(
+    //             `member_mutualfunds_history.create.member_profile.${profileId}`,
+    //             () =>
+    //                 queryClient.invalidateQueries({
+    //                     queryKey: [
+    //                         'member-mutualfunds-history',
+    //                         'resource-query',
+    //                         profileId,
+    //                     ],
+    //                 })
+    //         )
+
+    //         return (
+    //             <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+    //                 <p className="text-sm">
+    //                     Member Gender history for this member
+    //                 </p>
+    //                 <MemberMutualFundsHistoryTable
+    //                     className="grow"
+    //                     profileId={profileId}
+    //                 />
+    //             </div>
+    //         )
+    //     },
+    // },
 ]
 
 const MemberHistories = ({ profileId }: IMemberHistoriesProps) => {
@@ -152,8 +307,9 @@ export const MemberHistoriesModal = ({
         <Modal
             title={title}
             titleClassName="hidden"
+            closeButtonClassName="hidden"
             descriptionClassName="hidden"
-            className={cn('flex max-w-7xl', className)}
+            className={cn('flex max-w-7xl p-1', className)}
             {...other}
         >
             <MemberHistories {...memberHistoryProps} />

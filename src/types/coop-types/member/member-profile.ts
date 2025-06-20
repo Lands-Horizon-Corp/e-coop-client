@@ -1,20 +1,3 @@
-import { IMedia } from '../media'
-import { IUserBase } from '../../auth'
-import { IMemberDescriptionRequest } from './member-description'
-import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
-import {
-    IMemberJointAccount,
-    IMemberJointAccountRequest,
-} from './member-joint-account'
-import {
-    IMemberRelativeAccount,
-    IMemberRelativeAccountRequest,
-} from './member-relative-account'
-import {
-    IMemberGovernmentBenefit,
-    IMemberGovernmentBenefitRequest,
-} from './member-government-benefit'
-
 import {
     TEntityId,
     IAuditable,
@@ -22,29 +5,52 @@ import {
     TCivilStatus,
     TGeneralStatus,
 } from '../../common'
-import { IBranch } from '../branch'
-import { IMemberType } from './member-type'
-import { IMemberGender } from './member-gender'
-import { IMemberCenter } from './member-center'
-import { IPaginatedResult } from '../paginated-result'
-import { IMemberIncome, IMemberIncomeRequest } from './member-income'
-import { IMemberAsset, IMemberAssetRequest } from './member-asset'
-import { IMemberOccupation } from './member-occupation'
-import { IMemberAddress, IMemberAddressRequest } from './member-address'
-import { IMemberClassification } from './member-classification'
 import {
     IMemberCloseRemark,
     IMemberCloseRemarkRequest,
 } from './member-close-remark'
 import {
-    IMemberContactReferenceRequest,
+    IMemberJointAccount,
+    IMemberJointAccountRequest,
+} from './member-joint-account'
+import { IMedia } from '../media'
+import {
+    IMemberRelativeAccount,
+    IMemberRelativeAccountRequest,
+} from './member-relative-account'
+import {
     IMemberContactReference,
+    IMemberContactReferenceRequest,
 } from './member-contact-reference'
-import { IMemberEducationalAttainment } from './member-educational-attainment'
-import { IOrganization } from '@/types/lands-types'
-import { IMemberRecruits } from './member-recruits'
+import { IBranch } from '../branch'
+import {
+    IMemberGovernmentBenefit,
+    IMemberGovernmentBenefitRequest,
+} from './member-government-benefit'
+import { IMemberType } from './member-type'
 import { IMemberGroup } from './member-group'
 import { IQrScanResult } from '../../qr/index'
+import { IMemberGender } from './member-gender'
+import { IMemberCenter } from './member-center'
+import { IMemberRecruits } from './member-recruits'
+import { IOrganization } from '@/types/lands-types'
+import { IPaginatedResult } from '../paginated-result'
+import { ISignUpRequest, IUserBase } from '../../auth'
+import { IMemberOccupation } from './member-occupation'
+import { IMemberClassification } from './member-classification'
+import { IMemberDescriptionRequest } from './member-description'
+import { IMemberAsset, IMemberAssetRequest } from './member-asset'
+import { IMemberIncome, IMemberIncomeRequest } from './member-income'
+import { IMemberAddress, IMemberAddressRequest } from './member-address'
+import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
+import { IMemberEducationalAttainment } from './member-educational-attainment'
+
+// For creation of member user account
+export interface IMemberProfileUserAccountRequest
+    extends Omit<ISignUpRequest, 'password'> {
+    id?: TEntityId
+    password?: string
+}
 
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
@@ -74,6 +80,13 @@ export interface IMemberProfileQuickCreateRequest {
     is_micro_finance_member: boolean
 
     member_type_id: TEntityId
+
+    // Prior Connect
+
+    user_id?: TEntityId
+
+    // Or Create User Account
+    account_info?: Pick<ISignUpRequest, 'user_name' | 'email' | 'password'>
 }
 
 export interface IMemberProfileRequest {
@@ -168,7 +181,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     recruited_by_member_profile_id: TEntityId
     recruited_by_member_profile: IMemberProfile
 
-    is_close: boolean
+    is_closed: boolean
     is_mutual_fund_member: boolean
     is_micro_finance_member: boolean
 
@@ -197,10 +210,10 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // occupationId?: TEntityId
 
     // memberEducationalAttainmentId?: TEntityId
-    member_educational_attainment?: IMemberEducationalAttainment[]
+    member_educational_attainments?: IMemberEducationalAttainment[]
 
     member_assets?: IMemberAsset[]
-    member_income?: IMemberIncome[]
+    member_incomes?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
     member_addresses?: IMemberAddress[]
     member_recruits?: IMemberRecruits[]
@@ -211,7 +224,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_relative_accounts?: IMemberRelativeAccount[]
     member_government_benefits?: IMemberGovernmentBenefit[]
     // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
-    member_contact_number_references?: IMemberContactReference[]
+    member_contact_references?: IMemberContactReference[]
 }
 
 export interface IMemberProfilePaginated

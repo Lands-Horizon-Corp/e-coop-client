@@ -3127,7 +3127,7 @@ Ref: disbursement.branch_id > branch.id [delete:cascade, update:cascade]
 
 enum computation_type {
   "Straight"
-  "Deminishing"
+  "Diminishing"
   "Diminishing Add-On"
   "Diminishing Yearly"
   "Diminishing Straight"

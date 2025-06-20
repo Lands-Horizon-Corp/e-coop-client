@@ -25,11 +25,29 @@ import { useModalState } from '@/hooks/use-modal-state'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IClassProps, IMemberProfile } from '@/types'
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface Props extends IClassProps {}
 
 const NewMemberProfileKanban = (_props: Props) => {
+    const queryClient = useQueryClient()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
     const { data, isPending } = useAllPendingMemberProfiles()
+
+    useSubscribe(`member_profile.update.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({
+            queryKey: ['member-profile', 'all', 'pending'],
+        })
+        queryClient.invalidateQueries({
+            queryKey: ['member-profile', 'resource-query'],
+        })
+    })
 
     return (
         <KanbanContainer className="w-[360px]">

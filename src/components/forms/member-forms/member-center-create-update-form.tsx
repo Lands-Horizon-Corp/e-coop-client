@@ -175,7 +175,13 @@ export const MemberCenterCreateUpdateFormModal = ({
             className={cn('', className)}
             {...props}
         >
-            <MemberCenterCreateUpdateForm {...formProps} />
+            <MemberCenterCreateUpdateForm
+                {...formProps}
+                onSuccess={(createdData) => {
+                    formProps?.onSuccess?.(createdData)
+                    props.onOpenChange?.(false)
+                }}
+            />
         </Modal>
     )
 }

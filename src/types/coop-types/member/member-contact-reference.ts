@@ -7,7 +7,7 @@ export interface IMemberContactReferenceRequest {
 
     name: string
     description: string
-    contactNumber: string
+    contact_number: string
 }
 
 // LATEST FROM ERD

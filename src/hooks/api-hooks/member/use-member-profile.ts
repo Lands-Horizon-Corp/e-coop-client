@@ -3,14 +3,18 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from '../api-hook-factory'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../api-hook-factory'
 import * as MemberProfileService from '@/api-service/member-services/member-profile-service'
 
 import {
     IAPIHook,
     TEntityId,
     IQueryProps,
-    IMutationProps,
     IMemberProfile,
     IMemberProfileRequest,
     IMemberProfilePaginated,
@@ -19,59 +23,35 @@ import {
     IMemberProfileQuickCreateRequest,
 } from '@/types'
 
-export const useQuickCreateMemberProfile = ({
-    showMessage = true,
-    onSuccess,
+export const useMemberProfile = ({
+    profileId,
     onError,
-}: undefined | (IAPIHook<IMemberProfile, string> & IQueryProps) = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberProfile,
-        string,
-        IMemberProfileQuickCreateRequest
-    >({
-        mutationKey: ['member-profile', 'create'],
-        mutationFn: async (data) => {
-            const [error, newMember] = await withCatchAsync(
-                MemberProfileService.quickCreateMemberProfile({
-                    ...data,
-                    full_name: `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''} ${data.suffix ?? ''}`,
-                })
+    onSuccess,
+    ...opts
+}: { profileId: TEntityId } & IAPIHook<IMemberProfile, string> &
+    IQueryProps<IMemberProfile>) => {
+    return useQuery<IMemberProfile, string>({
+        queryKey: ['member-profile', profileId],
+        queryFn: async () => {
+            const [error, data] = await withCatchAsync(
+                MemberProfileService.getMemberProfileById(profileId)
             )
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
+                toast.error(errorMessage)
                 onError?.(errorMessage)
                 throw errorMessage
             }
 
-            queryClient.invalidateQueries({
-                queryKey: ['member', 'resource-query'],
-            })
-
-            queryClient.setQueryData<IMemberProfile>(
-                ['member-profile', newMember.id],
-                newMember
-            )
-
-            queryClient.invalidateQueries({
-                queryKey: ['member', newMember.id],
-            })
-
-            queryClient.removeQueries({
-                queryKey: ['member', 'loader', newMember.id],
-            })
-
-            if (showMessage) toast.success('Member Profile Created')
-            onSuccess?.(newMember)
-
-            return newMember
+            onSuccess?.(data)
+            return data
         },
+        ...opts,
     })
 }
 
+// DELETE THIS IN FUTURE IF NOT USED
 export const useCreateMemberProfile = ({
     showMessage = true,
     onSuccess,
@@ -118,134 +98,55 @@ export const useCreateMemberProfile = ({
     })
 }
 
-export const useMemberProfile = ({
-    profileId,
-    onError,
-    onSuccess,
-    ...opts
-}: { profileId: TEntityId } & IAPIHook<IMemberProfile, string> &
-    IQueryProps<IMemberProfile>) => {
-    return useQuery<IMemberProfile, string>({
-        queryKey: ['member-profile', profileId],
-        queryFn: async () => {
-            const [error, data] = await withCatchAsync(
-                MemberProfileService.getMemberProfileById(profileId)
-            )
+export const useQuickCreateMemberProfile = createMutationHook<
+    IMemberProfile,
+    string,
+    IMemberProfileQuickCreateRequest
+>(
+    (data) =>
+        MemberProfileService.quickCreateMemberProfile({
+            ...data,
+            full_name: `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''} ${data.suffix ?? ''}`,
+        }),
+    'Member Created',
+    (args) => createMutationInvalidateFn('member-profile', args)
+)
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
+export const useDeleteMemberProfile = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (id) => MemberProfileService.deleteMemberProfile(id),
+    'Member profile deleted',
+    (args) => deleteMutationInvalidationFn('member-profile', args)
+)
 
-            onSuccess?.(data)
-            return data
-        },
-        ...opts,
-    })
-}
+export const useUpdateMemberProfile = createMutationHook<
+    IMemberProfile,
+    string,
+    { id: TEntityId; data: IMemberProfileRequest }
+>(
+    ({ id, data }) => MemberProfileService.updateMemberProfile(id, data),
+    'Member Profile Updated',
+    (args) => updateMutationInvalidationFn('member-profile', args)
+)
 
-export const useUpdateMemberProfile = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: undefined | (IAPIHook<IMemberProfile, string> & IMutationProps) = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberProfile,
-        string,
-        { id: TEntityId; data: IMemberProfileRequest }
-    >({
-        mutationKey: ['member-profile', 'update'],
-        mutationFn: async ({ id, data }) => {
-            const [error, updatedMember] = await withCatchAsync(
-                MemberProfileService.updateMemberProfile(id, data)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member', 'resource-query'],
-            })
-
-            queryClient.setQueryData<IMemberProfile>(
-                ['member-profile', updatedMember.id],
-                updatedMember
-            )
-
-            queryClient.invalidateQueries({
-                queryKey: ['member', updatedMember.id],
-            })
-            queryClient.removeQueries({
-                queryKey: ['member', 'loader', updatedMember.id],
-            })
-
-            if (showMessage) toast.success('Member Profile Updated')
-            onSuccess?.(updatedMember)
-
-            return updatedMember
-        },
-    })
-}
-
-export const useCloseMemberProfile = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-    ...other
-}: IAPIHook<IMemberProfile, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberProfile,
-        string,
-        { profileId: TEntityId; data: IMemberCloseRemarkRequest[] }
-    >({
-        mutationKey: ['member-profile', 'close-account'],
-        mutationFn: async ({ profileId, data }) => {
-            const [error, closedMember] = await withCatchAsync(
-                MemberProfileService.closeMemberProfileAccount(profileId, data)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member', 'resource-query'],
-            })
-
-            queryClient.setQueryData<IMemberProfile>(
-                ['member-profile', closedMember.id],
-                closedMember
-            )
-
-            queryClient.invalidateQueries({
-                queryKey: ['member', closedMember.id],
-            })
-
-            queryClient.removeQueries({
-                queryKey: ['member', 'loader', closedMember.id],
-            })
-
-            if (showMessage) toast.success('Member Profile Updated')
-            onSuccess?.(closedMember)
-
-            return closedMember
-        },
-        ...other,
-    })
-}
+export const useCloseMemberProfile = createMutationHook<
+    IMemberProfile,
+    string,
+    { profileId: TEntityId; data: IMemberCloseRemarkRequest[] }
+>(
+    ({ profileId, data }) =>
+        MemberProfileService.closeMemberProfileAccount(profileId, data),
+    'Member profile closed',
+    (args) => {
+        deleteMutationInvalidationFn('member-profile', args)
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.profileId],
+        })
+    }
+)
 
 export const useApproveMemberProfile = createMutationHook<
     IMemberProfile,
@@ -253,7 +154,10 @@ export const useApproveMemberProfile = createMutationHook<
     TEntityId
 >(
     (id) => MemberProfileService.approveMemberProfile(id),
-    'Member profile approved'
+    'Member profile approved',
+    (args) => {
+        updateMutationInvalidationFn('member-profile', args)
+    }
 )
 
 export const useDeclineMemberProfile = createMutationHook<
@@ -262,7 +166,10 @@ export const useDeclineMemberProfile = createMutationHook<
     TEntityId
 >(
     (id) => MemberProfileService.declineMemberProfile(id),
-    'Member profile declined'
+    'Member profile rejected',
+    (args) => {
+        updateMutationInvalidationFn('member-profile', args)
+    }
 )
 
 export const useAllPendingMemberProfiles = ({
@@ -270,7 +177,7 @@ export const useAllPendingMemberProfiles = ({
     showMessage = true,
 }: IAPIHook<IMemberProfile[], string> & IQueryProps = {}) => {
     return useQuery<IMemberProfile[], string>({
-        queryKey: ['member-profile', 'resource-query', 'all', 'pending'],
+        queryKey: ['member-profile', 'all', 'pending'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberProfileService.getAllPendingMemberProfile()
@@ -302,11 +209,10 @@ export const useFilteredPaginatedMemberProfile = ({
     IQueryProps<IMemberProfilePaginated> & { mode?: 'all' | 'pendings' }) => {
     return useQuery<IMemberProfilePaginated, string>({
         queryKey: [
-            'gender',
+            'member-profile',
             'resource-query',
             mode,
             filterPayload,
-            pagination,
             sort,
         ],
         queryFn: async () => {

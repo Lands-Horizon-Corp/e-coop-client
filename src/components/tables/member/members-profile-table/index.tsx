@@ -47,6 +47,7 @@ const MemberProfileTable = ({
     className,
     toolbarProps,
     defaultFilter,
+    onRowClick,
     onSelectData,
     actionComponent,
 }: MemberProfileTableProps) => {
@@ -152,7 +153,7 @@ const MemberProfileTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['company', 'resource-query'],
+                                queryKey: ['member-profile', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
                             MemberProfileService.deleteMany(
@@ -187,6 +188,7 @@ const MemberProfileTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
+                    onRowClick={onRowClick}
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
                     className={cn('mb-2', isScrollable && 'flex-1')}

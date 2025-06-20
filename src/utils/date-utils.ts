@@ -1,7 +1,11 @@
 import { format } from 'date-fns'
 
-// TO REMOVE IF NOT USED
-import { CalendarDate } from '@internationalized/date'
+export const toReadableDateShort = (
+    inputDate: Date | string | number,
+    fmt = 'MMM d yyyy'
+) => {
+    return format(inputDate, fmt)
+}
 
 export const toReadableDate = (
     inputDate: Date | string | number,
@@ -16,14 +20,14 @@ export const toReadableDateTime = (
     return toReadableDate(args[0], args[1] ?? "MMM dd yyyy 'at' hh:mm a")
 }
 
-// TO REMOVE IF NOT USED
-export const formatCalendarDate = (date: CalendarDate, fmt = 'MM-dd-yyyy') => {
-    const jsDate = new Date(date.toString())
-    return format(jsDate, fmt)
-}
-
 export const toDateTimeFormatFile = (
     ...args: Parameters<typeof toReadableDate>
 ) => {
     return toReadableDate(args[0], args[1] ?? 'yyyyMMdd_HHmmss')
+}
+
+export const toInputDateString = (
+    ...args: Parameters<typeof toReadableDate>
+) => {
+    return toReadableDate(args[0], args[1] ?? 'yyyy-MM-dd')
 }

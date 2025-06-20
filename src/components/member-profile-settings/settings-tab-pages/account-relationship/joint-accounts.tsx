@@ -35,6 +35,7 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                 title="Update Joint Account"
                 description="Modify / Update this joint account information."
                 formProps={{
+                    jointAccountId: joint.id,
                     memberProfileId: joint.member_profile_id,
                     defaultValues: joint,
                 }}
@@ -201,7 +202,10 @@ const MemberJointAccounts = ({ memberProfile }: Props) => {
                 ))}
                 {(!memberProfile.member_joint_accounts ||
                     memberProfile.member_joint_accounts.length === 0) && (
-                    <EmptyListIndicator message="This account has no joint accounts." />
+                    <EmptyListIndicator
+                        className="col-span-3"
+                        message="This account has no joint accounts."
+                    />
                 )}
             </div>
         </div>

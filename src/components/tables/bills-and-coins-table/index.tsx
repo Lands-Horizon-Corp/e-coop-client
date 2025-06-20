@@ -149,7 +149,7 @@ const BillsAndCoinsTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['bills-and-coins', 'resource-query'],
+                                queryKey: ['bills-and-coin', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyBillsAndCoin(
@@ -157,17 +157,6 @@ const BillsAndCoinsTable = ({
                             ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    // exportActionProps={{
-                    //     pagination,
-                    //     isLoading: isPending,
-                    //     filters: filterState.finalFilterPayload,
-                    //     disabled: isPending || isRefetching,
-                    //     // exportAll: exportAll,
-                    //     // exportCurrentPage: (ids) =>
-                    //     //     exportSelected(ids.map((data) => data.id)),
-                    //     // exportSelected: (ids) =>
-                    //     //     exportSelected(ids.map((data) => data.id)),
-                    // }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,

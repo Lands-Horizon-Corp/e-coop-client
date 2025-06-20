@@ -1,12 +1,12 @@
-import { IBranch } from '../branch'
-import { IMemberProfile } from './member-profile'
-import { IPaginatedResult } from '../paginated-result'
 import {
+    TEntityId,
     IAuditable,
     ITimeStamps,
     TEducationalAttainment,
-    TEntityId,
 } from '../../common'
+import { IBranch } from '../branch'
+import { IMemberProfile } from './member-profile'
+import { IPaginatedResult } from '../paginated-result'
 
 // THIS IS NOT A MAINTENANCE
 // FROM LATEST ERD

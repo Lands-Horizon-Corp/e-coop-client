@@ -40,3 +40,16 @@ export const groupBy = <T, K extends keyof any>(
 
     return result
 }
+
+const slugify = (str: string) =>
+    str
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^[-]+|[-]+$/g, '')
+
+export const getOrgBranchSafeURLNames = (
+    orgName: string,
+    branchName: string
+) => {
+    return { orgName: slugify(orgName), branchName: slugify(branchName) }
+}

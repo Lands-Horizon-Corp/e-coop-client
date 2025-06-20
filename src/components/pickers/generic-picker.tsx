@@ -46,9 +46,9 @@ const GenericPicker = <T extends { id: TEntityId }>({
     ...other
 }: GenericPickerProps<T>) => {
     const [modalState, setModalState] = useInternalState(
+        false,
         open,
-        onOpenChange,
-        false
+        onOpenChange
     )
 
     return (

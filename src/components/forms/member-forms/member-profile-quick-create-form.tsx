@@ -3,12 +3,18 @@ import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 
-import { Form } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import {
+    ChecklistTemplate,
+    ValueChecklistMeter,
+} from '@/components/value-checklist-indicator'
+import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormItem } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
+import PasswordInput from '@/components/ui/password-input'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -22,12 +28,10 @@ import { cn } from '@/lib/utils'
 import { useQuickCreateMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import { quickCreateMemberProfileSchema } from '@/validations/member/member-profile-schema'
 
-import { IForm } from '@/types'
-import {
-    IClassProps,
-    IMemberProfile,
-    IMemberProfileQuickCreateRequest,
-} from '@/types'
+import { IForm, IClassProps, IMemberProfile } from '@/types'
+import { VerifiedPatchIcon } from '@/components/icons'
+import { PhoneInput } from '@/components/contact-input/contact-input'
+import { toInputDateString } from '@/utils'
 
 type TMemberProfileQuickFormValues = z.infer<
     typeof quickCreateMemberProfileSchema
@@ -35,11 +39,7 @@ type TMemberProfileQuickFormValues = z.infer<
 
 export interface IMemberProfileQuickCreateFormProps
     extends IClassProps,
-        IForm<
-            Partial<IMemberProfileQuickCreateRequest>,
-            IMemberProfile,
-            string
-        > {}
+        IForm<Partial<TMemberProfileQuickFormValues>, IMemberProfile, string> {}
 
 const MemberProfileQuickCreateForm = ({
     readOnly,
@@ -61,18 +61,32 @@ const MemberProfileQuickCreateForm = ({
             civil_status: 'single',
             is_mutual_fund_member: false,
             is_micro_finance_member: false,
+            create_new_user: false,
             ...defaultValues,
+            birth_date: toInputDateString(
+                defaultValues?.birth_date ?? new Date()
+            ),
         },
     })
 
-    const { mutate, error, isPending } = useQuickCreateMemberProfile({
+    const {
+        mutate,
+        error,
+        isPending,
+        reset: reset,
+    } = useQuickCreateMemberProfile({
         onSuccess,
         onError,
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        mutate(formData)
+        mutate({
+            ...formData,
+            full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+        })
     })
+
+    const createNewUser = form.watch('create_new_user')
 
     const isDisabled = (field: Path<TMemberProfileQuickFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
@@ -265,6 +279,30 @@ const MemberProfileQuickCreateForm = ({
                                     />
                                 )}
                             />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="contact_number"
+                                label="Contact Number"
+                                render={({
+                                    field,
+                                    fieldState: { invalid, error },
+                                }) => (
+                                    <div className="relative flex flex-1 items-center gap-x-2">
+                                        <VerifiedPatchIcon
+                                            className={cn(
+                                                'absolute right-2 top-1/2 z-20 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
+                                                (invalid || error) &&
+                                                    'text-destructive'
+                                            )}
+                                        />
+                                        <PhoneInput
+                                            {...field}
+                                            className="w-full"
+                                            defaultCountry="PH"
+                                        />
+                                    </div>
+                                )}
+                            />
                         </div>
                     </div>
                     <Separator />
@@ -344,7 +382,98 @@ const MemberProfileQuickCreateForm = ({
                         </div>
                     </div>
                 </fieldset>
-                <span className="text-center text-xs text-muted-foreground">
+
+                <Separator />
+
+                <fieldset
+                    disabled={isPending || readOnly}
+                    className="space-y-4"
+                >
+                    <FormFieldWrapper
+                        control={form.control}
+                        name="create_new_user"
+                        render={({ field }) => (
+                            <div className="inline-flex items-start gap-x-4">
+                                <Switch
+                                    id={field.name}
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                    aria-label="Toggle switch"
+                                />
+                                <Label
+                                    htmlFor={field.name}
+                                    className="cursor-pointer space-y-2 text-sm font-medium"
+                                >
+                                    <p>Create User Account</p>
+                                    <p className="text-xs text-muted-foreground/80">
+                                        Turn on to let this member log in with a
+                                        username and password. Leave off to just
+                                        create a profile without login access
+                                    </p>
+                                </Label>
+                            </div>
+                        )}
+                    />
+
+                    {createNewUser && (
+                        <>
+                            <p>New Account</p>
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="new_user_info.user_name"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        autoComplete="username"
+                                        placeholder="Username"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="new_user_info.email"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        autoComplete="email"
+                                        placeholder="example@email.com"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="new_user_info.password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <PasswordInput
+                                            {...field}
+                                            id={field.name}
+                                            defaultVisibility
+                                            placeholder="+8 Character Password"
+                                            autoComplete="new-password"
+                                        />
+                                        <ValueChecklistMeter
+                                            value={field.value}
+                                            hideOnComplete
+                                            checkList={ChecklistTemplate[
+                                                'password-checklist'
+                                            ].concat([
+                                                {
+                                                    regex: /^.{0,50}$/,
+                                                    text: 'No more than 50 characters',
+                                                },
+                                            ])}
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+                        </>
+                    )}
+                </fieldset>
+
+                <span className="mt-4 text-center text-xs text-muted-foreground/50">
                     You can setup other member profile information later after
                     creation
                 </span>
@@ -356,7 +485,10 @@ const MemberProfileQuickCreateForm = ({
                             size="sm"
                             type="button"
                             variant="ghost"
-                            onClick={() => form.reset()}
+                            onClick={() => {
+                                form.reset()
+                                reset()
+                            }}
                             className="w-full self-end px-8 sm:w-fit"
                         >
                             Reset

@@ -1,10 +1,12 @@
+import { useNavigate } from '@tanstack/react-router'
+
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { HikingLandscape } from '@/components/svg/svg'
+import { BuildingIcon, PlusIcon } from '@/components/icons'
 
 import { useCategoryStore } from '@/store/onboarding/category-store'
 
-import { useNavigate } from '@tanstack/react-router'
 import { cn } from '@/lib'
 
 const NoOrganizationView = () => {
@@ -18,8 +20,9 @@ const NoOrganizationView = () => {
                 onClick={() => {
                     handleProceedToSetupOrg(navigate)
                 }}
-                className={cn('w-[300px] rounded-xl')}
+                className={cn('w-[300px] gap-x-2 rounded-xl')}
             >
+                <PlusIcon />
                 Create your own Organization
             </Button>
             <div className="flex items-center justify-evenly gap-x-2">
@@ -32,9 +35,9 @@ const NoOrganizationView = () => {
                 onClick={() => {
                     navigate({ to: '/onboarding/organization' })
                 }}
-                className={cn('w-[300px] rounded-xl')}
+                className={cn('w-[300px] gap-x-2 rounded-xl')}
             >
-                Join an Organization
+                <BuildingIcon /> Join an Organization
             </Button>
         </div>
     )
