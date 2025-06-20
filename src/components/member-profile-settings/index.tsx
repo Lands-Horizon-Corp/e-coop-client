@@ -368,9 +368,7 @@ const MemberProfileSettings = ({
             )}
             {memberProfile && (
                 <>
-                    <MemberProfileMiniInfoCard
-                        memberProfile={memberProfile}
-                    />
+                    <MemberProfileMiniInfoCard memberProfile={memberProfile} />
                     {memberProfile.is_closed && (
                         <MemberCloseAccountBanner
                             showRemarksList

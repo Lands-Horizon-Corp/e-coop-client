@@ -35,7 +35,7 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                 }}
             />
             <MemberProfileMiniInfoCard memberProfile={memberProfile} />
-            <div className="shadow-xs  inline-flex -space-x-px rounded-md rtl:space-x-reverse">
+            <div className="shadow-xs inline-flex -space-x-px rounded-md rtl:space-x-reverse">
                 <Button
                     size="sm"
                     variant="outline"

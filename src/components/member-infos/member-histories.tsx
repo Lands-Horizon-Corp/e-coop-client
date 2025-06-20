@@ -307,9 +307,9 @@ export const MemberHistoriesModal = ({
         <Modal
             title={title}
             titleClassName="hidden"
-            closeButtonClassName='hidden'
+            closeButtonClassName="hidden"
             descriptionClassName="hidden"
-            className={cn('flex p-1 max-w-7xl', className)}
+            className={cn('flex max-w-7xl p-1', className)}
             {...other}
         >
             <MemberHistories {...memberHistoryProps} />
