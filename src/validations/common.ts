@@ -77,6 +77,11 @@ export const birthDateSchema = z.coerce.date().refine(
 
 export const stringDateSchema = z.string().date()
 
+export const stringDateWithTransformSchema = z.coerce
+    .string()
+    .date()
+    .transform((val) => new Date(val).toISOString())
+
 export const otpCodeSchema = z
     .string()
     .min(6, 'OTP must be 6 alphanumeric characters')

@@ -1,17 +1,10 @@
-import { toast } from 'sonner'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-
-import { withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberProfileService from '@/api-service/member-services/member-profile-service'
 
 import {
-    IAPIHook,
     TEntityId,
     IMemberAsset,
     IMemberIncome,
     IMemberProfile,
-    IMutationProps,
     IMemberAddress,
     IMemberExpense,
     IMemberJointAccount,
@@ -128,133 +121,65 @@ export const useConnectMemberProfileToUserAccount = createMutationHook<
 
 // EDUC ATTAINMENT UPDATE MEMBER_PROFILE > SETTINGS
 
-export const useCreateEducationalAttainmentForMember = ({
-    onError,
-    onSuccess,
-    showMessage,
-}: IAPIHook<IMemberEducationalAttainment, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberEducationalAttainment,
-        string,
-        {
-            memberProfileId: TEntityId
-            data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
-        }
-    >({
-        mutationKey: ['member-profile', 'create-educational-attainment'],
-        mutationFn: async ({ memberProfileId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberProfileService.createEducationalAttainmentForMember(
-                    memberProfileId,
-                    data
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-profile', memberProfileId],
-            })
-
-            if (showMessage) toast.success('Educational attainment added')
-            onSuccess?.(result)
-            return result
-        },
-    })
-}
-
-export const useUpdateEducationalAttainmentForMember = ({
-    onError,
-    onSuccess,
-    showMessage,
-}: IAPIHook<IMemberEducationalAttainment, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberEducationalAttainment,
-        string,
-        {
-            memberProfileId: TEntityId
-            educationalAttainmentId: TEntityId
-            data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
-        }
-    >({
-        mutationKey: ['member-profile', 'update-educational-attainment'],
-        mutationFn: async ({
+export const useCreateEducationalAttainmentForMember = createMutationHook<
+    IMemberEducationalAttainment,
+    string,
+    {
+        memberProfileId: TEntityId
+        data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
+    }
+>(
+    ({ memberProfileId, data }) =>
+        MemberProfileService.createEducationalAttainmentForMember(
             memberProfileId,
+            data
+        ),
+    'Educational Attainment Added',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
+)
+
+export const useUpdateEducationalAttainmentForMember = createMutationHook<
+    IMemberEducationalAttainment,
+    string,
+    {
+        memberProfileId: TEntityId
+        educationalAttainmentId: TEntityId
+        data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
+    }
+>(
+    ({ educationalAttainmentId, data }) =>
+        MemberProfileService.updateEducationalAttainmentForMember(
             educationalAttainmentId,
-            data,
-        }) => {
-            const [error, result] = await withCatchAsync(
-                MemberProfileService.updateEducationalAttainmentForMember(
-                    memberProfileId,
-                    educationalAttainmentId,
-                    data
-                )
-            )
+            data
+        ),
+    'Educational Attainment Updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
+)
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-profile', memberProfileId],
-            })
-
-            if (showMessage) toast.success('Educational attainment updated')
-            onSuccess?.(result)
-            return result
-        },
-    })
-}
-
-export const useDeleteEducationalAttainmentForMember = ({
-    onError,
-    onSuccess,
-    showMessage,
-}: IAPIHook<void, string> & IMutationProps = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        void,
-        string,
-        { memberProfileId: TEntityId; educationalAttainmentId: TEntityId }
-    >({
-        mutationKey: ['member-profile', 'delete-educational-attainment'],
-        mutationFn: async ({ memberProfileId, educationalAttainmentId }) => {
-            const [error] = await withCatchAsync(
-                MemberProfileService.deleteEducationalAttainmentForMember(
-                    memberProfileId,
-                    educationalAttainmentId
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-profile', memberProfileId],
-            })
-
-            if (showMessage) toast.success('Educational attainment deleted')
-            onSuccess?.()
-        },
-    })
-}
+export const useDeleteEducationalAttainment = createMutationHook<
+    void,
+    string,
+    { memberProfileId: TEntityId; educationalAttainmentId: TEntityId }
+>(
+    ({ educationalAttainmentId }) =>
+        MemberProfileService.deleteEducationalAttainmentForMember(
+            educationalAttainmentId
+        ),
+    'Educational Attainment Deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
+)
 
 // MEMBER ADDRESS
 
@@ -268,7 +193,12 @@ export const useCreateMemberProfileAddress = createMutationHook<
 >(
     ({ memberProfileId, data }) =>
         MemberProfileService.createMemberProfileAddress(memberProfileId, data),
-    'Address created'
+    'Address created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberProfileAddress = createMutationHook<
@@ -280,13 +210,14 @@ export const useUpdateMemberProfileAddress = createMutationHook<
         data: Omit<IMemberAddressRequest, 'member_profile_id'>
     }
 >(
-    ({ memberProfileId, memberAddressId, data }) =>
-        MemberProfileService.updateMemberProfileAddress(
-            memberProfileId,
-            memberAddressId,
-            data
-        ),
-    'Address updated'
+    ({ memberAddressId, data }) =>
+        MemberProfileService.updateMemberProfileAddress(memberAddressId, data),
+    'Address updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberProfileAddress = createMutationHook<
@@ -294,12 +225,14 @@ export const useDeleteMemberProfileAddress = createMutationHook<
     string,
     { memberProfileId: TEntityId; memberAddressId: TEntityId }
 >(
-    ({ memberProfileId, memberAddressId }) =>
-        MemberProfileService.deleteMemberProfileAddress(
-            memberProfileId,
-            memberAddressId
-        ),
-    'Address deleted'
+    ({ memberAddressId }) =>
+        MemberProfileService.deleteMemberProfileAddress(memberAddressId),
+    'Address deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 // MEMBER CONTACT
@@ -317,7 +250,12 @@ export const useCreateMemberProfileContactReference = createMutationHook<
             memberProfileId,
             data
         ),
-    'Contact reference created'
+    'Contact reference created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberProfileContactReference = createMutationHook<
@@ -329,13 +267,17 @@ export const useUpdateMemberProfileContactReference = createMutationHook<
         data: Omit<IMemberContactReferenceRequest, 'member_profile_id'>
     }
 >(
-    ({ memberProfileId, contactReferenceId, data }) =>
+    ({ contactReferenceId, data }) =>
         MemberProfileService.updateMemberProfileContactReference(
-            memberProfileId,
             contactReferenceId,
             data
         ),
-    'Contact reference updated'
+    'Contact reference updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberProfileContactReference = createMutationHook<
@@ -343,12 +285,16 @@ export const useDeleteMemberProfileContactReference = createMutationHook<
     string,
     { memberProfileId: TEntityId; contactReferenceId: TEntityId }
 >(
-    ({ memberProfileId, contactReferenceId }) =>
+    ({ contactReferenceId }) =>
         MemberProfileService.deleteMemberProfileContactReference(
-            memberProfileId,
             contactReferenceId
         ),
-    'Contact reference deleted'
+    'Contact reference deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 // MEMBER ASSET
@@ -363,7 +309,12 @@ export const useCreateMemberProfileAsset = createMutationHook<
 >(
     ({ memberProfileId, data }) =>
         MemberProfileService.createMemberProfileAsset(memberProfileId, data),
-    'Asset created'
+    'Asset created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberProfileAsset = createMutationHook<
@@ -375,13 +326,14 @@ export const useUpdateMemberProfileAsset = createMutationHook<
         data: Omit<IMemberAssetRequest, 'member_profile_id'>
     }
 >(
-    ({ memberProfileId, assetId, data }) =>
-        MemberProfileService.updateMemberProfileAsset(
-            memberProfileId,
-            assetId,
-            data
-        ),
-    'Asset updated'
+    ({ assetId, data }) =>
+        MemberProfileService.updateMemberProfileAsset(assetId, data),
+    'Asset updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberProfileAsset = createMutationHook<
@@ -389,9 +341,13 @@ export const useDeleteMemberProfileAsset = createMutationHook<
     string,
     { memberProfileId: TEntityId; assetId: TEntityId }
 >(
-    ({ memberProfileId, assetId }) =>
-        MemberProfileService.deleteMemberProfileAsset(memberProfileId, assetId),
-    'Asset deleted'
+    ({ assetId }) => MemberProfileService.deleteMemberProfileAsset(assetId),
+    'Asset deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 // MEMBER INCOME
@@ -406,7 +362,12 @@ export const useCreateMemberProfileIncome = createMutationHook<
 >(
     ({ memberProfileId, data }) =>
         MemberProfileService.createMemberProfileIncome(memberProfileId, data),
-    'Income created'
+    'Income created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberProfileIncome = createMutationHook<
@@ -418,13 +379,14 @@ export const useUpdateMemberProfileIncome = createMutationHook<
         data: Omit<IMemberIncomeRequest, 'member_profile_id'>
     }
 >(
-    ({ memberProfileId, incomeId, data }) =>
-        MemberProfileService.updateMemberProfileIncome(
-            memberProfileId,
-            incomeId,
-            data
-        ),
-    'Income updated'
+    ({ incomeId, data }) =>
+        MemberProfileService.updateMemberProfileIncome(incomeId, data),
+    'Income updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberProfileIncome = createMutationHook<
@@ -432,12 +394,13 @@ export const useDeleteMemberProfileIncome = createMutationHook<
     string,
     { memberProfileId: TEntityId; incomeId: TEntityId }
 >(
-    ({ memberProfileId, incomeId }) =>
-        MemberProfileService.deleteMemberProfileIncome(
-            memberProfileId,
-            incomeId
-        ),
-    'Income deleted'
+    ({ incomeId }) => MemberProfileService.deleteMemberProfileIncome(incomeId),
+    'Income deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 // MEMBER EXPENSE
@@ -452,7 +415,12 @@ export const useCreateMemberProfileExpense = createMutationHook<
 >(
     ({ memberProfileId, data }) =>
         MemberProfileService.createMemberProfileExpense(memberProfileId, data),
-    'Expense created'
+    'Expense created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberProfileExpense = createMutationHook<
@@ -464,13 +432,14 @@ export const useUpdateMemberProfileExpense = createMutationHook<
         data: Omit<IMemberExpenseRequest, 'member_profile_id'>
     }
 >(
-    ({ memberProfileId, expenseId, data }) =>
-        MemberProfileService.updateMemberProfileExpense(
-            memberProfileId,
-            expenseId,
-            data
-        ),
-    'Expense updated'
+    ({ expenseId, data }) =>
+        MemberProfileService.updateMemberProfileExpense(expenseId, data),
+    'Expense updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberProfileExpense = createMutationHook<
@@ -478,12 +447,14 @@ export const useDeleteMemberProfileExpense = createMutationHook<
     string,
     { memberProfileId: TEntityId; expenseId: TEntityId }
 >(
-    ({ memberProfileId, expenseId }) =>
-        MemberProfileService.deleteMemberProfileExpense(
-            memberProfileId,
-            expenseId
-        ),
-    'Expense deleted'
+    ({ expenseId }) =>
+        MemberProfileService.deleteMemberProfileExpense(expenseId),
+    'Expense deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 // MEMBER GOVERNMENT BENEFIT
@@ -504,7 +475,12 @@ export const useCreateMemberGovernmentBenefit = createMutationHook<
             memberProfileId,
             data
         ),
-    'Government benefit created'
+    'Government benefit created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberGovernmentBenefit = createMutationHook<
@@ -519,13 +495,14 @@ export const useUpdateMemberGovernmentBenefit = createMutationHook<
         >
     }
 >(
-    ({ memberProfileId, benefitId, data }) =>
-        MemberProfileService.updateMemberGovernmentBenefit(
-            memberProfileId,
-            benefitId,
-            data
-        ),
-    'Government benefit updated'
+    ({ benefitId, data }) =>
+        MemberProfileService.updateMemberGovernmentBenefit(benefitId, data),
+    'Government benefit updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberGovernmentBenefit = createMutationHook<
@@ -533,12 +510,14 @@ export const useDeleteMemberGovernmentBenefit = createMutationHook<
     string,
     { memberProfileId: TEntityId; benefitId: TEntityId }
 >(
-    ({ memberProfileId, benefitId }) =>
-        MemberProfileService.deleteMemberGovernmentBenefit(
-            memberProfileId,
-            benefitId
-        ),
-    'Government benefit deleted'
+    ({ benefitId }) =>
+        MemberProfileService.deleteMemberGovernmentBenefit(benefitId),
+    'Government benefit deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 // MEMBER JOINT ACCOUNT
@@ -553,7 +532,12 @@ export const useCreateMemberJointAccount = createMutationHook<
 >(
     ({ memberProfileId, data }) =>
         MemberProfileService.createMemberJointAccount(memberProfileId, data),
-    'Joint account created'
+    'Joint account created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberJointAccount = createMutationHook<
@@ -565,13 +549,14 @@ export const useUpdateMemberJointAccount = createMutationHook<
         data: Omit<IMemberJointAccountRequest, 'member_profile_id'>
     }
 >(
-    ({ memberProfileId, jointAccountId, data }) =>
-        MemberProfileService.updateMemberJointAccount(
-            memberProfileId,
-            jointAccountId,
-            data
-        ),
-    'Joint account updated'
+    ({ jointAccountId, data }) =>
+        MemberProfileService.updateMemberJointAccount(jointAccountId, data),
+    'Joint account updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberJointAccount = createMutationHook<
@@ -579,12 +564,14 @@ export const useDeleteMemberJointAccount = createMutationHook<
     string,
     { memberProfileId: TEntityId; jointAccountId: TEntityId }
 >(
-    ({ memberProfileId, jointAccountId }) =>
-        MemberProfileService.deleteMemberJointAccount(
-            memberProfileId,
-            jointAccountId
-        ),
-    'Joint account deleted'
+    ({ jointAccountId }) =>
+        MemberProfileService.deleteMemberJointAccount(jointAccountId),
+    'Joint account deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 // MEMBER RELATIVE ACCOUNT
@@ -599,7 +586,12 @@ export const useCreateMemberRelativeAccount = createMutationHook<
 >(
     ({ memberProfileId, data }) =>
         MemberProfileService.createMemberRelativeAccount(memberProfileId, data),
-    'Relative account created'
+    'Relative account created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useUpdateMemberRelativeAccount = createMutationHook<
@@ -611,13 +603,17 @@ export const useUpdateMemberRelativeAccount = createMutationHook<
         data: Omit<IMemberRelativeAccountRequest, 'member_profile_id'>
     }
 >(
-    ({ memberProfileId, relativeAccountId, data }) =>
+    ({ relativeAccountId, data }) =>
         MemberProfileService.updateMemberRelativeAccount(
-            memberProfileId,
             relativeAccountId,
             data
         ),
-    'Relative account updated'
+    'Relative account updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
 
 export const useDeleteMemberRelativeAccount = createMutationHook<
@@ -625,10 +621,12 @@ export const useDeleteMemberRelativeAccount = createMutationHook<
     string,
     { memberProfileId: TEntityId; relativeAccountId: TEntityId }
 >(
-    ({ memberProfileId, relativeAccountId }) =>
-        MemberProfileService.deleteMemberRelativeAccount(
-            memberProfileId,
-            relativeAccountId
-        ),
-    'Relative account deleted'
+    ({ relativeAccountId }) =>
+        MemberProfileService.deleteMemberRelativeAccount(relativeAccountId),
+    'Relative account deleted',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-profile', args.payload.memberProfileId],
+        })
+    }
 )
