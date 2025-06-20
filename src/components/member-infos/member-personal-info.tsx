@@ -151,21 +151,21 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
                     subTitle="Business Information"
                 />
                 <div className="grid grid-cols-5">
-                    <div className="w-full space-y-2">
+                    <div className="w-full space-y-2 text-sm">
                         <p>{data?.business_contact_number ?? '-'}</p>
                         <p className="text-xs text-muted-foreground/70">
                             Business Contact
                         </p>
                     </div>
 
-                    <div className="col-span-3 w-full space-y-2">
+                    <div className="col-span-3 w-full space-y-2 text-sm">
                         <p>{data?.business_address ?? '-'}</p>
                         <p className="text-xs text-muted-foreground/70">
                             Business Address
                         </p>
                     </div>
 
-                    <div className="w-full space-y-2">
+                    <div className="w-full space-y-2 text-sm">
                         <p>
                             {data?.created_at
                                 ? toReadableDate(data?.created_at)

@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { IconType } from 'react-icons/lib'
+import { useQueryClient } from '@tanstack/react-query'
 
 import {
     UserIcon,
@@ -9,6 +10,7 @@ import {
     CreditCardIcon,
     FolderFillIcon,
 } from '../icons'
+import { useSubscribe } from '@/hooks/use-pubsub'
 import MemberMediasInfo from './member-medias-info'
 import Modal, { IModalProps } from '../modals/modal'
 import MemberPersonalInfo from './member-personal-info'
@@ -19,11 +21,11 @@ import MemberMembershipInfo from './member-general-membership-info'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import MemberGovernmentBenefits from './member-government-benefits-info'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
@@ -84,9 +86,21 @@ const memberInfoTabs: {
 ]
 
 const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
+    const queryClient = useQueryClient()
+
     const { data: memberProfile } = useMemberProfile({
         profileId: memberProfileId,
     })
+
+    useSubscribe(
+        `member-profile.${memberProfileId}.update`,
+        (newMemberProfileData) => {
+            queryClient.setQueryData(
+                ['member-profile', memberProfileId],
+                newMemberProfileData
+            )
+        }
+    )
 
     return (
         <div className="min-h-[80vh] min-w-[80vw] space-y-4 pt-4">

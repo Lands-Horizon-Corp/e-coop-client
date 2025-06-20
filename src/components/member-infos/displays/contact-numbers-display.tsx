@@ -40,13 +40,13 @@ const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {
                             key={contactNumberReference.id}
                         >
                             <div className="grid grid-cols-4 gap-x-4 gap-y-1">
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>{contactNumberReference.name}</p>
                                     <p className="text-xs text-muted-foreground/70">
                                         Name
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>
                                         {contactNumberReference.contact_number}
                                     </p>
@@ -54,7 +54,7 @@ const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {
                                         Contact Number
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>
                                         {toReadableDate(
                                             contactNumberReference.created_at
@@ -64,7 +64,7 @@ const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {
                                         Date Added
                                     </p>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-sm">
                                     <p>
                                         {contactNumberReference.created_at
                                             ? toReadableDate(
