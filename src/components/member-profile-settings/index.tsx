@@ -355,9 +355,9 @@ const MemberProfileSettings = ({
     )
 
     const [value, handleChange] = useInternalState(
+        SettingsTabs[0].value,
         activeTab,
-        onTabChange,
-        SettingsTabs[0].value
+        onTabChange
     )
 
     return (
@@ -371,7 +371,7 @@ const MemberProfileSettings = ({
                     <MemberProfileSettingsBanner
                         memberProfile={memberProfile}
                     />
-                    {memberProfile.is_close && (
+                    {memberProfile.is_closed && (
                         <MemberCloseAccountBanner
                             showRemarksList
                             closeRemarks={memberProfile.member_close_remarks}

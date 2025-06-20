@@ -4,7 +4,6 @@ import {
     getSortedRowModel,
 } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
 import DataTableToolbar, {
@@ -13,28 +12,28 @@ import DataTableToolbar, {
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 
 import { cn } from '@/lib'
+import { PAGE_SIZES_SMALL } from '@/constants'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import { useMemberOccupationHistory } from '@/hooks/api-hooks/member/use-member-history'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import * as MemberOccupationService from '@/api-service/member-services/member-occupation-service'
-import { useFilteredPaginatedMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
 
-import { TableProps } from '@/types'
-import { IMemberOccupation } from '@/types'
-
-import memberOccupationColumns, {
-    IMemberOccupationTableColumnProps,
-    memberOccupationGlobalSearchTargets,
+import memberOccupationHistoryColumns, {
+    type IMemberOccupationHistoryColumnProps,
+    memberOccupationHistoryGlobalSearchTargets,
 } from './columns'
 
-export interface MemberOccupationTableProps
-    extends TableProps<IMemberOccupation>,
-        IMemberOccupationTableColumnProps {
+import { IMemberOccupationHistory, TableProps, TEntityId } from '@/types'
+
+export interface MemberOccupationHistoryTableProps
+    extends TableProps<IMemberOccupationHistory>,
+        IMemberOccupationHistoryColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberOccupation>,
+        IDataTableToolbarProps<IMemberOccupationHistory>,
         | 'table'
+        | 'actionComponent'
         | 'refreshActionProps'
         | 'globalSearchProps'
         | 'scrollableProps'
@@ -42,24 +41,21 @@ export interface MemberOccupationTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
+    profileId: TEntityId
 }
 
-const MemberOccupationTable = ({
+const MemberOccupationHistoryTable = ({
+    profileId,
     className,
     toolbarProps,
-    defaultFilter,
-    onSelectData,
-    actionComponent,
-}: MemberOccupationTableProps) => {
-    const queryClient = useQueryClient()
-    const { pagination, setPagination } = usePagination()
+}: MemberOccupationHistoryTableProps) => {
+    const { pagination, setPagination } = usePagination({
+        pageSize: PAGE_SIZES_SMALL[2],
+    })
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
-    const columns = useMemo(
-        () => memberOccupationColumns({ actionComponent }),
-        [actionComponent]
-    )
+    const columns = useMemo(() => memberOccupationHistoryColumns(), [])
 
     const {
         getRowIdFn,
@@ -71,13 +67,11 @@ const MemberOccupationTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberOccupation>({
+    } = useDataTableState<IMemberOccupationHistory>({
         defaultColumnOrder: columns.map((c) => c.id!),
-        onSelectData,
     })
 
     const filterState = useDatableFilterState({
-        defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
 
@@ -86,7 +80,8 @@ const MemberOccupationTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedMemberOccupations({
+    } = useMemberOccupationHistory({
+        profileId,
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
@@ -110,11 +105,11 @@ const MemberOccupationTable = ({
         rowCount: pageSize,
         manualSorting: true,
         pageCount: totalPage,
-        enableMultiSort: false,
+        getRowId: getRowIdFn,
         manualFiltering: true,
+        enableMultiSort: false,
         manualPagination: true,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
@@ -135,44 +130,21 @@ const MemberOccupationTable = ({
             >
                 <DataTableToolbar
                     globalSearchProps={{
-                        defaultMode: 'contains',
-                        targets: memberOccupationGlobalSearchTargets,
+                        defaultMode: 'equal',
+                        targets: memberOccupationHistoryGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: [
-                                    'member-occupation',
-                                    'resource-query',
-                                ],
-                            }),
-                        onDelete: (selectedData) =>
-                            MemberOccupationService.deleteManyMemberOccupation(
-                                selectedData.map((item) => item.id)
-                            ),
-                    }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        exportAll:
-                            MemberOccupationService.exportAllMemberOccupation,
-                        exportCurrentPage: (ids) =>
-                            MemberOccupationService.exportSelectedMemberOccupation(
-                                ids.map((item) => item.id)
-                            ),
-                        exportSelected: (ids) =>
-                            MemberOccupationService.exportSelectedMemberOccupation(
-                                ids.map((item) => item.id)
-                            ),
-                    }}
+                    // exportActionProps={{
+                    //     pagination,
+                    //     isLoading: isPending,
+                    //     filters: filterState.finalFilterPayload,
+                    //     disabled: isPending || isRefetching,
+                    // }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -183,14 +155,17 @@ const MemberOccupationTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
-                    className="mb-2"
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
                 />
-                <DataTablePagination table={table} totalSize={totalSize} />
+                <DataTablePagination
+                    table={table}
+                    totalSize={totalSize}
+                    pageSizes={PAGE_SIZES_SMALL.slice(1)}
+                />
             </div>
         </FilterContext.Provider>
     )
 }
 
-export default MemberOccupationTable
+export default MemberOccupationHistoryTable

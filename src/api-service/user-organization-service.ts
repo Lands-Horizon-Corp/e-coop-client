@@ -50,16 +50,25 @@ export const getPaginatedEmployees = async (props?: {
 
 export const getPaginatedUserOrg = async <
     T = unknown | IEmployee | IMember | IOwner,
->(props?: {
+>({
+    mode = 'all',
+    filters,
+    pagination,
+    sort,
+}: {
+    mode?: 'all' | 'none-member-profile'
     sort?: string
     filters?: string
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const { filters, pagination, sort } = props || {}
+    let url = `/user-organization/search`
 
-    const url = qs.stringifyUrl(
+    if (mode === 'none-member-profile')
+        url = '/user-organization/none-member-profle/search'
+
+    const finalUrl = qs.stringifyUrl(
         {
-            url: `/user-organization/search`,
+            url,
             query: {
                 sort,
                 filter: filters,
@@ -70,7 +79,8 @@ export const getPaginatedUserOrg = async <
         { skipNull: true }
     )
 
-    const response = await APIService.get<IUserOrganizationPaginated<T>>(url)
+    const response =
+        await APIService.get<IUserOrganizationPaginated<T>>(finalUrl)
     return response.data
 }
 

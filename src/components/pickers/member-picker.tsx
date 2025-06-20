@@ -9,17 +9,17 @@ import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 
+import { useShortcut } from '../use-shorcuts'
 import useFilterState from '@/hooks/use-filter-state'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
-import { useShortcut } from '../use-shorcuts'
-
-import { IMemberProfile, TEntityId } from '@/types'
+import { IMemberProfile } from '@/types'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 interface Props {
-    value?: TEntityId
+    value?: IMemberProfile
     disabled?: boolean
     placeholder?: string
     onSelect?: (selectedMember: IMemberProfile) => void
@@ -34,7 +34,7 @@ const MemberPicker = ({
     onSelect,
 }: Props) => {
     const queryClient = useQueryClient()
-    const [state, setState] = useState(false)
+    const [state, setState] = useInternalState(false)
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
@@ -58,21 +58,19 @@ const MemberPicker = ({
             showMessage: false,
         })
 
-    const selectedMember = data.data.find((member) => member.id === value)
-
     useShortcut(
         'Enter',
         (event) => {
             event?.preventDefault()
             if (
-                !selectedMember &&
+                !value &&
                 !disabled &&
                 !isPending &&
                 !isLoading &&
                 !isFetching &&
                 allowShorcutCommand
             ) {
-                setState((prev) => !prev)
+                setState(false)
             }
         },
         { disableTextInputs: true }
@@ -147,7 +145,7 @@ const MemberPicker = ({
                 type="button"
                 variant="secondary"
                 disabled={disabled}
-                onClick={() => setState((prev) => !prev)}
+                onClick={() => setState(true)}
                 className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
             >
                 <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
@@ -157,26 +155,23 @@ const MemberPicker = ({
                                 <LoadingSpinner />
                             ) : (
                                 <ImageDisplay
-                                    src={selectedMember?.media?.download_url}
+                                    src={value?.media?.download_url}
                                 />
                             )}
                         </div>
-                        {!selectedMember ? (
+                        {!value ? (
                             <span className="text-foreground/70">
                                 {value || placeholder || 'Select member'}
                             </span>
                         ) : (
-                            <span>{selectedMember.full_name}</span>
+                            <span>{value.full_name}</span>
                         )}
                     </span>
                     {allowShorcutCommand && (
                         <span className="mr-2 text-sm">⌘ ↵ </span>
                     )}
                     <span className="mr-1 font-mono text-sm text-foreground/30">
-                        #
-                        {selectedMember?.id
-                            ? abbreviateUUID(selectedMember.id)
-                            : '?'}
+                        #{value?.id ? abbreviateUUID(value.id) : '?'}
                     </span>
                 </span>
                 <ChevronDownIcon />

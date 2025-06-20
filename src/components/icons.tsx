@@ -3,6 +3,7 @@ import {
     TbSquareF1 as F1Icon,
     TbSquareF2 as F2Icon,
     TbSquareF3 as F3Icon,
+    TbUnlink as UnlinkIcon,
     TbSunMoon as SunMoonIcon,
     TbMoneybag as MoneyBagIcon,
     TbGhost2Filled as GhostIcon,
@@ -142,6 +143,7 @@ import {
 } from 'react-icons/ai'
 
 import {
+    MdGroups as UserGroupIcon,
     MdOutlineDraw as DrawIcon,
     MdOutlineEmail as EmailIcon,
     MdFamilyRestroom as FamilyIcon,
@@ -375,6 +377,7 @@ export {
     ResetIcon,
     HouseIcon,
     TabletIcon,
+    UnlinkIcon,
     FamilyIcon,
     ReloadIcon,
     QrCodeIcon,
@@ -459,6 +462,7 @@ export {
     IoIosCodeIcon,
     WoodSignsIcon,
     TelephoneIcon,
+    UserGroupIcon,
     ChecksGridIcon,
     NavigationIcon,
     ShieldLockIcon,

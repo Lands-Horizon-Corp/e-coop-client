@@ -12,7 +12,7 @@ export interface IUserBase extends ITimeStamps, IAuditable {
     api_key: string
 
     password: string
-    birthdate?: Date
+    birthdate?: string
 
     user_name: string
     first_name?: string

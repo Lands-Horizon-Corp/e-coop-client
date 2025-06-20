@@ -174,6 +174,13 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                         </div>
 
                         <div className="space-y-2">
+                            <p>{data?.member_type?.name ?? '-'}</p>
+                            <p className="text-xs text-muted-foreground/70">
+                                Member Type
+                            </p>
+                        </div>
+
+                        <div className="space-y-2">
                             <p>{data?.old_reference_id ?? '-'}</p>
                             <p className="text-xs text-muted-foreground/70">
                                 Old Reference ID

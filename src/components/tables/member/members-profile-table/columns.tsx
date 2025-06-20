@@ -16,11 +16,10 @@ import { IMemberProfile } from '@/types'
 
 export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberProfile>[] =
     [
-        { field: 'name', displayText: 'Name' },
-        { field: 'address', displayText: 'Address' },
-        { field: 'Owner.username', displayText: 'Owner' },
-        { field: 'contactNumber', displayText: 'Contact' },
-        { field: 'isAdminVerified', displayText: 'Verify Status' },
+        { field: 'first_name', displayText: 'Name' },
+        { field: 'full_name', displayText: 'Full Name' },
+        { field: 'contact_number', displayText: 'Contact' },
+        { field: 'status', displayText: 'Verify Status' },
     ]
 
 export interface IMemberProfileTableActionComponentProp {
@@ -187,9 +186,9 @@ const MemberProfileTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { last_name },
+                    original: { suffix },
                 },
-            }) => <div onClick={(e) => e.stopPropagation()}>{last_name}</div>,
+            }) => <div onClick={(e) => e.stopPropagation()}>{suffix}</div>,
             enableMultiSort: true,
             enableResizing: true,
             minSize: 150,
@@ -247,7 +246,7 @@ const MemberProfileTableColumns = (
                     <ColumnActions {...props}>
                         <TextFilter<IMemberProfile>
                             displayText="Gender"
-                            field="member_gender"
+                            field="member_gender.name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>

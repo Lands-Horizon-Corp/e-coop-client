@@ -72,7 +72,9 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
         <Card
             className={cn(
                 'mx-auto w-full bg-gradient-to-r from-primary/20 to-card/10 ring-2 ring-card dark:ring-primary/40',
-                className
+                className,
+                memberProfile.is_closed &&
+                    'from-destructive/20 !ring-destructive'
             )}
         >
             <CardContent className="p-4">
@@ -93,7 +95,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                                 <Badge variant="outline">
                                     {memberProfile.member_type.name}
                                 </Badge>
-                                {memberProfile.is_close ? (
+                                {memberProfile.is_closed ? (
                                     <Badge variant="destructive">Closed</Badge>
                                 ) : (
                                     <Badge className={statusConfig.className}>

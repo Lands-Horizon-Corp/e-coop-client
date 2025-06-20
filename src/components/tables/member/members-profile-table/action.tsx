@@ -10,6 +10,7 @@ import { MemberHistoriesModal } from '@/components/member-infos/member-histories
 import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { EyeIcon, UserClockFillIcon } from '@/components/icons'
+import { useDeleteMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 interface IMemberProfileTableActionProps
     extends IMemberProfileTableActionComponentProp {
@@ -22,10 +23,11 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
 }) => {
     const member = row.original
     const router = useRouter()
-    // const [editModal, setEditModal] = useState(false)
+
     const [viewOverallInfo, setViewOverallInfo] = useState(false)
     const [viewHistoryModal, setViewHistoryModal] = useState(false)
-    // const [editAccountModal, setEditAccountModal] = useState(false)
+    const { mutate: deleteProfile, isPending: isDeleting } =
+        useDeleteMemberProfile()
 
     return (
         <>
@@ -50,6 +52,7 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                 )}
             </div>
             <RowActionsGroup
+                canDelete={!isDeleting}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -58,6 +61,11 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                             to: `../member-profile/${member.id}/personal-info`,
                         })
                     },
+                }}
+                onDelete={{
+                    text: 'Delete',
+                    isAllowed: true,
+                    onClick: () => deleteProfile(member.id),
                 }}
                 otherActions={
                     <>

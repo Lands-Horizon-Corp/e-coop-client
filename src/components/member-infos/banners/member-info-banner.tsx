@@ -110,7 +110,7 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                             size="sm"
                             variant="outline"
                             hoverVariant="destructive"
-                            disabled={memberProfile.is_close}
+                            disabled={memberProfile.is_closed}
                             className="group rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
                             onClick={() =>
                                 onOpen({
@@ -144,7 +144,7 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                         {memberProfile.member_type?.name}
                     </Badge>
                 </span>
-                {memberProfile.is_close && (
+                {memberProfile.is_closed && (
                     <Badge variant="destructive" className="bg-rose-500">
                         <WarningFillIcon className="mr-1 inline text-rose-200" />
                         Closed Account

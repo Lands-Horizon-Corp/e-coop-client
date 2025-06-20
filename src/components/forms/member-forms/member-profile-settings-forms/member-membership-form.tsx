@@ -2,17 +2,21 @@ import z from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Form } from '@/components/ui/form'
+import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
-import { Form } from '@/components/ui/form'
+import MemberPicker from '@/components/pickers/member-picker'
+import { HandCoinsIcon, PieChartIcon } from '@/components/icons'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
 import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
 import MemberGroupCombobox from '@/components/comboboxes/member-group-combobox'
 import MemberCenterCombobox from '@/components/comboboxes/member-center-combobox'
+import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
 import MemberClassificationCombobox from '@/components/comboboxes/member-classification-combobox'
 
 import { cn } from '@/lib/utils'
@@ -20,14 +24,13 @@ import { memberProfileMembershipInfoSchema } from '@/validations/member/member-p
 import { useUpdateMemberProfileMembershipInfo } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
+    IForm,
+    TEntityId,
     IClassProps,
     IMemberProfile,
     IMemberProfileMembershipInfoRequest,
 } from '@/types'
-import { IForm, TEntityId } from '@/types'
-import { Checkbox } from '@/components/ui/checkbox'
-import { HandCoinsIcon, PieChartIcon } from '@/components/icons'
-import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
 
 type TMemberProfileMembershipInfoFormValues = z.infer<
     typeof memberProfileMembershipInfoSchema
@@ -273,19 +276,48 @@ const MemberMembershipForm = ({
                             </div>
                         </div>
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                            {/* <FormFieldWrapper
+                            <FormFieldWrapper
                                 control={form.control}
                                 name="recruited_by_member_profile_id"
                                 label="Recruited By"
                                 hiddenFields={hiddenFields}
-                                render={({ field }) => (
-                                    <MemberProfilePickerCombobox
-                                        {...field}
-                                        placeholder="Select Recruiter"
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                )}
-                            /> */}
+                                render={({ field }) => {
+                                    const value = form.getValues(
+                                        'recruited_by_member_profile'
+                                    )
+
+                                    return (
+                                        <MemberPicker
+                                            value={value}
+                                            onSelect={(memberProfile) => {
+                                                if (
+                                                    memberProfile &&
+                                                    memberProfile.id ===
+                                                        memberProfileId
+                                                )
+                                                    return toast.warning(
+                                                        'Member cannot invite itself'
+                                                    )
+
+                                                form.setValue(
+                                                    'recruited_by_member_profile_id',
+                                                    memberProfile !== undefined
+                                                        ? memberProfile.id
+                                                        : memberProfile
+                                                )
+
+                                                if (memberProfile !== undefined)
+                                                    form.setValue(
+                                                        'recruited_by_member_profile',
+                                                        memberProfile
+                                                    )
+                                            }}
+                                            placeholder="Select Recruiter"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )
+                                }}
+                            />
                         </div>
                     </div>
                 </fieldset>

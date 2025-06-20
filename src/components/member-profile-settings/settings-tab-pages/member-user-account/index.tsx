@@ -1,20 +1,28 @@
 import { forwardRef } from 'react'
 
-import MemberUserAccountCreateUpdateForm, {
-    MemberUserAccountCreateUpdateFormModal,
-} from './member-account-create-update-form'
 import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { LinkIcon, UserPlusIcon, PlugConnectFillIcon } from '@/components/icons'
+import {
+    LinkIcon,
+    UserPlusIcon,
+    PlugConnectFillIcon,
+    UnlinkIcon,
+} from '@/components/icons'
 import UserOrganizationPicker from '@/components/pickers/user-organization-picker'
 import ProfileConnectUserModalDisplay from '@/components/elements/modal-displays/profile-connect-user-content'
 
 import { cn } from '@/lib'
 import { useModalState } from '@/hooks/use-modal-state'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useConnectMemberProfileToUserAccount } from '@/hooks/api-hooks/member/use-member-profile-settings'
+import {
+    useConnectMemberProfileToUserAccount,
+    useDisconnectMemberProfileUserAccount,
+} from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMember, IMemberProfile, IUserOrganization } from '@/types'
+import UserAccountCardMini from './member-account-card-mini'
+import { MemberUserAccountCreateUpdateFormModal } from './member-account-create-update-form'
+import useActionSecurityStore from '@/store/action-security-store'
 
 interface Props {
     memberProfile: IMemberProfile
@@ -26,30 +34,53 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
         const connectUserModal = useModalState()
 
         const { onOpen } = useConfirmModalStore()
+        const { onOpenSecurityAction } = useActionSecurityStore()
 
         const { mutate: connect, isPending: isConnecting } =
             useConnectMemberProfileToUserAccount()
+        const { mutate: disconnect, isPending: isDisconnecting } =
+            useDisconnectMemberProfileUserAccount()
 
         return (
             <div ref={ref}>
                 <p className="mb-2">Member User Account</p>
+
                 {memberProfile.user !== undefined ? (
                     <div>
-                        <MemberUserAccountCreateUpdateForm
-                            className="mt-4"
-                            userId={memberProfile.user_id}
-                            memberProfileId={memberProfile.id}
-                            defaultValues={{
-                                birthdate: memberProfile.birth_date,
-                                contact_number: memberProfile.contact_number,
-                                first_name: memberProfile.first_name,
-                                middle_name: memberProfile.middle_name,
-                                last_name: memberProfile.full_name,
-                                suffix: memberProfile.suffix,
-                                full_name: memberProfile.full_name,
-                                user_name: memberProfile.first_name,
+                        <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
+                            Member User Account let them use their
+                            created/issued User Account to access their
+                            information in the system. Below is the connected
+                            User Account for this member profile.
+                        </p>
+                        <UserAccountCardMini user={memberProfile.user} />
+                        <p className="my-4 rounded-md text-xs text-muted-foreground/60">
+                            If the member wants a new account, you can
+                            disconnect this account first.
+                        </p>
+                        <Button
+                            variant="secondary"
+                            hoverVariant="destructive"
+                            disabled={isDisconnecting}
+                            onClick={() => {
+                                onOpenSecurityAction({
+                                    title: 'Disconnect User Account',
+                                    onSuccess: () =>
+                                        disconnect({
+                                            memberProfileId: memberProfile.id,
+                                        }),
+                                })
                             }}
-                        />
+                        >
+                            {isDisconnecting ? (
+                                <LoadingSpinner />
+                            ) : (
+                                <>
+                                    <UnlinkIcon className="mr-1" />
+                                    Disconnect Account
+                                </>
+                            )}
+                        </Button>
                     </div>
                 ) : (
                     <div className="space-y-4">
@@ -80,17 +111,9 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 }}
                             />
                             <UserOrganizationPicker
-                                defaultFilter={{
-                                    user_type: {
-                                        dataType: 'text',
-                                        displayText: 'User Type',
-                                        mode: 'equal',
-                                        isStaticFilter: true,
-                                        value: 'member',
-                                    },
-                                }}
                                 triggerClassName="hidden"
                                 modalState={connectUserModal}
+                                userOrgSearchMode="none-member-profile"
                                 onSelect={(value) => {
                                     const userOrg =
                                         value as unknown as IUserOrganization<IMember>

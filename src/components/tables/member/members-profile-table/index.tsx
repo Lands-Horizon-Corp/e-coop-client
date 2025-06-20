@@ -152,7 +152,7 @@ const MemberProfileTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['company', 'resource-query'],
+                                queryKey: ['member-profile', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
                             MemberProfileService.deleteMany(

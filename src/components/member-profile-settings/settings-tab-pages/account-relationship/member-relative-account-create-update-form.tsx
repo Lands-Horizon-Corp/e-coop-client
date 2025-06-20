@@ -120,16 +120,24 @@ const MemberRelativeAccountCreateUpdateForm = ({
                             control={form.control}
                             name="relative_member_profile_id"
                             label="Relative Member Profile *"
-                            render={({ field }) => (
-                                <MemberPicker
-                                    {...field}
-                                    onSelect={(selectedMember) =>
-                                        field.onChange(selectedMember.id)
-                                    }
-                                    placeholder="Relative Member Profile"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
+                            render={({ field }) => {
+                                return (
+                                    <MemberPicker
+                                        value={form.getValues(
+                                            'relative_member'
+                                        )}
+                                        onSelect={(selectedMember) => {
+                                            field.onChange(selectedMember?.id)
+                                            form.setValue(
+                                                'relative_member',
+                                                selectedMember
+                                            )
+                                        }}
+                                        placeholder="Relative Member Profile"
+                                        disabled={isDisabled(field.name)}
+                                    />
+                                )
+                            }}
                         />
                         <FormFieldWrapper
                             control={form.control}

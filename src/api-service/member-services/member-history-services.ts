@@ -1,15 +1,17 @@
 import qs from 'query-string'
+
 import APIService from '../api-service'
+
 import {
     TEntityId,
     IMemberTypeHistoryPaginated,
+    IMemberGroupHistoryPaginated,
     IMemberGenderHistoryPaginated,
     IMemberCenterHistoryPaginated,
     IMemberMutualFundsHistoryPaginated,
     IMemberClassificationHistoryPaginated,
+    IMemberOccupationHistoryPaginated,
 } from '@/types'
-
-const BASE_ENDPOINT = '/member-profile'
 
 export const getMemberCenterHistoryById = async ({
     profileId,
@@ -24,7 +26,7 @@ export const getMemberCenterHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/${profileId}/member-center-history`,
+            url: `/member-center-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -52,7 +54,7 @@ export const getMemberClassificationHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/${profileId}/member-classification-history`,
+            url: `/member-classification-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -81,7 +83,7 @@ export const getMemberTypeHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/${profileId}/member-type-history`,
+            url: `/member-type-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -109,7 +111,7 @@ export const getMemberGenderHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/${profileId}/member-gender-history`,
+            url: `/member-gender-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -121,6 +123,63 @@ export const getMemberGenderHistoryById = async ({
     )
 
     const response = await APIService.get<IMemberGenderHistoryPaginated>(url)
+    return response.data
+}
+
+export const getMemberGroupHistoryById = async ({
+    profileId,
+    ...props
+}: {
+    sort?: string
+    filters?: string
+    profileId: TEntityId
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const { filters, pagination, sort } = props || {}
+
+    const url = qs.stringifyUrl(
+        {
+            url: `/member-group-history/member-profile/${profileId}/search`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IMemberGroupHistoryPaginated>(url)
+    return response.data
+}
+
+export const getMemberOccupationHistoryById = async ({
+    profileId,
+    ...props
+}: {
+    sort?: string
+    filters?: string
+    profileId: TEntityId
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const { filters, pagination, sort } = props || {}
+
+    const url = qs.stringifyUrl(
+        {
+            url: `/member-occupation-history/member-profile/${profileId}/search`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response =
+        await APIService.get<IMemberOccupationHistoryPaginated>(url)
     return response.data
 }
 
@@ -137,7 +196,7 @@ export const getMemberMutualFundsHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/${profileId}/member-mutual-funds-history`,
+            url: `/member-mutual-funds-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
