@@ -39,7 +39,10 @@ export const memberGovernmentBenefitSchema = z.object({
 
     country_code: z.string().min(1, 'Country is required'),
     value: z.string().min(1, 'Value is required'),
-    expiry_date: z.coerce.string().date(),
+    expiry_date: z.coerce
+        .string()
+        .date()
+        .transform((val) => new Date(val).toISOString()),
     description: z.string().optional(),
     front_media_id: entityIdSchema.optional(),
     front_media: z.any(),
@@ -82,9 +85,6 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
             country_code: '',
             value: '',
             description: '',
-            front_media_id: '',
-            back_media_id: '',
-
             ...defaultValues,
         },
     })

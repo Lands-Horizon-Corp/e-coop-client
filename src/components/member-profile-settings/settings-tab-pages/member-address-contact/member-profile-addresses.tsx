@@ -20,10 +20,15 @@ import { MemberAddressCreateUpdateFormModal } from './member-address-create-upda
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IMemberAddress, IMemberProfile } from '@/types'
+import { useDeleteMemberProfileAddress } from '@/hooks/api-hooks/member/use-member-profile-settings'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
+
+    const { mutate: deleteMemberAddress, isPending: isDeleting } =
+        useDeleteMemberProfileAddress({ showMessage: true })
 
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
@@ -41,7 +46,10 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
                 <div className="flex items-center gap-x-2">
                     <p className="font-bold">{address.label}</p>
                 </div>
-                <div className="flex items-center justify-end">
+                <fieldset
+                    disabled={isDeleting}
+                    className="flex items-center justify-end"
+                >
                     <Button
                         size="icon"
                         variant="ghost"
@@ -60,13 +68,23 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
                                 title: 'Delete Educational Attainment',
                                 description:
                                     'Are you sure to delete this educational attainment',
+                                onConfirm: () =>
+                                    deleteMemberAddress({
+                                        memberAddressId: address.id,
+                                        memberProfileId:
+                                            address.member_profile_id,
+                                    }),
                             })
                         }
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                     >
-                        <TrashIcon className="size-4" />
+                        {isDeleting ? (
+                            <LoadingSpinner />
+                        ) : (
+                            <TrashIcon className="size-4" />
+                        )}
                     </Button>
-                </div>
+                </fieldset>
             </div>
             <Separator className="!my-2" />
             <div className="space-y-2">

@@ -43,12 +43,12 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div ref={ref}>
-                <p className="mb-2">Member User Account</p>
+                <p className="mb-2">Member User Profile</p>
 
                 {memberProfile.user !== undefined ? (
                     <div>
                         <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
-                            Member User Account let them use their
+                            Member User Profile let them use their
                             created/issued User Account to access their
                             information in the system. Below is the connected
                             User Account for this member profile.
@@ -161,12 +161,12 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             >
                                 <div className="flex w-full items-center justify-between">
                                     <p className="shrink truncate">
-                                        Create New User Account
+                                        Create New User Profile
                                     </p>
                                     <UserPlusIcon className="size-4 shrink-0 text-muted-foreground/60 duration-200 ease-out group-hover:text-primary" />
                                 </div>
                                 <p className="text-wrap text-left text-xs text-muted-foreground/90">
-                                    Create a new user account for this member
+                                    Create a new user profile for this member
                                     profile.
                                 </p>
                             </Button>
@@ -182,7 +182,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             >
                                 <div className="flex w-full items-center justify-between">
                                     <p className="shrink truncate">
-                                        Connect to existing User Account
+                                        Connect to existing User Profile
                                     </p>
                                     {!isConnecting ? (
                                         <PlugConnectFillIcon className="size-4 shrink-0 text-muted-foreground/60 duration-200 ease-out group-hover:text-primary" />
@@ -198,7 +198,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 >
                                     {isConnecting
                                         ? 'Connecting...'
-                                        : 'Connect this Profile to an existing User Account that has no profile yet.'}
+                                        : 'Connect this Profile to an existing User Profile that has no profile yet.'}
                                 </p>
                             </Button>
                         </fieldset>

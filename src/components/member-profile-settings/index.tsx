@@ -146,7 +146,6 @@ const MemberProfileSettings = ({
                     )}
                 </>
             )}
-            {/* <Separator className="mb-2" /> */}
             <Tabs
                 value={value}
                 className="flex w-full gap-x-4"

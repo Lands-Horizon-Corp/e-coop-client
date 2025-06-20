@@ -47,6 +47,7 @@ const MemberProfileTable = ({
     className,
     toolbarProps,
     defaultFilter,
+    onRowClick,
     onSelectData,
     actionComponent,
 }: MemberProfileTableProps) => {
@@ -187,6 +188,7 @@ const MemberProfileTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
+                    onRowClick={onRowClick}
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
                     className={cn('mb-2', isScrollable && 'flex-1')}

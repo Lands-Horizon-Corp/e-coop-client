@@ -37,6 +37,7 @@ const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
                 title="Update Asset"
                 description="Modify / Update this asset information."
                 formProps={{
+                    assetId: asset.id,
                     memberProfileId: asset.member_profile_id,
                     defaultValues: asset,
                 }}

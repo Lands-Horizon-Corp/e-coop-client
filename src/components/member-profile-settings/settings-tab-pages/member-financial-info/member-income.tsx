@@ -34,6 +34,7 @@ const MemberIncomeCard = ({ income }: { income: IMemberIncome }) => {
                 title="Update Income"
                 description="Modify / Update this income information."
                 formProps={{
+                    incomeId: income.id,
                     memberProfileId: income.member_profile_id,
                     defaultValues: income,
                 }}
@@ -121,10 +122,7 @@ const MemberIncome = ({ memberProfile }: Props) => {
                 description="Add new income information."
                 formProps={{
                     memberProfileId: memberProfile.id,
-                    defaultValues: {
-                        branch_id: memberProfile.branch_id,
-                        member_profile_id: memberProfile.id,
-                    },
+                    defaultValues: {},
                 }}
             />
             <div className="mb-2 flex items-start justify-between">
@@ -134,11 +132,11 @@ const MemberIncome = ({ memberProfile }: Props) => {
                 </Button>
             </div>
             <div className="grid grid-cols-3 gap-4">
-                {memberProfile.member_income?.map((income) => (
+                {memberProfile.member_incomes?.map((income) => (
                     <MemberIncomeCard key={income.id} income={income} />
                 ))}
-                {(!memberProfile.member_income ||
-                    memberProfile.member_income.length === 0) && (
+                {(!memberProfile.member_incomes ||
+                    memberProfile.member_incomes.length === 0) && (
                     <EmptyListIndicator
                         message="No income yet"
                         className="col-span-3"

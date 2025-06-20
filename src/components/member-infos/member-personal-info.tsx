@@ -141,7 +141,7 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
 
                 <Separator />
                 <ContactNumbersDisplay
-                    contactNumbers={data?.member_contact_number_references}
+                    contactNumbers={data?.member_contact_references}
                 />
 
                 <Separator />

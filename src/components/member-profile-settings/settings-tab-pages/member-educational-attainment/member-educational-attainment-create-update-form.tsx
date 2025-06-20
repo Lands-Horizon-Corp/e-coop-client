@@ -32,7 +32,6 @@ export const memberEducationalAttainmentSchema = z.object({
     id: z.string().optional(),
     branch_id: entityIdSchema.optional(),
     member_profile_id: entityIdSchema,
-    name: z.string().min(1, 'Name is required'),
     school_name: z.string().min(1, 'School name is required').optional(),
     school_year: z.coerce
         .number({ invalid_type_error: 'Invalid Year' })
@@ -84,8 +83,8 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            name: '',
             description: '',
+            school_name: '',
             program_course: '',
             school_year: new Date().getFullYear(),
             educational_attainment: 'college graduate',
@@ -137,19 +136,6 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="name"
-                            label="Name *"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    id={field.name}
-                                    placeholder="Name"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
                         <FormFieldWrapper
                             control={form.control}
                             name="school_name"

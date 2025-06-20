@@ -10,16 +10,16 @@ import {
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { MemberExpenseCreateUpdateFormModal } from './member-expense-create-update-form'
-
-import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useDeleteMemberProfileExpense } from '@/hooks/api-hooks/member/use-member-profile-settings'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import EmptyListIndicator from '../empty-list-indicator'
+import RawDescription from '@/components/raw-description'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { MemberExpenseCreateUpdateFormModal } from './member-expense-create-update-form'
+import { useDeleteMemberProfileExpense } from '@/hooks/api-hooks/member/use-member-profile-settings'
+
+import { formatNumber, toReadableDate } from '@/utils'
 
 import { IMemberExpense, IMemberProfile } from '@/types'
-import { formatNumber, toReadableDate } from '@/utils'
-import RawDescription from '@/components/raw-description'
 
 const MemberExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
     const [edit, setEdit] = useState(false)
@@ -35,6 +35,7 @@ const MemberExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
                 title="Update Expense"
                 description="Modify / Update this expense information."
                 formProps={{
+                    expenseId: expense.id,
                     memberProfileId: expense.member_profile_id,
                     defaultValues: expense,
                 }}
