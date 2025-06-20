@@ -53,7 +53,7 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                     size="sm"
                     variant="outline"
                     hoverVariant="destructive"
-                    disabled={memberProfile.is_close}
+                    disabled={memberProfile.is_closed}
                     className="group rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
                     onClick={() =>
                         onOpen({

@@ -93,7 +93,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                 <Badge variant="outline">
                                     {memberProfile.member_type.name}
                                 </Badge>
-                                {memberProfile.is_close ? (
+                                {memberProfile.is_closed ? (
                                     <Badge variant="destructive">Closed</Badge>
                                 ) : (
                                     <Badge className={statusConfig.className}>
