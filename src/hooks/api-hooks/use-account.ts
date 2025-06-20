@@ -14,6 +14,8 @@ import { useQuery } from '@tanstack/react-query'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 
+import ACCOUNT_DATA from './paginatedAccountSample.json'
+
 export const useAccountById = (
     id: TEntityId,
     { enabled = true }: IQueryProps = {}
@@ -40,7 +42,7 @@ export const useAccountById = (
 export const useFilteredPaginatedAccount = ({
     sort,
     enabled,
-    initialData,
+    // initialData,
     mode = 'all',
     filterPayload,
     showMessage = true,
@@ -74,13 +76,7 @@ export const useFilteredPaginatedAccount = ({
 
             return result
         },
-        initialData: initialData ?? {
-            data: [],
-            pages: [],
-            totalSize: 0,
-            totalPage: 1,
-            ...pagination,
-        },
+        initialData: ACCOUNT_DATA as unknown as IAccountPaginated,
         enabled,
         retry: 1,
     })
