@@ -93,7 +93,7 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
             {memberProfile && (
                 <>
                     <MemberInfoBanner memberProfile={memberProfile} />
-                    {memberProfile.is_close && (
+                    {memberProfile.is_closed && (
                         <MemberCloseAccountBanner
                             showRemarksList
                             closeRemarks={memberProfile.member_close_remarks}

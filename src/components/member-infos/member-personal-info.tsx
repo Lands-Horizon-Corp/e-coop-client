@@ -108,12 +108,12 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
                         </p>
                     </div>
 
-                    {/* <div className="space-y-2">
-                        <p>{data?.memberEducationalAttainment?.name ?? '-'}</p>
+                    <div className="space-y-2">
+                        <p>{data?.member_occupation?.name ?? '-'}</p>
                         <p className="text-xs text-muted-foreground/70">
-                            Educational Attainment
+                            Occupation
                         </p>
-                    </div> */}
+                    </div>
 
                     <div className="space-y-2">
                         <p>{data?.occupation ?? '-'}</p>
