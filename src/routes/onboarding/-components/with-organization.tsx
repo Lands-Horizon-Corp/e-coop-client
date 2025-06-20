@@ -241,7 +241,10 @@ const WithOrganization = ({
                                                                         'secondary'
                                                                     }
                                                                 >
-                                                                    visit
+                                                                    visit as{' '}
+                                                                    {
+                                                                        userOrg.user_type
+                                                                    }
                                                                 </Button>
                                                             </div>
                                                         </GradientBackground>

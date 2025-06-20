@@ -1,15 +1,16 @@
+import { useState, useEffect } from 'react'
+import { useRouter } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+
 import AuthGuard from '@/components/wrappers/auth-guard'
 import LocationBack from './-components/onboarding-back'
 import AuthFooter from '@/components/footers/auth-footer'
 import OnboardingNav from '@/components/nav/navs/onboarding-nav'
 import OrganizationCategoryPicker from '@/components/category-pickers/organization-category-picker'
 
-import { useCategoryStore } from '@/store/onboarding/category-store'
+import { useAuthStore } from '@/store/user-auth-store'
 import { useGetAllCategory } from '@/hooks/api-hooks/use-category'
-
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { useRouter } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useCategoryStore } from '@/store/onboarding/category-store'
 
 export const Route = createFileRoute('/onboarding')({
     component: RouteComponent,
@@ -17,7 +18,9 @@ export const Route = createFileRoute('/onboarding')({
 
 function RouteComponent() {
     const router = useRouter()
-
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
     const { onOpenCategoryPicker, setOnOpenCategoryPicker } = useCategoryStore()
 
     const { data: Category } = useGetAllCategory()
@@ -47,7 +50,7 @@ function RouteComponent() {
                 <main className="flex w-full flex-1 items-center">
                     <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col overflow-y-auto">
                         <div className="relative mx-auto my-5 flex w-[80%] flex-1 flex-col py-8">
-                            {!isCreateBranchRoute && (
+                            {!isCreateBranchRoute && user_organization && (
                                 <LocationBack className="absolute right-5 top-10 max-w-24" />
                             )}
                             <Outlet />
