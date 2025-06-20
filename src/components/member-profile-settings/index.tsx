@@ -14,9 +14,9 @@ import {
 import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 
-import MemberProfileSettingsBanner, {
-    MemberProfileSettingsBannerSkeleton,
-} from './member-profile-settings-banner'
+import MemberProfileMiniInfoCard, {
+    MemberProfileMiniInfoCardSkeleton,
+} from '../elements/member-profile-settings-banner'
 import MembershipInfo from './settings-tab-pages/membership-info'
 import MemberUserAccount from './settings-tab-pages/member-user-account'
 import MemberFinancial from './settings-tab-pages/member-financial-info'
@@ -364,11 +364,11 @@ const MemberProfileSettings = ({
         <div className={cn('w-full flex-1 space-y-4', className)}>
             <p className="my-4 text-muted-foreground">Edit Member Profile</p>
             {!memberProfile && isPending && (
-                <MemberProfileSettingsBannerSkeleton />
+                <MemberProfileMiniInfoCardSkeleton />
             )}
             {memberProfile && (
                 <>
-                    <MemberProfileSettingsBanner
+                    <MemberProfileMiniInfoCard
                         memberProfile={memberProfile}
                     />
                     {memberProfile.is_closed && (

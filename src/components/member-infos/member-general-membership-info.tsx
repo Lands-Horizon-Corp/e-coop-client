@@ -221,7 +221,7 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                             className={cn(
                                 'flex gap-x-4 rounded-xl border bg-popover/40 p-4 text-muted-foreground/60',
                                 data?.is_mutual_fund_member &&
-                                    'border-primary/20 bg-gradient-to-br from-transparent to-primary/5 text-foreground'
+                                    'border-primary/60 bg-gradient-to-bl from-transparent to-primary/50 text-foreground'
                             )}
                         >
                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -239,7 +239,7 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                             className={cn(
                                 'flex gap-x-4 rounded-xl border bg-popover/40 p-4 text-muted-foreground/60',
                                 data?.is_micro_finance_member &&
-                                    'border-primary/20 bg-gradient-to-bl from-transparent to-primary/5 text-foreground'
+                                    'border-primary/60 bg-gradient-to-bl from-transparent to-primary/50 text-foreground'
                             )}
                         >
                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -247,7 +247,7 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                             </div>
                             <div className="space-y-1">
                                 <p>Microfinance Member</p>
-                                <p className="text-sm text-muted-foreground/70">
+                                <p className="text-sm text-muted-foreground/90">
                                     Participates in small-scale financial
                                     services.
                                 </p>

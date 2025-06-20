@@ -18,12 +18,12 @@ import MemberInfoBanner from './banners/member-info-banner'
 import MemberMembershipInfo from './member-general-membership-info'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import MemberGovernmentBenefits from './member-government-benefits-info'
+import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
@@ -101,7 +101,7 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
                     )}
                 </>
             )}
-            <Tabs defaultValue="general-infos" className="flex-1 flex-col">
+            <Tabs defaultValue="general-infos" className="flex-1 mt-2 flex-col">
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {memberInfoTabs.map((tab) => (
