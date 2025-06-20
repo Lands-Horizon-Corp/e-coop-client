@@ -14,7 +14,7 @@ import RawDescription from '@/components/raw-description'
 import { MemberEducationalAttainmentCreateUpdateFormModal } from './member-educational-attainment-create-update-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useDeleteEducationalAttainmentForMember } from '@/hooks/api-hooks/member/use-member-profile-settings'
+import { useDeleteEducationalAttainment } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
     IClassProps,
@@ -33,7 +33,7 @@ const MemberEducationalAttainmentCard = ({
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
     const { mutate: deleteEducationalAttainment, isPending: isDeleting } =
-        useDeleteEducationalAttainmentForMember({ showMessage: true })
+        useDeleteEducationalAttainment({ showMessage: true })
 
     return (
         <div className="space-y-1 rounded-lg border bg-background">
@@ -43,6 +43,7 @@ const MemberEducationalAttainmentCard = ({
                 title="Update Educational Attainment"
                 description="Modify / Update this educational attainment information."
                 formProps={{
+                    educationalAttainmentId: educationalAttainment.id,
                     memberProfileId: educationalAttainment.member_profile_id,
                     defaultValues: educationalAttainment,
                 }}
@@ -163,7 +164,7 @@ const MemberEducationalAttainment = forwardRef<HTMLDivElement, Props>(
                     </Button>
                 </div>
                 <div className="space-y-4">
-                    {memberProfile.member_educational_attainment?.map(
+                    {memberProfile.member_educational_attainments?.map(
                         (educationalAttainmentId) => (
                             <MemberEducationalAttainmentCard
                                 key={educationalAttainmentId.id}
@@ -171,7 +172,7 @@ const MemberEducationalAttainment = forwardRef<HTMLDivElement, Props>(
                             />
                         )
                     )}
-                    {(!memberProfile.member_educational_attainment ||
+                    {(!memberProfile.member_educational_attainments ||
                         memberProfile.member_assets?.length) && (
                         <EmptyListIndicator message="Empty Educational Attainment" />
                     )}

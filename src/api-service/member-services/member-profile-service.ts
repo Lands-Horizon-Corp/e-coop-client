@@ -124,7 +124,7 @@ export const approveMemberProfile = async (id: TEntityId) => {
 
 export const declineMemberProfile = async (id: TEntityId) => {
     const response = await APIService.put<void, IMemberProfile>(
-        `/member-profile/${id}/decline`
+        `/member-profile/${id}/reject`
     )
     return response.data
 }
@@ -323,7 +323,7 @@ export const createEducationalAttainmentForMember = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
 ) => {
-    const url = `/member-profile/${memberProfileId}/educational-attainment`
+    const url = `/member-educational-attainment/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>,
         IMemberEducationalAttainment
@@ -332,11 +332,10 @@ export const createEducationalAttainmentForMember = async (
 }
 
 export const updateEducationalAttainmentForMember = async (
-    memberProfileId: TEntityId,
     educationalAttainmentId: TEntityId,
     data: Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainment/${educationalAttainmentId}`
+    const url = `/member-educational-attainment/${educationalAttainmentId}`
     const res = await APIService.put<
         Omit<IMemberEducationalAttainmentRequest, 'member_profile_id'>,
         IMemberEducationalAttainment
@@ -345,11 +344,10 @@ export const updateEducationalAttainmentForMember = async (
 }
 
 export const deleteEducationalAttainmentForMember = async (
-    memberProfileId: TEntityId,
     educationalAttainmentId: TEntityId
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/educational-attainment/${educationalAttainmentId}`
-    return APIService.delete(url)
+    const url = `/member-educational-attainment/${educationalAttainmentId}`
+    await APIService.delete(url)
 }
 
 // MEMBER ADDRESS
@@ -358,7 +356,7 @@ export const createMemberProfileAddress = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberAddressRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/address`
+    const url = `/member-address/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberAddressRequest, 'member_profile_id'>,
         IMemberAddress
@@ -367,11 +365,10 @@ export const createMemberProfileAddress = async (
 }
 
 export const updateMemberProfileAddress = async (
-    memberProfileId: TEntityId,
     memberAddressId: TEntityId,
     data: Omit<IMemberAddressRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/address/${memberAddressId}`
+    const url = `/member-address/${memberAddressId}`
     const res = await APIService.put<
         Omit<IMemberAddressRequest, 'member_profile_id'>,
         IMemberAddress
@@ -380,11 +377,10 @@ export const updateMemberProfileAddress = async (
 }
 
 export const deleteMemberProfileAddress = async (
-    memberProfileId: TEntityId,
     memberAddressId: TEntityId
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/address/${memberAddressId}`
-    return APIService.delete(url)
+    const url = `/member-address/${memberAddressId}`
+    await APIService.delete(url)
 }
 
 // MEMBER CONTACT REFERENCES
@@ -393,7 +389,7 @@ export const createMemberProfileContactReference = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberContactReferenceRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/contact-reference`
+    const url = `/member-contact-reference/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberContactReferenceRequest, 'member_profile_id'>,
         IMemberContactReference
@@ -402,11 +398,10 @@ export const createMemberProfileContactReference = async (
 }
 
 export const updateMemberProfileContactReference = async (
-    memberProfileId: TEntityId,
     contactReferenceId: TEntityId,
     data: Omit<IMemberContactReferenceRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/contact-reference/${contactReferenceId}`
+    const url = `/member-contact-reference/${contactReferenceId}`
     const res = await APIService.put<
         Omit<IMemberContactReferenceRequest, 'member_profile_id'>,
         IMemberContactReference
@@ -415,11 +410,10 @@ export const updateMemberProfileContactReference = async (
 }
 
 export const deleteMemberProfileContactReference = async (
-    memberProfileId: TEntityId,
     contactReferenceId: TEntityId
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/contact-reference/${contactReferenceId}`
-    return APIService.delete(url)
+    const url = `/member-contact-reference/${contactReferenceId}`
+    await APIService.delete(url)
 }
 
 // MEMBER ASSET
@@ -428,7 +422,7 @@ export const createMemberProfileAsset = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberAssetRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/asset`
+    const url = `/member-asset/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberAssetRequest, 'member_profile_id'>,
         IMemberAsset
@@ -437,11 +431,10 @@ export const createMemberProfileAsset = async (
 }
 
 export const updateMemberProfileAsset = async (
-    memberProfileId: TEntityId,
     assetId: TEntityId,
     data: Omit<IMemberAssetRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/asset/${assetId}`
+    const url = `/member-asset/${assetId}`
     const res = await APIService.put<
         Omit<IMemberAssetRequest, 'member_profile_id'>,
         IMemberAsset
@@ -449,12 +442,9 @@ export const updateMemberProfileAsset = async (
     return res.data
 }
 
-export const deleteMemberProfileAsset = async (
-    memberProfileId: TEntityId,
-    assetId: TEntityId
-) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/asset/${assetId}`
-    return APIService.delete(url)
+export const deleteMemberProfileAsset = async (assetId: TEntityId) => {
+    const url = `/member-asset/${assetId}`
+    await APIService.delete(url)
 }
 
 // MEMBER INCOME
@@ -463,7 +453,7 @@ export const createMemberProfileIncome = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberIncomeRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/income`
+    const url = `/member-income/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberIncomeRequest, 'member_profile_id'>,
         IMemberIncome
@@ -472,11 +462,10 @@ export const createMemberProfileIncome = async (
 }
 
 export const updateMemberProfileIncome = async (
-    memberProfileId: TEntityId,
     incomeId: TEntityId,
     data: Omit<IMemberIncomeRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/income/${incomeId}`
+    const url = `/member-income/${incomeId}`
     const res = await APIService.put<
         Omit<IMemberIncomeRequest, 'member_profile_id'>,
         IMemberIncome
@@ -484,12 +473,9 @@ export const updateMemberProfileIncome = async (
     return res.data
 }
 
-export const deleteMemberProfileIncome = async (
-    memberProfileId: TEntityId,
-    incomeId: TEntityId
-) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/income/${incomeId}`
-    return APIService.delete(url)
+export const deleteMemberProfileIncome = async (incomeId: TEntityId) => {
+    const url = `/member-income/${incomeId}`
+    await APIService.delete(url)
 }
 
 // MEMBER EXPENSE
@@ -498,7 +484,7 @@ export const createMemberProfileExpense = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberExpenseRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/expense`
+    const url = `/member-expense/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberExpenseRequest, 'member_profile_id'>,
         IMemberExpense
@@ -507,11 +493,10 @@ export const createMemberProfileExpense = async (
 }
 
 export const updateMemberProfileExpense = async (
-    memberProfileId: TEntityId,
     expenseId: TEntityId,
     data: Omit<IMemberExpenseRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/expense/${expenseId}`
+    const url = `/member-expense/${expenseId}`
     const res = await APIService.put<
         Omit<IMemberExpenseRequest, 'member_profile_id'>,
         IMemberExpense
@@ -519,12 +504,9 @@ export const updateMemberProfileExpense = async (
     return res.data
 }
 
-export const deleteMemberProfileExpense = async (
-    memberProfileId: TEntityId,
-    expenseId: TEntityId
-) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/expense/${expenseId}`
-    return APIService.delete(url)
+export const deleteMemberProfileExpense = async (expenseId: TEntityId) => {
+    const url = `/member-expense/${expenseId}`
+    await APIService.delete(url)
 }
 
 // MEMBER GOVERNMENT BENEFIT
@@ -536,7 +518,7 @@ export const createMemberGovernmentBenefit = async (
         'member_profile_id' | 'branch_id' | 'organization_id'
     >
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/government-benefit`
+    const url = `/member-government-benefit/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<
             IMemberGovernmentBenefitRequest,
@@ -548,14 +530,13 @@ export const createMemberGovernmentBenefit = async (
 }
 
 export const updateMemberGovernmentBenefit = async (
-    memberProfileId: TEntityId,
     benefitId: TEntityId,
     data: Omit<
         IMemberGovernmentBenefitRequest,
         'member_profile_id' | 'branch_id' | 'organization_id'
     >
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/government-benefit/${benefitId}`
+    const url = `/member-government-benefit/${benefitId}`
     const res = await APIService.put<
         Omit<
             IMemberGovernmentBenefitRequest,
@@ -566,12 +547,9 @@ export const updateMemberGovernmentBenefit = async (
     return res.data
 }
 
-export const deleteMemberGovernmentBenefit = async (
-    memberProfileId: TEntityId,
-    benefitId: TEntityId
-) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/government-benefit/${benefitId}`
-    return APIService.delete(url)
+export const deleteMemberGovernmentBenefit = async (benefitId: TEntityId) => {
+    const url = `/member-government-benefit/${benefitId}`
+    await APIService.delete(url)
 }
 
 // MEMBER JOINT ACCOUNT
@@ -580,7 +558,7 @@ export const createMemberJointAccount = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberJointAccountRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/joint-account`
+    const url = `/member-joint-account/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberJointAccountRequest, 'member_profile_id'>,
         IMemberJointAccount
@@ -589,11 +567,10 @@ export const createMemberJointAccount = async (
 }
 
 export const updateMemberJointAccount = async (
-    memberProfileId: TEntityId,
     jointAccountId: TEntityId,
     data: Omit<IMemberJointAccountRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/joint-account/${jointAccountId}`
+    const url = `/member-joint-account/${jointAccountId}`
     const res = await APIService.put<
         Omit<IMemberJointAccountRequest, 'member_profile_id'>,
         IMemberJointAccount
@@ -601,12 +578,9 @@ export const updateMemberJointAccount = async (
     return res.data
 }
 
-export const deleteMemberJointAccount = async (
-    memberProfileId: TEntityId,
-    jointAccountId: TEntityId
-) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/joint-account/${jointAccountId}`
-    return APIService.delete(url)
+export const deleteMemberJointAccount = async (jointAccountId: TEntityId) => {
+    const url = `/member-joint-account/${jointAccountId}`
+    await APIService.delete(url)
 }
 
 // MEMBER RELATIVE ACCOUNT
@@ -615,7 +589,7 @@ export const createMemberRelativeAccount = async (
     memberProfileId: TEntityId,
     data: Omit<IMemberRelativeAccountRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/relative-account`
+    const url = `/member-relative-account/member-profile/${memberProfileId}`
     const res = await APIService.post<
         Omit<IMemberRelativeAccountRequest, 'member_profile_id'>,
         IMemberRelativeAccount
@@ -624,11 +598,10 @@ export const createMemberRelativeAccount = async (
 }
 
 export const updateMemberRelativeAccount = async (
-    memberProfileId: TEntityId,
     relativeAccountId: TEntityId,
     data: Omit<IMemberRelativeAccountRequest, 'member_profile_id'>
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/relative-account/${relativeAccountId}`
+    const url = `/member-relative-account/${relativeAccountId}`
     const res = await APIService.put<
         Omit<IMemberRelativeAccountRequest, 'member_profile_id'>,
         IMemberRelativeAccount
@@ -637,9 +610,8 @@ export const updateMemberRelativeAccount = async (
 }
 
 export const deleteMemberRelativeAccount = async (
-    memberProfileId: TEntityId,
     relativeAccountId: TEntityId
 ) => {
-    const url = `/${BASE_ENDPOINT}/${memberProfileId}/relative-account/${relativeAccountId}`
-    return APIService.delete(url)
+    const url = `/member-relative-account/${relativeAccountId}`
+    await APIService.delete(url)
 }

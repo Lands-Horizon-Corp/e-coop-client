@@ -21,6 +21,7 @@ import {
 import { entityIdSchema, familyRelationshipSchema } from '@/validations/common'
 
 import { IForm, TEntityId, IClassProps, IMemberRelativeAccount } from '@/types'
+import { toast } from 'sonner'
 
 // STRICTLY BASED ON IMemberRelativeAccountRequest
 export const memberRelativeAccountSchema = z.object({
@@ -127,6 +128,14 @@ const MemberRelativeAccountCreateUpdateForm = ({
                                             'relative_member'
                                         )}
                                         onSelect={(selectedMember) => {
+                                            if (
+                                                selectedMember.id ===
+                                                memberProfileId
+                                            )
+                                                return toast.warning(
+                                                    'You cannot set urself as relative.'
+                                                )
+
                                             field.onChange(selectedMember?.id)
                                             form.setValue(
                                                 'relative_member',

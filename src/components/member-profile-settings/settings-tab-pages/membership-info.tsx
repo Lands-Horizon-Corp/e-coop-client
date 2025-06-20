@@ -11,6 +11,7 @@ const MembershipInfo = forwardRef<HTMLDivElement, Props>(
         return (
             <div ref={ref}>
                 <MemberMembershipForm
+                    disabledFields={['passbook']}
                     defaultValues={memberProfile}
                     memberProfileId={memberProfile.id}
                 />

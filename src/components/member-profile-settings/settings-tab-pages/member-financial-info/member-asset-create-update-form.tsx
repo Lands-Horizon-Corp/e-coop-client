@@ -21,6 +21,7 @@ import {
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IForm, TEntityId, IClassProps, IMemberAsset, IMedia } from '@/types'
+import { toInputDateString } from '@/utils'
 
 export const memberAssetSchema = z.object({
     id: z.string().optional(),
@@ -29,7 +30,10 @@ export const memberAssetSchema = z.object({
     name: z.string().min(1, 'Asset name is required'),
 
     cost: z.coerce.number(),
-    entry_date: z.coerce.string().date(),
+    entry_date: z.coerce
+        .string()
+        .date()
+        .transform((val) => new Date(val).toISOString()),
 
     description: z.string().min(1, 'Description is required'),
 
@@ -69,6 +73,9 @@ const MemberAssetCreateUpdateForm = ({
             name: '',
             member_profile_id: memberProfileId,
             ...defaultValues,
+            entry_date: toInputDateString(
+                defaultValues?.entry_date ?? new Date()
+            ),
         },
     })
 

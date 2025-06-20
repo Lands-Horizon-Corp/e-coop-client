@@ -154,7 +154,10 @@ export const useApproveMemberProfile = createMutationHook<
     TEntityId
 >(
     (id) => MemberProfileService.approveMemberProfile(id),
-    'Member profile approved'
+    'Member profile approved',
+    (args) => {
+        updateMutationInvalidationFn('member-profile', args)
+    }
 )
 
 export const useDeclineMemberProfile = createMutationHook<
@@ -163,7 +166,10 @@ export const useDeclineMemberProfile = createMutationHook<
     TEntityId
 >(
     (id) => MemberProfileService.declineMemberProfile(id),
-    'Member profile declined'
+    'Member profile rejected',
+    (args) => {
+        updateMutationInvalidationFn('member-profile', args)
+    }
 )
 
 export const useAllPendingMemberProfiles = ({
@@ -171,7 +177,7 @@ export const useAllPendingMemberProfiles = ({
     showMessage = true,
 }: IAPIHook<IMemberProfile[], string> & IQueryProps = {}) => {
     return useQuery<IMemberProfile[], string>({
-        queryKey: ['member-profile', 'resource-query', 'all', 'pending'],
+        queryKey: ['member-profile', 'all', 'pending'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberProfileService.getAllPendingMemberProfile()

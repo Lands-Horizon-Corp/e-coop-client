@@ -35,6 +35,7 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                 title="Update Joint Account"
                 description="Modify / Update this joint account information."
                 formProps={{
+                    jointAccountId: joint.id,
                     memberProfileId: joint.member_profile_id,
                     defaultValues: joint,
                 }}

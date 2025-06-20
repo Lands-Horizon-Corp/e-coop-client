@@ -12,7 +12,11 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
-import { entityIdSchema, familyRelationshipSchema } from '@/validations/common'
+import {
+    entityIdSchema,
+    familyRelationshipSchema,
+    stringDateWithTransformSchema,
+} from '@/validations/common'
 import {
     useCreateMemberJointAccount,
     useUpdateMemberJointAccount,
@@ -29,6 +33,7 @@ import ImageField from '@/components/ui/image-field'
 import RelationshipCombobox from '@/components/comboboxes/relationship-combobox'
 import SignatureField from '@/components/ui/signature-field'
 import TextEditor from '@/components/text-editor'
+import { toInputDateString } from '@/utils'
 
 export const memberJointAccountSchema = z.object({
     id: z.string().optional(),
@@ -45,7 +50,7 @@ export const memberJointAccountSchema = z.object({
     middle_name: z.string().optional(),
     last_name: z.string().min(1, 'Last name is required'),
     suffix: z.string().optional(),
-    birthday: z.string().min(1, 'Birthday is required'),
+    birthday: stringDateWithTransformSchema,
     family_relationship: familyRelationshipSchema,
 })
 
@@ -81,8 +86,8 @@ const MemberJointAccountCreateUpdateForm = ({
         defaultValues: {
             first_name: '',
             last_name: '',
-            birthday: '',
             ...defaultValues,
+            birthday: toInputDateString(defaultValues?.birthday ?? new Date()),
         },
     })
 

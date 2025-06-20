@@ -20,13 +20,17 @@ import {
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IForm, TEntityId, IClassProps, IMemberIncome, IMedia } from '@/types'
+import { toInputDateString } from '@/utils'
 
 export const memberIncomeSchema = z.object({
     id: z.string().optional(),
     name: z.string().min(1, 'Name is required'),
     source: z.string().min(1, 'Income source is required'),
     amount: z.coerce.number(),
-    release_date: z.coerce.string().date(),
+    release_date: z.coerce
+        .string()
+        .date()
+        .transform((val) => new Date(val).toISOString()),
     media_id: entityIdSchema.optional(),
     media: z.any(),
 })
@@ -36,7 +40,7 @@ type TMemberIncomeFormValues = z.infer<typeof memberIncomeSchema>
 export interface IMemberIncomeFormProps
     extends IClassProps,
         IForm<
-            Partial<IMemberIncome>,
+            Partial<TMemberIncomeFormValues>,
             IMemberIncome,
             string,
             TMemberIncomeFormValues
@@ -64,6 +68,9 @@ const MemberIncomeCreateUpdateForm = ({
             amount: 0,
             name: '',
             ...defaultValues,
+            release_date: toInputDateString(
+                defaultValues?.release_date ?? new Date()
+            ),
         },
     })
 
@@ -171,7 +178,7 @@ const MemberIncomeCreateUpdateForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="media_id"
-                            label="Photo *"
+                            label="Photo"
                             render={({ field }) => {
                                 const value = form.watch('media')
 

@@ -7,10 +7,12 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
+import { VerifiedPatchIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib/utils'
 import { entityIdSchema } from '@/validations/common'
@@ -20,15 +22,13 @@ import {
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IForm, TEntityId, IClassProps, IMemberContactReference } from '@/types'
-import { VerifiedPatchIcon } from '@/components/icons'
-import { PhoneInput } from '@/components/contact-input/contact-input'
 
 export const memberContactReferenceSchema = z.object({
     id: z.string().optional(),
     member_profile_id: entityIdSchema.optional(),
     name: z.string().min(1, 'Name is required'),
     description: z.string().min(1, 'Description is required'),
-    contactNumber: z.string().min(1, 'Contact number is required'),
+    contact_number: z.string().min(1, 'Contact number is required'),
 })
 
 type TMemberContactReferenceFormValues = z.infer<
@@ -64,7 +64,7 @@ const MemberContactCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            contactNumber: '',
+            contact_number: '',
             ...defaultValues,
         },
     })
@@ -128,7 +128,7 @@ const MemberContactCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="contactNumber"
+                            name="contact_number"
                             label="Contact Number *"
                             render={({ field, fieldState: { invalid } }) => (
                                 <div className="relative flex flex-1 items-center gap-x-2">
