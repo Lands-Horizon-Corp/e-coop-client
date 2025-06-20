@@ -15,6 +15,10 @@ import { cn } from '@/lib'
 
 import { IClassProps, IMemberProfile } from '@/types'
 import { CopyWrapper } from '../copy-wrapper'
+import { HoverCard, HoverCardTrigger } from '../ui/hover-card'
+import { HoverCardContent } from '@radix-ui/react-hover-card'
+import HoveruserInfo from './hover-elements/hover-user-info'
+import ImageNameDisplay from './image-name-display'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile
@@ -89,7 +93,30 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                             <h2 className="truncate font-bold">
                                 {memberProfile.full_name}
                             </h2>
-                            <div className="space-x-2">
+                            <div className="flex items-center gap-x-2">
+                                {memberProfile.user && (
+                                    <HoverCard>
+                                        <HoverCardTrigger>
+                                            <ImageNameDisplay
+                                                src={
+                                                    memberProfile.user?.media
+                                                        ?.download_url
+                                                }
+                                                name={memberProfile.full_name}
+                                                className="rounded-full bg-card/80 p-1 text-sm"
+                                                nameClassName="mr-2"
+                                            />
+                                        </HoverCardTrigger>
+                                        <HoverCardContent>
+                                            <HoveruserInfo
+                                                userId={memberProfile.user_id}
+                                                defaultValue={
+                                                    memberProfile.user
+                                                }
+                                            />
+                                        </HoverCardContent>
+                                    </HoverCard>
+                                )}
                                 <Badge variant="outline">
                                     {memberProfile.member_type.name}
                                 </Badge>
