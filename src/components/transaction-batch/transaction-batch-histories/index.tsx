@@ -97,9 +97,9 @@ const TransactionBatchHistories = ({
     onTabChange,
 }: Props) => {
     const [value, handleChange] = useInternalState(
+        HistoryTabs[0].value,
         activeTab,
-        onTabChange,
-        HistoryTabs[0].value
+        onTabChange
     )
 
     return (
