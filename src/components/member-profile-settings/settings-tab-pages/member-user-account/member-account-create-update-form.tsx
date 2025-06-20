@@ -10,6 +10,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Form, FormItem } from '@/components/ui/form'
+import { Separator } from '@/components/ui/separator'
 import { VerifiedPatchIcon } from '@/components/icons'
 import PasswordInput from '@/components/ui/password-input'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -20,6 +21,10 @@ import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib/utils'
 import { toReadableDate } from '@/utils'
+import {
+    useCreateMemberProfileUserAccount,
+    useUpdateMemberProfileUserAccount,
+} from '@/hooks/api-hooks/member/use-member-profile-settings'
 import { memberProfileUserAccountSchema } from '@/validations/member/member-profile-schema'
 
 import {
@@ -29,11 +34,6 @@ import {
     IMemberProfile,
     IMemberProfileUserAccountRequest,
 } from '@/types'
-import {
-    useCreateMemberProfileUserAccount,
-    useUpdateMemberProfileUserAccount,
-} from '@/hooks/api-hooks/member/use-member-profile-settings'
-import { Separator } from '@/components/ui/separator'
 
 type TForm = z.infer<typeof memberProfileUserAccountSchema>
 
