@@ -52,7 +52,7 @@ export const useGenders = ({
     showMessage = true,
 }: IAPIHook<IMemberGender[], string> & IQueryProps = {}) => {
     return useQuery<IMemberGender[], string>({
-        queryKey: ['gender', 'resource-query', 'all'],
+        queryKey: ['gender', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 GenderService.getAllMemberGenders()

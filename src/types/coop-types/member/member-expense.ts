@@ -6,7 +6,6 @@ import { IMemberProfile } from './member-profile'
 export interface IMemberExpenseRequest {
     id?: TEntityId
     name: string
-    date: string
     amount: number
     description: string
 }

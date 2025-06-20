@@ -210,10 +210,10 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // occupationId?: TEntityId
 
     // memberEducationalAttainmentId?: TEntityId
-    member_educational_attainment?: IMemberEducationalAttainment[]
+    member_educational_attainments?: IMemberEducationalAttainment[]
 
     member_assets?: IMemberAsset[]
-    member_income?: IMemberIncome[]
+    member_incomes?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
     member_addresses?: IMemberAddress[]
     member_recruits?: IMemberRecruits[]
@@ -224,7 +224,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_relative_accounts?: IMemberRelativeAccount[]
     member_government_benefits?: IMemberGovernmentBenefit[]
     // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
-    member_contact_number_references?: IMemberContactReference[]
+    member_contact_references?: IMemberContactReference[]
 }
 
 export interface IMemberProfilePaginated
