@@ -32,7 +32,6 @@ import { IMemberGroup } from './member-group'
 import { IQrScanResult } from '../../qr/index'
 import { IMemberGender } from './member-gender'
 import { IMemberCenter } from './member-center'
-import { IMemberRecruits } from './member-recruits'
 import { IOrganization } from '@/types/lands-types'
 import { IPaginatedResult } from '../paginated-result'
 import { ISignUpRequest, IUserBase } from '../../auth'
@@ -44,6 +43,7 @@ import { IMemberIncome, IMemberIncomeRequest } from './member-income'
 import { IMemberAddress, IMemberAddressRequest } from './member-address'
 import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
 import { IMemberEducationalAttainment } from './member-educational-attainment'
+import { IMemberRecruitedMembers } from './member-recruits'
 
 // For creation of member user account
 export interface IMemberProfileUserAccountRequest
@@ -212,11 +212,12 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // memberEducationalAttainmentId?: TEntityId
     member_educational_attainments?: IMemberEducationalAttainment[]
 
+    recruited_members?: IMemberRecruitedMembers[]
+
     member_assets?: IMemberAsset[]
     member_incomes?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
     member_addresses?: IMemberAddress[]
-    member_recruits?: IMemberRecruits[]
     member_expenses?: IMemberExpense[]
     // memberDescriptions?: IMemberDescription[]
     member_close_remarks?: IMemberCloseRemark[]
