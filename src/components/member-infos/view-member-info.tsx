@@ -9,6 +9,7 @@ import {
     UserTagIcon,
     CreditCardIcon,
     FolderFillIcon,
+    UserPlusIcon,
 } from '../icons'
 import { useSubscribe } from '@/hooks/use-pubsub'
 import MemberMediasInfo from './member-medias-info'
@@ -26,6 +27,7 @@ import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
+import RecruitedMembers from './recruited-members'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
@@ -72,6 +74,12 @@ const memberInfoTabs: {
         title: 'Financial',
         Icon: CreditCardIcon,
         Component: (props) => <MemberFinancialInfo {...props} />,
+    },
+    {
+        value: 'recruited-members',
+        title: 'Recruited Members',
+        Icon: UserPlusIcon,
+        Component: (props) => <RecruitedMembers {...props} />,
     },
     {
         value: 'accounts',

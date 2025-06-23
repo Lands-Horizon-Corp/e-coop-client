@@ -20,6 +20,7 @@ import { useDeleteMemberJointAccount } from '@/hooks/api-hooks/member/use-member
 
 import { IMemberJointAccount, IMemberProfile } from '@/types'
 import { toReadableDate } from '@/utils'
+import RawDescription from '@/components/raw-description'
 
 const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
     const [edit, setEdit] = useState(false)
@@ -105,16 +106,12 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                 </div>
             </div>
             <div className="grid grid-cols-4 space-y-2 text-sm">
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        First Name
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">First Name</p>
                     <p>{joint.first_name}</p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Middle Name
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Middle Name</p>
                     <p>
                         {joint.middle_name || (
                             <span className="italic text-muted-foreground/60">
@@ -123,14 +120,12 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                         )}
                     </p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Last Name
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Last Name</p>
                     <p>{joint.last_name}</p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">Suffix</p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Suffix</p>
                     <p>
                         {joint.suffix || (
                             <span className="italic text-muted-foreground/60">
@@ -139,26 +134,24 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                         )}
                     </p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Birthday
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Birthday</p>
                     <p>
-                        <CalendarIcon className="mr-1 inline size-4 text-muted-foreground/60" />
+                        <CalendarIcon className="mr-1 hidden size-4 text-muted-foreground/60 2xl:inline" />
                         {joint.birthday ? toReadableDate(joint.birthday) : '-'}
                     </p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Relationship
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Relationship</p>
                     <p>{joint.family_relationship}</p>
                 </div>
             </div>
             <div className="col-span-full !mt-4 space-y-2">
                 <p className="text-muted-foreground/70">Description</p>
                 {joint?.description ? (
-                    <p>{joint.description}</p>
+                    <RawDescription
+                        content={joint.description ?? 'no description'}
+                    />
                 ) : (
                     <p className="text-sm italic text-muted-foreground/60">
                         No Description <WoodSignsIcon className="ml-1 inline" />
