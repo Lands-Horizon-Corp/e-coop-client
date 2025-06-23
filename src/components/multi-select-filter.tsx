@@ -60,7 +60,7 @@ const MultiSelectFilter = <TValue,>({
 
                             return (
                                 <CommandItem
-                                    key={`${option.label}-${i}`}
+                                    key={`${option.label}-${i}-${option.value}`}
                                     onSelect={() => {
                                         const updatedValues = new Set(
                                             selectedValues
