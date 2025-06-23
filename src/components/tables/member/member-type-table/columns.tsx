@@ -4,16 +4,14 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import { PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { toReadableDate } from '@/utils'
-
 import { IMemberType } from '@/types'
 import { Badge } from '@/components/ui/badge'
+import { createUpdateColumns } from '../../common-columns'
 
 export const memberTypeGlobalSearchTargets: IGlobalSearchTargets<IMemberType>[] =
     [
@@ -133,53 +131,7 @@ const memberTypeTableColumns = (
             minSize: 300,
             maxSize: 500,
         },
-        {
-            id: 'created_at',
-            accessorKey: 'created_at',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Date Created">
-                    <ColumnActions {...props}>
-                        <DateFilter<IMemberType>
-                            displayText="Date Created"
-                            field="created_at"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { created_at },
-                },
-            }) => <div>{toReadableDate(created_at)}</div>,
-            enableMultiSort: true,
-            enableResizing: true,
-            minSize: 150,
-        },
-        {
-            id: 'updated_at',
-            accessorKey: 'updated_at',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Date Updated">
-                    <ColumnActions {...props}>
-                        <DateFilter<IMemberType>
-                            displayText="Date Updated"
-                            field="updated_at"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { updated_at },
-                },
-            }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: false,
-            size: 180,
-            minSize: 180,
-        },
+        ...createUpdateColumns<IMemberType>(),
     ]
 }
 

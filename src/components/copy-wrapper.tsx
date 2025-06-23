@@ -27,9 +27,9 @@ export const CopyWrapper = forwardRef<
             hidden = false,
             children,
             asChild = false,
-            copyInterval = 500,
-            checkIcon = <CheckIcon className="size-3" />,
-            copyIcon = <CopyIcon className="size-3" />,
+            copyInterval = 1000,
+            checkIcon = <CheckIcon className="size-3 text-primary" />,
+            copyIcon = <CopyIcon className="size-3 text-muted-foreground/70" />,
             iconSide = 'left',
             className,
             onClick,
@@ -113,6 +113,7 @@ export const CopyWrapper = forwardRef<
                     isDisabled && 'cursor-not-allowed opacity-50',
                     className
                 )}
+                data-checked={isCopied}
                 onClick={handleCopy}
                 disabled={isDisabled}
                 {...props}

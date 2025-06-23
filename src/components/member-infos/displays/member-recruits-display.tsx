@@ -9,13 +9,13 @@ import {
 
 import SectionTitle from '../section-title'
 import { UsersAddIcon } from '@/components/icons'
-import { IMemberRecruits } from '@/types'
+import { IMemberRecruitedMembers } from '@/types'
 import ImageDisplay from '@/components/image-display'
 import CopyTextButton from '@/components/copy-text-button'
 import { toReadableDate } from '@/utils'
 
 interface Props {
-    recruits?: IMemberRecruits[]
+    recruits?: IMemberRecruitedMembers[]
 }
 
 const MemberRecruitsDisplay = ({ recruits }: Props) => {

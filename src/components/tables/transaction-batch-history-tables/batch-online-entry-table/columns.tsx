@@ -12,6 +12,7 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import { formatNumber, toReadableDateTime } from '@/utils'
 
 import { IOnlineEntry } from '@/types/coop-types/online-entry'
+import { createUpdateColumns } from '../../common-columns'
 
 export const onlineEntryGlobalSearchTargets: IGlobalSearchTargets<IOnlineEntry>[] =
     [
@@ -249,6 +250,8 @@ const BatchOnlineEntryTableColumns = (
         size: 180,
         minSize: 150,
     },
+
+    ...createUpdateColumns<IOnlineEntry>(),
 ]
 
 export default BatchOnlineEntryTableColumns

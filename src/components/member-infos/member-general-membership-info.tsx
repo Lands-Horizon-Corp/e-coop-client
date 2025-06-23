@@ -277,7 +277,7 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                         relativeAccounts={data?.member_relative_accounts}
                     />
 
-                    <MemberRecruitsDisplay recruits={data?.member_recruits} />
+                    <MemberRecruitsDisplay recruits={data?.recruited_members} />
                 </div>
             </div>
         )

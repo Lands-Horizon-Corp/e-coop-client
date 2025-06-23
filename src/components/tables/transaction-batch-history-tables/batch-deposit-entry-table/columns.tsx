@@ -10,6 +10,7 @@ import NumberFilter from '@/components/data-table/data-table-filters/number-filt
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import { formatNumber, toReadableDateTime } from '@/utils'
 import { IDepositEntry } from '@/types/coop-types/deposit-entry'
+import { createUpdateColumns } from '../../common-columns'
 
 export const depositEntryGlobalSearchTargets: IGlobalSearchTargets<IDepositEntry>[] =
     [
@@ -205,6 +206,7 @@ const BatchDepositEntryTableColumns = (
         size: 180,
         minSize: 150,
     },
+    ...createUpdateColumns<IDepositEntry>(),
 ]
 
 export default BatchDepositEntryTableColumns

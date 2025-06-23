@@ -5,15 +5,15 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { PushPinSlashIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { toReadableDate } from '@/utils'
-import { IBillsAndCoin } from '@/types/coop-types/bills-and-coins'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
+import { createUpdateColumns } from '../common-columns'
+
+import { IBillsAndCoin } from '@/types'
 
 export const billsAndCoinsGlobalSearchTargets: IGlobalSearchTargets<IBillsAndCoin>[] =
     [
@@ -136,47 +136,8 @@ const BillsAndCoinsTableColumns = (
         size: 120,
         minSize: 100,
     },
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
-                <ColumnActions {...props}>
-                    <DateFilter displayText="Date Created" field="created_at" />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { created_at },
-            },
-        }) => <div>{toReadableDate(created_at)}</div>,
-        enableMultiSort: true,
-        enableResizing: true,
-        minSize: 150,
-    },
-    {
-        id: 'updated_at',
-        accessorKey: 'updated_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Updated">
-                <ColumnActions {...props}>
-                    <DateFilter displayText="Date Updated" field="updated_at" />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { updated_at },
-            },
-        }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 180,
-    },
+
+    ...createUpdateColumns<IBillsAndCoin>(),
 ]
 
 export default BillsAndCoinsTableColumns
