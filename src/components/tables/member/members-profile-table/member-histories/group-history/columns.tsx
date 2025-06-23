@@ -1,8 +1,7 @@
 import { ReactNode } from 'react'
-import { format } from 'date-fns'
 import { ColumnDef } from '@tanstack/react-table'
 
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import { createUpdateColumns } from '@/components/tables/common-columns'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
@@ -57,27 +56,8 @@ const memberGroupHistoryColumns = (): ColumnDef<IMemberGroupHistory>[] => [
         enableSorting: true,
         enableResizing: false,
     },
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
-                <ColumnActions {...props}>
-                    <DateFilter displayText="Date Created" field="created_at" />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({ row }) => (
-            <div>
-                {format(
-                    new Date(row.original.created_at),
-                    'MMMM dd, yyyy (EEE) h:mm a'
-                )}
-            </div>
-        ),
-        enableSorting: true,
-        enableResizing: false,
-    },
+
+    ...createUpdateColumns<IMemberGroupHistory>(),
 ]
 
 export default memberGroupHistoryColumns

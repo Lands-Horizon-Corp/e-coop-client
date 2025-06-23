@@ -13,6 +13,7 @@ import NumberFilter from '@/components/data-table/data-table-filters/number-filt
 import { formatNumber, toReadableDate } from '@/utils'
 import { ICashEntry } from '@/types/coop-types/cash-entry'
 import ImageNameDisplay from '@/components/elements/image-name-display'
+import { createUpdateColumns } from '../../common-columns'
 
 export const cashEntryGlobalSearchTargets: IGlobalSearchTargets<ICashEntry>[] =
     [
@@ -228,6 +229,8 @@ const BatchCashEntryTableColumns = (
         size: 180,
         minSize: 150,
     },
+
+    ...createUpdateColumns<ICashEntry>(),
 ]
 
 export default BatchCashEntryTableColumns

@@ -13,6 +13,7 @@ import NumberFilter from '@/components/data-table/data-table-filters/number-filt
 import { formatNumber, toReadableDate } from '@/utils'
 import { ICheckEntry } from '@/types/coop-types/check-entry'
 import ImageNameDisplay from '@/components/elements/image-name-display'
+import { createUpdateColumns } from '../../common-columns'
 
 export const checkEntryGlobalSearchTargets: IGlobalSearchTargets<ICheckEntry>[] =
     [
@@ -254,6 +255,8 @@ const BatchCheckEntryTableColumns = (
         size: 180,
         minSize: 150,
     },
+
+    ...createUpdateColumns<ICheckEntry>(),
 ]
 
 export default BatchCheckEntryTableColumns

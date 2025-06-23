@@ -1,17 +1,17 @@
 import { ReactNode } from 'react'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
+import ImageNameDisplay from '@/components/elements/image-name-display'
+import { createUpdateColumns } from '@/components/tables/common-columns'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
-import { formatNumber, toReadableDate } from '@/utils'
+import { formatNumber } from '@/utils'
 
 import { IBatchFunding } from '@/types'
-import ImageNameDisplay from '@/components/elements/image-name-display'
 
 export const batchFundingGlobalSearchTargets: IGlobalSearchTargets<IBatchFunding>[] =
     [
@@ -112,36 +112,8 @@ const BatchFundingTableColumns = (
         size: 140,
         minSize: 100,
     },
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date & Time">
-                <ColumnActions {...props}>
-                    <DateFilter<IBatchFunding>
-                        displayText="Date Created"
-                        field="created_at"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({ row }) => (
-            <span>
-                {row.original.created_at
-                    ? toReadableDate(
-                          row.original.created_at,
-                          "MMM dd yyyy 'at' hh:mm a"
-                      )
-                    : '-'}
-            </span>
-        ),
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 150,
-    },
+
+    ...createUpdateColumns<IBatchFunding>(),
 ]
 
 export default BatchFundingTableColumns
