@@ -1,4 +1,5 @@
 import z from 'zod'
+import { toast } from 'sonner'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -30,7 +31,6 @@ import {
     IMemberProfile,
     IMemberProfileMembershipInfoRequest,
 } from '@/types'
-import { toast } from 'sonner'
 
 type TMemberProfileMembershipInfoFormValues = z.infer<
     typeof memberProfileMembershipInfoSchema
@@ -73,7 +73,10 @@ const MemberMembershipForm = ({
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        mutate({ memberId: memberProfileId, data: formData })
+        mutate(
+            { memberId: memberProfileId, data: formData },
+            { onSuccess: (data) => form.reset(data) }
+        )
     })
 
     const isDisabled = (field: Path<TMemberProfileMembershipInfoFormValues>) =>
@@ -299,8 +302,7 @@ const MemberMembershipForm = ({
                                                         'Member cannot invite itself'
                                                     )
 
-                                                form.setValue(
-                                                    'recruited_by_member_profile_id',
+                                                field.onChange(
                                                     memberProfile !== undefined
                                                         ? memberProfile.id
                                                         : memberProfile

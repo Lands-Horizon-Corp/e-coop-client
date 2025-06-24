@@ -2,6 +2,8 @@ import z from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Textarea } from '../ui/textarea'
+import ImageField from '../ui/image-field'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -17,14 +19,12 @@ import { useCreateBank, useUpdateBank } from '@/hooks/api-hooks/use-bank'
 
 import {
     IForm,
+    IBank,
+    IMedia,
+    TEntityId,
     IClassProps,
     IBankRequest,
-    IBank,
-    TEntityId,
-    IMedia,
 } from '@/types'
-import ImageField from '../ui/image-field'
-import { Textarea } from '../ui/textarea'
 
 const bankSchema = z.object({
     name: z.string().min(1, 'Bank name is required'),
