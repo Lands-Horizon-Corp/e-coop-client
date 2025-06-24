@@ -6,10 +6,10 @@ import {
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '@/factory/api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as MemberClassificationService from '@/api-service/member-services/member-classification-service'
+import MemberClassificationService from '@/api-service/member-services/member-classification-service'
 
 import {
     IAPIHook,
@@ -26,9 +26,7 @@ export const memberClassificationLoader = (classificationId: TEntityId) =>
         queryKey: ['member-classification', 'loader', classificationId],
         queryFn: async () => {
             const data =
-                await MemberClassificationService.getMemberClassificationById(
-                    classificationId
-                )
+                await MemberClassificationService.getById(classificationId)
             return data
         },
         retry: 0,
@@ -39,7 +37,7 @@ export const useCreateMemberClassification = createMutationHook<
     string,
     IMemberClassificationRequest
 >(
-    (args) => MemberClassificationService.createMemberClassification(args),
+    (args) => MemberClassificationService.create(args),
     'Member Center Created',
     (args) => createMutationInvalidateFn('member-classification', args)
 )
@@ -50,10 +48,7 @@ export const useUpdateMemberClassification = createMutationHook<
     { classificationId: TEntityId; data: IMemberClassificationRequest }
 >(
     ({ classificationId, data }) =>
-        MemberClassificationService.updateMemberClassification(
-            classificationId,
-            data
-        ),
+        MemberClassificationService.updateById(classificationId, data),
     'Member Classification Updated',
     (args) => updateMutationInvalidationFn('member-classification', args)
 )
@@ -64,9 +59,7 @@ export const useDeleteMemberClassification = createMutationHook<
     TEntityId
 >(
     (classificationId) =>
-        MemberClassificationService.deleteMemberClassification(
-            classificationId
-        ),
+        MemberClassificationService.deleteById(classificationId),
     'Member Classifcation Deleted',
     (args) => deleteMutationInvalidationFn('member-classification', args)
 )
@@ -79,7 +72,7 @@ export const useMemberClassifications = ({
         queryKey: ['member-classification', 'resource-query', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberClassificationService.getMemberClassifications()
+                MemberClassificationService.allList()
             )
 
             if (error) {
@@ -113,7 +106,7 @@ export const useFilteredPaginatedMemberClassifications = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberClassificationService.getPaginatedMemberClassifications({
+                MemberClassificationService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

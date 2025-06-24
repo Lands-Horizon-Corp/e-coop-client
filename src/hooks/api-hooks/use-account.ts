@@ -6,7 +6,7 @@ import {
 } from '@/types/coop-types/accounts/account'
 import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
 
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 import { AccountServices } from '@/api-service/accounting-services'
 
 import { toast } from 'sonner'

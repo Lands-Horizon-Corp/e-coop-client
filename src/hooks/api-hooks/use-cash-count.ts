@@ -11,7 +11,7 @@ import {
     ICashCountBatchRequest,
     IQueryProps,
 } from '@/types'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 
 export const useCurrentBatchCashCounts = ({
     enabled,

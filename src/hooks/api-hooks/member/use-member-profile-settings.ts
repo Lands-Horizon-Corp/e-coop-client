@@ -29,7 +29,7 @@ import {
     createMutationHook,
     createMutationInvalidateFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '../../../factory/api-hook-factory'
 
 export const useUpdateMemberProfilePersonalInfo = createMutationHook<
     IMemberProfile,

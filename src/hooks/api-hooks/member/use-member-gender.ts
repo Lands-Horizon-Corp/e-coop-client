@@ -6,10 +6,10 @@ import {
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '@/factory/api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as GenderService from '@/api-service/member-services/member-gender-service'
+import GenderService from '@/api-service/member-services/member-gender-service'
 
 import {
     IAPIHook,
@@ -26,7 +26,7 @@ export const useCreateGender = createMutationHook<
     string,
     IMemberGenderRequest
 >(
-    (data) => GenderService.createMemberGender(data),
+    (data) => GenderService.create(data),
     'Member Gender Created',
     (args) => createMutationInvalidateFn('member-gender', args)
 )
@@ -36,13 +36,13 @@ export const useUpdateGender = createMutationHook<
     string,
     { genderId: TEntityId; data: IMemberGenderRequest }
 >(
-    ({ genderId, data }) => GenderService.updateMemberGender(genderId, data),
+    ({ genderId, data }) => GenderService.updateById(genderId, data),
     'Member Gender Updated',
     (args) => updateMutationInvalidationFn('member-gender', args)
 )
 
 export const useDeleteGender = createMutationHook<void, string, TEntityId>(
-    (genderId) => GenderService.deleteMemberGender(genderId),
+    (genderId) => GenderService.deleteById(genderId),
     'Member Gender Deleted',
     (args) => deleteMutationInvalidationFn('member-gender', args)
 )
@@ -55,7 +55,7 @@ export const useGenders = ({
         queryKey: ['gender', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                GenderService.getAllMemberGenders()
+                GenderService.allList()
             )
 
             if (error) {
@@ -90,7 +90,7 @@ export const useFilteredPaginatedGenders = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                GenderService.getPaginatedMemberGenders({
+                GenderService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

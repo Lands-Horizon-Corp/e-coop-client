@@ -1,5 +1,5 @@
 import { AccountCategoryServices } from '@/api-service/account-category-services'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 
 import { TEntityId } from '@/types'
 import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'

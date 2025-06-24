@@ -17,7 +17,7 @@ import {
 import {
     createMutationHook,
     deleteMutationInvalidationFn,
-} from './api-hook-factory'
+} from '../../factory/api-hook-factory'
 
 export const useEmployees = ({
     enabled,
