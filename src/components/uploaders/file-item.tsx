@@ -7,6 +7,7 @@ import { formatBytes } from '@/helpers'
 import { IMedia } from '@/types'
 import { AspectRatio } from '../ui/aspect-ratio'
 import ImageDisplay from '../image-display'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface FileItemProps {
     file?: File
@@ -34,10 +35,12 @@ const FileItem = ({
                 {media ? (
                     <div className="size-12">
                         <AspectRatio ratio={1 / 1}>
-                            <ImageDisplay
-                                src={media.download_url}
-                                className="size-full rounded-none object-cover"
-                            />
+                            <PreviewMediaWrapper media={media}>
+                                <ImageDisplay
+                                    src={media.download_url}
+                                    className="size-full rounded-none object-cover"
+                                />
+                            </PreviewMediaWrapper>
                         </AspectRatio>
                     </div>
                 ) : file ? (

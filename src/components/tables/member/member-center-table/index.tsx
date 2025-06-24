@@ -152,7 +152,7 @@ const MemberCenterTable = ({
                                 queryKey: ['member-center', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            MemberCenterService.deleteManyMemberCenters(
+                            MemberCenterService.deleteMany(
                                 selectedData.map((data) => data.id)
                             ),
                     }}

@@ -16,6 +16,7 @@ import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedUserOrganization } from '@/hooks/api-hooks/use-user-organization'
 
 import { IUserOrganization, IUserBase, IPickerBaseProps } from '@/types'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props<T = IUserBase> extends IPickerBaseProps<IUserOrganization<T>> {
     userOrgSearchMode?: 'all' | 'none-member-profile'
@@ -109,9 +110,13 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                     renderItem={(userOrg) => (
                         <div className="flex w-full items-center justify-between py-1">
                             <div className="flex items-center gap-x-2">
-                                <ImageDisplay
-                                    src={userOrg.user?.media?.download_url}
-                                />
+                                <PreviewMediaWrapper
+                                    media={userOrg.user?.media}
+                                >
+                                    <ImageDisplay
+                                        src={userOrg.user?.media?.download_url}
+                                    />
+                                </PreviewMediaWrapper>
                                 <span className="text-ellipsis text-foreground/80">
                                     {userOrg.user?.full_name}{' '}
                                     {userOrg.application_status ===
@@ -154,9 +159,11 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
                             <div>
-                                <ImageDisplay
-                                    src={value?.user?.media?.download_url}
-                                />
+                                <PreviewMediaWrapper media={value?.user?.media}>
+                                    <ImageDisplay
+                                        src={value?.user?.media?.download_url}
+                                    />
+                                </PreviewMediaWrapper>
                             </div>
                             {!value ? (
                                 <span className="text-foreground/70">

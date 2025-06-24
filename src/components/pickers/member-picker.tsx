@@ -17,6 +17,7 @@ import { useFilteredPaginatedMemberProfile } from '@/hooks/api-hooks/member/use-
 
 import { IMemberProfile } from '@/types'
 import { useInternalState } from '@/hooks/use-internal-state'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props {
     value?: IMemberProfile
@@ -110,7 +111,12 @@ const MemberPicker = ({
                 renderItem={(member) => (
                     <div className="flex w-full items-center justify-between py-1">
                         <div className="flex items-center gap-x-2">
-                            <ImageDisplay src={member.media?.download_url} />
+                            <PreviewMediaWrapper media={member.media}>
+                                <ImageDisplay
+                                    src={member.media?.download_url}
+                                />
+                            </PreviewMediaWrapper>
+
                             <span className="text-ellipsis text-foreground/80">
                                 {member.full_name}{' '}
                                 {member.status === 'verified' && (
@@ -154,9 +160,11 @@ const MemberPicker = ({
                             {isFetching ? (
                                 <LoadingSpinner />
                             ) : (
-                                <ImageDisplay
-                                    src={value?.media?.download_url}
-                                />
+                                <PreviewMediaWrapper media={value?.media}>
+                                    <ImageDisplay
+                                        src={value?.media?.download_url}
+                                    />
+                                </PreviewMediaWrapper>
                             )}
                         </div>
                         {!value ? (

@@ -24,7 +24,7 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import { useFilteredPaginatedBillsAndCoin } from '@/hooks/api-hooks/use-bills-and-coins'
-import { deleteManyBillsAndCoin } from '@/api-service/bills-and-coins-service'
+import { deleteMany } from '@/api-service/bills-and-coins-service'
 
 import { TableProps } from '@/types'
 import { IBillsAndCoin } from '@/types'
@@ -152,9 +152,7 @@ const BillsAndCoinsTable = ({
                                 queryKey: ['bills-and-coin', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            deleteManyBillsAndCoin(
-                                selectedData.map((data) => data.id)
-                            ),
+                            deleteMany(selectedData.map((data) => data.id)),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     filterLogicProps={{

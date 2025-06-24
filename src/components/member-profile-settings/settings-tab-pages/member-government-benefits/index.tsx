@@ -20,6 +20,7 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberGovernmentBenefit } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberGovernmentBenefit, IMemberProfile } from '@/types'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 const MemberGovernmentBenefitCard = ({
     benefit,
@@ -91,19 +92,23 @@ const MemberGovernmentBenefitCard = ({
             <Separator className="!my-2" />
             <div className="mb-4 flex gap-4">
                 <div className="flex flex-1 flex-col items-center">
-                    <ImageDisplay
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                        src={benefit.front_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={benefit.front_media}>
+                        <ImageDisplay
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={benefit.front_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Front
                     </span>
                 </div>
                 <div className="flex flex-1 flex-col items-center">
-                    <ImageDisplay
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                        src={benefit.back_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={benefit.back_media}>
+                        <ImageDisplay
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={benefit.back_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Back
                     </span>

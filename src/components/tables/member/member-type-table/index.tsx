@@ -21,17 +21,16 @@ import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import {
-    exportAllMemberTypes,
-    deleteManyMemberTypes,
-    exportSelectedMemberTypes,
+    exportAll,
+    deleteMany,
+    exportSelected,
 } from '@/api-service/member-services/member-type/member-type-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import { useFilteredPaginatedMemberTypes } from '@/hooks/api-hooks/member/use-member-type'
 
-import { TableProps } from '@/types'
-import { IMemberType } from '@/types'
+import { TableProps, IMemberType } from '@/types'
 
 export interface MemberTypeTableProps
     extends TableProps<IMemberType>,
@@ -156,9 +155,7 @@ const MemberTypeTable = ({
                                 queryKey: ['member-type', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            deleteManyMemberTypes(
-                                selectedData.map((data) => data.id)
-                            ),
+                            deleteMany(selectedData.map((data) => data.id)),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -166,15 +163,11 @@ const MemberTypeTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll: exportAllMemberTypes,
+                        exportAll: exportAll,
                         exportCurrentPage: (ids) =>
-                            exportSelectedMemberTypes(
-                                ids.map((data) => data.id)
-                            ),
+                            exportSelected(ids.map((data) => data.id)),
                         exportSelected: (ids) =>
-                            exportSelectedMemberTypes(
-                                ids.map((data) => data.id)
-                            ),
+                            exportSelected(ids.map((data) => data.id)),
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,

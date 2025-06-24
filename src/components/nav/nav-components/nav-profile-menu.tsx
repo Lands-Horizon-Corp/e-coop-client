@@ -39,6 +39,7 @@ import { switchOrganization } from '@/api-service/user-organization-services/use
 import { getOrgBranchSafeURLNames } from '@/utils'
 
 import type { IUserOrganization } from '@/types'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 const NavProfileMenu = () => {
     const router = useRouter()
@@ -137,11 +138,13 @@ const NavProfileMenu = () => {
             >
                 <div className="p-4">
                     <div className="flex flex-col items-center space-y-2">
-                        <ImageDisplay
-                            className="size-20 capitalize"
-                            fallback={user.user_name.charAt(0) ?? '-'}
-                            src={user.media?.download_url}
-                        />
+                        <PreviewMediaWrapper media={user.media}>
+                            <ImageDisplay
+                                className="size-20 capitalize"
+                                fallback={user.user_name.charAt(0) ?? '-'}
+                                src={user.media?.download_url}
+                            />
+                        </PreviewMediaWrapper>
                         <p className="text-sm font-medium leading-none">
                             {user.user_name}
                         </p>

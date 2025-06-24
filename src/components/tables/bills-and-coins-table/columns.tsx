@@ -14,6 +14,7 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import { createUpdateColumns } from '../common-columns'
 
 import { IBillsAndCoin } from '@/types'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 export const billsAndCoinsGlobalSearchTargets: IGlobalSearchTargets<IBillsAndCoin>[] =
     [
@@ -82,10 +83,12 @@ const BillsAndCoinsTableColumns = (
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                <ImageDisplay
-                    src={media?.download_url}
-                    className="h-9 w-9 rounded-full border bg-muted object-cover"
-                />
+                <PreviewMediaWrapper media={media}>
+                    <ImageDisplay
+                        src={media?.download_url}
+                        className="h-9 w-9 rounded-full border bg-muted object-cover"
+                    />
+                </PreviewMediaWrapper>
                 <div className="flex min-w-0 flex-col">
                     <span className="truncate font-semibold">
                         {name || '-'}

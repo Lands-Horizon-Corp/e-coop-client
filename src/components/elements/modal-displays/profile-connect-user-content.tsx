@@ -3,6 +3,7 @@ import ImageDisplay from '@/components/image-display'
 import { Card, CardContent } from '@/components/ui/card'
 import { IMemberProfile, IUserOrganization } from '@/types'
 import { UserIcon, ShieldIcon, ArrowDownIcon } from '@/components/icons'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 interface Props {
     memberProfile: IMemberProfile
@@ -15,14 +16,18 @@ const ProfileConnectUserModalDisplay = ({ memberProfile, userOrg }: Props) => {
             <Card className="border-2 border-dashed border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/50">
                 <CardContent className="p-4">
                     <div className="flex items-center gap-3">
-                        <ImageDisplay
-                            src={
-                                memberProfile.media?.download_url ||
-                                '/placeholder.svg'
-                            }
-                            fallback={memberProfile.first_name.charAt(0) ?? '-'}
-                            className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
-                        />
+                        <PreviewMediaWrapper media={memberProfile.media}>
+                            <ImageDisplay
+                                src={
+                                    memberProfile.media?.download_url ||
+                                    '/placeholder.svg'
+                                }
+                                fallback={
+                                    memberProfile.first_name.charAt(0) ?? '-'
+                                }
+                                className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="min-w-0 flex-1">
                             <div className="mb-1 flex items-center gap-2">
                                 <UserIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -57,14 +62,18 @@ const ProfileConnectUserModalDisplay = ({ memberProfile, userOrg }: Props) => {
             <Card className="border-2 border-dashed border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/50">
                 <CardContent className="p-4">
                     <div className="flex items-center gap-3">
-                        <ImageDisplay
-                            src={
-                                userOrg.user.media?.download_url ||
-                                '/placeholder.svg'
-                            }
-                            fallback={userOrg.user.user_name.charAt(0) ?? '-'}
-                            className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
-                        />
+                        <PreviewMediaWrapper media={userOrg.user.media}>
+                            <ImageDisplay
+                                src={
+                                    userOrg.user.media?.download_url ||
+                                    '/placeholder.svg'
+                                }
+                                fallback={
+                                    userOrg.user.user_name.charAt(0) ?? '-'
+                                }
+                                className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="min-w-0 flex-1">
                             <div className="mb-1 flex items-center gap-2">
                                 <ShieldIcon className="h-4 w-4 text-green-600 dark:text-green-400" />

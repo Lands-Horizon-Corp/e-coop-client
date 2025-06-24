@@ -16,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 
 import MemberProfileMiniInfoCard, {
     MemberProfileMiniInfoCardSkeleton,
-} from '../elements/member-profile-settings-banner'
+} from '../elements/member-profile-mini-info-card'
 import MembershipInfo from './settings-tab-pages/membership-info'
 import MemberUserAccount from './settings-tab-pages/member-user-account'
 import MemberFinancial from './settings-tab-pages/member-financial-info'
@@ -87,7 +87,7 @@ const SettingsTabs: {
         Component: (props) => <MemberAccountRelationship {...props} />,
     },
     {
-        value: 'use-account',
+        value: 'user-account',
         title: 'User Account',
         Icon: UserIcon,
         Component: (props) => <MemberUserAccount {...props} />,

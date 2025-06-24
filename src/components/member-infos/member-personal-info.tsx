@@ -12,6 +12,7 @@ import { toReadableDate } from '@/utils'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props extends IBaseProps {
     profileId: TEntityId
@@ -37,19 +38,23 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
 
                 <div className="grid grid-cols-2 gap-x-2">
                     <div className="w-full space-y-2">
-                        <ImageDisplay
-                            className="h-64 w-full rounded-xl"
-                            src={data?.media?.download_url}
-                        />
+                        <PreviewMediaWrapper media={data?.media}>
+                            <ImageDisplay
+                                className="h-64 w-full rounded-xl"
+                                src={data?.media?.download_url}
+                            />
+                        </PreviewMediaWrapper>
                         <p className="text-xs text-muted-foreground/70">
                             Picture
                         </p>
                     </div>
                     <div className="w-full space-y-2">
-                        <ImageDisplay
-                            className="h-64 w-full rounded-xl"
-                            src={data?.signature_media?.download_url}
-                        />
+                        <PreviewMediaWrapper media={data?.signature_media}>
+                            <ImageDisplay
+                                className="h-64 w-full rounded-xl"
+                                src={data?.signature_media?.download_url}
+                            />
+                        </PreviewMediaWrapper>
                         <p className="text-xs text-muted-foreground/70">
                             Signature
                         </p>

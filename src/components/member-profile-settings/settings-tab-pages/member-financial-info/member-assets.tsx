@@ -21,6 +21,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import ImageDisplay from '@/components/image-display'
 import { formatNumber, toReadableDate } from '@/utils'
 import RawDescription from '@/components/raw-description'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
     const [edit, setEdit] = useState(false)
@@ -83,10 +84,12 @@ const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
                 </div>
             </div>
             <Separator className="!my-2" />
-            <ImageDisplay
-                className="mb-4 h-[150px] w-full rounded-lg"
-                src={asset.media?.download_url}
-            />
+            <PreviewMediaWrapper media={asset.media}>
+                <ImageDisplay
+                    className="mb-4 h-[150px] w-full rounded-lg"
+                    src={asset.media?.download_url}
+                />
+            </PreviewMediaWrapper>
             <div className="space-y-2 text-sm">
                 <div>
                     <MoneyIcon className="mr-2 inline size-5 text-muted-foreground/70" />

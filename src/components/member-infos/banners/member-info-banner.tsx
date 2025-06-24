@@ -4,7 +4,7 @@ import { useRouter } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 import { PencilFillIcon, HeartBreakFillIcon } from '@/components/icons'
-import MemberProfileMiniInfoCard from '@/components/elements/member-profile-settings-banner'
+import MemberProfileMiniInfoCard from '@/components/elements/member-profile-mini-info-card'
 import ProfileClosureContent from '@/components/elements/modal-displays/profile-closure-content'
 import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/member-profile-close-form'
 

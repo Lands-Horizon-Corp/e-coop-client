@@ -7,6 +7,7 @@ import { toReadableDate } from '@/utils'
 import { useUser } from '@/hooks/api-hooks/use-user'
 
 import { IUserBase, TEntityId } from '@/types'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 type Props = {
     userId: TEntityId
@@ -19,8 +20,6 @@ const HoveruserInfo = ({ userId, defaultValue }: Props) => {
         initialData: defaultValue,
     })
 
-    console.log(defaultValue)
-
     return (
         <Card className="w-full max-w-sm rounded-2xl bg-popover text-white">
             <CardContent className="p-4">
@@ -29,11 +28,13 @@ const HoveruserInfo = ({ userId, defaultValue }: Props) => {
                 {user !== undefined && (
                     <div className="min-w-56 gap-4">
                         <div className="flex items-center justify-between gap-x-2">
-                            <ImageDisplay
-                                src={user?.media?.download_url}
-                                fallback={user?.user_name.charAt(0) ?? '-'}
-                                className="size-16 border-2 border-gray-700"
-                            />
+                            <PreviewMediaWrapper media={user?.media}>
+                                <ImageDisplay
+                                    src={user?.media?.download_url}
+                                    fallback={user?.user_name.charAt(0) ?? '-'}
+                                    className="size-16 border-2 border-gray-700"
+                                />
+                            </PreviewMediaWrapper>
                             <div>
                                 <div className="flex items-center gap-2">
                                     <h3 className="truncate font-semibold text-white">

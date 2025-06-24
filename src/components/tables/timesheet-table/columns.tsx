@@ -20,6 +20,7 @@ import { useImagePreview } from '@/store/image-preview-store'
 import { getTimeDifference } from '@/components/worktimer/utils'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 export const timesheetGlobalSearchTargets: IGlobalSearchTargets<ITimesheet>[] =
     [
@@ -226,10 +227,12 @@ const TimeInOutPhotos = ({
                     })
                 }}
             >
-                <ImageDisplay
-                    src={mediaIn?.download_url}
-                    className="size-8 rounded-sm"
-                />
+                <PreviewMediaWrapper media={mediaIn}>
+                    <ImageDisplay
+                        src={mediaIn?.download_url}
+                        className="size-8 rounded-sm"
+                    />
+                </PreviewMediaWrapper>
             </button>
             <button
                 onClick={() => {
@@ -240,10 +243,12 @@ const TimeInOutPhotos = ({
                     })
                 }}
             >
-                <ImageDisplay
-                    src={mediaOut?.download_url}
-                    className="size-8 rounded-sm"
-                />
+                <PreviewMediaWrapper media={mediaOut}>
+                    <ImageDisplay
+                        src={mediaOut?.download_url}
+                        className="size-8 rounded-sm"
+                    />
+                </PreviewMediaWrapper>
             </button>
         </div>
     )
