@@ -70,7 +70,9 @@ export const createAPICollectionService = <
                 { skipNull: true }
             )
 
-            const response = await APIService.get<TPaginatedResult>(url)
+            const response = await APIService.get<TPaginatedResult>(
+                `${baseEndpoint}/search`
+            )
             return response.data
         },
     }

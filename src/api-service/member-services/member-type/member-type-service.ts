@@ -9,8 +9,9 @@ import { downloadFileService } from '@/helpers'
 import { TEntityId, IMemberType, IMemberTypeRequest } from '@/types'
 
 const CrudServices = createAPICrudService<IMemberType, IMemberTypeRequest>(
-    `/member-type`
+    '/member-type'
 )
+
 const CollectionServices =
     createAPICollectionService<IMemberType>(`/member-type`)
 
