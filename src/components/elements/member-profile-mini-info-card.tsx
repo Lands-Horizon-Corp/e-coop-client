@@ -1,7 +1,3 @@
-import { Badge } from '../ui/badge'
-import { Skeleton } from '../ui/skeleton'
-import ImageDisplay from '../image-display'
-import { Card, CardContent } from '../ui/card'
 import {
     XIcon,
     UserIcon,
@@ -10,15 +6,20 @@ import {
     ClockIcon,
     IdCardIcon,
 } from '../icons'
+import { Badge } from '../ui/badge'
+import { Skeleton } from '../ui/skeleton'
+import ImageDisplay from '../image-display'
+import { Card, CardContent } from '../ui/card'
+import ImageNameDisplay from './image-name-display'
+import HoveruserInfo from './hover-elements/hover-user-info'
+import { HoverCardContent } from '@radix-ui/react-hover-card'
+import { HoverCard, HoverCardTrigger } from '../ui/hover-card'
+import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
 
 import { cn } from '@/lib'
 
 import { IClassProps, IMemberProfile } from '@/types'
-import { CopyWrapper } from '../copy-wrapper'
-import { HoverCard, HoverCardTrigger } from '../ui/hover-card'
-import { HoverCardContent } from '@radix-ui/react-hover-card'
-import HoveruserInfo from './hover-elements/hover-user-info'
-import ImageNameDisplay from './image-name-display'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile
@@ -82,11 +83,15 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
             <CardContent className="p-4">
                 <div className="flex gap-4">
                     <div className="flex-shrink-0">
-                        <ImageDisplay
-                            src={memberProfile.media?.download_url}
-                            fallback={memberProfile.first_name.charAt(0) ?? '-'}
-                            className="size-20"
-                        />
+                        <PreviewMediaWrapper media={memberProfile.media}>
+                            <ImageDisplay
+                                className="size-20"
+                                src={memberProfile.media?.download_url}
+                                fallback={
+                                    memberProfile.first_name.charAt(0) ?? '-'
+                                }
+                            />
+                        </PreviewMediaWrapper>
                     </div>
                     <div className="min-w-0 flex-1">
                         <div className="mb-4 flex items-center justify-between">
