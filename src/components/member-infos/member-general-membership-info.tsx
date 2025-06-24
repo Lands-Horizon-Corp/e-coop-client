@@ -23,6 +23,7 @@ import { toDateTimeFormatFile } from '@/utils'
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props extends IBaseProps {
     profileId: TEntityId
@@ -86,14 +87,20 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                         </p>
                     </div>
                     <div className="flex max-w-full items-end gap-x-2">
-                        <ImageDisplay
-                            src={
+                        <PreviewMediaWrapper
+                            media={
                                 data?.member_verified_by_employee_user?.media
-                                    ?.download_url
                             }
-                            className="size-16 rounded-xl"
-                            fallbackClassName="rounded-xl"
-                        />
+                        >
+                            <ImageDisplay
+                                src={
+                                    data?.member_verified_by_employee_user
+                                        ?.media?.download_url
+                                }
+                                className="size-16 rounded-xl"
+                                fallbackClassName="rounded-xl"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="flex-1 space-y-2">
                             {data?.member_verified_by_employee_user ? (
                                 <>

@@ -1,5 +1,6 @@
 import ImageDisplay from '@/components/image-display'
-import { CopyWrapper } from '@/components/copy-wrapper'
+import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IUserBase } from '@/types'
 
@@ -10,11 +11,13 @@ type Props = {
 const UserAccountCardMini = ({ user }: Props) => {
     return (
         <div className="flex max-w-md items-center gap-x-4 rounded-2xl border-2 bg-background p-1">
-            <ImageDisplay
-                src={user.media?.download_url}
-                fallback={user.user_name?.charAt(0) ?? '-'}
-                className="size-20 rounded-xl"
-            />
+            <PreviewMediaWrapper media={user.media}>
+                <ImageDisplay
+                    src={user.media?.download_url}
+                    fallback={user.user_name?.charAt(0) ?? '-'}
+                    className="size-20 rounded-xl"
+                />
+            </PreviewMediaWrapper>
             <div className="flex-1 space-y-1 pr-4">
                 <p className="inline-flex w-full items-center justify-between font-medium">
                     <span>{user.full_name}</span>

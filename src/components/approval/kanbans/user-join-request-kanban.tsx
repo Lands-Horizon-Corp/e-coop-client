@@ -26,6 +26,7 @@ import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IClassProps, IUserOrganization } from '@/types'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 interface Props extends IClassProps {}
 
@@ -107,10 +108,12 @@ const JoinRequestCard = ({ userOrg }: { userOrg: IUserOrganization }) => {
     return (
         <div className="relative space-y-2 rounded-xl bg-popover p-4 text-sm">
             <div className="flex items-center gap-x-2">
-                <ImageDisplay
-                    className="size-8"
-                    src={userOrg?.user?.media?.download_url}
-                />
+                <PreviewMediaWrapper media={userOrg?.user?.media}>
+                    <ImageDisplay
+                        className="size-8"
+                        src={userOrg?.user?.media?.download_url}
+                    />
+                </PreviewMediaWrapper>
                 <div className="w-full">
                     <div className="flex justify-between gap-x-2">
                         <p className="truncate">

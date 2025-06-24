@@ -1,14 +1,14 @@
 import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { toBase64, withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '@/factory/api-hook-factory'
+import { toBase64, withCatchAsync } from '@/utils'
+import { serverRequestErrExtractor } from '@/helpers'
 import * as MemberProfileService from '@/api-service/member-services/member-profile-service'
 
 import {

@@ -1,14 +1,10 @@
-import { IBillsAndCoin, IBillsAndCoinRequest } from '@/types'
 import {
     createAPICrudService,
     createAPICollectionService,
 } from '../factory/api-factory-service'
 
-const CrudServices = createAPICrudService<IBillsAndCoin, IBillsAndCoinRequest>(
-    `bills-and-coins`
-)
-const CollectionServices =
-    createAPICollectionService<IBillsAndCoin>(`bills-and-coins`)
+const CrudServices = createAPICrudService('/loan-status')
+const CollectionServices = createAPICollectionService('/loan-status')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

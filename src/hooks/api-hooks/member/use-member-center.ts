@@ -6,10 +6,10 @@ import {
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '@/factory/api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as MemberCenterService from '@/api-service/member-services/member-center-service'
+import MemberCenterService from '@/api-service/member-services/member-center-service'
 
 import {
     IAPIHook,
@@ -25,8 +25,7 @@ export const memberCenterLoader = (memberCenterId: TEntityId) =>
     queryOptions<IMemberCenter>({
         queryKey: ['member-center', 'loader', memberCenterId],
         queryFn: async () => {
-            const data =
-                await MemberCenterService.getMemberCenterById(memberCenterId)
+            const data = await MemberCenterService.getById(memberCenterId)
             return data
         },
         retry: 0,
@@ -37,7 +36,7 @@ export const useCreateMemberCenter = createMutationHook<
     string,
     IMemberCenterRequest
 >(
-    (data) => MemberCenterService.createMemberCenter(data),
+    (data) => MemberCenterService.create(data),
     'New member center created',
     (args) => createMutationInvalidateFn('member-center', args)
 )
@@ -48,7 +47,7 @@ export const useUpdateMemberCenter = createMutationHook<
     { memberCenterId: TEntityId; data: IMemberCenterRequest }
 >(
     ({ memberCenterId, data }) =>
-        MemberCenterService.updateMemberCenter(memberCenterId, data),
+        MemberCenterService.updateById(memberCenterId, data),
     'Member center updated',
     (args) => updateMutationInvalidationFn('member-center', args)
 )
@@ -58,7 +57,7 @@ export const useDeleteMemberCenter = createMutationHook<
     string,
     TEntityId
 >(
-    (memberCenterId) => MemberCenterService.deleteMemberCenter(memberCenterId),
+    (memberCenterId) => MemberCenterService.deleteById(memberCenterId),
     'Member center deleted',
     (args) => deleteMutationInvalidationFn('member-center', args)
 )
@@ -81,7 +80,7 @@ export const useFilteredPaginatedMemberCenters = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberCenterService.getPaginatedMemberCenters({
+                MemberCenterService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
@@ -116,7 +115,7 @@ export const useMemberCenter = ({
         queryKey: ['member-center', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberCenterService.getAllMemberCenters()
+                MemberCenterService.allList()
             )
 
             if (error) {
@@ -151,7 +150,7 @@ export const useFilteredPaginatedMemberCenter = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberCenterService.getPaginatedMemberCenters({
+                MemberCenterService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

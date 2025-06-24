@@ -152,7 +152,7 @@ const MemberClassificationTable = ({
                                 ],
                             }),
                         onDelete: (selectedData) =>
-                            MemberClassificationService.deleteManyMemberClassifications(
+                            MemberClassificationService.deleteMany(
                                 selectedData.map((data) => data.id)
                             ),
                     }}

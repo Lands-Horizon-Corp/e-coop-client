@@ -6,10 +6,10 @@ import {
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '@/factory/api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as MemberOccupationService from '@/api-service/member-services/member-occupation-service'
+import MemberOccupationService from '@/api-service/member-services/member-occupation-service'
 
 import {
     IAPIHook,
@@ -26,7 +26,7 @@ export const useCreateMemberOccupation = createMutationHook<
     string,
     IMemberOccupationRequest
 >(
-    (data) => MemberOccupationService.createMemberOccupation(data),
+    (data) => MemberOccupationService.create(data),
     'Member Occupation Created',
     (args) => createMutationInvalidateFn('member-occupation', args)
 )
@@ -37,7 +37,7 @@ export const useUpdateMemberOccupation = createMutationHook<
     { occupationId: TEntityId; data: IMemberOccupationRequest }
 >(
     ({ occupationId, data }) =>
-        MemberOccupationService.updateMemberOccupation(occupationId, data),
+        MemberOccupationService.updateById(occupationId, data),
     'Member Occupation Updated',
     (args) => updateMutationInvalidationFn('member-occupation', args)
 )
@@ -47,8 +47,7 @@ export const useDeleteMemberOccupation = createMutationHook<
     string,
     TEntityId
 >(
-    (occupationId) =>
-        MemberOccupationService.removeMemberOccupation(occupationId),
+    (occupationId) => MemberOccupationService.deleteById(occupationId),
     'Member Occupation Deleted',
     (args) => deleteMutationInvalidationFn('member-occupation', args)
 )
@@ -61,7 +60,7 @@ export const useMemberOccupations = ({
         queryKey: ['member-occupation', 'resource-query', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberOccupationService.getAllMemberOccupation()
+                MemberOccupationService.allList()
             )
 
             if (error) {
@@ -95,7 +94,7 @@ export const useFilteredPaginatedMemberOccupations = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberOccupationService.getPaginatedMemberOccupation({
+                MemberOccupationService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

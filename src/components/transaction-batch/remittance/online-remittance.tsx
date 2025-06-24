@@ -21,6 +21,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IOnlineRemitance, TEntityId } from '@/types'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 type Props = {
     transactionBatchId: TEntityId
@@ -158,10 +159,12 @@ const RemittanceListRow = ({
             />
             <TableCell>
                 <div className="flex min-w-0 items-center gap-3">
-                    <ImageDisplay
-                        src={onlineRemittance.bank?.media?.download_url}
-                        className="h-9 w-9 rounded-full border bg-muted object-cover"
-                    />
+                    <PreviewMediaWrapper media={onlineRemittance.bank?.media}>
+                        <ImageDisplay
+                            src={onlineRemittance.bank?.media?.download_url}
+                            className="h-9 w-9 rounded-full border bg-muted object-cover"
+                        />
+                    </PreviewMediaWrapper>
                     <div className="flex min-w-0 flex-col">Bank</div>
                 </div>
             </TableCell>

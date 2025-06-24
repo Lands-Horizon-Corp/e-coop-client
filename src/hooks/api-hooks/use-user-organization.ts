@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { groupBy, toBase64, withCatchAsync } from '@/utils'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 import { BranchService } from '@/api-service/branch-services'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
 import { UserOrganization } from '@/api-service/user-organization-services'

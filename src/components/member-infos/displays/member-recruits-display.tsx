@@ -13,6 +13,7 @@ import { IMemberRecruitedMembers } from '@/types'
 import ImageDisplay from '@/components/image-display'
 import CopyTextButton from '@/components/copy-text-button'
 import { toReadableDate } from '@/utils'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 interface Props {
     recruits?: IMemberRecruitedMembers[]
@@ -38,13 +39,17 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
                     className="space-y-2 rounded-xl bg-secondary/20 p-4"
                 >
                     <div className="flex items-center gap-x-4">
-                        <ImageDisplay
-                            src={
-                                recruit.membersProfileRecruited?.media
-                                    ?.download_url
-                            }
-                            className="size-16 rounded-xl"
-                        />
+                        <PreviewMediaWrapper
+                            media={recruit.membersProfileRecruited?.media}
+                        >
+                            <ImageDisplay
+                                src={
+                                    recruit.membersProfileRecruited?.media
+                                        ?.download_url
+                                }
+                                className="size-16 rounded-xl"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="grid flex-1 gap-2 md:grid-cols-5">
                             <div className="space-y-2">
                                 <p>
@@ -96,7 +101,11 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
                             </div>
 
                             <div className="space-y-2">
-                                <p>{toReadableDate(recruit.dateRecruited)}</p>
+                                <p>
+                                    {recruit.dateRecruited
+                                        ? toReadableDate(recruit.dateRecruited)
+                                        : '-'}
+                                </p>
                                 <p className="text-xs text-muted-foreground/70">
                                     Date Recruited
                                 </p>

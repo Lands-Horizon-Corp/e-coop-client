@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 import * as CheckRemittanceService from '@/api-service/check-remittance-service'
 
 import {

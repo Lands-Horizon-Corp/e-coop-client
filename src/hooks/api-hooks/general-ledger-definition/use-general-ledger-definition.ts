@@ -2,7 +2,7 @@ import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
 } from '@/types/coop-types/general-ledger-definitions'
-import { createMutationHook } from '../api-hook-factory'
+import { createMutationHook } from '../../../factory/api-hook-factory'
 import { GeneralLedgerDefinitionServices } from '@/api-service/general-ledger-definition-services'
 
 import { TEntityId } from '@/types'

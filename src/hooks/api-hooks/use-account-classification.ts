@@ -5,7 +5,7 @@ import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
 
 import { withCatchAsync, toBase64 } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 import { AccountClassificationServices } from '@/api-service/account-classification-services'
 
 import {

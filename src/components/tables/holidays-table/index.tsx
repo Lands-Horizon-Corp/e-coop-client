@@ -20,11 +20,7 @@ import HolidayTableColumns, {
 import { cn } from '@/lib'
 import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import {
-    // exportAll,
-    deleteManyHolidays,
-    // exportSelected,
-} from '@/api-service/holiday-service'
+import { deleteMany } from '@/api-service/holiday-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
@@ -156,9 +152,7 @@ const HolidaysTable = ({
                                 queryKey: ['holiday', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            deleteManyHolidays(
-                                selectedData.map((data) => data.id)
-                            ),
+                            deleteMany(selectedData.map((data) => data.id)),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{

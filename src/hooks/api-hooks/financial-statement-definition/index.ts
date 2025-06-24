@@ -2,7 +2,7 @@ import {
     IFinancialStatementDefinition,
     IFinancialStatementDefinitionRequest,
 } from '@/types/coop-types/financial-statement-definition'
-import { createMutationHook } from '../api-hook-factory'
+import { createMutationHook } from '../../../factory/api-hook-factory'
 import { TEntityId } from '@/types'
 import { FinancialStatementDefinitionServices } from '@/api-service/financial-statement-services'
 

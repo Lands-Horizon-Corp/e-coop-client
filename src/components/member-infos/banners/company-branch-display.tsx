@@ -5,6 +5,7 @@ import { IClassProps } from '@/types'
 import { IBranch, IOrganization } from '@/types'
 import { MapMarkedIcon, OpenExternalLinkIcon } from '@/components/icons'
 import OpenExternalMap from '@/components/map/open-external-map'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 interface Props extends IClassProps {
     branch?: IBranch
@@ -19,11 +20,13 @@ const OrganizationBranchDisplay = ({
     return (
         <div className={cn('flex gap-x-2', className)}>
             <div className="flex min-w-64 items-end gap-x-2">
-                <ImageDisplay
-                    src={organization?.media?.download_url}
-                    className="size-16 rounded-xl"
-                    fallbackClassName="rounded-xl size-16"
-                />
+                <PreviewMediaWrapper media={branch?.media}>
+                    <ImageDisplay
+                        src={organization?.media?.download_url}
+                        className="size-16 rounded-xl"
+                        fallbackClassName="rounded-xl size-16"
+                    />
+                </PreviewMediaWrapper>
                 <div className="space-y-1">
                     <p>{organization?.name ?? '-'}</p>
                     <p className="text-xs text-muted-foreground/70">
@@ -32,11 +35,13 @@ const OrganizationBranchDisplay = ({
                 </div>
             </div>
             <div className="flex min-w-64 items-end gap-x-2">
-                <ImageDisplay
-                    src={branch?.media?.download_url}
-                    className="size-16 rounded-xl"
-                    fallbackClassName="rounded-xl size-16"
-                />
+                <PreviewMediaWrapper media={branch?.media}>
+                    <ImageDisplay
+                        src={branch?.media?.download_url}
+                        className="size-16 rounded-xl"
+                        fallbackClassName="rounded-xl size-16"
+                    />
+                </PreviewMediaWrapper>
                 <div className="space-y-1">
                     <p>{branch?.name ?? '-'}</p>
                     <p className="text-xs text-muted-foreground/70">Branch</p>

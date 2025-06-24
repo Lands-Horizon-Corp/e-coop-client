@@ -152,7 +152,7 @@ const MemberOccupationTable = ({
                                 ],
                             }),
                         onDelete: (selectedData) =>
-                            MemberOccupationService.deleteManyMemberOccupation(
+                            MemberOccupationService.deleteMany(
                                 selectedData.map((item) => item.id)
                             ),
                     }}
@@ -162,14 +162,13 @@ const MemberOccupationTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll:
-                            MemberOccupationService.exportAllMemberOccupation,
+                        exportAll: MemberOccupationService.exportAll,
                         exportCurrentPage: (ids) =>
-                            MemberOccupationService.exportSelectedMemberOccupation(
+                            MemberOccupationService.exportSelected(
                                 ids.map((item) => item.id)
                             ),
                         exportSelected: (ids) =>
-                            MemberOccupationService.exportSelectedMemberOccupation(
+                            MemberOccupationService.exportSelected(
                                 ids.map((item) => item.id)
                             ),
                     }}

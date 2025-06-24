@@ -19,6 +19,7 @@ import EmptyListIndicator from '../empty-list-indicator'
 import { IMemberIncome, IMemberProfile } from '@/types'
 import { formatNumber, toReadableDate } from '@/utils'
 import ImageDisplay from '@/components/image-display'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 const MemberIncomeCard = ({ income }: { income: IMemberIncome }) => {
     const [edit, setEdit] = useState(false)
@@ -80,10 +81,12 @@ const MemberIncomeCard = ({ income }: { income: IMemberIncome }) => {
                 </div>
             </div>
             <Separator className="!my-2" />
-            <ImageDisplay
-                className="mb-4 h-[150px] w-full rounded-lg"
-                src={income.media?.download_url}
-            />
+            <PreviewMediaWrapper media={income.media}>
+                <ImageDisplay
+                    className="mb-4 h-[150px] w-full rounded-lg"
+                    src={income.media?.download_url}
+                />
+            </PreviewMediaWrapper>
             <div className="space-y-2 text-sm">
                 <div>
                     <MoneyIcon className="mr-2 inline size-5 text-muted-foreground/70" />

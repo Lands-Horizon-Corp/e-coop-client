@@ -21,6 +21,7 @@ import { useDeleteMemberJointAccount } from '@/hooks/api-hooks/member/use-member
 import { IMemberJointAccount, IMemberProfile } from '@/types'
 import { toReadableDate } from '@/utils'
 import RawDescription from '@/components/raw-description'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
     const [edit, setEdit] = useState(false)
@@ -87,19 +88,23 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
             <Separator className="!my-2" />
             <div className="mb-4 grid grid-cols-4 gap-4">
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
-                    <ImageDisplay
-                        src={joint.picture_media?.download_url}
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                    />
+                    <PreviewMediaWrapper media={joint.picture_media}>
+                        <ImageDisplay
+                            src={joint.picture_media?.download_url}
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Picture
                     </span>
                 </div>
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
-                    <ImageDisplay
-                        src={joint.signature_media?.download_url}
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                    />
+                    <PreviewMediaWrapper media={joint.signature_media}>
+                        <ImageDisplay
+                            src={joint.signature_media?.download_url}
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Signature
                     </span>

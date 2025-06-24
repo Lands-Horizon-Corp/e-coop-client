@@ -13,6 +13,7 @@ import CopyTextButton from '@/components/copy-text-button'
 import SectionTitle from '../section-title'
 import { FamilyIcon } from '@/components/icons'
 import { toReadableDate } from '@/utils'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 interface Props {
     relativeAccounts?: IMemberRelativeAccount[]
@@ -37,13 +38,17 @@ const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {
                     className="space-y-2 rounded-xl bg-secondary/20 p-4"
                 >
                     <div className="flex items-center gap-x-4">
-                        <ImageDisplay
-                            src={
-                                relativeAcc.relative_member_profile?.media
-                                    ?.download_url
-                            }
-                            className="size-16 rounded-xl"
-                        />
+                        <PreviewMediaWrapper
+                            media={relativeAcc.relative_member_profile?.media}
+                        >
+                            <ImageDisplay
+                                src={
+                                    relativeAcc.relative_member_profile?.media
+                                        ?.download_url
+                                }
+                                className="size-16 rounded-xl"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="grid flex-1 gap-2 md:grid-cols-5">
                             <div className="space-y-2">
                                 <p>

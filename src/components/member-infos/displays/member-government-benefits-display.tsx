@@ -12,6 +12,7 @@ import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberGovernmentBenefit } from '@/types'
 import { toReadableDate } from '@/utils'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 interface IGovernmentCardDisplay
     extends IClassProps,
         IMemberGovernmentBenefit {}
@@ -35,19 +36,23 @@ export const GovernmentCardDisplay = ({
         >
             <div className="relative flex gap-x-2 rounded-xl">
                 <div className="space-y-4">
-                    <ImageDisplay
-                        className="h-36 w-64 rounded-lg"
-                        src={front_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={front_media}>
+                        <ImageDisplay
+                            className="h-36 w-64 rounded-lg"
+                            src={front_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <p className="text-xs text-muted-foreground/70">
                         ID Front Photo
                     </p>
                 </div>
                 <div className="space-y-2">
-                    <ImageDisplay
-                        className="h-36 w-64 rounded-lg"
-                        src={back_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={back_media}>
+                        <ImageDisplay
+                            className="h-36 w-64 rounded-lg"
+                            src={back_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <p className="text-xs text-muted-foreground/70">
                         ID Back Photo
                     </p>

@@ -9,6 +9,7 @@ import { toReadableDateTime } from '@/utils'
 import { IClassProps, ITransactionBatch } from '@/types'
 import { useModalState } from '@/hooks/use-modal-state'
 import CopyTextButton from '../copy-text-button'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props extends IClassProps {
     transBatch: ITransactionBatch
@@ -61,10 +62,14 @@ const TransBatchTitleUserDisplay = ({ transBatch, className }: Props) => {
             </p>
             <div className="flex items-center justify-between gap-x-2">
                 <div className="flex items-center gap-x-2">
-                    <ImageDisplay
-                        className="size-8"
-                        src={transBatch?.employee_user?.media?.download_url}
-                    />
+                    <PreviewMediaWrapper
+                        media={transBatch?.employee_user?.media}
+                    >
+                        <ImageDisplay
+                            className="size-8"
+                            src={transBatch?.employee_user?.media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <div>
                         <p>{transBatch.employee_user?.full_name}</p>
                         <p className="text-xs text-muted-foreground/70">

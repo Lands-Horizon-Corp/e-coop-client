@@ -17,6 +17,7 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberRelativeAccount } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberProfile, IMemberRelativeAccount } from '@/types'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 const MemberRelativeAccountCard = ({
     relative,
@@ -47,10 +48,12 @@ const MemberRelativeAccountCard = ({
             />
             <div className="flex items-start justify-between">
                 <div className="flex min-w-0 items-center gap-3">
-                    <ImageDisplay
-                        src={relProfile?.media?.download_url}
-                        className="h-9 w-9 rounded-full border bg-muted object-cover"
-                    />
+                    <PreviewMediaWrapper media={relProfile?.media}>
+                        <ImageDisplay
+                            src={relProfile?.media?.download_url}
+                            className="h-9 w-9 rounded-full border bg-muted object-cover"
+                        />
+                    </PreviewMediaWrapper>
                     <div className="flex min-w-0 flex-col">
                         <span className="flex items-center gap-1 truncate font-semibold">
                             {relProfile?.full_name || '-'}

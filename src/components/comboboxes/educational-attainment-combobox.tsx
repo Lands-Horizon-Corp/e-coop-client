@@ -36,17 +36,20 @@ const EducationalAttainmentCombobox = React.forwardRef<
     HTMLButtonElement,
     Props
 >(
-    ({
-        value,
-        className,
-        disabled = false,
-        placeholder = 'Select Educational Attainment...',
-        attainments = Object.values(
-            EDUCATIONAL_ATTAINMENT
-        ) as TEducationalAttainment[],
-        onChange,
-        ...other
-    }: Props) => {
+    (
+        {
+            value,
+            className,
+            disabled = false,
+            placeholder = 'Select Educational Attainment...',
+            attainments = Object.values(
+                EDUCATIONAL_ATTAINMENT
+            ) as TEducationalAttainment[],
+            onChange,
+            ...other
+        }: Props,
+        ref
+    ) => {
         const [open, setOpen] = React.useState(false)
 
         return (
@@ -54,6 +57,7 @@ const EducationalAttainmentCombobox = React.forwardRef<
                 <PopoverTrigger asChild>
                     <Button
                         {...other}
+                        ref={ref}
                         type="button"
                         role="combobox"
                         variant="outline"

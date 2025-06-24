@@ -1,10 +1,13 @@
 import { ReactNode } from 'react'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { PushPinSlashIcon, QrCodeIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { QrCodeDownloadable } from '@/components/qr-code'
 import YesNoBadge from '@/components/badges/yes-no-badge'
+import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
+import { PushPinSlashIcon, QrCodeIcon } from '@/components/icons'
 import CivilStatusBadge from '@/components/badges/civil-status-badge'
 import GeneralStatusBadge from '@/components/badges/general-status-badge'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
@@ -14,14 +17,13 @@ import DataTableMultiSelectFilter from '@/components/data-table/data-table-filte
 // import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 
+import { createUpdateColumns } from '../../common-columns'
+
 import { CIVIL_STATUS, GENERAL_STATUS } from '@/constants'
+import { useInfoModalStore } from '@/store/info-modal-store'
 
 import { IMemberProfile, TCivilStatus, TGeneralStatus } from '@/types'
-import { CopyWrapper } from '@/components/copy-wrapper'
-import { useInfoModalStore } from '@/store/info-modal-store'
-import { QrCodeDownloadable } from '@/components/qr-code'
-import { Button } from '@/components/ui/button'
-import { createUpdateColumns } from '../../common-columns'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberProfile>[] =
     [
@@ -98,10 +100,12 @@ const MemberProfileTableColumns = (
                 },
             }) => (
                 <div className="mx-auto">
-                    <ImageDisplay
-                        src={media?.download_url}
-                        className="mx-auto size-7"
-                    />
+                    <PreviewMediaWrapper media={media}>
+                        <ImageDisplay
+                            src={media?.download_url}
+                            className="mx-auto size-7"
+                        />
+                    </PreviewMediaWrapper>
                 </div>
             ),
             enableSorting: false,

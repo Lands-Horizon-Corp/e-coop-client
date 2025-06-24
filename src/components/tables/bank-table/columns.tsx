@@ -3,6 +3,7 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import { Checkbox } from '@/components/ui/checkbox'
 import ImageDisplay from '@/components/image-display'
 import { PushPinSlashIcon } from '@/components/icons'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
@@ -72,10 +73,12 @@ const BankTableColumns = (opts?: IBankTableColumnProps): ColumnDef<IBank>[] => [
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                <ImageDisplay
-                    src={media?.download_url}
-                    className="h-9 w-9 rounded-full border bg-muted object-cover"
-                />
+                <PreviewMediaWrapper media={media}>
+                    <ImageDisplay
+                        src={media?.download_url}
+                        className="h-9 w-9 rounded-full border bg-muted object-cover"
+                    />
+                </PreviewMediaWrapper>
                 <div className="flex min-w-0 flex-col">
                     <span className="truncate font-semibold">
                         {name || '-'}

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import {
     createMutationHook,
     createMutationInvalidateFn,
-} from './api-hook-factory'
+} from '../../factory/api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import * as TimesheetService from '@/api-service/timesheet-service'

@@ -140,10 +140,7 @@ const TransactionBatchCreateForm = ({
                                                 'provided_by_user'
                                             )}
                                             onSelect={(value) => {
-                                                form.setValue(
-                                                    'provided_by_user_id',
-                                                    value.user_id
-                                                )
+                                                field.onChange(value?.user_id)
                                                 form.setValue(
                                                     'provided_by_user',
                                                     value.user

@@ -6,7 +6,7 @@ import {
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from './api-hook-factory'
+} from '@/factory/api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
 import * as HolidayService from '@/api-service/holiday-service'
@@ -27,7 +27,7 @@ export const useCreateHoliday = createMutationHook<
     string,
     IHolidayRequest
 >(
-    (data) => HolidayService.createHoliday(data),
+    (data) => HolidayService.create(data),
     'Holiday created',
     (args) => createMutationInvalidateFn('holiday', args)
 )
@@ -38,14 +38,14 @@ export const useUpdateHoliday = createMutationHook<
     string,
     { holidayId: TEntityId; data: IHolidayRequest }
 >(
-    ({ holidayId, data }) => HolidayService.updateHoliday(holidayId, data),
+    ({ holidayId, data }) => HolidayService.updateById(holidayId, data),
     'Holiday updated',
     (args) => updateMutationInvalidationFn('holiday', args)
 )
 
 // Delete
 export const useDeleteHoliday = createMutationHook<void, string, TEntityId>(
-    (id) => HolidayService.deleteHoliday(id),
+    (id) => HolidayService.deleteById(id),
     'Holiday deleted',
     (args) => deleteMutationInvalidationFn('holiday', args)
 )
@@ -59,7 +59,7 @@ export const useMemberClassifications = ({
         queryKey: ['holiday', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                HolidayService.getAllHolidays()
+                HolidayService.allList()
             )
 
             if (error) {
@@ -94,7 +94,7 @@ export const useFilteredPaginatedHolidays = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                HolidayService.getPaginatedHolidays({
+                HolidayService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
