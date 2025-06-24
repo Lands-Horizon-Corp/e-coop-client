@@ -3,7 +3,7 @@ import { serverRequestErrExtractor } from '@/helpers'
 import { toBase64, withCatchAsync } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 import {
     IAPIFilteredPaginatedHook,
     IAPIHook,

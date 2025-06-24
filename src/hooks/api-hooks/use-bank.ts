@@ -8,8 +8,8 @@ import {
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from './api-hook-factory'
-import * as BankService from '@/api-service/bank-service'
+} from '../../factory/api-hook-factory'
+import BankService from '@/api-service/bank-service'
 
 import {
     IBank,
@@ -22,7 +22,7 @@ import {
 } from '@/types'
 
 export const useCreateBank = createMutationHook<IBank, string, IBankRequest>(
-    (data) => BankService.createBank(data),
+    (data) => BankService.create(data),
     'Bank created',
     (args) => createMutationInvalidateFn('bank', args)
 )
@@ -32,13 +32,13 @@ export const useUpdateBank = createMutationHook<
     string,
     { bankId: TEntityId; data: IBankRequest }
 >(
-    ({ bankId, data }) => BankService.updateBank(bankId, data),
+    ({ bankId, data }) => BankService.updateById(bankId, data),
     'Bank updated',
     (args) => updateMutationInvalidationFn('bank', args)
 )
 
 export const useDeleteBank = createMutationHook<void, string, TEntityId>(
-    (id) => BankService.deleteBank(id),
+    (id) => BankService.deleteById(id),
     'Bank deleted',
     (args) => deleteMutationInvalidationFn('bank', args)
 )
@@ -50,9 +50,7 @@ export const useBanks = ({
     return useQuery<IBank[], string>({
         queryKey: ['bank', 'all'],
         queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                BankService.getAllBanks()
-            )
+            const [error, result] = await withCatchAsync(BankService.allList())
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -79,7 +77,7 @@ export const useFilteredPaginatedBanks = ({
         queryKey: ['bank', 'resource-query', filterPayload, pagination, sort],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                BankService.getPaginatedBanks({
+                BankService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

@@ -7,7 +7,7 @@ import { TEntityId } from '@/types'
 import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
 
 import { PaymentTypeServices } from '@/api-service/payment-type-services'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 
 import { serverRequestErrExtractor } from '@/helpers'
 import { withCatchAsync, toBase64 } from '@/utils'

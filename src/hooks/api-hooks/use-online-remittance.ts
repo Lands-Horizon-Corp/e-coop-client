@@ -11,7 +11,7 @@ import {
     TEntityId,
 } from '@/types'
 import * as OnlineRemittanceService from '@/api-service/online-remittance-service'
-import { createMutationHook } from './api-hook-factory'
+import { createMutationHook } from '../../factory/api-hook-factory'
 
 export const useCurrentBatchOnlineRemittances = ({
     enabled,

@@ -6,10 +6,10 @@ import {
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '@/factory/api-hook-factory'
 import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
+import MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 
 import {
     IAPIHook,
@@ -25,7 +25,7 @@ export const memberTypeLoader = (memberTypeId: TEntityId) =>
     queryOptions<IMemberType>({
         queryKey: ['member-type', 'loader', memberTypeId],
         queryFn: async () => {
-            const data = await MemberTypeService.getMemberTypeById(memberTypeId)
+            const data = await MemberTypeService.getById(memberTypeId)
             return data
         },
         retry: 0,
@@ -36,7 +36,7 @@ export const useCreateMemberType = createMutationHook<
     string,
     IMemberTypeRequest
 >(
-    (data) => MemberTypeService.createMemberType(data),
+    (data) => MemberTypeService.create(data),
     'New Member Type Created',
     (args) => createMutationInvalidateFn('member-type', args)
 )
@@ -47,13 +47,13 @@ export const useUpdateMemberType = createMutationHook<
     { memberTypeId: TEntityId; data: IMemberTypeRequest }
 >(
     ({ memberTypeId, data }) =>
-        MemberTypeService.updateMemberType(memberTypeId, data),
+        MemberTypeService.updateById(memberTypeId, data),
     'Member Type updated',
     (args) => updateMutationInvalidationFn('member-type', args)
 )
 
 export const useDeleteMemberType = createMutationHook<void, string, TEntityId>(
-    (memberTypeId) => MemberTypeService.deleteMemberType(memberTypeId),
+    (memberTypeId) => MemberTypeService.deleteById(memberTypeId),
     'Member Type deleted',
     (args) => deleteMutationInvalidationFn('member-type', args)
 )
@@ -66,7 +66,7 @@ export const useMemberTypes = ({
         queryKey: ['member-classification', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberTypeService.getAllMemberTypes()
+                MemberTypeService.allList()
             )
 
             if (error) {
@@ -101,7 +101,7 @@ export const useFilteredPaginatedMemberTypes = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberTypeService.getPaginatedMemberTypes({
+                MemberTypeService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
