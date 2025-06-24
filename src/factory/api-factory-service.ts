@@ -59,7 +59,7 @@ export const createAPICollectionService = <
         } = {}) {
             const url = qs.stringifyUrl(
                 {
-                    url: `/${baseEndpoint}/search`,
+                    url: `${baseEndpoint}/search`,
                     query: {
                         sort,
                         filter: filters,
