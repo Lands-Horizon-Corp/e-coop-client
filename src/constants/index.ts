@@ -1,4 +1,5 @@
 export * from './envs'
+export * from './icons'
 export * from './regex'
 export * from './table'
 export * from './quotes'
