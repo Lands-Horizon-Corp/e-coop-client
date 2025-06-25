@@ -50,7 +50,10 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksImport } 
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members';
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type';
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-entry';
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanStatusImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-status';
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-purpose';
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-application';
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanIdImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/$id';
 import { Route as OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeImport } from './routes/org/$orgname/branch.$branchname/(employee)/accounting/computation-type';
 import { Route as OrgOrgnameBranchBranchnameemployeeAccountingAccountsImport } from './routes/org/$orgname/branch.$branchname/(employee)/accounting/accounts';
 import { Route as OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsImport } from './routes/org/$orgname/branch.$branchname/(common)/(timesheets)/timesheets';
@@ -334,10 +337,31 @@ const OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute =
         getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any);
 
+const OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute =
+    OrgOrgnameBranchBranchnameemployeeLoanLoanStatusImport.update({
+        id: '/(employee)/loan/loan-status',
+        path: '/loan/loan-status',
+        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any);
+
+const OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute =
+    OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeImport.update({
+        id: '/(employee)/loan/loan-purpose',
+        path: '/loan/loan-purpose',
+        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any);
+
 const OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute =
     OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationImport.update({
         id: '/(employee)/loan/loan-application',
         path: '/loan/loan-application',
+        getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any);
+
+const OrgOrgnameBranchBranchnameemployeeLoanIdRoute =
+    OrgOrgnameBranchBranchnameemployeeLoanIdImport.update({
+        id: '/(employee)/loan/$id',
+        path: '/loan/$id',
         getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any);
 
@@ -807,11 +831,32 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
+        '/org/$orgname/branch/$branchname/(employee)/loan/$id': {
+            id: '/org/$orgname/branch/$branchname/(employee)/loan/$id';
+            path: '/loan/$id';
+            fullPath: '/org/$orgname/branch/$branchname/loan/$id';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIdImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
+        };
         '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': {
             id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-application';
             path: '/loan/loan-application';
             fullPath: '/org/$orgname/branch/$branchname/loan/loan-application';
             preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
+        };
+        '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose': {
+            id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose';
+            path: '/loan/loan-purpose';
+            fullPath: '/org/$orgname/branch/$branchname/loan/loan-purpose';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeImport;
+            parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
+        };
+        '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': {
+            id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-status';
+            path: '/loan/loan-status';
+            fullPath: '/org/$orgname/branch/$branchname/loan/loan-status';
+            preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusImport;
             parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport;
         };
         '/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry': {
@@ -1128,7 +1173,10 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
     OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute: typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute;
     OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute;
     OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeRoute;
+    OrgOrgnameBranchBranchnameemployeeLoanIdRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIdRoute;
     OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
+    OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute;
+    OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute;
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
@@ -1178,8 +1226,14 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
             OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute,
         OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeRoute:
             OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeRoute,
+        OrgOrgnameBranchBranchnameemployeeLoanIdRoute:
+            OrgOrgnameBranchBranchnameemployeeLoanIdRoute,
         OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute:
             OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute,
+        OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute:
+            OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute,
+        OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute:
+            OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute,
         OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute:
             OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute,
         OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute:
@@ -1293,7 +1347,10 @@ export interface FileRoutesByFullPath {
     '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute;
     '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute;
     '/org/$orgname/branch/$branchname/accounting/computation-type': typeof OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeRoute;
+    '/org/$orgname/branch/$branchname/loan/$id': typeof OrgOrgnameBranchBranchnameemployeeLoanIdRoute;
     '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
+    '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute;
+    '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
@@ -1356,7 +1413,10 @@ export interface FileRoutesByTo {
     '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute;
     '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute;
     '/org/$orgname/branch/$branchname/accounting/computation-type': typeof OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeRoute;
+    '/org/$orgname/branch/$branchname/loan/$id': typeof OrgOrgnameBranchBranchnameemployeeLoanIdRoute;
     '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
+    '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute;
+    '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
@@ -1425,7 +1485,10 @@ export interface FileRoutesById {
     '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute;
     '/org/$orgname/branch/$branchname/(employee)/accounting/accounts': typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute;
     '/org/$orgname/branch/$branchname/(employee)/accounting/computation-type': typeof OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeRoute;
+    '/org/$orgname/branch/$branchname/(employee)/loan/$id': typeof OrgOrgnameBranchBranchnameemployeeLoanIdRoute;
     '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute;
+    '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute;
+    '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute;
     '/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute;
     '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute;
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute;
@@ -1494,7 +1557,10 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/timesheets'
         | '/org/$orgname/branch/$branchname/accounting/accounts'
         | '/org/$orgname/branch/$branchname/accounting/computation-type'
+        | '/org/$orgname/branch/$branchname/loan/$id'
         | '/org/$orgname/branch/$branchname/loan/loan-application'
+        | '/org/$orgname/branch/$branchname/loan/loan-purpose'
+        | '/org/$orgname/branch/$branchname/loan/loan-status'
         | '/org/$orgname/branch/$branchname/transaction/payment-entry'
         | '/org/$orgname/branch/$branchname/transaction/payment-type'
         | '/org/$orgname/branch/$branchname/view-members'
@@ -1556,7 +1622,10 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/timesheets'
         | '/org/$orgname/branch/$branchname/accounting/accounts'
         | '/org/$orgname/branch/$branchname/accounting/computation-type'
+        | '/org/$orgname/branch/$branchname/loan/$id'
         | '/org/$orgname/branch/$branchname/loan/loan-application'
+        | '/org/$orgname/branch/$branchname/loan/loan-purpose'
+        | '/org/$orgname/branch/$branchname/loan/loan-status'
         | '/org/$orgname/branch/$branchname/transaction/payment-entry'
         | '/org/$orgname/branch/$branchname/transaction/payment-type'
         | '/org/$orgname/branch/$branchname/view-members'
@@ -1623,7 +1692,10 @@ export interface FileRouteTypes {
         | '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets'
         | '/org/$orgname/branch/$branchname/(employee)/accounting/accounts'
         | '/org/$orgname/branch/$branchname/(employee)/accounting/computation-type'
+        | '/org/$orgname/branch/$branchname/(employee)/loan/$id'
         | '/org/$orgname/branch/$branchname/(employee)/loan/loan-application'
+        | '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose'
+        | '/org/$orgname/branch/$branchname/(employee)/loan/loan-status'
         | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry'
         | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
         | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
@@ -1834,7 +1906,10 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets",
         "/org/$orgname/branch/$branchname/(employee)/accounting/accounts",
         "/org/$orgname/branch/$branchname/(employee)/accounting/computation-type",
+        "/org/$orgname/branch/$branchname/(employee)/loan/$id",
         "/org/$orgname/branch/$branchname/(employee)/loan/loan-application",
+        "/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose",
+        "/org/$orgname/branch/$branchname/(employee)/loan/loan-status",
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry",
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-type",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members",
@@ -1898,8 +1973,20 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(employee)/accounting/computation-type.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
+    "/org/$orgname/branch/$branchname/(employee)/loan/$id": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/loan/$id.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
     "/org/$orgname/branch/$branchname/(employee)/loan/loan-application": {
       "filePath": "org/$orgname/branch.$branchname/(employee)/loan/loan-application.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/loan/loan-purpose.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(employee)/loan/loan-status": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/loan/loan-status.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry": {
