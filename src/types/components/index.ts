@@ -1,4 +1,5 @@
 export * from './map'
+export * from './icon'
 export * from './form'
 export * from './table'
 export * from './picker'

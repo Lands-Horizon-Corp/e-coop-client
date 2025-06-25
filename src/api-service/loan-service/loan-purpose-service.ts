@@ -2,10 +2,14 @@ import {
     createAPICrudService,
     createAPICollectionService,
 } from '@/factory/api-factory-service'
-import { IHoliday, IHolidayRequest } from '@/types'
 
-const CrudServices = createAPICrudService<IHoliday, IHolidayRequest>('/holiday')
-const CollectionServices = createAPICollectionService<IHoliday>('/holiday')
+import { ILoanPurpose, ILoanPurposeRequest } from '@/types'
+
+const CrudServices = createAPICrudService<ILoanPurpose, ILoanPurposeRequest>(
+    '/loan-status'
+)
+const CollectionServices =
+    createAPICollectionService<ILoanPurpose>('/loan-purpose')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices
