@@ -1,36 +1,40 @@
-import { TUserType } from '@/types'
 import {
-    INavItem,
-    INavGroupItem,
-    INavItemSingle,
-    INavItemDropdown,
-} from '../../ui/app-sidebar/types'
-
-import {
+    PlusIcon,
     BankIcon,
     BillIcon,
+    BookIcon,
+    QrCodeIcon,
+    Users3Icon,
     ShieldIcon,
     UserTagIcon,
     UserCogIcon,
     GendersIcon,
     UserListIcon,
+    UserLockIcon,
+    PriceTagIcon,
     SettingsIcon,
     BriefCaseIcon,
     DashboardIcon,
     FootstepsIcon,
     HandCoinsIcon,
-    MaintenanceIcon,
-    Users3Icon,
-    CalendarDotsIcon,
-    BankDuoToneIcon,
-    UserLockIcon,
-    AccountSetupIcon,
-    CreditCardIcon2,
-    BookIcon,
-    FinanceReportsIcon,
     ChecksGridIcon,
-    QrCodeIcon,
+    MoneyCheckIcon,
+    TargetArrowIcon,
+    MaintenanceIcon,
+    CreditCardIcon2,
+    BankDuoToneIcon,
+    CalendarDotsIcon,
+    AccountSetupIcon,
+    FinanceReportsIcon,
 } from '@/components/icons'
+import {
+    INavItem,
+    INavGroupItem,
+    INavItemSingle,
+    INavItemDropdown,
+} from '@/components/ui/app-sidebar/types'
+
+import { TUserType } from '@/types'
 
 const filterNavItemsByUserType = (
     items: INavItem[],
@@ -263,6 +267,44 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/accounting/computation-type`,
                     userType: ['employee'],
                     shortDescription: 'Configure computation types',
+                },
+            ],
+        },
+        {
+            title: 'Loan',
+            userType: ['employee'],
+            navItems: [
+                {
+                    type: 'item',
+                    icon: PlusIcon,
+                    title: 'Loan Application',
+                    url: `${baseUrl}/loan/loan-application`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Create/Add Loan Application',
+                },
+                {
+                    type: 'item',
+                    icon: MoneyCheckIcon,
+                    title: 'Loans',
+                    url: `${baseUrl}/loan/loans`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage Loans',
+                },
+                {
+                    type: 'item',
+                    icon: PriceTagIcon,
+                    title: 'Loan Status',
+                    url: `${baseUrl}/loan/loan-status`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage Loan Status',
+                },
+                {
+                    type: 'item',
+                    icon: TargetArrowIcon,
+                    title: 'Loan Purpose',
+                    url: `${baseUrl}/loan/loan-purpose`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage Loan Purpose',
                 },
             ],
         },

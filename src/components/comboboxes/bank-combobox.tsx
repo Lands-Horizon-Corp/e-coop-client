@@ -103,7 +103,7 @@ const BankCombobox = ({
                         ) : (
                             <CommandList className="ecoop-scroll">
                                 <CommandEmpty>No Bank found.</CommandEmpty>
-                                {/* Uncomment if you want to support create modal */}
+                                {/* TODO: Once role is set */}
                                 {/* {bankComboboxCreateProps && (
                                     <>
                                         <CommandGroup>
