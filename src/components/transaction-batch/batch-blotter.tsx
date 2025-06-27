@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { EyeNoneIcon } from '@/components/icons'
+import { BatchBlotterSummaryView } from './batch-blotter-summary'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { toReadableDate } from '@/utils'
@@ -11,7 +12,6 @@ import {
     ITransactionBatch,
     ITransactionBatchMinimal,
 } from '@/types'
-import { BatchBlotterSummaryView } from './batch-blotter-summary'
 
 interface Props extends IClassProps {
     transactionBatch: ITransactionBatch

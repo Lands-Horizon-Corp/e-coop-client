@@ -1,5 +1,6 @@
-import * as React from 'react'
+import Fuse from 'fuse.js'
 import { Check } from 'lucide-react'
+import { useState, useMemo, forwardRef } from 'react'
 
 import {
     Command,
@@ -29,7 +30,7 @@ interface Props {
     onChange?: (selected: TIcon | undefined) => void
 }
 
-const IconCombobox = React.forwardRef<HTMLButtonElement, Props>(
+const IconCombobox = forwardRef<HTMLButtonElement, Props>(
     (
         {
             value,
@@ -40,14 +41,33 @@ const IconCombobox = React.forwardRef<HTMLButtonElement, Props>(
         },
         ref
     ) => {
-        const [open, setOpen] = React.useState(false)
+        const [search, setSearch] = useState('')
+        const [open, setOpen] = useState(false)
 
-        const selectedIcon = React.useMemo(() => {
+        const iconEntries = useMemo(
+            () =>
+                Object.entries(IconMap).map(([name, icon]) => ({ name, icon })),
+            []
+        )
+
+        const fuse = useMemo(
+            () =>
+                new Fuse(iconEntries, {
+                    keys: ['name'],
+                    threshold: 0.4,
+                }),
+            [iconEntries]
+        )
+
+        const filteredIcons = useMemo(() => {
+            if (!search) return iconEntries
+            return fuse.search(search).map((result) => result.item)
+        }, [search, fuse, iconEntries])
+
+        const selectedIcon = useMemo(() => {
             if (!value) return undefined
             const foundIcon = IconMap[value]
-
             if (foundIcon === undefined) return undefined
-
             return { name: value, icon: foundIcon }
         }, [value])
 
@@ -76,15 +96,17 @@ const IconCombobox = React.forwardRef<HTMLButtonElement, Props>(
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
-                    <Command>
+                    <Command shouldFilter={false}>
                         <CommandInput
+                            value={search}
+                            onValueChange={setSearch}
                             placeholder={placeholder}
                             className="h-9"
                         />
                         <CommandList className="ecoop-scroll">
-                            <CommandEmpty>No Bank found.</CommandEmpty>
+                            <CommandEmpty>No icon found.</CommandEmpty>
                             <CommandGroup>
-                                {Object.entries(IconMap).map(([name, Icon]) => (
+                                {filteredIcons.map(({ name, icon: Icon }) => (
                                     <CommandItem
                                         key={name}
                                         value={name}

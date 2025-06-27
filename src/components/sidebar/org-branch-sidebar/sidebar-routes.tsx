@@ -26,6 +26,8 @@ import {
     CalendarDotsIcon,
     AccountSetupIcon,
     FinanceReportsIcon,
+    LayersIcon,
+    OnlinePaymentIcon,
 } from '@/components/icons'
 import {
     INavItem,
@@ -141,6 +143,38 @@ export const generateSidebarGroups = (
                 },
             ],
         },
+
+        {
+            title: 'Transaction Batch & Entries',
+            userType: ['employee'],
+            navItems: [
+                {
+                    type: 'item',
+                    icon: LayersIcon,
+                    title: 'Transaction Batch',
+                    url: `${baseUrl}/transaction/transaction-batch`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'View transaction batches',
+                },
+                {
+                    type: 'item',
+                    icon: OnlinePaymentIcon,
+                    title: 'Online Entry',
+                    url: `${baseUrl}/transaction/online-entry`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'View online entries',
+                },
+                {
+                    type: 'item',
+                    icon: MoneyCheckIcon,
+                    title: 'Check Entry',
+                    url: `${baseUrl}/transaction/check-entry`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'View check entries',
+                },
+            ],
+        },
+
         {
             title: 'Members',
             userType: ['employee'],
@@ -239,10 +273,10 @@ export const generateSidebarGroups = (
                     shortDescription: 'Browse all employees',
                 },
                 {
-                    title: 'Roles Management',
+                    title: 'Permission Management',
                     icon: ShieldIcon,
                     type: 'item',
-                    url: `${baseUrl}/employees/roles-management`,
+                    url: `${baseUrl}/employees/permission-management`,
                     userType: ['employee'],
                     shortDescription: 'Manage employee roles and permissions',
                 },

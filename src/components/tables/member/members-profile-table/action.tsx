@@ -1,25 +1,25 @@
 import { FC } from 'react'
 import { useRouter } from '@tanstack/react-router'
 
-import { IMemberProfileTableActionComponentProp } from './columns'
-import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 // import { MemberCreateUpdateFormModal } from '@/components/forms/member-forms/member-create-update-form'
 // import { MemberProfileCreateUpdateFormModal } from '@/components/forms/member-forms/member-application-form/member-profile-create-update-form'
-
-import { MemberHistoriesModal } from '@/components/member-infos/member-histories'
-import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import {
     EyeIcon,
-    HeartBreakFillIcon,
     QrCodeIcon,
     UserClockFillIcon,
+    HeartBreakFillIcon,
 } from '@/components/icons'
-import { useDeleteMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-import { useInfoModalStore } from '@/store/info-modal-store'
 import { QrCodeDownloadable } from '@/components/qr-code'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { IMemberProfileTableActionComponentProp } from './columns'
+import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+import { MemberHistoriesModal } from '@/components/member-infos/member-histories'
+import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
 import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/member-profile-close-form'
+
 import { useModalState } from '@/hooks/use-modal-state'
+import { useInfoModalStore } from '@/store/info-modal-store'
+import { useDeleteMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 interface IMemberProfileTableActionProps
     extends IMemberProfileTableActionComponentProp {
