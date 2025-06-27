@@ -2,12 +2,16 @@ import { IMedia } from './media'
 import { IBranch } from './branch'
 import { IUserBase } from '../auth'
 import { IOrganization } from '../lands-types'
+import { IBatchFundingRequest } from './batch-funding'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 
 export type TBatchBalanceStatus =
     | 'balanced'
     | 'balance overage'
     | 'balance shortage'
+
+export interface ITransactionBatchRequest
+    extends Omit<IBatchFundingRequest, 'transaction_batch_id'> {}
 
 export interface ITransactionBatch
     extends ITimeStamps,

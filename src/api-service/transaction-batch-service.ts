@@ -1,23 +1,27 @@
+import {
+    createAPICrudService,
+    createAPICollectionService,
+} from '@/factory/api-factory-service'
 import APIService from './api-service'
 
 import {
     TEntityId,
     ITransactionBatch,
     ITransactionBatchMinimal,
+    ITransactionBatchRequest,
     TTransactionBatchFullorMin,
     ITransactionBatchEndRequest,
     ITransactionBatchSignatures,
     ITransactionBatchDepositInBankRequest,
 } from '@/types'
 
-import { IBatchFundingRequest } from '@/types/coop-types/batch-funding'
+const CollectionServices =
+    createAPICollectionService<ITransactionBatch>('/transaction-batch')
 
-export const getTransactionBatchById = async (id: TEntityId) => {
-    const response = await APIService.get<ITransactionBatch>(
-        `/transaction-batch/${id}`
-    )
-    return response.data
-}
+const CrudServices = createAPICrudService<
+    ITransactionBatch | ITransactionBatchMinimal,
+    ITransactionBatchRequest
+>('/trnsaction-batch')
 
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
@@ -25,20 +29,6 @@ export const currentTransactionBatch = async () => {
     >('/transaction-batch/current')
     return response.data
 }
-
-export const createTransactionBatch = async (
-    data: Omit<IBatchFundingRequest, 'transaction_batch_id'>
-) => {
-    const response = await APIService.post<
-        Omit<IBatchFundingRequest, 'transaction_batch_id'>,
-        ITransactionBatchMinimal
-    >('/trnsaction-batch', data)
-    return response.data
-}
-
-// Create TransactionBatch -> id
-// TransactionBatch Funding
-
 export const requestTransactionBatchBlotterView = async (id: TEntityId) => {
     const response = await APIService.put<void, ITransactionBatchMinimal>(
         `/transaction-batch/${id}/view-request`
@@ -95,4 +85,21 @@ export const updateEndedBatchApprovals = async (
         ITransactionBatch
     >(`/transaction-batch/${id}/view-accept`, data)
     return response.data
+}
+
+export const { allList, search } = CollectionServices
+export const { create, deleteById, deleteMany, getById, updateById } =
+    CrudServices
+
+export default {
+    endCurrentBatch,
+    setDepositInBank,
+    allowBlotterView,
+    currentTransactionBatch,
+    updateEndedBatchApprovals,
+    getAllEndedBatchViewRequest,
+    getAllTransactionBatchViewRequest,
+    requestTransactionBatchBlotterView,
+    ...CrudServices,
+    ...CollectionServices,
 }

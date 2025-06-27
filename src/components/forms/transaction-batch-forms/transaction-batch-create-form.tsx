@@ -110,9 +110,9 @@ const TransactionBatchCreateForm = ({
                                 />
                             )}
                         />
-                        <div>
+                        <div className="space-y-1">
                             <p>Starting Balance Info</p>
-                            <div className="grid gap-x-4">
+                            <div className="grid gap-x-4 space-y-4">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="amount"

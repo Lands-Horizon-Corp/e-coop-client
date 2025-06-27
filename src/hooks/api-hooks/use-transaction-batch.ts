@@ -3,16 +3,19 @@ import { useQuery } from '@tanstack/react-query'
 
 import { withCatchAsync } from '@/utils'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from '../../factory/api-hook-factory'
-import * as TransactionBatchService from '@/api-service/transaction-batch-service'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+} from '../../factory/api-hook-factory'
+import TransactionBatchService from '@/api-service/transaction-batch-service'
 
 import {
     IAPIHook,
     TEntityId,
     IQueryProps,
     ITransactionBatch,
-    IBatchFundingRequest,
     ITransactionBatchMinimal,
+    ITransactionBatchRequest,
     TTransactionBatchFullorMin,
     ITransactionBatchEndRequest,
     ITransactionBatchSignatures,
@@ -43,16 +46,16 @@ export const useCurrentTransactionBatch = ({
     })
 }
 
-export const useTransactionBatch = ({
+export const useTransactionBatch = <TData = ITransactionBatch>({
     id,
     enabled,
     showMessage = true,
-}: IAPIHook<ITransactionBatch, string> & IQueryProps & { id: TEntityId }) => {
-    return useQuery<ITransactionBatch, string>({
+}: IAPIHook<TData, string> & IQueryProps & { id: TEntityId }) => {
+    return useQuery<TData, string>({
         queryKey: ['transaction-batch', id],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                TransactionBatchService.getTransactionBatchById(id)
+                TransactionBatchService.getById<TData>(id)
             )
 
             if (error) {
@@ -71,8 +74,12 @@ export const useTransactionBatch = ({
 export const useCreateTransactionBatch = createMutationHook<
     ITransactionBatchMinimal,
     string,
-    Omit<IBatchFundingRequest, 'transaction_batch_id'>
->((variables) => TransactionBatchService.createTransactionBatch(variables))
+    ITransactionBatchRequest
+>(
+    (variables) => TransactionBatchService.create(variables),
+    'Transaction batch created.',
+    (args) => createMutationInvalidateFn('transaction-batch', args)
+)
 
 export const useTransactionBatchRequestBlotterView = createMutationHook<
     ITransactionBatchMinimal,
