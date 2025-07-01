@@ -29,6 +29,7 @@ import {
     IClassProps,
     ICashCountBatchRequest,
 } from '@/types'
+import { formatNumber } from '@/utils'
 
 type TFormValues = z.infer<typeof cashCountBatchSchema>
 
@@ -59,7 +60,10 @@ const BatchCashCount = ({
     })
 
     const { mutate, isPending, error, reset } = useUpdateBatchCashCounts({
-        onSuccess,
+        onSuccess: (data) => {
+            form.reset(defaultValues)
+            onSuccess?.(data)
+        },
         onError,
     })
 
@@ -131,7 +135,7 @@ const BatchCashCount = ({
                                                 <TableCell className="h-fit py-1.5">
                                                     <FormFieldWrapper
                                                         control={form.control}
-                                                        name={`cash_counts.${index}.bill_amount`}
+                                                        name={`cash_counts.${index}.name`}
                                                         render={({ field }) => (
                                                             <span>
                                                                 {field.value}
@@ -146,10 +150,53 @@ const BatchCashCount = ({
                                                         render={({ field }) => (
                                                             <Input
                                                                 {...field}
+                                                                onKeyDown={(
+                                                                    e
+                                                                ) => {
+                                                                    if (
+                                                                        e.key ===
+                                                                            '.' ||
+                                                                        e.key ===
+                                                                            'e' ||
+                                                                        e.key ===
+                                                                            '-'
+                                                                    ) {
+                                                                        e.preventDefault()
+                                                                    }
+                                                                }}
+                                                                onChange={(
+                                                                    e
+                                                                ) => {
+                                                                    const val =
+                                                                        form.getValues(
+                                                                            `cash_counts.${index}.bill_amount`
+                                                                        )
+
+                                                                    field.onChange(
+                                                                        e
+                                                                    )
+
+                                                                    form.setValue(
+                                                                        `cash_counts.${index}.amount`,
+                                                                        e.target
+                                                                            .value !==
+                                                                            undefined
+                                                                            ? val *
+                                                                                  Number(
+                                                                                      e
+                                                                                          .target
+                                                                                          .value
+                                                                                  )
+                                                                            : e
+                                                                                  .target
+                                                                                  .value
+                                                                    )
+                                                                }}
                                                                 disabled={
                                                                     other.readOnly
                                                                 }
                                                                 min={0}
+                                                                step={1}
                                                                 type="number"
                                                                 className="h-8 w-24"
                                                                 placeholder="qty"
@@ -159,16 +206,23 @@ const BatchCashCount = ({
                                                 </TableCell>
                                                 <TableCell className="h-fit py-1.5 text-right">
                                                     <span>
-                                                        {Number(
-                                                            watchedCashCounts?.[
-                                                                index
-                                                            ]?.bill_amount || 0
-                                                        ) *
+                                                        {formatNumber(
                                                             Number(
                                                                 watchedCashCounts?.[
                                                                     index
-                                                                ]?.quantity || 0
-                                                            )}
+                                                                ]
+                                                                    ?.bill_amount ||
+                                                                    0
+                                                            ) *
+                                                                Number(
+                                                                    watchedCashCounts?.[
+                                                                        index
+                                                                    ]
+                                                                        ?.quantity ||
+                                                                        0
+                                                                ),
+                                                            2
+                                                        )}
                                                     </span>
                                                 </TableCell>
                                             </TableRow>

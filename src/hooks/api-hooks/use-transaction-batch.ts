@@ -24,8 +24,10 @@ import {
 
 export const useCurrentTransactionBatch = ({
     enabled,
+    onError,
+    onSuccess,
     showMessage = true,
-}: IAPIHook<TTransactionBatchFullorMin, string> & IQueryProps = {}) => {
+}: IAPIHook<TTransactionBatchFullorMin> & IQueryProps = {}) => {
     return useQuery<TTransactionBatchFullorMin, string>({
         queryKey: ['transaction-batch', 'current'],
         queryFn: async () => {
@@ -35,10 +37,12 @@ export const useCurrentTransactionBatch = ({
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
+                onError?.(errorMessage, error)
                 if (showMessage) toast.error(errorMessage)
                 throw errorMessage
             }
 
+            onSuccess?.(result)
             return result
         },
         enabled,

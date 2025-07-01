@@ -8,6 +8,7 @@ import { useBillsAndCoins } from '@/hooks/api-hooks/use-bills-and-coins'
 import { useCurrentBatchCashCounts } from '@/hooks/api-hooks/use-cash-count'
 
 import {
+    ICashCount,
     IClassProps,
     ICashCountRequest,
     ITransactionBatchMinimal,
@@ -16,9 +17,14 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 interface Props extends IClassProps {
     transactionBatch: ITransactionBatchMinimal
+    onCashCountUpdate?: (data: ICashCount[]) => void
 }
 
-const TransactionBatchCashCount = ({ className, transactionBatch }: Props) => {
+const TransactionBatchCashCount = ({
+    className,
+    transactionBatch,
+    onCashCountUpdate,
+}: Props) => {
     const {
         data: billsAndCoins,
         isPending: isLoadingBillsAndCoins,
@@ -50,7 +56,7 @@ const TransactionBatchCashCount = ({ className, transactionBatch }: Props) => {
 
         return billsAndCoins.map((billCoin) => {
             const findCashCountByBill = cashCounts.find(
-                (cashCount) => cashCount.bill_amount === billCoin.value
+                (cashCount) => cashCount.name === billCoin.name
             )
 
             return {
@@ -58,6 +64,7 @@ const TransactionBatchCashCount = ({ className, transactionBatch }: Props) => {
                 bill_amount: billCoin.value,
                 amount: '' as unknown as number,
                 quantity: '' as unknown as number,
+                name: billCoin.name,
                 transaction_batch_id: transactionBatch?.id,
                 employee_user_id: transactionBatch?.employee_user_id,
                 organization_id: transactionBatch?.organization_id,
@@ -111,6 +118,11 @@ const TransactionBatchCashCount = ({ className, transactionBatch }: Props) => {
                 <BatchCashCount
                     resetOnDefaultChange
                     defaultValues={defaultValues}
+                    onSuccess={(data) => {
+                        onCashCountUpdate?.(data)
+                        refetchBillsAndCoins()
+                        refetchCashCounts()
+                    }}
                 />
             </div>
         </div>

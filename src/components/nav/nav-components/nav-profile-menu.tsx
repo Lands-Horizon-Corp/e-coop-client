@@ -23,12 +23,12 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
-import { Separator } from '@/components/ui/separator'
 import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useSignOut } from '@/hooks/api-hooks/use-auth'
 import { useAuthStore } from '@/store/user-auth-store'
@@ -39,7 +39,6 @@ import { switchOrganization } from '@/api-service/user-organization-services/use
 import { getOrgBranchSafeURLNames } from '@/utils'
 
 import type { IUserOrganization } from '@/types'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 const NavProfileMenu = () => {
     const router = useRouter()
@@ -134,9 +133,10 @@ const NavProfileMenu = () => {
             <PopoverContent
                 side="bottom"
                 align="end"
-                className="ecoop-scroll max-h-[80vh] w-[24rem] !max-w-md overflow-auto rounded-xl bg-popover/90 p-0 backdrop-blur-sm"
+                // className="ecoop-scroll max-h-[80vh] w-[24rem] !max-w-md overflow-auto rounded-xl bg-popover/90 p-0 backdrop-blur-sm"
+                className="ecoop-scroll max-h-[80vh] w-[24rem] !max-w-md space-y-2 overflow-auto rounded-2xl border-none bg-transparent p-1 shadow-none"
             >
-                <div className="p-4">
+                <div className="rounded-xl border bg-popover p-4 shadow-md">
                     <div className="flex flex-col items-center space-y-2">
                         <PreviewMediaWrapper media={user.media}>
                             <ImageDisplay
@@ -168,18 +168,19 @@ const NavProfileMenu = () => {
                     </div>
                 </div>
 
-                <Separator />
-
                 {isLoading ? (
-                    <div className="flex items-center justify-center p-4">
+                    <div className="flex items-center justify-center rounded-xl border bg-popover p-4 shadow-md">
                         <LoadingSpinner />
                     </div>
                 ) : userOrganizations && userOrganizations.length > 0 ? (
-                    <div className="my-2">
-                        <div className="px-4 py-1.5 text-sm font-semibold text-muted-foreground">
-                            Organizations
+                    <div className="space-y-2 rounded-xl border bg-popover p-4 shadow-md">
+                        <div className="flex items-center justify-between text-sm font-semibold text-muted-foreground">
+                            <span>Organizations</span>
+                            <span className="text-xs">
+                                ({userOrganizations?.length ?? ''})
+                            </span>
                         </div>
-                        <div className="px-2">
+                        <div>
                             <Accordion
                                 type="single"
                                 collapsible
@@ -346,7 +347,7 @@ const NavProfileMenu = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="px-4 py-4 text-center text-sm text-muted-foreground">
+                    <div className="border p-4 text-center text-sm text-muted-foreground shadow-md">
                         No organizations found{' '}
                         <span
                             onClick={() => refetch()}
@@ -357,9 +358,7 @@ const NavProfileMenu = () => {
                     </div>
                 )}
 
-                <Separator />
-
-                <div className="flex items-center gap-x-2 p-2">
+                <div className="flex items-center gap-x-2 rounded-xl border bg-popover p-1 shadow-md">
                     <Button
                         variant="ghost"
                         className="w-full justify-center"

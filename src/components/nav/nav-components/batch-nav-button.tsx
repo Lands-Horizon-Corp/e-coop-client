@@ -37,16 +37,10 @@ const TransactionBatchNavButton = (_props: Props) => {
     })
 
     useSubscribe<TTransactionBatchFullorMin>(
-        `transaction-batch.${transactionBatch?.id}.update`,
+        `transaction_batch.update.${transactionBatch?.id}`,
         (transactionBatch) => {
-            setData(transactionBatch)
-        }
-    )
-
-    useSubscribe<TTransactionBatchFullorMin>(
-        `transaction-batch.${transactionBatch?.id}.delete`,
-        () => {
             reset()
+            setData(transactionBatch)
         }
     )
 
@@ -70,6 +64,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                             branch_id: user_organization.branch_id,
                             organization_id: user_organization.organization_id,
                         },
+                        onSuccess: setData,
                     }}
                 />
             </>
@@ -93,6 +88,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                 className="h-fit w-fit border-none bg-transparent p-0 shadow-none"
             >
                 <TransactionBatch
+                    onBatchEnded={() => setData(null)}
                     transactionBatch={
                         transactionBatch as TTransactionBatchFullorMin
                     }
