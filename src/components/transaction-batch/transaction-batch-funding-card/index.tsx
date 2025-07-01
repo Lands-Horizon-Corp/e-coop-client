@@ -6,12 +6,18 @@ import { BatchFundingCreateFormModal } from '../../forms/batch-funding-create-fo
 import { cn } from '@/lib'
 
 import { IClassProps, TTransactionBatchFullorMin } from '@/types'
+import { formatNumber } from '@/utils'
 
 interface Props extends IClassProps {
     transactionBatch: TTransactionBatchFullorMin
+    onAdd?: () => void
 }
 
-const BeginningBalanceCard = ({ className, transactionBatch }: Props) => {
+const BeginningBalanceCard = ({
+    className,
+    transactionBatch,
+    onAdd,
+}: Props) => {
     const [addModal, setAddModal] = useState(false)
 
     return (
@@ -28,10 +34,13 @@ const BeginningBalanceCard = ({ className, transactionBatch }: Props) => {
                     transactionBatchId: transactionBatch?.id,
                     onSuccess() {
                         setAddModal(false)
+                        onAdd?.()
                     },
                 }}
             />
-            <p className="text-lg">30000.00</p>
+            <p className="text-lg">
+                {formatNumber(transactionBatch.beginning_balance, 2)}
+            </p>
             <p className="text-sm text-muted-foreground/70">
                 Beginning Balance
             </p>

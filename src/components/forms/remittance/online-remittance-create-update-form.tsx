@@ -33,6 +33,7 @@ import {
     IOnlineRemitanceRequest,
 } from '@/types'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { toInputDateString } from '@/utils'
 
 type TFormValues = z.infer<typeof onlineRemittanceSchema>
 
@@ -65,9 +66,11 @@ const OnlineRemittanceCreateUpdateForm = ({
             reference_number: '',
             account_name: '',
             amount: 1,
-            date_entry: new Date().toISOString().split('T')[0],
             description: '',
             ...defaultValues,
+            date_entry: toInputDateString(
+                defaultValues?.date_entry ?? new Date()
+            ),
         },
     })
 

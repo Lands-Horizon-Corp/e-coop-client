@@ -30,6 +30,7 @@ import {
     ICheckRemittance,
     ICheckRemittanceRequest,
 } from '@/types'
+import { toInputDateString } from '@/utils'
 
 type TFormValues = z.infer<typeof checkRemittanceSchema>
 
@@ -62,9 +63,11 @@ const CheckRemittanceCreateUpdateForm = ({
             reference_number: '',
             account_name: '',
             amount: 1,
-            date_entry: new Date().toISOString().split('T')[0],
             description: '',
             ...defaultValues,
+            date_entry: toInputDateString(
+                defaultValues?.date_entry ?? new Date()
+            ),
         },
     })
 
@@ -228,9 +231,6 @@ const CheckRemittanceCreateUpdateForm = ({
                         )}
                     />
                 </fieldset>
-
-                <FormErrorMessage errorMessage={error} />
-
                 <Separator />
                 <div className="space-y-2">
                     <FormErrorMessage errorMessage={error} />

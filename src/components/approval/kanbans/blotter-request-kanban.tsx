@@ -18,11 +18,21 @@ import { useModalState } from '@/hooks/use-modal-state'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { IClassProps, ITransactionBatch } from '@/types'
+import { useSubscribe } from '@/hooks/use-pubsub'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 interface Props extends IClassProps {}
 
 const BlotterRequestKanban = (_props: Props) => {
-    const { data, isPending } = useTransactionBatchBlotterViewRequests()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+    const { data, isPending, refetch } =
+        useTransactionBatchBlotterViewRequests()
+
+    useSubscribe(`transaction_batch.update.branch.${branch_id}`, refetch)
 
     return (
         <KanbanContainer className="w-[360px]">

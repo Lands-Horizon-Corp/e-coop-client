@@ -12,6 +12,8 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import { formatNumber } from '@/utils'
 
 import { IBatchFunding } from '@/types'
+import ImageDisplay from '@/components/image-display'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 export const batchFundingGlobalSearchTargets: IGlobalSearchTargets<IBatchFunding>[] =
     [
@@ -91,15 +93,28 @@ const BatchFundingTableColumns = (
         ),
         cell: ({
             row: {
-                original: { provided_by_user },
+                original: { provided_by_user, signature_media },
             },
         }) => (
-            <span>
+            <span className="inline-flex gap-x-2">
+                {signature_media && (
+                    <>
+                        <PreviewMediaWrapper media={signature_media}>
+                            <ImageDisplay
+                                className="size-8 rounded-lg"
+                                src={signature_media?.download_url}
+                            />
+                        </PreviewMediaWrapper>
+                    </>
+                )}
                 {provided_by_user ? (
-                    <ImageNameDisplay
-                        name={provided_by_user.full_name}
-                        src={provided_by_user.media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={provided_by_user.media}>
+                        <ImageNameDisplay
+                            imageClassName="size-8 rounded-lg"
+                            name={provided_by_user.full_name}
+                            src={provided_by_user.media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                 ) : (
                     '-'
                 )}
