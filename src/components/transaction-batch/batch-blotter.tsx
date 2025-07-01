@@ -39,8 +39,9 @@ const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
                                         "MM-dd-yyyy 'at' hh:mm a"
                                     )}
                                 </span>
-                                . <br/>Please wait for the authorized person to
-                                approve your request.
+                                . <br />
+                                Please wait for the authorized person to approve
+                                your request.
                             </p>
                         </>
                     ) : (
