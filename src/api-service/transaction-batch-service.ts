@@ -21,7 +21,7 @@ const CollectionServices =
 const CrudServices = createAPICrudService<
     ITransactionBatch | ITransactionBatchMinimal,
     ITransactionBatchRequest
->('/trnsaction-batch')
+>('/transaction-batch')
 
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
