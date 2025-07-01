@@ -17,12 +17,15 @@ import { IClassProps, TEntityId } from '@/types'
 interface Props extends IClassProps {
     transactionBatchId: TEntityId
     depositInBankAmount: number
+
+    onUpdate?: () => void
 }
 
 const DepositInBankCard = ({
     className,
     depositInBankAmount,
     transactionBatchId,
+    onUpdate,
 }: Props) => {
     const [edit, setEdit] = useState(false)
 
@@ -53,7 +56,10 @@ const DepositInBankCard = ({
                         defaultValues={{
                             deposit_in_bank: depositInBankAmount,
                         }}
-                        onSuccess={() => setEdit(false)}
+                        onSuccess={() => {
+                            setEdit(false)
+                            onUpdate?.()
+                        }}
                     />
                 </PopoverContent>
             </Popover>

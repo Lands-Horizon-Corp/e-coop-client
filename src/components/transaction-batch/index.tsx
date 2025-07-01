@@ -102,6 +102,7 @@ const TransactionBatch = ({
                             depositInBankAmount={
                                 transactionBatch?.deposit_in_bank ?? 0
                             }
+                            onUpdate={() => invalidateTransactionBatch()}
                         />
                     </div>
                     <TransactionBatchCashCount
