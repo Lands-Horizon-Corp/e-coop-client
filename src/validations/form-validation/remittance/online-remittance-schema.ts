@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import { entityIdSchema } from '@/validations/common'
+
+import {
+    entityIdSchema,
+    stringDateWithTransformSchema,
+} from '@/validations/common'
 
 export const onlineRemittanceSchema = z.object({
     id: entityIdSchema.optional(),
@@ -20,7 +24,7 @@ export const onlineRemittanceSchema = z.object({
 
     amount: z.coerce.number().min(1, 'Minimum amount is 1'),
 
-    date_entry: z.coerce.string(),
+    date_entry: stringDateWithTransformSchema,
 
     description: z.string().optional(),
 })

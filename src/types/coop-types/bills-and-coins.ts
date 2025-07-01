@@ -33,7 +33,7 @@ export interface IBillsAndCoin extends ITimeStamps {
     media_id?: TEntityId
     media?: IMedia
 
-    name?: string
+    name: string
     value: number
     country_code: string
 }
