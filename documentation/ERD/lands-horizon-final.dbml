@@ -404,7 +404,7 @@ Ref: branch.media_id - media.id [delete:cascade]
 
 // TEMPLATE
 // 🔑
-Table role_template {
+Table permission_template {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
   organization_id varchar(50)
@@ -428,8 +428,8 @@ Table role_template {
 
 }
 
-Ref: role_template.organization_id > organization.id [delete: cascade, update: cascade]
-Ref: role_template.branch_id > branch.id [delete:cascade, update:cascade]
+Ref: permission_template.organization_id > organization.id [delete: cascade, update: cascade]
+Ref: permission_template.branch_id > branch.id [delete:cascade, update:cascade]
 
 // ---- EMPLOYEE RATING FEATURE ---- //
 // 🔑
@@ -1692,13 +1692,13 @@ Ref: financial_statement_accounts_grouping.icon_media_id > media.id [delete:rest
 
 // Financial Statement Definition Types
 // enum financial_statement_definition_types {
-//   standard
-//   group
-//   "group title"
-//   "group total"
-//   "sub group title"
-//   "sub group total"
-//   "header total"
+  // standard
+  // group
+  // "group title"
+  // "group total"
+  // "sub group title"
+  // "sub group total"
+  // "header total"
 // }
 
 enum justify {
@@ -2475,13 +2475,12 @@ Table transaction_batch {
 
   can_view boolean [default: false] // if employee is allowed to view-his/her transaction batch via blotter
   is_closed boolean [default: false] // if teller terminate the blotter
-  request_view timestamp // if it has value, then requested something 
+  request_view timestamp // if it has value, then requested something
 
   // SIGNATURES
 
   employee_by_signature_media_id varchar(50) [ref: - media.id]
   employee_by_name varchar(255)
-  approved_by_position varchar(255)
 
   approved_by_signature_media_id varchar(50) [ref: - media.id]
   approved_by_name varchar(255)
