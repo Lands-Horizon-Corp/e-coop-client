@@ -1,3 +1,4 @@
+import { IGeneralLedgerAccountsGrouping } from '@/types/coop-types/general-ledger-accounts-grouping'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
@@ -7,9 +8,9 @@ import { TEntityId } from '@/types'
 
 import APIService from '../api-service'
 
-export const getAllGeneralLedgerDefinition = async () => {
-    const response = await APIService.get<IGeneralLedgerDefinition[]>(
-        `/general-ledger-definition`
+export const getAllGeneralLedgerAccountsGrouping = async () => {
+    const response = await APIService.get<IGeneralLedgerAccountsGrouping[]>(
+        `/general-ledger-accounts-grouping`
     )
     return response.data
 }

@@ -3,6 +3,7 @@ import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
 import { IPaginatedResult } from '../paginated-result'
 
 export enum AccountTypeEnum {
+    Other = 'Other',
     Deposit = 'Deposit',
     Loan = 'Loan',
     ARLedger = 'A/R-Ledger',
@@ -12,7 +13,6 @@ export enum AccountTypeEnum {
     SVFLedger = 'SVF-Ledger',
     WOff = 'W-Off',
     APLedger = 'A/P-Ledger',
-    Other = 'Other',
 }
 
 export enum ComputationTypeEnum {

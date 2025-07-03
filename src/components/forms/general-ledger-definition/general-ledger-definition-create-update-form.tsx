@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/lib'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
 import {
-    GeneralLedgerFinancialStatementNodeType,
     GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
@@ -22,7 +21,6 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
     Select,
     SelectContent,
@@ -36,7 +34,7 @@ import {
     IGeneralLedgerDefinitionFormValues,
 } from '@/validations/general-ledger-definition/general-ledger-definition-schema'
 
-import { useCreateGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definition/use-general-ledger-definition'
+import { useCreateGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -48,19 +46,17 @@ interface IGeneralLedgerDefinitionCreateUpdateFormProps
             string,
             IGeneralLedgerDefinitionFormValues
         > {
-    generalLedgerId?: TEntityId
+    generalLedgerDefinitionEntriesId?: TEntityId
 }
 const GeneralLedgerDefinitionCreateUpdateForm = ({
     defaultValues,
     className,
     readOnly,
     disabledFields,
-    generalLedgerId,
+    generalLedgerDefinitionEntriesId,
+    onSuccess,
 }: IGeneralLedgerDefinitionCreateUpdateFormProps) => {
-    const { currentAuth } = useAuthUserWithOrgBranch()
-
-    const organizationId = currentAuth.user_organization.organization_id
-    const branchId = currentAuth.user_organization.branch_id
+    const { generalLedgerAccountsGroupingId } = useGeneralLedgerStore()
 
     const form = useForm<IGeneralLedgerDefinitionFormValues>({
         resolver: zodResolver(GeneralLedgerDefinitionSchema),
@@ -76,17 +72,27 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
 
     const { mutate: CreateGeneralLedgerDefinition, isPending: isCreating } =
         useCreateGeneralLedgerDefinition({
-            onSuccess: () => {
-                form.reset()
-            },
+            onSuccess: onSuccess,
         })
 
     // Handle form submission
     const handleSubmit = form.handleSubmit((data) => {
+        if (
+            !generalLedgerAccountsGroupingId ||
+            !generalLedgerDefinitionEntriesId
+        ) {
+            form.setError('root', {
+                type: 'manual',
+                message: 'Please select a General Ledger Accounts Grouping.',
+            })
+            return
+        }
         const request = {
-            organization_id: organizationId,
-            branch_id: branchId,
             ...data,
+            general_ledger_definition_entries_id:
+                generalLedgerDefinitionEntriesId,
+            general_ledger_accounts_grouping_id:
+                generalLedgerAccountsGroupingId,
         }
         CreateGeneralLedgerDefinition(request)
     })
@@ -195,56 +201,6 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 </div>
                 <FormFieldWrapper
                     control={form.control}
-                    name="type"
-                    className="col-span-2"
-                    render={({ field }) => (
-                        <RadioGroup
-                            onValueChange={field.onChange}
-                            value={field.value || ''}
-                            disabled={isDisabled(field.name)}
-                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                        >
-                            {Object.values(
-                                GeneralLedgerFinancialStatementNodeType
-                            ).map((type) => (
-                                <GradientBackground gradientOnly>
-                                    <div
-                                        key={type}
-                                        className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
-                                    >
-                                        <RadioGroupItem
-                                            value={type}
-                                            id={`interest-fines-diminishing-${type}`}
-                                            className="order-1 after:absolute after:inset-0"
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="grid gap-2">
-                                                <Label
-                                                    htmlFor={`interest-fines-diminishing-${type}`}
-                                                >
-                                                    {type}
-                                                </Label>
-                                                <p
-                                                    id={`interest-fines-diminishing-${type}-description`}
-                                                    className="text-xs text-muted-foreground"
-                                                >
-                                                    {type ===
-                                                        GeneralLedgerFinancialStatementNodeType.DEFINITION &&
-                                                        'General Ledger Definition'}
-                                                    {type ===
-                                                        GeneralLedgerFinancialStatementNodeType.ACCOUNT &&
-                                                        'General Ledger Account.'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </GradientBackground>
-                            ))}
-                        </RadioGroup>
-                    )}
-                />
-                <FormFieldWrapper
-                    control={form.control}
                     name="is_posting"
                     className="col-span-2"
                     render={({ field }) => {
@@ -346,7 +302,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                     size="sm"
                                     type="submit"
                                     disabled={
-                                        generalLedgerId
+                                        generalLedgerDefinitionEntriesId
                                             ? !isFormChange
                                             : isCreating
                                     }
@@ -354,7 +310,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                 >
                                     {isCreating ? (
                                         <LoadingSpinner />
-                                    ) : generalLedgerId ? (
+                                    ) : generalLedgerDefinitionEntriesId ? (
                                         'Update'
                                     ) : (
                                         'Create'

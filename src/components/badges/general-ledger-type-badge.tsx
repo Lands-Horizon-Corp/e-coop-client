@@ -44,6 +44,9 @@ export const GeneralLedgerTypeBadge = ({
     className,
     description,
 }: GeneralLedgerTypeBadgeProps) => {
+    if (generalLedgerTypeStyles[type] === undefined) {
+        return null
+    }
     const { label, bgColor, textColor } = generalLedgerTypeStyles[type]
     const hover = `hover:${bgColor}`
     return (
