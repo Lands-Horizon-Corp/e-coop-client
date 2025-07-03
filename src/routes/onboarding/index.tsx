@@ -1,15 +1,16 @@
+import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
+import { useAuthUser } from '@/store/user-auth-store'
+import { createFileRoute } from '@tanstack/react-router'
+
 import ErrorPage from '@/components/error-page'
 import { LandmarkIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import WithOrganization from './-components/with-organization'
-import NoOrganizationView from './-components/no-organization-view'
 
-import { useAuthUser } from '@/store/user-auth-store'
-import { useSubscribe } from '@/hooks/use-pubsub'
 import { useGetUserOrganizationByUserId } from '@/hooks/api-hooks/use-user-organization'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
-import { createFileRoute } from '@tanstack/react-router'
-import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
+import NoOrganizationView from './-components/no-organization-view'
+import WithOrganization from './-components/with-organization'
 
 export const Route = createFileRoute('/onboarding/')({
     component: RouteComponent,

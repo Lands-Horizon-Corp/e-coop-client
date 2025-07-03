@@ -1,12 +1,12 @@
 import {
+    Outlet,
     createFileRoute,
     lazyRouteComponent,
-    Outlet,
     redirect,
 } from '@tanstack/react-router'
 
-import AuthNav from '@/components/nav/navs/auth-nav'
 import AuthFooter from '@/components/footers/auth-footer'
+import AuthNav from '@/components/nav/navs/auth-nav'
 import GuestGuard from '@/components/wrappers/guest-guard'
 
 export const Route = createFileRoute('/auth')({

@@ -4,58 +4,55 @@ import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import { MemberCenterCreateUpdateFormModal } from '@/components/forms/member-forms/member-center-create-update-form'
-import MemberCenterTable from '@/components/tables/member/member-center-table'
-import MemberCenterTableAction from '@/components/tables/member/member-center-table/action'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center'
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template'
 )({
     component: RouteComponent,
 })
 
 function RouteComponent() {
     const createModal = useModalState()
+
+    const queryClient = useQueryClient()
     const {
         currentAuth: {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
 
-    const queryClient = useQueryClient()
-
-    useSubscribe(`member_center.created.branch.${branch_id}`, () => {
+    useSubscribe(`member_profile.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-center', 'resource-query'],
+            queryKey: ['permission-template', 'resource-query'],
         })
     })
 
-    useSubscribe(`member_center.updated.branch.${branch_id}`, () => {
+    useSubscribe(`member_profile.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-center', 'resource-query'],
+            queryKey: ['permission-template', 'resource-query'],
         })
     })
 
-    useSubscribe(`member_center.deleted.branch.${branch_id}`, () => {
+    useSubscribe(`member_profile.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-center', 'resource-query'],
+            queryKey: ['permission-template', 'resource-query'],
         })
     })
 
     return (
         <PageContainer>
-            <MemberCenterCreateUpdateFormModal {...createModal} />
-            <MemberCenterTable
+            <PermissionTemplateCreateUpdateFormModal {...createModal} />
+            <PermissionTemplateTable
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
                 actionComponent={(prop) => (
-                    <MemberCenterTableAction {...prop} />
+                    <PermissionTemplateTableAction {...prop} />
                 )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />

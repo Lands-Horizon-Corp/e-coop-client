@@ -1,34 +1,37 @@
-import z from 'zod'
-import { useForm } from 'react-hook-form'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
+import z from 'zod'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { contactFormSchema } from '@/routes/(landing)/-validations/contact-form'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
+
+import { PhoneInput } from '@/components/contact-input/contact-input'
 import {
     EmailIcon,
     FacebookIcon,
-    TelephoneIcon,
     LoadingCircleIcon,
     MessageOutlineIcon,
+    TelephoneIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     Form,
+    FormControl,
+    FormField,
     FormItem,
     FormLabel,
-    FormField,
-    FormControl,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
 import FormErrorMessage from '@/components/ui/form-error-message'
-
-import { PhoneInput } from '@/components/contact-input/contact-input'
-import { contactFormSchema } from '@/routes/(landing)/-validations/contact-form'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
-import UseCooldown from '@/hooks/use-cooldown'
+
 import { useCreateContactUs } from '@/hooks/api-hooks/use-contact-us'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import UseCooldown from '@/hooks/use-cooldown'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 type TContact = z.infer<typeof contactFormSchema>

@@ -1,8 +1,9 @@
+import { HandShakeHeartIcon } from '@/components/icons'
+import SectionTitle from '@/components/member-infos/section-title'
 import Modal, { IModalProps } from '@/components/modals/modal'
 
 import { IMemberJointAccount } from '@/types'
-import SectionTitle from '@/components/member-infos/section-title'
-import { HandShakeHeartIcon } from '@/components/icons'
+
 import JointAccountCardView from './joint-account-card-view'
 
 interface jointMemberProfileListModalProps extends IModalProps {

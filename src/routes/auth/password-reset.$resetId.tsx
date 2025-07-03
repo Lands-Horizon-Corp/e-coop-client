@@ -1,15 +1,15 @@
-import z from 'zod'
 import { useState } from 'react'
-import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
+import z from 'zod'
 
-import { GoArrowLeft } from 'react-icons/go'
-import { Button } from '@/components/ui/button'
-
-import { KeyIcon } from '@/components/icons'
-import GuestGuard from '@/components/wrappers/guest-guard'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import AuthPageWrapper from '@/routes/auth/-components/auth-page-wrapper'
+import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
+import { GoArrowLeft } from 'react-icons/go'
+
 import ResetPasswordForm from '@/components/forms/auth-forms/reset-password-form'
+import { KeyIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import GuestGuard from '@/components/wrappers/guest-guard'
 
 import { useCheckResetId } from '@/hooks/api-hooks/use-auth'
 

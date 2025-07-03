@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+
+import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 
-import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
 import GeneralLedgerTreeViewer from '../../../(employee)/accounting/-components/general-ledger-tree'
 
 export const Route = createFileRoute(

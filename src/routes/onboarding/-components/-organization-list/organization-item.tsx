@@ -1,10 +1,14 @@
+import { useState } from 'react'
+
+import { Link, useNavigate } from '@tanstack/react-router'
+
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import PlainTextEditor from '@/components/plain-text-editor'
 import { Button } from '@/components/ui/button'
+
 import { cn } from '@/lib/utils'
+
 import { IOrganization } from '@/types'
-import { Link, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
 
 type OrganizationItemProps = {
     organization: IOrganization

@@ -1,16 +1,19 @@
-import z from 'zod'
 import { useState } from 'react'
-import { createFileRoute, useSearch } from '@tanstack/react-router'
-import { useOrganizations } from '@/hooks/api-hooks/use-organization'
+import z from 'zod'
 
-import { Button } from '@/components/ui/button'
-import { QrCodeIcon } from '@/components/icons'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import OrganizationItem from '../-components/-organization-list/organization-item'
+import { useAuthUser } from '@/store/user-auth-store'
+import { createFileRoute, useSearch } from '@tanstack/react-router'
+
 import OrganizationItemSkeleton from '@/components/Skeleton/organization-item-skeleton'
 import JoinBranchWithCodeFormModal from '@/components/forms/onboarding-forms/join-organization-form'
-import { useAuthUser } from '@/store/user-auth-store'
+import { QrCodeIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import FormErrorMessage from '@/components/ui/form-error-message'
+
+import { useOrganizations } from '@/hooks/api-hooks/use-organization'
 import { useSubscribe } from '@/hooks/use-pubsub'
+
+import OrganizationItem from '../-components/-organization-list/organization-item'
 
 const paramSchema = z.object({
     invitation_code: z.string().optional(),

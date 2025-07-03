@@ -1,11 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+
+import { createFileRoute } from '@tanstack/react-router'
+
 import PageContainer from '@/components/containers/page-container'
 import { PaymentTypeFormModal } from '@/components/forms/payment-type-forms/payment-type-create-update-form'
 import { PaymentTypeTable } from '@/components/tables/payment-type-table'
 import PaymentTypeAction from '@/components/tables/payment-type-table/action'
-
-import { useQueryClient } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type'

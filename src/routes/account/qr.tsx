@@ -1,9 +1,9 @@
+import { useAuthUser } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
 import AccountQr from '@/components/account-settings/account-qr'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
-import { useAuthUser } from '@/store/user-auth-store'
 
 import { IUserBase } from '@/types'
 

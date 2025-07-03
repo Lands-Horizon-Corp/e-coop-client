@@ -1,10 +1,11 @@
-import { useRouter } from '@tanstack/react-router'
-
 import { useAuthStore } from '@/store/user-auth-store'
-import GuestGuard from '@/components/wrappers/guest-guard'
-import { SignUpForm } from '@/components/forms/auth-forms'
-import AuthPageWrapper from './-components/auth-page-wrapper'
+import { useRouter } from '@tanstack/react-router'
 import { createLazyFileRoute } from '@tanstack/react-router'
+
+import { SignUpForm } from '@/components/forms/auth-forms'
+import GuestGuard from '@/components/wrappers/guest-guard'
+
+import AuthPageWrapper from './-components/auth-page-wrapper'
 
 export const Route = createLazyFileRoute('/auth/sign-up')({
     component: SignUpPage,

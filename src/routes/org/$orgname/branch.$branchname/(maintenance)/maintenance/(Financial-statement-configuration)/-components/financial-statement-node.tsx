@@ -1,26 +1,19 @@
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import PlainTextEditor from '@/components/plain-text-editor'
-import { blueGradientPalette } from '@/components/color-palettes'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { FinancialStatementTypeBadge } from '@/components/badges/financial-statement-type-badge'
-import { FSDefinitionCreateUpdateFormModal } from '@/components/forms/financial-statement-definition/financial-statement-definition-create-update-form'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
 import {
     FinancialStatementTypeEnum,
     IFinancialStatementDefinition,
 } from '@/types/coop-types/financial-statement-definition'
 import { GeneralLedgerFinancialStatementNodeType } from '@/types/coop-types/general-ledger-definitions'
+import { XYCoord, useDrag, useDrop } from 'react-dnd'
 
-import { toast } from 'sonner'
-import { useEffect, useRef, useState } from 'react'
-import { useDrag, useDrop, XYCoord } from 'react-dnd'
+import { FinancialStatementTypeBadge } from '@/components/badges/financial-statement-type-badge'
+import { blueGradientPalette } from '@/components/color-palettes'
+import { FSDefinitionCreateUpdateFormModal } from '@/components/forms/financial-statement-definition/financial-statement-definition-create-update-form'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     ArrowChevronDown,
     ArrowChevronRight,
@@ -29,8 +22,15 @@ import {
     PlusIcon,
     TrashIcon,
 } from '@/components/icons'
-import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
+import PlainTextEditor from '@/components/plain-text-editor'
+import { Button } from '@/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 type FinancialStatementTreeNodeProps = {
     node: IFinancialStatementDefinition

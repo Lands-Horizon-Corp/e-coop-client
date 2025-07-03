@@ -1,13 +1,12 @@
-import { Outlet } from '@tanstack/react-router'
-import { createFileRoute } from '@tanstack/react-router'
-
 import bg_element_1 from '@/assets/images/landing-page/bg_element_1.webp'
 import bg_element_2 from '@/assets/images/landing-page/bg_element_2.webp'
 import bg_element_3 from '@/assets/images/landing-page/bg_element_3.webp'
+import { Outlet } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import Footer from '@/components/footers/landing-footer'
-import { VersionAndFeedBack } from '@/components/version'
 import LandingNav from '@/components/nav/navs/landing-nav'
+import { VersionAndFeedBack } from '@/components/version'
 
 const PublicLayout = () => {
     return (

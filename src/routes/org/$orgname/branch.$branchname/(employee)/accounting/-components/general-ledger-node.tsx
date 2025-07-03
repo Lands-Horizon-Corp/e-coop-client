@@ -1,22 +1,19 @@
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
 import {
     GeneralLedgerFinancialStatementNodeType,
     IGeneralLedgerDefinition,
 } from '@/types/coop-types/general-ledger-definitions'
+import { XYCoord, useDrag, useDrop } from 'react-dnd'
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { blueGradientPalette } from '@/components/color-palettes'
 import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { blueGradientPalette } from '@/components/color-palettes'
 import { AccountCreateUpdateFormModal } from '@/components/forms/accounting-forms/account-create-update-form'
 import { GeneralLedgerDefinitionCreateUpdateFormModal } from '@/components/forms/general-ledger-definition/general-ledger-definition-create-update-form'
-
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     ArrowChevronDown,
     ArrowChevronRight,
@@ -25,15 +22,17 @@ import {
     PlusIcon,
     TrashIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
-import { colorPalette } from '@/hooks/use-random-gradient'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definition/use-general-ledger-definition'
-
-import { toast } from 'sonner'
-import { useEffect, useRef, useState } from 'react'
-import { useDrag, useDrop, XYCoord } from 'react-dnd'
-import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
+import { colorPalette } from '@/hooks/use-random-gradient'
 
 export interface IGeneralLedgerAccount extends IGeneralLedgerDefinition {
     type: GeneralLedgerFinancialStatementNodeType.ACCOUNT

@@ -1,5 +1,6 @@
-import { Button } from '@/components/ui/button'
 import { Dispatch, SetStateAction } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 type NoMemberSelectedViewProps = {
     onOpenChange: Dispatch<SetStateAction<boolean>>

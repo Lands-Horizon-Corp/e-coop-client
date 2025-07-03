@@ -1,33 +1,33 @@
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { toast } from 'sonner'
+
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { cn } from '@/lib'
+import { useCategoryStore } from '@/store/onboarding/category-store'
+import { useAuthUser } from '@/store/user-auth-store'
+import { useNavigate } from '@tanstack/react-router'
+
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import PlainTextEditor from '@/components/plain-text-editor'
 import {
     BuildingIcon,
     GearIcon,
     PinLocationIcon,
     PlusIcon,
 } from '@/components/icons'
+import PlainTextEditor from '@/components/plain-text-editor'
 import { StatusBadge } from '@/components/status-badge'
-import { Button } from '@/components/ui/button'
-
-import { IUserOrganization, IOrgUserOrganizationGroup } from '@/types'
 import {
     Accordion,
+    AccordionContent,
     AccordionItem,
     AccordionTrigger,
-    AccordionContent,
 } from '@/components/ui/accordion'
-
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { useSwitchOrganization } from '@/hooks/api-hooks/use-user-organization'
 
-import { toast } from 'sonner'
-import { cn } from '@/lib'
-import { useNavigate } from '@tanstack/react-router'
-import { useAuthUser } from '@/store/user-auth-store'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { useCategoryStore } from '@/store/onboarding/category-store'
+import { IOrgUserOrganizationGroup, IUserOrganization } from '@/types'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: IOrgUserOrganizationGroup[]

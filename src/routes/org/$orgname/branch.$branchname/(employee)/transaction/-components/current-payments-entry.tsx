@@ -1,21 +1,23 @@
 import { memo } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { ReceiptTextIcon, FileTextIcon } from 'lucide-react'
-import { EmptyIcon, ReceiptIcon, TrashIcon } from '@/components/icons'
 
+import { commaSeparators } from '@/helpers'
 import { cn } from '@/lib'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { usePaymentsDataStore } from '@/store/transaction/payments-entry-store'
+import { FileTextIcon, ReceiptTextIcon } from 'lucide-react'
+
+import CopyTextButton from '@/components/copy-text-button'
+import { EmptyIcon, ReceiptIcon, TrashIcon } from '@/components/icons'
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import { commaSeparators } from '@/helpers'
 import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+
 import { ITransactionEntryRequest } from '@/types'
-import CopyTextButton from '@/components/copy-text-button'
-import useConfirmModalStore from '@/store/confirm-modal-store'
-import { usePaymentsDataStore } from '@/store/transaction/payments-entry-store'
 
 type itemgBadgeTypeProps = {
     text: string

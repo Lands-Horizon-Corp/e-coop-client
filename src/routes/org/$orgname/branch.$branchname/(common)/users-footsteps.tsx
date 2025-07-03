@@ -1,12 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query'
+
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
-import FootstepTable from '@/components/tables/footsteps-table'
 import PageContainer from '@/components/containers/page-container'
+import FootstepTable from '@/components/tables/footsteps-table'
 import FootstepTableAction from '@/components/tables/footsteps-table/action'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(common)/users-footsteps'

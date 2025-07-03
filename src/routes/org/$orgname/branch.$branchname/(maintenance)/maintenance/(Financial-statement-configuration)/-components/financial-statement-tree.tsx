@@ -1,21 +1,19 @@
 import { useCallback, useRef, useState } from 'react'
-
-import { Input } from '@/components/ui/input'
-import AccountPicker from '@/components/pickers/account-picker'
-import { Button } from '@/components/ui/button'
-
-import FinancialStatementTreeNode, {
-    addFSPositionIndexes,
-    IFinancialStatementAccount,
-    moveFSNodeInTree,
-} from './financial-statement-node'
-
-import { MagnifyingGlassIcon } from '@/components/icons'
+import { toast } from 'sonner'
 
 import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
 import { IFinancialStatementDefinition } from '@/types/coop-types/financial-statement-definition'
 
-import { toast } from 'sonner'
+import { MagnifyingGlassIcon } from '@/components/icons'
+import AccountPicker from '@/components/pickers/account-picker'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+import FinancialStatementTreeNode, {
+    IFinancialStatementAccount,
+    addFSPositionIndexes,
+    moveFSNodeInTree,
+} from './financial-statement-node'
 
 type FinancialStatementTreeViewerProps = {
     treeData: IFinancialStatementDefinition[]

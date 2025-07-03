@@ -1,6 +1,7 @@
+import { useRouter } from '@tanstack/react-router'
+
 import { BackIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { useRouter } from '@tanstack/react-router'
 
 const LocationBack = ({ className }: { className: string }) => {
     const location = useRouter()

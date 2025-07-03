@@ -1,11 +1,12 @@
 import { toReadableDate } from '@/utils'
-import { IMemberJointAccount } from '@/types'
 
-import ImageDisplay from '@/components/image-display'
-import { Separator } from '@/components/ui/separator'
-import RawDescription from '@/components/raw-description'
 import { CalendarIcon, Users3Icon, WoodSignsIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import RawDescription from '@/components/raw-description'
+import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IMemberJointAccount } from '@/types'
 
 interface JoinAccountCardViewProps {
     jointAccounts: IMemberJointAccount

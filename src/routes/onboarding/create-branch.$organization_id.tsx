@@ -1,40 +1,42 @@
+import { toast } from 'sonner'
 import z from 'zod'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-
-import {
-    PlusIcon,
-    TrashIcon,
-    PhoneIcon,
-    BranchIcon,
-    PushPinIcon,
-    LandmarkIcon,
-    CheckFillIcon,
-    EditPencilIcon,
-    AddressCardIcon,
-    LoadingCircleIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import ImageDisplay from '@/components/image-display'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import PlainTextEditor from '@/components/plain-text-editor'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
 
 import { cn } from '@/lib'
-import { toast } from 'sonner'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+
+import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import {
+    AddressCardIcon,
+    BranchIcon,
+    CheckFillIcon,
+    EditPencilIcon,
+    LandmarkIcon,
+    LoadingCircleIcon,
+    PhoneIcon,
+    PlusIcon,
+    PushPinIcon,
+    TrashIcon,
+} from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import PlainTextEditor from '@/components/plain-text-editor'
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Skeleton } from '@/components/ui/skeleton'
+
+import { entityIdSchema } from '@/validations/common'
+
 import {
     useDeleteBranch,
     useGetBranchesByOrganizationId,
 } from '@/hooks/api-hooks/use-branch'
-import { useModalState } from '@/hooks/use-modal-state'
-import { useLocationInfo } from '@/hooks/use-location-info'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
 import { useSeedOrganization } from '@/hooks/api-hooks/use-user-organization'
+import { useLocationInfo } from '@/hooks/use-location-info'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IBranch, TEntityId } from '@/types'
-import { entityIdSchema } from '@/validations/common'
 
 const routeSchema = z.object({
     organization_id: entityIdSchema,

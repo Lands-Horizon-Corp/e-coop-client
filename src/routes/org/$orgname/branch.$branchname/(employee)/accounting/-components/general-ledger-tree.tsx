@@ -1,17 +1,18 @@
-import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
-import GeneralLedgerTreeNode, {
-    addPositionIndexes,
-    IGeneralLedgerAccount,
-    moveNodeInTree,
-} from './general-ledger-node'
-
-import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
-
 import { useCallback, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+
+import { useFinancialStatementStore } from '@/store/financial-statement-definition-store'
+import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
+
 import { MagnifyingGlassIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+import GeneralLedgerTreeNode, {
+    IGeneralLedgerAccount,
+    addPositionIndexes,
+    moveNodeInTree,
+} from './general-ledger-node'
 
 type GeneralLedgerTreeViewerProps = {
     treeData: IGeneralLedgerDefinition[]

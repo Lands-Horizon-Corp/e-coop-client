@@ -1,13 +1,7 @@
-import { IMemberProfile } from '@/types'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
-import ImageDisplay from '@/components/image-display'
-import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-} from '@/components/ui/hover-card'
-import ImageNameDisplay from '@/components/elements/image-name-display'
+import { useState } from 'react'
+
 import HoveruserInfo from '@/components/elements/hover-elements/hover-user-info'
+import ImageNameDisplay from '@/components/elements/image-name-display'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     BadgeCheckIcon,
@@ -15,10 +9,18 @@ import {
     PhoneIcon,
     UserIcon,
 } from '@/components/icons'
-
-import { useState } from 'react'
+import ImageDisplay from '@/components/image-display'
 import { Button } from '@/components/ui/button'
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from '@/components/ui/hover-card'
 import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IMemberProfile } from '@/types'
+
 import JointMemberProfileListModal from './joint-member-profile-list-modal'
 
 type MemberProfileTransactionViewProps = {

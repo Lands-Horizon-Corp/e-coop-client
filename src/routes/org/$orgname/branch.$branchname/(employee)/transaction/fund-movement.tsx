@@ -1,38 +1,37 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { CloseIcon, ReceiptIcon } from '@/components/icons'
-import MemberPicker from '@/components/pickers/member-picker'
-import PageContainer from '@/components/containers/page-container'
-import MemberAccountingLedgerTable from '@/components/tables/transaction-tables'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { useState } from 'react'
 
-import TransactionEntryModal from './-components/transaction-entry'
-import CurrentPaymentsEntry from './-components/current-payments-entry'
-import MemberProfileTransactionView from './-components/member-profile'
-import NoSelectedMemberView from './-components/no-member-selected-view'
-
+import { deposit_bg, payment_bg, withdraw_bg } from '@/assets/transactions'
+import { commaSeparators } from '@/helpers'
+import { cn } from '@/lib'
 import {
     usePaymentsDataStore,
     usePaymentsModalStore,
 } from '@/store/transaction/payments-entry-store'
-
-import { ITransactionEntryRequest } from '@/types'
 import { createFileRoute } from '@tanstack/react-router'
-import { payment_bg, withdraw_bg, deposit_bg } from '@/assets/transactions'
 
-import TRANSACTIION_DUMMY_DATA from './-components/transactionEntrySamplea.json'
-import MemberAccountSampleData from './-components/memberAccountingLegdgerSample.json'
-
-import { cn } from '@/lib'
+import PageContainer from '@/components/containers/page-container'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { CloseIcon, ReceiptIcon } from '@/components/icons'
+import MemberPicker from '@/components/pickers/member-picker'
+import MemberAccountingLedgerTable from '@/components/tables/transaction-tables'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { commaSeparators } from '@/helpers'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useState } from 'react'
 import { useShortcut } from '@/components/use-shorcuts'
+
+import { ITransactionEntryRequest } from '@/types'
+
+import CurrentPaymentsEntry from './-components/current-payments-entry'
+import MemberProfileTransactionView from './-components/member-profile'
+import MemberAccountSampleData from './-components/memberAccountingLegdgerSample.json'
+import NoSelectedMemberView from './-components/no-member-selected-view'
+import TransactionEntryModal from './-components/transaction-entry'
+import TRANSACTIION_DUMMY_DATA from './-components/transactionEntrySamplea.json'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/fund-movement'

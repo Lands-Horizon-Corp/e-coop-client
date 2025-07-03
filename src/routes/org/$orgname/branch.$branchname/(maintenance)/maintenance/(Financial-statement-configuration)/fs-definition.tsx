@@ -1,10 +1,11 @@
-import PageContainer from '@/components/containers/page-container'
-import FinancialStatementTreeViewer from './-components/financial-statement-tree'
+import { useQuery } from '@tanstack/react-query'
 
 import { IFinancialStatementDefinition } from '@/types/coop-types/financial-statement-definition'
-
-import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+
+import PageContainer from '@/components/containers/page-container'
+
+import FinancialStatementTreeViewer from './-components/financial-statement-tree'
 
 const FINANCIAL_DATA_FILE_PATH = '/data/financialStatementDefinitionSample.json'
 

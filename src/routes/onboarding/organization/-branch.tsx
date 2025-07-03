@@ -1,17 +1,17 @@
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { useJoinOrganization } from '@/hooks/api-hooks/use-user-organization'
-import PlainTextEditor from '@/components/plain-text-editor'
-
-import { Button } from '@/components/ui/button'
-
-import useConfirmModalStore from '@/store/confirm-modal-store'
-import { IBranch, TEntityId } from '@/types'
+import { toast } from 'sonner'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
-
-import { toast } from 'sonner'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useNavigate } from '@tanstack/react-router'
+
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import ImageDisplay from '@/components/image-display'
+import PlainTextEditor from '@/components/plain-text-editor'
+import { Button } from '@/components/ui/button'
+
+import { useJoinOrganization } from '@/hooks/api-hooks/use-user-organization'
+
+import { IBranch, TEntityId } from '@/types'
 
 type BranchProps = {
     branch: IBranch

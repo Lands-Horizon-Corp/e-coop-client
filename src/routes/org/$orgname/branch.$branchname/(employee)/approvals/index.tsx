@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import PageContainer from '@/components/containers/page-container'
 import Approval from '@/components/approval'
+import PageContainer from '@/components/containers/page-container'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/approvals/'
