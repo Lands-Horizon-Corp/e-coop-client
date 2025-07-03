@@ -16,6 +16,7 @@ export interface IFinancialStatementDefinition extends IAuditable, ITimeStamps {
     branch_id: TEntityId
 
     financial_statement_definition_id?: TEntityId
+    financial_statement_grouping_id?: TEntityId
 
     type: GeneralLedgerFinancialStatementNodeType
     name: string

@@ -1,4 +1,5 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IGeneralLedgerDefinition } from './general-ledger-definitions'
 import { IPaginatedResult } from './paginated-result'
 
 export type AccountingPrincipleType = 'positive' | 'negative'
@@ -15,6 +16,7 @@ export interface IGeneralLedgerAccountsGrouping
     credit: AccountingPrincipleType
     name: string
     description: string
+    general_ledger_definition: IGeneralLedgerDefinition[]
 
     from_code?: number
     to_code?: number
