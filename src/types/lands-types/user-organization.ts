@@ -1,5 +1,6 @@
 import { IUserBase } from '../auth/user'
 import { IOrganization } from './organization'
+import { TPermission } from '../coop-types/permission'
 import { IBranch, IPaginatedResult } from '../coop-types'
 import { TEntityId, IBaseEntityMeta, TUserType } from '../common'
 
@@ -21,6 +22,11 @@ export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
 
     application_description?: string
     application_status: 'pending' | 'reported' | 'accepted' | 'ban'
+
+    // Perms
+    permission_name: string
+    permission_description: string
+    permissions: TPermission[]
 }
 
 export interface IUserOrganizationResponse {

@@ -1,26 +1,26 @@
-import { toast } from 'sonner'
-import { useQuery } from '@tanstack/react-query'
-
-import { withCatchAsync } from '@/utils'
+import TransactionBatchService from '@/api-service/transaction-batch-service'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
+import {
+    IAPIHook,
+    IQueryProps,
+    ITransactionBatch,
+    ITransactionBatchDepositInBankRequest,
+    ITransactionBatchEndRequest,
+    ITransactionBatchMinimal,
+    ITransactionBatchRequest,
+    ITransactionBatchSignatures,
+    TEntityId,
+    TTransactionBatchFullorMin,
+} from '@/types'
+
 import {
     createMutationHook,
     createMutationInvalidateFn,
 } from '../../factory/api-hook-factory'
-import TransactionBatchService from '@/api-service/transaction-batch-service'
-
-import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    ITransactionBatch,
-    ITransactionBatchMinimal,
-    ITransactionBatchRequest,
-    TTransactionBatchFullorMin,
-    ITransactionBatchEndRequest,
-    ITransactionBatchSignatures,
-    ITransactionBatchDepositInBankRequest,
-} from '@/types'
 
 export const useCurrentTransactionBatch = ({
     enabled,
@@ -159,7 +159,7 @@ export const useTransactionBatchEndApprovals = ({
         queryKey: ['transaction-batch', 'end-approvals'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                TransactionBatchService.getAllTransactionBatchViewRequest()
+                TransactionBatchService.getAllEndedBatchViewRequest()
             )
 
             if (error) {

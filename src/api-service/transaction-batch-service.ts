@@ -1,19 +1,20 @@
 import {
-    createAPICrudService,
     createAPICollectionService,
+    createAPICrudService,
 } from '@/factory/api-factory-service'
-import APIService from './api-service'
 
 import {
-    TEntityId,
     ITransactionBatch,
+    ITransactionBatchDepositInBankRequest,
+    ITransactionBatchEndRequest,
     ITransactionBatchMinimal,
     ITransactionBatchRequest,
-    TTransactionBatchFullorMin,
-    ITransactionBatchEndRequest,
     ITransactionBatchSignatures,
-    ITransactionBatchDepositInBankRequest,
+    TEntityId,
+    TTransactionBatchFullorMin,
 } from '@/types'
+
+import APIService from './api-service'
 
 const CollectionServices =
     createAPICollectionService<ITransactionBatch>('/transaction-batch')
@@ -71,7 +72,7 @@ export const allowBlotterView = async (id: TEntityId) => {
 
 export const getAllEndedBatchViewRequest = async () => {
     const response = await APIService.get<ITransactionBatch[]>(
-        '/transaction-batch/view-approval'
+        '/transaction-batch/ended-batch'
     )
     return response.data
 }
@@ -83,7 +84,7 @@ export const updateEndedBatchApprovals = async (
     const response = await APIService.put<
         ITransactionBatchSignatures,
         ITransactionBatch
-    >(`/transaction-batch/${id}/view-accept`, data)
+    >(`/transaction-batch/${id}/signature`, data)
     return response.data
 }
 

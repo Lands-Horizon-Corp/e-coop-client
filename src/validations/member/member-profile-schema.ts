@@ -128,7 +128,7 @@ export const quickCreateMemberProfileSchema = z
         full_name: z.string().optional(),
         suffix: z.string().max(15).optional(),
         contact_number: z.string().optional(),
-        birth_date: stringDateSchema
+        birthdate: stringDateSchema
             .refine(
                 (val) => {
                     const date = startOfDay(new Date(val))
@@ -199,7 +199,7 @@ export const memberProfileUserAccountSchema = z
 //     full_name: z.string().optional(),
 //     suffix: z.string().max(15).optional(),
 //     contact_number: z.string().optional(),
-//     birth_date: stringDateSchema.transform((val) =>
+//     birthdate: stringDateSchema.transform((val) =>
 //         new Date(val).toISOString()
 //     ),
 //     member_gender_id: entityIdSchema.optional(),

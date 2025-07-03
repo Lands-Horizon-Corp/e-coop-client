@@ -14,7 +14,7 @@ export const memberProfilePersonalInfoSchema = z.object({
     full_name: z.string().optional(),
     suffix: z.string().optional(),
     member_gender_id: entityIdSchema.optional(),
-    birth_date: stringDateSchema.transform((val) =>
+    birthdate: stringDateSchema.transform((val) =>
         new Date(val).toISOString()
     ),
     contact_number: z.string().optional(),
