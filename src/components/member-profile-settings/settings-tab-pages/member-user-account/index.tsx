@@ -98,7 +98,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 formProps={{
                                     memberProfileId: memberProfile.id,
                                     defaultValues: {
-                                        birthdate: memberProfile.birth_date,
+                                        birthdate: memberProfile.birthdate,
                                         contact_number:
                                             memberProfile.contact_number,
                                         first_name: memberProfile.first_name,

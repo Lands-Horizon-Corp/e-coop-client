@@ -34,14 +34,14 @@ const TransBatchTitleUserDisplay = ({ transBatch, className }: Props) => {
                     {transBatch.created_at
                         ? toReadableDateTime(
                               transBatch.created_at,
-                              'MM-dd-yyyy @ hh:mm a '
+                              'MM-dd-yyyy hh:mm a '
                           )
                         : 'invalid start'}{' '}
                     -{' '}
                     {transBatch.ended_at
                         ? toReadableDateTime(
                               transBatch.ended_at,
-                              'MM-dd-yyyy @ hh:mm a '
+                              'MM-dd-yyyy hh:mm a '
                           )
                         : 'not ended'}
                 </p>

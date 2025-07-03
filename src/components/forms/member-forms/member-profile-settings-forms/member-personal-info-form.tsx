@@ -1,35 +1,40 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import ImageField from '@/components/ui/image-field'
-import { Separator } from '@/components/ui/separator'
-import { VerifiedPatchIcon } from '@/components/icons'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { PhoneInput } from '@/components/contact-input/contact-input'
+import { toInputDateString } from '@/utils'
+import { Path, useForm } from 'react-hook-form'
+
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import MemberGenderCombobox from '@/components/comboboxes/member-gender-combobox'
+import MemberOccupationCombobox from '@/components/comboboxes/member-occupation-combobox'
+import { PhoneInput } from '@/components/contact-input/contact-input'
+import { VerifiedPatchIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import ImageField from '@/components/ui/image-field'
+import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
+import { Separator } from '@/components/ui/separator'
+import SignatureField from '@/components/ui/signature-field'
 
 import { cn } from '@/lib/utils'
+
 import { memberProfilePersonalInfoSchema } from '@/validations/member/member-profile-settings-schema'
+
 import { useUpdateMemberProfilePersonalInfo } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
-    IMedia,
     IClassProps,
+    IMedia,
     IMemberProfile,
     IMemberProfilePersonalInfoRequest,
 } from '@/types'
 import { IForm, TEntityId } from '@/types'
-import SignatureField from '@/components/ui/signature-field'
-import { toInputDateString } from '@/utils'
-import MemberOccupationCombobox from '@/components/comboboxes/member-occupation-combobox'
 
 type TMemberProfilePersonalInfoFormValues = z.infer<
     typeof memberProfilePersonalInfoSchema
@@ -62,8 +67,8 @@ const MemberPersonalInfoForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
-            birth_date: toInputDateString(
-                defaultValues?.birth_date ?? new Date()
+            birthdate: toInputDateString(
+                defaultValues?.birthdate ?? new Date()
             ),
         },
     })
@@ -74,13 +79,16 @@ const MemberPersonalInfoForm = ({
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        mutate({
-            memberId: memberProfileId,
-            data: {
-                ...formData,
-                full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+        mutate(
+            {
+                memberId: memberProfileId,
+                data: {
+                    ...formData,
+                    full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+                },
             },
-        })
+            { onSuccess: (data) => form.reset(data) }
+        )
     })
 
     const isDisabled = (field: Path<TMemberProfilePersonalInfoFormValues>) =>
@@ -279,14 +287,15 @@ const MemberPersonalInfoForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="birth_date"
+                                name="birthdate"
+                                className="relative"
                                 label="Date of Birth"
+                                description="mm/dd/yyyy"
                                 hiddenFields={hiddenFields}
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
                                         value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
                                     />

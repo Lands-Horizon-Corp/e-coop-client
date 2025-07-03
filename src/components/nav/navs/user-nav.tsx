@@ -1,4 +1,8 @@
+import { useRouter } from '@tanstack/react-router'
+
 import RootNav from '@/components/nav/root-nav'
+import { Button } from '@/components/ui/button'
+import { BadgeCheckFillIcon } from '@/components/icons'
 import NavContainer from '@/components/nav/nav-container'
 import PageBreadCrumb from '@/components/pages-breadcrumbs'
 import NavTimeInBar from '../nav-components/nav-time-in-bar'
@@ -19,6 +23,9 @@ const UserNav = ({
     const {
         currentAuth: { user, user_organization },
     } = useAuthStore()
+
+    const router = useRouter()
+
     return (
         <RootNav
             className={cn(
@@ -34,6 +41,23 @@ const UserNav = ({
                 />
             </NavContainer>
             <NavContainer className="pointer-events-auto">
+                {['employee', 'owner'].includes(
+                    user_organization?.user_type ?? ''
+                ) && (
+                    <Button
+                        variant="secondary"
+                        hoverVariant="primary"
+                        className="rounded-full group text-muted-foreground"
+                        onClick={() =>
+                            router.navigate({
+                                to: '/org/$orgname/branch/$branchname/approvals' as string,
+                            })
+                        }
+                    >
+                        <BadgeCheckFillIcon className="mr-2 ease-out duration-500 text-primary group-hover:text-primary-foreground" />
+                        Approvals
+                    </Button>
+                )}
                 {user && <TransactionBatchNavButton />}
                 {user && user_organization?.user_type === 'employee' && (
                     <NavTimeInBar />

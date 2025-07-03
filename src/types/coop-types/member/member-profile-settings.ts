@@ -10,7 +10,7 @@ export interface IMemberProfilePersonalInfoRequest {
     full_name?: string
     suffix?: string
     member_gender_id?: TEntityId
-    birth_date?: string
+    birthdate?: string
     contact_number?: string
     business_contact_number?: string
 

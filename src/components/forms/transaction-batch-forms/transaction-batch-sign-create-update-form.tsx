@@ -1,42 +1,50 @@
+import { useEffect, useRef, useState } from 'react'
 import z from 'zod'
-import { useState, useRef, useEffect } from 'react'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Path, useForm } from 'react-hook-form'
+
 import {
-    Stepper,
-    StepperItem,
-    StepperTitle,
-    StepperTrigger,
-    StepperIndicator,
-    StepperSeparator,
-    StepperDescription,
-} from '@/components/ui/stepper'
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import SignatureField from '@/components/ui/signature-field'
+    CheckFillIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+} from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TransactionBatchMiniViewCard from '@/components/transaction-batch/transaction-batch-mini-card'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons'
-import TransactionBatchMiniViewCard from '@/components/transaction-batch/transaction-batch-mini-card'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import SignatureField from '@/components/ui/signature-field'
+import {
+    Stepper,
+    StepperDescription,
+    StepperIndicator,
+    StepperItem,
+    StepperSeparator,
+    StepperTitle,
+    StepperTrigger,
+} from '@/components/ui/stepper'
 
 import { cn } from '@/lib/utils'
-import {
-    useTransactionBatch,
-    useTransBatchUpdateSignApproval,
-} from '@/hooks/api-hooks/use-transaction-batch'
+
 import { batchSignSchema } from '@/validations/form-validation/transaction-batch'
 
 import {
+    useTransBatchUpdateSignApproval,
+    useTransactionBatch,
+} from '@/hooks/api-hooks/use-transaction-batch'
+
+import {
+    IClassProps,
     IForm,
     IMedia,
-    TEntityId,
-    IClassProps,
     ITransactionBatchSignatures,
+    TEntityId,
 } from '@/types'
 
 type TBatchSignFormValues = z.infer<typeof batchSignSchema>
@@ -270,7 +278,10 @@ const TransactionBatchSignCreateUpdateForm = ({
                                                     (stepRefs.current[i] = el)
                                                 }
                                             >
-                                                {title}
+                                                {title}{' '}
+                                                {!!form.getValues(Steps[i].fields[1]) && (
+                                                    <CheckFillIcon className="inline ml-1 text-primary" />
+                                                )}
                                             </StepperTitle>
                                             <StepperDescription>
                                                 {description}

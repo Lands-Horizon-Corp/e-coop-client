@@ -23,8 +23,8 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { TEntityId, IMemberOccupation } from '@/types'
 import { useMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
 import {
-    IMemberOccupationCreateUpdateFormProps,
     MemberOccupationCreateUpdateFormModal,
+    IMemberOccupationCreateUpdateFormProps,
 } from '../forms/member-forms/member-occupation-create-update-form'
 
 export interface IMemberOccupationComboboxCreateProps

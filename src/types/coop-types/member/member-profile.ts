@@ -68,7 +68,7 @@ export interface IMemberProfileQuickCreateRequest {
     full_name?: string
     suffix?: string
     member_gender_id?: TEntityId
-    birth_date?: string
+    birthdate?: string
     contact_number?: string
 
     civil_status: TCivilStatus
@@ -190,7 +190,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     last_name: string
     full_name: string
     suffix?: string
-    birth_date?: string
+    birthdate?: string
     status: TGeneralStatus
 
     description: string
