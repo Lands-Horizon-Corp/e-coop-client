@@ -1,8 +1,9 @@
+import { IOrganization } from '@/types/lands-types'
+
+import { ITimeStamps, TEntityId } from '../../common'
+import { IBranch } from '../branch'
 import { IMedia } from '../media'
 import { IMemberProfile } from './member-profile'
-import { ITimeStamps, TEntityId } from '../../common'
-import { IOrganization } from '@/types/lands-types'
-import { IBranch } from '../branch'
 
 // LATEST FROM ERD
 export interface IMemberGovernmentBenefitRequest {

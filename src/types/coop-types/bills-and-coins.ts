@@ -1,7 +1,7 @@
-import { IMedia } from './media'
-import { IBranch } from './branch'
-import { IOrganization } from '../lands-types'
 import { ITimeStamps, TEntityId } from '../common'
+import { IOrganization } from '../lands-types'
+import { IBranch } from './branch'
+import { IMedia } from './media'
 import { IPaginatedResult } from './paginated-result'
 
 export interface IBillsAndCoinRequest {

@@ -1,12 +1,13 @@
-import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { withCatchAsync } from '@/utils'
 import { uploadMedia } from '@/api-service/media-service'
+import { serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
 
 import { IMedia } from '@/types'
+
 import { IOperationCallbacks } from '../../types/api-hooks-types'
-import { serverRequestErrExtractor } from '@/helpers'
 
 export const useSinglePictureUpload = ({
     onError,

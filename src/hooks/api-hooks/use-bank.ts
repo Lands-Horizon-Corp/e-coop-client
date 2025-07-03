@@ -1,25 +1,26 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
+import BankService from '@/api-service/bank-service'
 import { serverRequestErrExtractor } from '@/helpers'
+import { toBase64, withCatchAsync } from '@/utils'
+
+import {
+    IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IBank,
+    IBankPaginated,
+    IBankRequest,
+    IQueryProps,
+    TEntityId,
+} from '@/types'
+
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
 } from '../../factory/api-hook-factory'
-import BankService from '@/api-service/bank-service'
-
-import {
-    IBank,
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IBankRequest,
-    IBankPaginated,
-    IAPIFilteredPaginatedHook,
-} from '@/types'
 
 export const useCreateBank = createMutationHook<IBank, string, IBankRequest>(
     (data) => BankService.create(data),

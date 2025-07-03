@@ -1,8 +1,9 @@
-import { IMedia } from '../media'
-import { IBranch } from '../branch'
-import { IMemberProfile } from './member-profile'
-import { IAuditable, ITimeStamps, TEntityId, TRelationship } from '../../common'
 import { IOrganization } from '@/types/lands-types'
+
+import { IAuditable, ITimeStamps, TEntityId, TRelationship } from '../../common'
+import { IBranch } from '../branch'
+import { IMedia } from '../media'
+import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
 export interface IMemberJointAccountRequest {

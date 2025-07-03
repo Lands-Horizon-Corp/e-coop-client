@@ -1,6 +1,6 @@
 import {
-    createAPICrudService,
     createAPICollectionService,
+    createAPICrudService,
 } from '@/factory/api-factory-service'
 
 import { ILoanPurpose, ILoanPurposeRequest } from '@/types'

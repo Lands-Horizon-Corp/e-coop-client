@@ -1,7 +1,8 @@
 import { AxiosProgressEvent } from 'axios'
 
-import APIService from './api-service'
 import { IMedia, TEntityId } from '@/types'
+
+import APIService from './api-service'
 
 const BASE_ENDPOINT = '/media'
 

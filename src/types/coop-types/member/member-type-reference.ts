@@ -1,8 +1,8 @@
-import { IBranch } from '../branch'
-import { IMemberType } from './member-type'
-import { IPaginatedResult } from '../paginated-result'
-import { IAccountResource } from '../accounts/accounts'
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IAccountResource } from '../accounts/accounts'
+import { IBranch } from '../branch'
+import { IPaginatedResult } from '../paginated-result'
+import { IMemberType } from './member-type'
 
 // LATEST FROM ERD
 export interface IMemberTypeReferenceRequest {

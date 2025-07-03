@@ -1,7 +1,7 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
+import GroupService from '@/api-service/member-services/member-group-service'
 import {
     createMutationHook,
     createMutationInvalidateFn,
@@ -9,16 +9,16 @@ import {
     updateMutationInvalidationFn,
 } from '@/factory/api-hook-factory'
 import { serverRequestErrExtractor } from '@/helpers'
-import GroupService from '@/api-service/member-services/member-group-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IMemberGroup,
-    IMemberGroupRequest,
-    IMemberGroupPaginated,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IMemberGroup,
+    IMemberGroupPaginated,
+    IMemberGroupRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useCreateMemberGroup = createMutationHook<

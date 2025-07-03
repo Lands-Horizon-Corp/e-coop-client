@@ -1,10 +1,11 @@
-import { TEntityId } from '@/types'
-
-import APIService from '../api-service'
 import {
     IFinancialStatementDefinition,
     IFinancialStatementDefinitionRequest,
 } from '@/types/coop-types/financial-statement-definition'
+
+import { TEntityId } from '@/types'
+
+import APIService from '../api-service'
 
 export const getAllFinancialStatementDefinition = async () => {
     const response = await APIService.get<IFinancialStatementDefinition[]>(

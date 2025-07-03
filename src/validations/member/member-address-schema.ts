@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import { entityIdSchema } from '@/validations/common'
 
 export const memberAddressSchema = z.object({

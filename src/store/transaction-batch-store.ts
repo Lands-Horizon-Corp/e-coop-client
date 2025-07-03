@@ -1,5 +1,6 @@
-import { ITransactionBatch, ITransactionBatchMinimal } from '@/types'
 import { create } from 'zustand'
+
+import { ITransactionBatch, ITransactionBatchMinimal } from '@/types'
 
 interface ITransactionBatchStore {
     data: ITransactionBatch | ITransactionBatchMinimal | null

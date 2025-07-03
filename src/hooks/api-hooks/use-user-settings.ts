@@ -1,23 +1,23 @@
-import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import {
-    updateUserSettingsPhoto,
     updateUserSettingsGeneral,
+    updateUserSettingsPhoto,
     updateUserSettingsProfile,
     updateUserSettingsSecurity,
 } from '@/api-service/user-settings-service'
-import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
 
 import {
     IAPIHook,
-    IUserBase,
     IMutationProps,
+    IUserBase,
     IUserSettingsGeneralRequest,
+    IUserSettingsPhotoUpdateRequest,
     IUserSettingsProfileRequest,
     IUserSettingsSecurityRequest,
-    IUserSettingsPhotoUpdateRequest,
 } from '@/types'
 
 export const useUpdateUserSettingsGeneral = ({

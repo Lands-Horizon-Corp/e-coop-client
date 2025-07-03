@@ -1,6 +1,6 @@
-import { IUserBase } from './user'
 import { IMediaRequest } from '../coop-types/media'
 import { IGeneratedReport, IUserOrganization } from '../lands-types'
+import { IUserBase } from './user'
 
 // returned by /authentication/current
 export interface IAuthContext<TUser = IUserBase | undefined> {

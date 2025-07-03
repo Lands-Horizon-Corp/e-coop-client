@@ -1,7 +1,7 @@
-import { IBranch } from '../branch'
-import { IMemberProfile } from './member-profile'
-import { IPaginatedResult } from '../paginated-result'
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IBranch } from '../branch'
+import { IPaginatedResult } from '../paginated-result'
+import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
 export interface IMemberMutualFundsHistory extends ITimeStamps, IAuditable {

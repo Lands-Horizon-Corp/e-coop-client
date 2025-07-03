@@ -1,15 +1,15 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import * as DepositEntryService from '@/api-service/deposit-entry-service'
+import { serverRequestErrExtractor } from '@/helpers'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    TEntityId,
-    IQueryProps,
-    IDepositEntryPaginated,
     IAPIFilteredPaginatedHook,
+    IDepositEntryPaginated,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useFilteredBatchDepositEntry = ({

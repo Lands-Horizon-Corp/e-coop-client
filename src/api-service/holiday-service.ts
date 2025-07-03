@@ -1,7 +1,8 @@
 import {
-    createAPICrudService,
     createAPICollectionService,
+    createAPICrudService,
 } from '@/factory/api-factory-service'
+
 import { IHoliday, IHolidayRequest } from '@/types'
 
 const CrudServices = createAPICrudService<IHoliday, IHolidayRequest>('/holiday')

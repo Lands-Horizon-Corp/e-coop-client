@@ -1,7 +1,7 @@
-import { IBank } from './bank'
-import { IMedia } from './media'
 import { IUserBase } from '../auth'
 import { IBaseEntityMeta, TEntityId } from '../common'
+import { IBank } from './bank'
+import { IMedia } from './media'
 import { ITransactionBatch } from './transaction-batch'
 
 export interface IOnlineRemitance extends IBaseEntityMeta {

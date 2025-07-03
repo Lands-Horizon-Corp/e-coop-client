@@ -1,4 +1,5 @@
 import { IBaseEntityMeta, TEntityId } from '@/types/common'
+
 import { IPaginatedResult } from './paginated-result'
 
 export interface IDisbursement extends IBaseEntityMeta {

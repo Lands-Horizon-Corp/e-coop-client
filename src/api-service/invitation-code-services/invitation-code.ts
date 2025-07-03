@@ -1,11 +1,13 @@
+import qs from 'query-string'
+
 import {
     IInvitationCode,
     IInvitationCodePaginated,
     IInvitationCodeRequest,
     TEntityId,
 } from '@/types'
+
 import APIService from '../api-service'
-import qs from 'query-string'
 
 export const verifyInvitationCode = async (code: string) => {
     const response = await APIService.get<IInvitationCode>(

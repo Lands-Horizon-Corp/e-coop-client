@@ -1,6 +1,6 @@
-import APIService from './api-service'
-
 import { IMedia, IUserBase, TEntityId } from '@/types'
+
+import APIService from './api-service'
 
 const BASE_ENDPOINT = '/user'
 

@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
-import { useSortingState } from '@/hooks/use-sorting-state'
+
 import { OnChangeFn, SortingState } from '@tanstack/react-table'
+
+import { useSortingState } from '@/hooks/use-sorting-state'
 
 export const useDataTableSorting = () => {
     const { sortingState, setSortingState } = useSortingState()

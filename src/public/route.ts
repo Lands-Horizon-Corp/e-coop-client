@@ -1,7 +1,7 @@
+import { rootRoute } from '@/root-route'
 import { createRoute } from '@tanstack/react-router'
 
 import PublicPracticeLayout from './layout'
-import { rootRoute } from '@/root-route'
 
 const publicPracticeRoute = createRoute({
     getParentRoute: () => rootRoute,

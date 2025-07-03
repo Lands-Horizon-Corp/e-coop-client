@@ -1,12 +1,12 @@
-import APIService from './api-service'
-
 import {
     IUserBase,
-    IUserSettingsProfileRequest,
     IUserSettingsGeneralRequest,
-    IUserSettingsSecurityRequest,
     IUserSettingsPhotoUpdateRequest,
+    IUserSettingsProfileRequest,
+    IUserSettingsSecurityRequest,
 } from '@/types'
+
+import APIService from './api-service'
 
 export const updateUserSettingsGeneral = async (
     data: IUserSettingsGeneralRequest

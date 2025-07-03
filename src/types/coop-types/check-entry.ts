@@ -1,11 +1,11 @@
+import { IUserBase } from '../auth'
+import { IBaseEntityMeta, TEntityId } from '../common'
 import { IBank } from './bank'
 import { IMedia } from './media'
-import { IUserBase } from '../auth'
-import { IPaginatedResult } from './paginated-result'
-import { IBaseEntityMeta, TEntityId } from '../common'
-import { IMemberProfile } from './member/member-profile'
-import { TTransactionBatchFullorMin } from './transaction-batch'
 import { IMemberJointAccount } from './member/member-joint-account'
+import { IMemberProfile } from './member/member-profile'
+import { IPaginatedResult } from './paginated-result'
+import { TTransactionBatchFullorMin } from './transaction-batch'
 
 export interface ICheckEntry extends IBaseEntityMeta {
     account_id?: TEntityId

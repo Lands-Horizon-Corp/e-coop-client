@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import { entityIdSchema } from '../common'
 
 export const loanPurposeSchema = z.object({

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+
 import { IMedia } from '@/types'
 
 interface ImagePreviewState {

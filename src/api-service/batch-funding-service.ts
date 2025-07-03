@@ -1,12 +1,13 @@
 import qs from 'query-string'
-import APIService from './api-service'
 
 import {
-    TEntityId,
     IBatchFunding,
-    IBatchFundingRequest,
     IBatchFundingPaginated,
+    IBatchFundingRequest,
+    TEntityId,
 } from '@/types'
+
+import APIService from './api-service'
 
 export const createBatchFund = async (data: IBatchFundingRequest) => {
     const response = await APIService.post<IBatchFundingRequest, IBatchFunding>(

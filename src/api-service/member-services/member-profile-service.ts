@@ -1,39 +1,39 @@
+import { downloadFileService } from '@/helpers'
 import qs from 'query-string'
 
-import APIService from '../api-service'
-import { downloadFileService } from '@/helpers'
-
 import {
-    TEntityId,
-    IMemberAsset,
-    IMemberIncome,
-    IMemberExpense,
     IMemberAddress,
-    IMemberProfile,
-    IMemberJointAccount,
-    IMemberAssetRequest,
-    IMemberIncomeRequest,
-    IMemberExpenseRequest,
-    IMemberProfileRequest,
     IMemberAddressRequest,
-    IMemberRelativeAccount,
-    IMemberProfilePaginated,
-    IMemberContactReference,
-    IMemberGovernmentBenefit,
+    IMemberAsset,
+    IMemberAssetRequest,
     IMemberCloseRemarkRequest,
-    IMemberJointAccountRequest,
-    IMemberProfileMediasRequest,
-    IMemberEducationalAttainment,
-    IMemberProfileAccountRequest,
-    IMemberRelativeAccountRequest,
+    IMemberContactReference,
     IMemberContactReferenceRequest,
-    IMemberGovernmentBenefitRequest,
-    IMemberProfileUserAccountRequest,
-    IMemberProfileQuickCreateRequest,
-    IMemberProfilePersonalInfoRequest,
-    IMemberProfileMembershipInfoRequest,
+    IMemberEducationalAttainment,
     IMemberEducationalAttainmentRequest,
+    IMemberExpense,
+    IMemberExpenseRequest,
+    IMemberGovernmentBenefit,
+    IMemberGovernmentBenefitRequest,
+    IMemberIncome,
+    IMemberIncomeRequest,
+    IMemberJointAccount,
+    IMemberJointAccountRequest,
+    IMemberProfile,
+    IMemberProfileAccountRequest,
+    IMemberProfileMediasRequest,
+    IMemberProfileMembershipInfoRequest,
+    IMemberProfilePaginated,
+    IMemberProfilePersonalInfoRequest,
+    IMemberProfileQuickCreateRequest,
+    IMemberProfileRequest,
+    IMemberProfileUserAccountRequest,
+    IMemberRelativeAccount,
+    IMemberRelativeAccountRequest,
+    TEntityId,
 } from '@/types'
+
+import APIService from '../api-service'
 
 const BASE_ENDPOINT = '/member-profile'
 

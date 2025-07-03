@@ -1,7 +1,8 @@
 import { IBillsAndCoin, IBillsAndCoinRequest } from '@/types'
+
 import {
-    createAPICrudService,
     createAPICollectionService,
+    createAPICrudService,
 } from '../factory/api-factory-service'
 
 const CrudServices = createAPICrudService<IBillsAndCoin, IBillsAndCoinRequest>(

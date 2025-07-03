@@ -1,6 +1,6 @@
 import { IUserBase } from '../auth'
+import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
 import { IPaginatedResult } from './paginated-result'
-import { ITimeStamps, TEntityId, IAuditable, TUserType } from '../common'
 
 export interface IFootstep extends ITimeStamps, IAuditable {
     id: TEntityId

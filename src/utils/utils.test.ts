@@ -1,6 +1,6 @@
-import { formatNumber, toReadableDate } from './'
+import { describe, expect, it } from 'vitest'
 
-import { describe, it, expect } from 'vitest'
+import { formatNumber, toReadableDate } from './'
 
 describe('toReadableDate', () => {
     it('Should be December 3 2024', () => {

@@ -1,12 +1,14 @@
 // Refactored ChequeService
-import APIService from '../api-service'
 import qs from 'query-string'
+
 import { TEntityId } from '@/types'
 import {
+    IChequePaginatedResource,
     IChequeResource,
     IChequeResponse,
-    IChequePaginatedResource,
 } from '@/types'
+
+import APIService from '../api-service'
 
 export default class ChequeService {
     private static readonly BASE_ENDPOINT = '/cheque'

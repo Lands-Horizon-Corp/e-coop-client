@@ -1,11 +1,11 @@
-import { IMedia } from './media'
 import { IUserBase } from '../auth'
-import { IPaginatedResult } from './paginated-result'
 import { IBaseEntityMeta, TEntityId } from '../common'
-import { ITransactionBatch } from './transaction-batch'
-import { IMemberProfile } from './member/member-profile'
-import { IMemberJointAccount } from './member/member-joint-account'
 import { IAccount } from './accounts/account'
+import { IMedia } from './media'
+import { IMemberJointAccount } from './member/member-joint-account'
+import { IMemberProfile } from './member/member-profile'
+import { IPaginatedResult } from './paginated-result'
+import { ITransactionBatch } from './transaction-batch'
 
 export const GENERAL_LEDGER_SOURCE = [
     'withdraw',

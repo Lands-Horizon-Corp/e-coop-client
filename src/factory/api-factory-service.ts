@@ -1,9 +1,9 @@
+import { downloadFileService } from '@/helpers'
 import qs from 'query-string'
 
-import APIService from '../api-service/api-service'
-
 import { IPaginatedResult, TEntityId } from '@/types'
-import { downloadFileService } from '@/helpers'
+
+import APIService from '../api-service/api-service'
 
 // Typical na CRUD service functions
 export const createAPICrudService = <

@@ -1,14 +1,16 @@
 import { useMemo, useState } from 'react'
 
 import {
-    TFilterLogic,
-    TFinalFilter,
     IFilterState,
-    TSearchFilter,
+    TFilterLogic,
     TFilterObject,
     TFilterPayload,
+    TFinalFilter,
+    TSearchFilter,
 } from '@/contexts/filter-context'
+
 import useDebounce from '@/hooks/use-debounce'
+
 // import logger from '@/helpers/loggers/logger'
 
 const useFilterState = ({

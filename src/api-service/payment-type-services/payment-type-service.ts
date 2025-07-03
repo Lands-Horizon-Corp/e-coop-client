@@ -1,13 +1,14 @@
-import { TPagination } from '@/hooks/use-pagination'
-
-import { TEntityId, IPaginatedResult } from '@/types'
 import {
     IPaymentType,
     IPaymentTypePaginatedResource,
     IPaymentTypeRequest,
 } from '@/types/coop-types/payment-type'
-
 import qs from 'query-string'
+
+import { TPagination } from '@/hooks/use-pagination'
+
+import { IPaginatedResult, TEntityId } from '@/types'
+
 import APIService from '../api-service'
 
 // GET /payment-type/:id
