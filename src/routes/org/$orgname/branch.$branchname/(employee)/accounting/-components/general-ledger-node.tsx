@@ -31,11 +31,12 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definition/use-general-ledger-definition'
+import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
 import { colorPalette } from '@/hooks/use-random-gradient'
 
 export interface IGeneralLedgerAccount extends IGeneralLedgerDefinition {
     type: GeneralLedgerFinancialStatementNodeType.ACCOUNT
+    general_ledger_definition?: IGeneralLedgerDefinition[]
 }
 
 export type GeneralLedgerTree = IGeneralLedgerDefinition | IGeneralLedgerAccount
@@ -45,11 +46,8 @@ export function addPositionIndexes(
 ) {
     nodes.forEach((node, idx) => {
         node.index = idx
-        if (
-            node.general_ledger_accounts &&
-            node.general_ledger_accounts.length > 0
-        ) {
-            addPositionIndexes(node.general_ledger_accounts)
+        if (node.accounts && node.accounts.length > 0) {
+            addPositionIndexes(node.general_ledger_definition || [])
         }
     })
 }
@@ -68,12 +66,9 @@ export function findNodeAndParent(
         if (current.id === id) {
             return { node: current, parent: parent, index: i }
         }
-        if (
-            current.general_ledger_accounts &&
-            current.general_ledger_accounts.length > 0
-        ) {
+        if (current.accounts && current.accounts.length > 0) {
             const found = findNodeAndParent(
-                current.general_ledger_accounts,
+                current.general_ledger_definition || [],
                 id,
                 current
             )
@@ -124,7 +119,7 @@ export function moveNodeInTree(
         return tree
     }
 
-    const parentAccounts = draggedParent.general_ledger_accounts
+    const parentAccounts = draggedParent.general_ledger_definition
     if (!parentAccounts) {
         toast.error('Parent accounts array is missing for dragged node.')
         return tree
@@ -155,17 +150,24 @@ const GeneralLedgerTreeNode = ({
 }: GeneralLedgerTreeNodeProps) => {
     const ref = useRef<HTMLDivElement>(null)
     const { onOpen } = useConfirmModalStore()
+
     const [openCreateAccountModal, setOpenCreateAccountModal] = useState(false)
     const [openCreateGeneralLedgerModal, setOpenCreateGeneralLedgerModal] =
         useState(false)
     const [onCreate, setOnCreate] = useState(true)
     const [isReadOnly, setIsReadyOnly] = useState(false)
+
+    // if (!node.general_ledger_definition) {
+    //     return <div>Loading...</div>
+    // }
+
     const hasChildren =
-        node.general_ledger_accounts && node.general_ledger_accounts.length > 0
+        node.general_ledger_definition &&
+        node.general_ledger_definition.length > 0
 
     const canDrag = depth > 0
 
-    const hasOnlyOneChild = node.general_ledger_accounts.length === 1
+    const hasOnlyOneChild = node.general_ledger_definition?.length === 1
 
     const [{ isDragging }, drag] = useDrag({
         type: ItemTypes.GL_NODE,
@@ -247,7 +249,7 @@ const GeneralLedgerTreeNode = ({
     const isDefinition =
         node.type === GeneralLedgerFinancialStatementNodeType.DEFINITION
 
-    const childLength = node.general_ledger_accounts.length
+    const childLength = node.general_ledger_definition?.length
     const {
         expandedNodeIds,
         targetNodeId,
@@ -279,7 +281,9 @@ const GeneralLedgerTreeNode = ({
                 description={`Fill out the form to ${onCreate ? 'add a new' : 'edit'} General Ledger Definition.`}
                 formProps={{
                     defaultValues: onCreate ? {} : node,
-                    generalLedgerId: onCreate ? undefined : node.id,
+                    generalLedgerDefinitionEntriesId: onCreate
+                        ? undefined
+                        : node.id,
                     readOnly: isReadOnly,
                 }}
             />
@@ -342,113 +346,101 @@ const GeneralLedgerTreeNode = ({
                             </p>
                         )}
                     </div>
-                    {isDefinition || isAccount ? (
+                    {/* {isDefinition || isAccount ? (
                         <>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        size={'sm'}
-                                        className="border-0 text-xl"
-                                    >
-                                        +
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                    className="w-56"
-                                    align="start"
+                        </>
+                    ) : (
+                        ''
+                    )} */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size={'sm'}
+                                className="border-0 text-xl"
+                            >
+                                +
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56" align="start">
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setIsReadyOnly(false)
+                                        setOpenCreateAccountModal(true)
+                                        setIsReadyOnly(false)
+                                    }}
                                 >
-                                    <DropdownMenuGroup>
+                                    <PlusIcon className="mr-2">+</PlusIcon>
+                                    Add Account
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        setIsReadyOnly(false)
+                                        setOnCreate(true)
+                                        setOpenCreateGeneralLedgerModal(true)
+                                    }}
+                                >
+                                    <PlusIcon className="mr-2">+</PlusIcon>
+                                    Add GL Definition
+                                </DropdownMenuItem>
+                                {!isFirstLevel && (
+                                    <div>
                                         <DropdownMenuItem
                                             onClick={(e) => {
                                                 e.stopPropagation()
-                                                setIsReadyOnly(false)
-                                                setOpenCreateAccountModal(true)
-                                                setIsReadyOnly(false)
-                                            }}
-                                        >
-                                            <PlusIcon className="mr-2">
-                                                +
-                                            </PlusIcon>
-                                            Add Account
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                setIsReadyOnly(false)
-                                                setOnCreate(true)
+                                                setOnCreate(false)
                                                 setOpenCreateGeneralLedgerModal(
                                                     true
                                                 )
                                             }}
                                         >
-                                            <PlusIcon className="mr-2">
-                                                +
-                                            </PlusIcon>
-                                            Add GL Definition
+                                            <EditPencilIcon className="mr-2" />
+                                            edit
                                         </DropdownMenuItem>
-                                        {!isFirstLevel && (
-                                            <div>
-                                                <DropdownMenuItem
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setOnCreate(false)
-                                                        setOpenCreateGeneralLedgerModal(
-                                                            true
+                                        <DropdownMenuItem
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setOnCreate(false)
+                                                setOpenCreateGeneralLedgerModal(
+                                                    true
+                                                )
+                                                setIsReadyOnly(true)
+                                            }}
+                                        >
+                                            <EyeViewIcon className="mr-2" />
+                                            View Details
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            disabled={isDeletingGLDefinition}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpen({
+                                                    title: `Delete  ${isDefinition ? 'definition' : 'Account'}`,
+                                                    description: `You are about this ${isDefinition ? 'definition' : 'Account'}, are you sure you want to proceed?`,
+                                                    onConfirm: () => {
+                                                        deleteGeneralLedgerDefinition(
+                                                            node.id
                                                         )
-                                                    }}
-                                                >
-                                                    <EditPencilIcon className="mr-2" />
-                                                    edit
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setOnCreate(false)
-                                                        setOpenCreateGeneralLedgerModal(
-                                                            true
-                                                        )
-                                                        setIsReadyOnly(true)
-                                                    }}
-                                                >
-                                                    <EyeViewIcon className="mr-2" />
-                                                    View Details
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    disabled={
-                                                        isDeletingGLDefinition
-                                                    }
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        onOpen({
-                                                            title: `Delete  ${isDefinition ? 'definition' : 'Account'}`,
-                                                            description: `You are about this ${isDefinition ? 'definition' : 'Account'}, are you sure you want to proceed?`,
-                                                            onConfirm: () => {
-                                                                deleteGeneralLedgerDefinition(
-                                                                    node.id
-                                                                )
-                                                            },
-                                                            confirmString:
-                                                                'Proceed',
-                                                        })
-                                                    }}
-                                                >
-                                                    <TrashIcon className="mr-2 text-destructive" />
-                                                    Remove
-                                                </DropdownMenuItem>
-                                            </div>
-                                        )}
-                                    </DropdownMenuGroup>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </>
-                    ) : (
-                        ''
-                    )}
+                                                    },
+                                                    confirmString: 'Proceed',
+                                                })
+                                            }}
+                                        >
+                                            <TrashIcon className="mr-2 text-destructive" />
+                                            Remove
+                                        </DropdownMenuItem>
+                                    </div>
+                                )}
+                            </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </GradientBackground>
                 {isNodeExpanded && hasChildren && (
                     <div className="ml-4">
-                        {node.general_ledger_accounts!.map((childNode) => (
+                        {node.general_ledger_definition?.map((childNode) => (
                             <GeneralLedgerTreeNode
                                 key={childNode.id}
                                 node={childNode}

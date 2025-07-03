@@ -1600,6 +1600,7 @@ Table financial_statement_definition {
   deleted_by_id varchar(50) [ref: - user.id]
 
   financial_statement_definition_id varchar(50)
+financial_statement_grouping_id varchar(50)
 
   name varchar(255) [not null, unique]
   description text

@@ -25,12 +25,15 @@ const findNodePath = (
 ): string[] | null => {
     for (const node of nodes) {
         const newPath = [...path, node.id]
+        if (!node.general_ledger_definition) {
+            return newPath
+        }
         if (node.name.toLowerCase().includes(name.toLowerCase())) {
             return newPath
         }
-        if (node.general_ledger_accounts) {
+        if (node.accounts) {
             const foundPath = findNodePath(
-                node.general_ledger_accounts,
+                node.general_ledger_definition,
                 name,
                 newPath
             )
@@ -57,10 +60,10 @@ const GeneralLedgerTreeViewer = ({
             nodes.forEach((node, idx) => {
                 node.index = idx
                 if (
-                    node.general_ledger_accounts &&
-                    node.general_ledger_accounts.length > 0
+                    node.general_ledger_definition &&
+                    node.general_ledger_definition.length > 0
                 ) {
-                    addPositionIndexesToTree(node.general_ledger_accounts)
+                    addPositionIndexesToTree(node.general_ledger_definition)
                 }
             })
         },
@@ -112,12 +115,10 @@ const GeneralLedgerTreeViewer = ({
 
     return (
         <div className="w-full rounded-lg p-4 shadow-md">
-            <h3 className="mb-4 text-xl font-bold">
-                General Ledger Definition
-            </h3>
-            <div className="flex gap-2 border-b p-4">
+            <div className="flex gap-2 py-4">
                 <Input
                     type="text"
+                    className="rounded-2xl"
                     placeholder="Search General Ledger..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -129,22 +130,24 @@ const GeneralLedgerTreeViewer = ({
                 />
                 <Button
                     onClick={handleSearch}
-                    variant={'ghost'}
-                    className="flex items-center space-x-2"
+                    variant={'secondary'}
+                    className="flex items-center rounded-2xl space-x-2"
                     disabled={!isSearchOnChanged}
                 >
                     <MagnifyingGlassIcon className="mr-2" />
                     Search
                 </Button>
             </div>
-            {ledgerData.map((node) => (
-                <GeneralLedgerTreeNode
-                    key={node.id}
-                    node={node}
-                    depth={0}
-                    onMoveNode={handleMoveNode}
-                />
-            ))}
+            {ledgerData.map((node) => {
+                return (
+                    <GeneralLedgerTreeNode
+                        key={node.id}
+                        node={node}
+                        depth={0}
+                        onMoveNode={handleMoveNode}
+                    />
+                )
+            })}
         </div>
     )
 }

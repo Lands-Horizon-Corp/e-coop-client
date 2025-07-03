@@ -1,28 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
-
-import { IFinancialStatementDefinition } from '@/types/coop-types/financial-statement-definition'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 
+import { useGetALlFinancialStatement } from '@/hooks/api-hooks/financial-statement-definition'
+
 import FinancialStatementTreeViewer from './-components/financial-statement-tree'
 
-const FINANCIAL_DATA_FILE_PATH = '/data/financialStatementDefinitionSample.json'
-
-export const useTemporaryFetchFinancialStatementDefinationData = () => {
-    return useQuery<IFinancialStatementDefinition[], Error>({
-        queryKey: ['financialStatementDefinitions'],
-        queryFn: async () => {
-            const response = await fetch(FINANCIAL_DATA_FILE_PATH)
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`)
-            }
-            return response.json()
-        },
-        staleTime: 1000 * 60 * 5,
-        refetchOnWindowFocus: false,
-    })
-}
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
 )({
@@ -30,8 +13,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const { data: financialTreeData } =
-        useTemporaryFetchFinancialStatementDefinationData()
+    const { data: financialTreeData } = useGetALlFinancialStatement()
 
     if (!financialTreeData || financialTreeData.length === 0) {
         return (
