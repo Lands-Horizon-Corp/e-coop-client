@@ -10,7 +10,10 @@ import {
     IQueryProps,
     IAPIFilteredPaginatedHook,
     ITransactionEntryPaginated,
+    ITransactionEntryRequest,
+    ITransactionEntry,
 } from '@/types'
+import { createMutationHook } from '@/factory/api-hook-factory'
 
 export const useFilteredBatchTransactionEntry = ({
     sort,
@@ -62,3 +65,12 @@ export const useFilteredBatchTransactionEntry = ({
         retry: 1,
     })
 }
+
+export const useCreateTransactionEntry = createMutationHook<
+    ITransactionEntry,
+    string,
+    ITransactionEntryRequest
+>(
+    (payload) => TransactionEntryService.createTransactionEntry(payload),
+    'Successfully sumit Payment entry'
+)

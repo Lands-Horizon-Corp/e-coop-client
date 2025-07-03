@@ -14,8 +14,7 @@ import {
 import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 import z from 'zod'
-
-const TEntityIdSchema = z.string().min(1, 'Name is required')
+import { entityIdSchema } from '../common'
 
 export enum AccountExclusiveSettingTypeEnum {
     None = 'None',
@@ -25,11 +24,11 @@ export enum AccountExclusiveSettingTypeEnum {
 }
 
 export const IAccountRequestSchema = z.object({
-    general_ledger_definition_id: TEntityIdSchema.optional(),
-    financial_statement_definition_id: TEntityIdSchema.optional(),
-    account_classification_id: TEntityIdSchema.optional(),
-    account_category_id: TEntityIdSchema.optional(),
-    member_type_id: TEntityIdSchema.optional(),
+    general_ledger_definition_id: entityIdSchema.optional(),
+    financial_statement_definition_id: entityIdSchema.optional(),
+    account_classification_id: entityIdSchema.optional(),
+    account_category_id: entityIdSchema.optional(),
+    member_type_id: entityIdSchema.optional(),
 
     name: z.string().min(1, 'Name is required'),
     description: z.string().min(1, 'Description is required'),
@@ -66,7 +65,7 @@ export const IAccountRequestSchema = z.object({
         .min(0, 'Interest secured must be non-negative')
         .optional(),
 
-    computation_sheet_id: TEntityIdSchema.optional(),
+    computation_sheet_id: entityIdSchema.optional(),
 
     coh_cib_fines_grace_period_entry_daily_amortization: z
         .number()
