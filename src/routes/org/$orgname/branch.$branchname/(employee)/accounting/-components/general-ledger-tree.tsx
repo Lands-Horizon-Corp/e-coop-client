@@ -16,6 +16,31 @@ import { MagnifyingGlassIcon } from '@/components/icons'
 type GeneralLedgerTreeViewerProps = {
     treeData: IGeneralLedgerDefinition[]
 }
+
+const findNodePath = (
+    nodes: IGeneralLedgerDefinition[],
+    name: string,
+    path: string[] = []
+): string[] | null => {
+    for (const node of nodes) {
+        const newPath = [...path, node.id]
+        if (node.name.toLowerCase().includes(name.toLowerCase())) {
+            return newPath
+        }
+        if (node.general_ledger_accounts) {
+            const foundPath = findNodePath(
+                node.general_ledger_accounts,
+                name,
+                newPath
+            )
+            if (foundPath) {
+                return foundPath
+            }
+        }
+    }
+    return null
+}
+
 const GeneralLedgerTreeViewer = ({
     treeData,
 }: GeneralLedgerTreeViewerProps) => {
@@ -25,30 +50,6 @@ const GeneralLedgerTreeViewer = ({
     const [searchTerm, setSearchTerm] = useState('')
     const { expandPath, setTargetNodeId, resetExpansion } =
         useFinancialStatementStore()
-
-    const findNodePath = (
-        nodes: IGeneralLedgerDefinition[],
-        name: string,
-        path: string[] = []
-    ): string[] | null => {
-        for (const node of nodes) {
-            const newPath = [...path, node.id]
-            if (node.name.toLowerCase().includes(name.toLowerCase())) {
-                return newPath
-            }
-            if (node.general_ledger_accounts) {
-                const foundPath = findNodePath(
-                    node.general_ledger_accounts,
-                    name,
-                    newPath
-                )
-                if (foundPath) {
-                    return foundPath
-                }
-            }
-        }
-        return null
-    }
 
     const addPositionIndexesToTree = useCallback(
         (nodes: (IGeneralLedgerDefinition | IGeneralLedgerAccount)[]) => {

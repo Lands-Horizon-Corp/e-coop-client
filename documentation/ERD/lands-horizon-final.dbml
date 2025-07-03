@@ -2247,7 +2247,7 @@ Table general_accounting_ledger {
 
   employee_user_id varchar(50) // sino employee
   member_profile_id varchar(50)
-  member_joint_account_id varchar(50) // ka may ari nang account yung gumamit/nag transact
+// member_joint_account_id varchar(50) // ka may ari nang account yung gumamit/nag transact
 
   transaction_reference_number varchar(50)
   reference_number varchar(50)
@@ -2363,7 +2363,7 @@ Table general_ledger_transaction_entry {
   deleted_by_id varchar(50) [ref: - user.id]
 
   account_id varchar(50)
-  general_ledger_transaction_entry_id varchar(50)
+  general_ledger_transaction_id varchar(50)
 
   debit decimal
   credit decimal

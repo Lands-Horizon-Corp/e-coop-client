@@ -1,14 +1,15 @@
-import NoOrganizationView from './-components/no-organization-view'
-import WithOrganization from './-components/with-organization'
+import ErrorPage from '@/components/error-page'
 import { LandmarkIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import FormErrorMessage from '@/components/ui/form-error-message'
+import ImageDisplay from '@/components/image-display'
+import WithOrganization from './-components/with-organization'
+import NoOrganizationView from './-components/no-organization-view'
 
 import { useAuthUser } from '@/store/user-auth-store'
+import { useSubscribe } from '@/hooks/use-pubsub'
 import { useGetUserOrganizationByUserId } from '@/hooks/api-hooks/use-user-organization'
 
 import { createFileRoute } from '@tanstack/react-router'
-import { useSubscribe } from '@/hooks/use-pubsub'
+import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 
 export const Route = createFileRoute('/onboarding/')({
     component: RouteComponent,
@@ -32,9 +33,27 @@ function RouteComponent() {
     useSubscribe(`user_organization.update.user.${user.id}`, () => refetch())
     useSubscribe(`user_organization.delete.user.${user.id}`, () => refetch())
 
-    const hasOrganization: boolean =
-        Object.keys(userOrganizationsData).length > 0
+    const hasOrganization: boolean = userOrganizationsData.length > 0
 
+    if (isError) {
+        return <ErrorPage />
+    }
+
+    if (isPending || isLoading || isFetching) {
+        return (
+            <div className="flex min-h-full w-full flex-col items-center justify-center gap-y-2">
+                <ImageDisplay
+                    src={LOADING_ARTWORK_GIF}
+                    className="block size-52 animate-pulse rounded-none !bg-transparent"
+                    fallbackClassName="!bg-transparent rounded-none"
+                />
+                <p className="animate-pulse text-xs text-accent-foreground">
+                    {' '}
+                    Getting ready...
+                </p>
+            </div>
+        )
+    }
     return (
         <div className="mt-10 flex min-h-full w-full flex-col items-center gap-y-5">
             <h1 className="relative mr-2 flex w-full items-center justify-center space-x-2 font-inter text-3xl font-semibold">
@@ -43,35 +62,13 @@ function RouteComponent() {
                 </span>
                 Welcome to E-Coop Onboarding
             </h1>
-            {isPending && (
-                <div className="flex h-14 w-full items-center justify-center">
-                    <LoadingSpinner className="animate-spin" />
-                </div>
-            )}
-            {userOrganizationsData ? (
-                hasOrganization ? (
-                    <WithOrganization
-                        isLoading={isLoading}
-                        organizationsWithBranches={userOrganizationsData}
-                    />
-                ) : (
-                    <NoOrganizationView />
-                )
-            ) : isError ? (
-                <FormErrorMessage
-                    errorMessage={'Something went wrong! Failed to load data.'}
+            {hasOrganization ? (
+                <WithOrganization
+                    organizationsWithBranches={userOrganizationsData}
                 />
-            ) : isLoading ? (
-                <LoadingSpinner className="animate-spin" />
             ) : (
-                <>
-                    hello
-                    <NoOrganizationView />
-                </>
+                <NoOrganizationView />
             )}
-            <div className="text-xs opacity-30">
-                {isFetching ? 'Fetching data...' : null}
-            </div>
         </div>
     )
 }

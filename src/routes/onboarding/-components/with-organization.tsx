@@ -28,16 +28,13 @@ import { useNavigate } from '@tanstack/react-router'
 import { useAuthUser } from '@/store/user-auth-store'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { useCategoryStore } from '@/store/onboarding/category-store'
-import OrganizationItemSkeleton from '@/components/Skeleton/organization-item-skeleton'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: IOrgUserOrganizationGroup[]
-    isLoading: boolean
 }
 
 const WithOrganization = ({
     organizationsWithBranches,
-    isLoading,
 }: WithOrganizationViewProps) => {
     const navigate = useNavigate()
     const {
@@ -107,10 +104,6 @@ const WithOrganization = ({
                     collapsible
                     className={cn('w-full space-y-4')}
                 >
-                    {isLoading &&
-                        Array.from({ length: 3 }).map((_, index) => (
-                            <OrganizationItemSkeleton key={index} />
-                        ))}
                     {organizationsWithBranches.map((org) => {
                         const mediaUrl = org.media?.url ?? orgBannerList[0]
 

@@ -1,4 +1,3 @@
-import PageContainer from '@/components/containers/page-container'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/(landing)/test')({
@@ -6,9 +5,5 @@ export const Route = createFileRoute('/(landing)/test')({
 })
 
 function RouteComponent() {
-    return (
-        <PageContainer className="flex h-fit w-full flex-row items-start overflow-auto bg-black">
-            Test page
-        </PageContainer>
-    )
+    return <></>
 }
