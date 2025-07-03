@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 
-import { useModalState } from '@/hooks/use-modal-state'
+// import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute(
@@ -15,7 +15,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const createModal = useModalState()
+    // const createModal = useModalState()
 
     const queryClient = useQueryClient()
     const {
@@ -44,7 +44,7 @@ function RouteComponent() {
 
     return (
         <PageContainer>
-            <PermissionTemplateCreateUpdateFormModal {...createModal} />
+            {/* <PermissionTemplateCreateUpdateFormModal {...createModal} />
             <PermissionTemplateTable
                 toolbarProps={{
                     createActionProps: {
@@ -55,7 +55,7 @@ function RouteComponent() {
                     <PermissionTemplateTableAction {...prop} />
                 )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
-            />
+            /> */}
         </PageContainer>
     )
 }
