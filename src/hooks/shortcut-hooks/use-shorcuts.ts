@@ -1,9 +1,9 @@
 import {
     useCallback,
-    useRef,
-    useLayoutEffect,
-    useState,
     useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
 } from 'react'
 
 interface ShortcutOptions {

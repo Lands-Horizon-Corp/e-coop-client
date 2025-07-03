@@ -1,12 +1,13 @@
-import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import { createContactUs } from '@/api-service/contact-us-service'
+import { serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
+
+import { IContactUs, IContactUsRequest } from '@/types'
 
 import { IAPIHook, IMutationProps } from '../../types/api-hooks-types'
-import { IContactUs, IContactUsRequest } from '@/types'
 
 export const useCreateContactUs = ({
     onError,

@@ -1,11 +1,12 @@
+import { GeneralLedgerDefinitionServices } from '@/api-service/general-ledger-definition-services'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
 } from '@/types/coop-types/general-ledger-definitions'
-import { createMutationHook } from '../../../factory/api-hook-factory'
-import { GeneralLedgerDefinitionServices } from '@/api-service/general-ledger-definition-services'
 
 import { TEntityId } from '@/types'
+
+import { createMutationHook } from '../../../factory/api-hook-factory'
 
 export const useCreateGeneralLedgerDefinition = createMutationHook<
     IGeneralLedgerDefinition,

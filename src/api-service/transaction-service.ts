@@ -1,12 +1,12 @@
-import { IMemberAccountingLedger, TEntityId } from '@/types'
 import {
     ITransaction,
     ITransactionPaginated,
 } from '@/types/coop-types/transaction'
+import qs from 'query-string'
+
+import { IMemberAccountingLedger, TEntityId } from '@/types'
 
 import APIService from './api-service'
-
-import qs from 'query-string'
 
 export const getTransactionById = async (
     id: TEntityId

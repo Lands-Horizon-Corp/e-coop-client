@@ -1,24 +1,24 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import MemberOccupationService from '@/api-service/member-services/member-occupation-service'
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
 } from '@/factory/api-hook-factory'
-import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberOccupationService from '@/api-service/member-services/member-occupation-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IMemberOccupation,
-    IMemberOccupationRequest,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IMemberOccupation,
     IMemberOccupationPaginated,
+    IMemberOccupationRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useCreateMemberOccupation = createMutationHook<

@@ -1,4 +1,5 @@
-import { TEntityId, IAccountsRequest } from '@/types'
+import { IAccountsRequest, TEntityId } from '@/types'
+
 import { ICheckClearingRequest } from './check-clearing'
 
 /**

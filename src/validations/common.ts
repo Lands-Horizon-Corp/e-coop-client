@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import {
     CIVIL_STATUS,
     EDUCATIONAL_ATTAINMENT,

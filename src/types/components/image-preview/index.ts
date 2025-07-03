@@ -1,4 +1,5 @@
 import { MutableRefObject } from 'react'
+
 import { IMedia } from '@/types'
 
 export interface ImagePreviewProps {

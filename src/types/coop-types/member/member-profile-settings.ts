@@ -1,5 +1,4 @@
 // THIS IS ONLY USE FOR MEMBER PROFILE UPDATE
-
 import { TCivilStatus, TEntityId, TGeneralStatus } from '@/types/common'
 
 // 📌 Identity & Personal Info

@@ -1,4 +1,5 @@
 import { Path } from 'react-hook-form'
+
 import { IClassProps } from '@/types'
 
 export * from './form-interface'

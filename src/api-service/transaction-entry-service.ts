@@ -1,13 +1,13 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
-
 import {
-    TEntityId,
-    ITransactionEntryPaginated,
     ITransactionEntry,
+    ITransactionEntryPaginated,
     ITransactionEntryRequest,
+    TEntityId,
 } from '@/types'
+
+import APIService from './api-service'
 
 export const getPaginatedBatchTransactionEntry = async ({
     sort,

@@ -1,4 +1,4 @@
-import { IQRInvitationCode, IQrMemberIdData, IQRMemberProfile } from '@/types'
+import { IQRInvitationCode, IQRMemberProfile, IQrMemberIdData } from '@/types'
 
 // Type of QR content identifier
 export type TQrContentType =

@@ -1,9 +1,9 @@
-import { IMedia } from './media'
-import { IBranch } from './branch'
 import { IUserBase } from '../auth'
+import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IOrganization } from '../lands-types'
 import { IBatchFundingRequest } from './batch-funding'
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IBranch } from './branch'
+import { IMedia } from './media'
 
 export type TBatchBalanceStatus =
     | 'balanced'

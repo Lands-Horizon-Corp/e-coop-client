@@ -1,9 +1,9 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
-import { downloadFile } from '../helpers'
-
 import { IFootstepPaginated, TEntityId } from '@/types'
+
+import { downloadFile } from '../helpers'
+import APIService from './api-service'
 
 export const exportAll = async (url: string) => {
     return downloadFile(`/footstep/${url}`, 'all_footsteps_export.csv')

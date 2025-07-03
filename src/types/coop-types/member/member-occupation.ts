@@ -1,6 +1,7 @@
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 import { IBranch } from '../branch'
 import { IPaginatedResult } from '../paginated-result'
-import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+
 // import { IMemberOccupationHistory } from './member-occupation-history'
 
 // LATEST FROM ERD

@@ -1,8 +1,8 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
-
 import { IContactUs, IContactUsRequest, TEntityId } from '@/types'
+
+import APIService from './api-service'
 
 const BASE_ENDPOINT = '/contact'
 

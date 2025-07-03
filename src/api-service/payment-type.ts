@@ -3,6 +3,7 @@ import {
     ITransactionPaymentTypePaginated,
     TEntityId,
 } from '@/types'
+
 import APIService from './api-service'
 
 // GET /invitation-code/

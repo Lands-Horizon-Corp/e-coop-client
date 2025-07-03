@@ -1,12 +1,12 @@
+import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
 import qs from 'query-string'
 
-import {
-    createAPICrudService,
-    createAPICollectionService,
-} from '@/factory/api-factory-service'
-import { downloadFile } from '../helpers'
-
 import { IBank, IBankRequest, TEntityId } from '@/types'
+
+import { downloadFile } from '../helpers'
 
 const CrudServices = createAPICrudService<IBank, IBankRequest>('/bank')
 const CollectionServices = createAPICollectionService<IBank>('/bank')

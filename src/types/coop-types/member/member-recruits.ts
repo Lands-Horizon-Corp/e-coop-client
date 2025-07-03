@@ -1,5 +1,5 @@
-import { IMemberProfile } from './member-profile'
 import { ITimeStamps, TEntityId } from '../../common'
+import { IMemberProfile } from './member-profile'
 
 export interface IMemberRecruitedMembers extends ITimeStamps {
     id: TEntityId

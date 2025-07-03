@@ -1,5 +1,6 @@
+import { Dispatch, SetStateAction } from 'react'
+
 import L, { LatLngExpression, LatLngLiteral } from 'leaflet'
-import { SetStateAction, Dispatch } from 'react'
 import { MapContainerProps } from 'react-leaflet'
 
 interface TSearchableProps {

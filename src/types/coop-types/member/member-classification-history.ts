@@ -1,7 +1,7 @@
-import { IMemberProfile } from './member-profile'
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
 import { IMemberClassification } from './member-classification'
-import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
 export interface IMemberClassificationHistory extends ITimeStamps, IAuditable {

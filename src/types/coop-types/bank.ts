@@ -1,6 +1,6 @@
+import { IBaseEntityMeta, TEntityId } from '../common'
 import { IMedia } from './media'
 import { IPaginatedResult } from './paginated-result'
-import { IBaseEntityMeta, TEntityId } from '../common'
 
 export interface IBankRequest {
     name: string

@@ -1,6 +1,6 @@
 import { IUserBase } from '../auth/user'
-import { IPaginatedResult } from '../coop-types'
 import { ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult } from '../coop-types'
 
 export type INotificationType =
     | 'success'

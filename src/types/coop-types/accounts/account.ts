@@ -1,4 +1,5 @@
 import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
+
 import { IPaginatedResult } from '../paginated-result'
 
 export enum AccountTypeEnum {

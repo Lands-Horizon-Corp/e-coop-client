@@ -1,5 +1,6 @@
+import { IOnlineRemitance, IOnlineRemitanceRequest, TEntityId } from '@/types'
+
 import APIService from './api-service'
-import { TEntityId, IOnlineRemitance, IOnlineRemitanceRequest } from '@/types'
 
 export const createTransactionBatchOnlineRemittance = async (
     data: IOnlineRemitanceRequest

@@ -1,28 +1,29 @@
-import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { groupBy, toBase64, withCatchAsync } from '@/utils'
-import { createMutationHook } from '../../factory/api-hook-factory'
 import { BranchService } from '@/api-service/branch-services'
-import { isArray, serverRequestErrExtractor } from '@/helpers'
-import { UserOrganization } from '@/api-service/user-organization-services'
 import * as UserOrganizationService from '@/api-service/user-organization-service'
+import { UserOrganization } from '@/api-service/user-organization-services'
+import { isArray, serverRequestErrExtractor } from '@/helpers'
+import { groupBy, toBase64, withCatchAsync } from '@/utils'
 
 import {
+    IAPIFilteredPaginatedHook,
     IBranch,
-    TEntityId,
-    IQueryProps,
-    IUserOrganization,
+    IEmployee,
+    IMember,
+    IMutationProps,
     IOperationCallbacks,
     IOrgUserOrganizationGroup,
-    IMutationProps,
-    IAPIFilteredPaginatedHook,
-    IEmployee,
     IOwner,
-    IMember,
-    IUserOrganizationPaginated,
+    IQueryProps,
     IUserBase,
+    IUserOrganization,
+    IUserOrganizationPaginated,
+    TEntityId,
 } from '@/types'
+
+import { createMutationHook } from '../../factory/api-hook-factory'
 
 export const useGetUserOrganizationByUserId = (id: TEntityId) => {
     return useQuery<IOrgUserOrganizationGroup[], string>({

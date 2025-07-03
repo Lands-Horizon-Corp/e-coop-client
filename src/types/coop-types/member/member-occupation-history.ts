@@ -1,9 +1,8 @@
+import { IBaseEntityMeta, TEntityId } from '../../common'
 import { IBranch } from '../branch'
-import { IMemberProfile } from './member-profile'
 import { IPaginatedResult } from '../paginated-result'
 import { IMemberOccupation } from './member-occupation'
-
-import { TEntityId, IBaseEntityMeta } from '../../common'
+import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
 export interface IMemberOccupationHistory extends IBaseEntityMeta {

@@ -1,24 +1,24 @@
-import { toast } from 'sonner'
 import { queryOptions, useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
 } from '@/factory/api-hook-factory'
-import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import MemberTypeService from '@/api-service/member-services/member-type/member-type-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IMemberType,
-    IQueryProps,
-    IMemberTypeRequest,
-    IMemberTypePaginated,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IMemberType,
+    IMemberTypePaginated,
+    IMemberTypeRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const memberTypeLoader = (memberTypeId: TEntityId) =>

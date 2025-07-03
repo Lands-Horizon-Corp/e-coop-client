@@ -1,24 +1,24 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import LoanPurposeService from '@/api-service/loan-service/loan-purpose-service'
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
 } from '@/factory/api-hook-factory'
-import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import LoanPurposeService from '@/api-service/loan-service/loan-purpose-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    ILoanPurpose,
-    ILoanPurposeRequest,
-    ILoanPurposePaginated,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    ILoanPurpose,
+    ILoanPurposePaginated,
+    ILoanPurposeRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useCreateLoanPurpose = createMutationHook<

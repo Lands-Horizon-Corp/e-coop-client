@@ -1,20 +1,20 @@
-import APIService from '../api-service'
-
 import {
-    IBranch,
-    IUserBase,
     IAuthContext,
-    IVerification,
+    IBranch,
+    IChangePasswordRequest,
+    IForgotPasswordRequest,
     ILoggedInUser,
     IOrganization,
-    ISignUpRequest,
     ISignInRequest,
-    IVerifyEmailRequest,
-    IForgotPasswordRequest,
-    IChangePasswordRequest,
-    IVerifyContactNumberRequest,
+    ISignUpRequest,
+    IUserBase,
+    IVerification,
     IVerificationPasswordRequest,
+    IVerifyContactNumberRequest,
+    IVerifyEmailRequest,
 } from '@/types'
+
+import APIService from '../api-service'
 
 export const currentAuth = async () => {
     const endpoint = `/authentication/current`

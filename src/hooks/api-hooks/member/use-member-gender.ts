@@ -1,24 +1,24 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import GenderService from '@/api-service/member-services/member-gender-service'
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
 } from '@/factory/api-hook-factory'
-import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import GenderService from '@/api-service/member-services/member-gender-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IMemberGender,
-    IMemberGenderRequest,
-    IMemberGenderPaginated,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IMemberGender,
+    IMemberGenderPaginated,
+    IMemberGenderRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useCreateGender = createMutationHook<

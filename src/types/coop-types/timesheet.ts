@@ -1,9 +1,9 @@
 import {
+    IBaseEntityMeta,
     IMedia,
+    IPaginatedResult,
     IUserBase,
     TEntityId,
-    IBaseEntityMeta,
-    IPaginatedResult,
 } from '@/types'
 
 export interface ITimesheet extends IBaseEntityMeta {

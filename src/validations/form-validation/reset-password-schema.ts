@@ -1,6 +1,7 @@
 import z from 'zod'
 
 import { PASSWORD_MIN_LENGTH } from '@/constants'
+
 import { passwordSchema } from '@/validations/common'
 
 export const ResetPasswordSchema = z

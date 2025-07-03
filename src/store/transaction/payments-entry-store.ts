@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { IAccountsRequest, IPaymentsEntry, IMemberProfile } from '@/types'
+
+import { IAccountsRequest, IMemberProfile, IPaymentsEntry } from '@/types'
 
 // Payments Data
 export interface PaymentsDataStore {

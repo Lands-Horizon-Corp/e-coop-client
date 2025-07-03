@@ -1,5 +1,5 @@
-import { IPaginatedResult } from '../paginated-result'
 import { IBaseEntityMeta, TEntityId } from '../../common'
+import { IPaginatedResult } from '../paginated-result'
 
 // LATEST FROM ERD
 export interface IMemberGender extends IBaseEntityMeta {

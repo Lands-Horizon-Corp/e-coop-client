@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import SpySvg from '../src/assets/spy.svg';
-import { RouterProvider } from '@tanstack/react-router';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import createRouter from '@/root-route';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { RouterProvider } from '@tanstack/react-router';
+
+import SpySvg from '../src/assets/spy.svg';
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
 
 declare module '@tanstack/react-router' {

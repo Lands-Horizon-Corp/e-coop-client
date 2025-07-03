@@ -1,5 +1,5 @@
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 import { IPaginatedResult } from '../paginated-result'
-import { ITimeStamps, TEntityId, IAuditable } from '../../common'
 
 // LATEST FROM ERD
 export interface IMemberCenterRequest {

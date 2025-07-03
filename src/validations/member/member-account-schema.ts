@@ -1,16 +1,16 @@
 import z from 'zod'
 
 import {
+    birthDateSchema,
+    contactNumberSchema,
     emailSchema,
     entityIdSchema,
-    lastNameSchema,
-    passwordSchema,
-    userNameSchema,
-    birthDateSchema,
     firstNameSchema,
+    lastNameSchema,
     middleNameSchema,
-    contactNumberSchema,
+    passwordSchema,
     permanentAddressSchema,
+    userNameSchema,
 } from '../common'
 
 export const baseMemberAccountSchema = z.object({

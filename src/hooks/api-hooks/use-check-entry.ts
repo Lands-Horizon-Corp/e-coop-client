@@ -1,21 +1,21 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import * as CheckEntryService from '@/api-service/check-entry-service'
 import {
     createMutationHook,
     deleteMutationInvalidationFn,
 } from '@/factory/api-hook-factory'
-import { toBase64, withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as CheckEntryService from '@/api-service/check-entry-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    ICheckEntry,
-    IQueryProps,
-    ICheckEntryPaginated,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    ICheckEntry,
+    ICheckEntryPaginated,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useCheckAllEntry = ({

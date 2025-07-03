@@ -1,15 +1,14 @@
+import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
+import { downloadFileService } from '@/helpers'
 import qs from 'query-string'
 
 import {
-    createAPICrudService,
-    createAPICollectionService,
-} from '@/factory/api-factory-service'
-import { downloadFileService } from '@/helpers'
-
-import {
-    TEntityId,
     IMemberEducationalAttainment,
     IMemberEducationalAttainmentRequest,
+    TEntityId,
 } from '@/types'
 
 const CrudServices = createAPICrudService<

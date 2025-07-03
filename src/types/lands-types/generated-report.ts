@@ -1,7 +1,7 @@
 import { IUserBase } from '../auth/user'
-import { IOrganization } from './organization'
-import { IBranch, IMedia, IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IBranch, IMedia, IPaginatedResult } from '../coop-types'
+import { IOrganization } from './organization'
 
 export type TGenerateReportType = 'pending' | 'canceled' | 'error' | 'completed'
 
