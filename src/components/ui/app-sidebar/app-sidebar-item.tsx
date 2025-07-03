@@ -1,6 +1,8 @@
 import React from 'react'
-import { VariantProps } from 'class-variance-authority'
+
+import { cn } from '@/lib'
 import { useLocation, useRouter } from '@tanstack/react-router'
+import { VariantProps } from 'class-variance-authority'
 
 import { ChevronRightIcon } from '@/components/icons'
 
@@ -10,15 +12,13 @@ import {
     CollapsibleTrigger,
 } from '../collapsible'
 import {
-    SidebarMenuSub,
-    SidebarMenuItem,
     SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
     sidebarMenuButtonVariants,
 } from '../sidebar'
 import { TooltipContent } from '../tooltip'
 import { sidebarRouteMatcher } from './app-sidebar-utils'
-
-import { cn } from '@/lib'
 import { INavItem } from './types'
 
 interface Props {

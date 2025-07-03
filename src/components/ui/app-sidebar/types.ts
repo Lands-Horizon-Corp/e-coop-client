@@ -1,5 +1,6 @@
-import { TUserType } from '@/types'
 import { IconType } from 'react-icons/lib'
+
+import { TUserType } from '@/types'
 
 export type TNavItemType = 'dropdown' | 'item'
 

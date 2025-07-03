@@ -1,6 +1,6 @@
 import {
-    INavItem,
     INavGroupItem,
+    INavItem,
     INavItemSingle,
     TQuickSearchGroup,
 } from './types'

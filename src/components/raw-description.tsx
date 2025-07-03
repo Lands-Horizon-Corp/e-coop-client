@@ -1,6 +1,6 @@
+import { cn } from '@/lib'
 import DOMPurify from 'dompurify'
 
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {

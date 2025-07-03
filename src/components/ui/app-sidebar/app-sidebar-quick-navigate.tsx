@@ -1,19 +1,20 @@
-import { ArrowRight } from 'lucide-react'
-import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useState } from 'react'
 
+import { Link } from '@tanstack/react-router'
+import { ArrowRight } from 'lucide-react'
+
+import { MagnifyingGlassIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
-    CommandItem,
-    CommandList,
+    CommandDialog,
     CommandEmpty,
     CommandGroup,
     CommandInput,
-    CommandDialog,
-    CommandShortcut,
+    CommandItem,
+    CommandList,
     CommandSeparator,
+    CommandShortcut,
 } from '@/components/ui/command'
-import { Button } from '@/components/ui/button'
-import { MagnifyingGlassIcon } from '@/components/icons'
 
 import { TQuickSearchGroup } from './types'
 

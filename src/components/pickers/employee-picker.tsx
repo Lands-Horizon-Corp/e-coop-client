@@ -1,20 +1,22 @@
-import { forwardRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { forwardRef, useState } from 'react'
+
+import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { PaginationState } from '@tanstack/react-table'
 
-import GenericPicker from './generic-picker'
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
 import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import { Button } from '@/components/ui/button'
 
-import { useShortcut } from '../use-shorcuts'
-import useFilterState from '@/hooks/use-filter-state'
 import { useFilteredPaginatedEmployees } from '@/hooks/api-hooks/use-employee'
-import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
+import useFilterState from '@/hooks/use-filter-state'
 
 import { IUserBase, IUserOrganization } from '@/types'
+
+import { useShortcut } from '../use-shorcuts'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+import GenericPicker from './generic-picker'
 
 interface Props {
     value?: IUserBase

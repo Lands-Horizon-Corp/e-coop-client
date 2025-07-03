@@ -1,6 +1,7 @@
+import React, { type ReactNode, forwardRef, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+
 import { Slot } from '@radix-ui/react-slot'
-import React, { useState, useEffect, forwardRef, type ReactNode } from 'react'
 
 import { CheckIcon, CopyIcon } from '@/components/icons'
 

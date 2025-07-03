@@ -1,29 +1,29 @@
 import { ReactNode } from 'react'
-import { ColumnDef, Row } from '@tanstack/react-table'
-
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import ImageDisplay from '@/components/image-display'
-import { QrCodeDownloadable } from '@/components/qr-code'
-import YesNoBadge from '@/components/badges/yes-no-badge'
-import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
-import { PushPinSlashIcon, QrCodeIcon } from '@/components/icons'
-import CivilStatusBadge from '@/components/badges/civil-status-badge'
-import GeneralStatusBadge from '@/components/badges/general-status-badge'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
-import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
-// import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
-import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-
-import { createUpdateColumns } from '../../common-columns'
 
 import { CIVIL_STATUS, GENERAL_STATUS } from '@/constants'
 import { useInfoModalStore } from '@/store/info-modal-store'
+import { ColumnDef, Row } from '@tanstack/react-table'
+
+import CivilStatusBadge from '@/components/badges/civil-status-badge'
+import GeneralStatusBadge from '@/components/badges/general-status-badge'
+import YesNoBadge from '@/components/badges/yes-no-badge'
+import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
+import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+// import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
+import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
+import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import { PushPinSlashIcon, QrCodeIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import { QrCodeDownloadable } from '@/components/qr-code'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IMemberProfile, TCivilStatus, TGeneralStatus } from '@/types'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { createUpdateColumns } from '../../common-columns'
 
 export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberProfile>[] =
     [

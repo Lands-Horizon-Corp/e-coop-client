@@ -1,12 +1,14 @@
-import { forwardRef, ReactElement, useState } from 'react'
+import { ReactElement, forwardRef, useState } from 'react'
 
+import { cn } from '@/lib'
+
+import { SignatureLightIcon, XIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import { Button, ButtonProps } from '@/components/ui/button'
-import { SignatureLightIcon, XIcon } from '@/components/icons'
-import { SignaturePickerUploaderModal } from '../signature/signature-picker-uploader'
 
 import { IMedia } from '@/types'
-import { cn } from '@/lib'
+
+import { SignaturePickerUploaderModal } from '../signature/signature-picker-uploader'
 
 interface SignatureFieldProps extends Omit<ButtonProps, 'onChange'> {
     name?: string

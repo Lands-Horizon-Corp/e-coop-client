@@ -1,7 +1,8 @@
-import BatchWithdrawalEntryTable from '@/components/tables/transaction-batch-history-tables/batch-withdrawal-entry-table'
-import { TransBatchHistoryTabsContentProps } from '.'
-
 import { cn } from '@/lib'
+
+import BatchWithdrawalEntryTable from '@/components/tables/transaction-batch-history-tables/batch-withdrawal-entry-table'
+
+import { TransBatchHistoryTabsContentProps } from '.'
 
 const BatchWithdrawalEntryHistory = ({
     transactionBatchId,

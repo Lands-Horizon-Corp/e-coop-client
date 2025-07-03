@@ -1,7 +1,7 @@
 import { cn } from '@/lib'
+import { ComputationTypeEnum } from '@/types/coop-types/accounts/account'
 
 import { Badge } from '@/components/ui/badge'
-import { ComputationTypeEnum } from '@/types/coop-types/accounts/account'
 
 interface ComputationTypeBadgeProps {
     type: ComputationTypeEnum

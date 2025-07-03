@@ -1,7 +1,8 @@
-import { TransBatchHistoryTabsContentProps } from '.'
+import { cn } from '@/lib'
+
 import BatchBatchFundingTable from '@/components/tables/transaction-batch-history-tables/batch-batch-funding-table'
 
-import { cn } from '@/lib'
+import { TransBatchHistoryTabsContentProps } from '.'
 
 const BatchFundingHistory = ({
     transactionBatchId,

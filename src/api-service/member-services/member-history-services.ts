@@ -1,17 +1,17 @@
 import qs from 'query-string'
 
-import APIService from '../api-service'
-
 import {
-    TEntityId,
-    IMemberTypeHistoryPaginated,
-    IMemberGroupHistoryPaginated,
-    IMemberGenderHistoryPaginated,
     IMemberCenterHistoryPaginated,
-    IMemberMutualFundsHistoryPaginated,
     IMemberClassificationHistoryPaginated,
+    IMemberGenderHistoryPaginated,
+    IMemberGroupHistoryPaginated,
+    IMemberMutualFundsHistoryPaginated,
     IMemberOccupationHistoryPaginated,
+    IMemberTypeHistoryPaginated,
+    TEntityId,
 } from '@/types'
+
+import APIService from '../api-service'
 
 export const getMemberCenterHistoryById = async ({
     profileId,

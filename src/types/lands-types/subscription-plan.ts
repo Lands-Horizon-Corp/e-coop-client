@@ -1,5 +1,5 @@
-import { IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult } from '../coop-types'
 
 export interface ISubscriptionPlan extends ITimeStamps, IAuditable {
     id: TEntityId

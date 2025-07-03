@@ -1,6 +1,8 @@
 import { z } from 'zod'
-import { amount, TEntityId } from '../common'
+
 import { GENERAL_LEDGER_SOURCE } from '@/types'
+
+import { TEntityId, amount } from '../common'
 
 export const TransactionEntrySchema = z.object({
     amount: amount,

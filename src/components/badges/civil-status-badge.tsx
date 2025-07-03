@@ -1,7 +1,9 @@
 import { forwardRef } from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
+
+import { type VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
+
 import type { IClassProps, TCivilStatus } from '@/types'
 
 const civilStatusVariants = cva(

@@ -1,11 +1,13 @@
-import { toast } from 'sonner'
 import { ReactNode } from 'react'
+import { toast } from 'sonner'
+
 import { DropzoneOptions, useDropzone } from 'react-dropzone'
 
 import { Input } from '@/components/ui/input'
-import DefaultDropArea from '../drop-areas/default-drop-area'
 
 import { IClassProps } from '@/types'
+
+import DefaultDropArea from '../drop-areas/default-drop-area'
 
 interface Props
     extends IClassProps,

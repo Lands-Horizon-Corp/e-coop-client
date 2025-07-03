@@ -1,23 +1,25 @@
 import { useState } from 'react'
 
-import {
-    TrashIcon,
-    PencilFillIcon,
-    BadgeQuestionIcon,
-    BadgeCheckFillIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
-import { Separator } from '@/components/ui/separator'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { MemberRelativeAccountCreateUpdateFormModal } from './member-relative-account-create-update-form'
-
-import { toReadableDate } from '@/utils'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { toReadableDate } from '@/utils'
+
+import {
+    BadgeCheckFillIcon,
+    BadgeQuestionIcon,
+    PencilFillIcon,
+    TrashIcon,
+} from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
 import { useDeleteMemberRelativeAccount } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberProfile, IMemberRelativeAccount } from '@/types'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { MemberRelativeAccountCreateUpdateFormModal } from './member-relative-account-create-update-form'
 
 const MemberRelativeAccountCard = ({
     relative,

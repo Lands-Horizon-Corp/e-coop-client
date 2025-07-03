@@ -1,18 +1,19 @@
+import { cn } from '@/lib'
+import { toReadableDate } from '@/utils'
 import DOMPurify from 'dompurify'
 
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import ImageDisplay from '@/components/image-display'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberGovernmentBenefit } from '@/types'
-import { toReadableDate } from '@/utils'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
 interface IGovernmentCardDisplay
     extends IClassProps,
         IMemberGovernmentBenefit {}

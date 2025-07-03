@@ -1,21 +1,22 @@
 'use client'
+
 import { useState } from 'react'
 
-import { outline, Scanner, useDevices } from '@yudiel/react-qr-scanner'
-
-import {
-    DropdownMenu,
-    DropdownMenuLabel,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuRadioGroup,
-} from '../ui/dropdown-menu'
-import { Button } from '../ui/button'
+import { Scanner, outline, useDevices } from '@yudiel/react-qr-scanner'
 
 import { cn } from '@/lib/utils'
+
 import { CameraIcon } from '../icons'
+import { Button } from '../ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 import { IQrScannerProps } from './types'
 
 const QrScanner = (props: IQrScannerProps) => {

@@ -1,9 +1,12 @@
-import { IMemberProfile } from '@/types'
-import MemberAssets from './member-assets'
-import { Separator } from '@/components/ui/separator'
-import MemberIncome from './member-income'
-import MemberExpenses from './member-expenses'
 import { forwardRef } from 'react'
+
+import { Separator } from '@/components/ui/separator'
+
+import { IMemberProfile } from '@/types'
+
+import MemberAssets from './member-assets'
+import MemberExpenses from './member-expenses'
+import MemberIncome from './member-income'
 
 type Props = {
     memberProfile: IMemberProfile

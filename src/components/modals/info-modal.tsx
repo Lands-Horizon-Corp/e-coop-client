@@ -1,8 +1,9 @@
-import Modal from './modal'
+import { useInfoModalStore } from '@/store/info-modal-store'
+
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
-import { useInfoModalStore } from '@/store/info-modal-store'
+import Modal from './modal'
 
 const InfoModal = () => {
     const {

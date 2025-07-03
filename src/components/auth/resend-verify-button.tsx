@@ -1,9 +1,10 @@
-import { Button } from '@/components/ui/button'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-
 import { cn } from '@/lib'
-import UseCooldown from '@/hooks/use-cooldown'
+
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+
 import { useOTPVerification } from '@/hooks/api-hooks/use-auth'
+import UseCooldown from '@/hooks/use-cooldown'
 
 interface Props {
     verifyMode: 'email' | 'mobile'

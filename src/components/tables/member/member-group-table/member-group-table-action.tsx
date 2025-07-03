@@ -1,11 +1,13 @@
 import { useState } from 'react'
 
-import { IMemberGroupTableActionComponentProp } from './columns'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { MemberGroupCreateUpdateFormModal } from '@/components/forms/member-forms/member-group-create-update-form'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberGroup } from '@/hooks/api-hooks/member/use-member-group'
+
+import { IMemberGroupTableActionComponentProp } from './columns'
 
 interface IMemberGroupTableActionProps
     extends IMemberGroupTableActionComponentProp {

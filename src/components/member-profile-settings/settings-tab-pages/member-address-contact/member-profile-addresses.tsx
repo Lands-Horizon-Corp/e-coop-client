@@ -1,27 +1,29 @@
 import { useState } from 'react'
 
-import {
-    MapIcon,
-    ParkIcon,
-    PlusIcon,
-    TrashIcon,
-    VillageIcon,
-    TreeCityIcon,
-    WoodSignsIcon,
-    PencilFillIcon,
-    LocationPinIcon,
-    BarcodeScanIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import EmptyListIndicator from '../empty-list-indicator'
-import { MemberAddressCreateUpdateFormModal } from './member-address-create-update-form'
-
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
-import { IMemberAddress, IMemberProfile } from '@/types'
-import { useDeleteMemberProfileAddress } from '@/hooks/api-hooks/member/use-member-profile-settings'
+import {
+    BarcodeScanIcon,
+    LocationPinIcon,
+    MapIcon,
+    ParkIcon,
+    PencilFillIcon,
+    PlusIcon,
+    TrashIcon,
+    TreeCityIcon,
+    VillageIcon,
+    WoodSignsIcon,
+} from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+
+import { useDeleteMemberProfileAddress } from '@/hooks/api-hooks/member/use-member-profile-settings'
+
+import { IMemberAddress, IMemberProfile } from '@/types'
+
+import EmptyListIndicator from '../empty-list-indicator'
+import { MemberAddressCreateUpdateFormModal } from './member-address-create-update-form'
 
 const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
     const [edit, setEdit] = useState(false)

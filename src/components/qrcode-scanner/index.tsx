@@ -1,15 +1,17 @@
-import { toast } from 'sonner'
 import { useCallback } from 'react'
-import { IDetectedBarcode } from '@yudiel/react-qr-scanner'
-
-import QrScanner from './qr-scanner'
-import Modal, { IModalProps } from '../modals/modal'
-import LoadingSpinner from '../spinners/loading-spinner'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib'
-import { IQrScanResult } from '@/types'
-import { IQrCodeScannerProps } from './types'
+import { IDetectedBarcode } from '@yudiel/react-qr-scanner'
+
 import { useQrDecryptData } from '@/hooks/api-hooks/use-qr-crypto'
+
+import { IQrScanResult } from '@/types'
+
+import Modal, { IModalProps } from '../modals/modal'
+import LoadingSpinner from '../spinners/loading-spinner'
+import QrScanner from './qr-scanner'
+import { IQrCodeScannerProps } from './types'
 
 const QrCodeScanner = <TData, TErr = string>({
     paused,

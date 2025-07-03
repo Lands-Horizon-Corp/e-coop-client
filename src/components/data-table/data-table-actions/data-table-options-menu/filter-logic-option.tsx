@@ -1,9 +1,9 @@
 import {
     DropdownMenuGroup,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
+    DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 
 import { TFilterLogic } from '../../../../contexts/filter-context'

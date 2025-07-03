@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react'
+
 import { Column } from '@tanstack/react-table'
 
 export const getPinningStyles = <T>(column: Column<T>): CSSProperties => {

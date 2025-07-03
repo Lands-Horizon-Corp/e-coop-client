@@ -1,6 +1,6 @@
-import APIService from '../api-service'
+import { IUserOrganization, TEntityId } from '@/types'
 
-import { TEntityId, IUserOrganization } from '@/types'
+import APIService from '../api-service'
 
 export const getUserOrganizationUserId = async (userId: TEntityId) => {
     const response = await APIService.get<IUserOrganization[]>(

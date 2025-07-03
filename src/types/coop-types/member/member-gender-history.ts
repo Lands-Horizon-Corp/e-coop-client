@@ -1,8 +1,8 @@
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 import { IBranch } from '../branch'
+import { IPaginatedResult } from '../paginated-result'
 import { IMemberGender } from './member-gender'
 import { IMemberProfile } from './member-profile'
-import { IPaginatedResult } from '../paginated-result'
-import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
 // LATEST FROM ERD
 export interface IMemberGenderHistory extends ITimeStamps, IAuditable {

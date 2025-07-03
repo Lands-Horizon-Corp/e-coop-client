@@ -1,24 +1,25 @@
 import { Column, Table } from '@tanstack/react-table'
 
 import {
-    ResetIcon,
+    ArrowDownIcon,
     ArrowUpIcon,
+    DotsVerticalIcon,
     EyeNoneIcon,
     PushPinIcon,
-    ArrowDownIcon,
     PushPinSlashIcon,
-    DotsVerticalIcon,
+    ResetIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuGroup,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
+
 import { IBaseProps } from '@/types'
 
 interface Props<TData, TValue> extends IBaseProps {

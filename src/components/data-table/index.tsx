@@ -1,25 +1,24 @@
+import { cn } from '@/lib'
 import {
-    useSensor,
-    useSensors,
     DndContext,
+    DragEndEvent,
+    KeyboardSensor,
     MouseSensor,
     TouchSensor,
-    DragEndEvent,
     closestCenter,
-    KeyboardSensor,
+    useSensor,
+    useSensors,
 } from '@dnd-kit/core'
-
-import { arrayMove } from '@dnd-kit/sortable'
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers'
+import { arrayMove } from '@dnd-kit/sortable'
 import { Row, Table as TableInstance } from '@tanstack/react-table'
+
+import { IClassProps } from '@/types'
 
 import { Table } from '../ui/table'
 import DataTableBody from './data-table-body'
-import DataTableHeader from './data-table-header'
 import DataTableFooter from './data-table-footer'
-
-import { cn } from '@/lib'
-import { IClassProps } from '@/types'
+import DataTableHeader from './data-table-header'
 
 interface ITableProps<TData> extends IClassProps {
     table: TableInstance<TData>

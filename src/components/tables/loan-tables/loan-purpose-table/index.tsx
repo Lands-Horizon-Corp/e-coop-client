@@ -1,32 +1,33 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
+import { deleteMany } from '@/api-service/loan-service/loan-purpose-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
 import {
-    useReactTable,
     getCoreRowModel,
     getSortedRowModel,
+    useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+
+import { useFilteredPaginatedLoanPurpose } from '@/hooks/api-hooks/loan/use-loan-purpose'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { ILoanPurpose, TableProps } from '@/types'
 
 import LoanPurposeTableColumns, {
     ILoanPurposeTableColumnProps,
     loanPurposeGlobalSearchTargets,
 } from './columns'
-
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import { deleteMany } from '@/api-service/loan-service/loan-purpose-service'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedLoanPurpose } from '@/hooks/api-hooks/loan/use-loan-purpose'
-
-import { TableProps, ILoanPurpose } from '@/types'
 
 export interface LoanPurposeTableProps
     extends TableProps<ILoanPurpose>,

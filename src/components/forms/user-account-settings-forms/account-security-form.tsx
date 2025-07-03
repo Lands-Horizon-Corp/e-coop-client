@@ -1,26 +1,30 @@
+import { useEffect } from 'react'
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { Path, useForm } from 'react-hook-form'
+
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Form, FormItem } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
+import PasswordInput from '@/components/ui/password-input'
+import { Separator } from '@/components/ui/separator'
 import {
     ChecklistTemplate,
     ValueChecklistMeter,
 } from '@/components/value-checklist-indicator'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Form, FormItem } from '@/components/ui/form'
-import PasswordInput from '@/components/ui/password-input'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { cn } from '@/lib/utils'
+
 import { userSettingsSecuritySchema } from '@/validations/user-settings'
+
 import { useUpdateUserSettingsSecurity } from '@/hooks/api-hooks/use-user-settings'
 
 import { IClassProps, IForm, IUserBase } from '@/types'
-import { useEffect } from 'react'
 
 type TAccountSecurityFormValues = z.infer<typeof userSettingsSecuritySchema>
 

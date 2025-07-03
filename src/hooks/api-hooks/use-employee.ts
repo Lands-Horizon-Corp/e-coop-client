@@ -1,19 +1,20 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import * as UserOrganizationService from '@/api-service/user-organization-service'
+import { serverRequestErrExtractor } from '@/helpers'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
+    IAPIFilteredPaginatedHook,
     IAPIHook,
     IEmployee,
-    TEntityId,
     IQueryProps,
     IUserOrganization,
-    IAPIFilteredPaginatedHook,
     IUserOrganizationPaginated,
+    TEntityId,
 } from '@/types'
+
 import {
     createMutationHook,
     deleteMutationInvalidationFn,

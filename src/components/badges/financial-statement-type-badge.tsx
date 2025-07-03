@@ -1,8 +1,7 @@
 import { cn } from '@/lib'
+import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 
 import { Badge } from '@/components/ui/badge'
-
-import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 
 interface FinancialStatementTypeBadgeProps {
     type: FinancialStatementTypeEnum

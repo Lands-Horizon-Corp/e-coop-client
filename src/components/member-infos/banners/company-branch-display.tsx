@@ -1,11 +1,12 @@
-import ImageDisplay from '@/components/image-display'
-
 import { cn } from '@/lib'
-import { IClassProps } from '@/types'
-import { IBranch, IOrganization } from '@/types'
+
 import { MapMarkedIcon, OpenExternalLinkIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import OpenExternalMap from '@/components/map/open-external-map'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IClassProps } from '@/types'
+import { IBranch, IOrganization } from '@/types'
 
 interface Props extends IClassProps {
     branch?: IBranch

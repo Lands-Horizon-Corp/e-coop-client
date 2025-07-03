@@ -1,19 +1,20 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import * as AuthService from '@/api-service/security-services/auth-service'
+import { serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
 
 import {
-    IUserBase,
     IAuthContext,
-    ISignInRequest,
-    ISignUpRequest,
     IChangePasswordRequest,
     IForgotPasswordRequest,
     ILoggedInUser,
+    ISignInRequest,
+    ISignUpRequest,
+    IUserBase,
 } from '@/types'
+
 import {
     IAPIHook,
     IMutationProps,

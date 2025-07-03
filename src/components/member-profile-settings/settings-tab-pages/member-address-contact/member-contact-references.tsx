@@ -1,19 +1,23 @@
 import { useState } from 'react'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import {
-    PlusIcon,
     NoteIcon,
-    PhoneIcon,
-    TrashIcon,
     PencilFillIcon,
+    PhoneIcon,
+    PlusIcon,
+    TrashIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { MemberContactCreateUpdateFormModal } from './member-contact-create-update-form'
-import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import { useDeleteMemberProfileContactReference } from '@/hooks/api-hooks/member/use-member-profile-settings'
-import { IMemberProfile, IMemberContactReference } from '@/types'
+
+import { IMemberContactReference, IMemberProfile } from '@/types'
+
 import EmptyListIndicator from '../empty-list-indicator'
+import { MemberContactCreateUpdateFormModal } from './member-contact-create-update-form'
 
 const MemberContactReferenceCard = ({
     reference,

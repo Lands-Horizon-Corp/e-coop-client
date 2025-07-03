@@ -1,8 +1,8 @@
 import { IUserBase } from '../auth/user'
-import { IOrganization } from './organization'
-import { TPermission } from '../coop-types/permission'
+import { IBaseEntityMeta, TEntityId, TUserType } from '../common'
 import { IBranch, IPaginatedResult } from '../coop-types'
-import { TEntityId, IBaseEntityMeta, TUserType } from '../common'
+import { TPermission } from '../coop-types/permission'
+import { IOrganization } from './organization'
 
 export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
     id: TEntityId

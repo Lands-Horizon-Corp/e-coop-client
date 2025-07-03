@@ -1,18 +1,18 @@
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { Checkbox } from '@/components/ui/checkbox'
-import ImageDisplay from '@/components/image-display'
-import { PushPinSlashIcon } from '@/components/icons'
-import { createUpdateColumns } from '@/components/tables/common-columns'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-
-import { TGeneralStatus, IUserOrganization } from '@/types'
+import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
+import { PushPinSlashIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import { createUpdateColumns } from '@/components/tables/common-columns'
+import { Checkbox } from '@/components/ui/checkbox'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IUserOrganization, TGeneralStatus } from '@/types'
 
 export const employeesGlobalSearchTargets: IGlobalSearchTargets<IUserOrganization>[] =
     [

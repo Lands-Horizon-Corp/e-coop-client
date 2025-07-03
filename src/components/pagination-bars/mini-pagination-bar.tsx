@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons'
-
 import { cn } from '@/lib'
+
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+
 import { IClassProps } from '@/types'
 
 export type TPagination = {

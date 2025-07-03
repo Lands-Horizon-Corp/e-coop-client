@@ -1,30 +1,34 @@
 import * as React from 'react'
+
 import { Check } from 'lucide-react'
 
+import { ChevronDownIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-    Command,
-    CommandItem,
-    CommandList,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-} from '@/components/ui/command'
-import { cn } from '@/lib/utils'
-import {
-    type IBankFormProps,
-    BankCreateUpdateFormModal,
-} from '../forms/bank-create-update-form'
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import { TEntityId, IBank } from '@/types'
+import { cn } from '@/lib/utils'
+
 import { useBanks } from '@/hooks/api-hooks/use-bank'
+
+import { IBank, TEntityId } from '@/types'
+
+import {
+    BankCreateUpdateFormModal,
+    type IBankFormProps,
+} from '../forms/bank-create-update-form'
 
 export interface IBankComboboxCreateProps
     extends Pick<

@@ -1,14 +1,15 @@
+import { useCallback } from 'react'
+
 import { Table } from '@tanstack/react-table'
 
+import { EyeIcon } from '@/components/icons'
 import {
+    DropdownMenuCheckboxItem,
+    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuGroup,
     DropdownMenuSeparator,
-    DropdownMenuCheckboxItem,
 } from '@/components/ui/dropdown-menu'
-import { EyeIcon } from '@/components/icons'
-import { useCallback } from 'react'
 
 interface DataTableViewOptionsProps<TData> {
     table: Table<TData>

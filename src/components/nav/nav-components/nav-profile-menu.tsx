@@ -1,42 +1,42 @@
 'use client'
 
-import { toast } from 'sonner'
-import { useRouter } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
+import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useAuthStore } from '@/store/user-auth-store'
+import { getOrgBranchSafeURLNames } from '@/utils'
+import { useRouter } from '@tanstack/react-router'
 
 import {
-    GearIcon,
-    LogoutIcon,
-    BuildingIcon,
     ArrowRightIcon,
     BadgeCheckFillIcon,
     BuildingBranchIcon,
+    BuildingIcon,
+    GearIcon,
+    LogoutIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     Accordion,
+    AccordionContent,
     AccordionItem,
     AccordionTrigger,
-    AccordionContent,
 } from '@/components/ui/accordion'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
-import ImageDisplay from '@/components/image-display'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useSignOut } from '@/hooks/api-hooks/use-auth'
-import { useAuthStore } from '@/store/user-auth-store'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useGetCurrentUserOrganizations } from '@/hooks/api-hooks/use-user-organization'
-import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
-
-import { getOrgBranchSafeURLNames } from '@/utils'
 
 import type { IUserOrganization } from '@/types'
 

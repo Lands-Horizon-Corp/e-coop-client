@@ -1,17 +1,18 @@
-import { toast } from 'sonner'
-import { Table } from '@tanstack/react-table'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { serverRequestErrExtractor } from '@/helpers'
+import { cn } from '@/lib'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { withCatchAsync } from '@/utils'
+import { Table } from '@tanstack/react-table'
+
 import { TrashIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib'
-import { withCatchAsync } from '@/utils'
 import { IClassProps } from '@/types'
-import { serverRequestErrExtractor } from '@/helpers'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 
 export interface IDataTableDeleteSelectedProps<T> extends IClassProps {
     table: Table<T>

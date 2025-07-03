@@ -1,38 +1,39 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
 import {
-    useReactTable,
+    deleteMany,
+    exportAll,
+    exportAllFiltered,
+    exportSelected,
+} from '@/api-service/bank-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
+import {
     getCoreRowModel,
     getSortedRowModel,
+    useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+
+import { useFilteredPaginatedBanks } from '@/hooks/api-hooks/use-bank'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { TableProps } from '@/types'
+import { IBank } from '@/types'
 
 import BankTableColumns, {
     IBankTableColumnProps,
     bankGlobalSearchTargets,
 } from './columns'
-
-import { cn } from '@/lib'
-import {
-    exportAll,
-    deleteMany,
-    exportSelected,
-    exportAllFiltered,
-} from '@/api-service/bank-service'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedBanks } from '@/hooks/api-hooks/use-bank'
-
-import { TableProps } from '@/types'
-import { IBank } from '@/types'
 
 export interface BankTableProps
     extends TableProps<IBank>,

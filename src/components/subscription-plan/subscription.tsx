@@ -1,6 +1,11 @@
-import { useSubscriptionPlan } from '@/hooks/subscription-plan/use-subscription-plan'
-import { ISubscriptionPlan, TEntityId } from '@/types'
 import { cn } from '@/lib'
+
+import { useSubscriptionPlan } from '@/hooks/subscription-plan/use-subscription-plan'
+
+import { ISubscriptionPlan, TEntityId } from '@/types'
+
+import { CheckFillIcon } from '../icons'
+import { Button } from '../ui/button'
 import {
     Card,
     CardContent,
@@ -8,8 +13,6 @@ import {
     CardHeader,
     CardTitle,
 } from '../ui/card'
-import { Button } from '../ui/button'
-import { CheckFillIcon } from '../icons'
 
 interface SubscriptionProps {
     onChange?: (value: TEntityId) => void

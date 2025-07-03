@@ -1,20 +1,20 @@
 import {
-    useQuery,
-    useMutation,
     UseQueryResult,
+    useMutation,
+    useQuery,
     useQueryClient,
 } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { withCatchAsync } from '@/utils'
 import { serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
 
 import {
     IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IMutationProps,
     IInvalidateFnArgs,
+    IMutationProps,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const createMutationHook =

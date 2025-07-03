@@ -1,38 +1,38 @@
-import { ReactNode } from 'react'
-import { IconType } from 'react-icons/lib'
 import { useQueryClient } from '@tanstack/react-query'
+import { ReactNode } from 'react'
 
-import {
-    UserIcon,
-    IdCardIcon,
-    Users3Icon,
-    UserTagIcon,
-    HandCoinsIcon,
-    MapMarkedIcon,
-    GraduationCapIcon,
-} from '../icons'
-import { ScrollArea, ScrollBar } from '../ui/scroll-area'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { cn } from '@/lib'
+import { IconType } from 'react-icons/lib'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { useInternalState } from '@/hooks/use-internal-state'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
+import { IClassProps, IMemberProfile, TEntityId } from '@/types'
 
 import MemberProfileMiniInfoCard, {
     MemberProfileMiniInfoCardSkeleton,
 } from '../elements/member-profile-mini-info-card'
-import MembershipInfo from './settings-tab-pages/membership-info'
-import MemberUserAccount from './settings-tab-pages/member-user-account'
-import MemberFinancial from './settings-tab-pages/member-financial-info'
-import MemberAddressContact from './settings-tab-pages/member-address-contact'
+import {
+    GraduationCapIcon,
+    HandCoinsIcon,
+    IdCardIcon,
+    MapMarkedIcon,
+    UserIcon,
+    UserTagIcon,
+    Users3Icon,
+} from '../icons'
+import MemberCloseAccountBanner from '../member-infos/banners/member-closed-account-banner'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import MemberAccountRelationship from './settings-tab-pages/account-relationship'
+import MemberAddressContact from './settings-tab-pages/member-address-contact'
+import MemberEducationalAttainment from './settings-tab-pages/member-educational-attainment'
+import MemberFinancial from './settings-tab-pages/member-financial-info'
 import MemberGovernmentBenefits from './settings-tab-pages/member-government-benefits'
 import MemberProfilePersonalInfo from './settings-tab-pages/member-profile-personal-info'
-import MemberCloseAccountBanner from '../member-infos/banners/member-closed-account-banner'
-import MemberEducationalAttainment from './settings-tab-pages/member-educational-attainment'
-
-import { cn } from '@/lib'
-import { useSubscribe } from '@/hooks/use-pubsub'
-import { useInternalState } from '@/hooks/use-internal-state'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-
-import { IClassProps, IMemberProfile, TEntityId } from '@/types'
+import MemberUserAccount from './settings-tab-pages/member-user-account'
+import MembershipInfo from './settings-tab-pages/membership-info'
 
 const SettingsTabs: {
     value: string

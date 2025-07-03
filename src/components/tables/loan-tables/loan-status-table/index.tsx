@@ -1,32 +1,33 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
+import { deleteMany } from '@/api-service/loan-service/loan-status-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
 import {
-    useReactTable,
     getCoreRowModel,
     getSortedRowModel,
+    useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+
+import { useFilteredPaginatedLoanStatus } from '@/hooks/api-hooks/loan/use-loan-status'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { ILoanStatus, TableProps } from '@/types'
 
 import LoanStatusTableColumns, {
     ILoanStatusTableColumnProps,
     loanStatusGlobalSearchTargets,
 } from './columns'
-
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import { deleteMany } from '@/api-service/loan-service/loan-status-service'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedLoanStatus } from '@/hooks/api-hooks/loan/use-loan-status'
-
-import { TableProps, ILoanStatus } from '@/types'
 
 export interface LoanStatusTableProps
     extends TableProps<ILoanStatus>,

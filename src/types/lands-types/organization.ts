@@ -1,7 +1,7 @@
-import { ISubscriptionPlan } from './subscription-plan'
-import { IBranch, IMedia, IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IBranch, IMedia, IPaginatedResult } from '../coop-types'
 import { IOrganizationCategoryRequest } from './organization-category'
+import { ISubscriptionPlan } from './subscription-plan'
 import { IUserOrganization } from './user-organization'
 
 export type TOrganizationMigrationStatus =

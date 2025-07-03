@@ -1,12 +1,14 @@
-import { Separator } from '../ui/separator'
-import MemberIncomeDisplay from './displays/member-income-display'
-import MemberAssetsDisplay from './displays/member-assets-display'
-import MemberExpensesDisplay from './displays/member-expenses-display'
-
 import { cn } from '@/lib'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
+import { Separator } from '../ui/separator'
+import MemberAssetsDisplay from './displays/member-assets-display'
+import MemberExpensesDisplay from './displays/member-expenses-display'
+import MemberIncomeDisplay from './displays/member-income-display'
 
 interface Props extends IClassProps {
     profileId: TEntityId

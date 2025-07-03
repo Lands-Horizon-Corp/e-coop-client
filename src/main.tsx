@@ -1,9 +1,10 @@
-import './index.css';
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
+import { createRoot } from 'react-dom/client';
 
 import App from './app';
+import './index.css';
 
 const isDevelopment =
     typeof import.meta.env !== 'undefined' &&

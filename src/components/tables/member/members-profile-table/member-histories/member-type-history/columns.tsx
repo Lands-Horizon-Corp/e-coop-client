@@ -1,11 +1,12 @@
 import { ReactNode } from 'react'
+
 import { ColumnDef } from '@tanstack/react-table'
 
-import { createUpdateColumns } from '@/components/tables/common-columns'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import { createUpdateColumns } from '@/components/tables/common-columns'
 
 import { IMemberTypeHistory } from '@/types'
 

@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
+
 import { cn } from '@/lib'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { useEffect } from 'react'
 
 type PlainTextEditorProps = {
     content?: string

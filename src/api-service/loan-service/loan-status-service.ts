@@ -1,7 +1,8 @@
 import {
-    createAPICrudService,
     createAPICollectionService,
+    createAPICrudService,
 } from '@/factory/api-factory-service'
+
 import { ILoanStatus, ILoanStatusRequest } from '@/types'
 
 const CrudServices = createAPICrudService<ILoanStatus, ILoanStatusRequest>(

@@ -1,6 +1,7 @@
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
+
 import { cn } from '@/lib'
 import { useTheme } from '@/providers/theme-provider'
-import { useRef, useState, useEffect, MutableRefObject } from 'react'
 import ReactSignatureCanvas from 'react-signature-canvas'
 
 interface DrawSignatureProps {

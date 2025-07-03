@@ -1,19 +1,19 @@
 import { ReactNode } from 'react'
+
+import { formatNumber } from '@/utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import ImageNameDisplay from '@/components/elements/image-name-display'
-import { createUpdateColumns } from '@/components/tables/common-columns'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-
-import { formatNumber } from '@/utils'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import ImageNameDisplay from '@/components/elements/image-name-display'
+import ImageDisplay from '@/components/image-display'
+import { createUpdateColumns } from '@/components/tables/common-columns'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IBatchFunding } from '@/types'
-import ImageDisplay from '@/components/image-display'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 export const batchFundingGlobalSearchTargets: IGlobalSearchTargets<IBatchFunding>[] =
     [

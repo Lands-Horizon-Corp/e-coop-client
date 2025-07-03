@@ -1,25 +1,26 @@
 import * as React from 'react'
+
+import { GENERAL_STATUS } from '@/constants'
 import { Check } from 'lucide-react'
 
+import { ChevronDownIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     Command,
-    CommandItem,
-    CommandList,
     CommandEmpty,
     CommandGroup,
     CommandInput,
+    CommandItem,
+    CommandList,
 } from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon } from '@/components/icons'
-
-import { GENERAL_STATUS } from '@/constants'
 
 import { cn } from '@/lib/utils'
+
 import { TGeneralStatus } from '@/types'
 
 interface Props

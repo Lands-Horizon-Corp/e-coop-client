@@ -1,20 +1,20 @@
+import { getFileCategory } from '@/helpers'
+import { cn } from '@/lib'
 import { IconType } from 'react-icons/lib'
 
-import {
-    FileFillIcon,
-    PDFFileFillIcon,
-    TextFileFillIcon,
-    VideoFileFillIcon,
-    ImageFileFillIcon,
-    MusicFileFillIcon,
-    SpreadSheetFileIcon,
-    DocumentFileFillIcon,
-} from './icons'
-
-import { cn } from '@/lib'
 import { IMedia } from '@/types'
 import { IClassProps } from '@/types'
-import { getFileCategory } from '@/helpers'
+
+import {
+    DocumentFileFillIcon,
+    FileFillIcon,
+    ImageFileFillIcon,
+    MusicFileFillIcon,
+    PDFFileFillIcon,
+    SpreadSheetFileIcon,
+    TextFileFillIcon,
+    VideoFileFillIcon,
+} from './icons'
 
 interface Props {
     media: IMedia

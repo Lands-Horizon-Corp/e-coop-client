@@ -1,29 +1,32 @@
 import z from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { cn } from '@/lib'
+import { otpSchema } from '@/validations'
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp'
+import { useForm } from 'react-hook-form'
+
+import { BadgeQuestionFillIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     Form,
-    FormItem,
-    FormField,
     FormControl,
+    FormField,
+    FormItem,
     FormMessage,
 } from '@/components/ui/form'
 import {
     InputOTP,
-    InputOTPSlot,
     InputOTPGroup,
     InputOTPSeparator,
+    InputOTPSlot,
 } from '@/components/ui/input-otp'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import { cn } from '@/lib'
-import { IUserBase } from '@/types'
-import { otpSchema } from '@/validations'
-import UseCooldown from '@/hooks/use-cooldown'
 import { useOTPVerification, useVerify } from '@/hooks/api-hooks/use-auth'
-import { BadgeQuestionFillIcon } from '@/components/icons'
+import UseCooldown from '@/hooks/use-cooldown'
+
+import { IUserBase } from '@/types'
 
 type TVerifyMode = 'email' | 'mobile'
 

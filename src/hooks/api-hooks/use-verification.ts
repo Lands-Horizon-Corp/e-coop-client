@@ -1,11 +1,11 @@
-import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import { verifyWithPassword } from '@/api-service/security-services/auth-service'
+import { serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
 
-import { IAPIHook, IVerificationPasswordRequest, IVerification } from '@/types'
+import { IAPIHook, IVerification, IVerificationPasswordRequest } from '@/types'
 
 export const useVerifyPassword = ({
     onError,

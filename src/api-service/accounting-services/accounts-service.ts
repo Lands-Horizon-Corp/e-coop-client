@@ -1,14 +1,14 @@
-import qs from 'query-string'
-
-import APIService from '../api-service'
-
-import { TEntityId } from '@/types'
+import { downloadFile } from '@/helpers'
 import {
     IAccount,
     IAccountPaginated,
     IAccountRequest,
 } from '@/types/coop-types/accounts/account'
-import { downloadFile } from '@/helpers'
+import qs from 'query-string'
+
+import { TEntityId } from '@/types'
+
+import APIService from '../api-service'
 
 export const getAccountById = async (id: TEntityId) => {
     const response = await APIService.get<IAccount>(`/account/${id}`)

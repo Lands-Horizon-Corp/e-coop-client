@@ -1,5 +1,5 @@
-import { IMemberProfile } from './member-profile'
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
 export interface IMemberAddress extends ITimeStamps, IAuditable {

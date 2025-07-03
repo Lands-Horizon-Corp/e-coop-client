@@ -1,7 +1,7 @@
-import { IMedia } from './media'
-import { IPaginatedResult } from './paginated-result'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IOrganization } from '../lands-types'
+import { IMedia } from './media'
+import { IPaginatedResult } from './paginated-result'
 
 export enum branchTypeEnum {
     CooperativeBranch = 'cooperative branch',

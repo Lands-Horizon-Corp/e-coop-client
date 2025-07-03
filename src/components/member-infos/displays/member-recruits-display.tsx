@@ -1,19 +1,20 @@
+import { toReadableDate } from '@/utils'
 import DOMPurify from 'dompurify'
 
+import CopyTextButton from '@/components/copy-text-button'
+import { UsersAddIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IMemberRecruitedMembers } from '@/types'
 
 import SectionTitle from '../section-title'
-import { UsersAddIcon } from '@/components/icons'
-import { IMemberRecruitedMembers } from '@/types'
-import ImageDisplay from '@/components/image-display'
-import CopyTextButton from '@/components/copy-text-button'
-import { toReadableDate } from '@/utils'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 interface Props {
     recruits?: IMemberRecruitedMembers[]

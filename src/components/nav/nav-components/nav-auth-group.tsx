@@ -1,9 +1,9 @@
 import { useLocation } from '@tanstack/react-router'
 
-import NavSignIn from './nav-sign-in'
-import NavSignUp from './nav-sign-up'
-import NavSignOut from './nav-sign-out'
 import NavGetStarted from './nav-get-started'
+import NavSignIn from './nav-sign-in'
+import NavSignOut from './nav-sign-out'
+import NavSignUp from './nav-sign-up'
 
 const NavAuthGroup = () => {
     const pathname = useLocation({

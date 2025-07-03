@@ -1,18 +1,20 @@
 import { forwardRef } from 'react'
-import SectionTitle from './section-title'
-import ImageDisplay from '../image-display'
-import { Separator } from '../ui/separator'
-import RawDescription from '../raw-description'
-import AddressesDisplay from './displays/addresses-display'
-import ContactNumbersDisplay from './displays/contact-numbers-display'
-import { DetailsIcon, NoteIcon, StoreIcon, UserIcon } from '../icons'
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
+
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+
+import { DetailsIcon, NoteIcon, StoreIcon, UserIcon } from '../icons'
+import ImageDisplay from '../image-display'
+import RawDescription from '../raw-description'
+import { Separator } from '../ui/separator'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+import AddressesDisplay from './displays/addresses-display'
+import ContactNumbersDisplay from './displays/contact-numbers-display'
+import SectionTitle from './section-title'
 
 interface Props extends IBaseProps {
     profileId: TEntityId

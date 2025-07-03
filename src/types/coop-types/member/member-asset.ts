@@ -1,7 +1,7 @@
-import { IMedia } from '../media'
-import { IBranch } from '../branch'
-import { IMemberProfile } from './member-profile'
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IBranch } from '../branch'
+import { IMedia } from '../media'
+import { IMemberProfile } from './member-profile'
 
 // LATEST FROM ERD
 export interface IMemberAssetRequest {

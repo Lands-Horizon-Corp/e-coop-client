@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import { emailSchema, userAccountTypeSchema } from '../common'
 
 export const signInSchema = z.object({

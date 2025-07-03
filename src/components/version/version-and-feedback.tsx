@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { cn } from '@/lib/utils'
 
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover'
+import { softwareUpdates } from '@/constants'
+import { MdExpandMore } from 'react-icons/md'
+import { MdOutlineExpandLess } from 'react-icons/md'
+
 import { Badge } from '@/components/ui/badge'
 import {
     Dialog,
@@ -15,13 +13,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
+
+import { cn } from '@/lib/utils'
+
 import { Button } from '../ui/button'
-
-import { MdExpandMore } from 'react-icons/md'
-import { MdOutlineExpandLess } from 'react-icons/md'
-
 import FeedbackForm from './feedback-form'
-import { softwareUpdates } from '@/constants'
 import VersionUpdates from './version-updates'
 
 export const VersionAndFeedBack = () => {

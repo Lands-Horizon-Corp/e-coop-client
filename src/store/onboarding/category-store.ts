@@ -1,7 +1,8 @@
-import { TEntityId } from '@/types'
 import { ICategory } from '@/types/lands-types/category'
 import { UseNavigateResult } from '@tanstack/react-router'
 import { create } from 'zustand'
+
+import { TEntityId } from '@/types'
 
 export interface CategoryDataStore {
     selectedCategories: ICategory[]

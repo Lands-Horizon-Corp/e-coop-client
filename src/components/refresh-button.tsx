@@ -1,6 +1,6 @@
 import { ReloadIcon } from '@/components/icons'
-import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
 export interface IRefreshButtonProps {
     isLoading?: boolean

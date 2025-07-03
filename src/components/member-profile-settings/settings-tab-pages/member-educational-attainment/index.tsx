@@ -1,27 +1,29 @@
 import { forwardRef, useState } from 'react'
 
-import {
-    PlusIcon,
-    TrashIcon,
-    SchoolIcon,
-    CalendarIcon,
-    WoodSignsIcon,
-    PencilFillIcon,
-    GraduationCapIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import RawDescription from '@/components/raw-description'
-import { MemberEducationalAttainmentCreateUpdateFormModal } from './member-educational-attainment-create-update-form'
-
 import useConfirmModalStore from '@/store/confirm-modal-store'
+
+import {
+    CalendarIcon,
+    GraduationCapIcon,
+    PencilFillIcon,
+    PlusIcon,
+    SchoolIcon,
+    TrashIcon,
+    WoodSignsIcon,
+} from '@/components/icons'
+import RawDescription from '@/components/raw-description'
+import { Button } from '@/components/ui/button'
+
 import { useDeleteEducationalAttainment } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
     IClassProps,
-    IMemberProfile,
     IMemberEducationalAttainment,
+    IMemberProfile,
 } from '@/types'
+
 import EmptyListIndicator from '../empty-list-indicator'
+import { MemberEducationalAttainmentCreateUpdateFormModal } from './member-educational-attainment-create-update-form'
 
 interface MemberEducationalAttainmentCard {
     educationalAttainment: IMemberEducationalAttainment

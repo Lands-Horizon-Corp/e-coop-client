@@ -1,21 +1,21 @@
-import { Badge } from '../ui/badge'
-import { Skeleton } from '../ui/skeleton'
-import ImageDisplay from '../image-display'
-import { Card, CardContent } from '../ui/card'
-import {
-    XIcon,
-    UserIcon,
-    PhoneIcon,
-    CheckIcon,
-    ClockIcon,
-    IdCardIcon,
-} from '../icons'
-
 import { cn } from '@/lib'
 
 import { IClassProps, IMemberProfile } from '@/types'
-import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+
+import {
+    CheckIcon,
+    ClockIcon,
+    IdCardIcon,
+    PhoneIcon,
+    UserIcon,
+    XIcon,
+} from '../icons'
+import ImageDisplay from '../image-display'
+import { Badge } from '../ui/badge'
+import { Card, CardContent } from '../ui/card'
+import { Skeleton } from '../ui/skeleton'
 import { CopyWrapper } from '../wrappers/copy-wrapper'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile

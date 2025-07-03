@@ -1,19 +1,21 @@
+import z from 'zod'
+
 import {
     AccountTypeEnum,
     ComputationTypeEnum,
-    LumpsumComputationTypeEnum,
+    EarnedUnearnedInterestEnum,
+    InterestDeductionEnum,
     InterestFinesComputationDiminishingEnum,
     InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
-    EarnedUnearnedInterestEnum,
-    LoanSavingTypeEnum,
-    InterestDeductionEnum,
-    OtherDeductionEntryEnum,
     InterestSavingTypeDiminishingStraightEnum,
+    LoanSavingTypeEnum,
+    LumpsumComputationTypeEnum,
+    OtherDeductionEntryEnum,
     OtherInformationOfAnAccountEnum,
 } from '@/types/coop-types/accounts/account'
 import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
-import z from 'zod'
+
 import { entityIdSchema } from '../common'
 
 export enum AccountExclusiveSettingTypeEnum {

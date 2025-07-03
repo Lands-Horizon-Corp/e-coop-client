@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+
 import { IBaseProps } from '@/types'
 
 const RootNav = ({ className, children }: IBaseProps) => {

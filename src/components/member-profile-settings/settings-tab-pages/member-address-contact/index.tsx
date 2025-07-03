@@ -1,10 +1,11 @@
 import { forwardRef } from 'react'
 
 import { Separator } from '@/components/ui/separator'
-import MemberProfileAddress from './member-profile-addresses'
-import MemberContactReferences from './member-contact-references'
 
 import { IMemberProfile } from '@/types'
+
+import MemberContactReferences from './member-contact-references'
+import MemberProfileAddress from './member-profile-addresses'
 
 type Props = {
     memberProfile: IMemberProfile

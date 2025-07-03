@@ -1,9 +1,11 @@
 import { forwardRef } from 'react'
+
 import { QRCodeSVG } from 'qrcode.react'
 
 import { QrCodeIcon } from '@/components/icons'
 
 import { cn } from '@/lib/utils'
+
 import { IClassProps } from '@/types'
 
 export interface IQrCodeProps extends IClassProps {

@@ -1,15 +1,15 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
-
 import {
-    TEntityId,
     IEmployee,
-    IUserOrganization,
-    IUserOrganizationPaginated,
     IMember,
     IOwner,
+    IUserOrganization,
+    IUserOrganizationPaginated,
+    TEntityId,
 } from '@/types'
+
+import APIService from './api-service'
 
 export const deleteEmployee = async (id: TEntityId) => {
     const response = await APIService.delete<void>(`/user-organization/${id}`)

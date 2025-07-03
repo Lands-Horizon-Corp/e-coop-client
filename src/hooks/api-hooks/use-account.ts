@@ -1,19 +1,19 @@
-import { TEntityId } from '@/types'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
+import { AccountServices } from '@/api-service/accounting-services'
+import { serverRequestErrExtractor } from '@/helpers'
+import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
 import {
     IAccount,
-    IAccountRequest,
     IAccountPaginated,
+    IAccountRequest,
 } from '@/types/coop-types/accounts/account'
-import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
+import { toBase64, withCatchAsync } from '@/utils'
+
+import { TEntityId } from '@/types'
 
 import { createMutationHook } from '../../factory/api-hook-factory'
-import { AccountServices } from '@/api-service/accounting-services'
-
-import { toast } from 'sonner'
-import { useQuery } from '@tanstack/react-query'
-import { toBase64, withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
-
 import ACCOUNT_DATA from './paginatedAccountSample.json'
 
 export const useAccountById = (

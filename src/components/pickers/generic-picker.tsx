@@ -1,19 +1,21 @@
 import React from 'react'
 
+import { cn } from '@/lib'
+
+import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     Command,
-    CommandItem,
-    CommandList,
     CommandEmpty,
     CommandGroup,
     CommandInput,
+    CommandItem,
+    CommandList,
 } from '@/components/ui/command'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 
-import { cn } from '@/lib'
-import { TEntityId } from '@/types'
 import { useInternalState } from '@/hooks/use-internal-state'
+
+import { TEntityId } from '@/types'
 
 interface GenericPickerProps<T extends { id: TEntityId }> extends IModalProps {
     items: T[]

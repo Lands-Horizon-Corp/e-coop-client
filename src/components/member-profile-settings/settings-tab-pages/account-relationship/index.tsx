@@ -1,10 +1,11 @@
 import { forwardRef } from 'react'
 
-import MemberJointAccounts from './joint-accounts'
 import { Separator } from '@/components/ui/separator'
-import MemberRelativeAccounts from './member-relative-accounts'
 
 import { IMemberProfile } from '@/types'
+
+import MemberJointAccounts from './joint-accounts'
+import MemberRelativeAccounts from './member-relative-accounts'
 
 type Props = { memberProfile: IMemberProfile }
 

@@ -1,12 +1,13 @@
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
-import StarterKit from '@tiptap/starter-kit'
-import Placeholder from '@tiptap/extension-placeholder'
-import { useEditor, EditorContent } from '@tiptap/react'
-
-import Toolbar from './toolbar'
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 
 import { cn } from '@/lib'
+import Placeholder from '@tiptap/extension-placeholder'
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+
 import { IBaseProps } from '@/types'
+
+import Toolbar from './toolbar'
 
 interface Props extends IBaseProps {
     content?: string

@@ -1,5 +1,6 @@
+import { useCallback, useState } from 'react'
+
 import * as htmlToImage from 'html-to-image'
-import { useState, useCallback } from 'react'
 
 export interface UseDownloadOptions {
     fileName: string

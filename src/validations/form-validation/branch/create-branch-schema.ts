@@ -1,5 +1,6 @@
-import { branchTypeEnum } from '@/types'
 import z from 'zod'
+
+import { branchTypeEnum } from '@/types'
 
 export const branchRequestSchema = z.object({
     media: z.any(),

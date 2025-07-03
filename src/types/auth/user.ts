@@ -1,6 +1,6 @@
+import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
 import { IMedia } from '../coop-types'
 import { IQrScanResult } from '../qr/qr-result'
-import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
 
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps, IAuditable {

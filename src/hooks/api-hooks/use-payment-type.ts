@@ -1,19 +1,19 @@
-import {
-    IPaymentTypePaginatedResource,
-    IPaymentType,
-    IPaymentTypeRequest,
-} from '@/types/coop-types/payment-type'
-import { TEntityId } from '@/types'
-import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
-
-import { PaymentTypeServices } from '@/api-service/payment-type-services'
-import { createMutationHook } from '../../factory/api-hook-factory'
-
-import { serverRequestErrExtractor } from '@/helpers'
-import { withCatchAsync, toBase64 } from '@/utils'
-
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
+
+import { PaymentTypeServices } from '@/api-service/payment-type-services'
+import { serverRequestErrExtractor } from '@/helpers'
+import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
+import {
+    IPaymentType,
+    IPaymentTypePaginatedResource,
+    IPaymentTypeRequest,
+} from '@/types/coop-types/payment-type'
+import { toBase64, withCatchAsync } from '@/utils'
+
+import { TEntityId } from '@/types'
+
+import { createMutationHook } from '../../factory/api-hook-factory'
 
 export const useFilteredPaginatedPaymentType = ({
     sort,

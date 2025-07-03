@@ -1,15 +1,15 @@
 import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import ActionTooltip from '@/components/action-tooltip'
-import { MagnifyingGlassIcon, XIcon } from '@/components/icons'
-import { DebouncedInput } from '@/components/ui/debounced-input'
-
 import {
-    useFilter,
     TFilterModes,
     TSearchFilter,
+    useFilter,
 } from '@/contexts/filter-context'
+
+import ActionTooltip from '@/components/action-tooltip'
+import { MagnifyingGlassIcon, XIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import { DebouncedInput } from '@/components/ui/debounced-input'
 
 import { KeysOfOrString } from '@/types'
 

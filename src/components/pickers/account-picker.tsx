@@ -1,24 +1,23 @@
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
-
-import GenericPicker from './generic-picker'
-
-import { useShortcut } from '../use-shorcuts'
-import useFilterState from '@/hooks/use-filter-state'
-import { abbreviateUUID } from '@/utils/formatting-utils'
-import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
+import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
-
-import { TEntityId } from '@/types'
 import { IAccount } from '@/types/coop-types/accounts/account'
-
-import { useQueryClient } from '@tanstack/react-query'
+import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PaginationState } from '@tanstack/react-table'
 
-import { useState } from 'react'
+import { ChevronDownIcon } from '@/components/icons'
+import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+
+import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
+import useFilterState from '@/hooks/use-filter-state'
+
+import { TEntityId } from '@/types'
+
+import { useShortcut } from '../use-shorcuts'
+import GenericPicker from './generic-picker'
 
 interface Props {
     value?: TEntityId

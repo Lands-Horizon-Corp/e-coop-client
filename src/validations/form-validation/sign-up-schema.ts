@@ -1,15 +1,16 @@
 import z from 'zod'
+
 import { isBefore, startOfDay } from 'date-fns'
 
 import {
-    emailSchema,
-    passwordSchema,
-    lastNameSchema,
-    userNameSchema,
-    firstNameSchema,
-    middleNameSchema,
-    stringDateSchema,
     contactNumberSchema,
+    emailSchema,
+    firstNameSchema,
+    lastNameSchema,
+    middleNameSchema,
+    passwordSchema,
+    stringDateSchema,
+    userNameSchema,
 } from '@/validations/common'
 
 export const signUpSchema = z.object({

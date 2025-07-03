@@ -1,31 +1,35 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Separator } from '@/components/ui/separator'
+import { EDUCATIONAL_ATTAINMENT } from '@/constants'
+import { Path, useForm } from 'react-hook-form'
+
+import EducationalAttainmentCombobox from '@/components/comboboxes/educational-attainment-combobox'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import EducationalAttainmentCombobox from '@/components/comboboxes/educational-attainment-combobox'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
+
 import { entityIdSchema } from '@/validations/common'
-import { EDUCATIONAL_ATTAINMENT } from '@/constants'
+
 import {
     useCreateEducationalAttainmentForMember,
     useUpdateEducationalAttainmentForMember,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
-    IForm,
-    TEntityId,
     IClassProps,
+    IForm,
     IMemberEducationalAttainment,
+    TEntityId,
 } from '@/types'
 
 export const memberEducationalAttainmentSchema = z.object({

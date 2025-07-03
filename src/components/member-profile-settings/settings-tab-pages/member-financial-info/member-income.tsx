@@ -1,25 +1,27 @@
 import { useState } from 'react'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { formatNumber, toReadableDate } from '@/utils'
+
 import {
-    PlusIcon,
-    TrashIcon,
+    CalendarDotsIcon,
     MoneyIcon,
     PencilFillIcon,
-    CalendarDotsIcon,
+    PlusIcon,
+    TrashIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { MemberIncomeCreateUpdateFormModal } from './member-income-create-update-form'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberProfileIncome } from '@/hooks/api-hooks/member/use-member-profile-settings'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import EmptyListIndicator from '../empty-list-indicator'
 
 import { IMemberIncome, IMemberProfile } from '@/types'
-import { formatNumber, toReadableDate } from '@/utils'
-import ImageDisplay from '@/components/image-display'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import EmptyListIndicator from '../empty-list-indicator'
+import { MemberIncomeCreateUpdateFormModal } from './member-income-create-update-form'
 
 const MemberIncomeCard = ({ income }: { income: IMemberIncome }) => {
     const [edit, setEdit] = useState(false)

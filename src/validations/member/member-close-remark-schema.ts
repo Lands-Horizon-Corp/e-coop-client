@@ -1,6 +1,8 @@
 import z from 'zod'
-import { entityIdSchema } from '../common'
+
 import { AccountClosureReasons } from '@/constants'
+
+import { entityIdSchema } from '../common'
 
 export const memberCloseRemarkSchema = z.object({
     id: entityIdSchema.optional(),

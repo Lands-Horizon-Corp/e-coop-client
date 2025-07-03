@@ -1,6 +1,6 @@
-import { IOrganization } from './organization'
-import { IBranch, IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
+import { IBranch, IPaginatedResult } from '../coop-types'
+import { IOrganization } from './organization'
 
 // Invitation Code Resource
 export interface IInvitationCode extends ITimeStamps, IAuditable {

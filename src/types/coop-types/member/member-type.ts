@@ -1,6 +1,6 @@
+import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 import { IBranch } from '../branch'
 import { IPaginatedResult } from '../paginated-result'
-import { IAuditable, ITimeStamps, TEntityId } from '../../common'
 
 export interface IMemberTypeRequest {
     id?: TEntityId

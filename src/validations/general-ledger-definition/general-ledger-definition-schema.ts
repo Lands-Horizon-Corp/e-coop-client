@@ -1,8 +1,9 @@
+import { z } from 'zod'
+
 import {
     GeneralLedgerFinancialStatementNodeType,
     GeneralLedgerTypeEnum,
 } from '@/types/coop-types/general-ledger-definitions'
-import { z } from 'zod'
 
 export const GeneralLedgerTypeEnumSchema = z.enum([
     GeneralLedgerTypeEnum.Assets,

@@ -1,27 +1,31 @@
+import { toast } from 'sonner'
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Separator } from '@/components/ui/separator'
-import MemberPicker from '@/components/pickers/member-picker'
+import { Path, useForm } from 'react-hook-form'
+
+import RelationshipCombobox from '@/components/comboboxes/relationship-combobox'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import MemberPicker from '@/components/pickers/member-picker'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import RelationshipCombobox from '@/components/comboboxes/relationship-combobox'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
+
+import { entityIdSchema, familyRelationshipSchema } from '@/validations/common'
+
 import {
     useCreateMemberRelativeAccount,
     useUpdateMemberRelativeAccount,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
-import { entityIdSchema, familyRelationshipSchema } from '@/validations/common'
 
-import { IForm, TEntityId, IClassProps, IMemberRelativeAccount } from '@/types'
-import { toast } from 'sonner'
+import { IClassProps, IForm, IMemberRelativeAccount, TEntityId } from '@/types'
 
 // STRICTLY BASED ON IMemberRelativeAccountRequest
 export const memberRelativeAccountSchema = z.object({

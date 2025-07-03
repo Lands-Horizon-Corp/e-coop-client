@@ -1,6 +1,8 @@
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib'
 import React from 'react'
+
+import { cn } from '@/lib'
+
+import { Badge } from '@/components/ui/badge'
 
 type Status = 'pending' | 'reported' | 'accepted' | 'ban'
 

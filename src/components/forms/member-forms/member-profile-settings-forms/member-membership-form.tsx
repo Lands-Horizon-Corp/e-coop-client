@@ -1,35 +1,39 @@
-import z from 'zod'
 import { toast } from 'sonner'
-import { useForm, Path } from 'react-hook-form'
+import z from 'zod'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
+import { Path, useForm } from 'react-hook-form'
+
+import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
+import MemberCenterCombobox from '@/components/comboboxes/member-center-combobox'
+import MemberClassificationCombobox from '@/components/comboboxes/member-classification-combobox'
+import MemberGroupCombobox from '@/components/comboboxes/member-group-combobox'
+import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
+import { HandCoinsIcon, PieChartIcon } from '@/components/icons'
+import MemberPicker from '@/components/pickers/member-picker'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Separator } from '@/components/ui/separator'
-import MemberPicker from '@/components/pickers/member-picker'
-import { HandCoinsIcon, PieChartIcon } from '@/components/icons'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
-import MemberGroupCombobox from '@/components/comboboxes/member-group-combobox'
-import MemberCenterCombobox from '@/components/comboboxes/member-center-combobox'
-import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
-import MemberClassificationCombobox from '@/components/comboboxes/member-classification-combobox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
+
 import { memberProfileMembershipInfoSchema } from '@/validations/member/member-profile-settings-schema'
+
 import { useUpdateMemberProfileMembershipInfo } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
-    IForm,
-    TEntityId,
     IClassProps,
+    IForm,
     IMemberProfile,
     IMemberProfileMembershipInfoRequest,
+    TEntityId,
 } from '@/types'
 
 type TMemberProfileMembershipInfoFormValues = z.infer<

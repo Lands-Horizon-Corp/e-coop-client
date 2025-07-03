@@ -1,4 +1,5 @@
 import { Table } from '@tanstack/react-table'
+
 import { Checkbox } from '@/components/ui/checkbox'
 
 interface Props<T> {

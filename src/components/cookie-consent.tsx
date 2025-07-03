@@ -1,12 +1,13 @@
-import Cookies from 'js-cookie'
-import { addYears } from 'date-fns'
 import { useEffect, useState } from 'react'
 
-import { Button } from '@/components/ui/button'
+import CookieSvg from '@/assets/cookie-icon.svg'
+import { addYears } from 'date-fns'
+import Cookies from 'js-cookie'
+
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
-import CookieSvg from '@/assets/cookie-icon.svg'
 
 const CookieConsent = () => {
     const [accepted, setAccepted] = useState(true)

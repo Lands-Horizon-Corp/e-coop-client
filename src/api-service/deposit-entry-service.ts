@@ -1,8 +1,8 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
-
 import { IDepositEntryPaginated, TEntityId } from '@/types'
+
+import APIService from './api-service'
 
 export const getPaginatedBatchDepositEntry = async ({
     sort,

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import detectIncognito from 'detectincognitojs'
 
 export const useIncognitoDetector = ({

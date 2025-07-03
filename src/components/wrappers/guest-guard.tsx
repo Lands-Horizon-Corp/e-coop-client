@@ -1,7 +1,7 @@
+import { useAuthStore } from '@/store/user-auth-store'
 import { Navigate } from '@tanstack/react-router'
 
 import { IBaseProps } from '@/types'
-import { useAuthStore } from '@/store/user-auth-store'
 
 interface IGuestGuardProps extends Omit<IBaseProps, 'className'> {
     allowAuthenticatedUser?: false

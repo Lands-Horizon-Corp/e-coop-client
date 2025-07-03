@@ -1,32 +1,35 @@
 import * as React from 'react'
+
 import { Check } from 'lucide-react'
 
+import { ChevronDownIcon, PlusIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+    CommandSeparator,
+} from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-    Command,
-    CommandItem,
-    CommandList,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandSeparator,
-} from '@/components/ui/command'
+
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon, PlusIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+
+import { useMemberCenter } from '@/hooks/api-hooks/member/use-member-center'
+
+import { IMemberCenter, TEntityId } from '@/types'
+
 import {
     IMemberCenterCreateUpdateFormProps,
     MemberCenterCreateUpdateFormModal,
 } from '../forms/member-forms/member-center-create-update-form'
-
-import { useMemberCenter } from '@/hooks/api-hooks/member/use-member-center'
-
-import { TEntityId, IMemberCenter } from '@/types'
 
 export interface IMemberCenterComboboxCreateProps
     extends Pick<

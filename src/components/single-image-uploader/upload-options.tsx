@@ -1,12 +1,14 @@
-import { toast } from 'sonner'
-import Webcam from 'react-webcam'
 import { useCallback, useRef } from 'react'
+import { toast } from 'sonner'
+
+import Webcam from 'react-webcam'
+
+import { CameraFillIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import WebCam from '@/components/webcam'
 
 import PictureDrop from './picture-drop'
-import WebCam from '@/components/webcam'
-import { Button } from '@/components/ui/button'
-import { CameraFillIcon } from '@/components/icons'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface Props {
     onPhotoChoose: (imageBase64: string) => void

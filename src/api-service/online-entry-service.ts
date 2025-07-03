@@ -1,13 +1,13 @@
-import qs from 'query-string'
-
 import {
-    createAPICrudService,
     createAPICollectionService,
+    createAPICrudService,
     createAPIExportableService,
 } from '@/factory/api-factory-service'
-import APIService from './api-service'
+import qs from 'query-string'
 
 import { IOnlineEntry, IOnlineEntryPaginated, TEntityId } from '@/types'
+
+import APIService from './api-service'
 
 const CrudService = createAPICrudService<IOnlineEntry, void>('/online-entry')
 

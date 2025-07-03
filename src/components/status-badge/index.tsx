@@ -1,4 +1,5 @@
 import { cn } from '@/lib'
+
 import { Badge } from '../ui/badge'
 
 export type BadgeColorMap<T extends string> = Record<T, string>

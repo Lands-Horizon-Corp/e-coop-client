@@ -1,6 +1,30 @@
+import { useState } from 'react'
+import { toast } from 'sonner'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { base64ImagetoFile } from '@/helpers'
+import { cn } from '@/lib'
+import { useCategoryStore } from '@/store/onboarding/category-store'
+import { IOrganizationCategoryRequest } from '@/types/lands-types/organization-category'
+import { useNavigate } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
+
+import ActionTooltip from '@/components/action-tooltip'
+import CategoriesItem from '@/components/category-pickers/categories-item'
 import { PhoneInput } from '@/components/contact-input/contact-input'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import {
+    LoadingSpinnerIcon,
+    NextIcon,
+    PlusIcon,
+    ReplaceIcon,
+    UnavailableIcon,
+    VerifiedPatchIcon,
+} from '@/components/icons'
 import PlainTextEditor from '@/components/plain-text-editor'
+import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import SubscriptionPlanPicker from '@/components/subscription-plan/subscription'
 import TextEditor from '@/components/text-editor'
 import { Button } from '@/components/ui/button'
@@ -17,41 +41,18 @@ import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import UserAvatar from '@/components/user-avatar'
 
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
-import { useCreateOrganization } from '@/hooks/api-hooks/use-organization'
-
-import { IOrganizationCategoryRequest } from '@/types/lands-types/organization-category'
-import { ICreateOrganizationResponse, TEntityId } from '@/types'
-
-import { useCategoryStore } from '@/store/onboarding/category-store'
 import {
     Organization,
     OrganizationSchema,
 } from '@/validations/form-validation/onboarding/create-organization-schema'
 
-import {
-    LoadingSpinnerIcon,
-    NextIcon,
-    PlusIcon,
-    ReplaceIcon,
-    UnavailableIcon,
-    VerifiedPatchIcon,
-} from '@/components/icons'
-
-import { base64ImagetoFile } from '@/helpers'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { cn } from '@/lib'
-import CategoriesItem from '@/components/category-pickers/categories-item'
-import { toast } from 'sonner'
-import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
-import UserAvatar from '@/components/user-avatar'
-import ActionTooltip from '@/components/action-tooltip'
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
+import { useCreateOrganization } from '@/hooks/api-hooks/use-organization'
 import { useLocationInfo } from '@/hooks/use-location-info'
+
+import { ICreateOrganizationResponse, TEntityId } from '@/types'
 
 const steps = [
     {

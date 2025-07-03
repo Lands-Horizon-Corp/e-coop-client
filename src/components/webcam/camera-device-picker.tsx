@@ -1,6 +1,10 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import { withCatchAsync } from '@/utils'
+
+import { CameraIcon, RefreshIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -9,12 +13,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { CameraIcon, RefreshIcon } from '@/components/icons'
 
 import { cn } from '@/lib/utils'
-import { withCatchAsync } from '@/utils'
+
 import { IBaseProps } from '@/types'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 interface Props extends IBaseProps {
     currentCamId: string | undefined

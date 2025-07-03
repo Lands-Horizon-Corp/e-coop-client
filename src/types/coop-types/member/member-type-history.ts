@@ -1,8 +1,8 @@
-import { IBranch } from '../branch'
-import { IMemberType } from './member-type'
-import { IMemberProfile } from './member-profile'
-import { IPaginatedResult } from '../paginated-result'
 import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IBranch } from '../branch'
+import { IPaginatedResult } from '../paginated-result'
+import { IMemberProfile } from './member-profile'
+import { IMemberType } from './member-type'
 
 // FROM LATEST ERD
 export interface IMemberTypeHistory extends ITimeStamps, IAuditable {

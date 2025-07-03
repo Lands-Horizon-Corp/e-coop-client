@@ -1,5 +1,4 @@
 import { ILocationJSON } from './address-types'
-
 import ADDRESSES_DATA from './addresses-data-2019.json'
 
 export const getProvinces = (data: ILocationJSON = ADDRESSES_DATA): string[] =>

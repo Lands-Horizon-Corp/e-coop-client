@@ -1,12 +1,11 @@
+import { toReadableDate } from '@/utils'
 import { ColumnDef } from '@tanstack/react-table'
 
-import DateFilter from '../data-table/data-table-filters/date-filter'
+import { ITimeStamps } from '@/types'
+
 import DataTableColumnHeader from '../data-table/data-table-column-header'
 import ColumnActions from '../data-table/data-table-column-header/column-actions'
-
-import { toReadableDate } from '@/utils'
-
-import { ITimeStamps } from '@/types'
+import DateFilter from '../data-table/data-table-filters/date-filter'
 
 export const createUpdateColumns = <
     T extends ITimeStamps = ITimeStamps,

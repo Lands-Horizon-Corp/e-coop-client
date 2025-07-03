@@ -1,29 +1,30 @@
 import { forwardRef } from 'react'
 
+import { cn } from '@/lib'
+import { toDateTimeFormatFile } from '@/utils'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
+import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+
+import CopyTextButton from '../copy-text-button'
 import {
+    DetailsIcon,
+    HandCoinsIcon,
+    PieChartIcon,
     QrCodeIcon,
     UserTagIcon,
-    DetailsIcon,
-    PieChartIcon,
-    HandCoinsIcon,
 } from '../icons'
-import SectionTitle from './section-title'
-import { Separator } from '../ui/separator'
 import ImageDisplay from '../image-display'
 import { QrCodeDownloadable } from '../qr-code'
-import CopyTextButton from '../copy-text-button'
 import ExpandableDescription from '../raw-description'
+import { Separator } from '../ui/separator'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import OrganizationBranchDisplay from './banners/company-branch-display'
 import JointAccountsDisplay from './displays/joint-accounts-display'
 import MemberRecruitsDisplay from './displays/member-recruits-display'
 import RelativeAccountsDisplay from './displays/relative-accounts-display'
-
-import { cn } from '@/lib'
-import { toDateTimeFormatFile } from '@/utils'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-
-import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
-import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+import SectionTitle from './section-title'
 
 interface Props extends IBaseProps {
     profileId: TEntityId

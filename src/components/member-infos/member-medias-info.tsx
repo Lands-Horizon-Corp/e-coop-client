@@ -1,10 +1,12 @@
 import { forwardRef } from 'react'
-import MemberFileMediaDisplay from './displays/member-file-medias-display'
 
 import { cn } from '@/lib'
+
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
 import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+
+import MemberFileMediaDisplay from './displays/member-file-medias-display'
 
 interface Props extends IBaseProps {
     profileId: TEntityId

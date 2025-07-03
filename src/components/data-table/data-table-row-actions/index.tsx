@@ -1,20 +1,20 @@
 import { ReactNode } from 'react'
 
 import {
-    TrashIcon,
-    EyeNoneIcon,
     DotsVerticalIcon,
+    EyeNoneIcon,
     PencilFillIcon,
+    TrashIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
+    DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
 
 export interface IRowActionOption {
     text: string

@@ -1,11 +1,10 @@
-import { ScrollArea } from '../ui/scroll-area'
-import { Button } from '../ui/button'
-import { Badge } from '../ui/badge'
-
-import { CloseIcon } from '../icons'
+import { cn } from '@/lib'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 
-import { cn } from '@/lib'
+import { CloseIcon } from '../icons'
+import { Badge } from '../ui/badge'
+import { Button } from '../ui/button'
+import { ScrollArea } from '../ui/scroll-area'
 
 type CategoriesItemProps = {
     className?: string

@@ -1,7 +1,8 @@
 import z from 'zod'
+
 import {
-    entityIdSchema,
     civilStatusSchema,
+    entityIdSchema,
     generalStatusSchema,
     stringDateSchema,
 } from '../common'
@@ -14,9 +15,7 @@ export const memberProfilePersonalInfoSchema = z.object({
     full_name: z.string().optional(),
     suffix: z.string().optional(),
     member_gender_id: entityIdSchema.optional(),
-    birthdate: stringDateSchema.transform((val) =>
-        new Date(val).toISOString()
-    ),
+    birthdate: stringDateSchema.transform((val) => new Date(val).toISOString()),
     contact_number: z.string().optional(),
 
     civil_status: civilStatusSchema,

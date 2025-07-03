@@ -1,34 +1,34 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
+import { deleteManyEmployees } from '@/api-service/user-organization-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
+import { IUserOrganization } from '@/types/lands-types/user-organization'
 import {
-    useReactTable,
     getCoreRowModel,
     getSortedRowModel,
+    useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+
+import { useFilteredPaginatedEmployees } from '@/hooks/api-hooks/use-employee'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { TableProps } from '@/types'
 
 import EmployeesTableColumns, {
     IEmployeesTableColumnProps,
     employeesGlobalSearchTargets,
 } from './columns'
-
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { deleteManyEmployees } from '@/api-service/user-organization-service'
-import { useFilteredPaginatedEmployees } from '@/hooks/api-hooks/use-employee'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-
-import { IUserOrganization } from '@/types/lands-types/user-organization'
-
-import { TableProps } from '@/types'
 
 export interface EmployeesTableProps
     extends TableProps<IUserOrganization>,

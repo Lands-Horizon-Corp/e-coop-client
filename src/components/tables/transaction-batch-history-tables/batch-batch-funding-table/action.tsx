@@ -1,5 +1,7 @@
-import { IBatchFundingTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+
+import { IBatchFundingTableActionComponentProp } from './columns'
+
 // import { BatchFundingCreateUpdateFormModal } from '@/components/forms/batch-funding-create-update-form'
 
 interface IBatchFundingTableActionProps

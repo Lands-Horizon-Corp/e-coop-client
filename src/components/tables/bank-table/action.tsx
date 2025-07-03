@@ -1,10 +1,12 @@
-import { IBankTableActionComponentProp } from './columns'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { BankCreateUpdateFormModal } from '@/components/forms/bank-create-update-form'
 
-import { useModalState } from '@/hooks/use-modal-state'
 import { useDeleteBank } from '@/hooks/api-hooks/use-bank'
-import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useModalState } from '@/hooks/use-modal-state'
+
+import { IBankTableActionComponentProp } from './columns'
 
 interface IBankTableActionProps extends IBankTableActionComponentProp {
     onBankUpdate?: () => void

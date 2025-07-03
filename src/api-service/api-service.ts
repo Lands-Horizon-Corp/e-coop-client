@@ -1,11 +1,10 @@
+import { API_URL } from '@/constants/envs'
 import axios, {
-    AxiosResponse,
     AxiosInstance,
     AxiosRequestConfig,
+    AxiosResponse,
     InternalAxiosRequestConfig,
 } from 'axios'
-
-import { API_URL } from '@/constants/envs'
 
 import { IRequestParams } from '@/types'
 

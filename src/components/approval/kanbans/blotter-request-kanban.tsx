@@ -1,25 +1,27 @@
-import { Button } from '@/components/ui/button'
-import KanbanTitle from '../kanban/kanban-title'
-import { Separator } from '@/components/ui/separator'
-import ImageDisplay from '@/components/image-display'
-import KanbanContainer from '../kanban/kanban-container'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { formatNumber } from '@/utils'
+
 import { EyeIcon, LayersSharpDotIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import KanbanItemsContainer from '../kanban/kanban-items-container'
 import { BatchBlotterQuickViewModal } from '@/components/transaction-batch/transaction-batch-quick-view'
 import TransactionBatchStatusIndicator from '@/components/transaction-batch/transaction-batch-status-indicator'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
-import { formatNumber } from '@/utils'
 import {
     useTransactionBatchAcceptBlotterView,
     useTransactionBatchBlotterViewRequests,
 } from '@/hooks/api-hooks/use-transaction-batch'
 import { useModalState } from '@/hooks/use-modal-state'
-import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IClassProps, ITransactionBatch } from '@/types'
-import { useSubscribe } from '@/hooks/use-pubsub'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+
+import KanbanContainer from '../kanban/kanban-container'
+import KanbanItemsContainer from '../kanban/kanban-items-container'
+import KanbanTitle from '../kanban/kanban-title'
 
 interface Props extends IClassProps {}
 

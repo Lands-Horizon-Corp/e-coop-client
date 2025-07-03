@@ -1,24 +1,23 @@
 import {
-    Select,
-    SelectItem,
-    SelectValue,
-    SelectTrigger,
-    SelectContent,
-} from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import InputDatePicker from '@/components/date-time-pickers/input-date-picker'
-
-import DateRange from './date-range'
-
-import { isDate } from '@/helpers'
-
-import {
-    filterModeMap,
     IFilterComponentProps,
     TFilterModes,
     TSearchFilter,
+    filterModeMap,
     useFilter,
 } from '@/contexts/filter-context'
+import { isDate } from '@/helpers'
+
+import InputDatePicker from '@/components/date-time-pickers/input-date-picker'
+import { Button } from '@/components/ui/button'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
+
+import DateRange from './date-range'
 
 const DateFilter = <T,>({
     field,

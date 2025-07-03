@@ -1,5 +1,7 @@
 'use client'
+
 import { Fragment, useMemo } from 'react'
+
 import { Link, useRouterState } from '@tanstack/react-router'
 
 import {
@@ -17,10 +19,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import PageNavigator from './page-navigator'
-import { ChevronRightIcon, HomeFillIcon } from '../icons'
 
 import { cn } from '@/lib/utils'
+
+import { ChevronRightIcon, HomeFillIcon } from '../icons'
+import PageNavigator from './page-navigator'
 
 type Props = {
     homeUrl?: `/${string}`

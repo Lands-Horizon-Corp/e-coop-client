@@ -1,7 +1,9 @@
-import qs from 'query-string'
-import { TEntityId } from '@/types'
-import APIService from './api-service'
 import { ICashEntryPaginated } from '@/types/coop-types/cash-entry'
+import qs from 'query-string'
+
+import { TEntityId } from '@/types'
+
+import APIService from './api-service'
 
 export const getPaginatedBatchCashEntry = async ({
     sort,

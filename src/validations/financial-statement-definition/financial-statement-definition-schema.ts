@@ -1,6 +1,8 @@
 import { z } from 'zod'
-import { GeneralLedgerFinancialStatementNodeTypeEnumSchema } from '../general-ledger-definition/general-ledger-definition-schema'
+
 import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
+
+import { GeneralLedgerFinancialStatementNodeTypeEnumSchema } from '../general-ledger-definition/general-ledger-definition-schema'
 
 export const FinancialStatementDefinitionTypesEnumSchema = z.nativeEnum(
     FinancialStatementTypeEnum

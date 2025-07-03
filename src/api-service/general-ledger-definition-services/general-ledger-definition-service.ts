@@ -1,8 +1,9 @@
-import { TEntityId } from '@/types'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
 } from '@/types/coop-types/general-ledger-definitions'
+
+import { TEntityId } from '@/types'
 
 import APIService from '../api-service'
 

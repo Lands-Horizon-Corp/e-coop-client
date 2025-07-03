@@ -1,8 +1,7 @@
 import { cn } from '@/lib'
+import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
 import { Badge } from '@/components/ui/badge'
-
-import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
 interface GeneralLedgerTypeBadgeProps {
     type: GeneralLedgerTypeEnum

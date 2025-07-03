@@ -1,6 +1,7 @@
 import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
-import { IPaginatedResult } from './paginated-result'
+
 import { IAccount } from './accounts/account'
+import { IPaginatedResult } from './paginated-result'
 
 export const GENERAL_LEDGER_SOURCES = [
     'withdraw',

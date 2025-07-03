@@ -1,13 +1,13 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
-
 import {
-    TEntityId,
-    ITimesheet,
     IPaginatedTimesheet,
+    ITimesheet,
     ITimesheetInOutRequest,
+    TEntityId,
 } from '@/types'
+
+import APIService from './api-service'
 
 export const getTimesheetById = async (id: TEntityId) => {
     const response = await APIService.get<ITimesheet>(`/timesheet/${id}`)

@@ -1,15 +1,16 @@
+import { forwardRef, useState } from 'react'
 import { toast } from 'sonner'
-import { IconType } from 'react-icons/lib'
-import { useState, forwardRef } from 'react'
-
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
-import { ImageIcon, TrashIcon } from '@/components/icons'
-import { SingleImageUploaderModal } from '@/components/uploaders/single-image-uploader'
 
 import { formatBytes } from '@/helpers'
-import { IMedia, TEntityId } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
+import { IconType } from 'react-icons/lib'
+
+import { ImageIcon, TrashIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import { Button } from '@/components/ui/button'
+import { SingleImageUploaderModal } from '@/components/uploaders/single-image-uploader'
+
+import { IMedia, TEntityId } from '@/types'
 
 export interface SingleImageUploadFieldProps {
     id?: string

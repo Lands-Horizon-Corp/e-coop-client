@@ -1,38 +1,39 @@
 // External Libraries
 import * as React from 'react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
+
+import { formatBytes, formatDate } from '@/helpers'
+import {
+    DownloadProps,
+    ImageContainerProps,
+    ImagePreviewActionProps,
+    ImagePreviewButtonActionProps,
+    ImagePreviewPanelProps,
+} from '@/types/components/image-preview'
 import useEmblaCarousel from 'embla-carousel-react'
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
-    ZoomIn,
-    ZoomOut,
+    DownloadIcon,
     FlipHorizontal,
     FlipVertical,
-    DownloadIcon,
+    ZoomIn,
+    ZoomOut,
 } from 'lucide-react'
 
-// Local Components
-import { useCarousel } from '@/components/ui/carousel'
-import { Card } from '../ui/card'
-import { Button } from '../ui/button'
 import {
     PowerResetIcon,
     RotateLeftIcon,
     RotateRightIcon,
 } from '@/components/icons'
+// Local Components
+import { useCarousel } from '@/components/ui/carousel'
 
 // Utility Functions
 import { cn } from '@/lib/utils'
-import { formatBytes, formatDate } from '@/helpers'
 
-import {
-    DownloadProps,
-    ImageContainerProps,
-    ImagePreviewPanelProps,
-    ImagePreviewActionProps,
-    ImagePreviewButtonActionProps,
-} from '@/types/components/image-preview'
+import { Button } from '../ui/button'
+import { Card } from '../ui/card'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>

@@ -1,27 +1,29 @@
 import * as React from 'react'
+
 import { Check } from 'lucide-react'
 
+import { ChevronDownIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-    Command,
-    CommandItem,
-    CommandList,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-} from '@/components/ui/command'
+
 import { cn } from '@/lib/utils'
 
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { useFilteredPaginatedAccountClassification } from '@/hooks/api-hooks/use-account-classification'
 
 import { IAccountClassification, TEntityId } from '@/types'
-import { useFilteredPaginatedAccountClassification } from '@/hooks/api-hooks/use-account-classification'
 
 interface Props {
     value?: TEntityId

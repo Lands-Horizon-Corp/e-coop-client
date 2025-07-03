@@ -1,8 +1,8 @@
 import { IconType } from 'react-icons/lib'
 
+import ActionTooltip from '@/components/action-tooltip'
 import { XIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
-import ActionTooltip from '@/components/action-tooltip'
 
 interface Props {
     label: string

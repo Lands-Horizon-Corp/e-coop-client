@@ -1,10 +1,12 @@
+import { FinancialStatementDefinitionServices } from '@/api-service/financial-statement-services'
 import {
     IFinancialStatementDefinition,
     IFinancialStatementDefinitionRequest,
 } from '@/types/coop-types/financial-statement-definition'
-import { createMutationHook } from '../../../factory/api-hook-factory'
+
 import { TEntityId } from '@/types'
-import { FinancialStatementDefinitionServices } from '@/api-service/financial-statement-services'
+
+import { createMutationHook } from '../../../factory/api-hook-factory'
 
 export const useCreateFinancialStatementDefinition = createMutationHook<
     IFinancialStatementDefinition,

@@ -1,13 +1,15 @@
-import { TPagination } from '@/hooks/use-pagination'
-import { TEntityId, IPaginatedResult } from '@/types'
 import {
     IAccountCategory,
     IAccountCategoryPaginatedResource,
     IAccountCategoryRequest,
 } from '@/types/coop-types/account-category'
+import qs from 'query-string'
+
+import { TPagination } from '@/hooks/use-pagination'
+
+import { IPaginatedResult, TEntityId } from '@/types'
 
 import APIService from '../api-service'
-import qs from 'query-string'
 
 // GET /account-category/:id
 export const getAccountCategoryById = async (id: TEntityId) => {

@@ -1,19 +1,20 @@
+import { toReadableDate } from '@/utils'
 import DOMPurify from 'dompurify'
 
+import CopyTextButton from '@/components/copy-text-button'
+import { FamilyIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IMemberRelativeAccount } from '@/types'
-import ImageDisplay from '@/components/image-display'
-import CopyTextButton from '@/components/copy-text-button'
+
 import SectionTitle from '../section-title'
-import { FamilyIcon } from '@/components/icons'
-import { toReadableDate } from '@/utils'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 interface Props {
     relativeAccounts?: IMemberRelativeAccount[]
