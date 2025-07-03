@@ -37,7 +37,7 @@ export const getPaginatedAccountClassifications = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/account-classification`,
+            url: `/account-classification/search`,
             query: {
                 sort,
                 filters,
