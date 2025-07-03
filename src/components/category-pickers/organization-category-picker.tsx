@@ -1,3 +1,13 @@
+import { useCategoryStore } from '@/store/onboarding/category-store'
+import { ICategory } from '@/types/lands-types/category'
+import { useNavigate } from '@tanstack/react-router'
+
+import { TEntityId } from '@/types'
+
+import { CloseIcon, NextIcon } from '../icons'
+import Modal, { IModalProps } from '../modals/modal'
+import { Badge } from '../ui/badge'
+import { Button } from '../ui/button'
 import {
     Command,
     CommandEmpty,
@@ -6,17 +16,6 @@ import {
     CommandList,
 } from '../ui/command'
 import { ScrollArea } from '../ui/scroll-area'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
-
-import { ICategory } from '@/types/lands-types/category'
-import { TEntityId } from '@/types'
-
-import Modal, { IModalProps } from '../modals/modal'
-
-import { CloseIcon, NextIcon } from '../icons'
-import { useNavigate } from '@tanstack/react-router'
-import { useCategoryStore } from '@/store/onboarding/category-store'
 
 interface OrganizationCategoryPickerProps extends IModalProps {
     onChange?: (categoryData: ICategory) => void

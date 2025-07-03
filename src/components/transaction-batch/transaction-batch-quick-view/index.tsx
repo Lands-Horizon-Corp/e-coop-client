@@ -1,11 +1,12 @@
+import { cn } from '@/lib'
+
+import TransBatchTitleUserDisplay from '@/components/elements/trans-batch-title-user-display'
+import Modal, { IModalProps } from '@/components/modals/modal'
+
 import {
     BatchBlotterSummaryView,
     BatchBlotterSummaryViewProps,
 } from '../batch-blotter-summary'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import TransBatchTitleUserDisplay from '@/components/elements/trans-batch-title-user-display'
-
-import { cn } from '@/lib'
 
 export const BatchBlotterQuickViewModal = ({
     className,

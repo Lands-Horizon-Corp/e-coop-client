@@ -1,7 +1,8 @@
-import { TransBatchHistoryTabsContentProps } from '.'
+import { cn } from '@/lib'
+
 import BatchDepositEntryTable from '@/components/tables/transaction-batch-history-tables/batch-deposit-entry-table'
 
-import { cn } from '@/lib'
+import { TransBatchHistoryTabsContentProps } from '.'
 
 const BatchDepositEntryHistory = ({
     transactionBatchId,

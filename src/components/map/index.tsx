@@ -1,18 +1,18 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+import logger from '@/helpers/loggers/logger'
+import { cn } from '@/lib'
+import { Pin, TMainMapProps, TMapWithClickProps } from '@/types/components'
+import L, { LatLngExpression, latLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useState, useEffect, useCallback, useRef } from 'react'
 import {
     MapContainer,
     TileLayer,
-    useMapEvent,
     ZoomControl,
+    useMapEvent,
 } from 'react-leaflet'
-import L, { LatLngExpression, latLng } from 'leaflet'
 
-import { Pin, TMainMapProps, TMapWithClickProps } from '@/types/components'
 import LayerControl from './layer-control'
-
-import { cn } from '@/lib'
-import logger from '@/helpers/loggers/logger'
 import MapSearch from './map-search'
 
 const getLocationDescription = async (latlng: LatLngExpression) => {

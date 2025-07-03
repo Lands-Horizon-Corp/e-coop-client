@@ -1,8 +1,8 @@
 // import { useTheme } from "next-themes"
 import { Toaster as Sonner } from 'sonner'
-import { createPortal as yeetToDOM } from 'react-dom'
 
 import { useTheme } from '@/providers/theme-provider'
+import { createPortal as yeetToDOM } from 'react-dom'
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 

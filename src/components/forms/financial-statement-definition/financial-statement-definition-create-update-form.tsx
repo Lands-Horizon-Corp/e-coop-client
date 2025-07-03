@@ -1,41 +1,42 @@
-import Modal, { IModalProps } from '@/components/modals/modal'
+import { z } from 'zod'
 
-import { IClassProps, IForm, TEntityId } from '@/types'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/lib'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import {
+    FinancialStatementTypeEnum,
+    IFinancialStatementDefinition,
+    IFinancialStatementDefinitionRequest,
+} from '@/types/coop-types/financial-statement-definition'
+import { GeneralLedgerFinancialStatementNodeType } from '@/types/coop-types/general-ledger-definitions'
 import { Path, useForm } from 'react-hook-form'
 
-import { z } from 'zod'
-import { Input } from '@/components/ui/input'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { CloseIcon, NoteIcon } from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
 import { Button } from '@/components/ui/button'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormControl } from '@/components/ui/form'
-import { CloseIcon, NoteIcon } from '@/components/icons'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import TextEditor from '@/components/text-editor'
-import {
-    FinancialStatementTypeEnum,
-    IFinancialStatementDefinition,
-    IFinancialStatementDefinitionRequest,
-} from '@/types/coop-types/financial-statement-definition'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+
 import { FinancialStatementDefinitionSchema } from '@/validations/financial-statement-definition/financial-statement-definition-schema'
 
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
-import { GeneralLedgerFinancialStatementNodeType } from '@/types/coop-types/general-ledger-definitions'
 import { useCreateFinancialStatementDefinition } from '@/hooks/api-hooks/financial-statement-definition'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+
+import { IClassProps, IForm, TEntityId } from '@/types'
 
 type TFinancialStatementDefinitionFormValues = z.infer<
     typeof FinancialStatementDefinitionSchema

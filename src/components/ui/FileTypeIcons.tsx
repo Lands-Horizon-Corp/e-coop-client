@@ -1,10 +1,11 @@
-import { FileXIcon, ImageIcon } from '../icons'
 import attachmentAudio from '@/assets/images/file-thumbnails/attachment-audio.svg'
 import attachmentDoc from '@/assets/images/file-thumbnails/attachment-doc.svg'
-import attachmentSheet from '@/assets/images/file-thumbnails/attachment-sheet.svg'
 import attachmentpdf from '@/assets/images/file-thumbnails/attachment-pdf.svg'
+import attachmentSheet from '@/assets/images/file-thumbnails/attachment-sheet.svg'
 import attachmentTxt from '@/assets/images/file-thumbnails/attachment-txt.svg'
 import attachmentVideo from '@/assets/images/file-thumbnails/attachment-video.svg'
+
+import { FileXIcon, ImageIcon } from '../icons'
 
 export const FileTypeIcons = {
     audio: <img src={attachmentAudio} loading="lazy" alt="attachment-audio" />,

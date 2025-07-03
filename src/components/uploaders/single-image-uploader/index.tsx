@@ -1,28 +1,31 @@
-import { toast } from 'sonner'
 import { useState } from 'react'
+import { toast } from 'sonner'
+
+import { formatBytes } from '@/helpers'
+import { cn } from '@/lib'
 
 import {
-    TrashIcon,
     CameraIcon,
     DotMediumIcon,
     HardDriveUploadIcon,
+    TrashIcon,
 } from '@/components/icons'
-import WebCam from '@/components/webcam'
-import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
-import FileTypeIcon from '@/components/ui/file-type'
-import SingleFileDrop from '../file-drop/single-file-drop'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import FileTypeIcon from '@/components/ui/file-type'
+import { Progress } from '@/components/ui/progress'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import WebCam from '@/components/webcam'
 
-import { cn } from '@/lib'
-import { formatBytes } from '@/helpers'
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
+import { useCamera } from '@/hooks/use-camera'
+
 import { IMedia } from '@/types'
 import { IClassProps } from '@/types'
-import { useCamera } from '@/hooks/use-camera'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
+
+import SingleFileDrop from '../file-drop/single-file-drop'
 
 type TUploadSource = 'file' | 'capture'
 

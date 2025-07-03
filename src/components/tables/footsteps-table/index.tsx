@@ -1,33 +1,34 @@
-import {
-    useReactTable,
-    getCoreRowModel,
-    getSortedRowModel,
-} from '@tanstack/react-table'
 import { useMemo } from 'react'
 
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
+import {
+    getCoreRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
+
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import FootstepTableColumns, {
-    IFootstepTableColumnProps,
-    footstepGlobalSearchTargets,
-} from './columns'
-
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import {
     type TFootstepHookMode,
     useFilteredPaginatedFootsteps,
 } from '@/hooks/api-hooks/use-footstep'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
 
-import { TableProps, IFootstep, TEntityId } from '@/types'
+import { IFootstep, TEntityId, TableProps } from '@/types'
+
+import FootstepTableColumns, {
+    IFootstepTableColumnProps,
+    footstepGlobalSearchTargets,
+} from './columns'
 
 export interface FootstepTableProps
     extends TableProps<IFootstep>,

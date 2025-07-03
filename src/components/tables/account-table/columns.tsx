@@ -1,32 +1,32 @@
 import { ReactNode } from 'react'
+
+import { cn } from '@/lib'
+import {
+    IAccount,
+    InterestDeductionEnum,
+} from '@/types/coop-types/accounts/account'
+import { toReadableDate } from '@/utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
+import { AccountTypeBadge } from '@/components/badges/account-type-badge'
+import { ComputationTypeBadge } from '@/components/badges/computation-type-badge'
+import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
+import CopyTextButton from '@/components/copy-text-button'
+import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
+import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import {
     ArrowUpLong,
     FaCheckIcon,
     FaTimesIcon,
     PushPinSlashIcon,
 } from '@/components/icons'
-import { Checkbox } from '@/components/ui/checkbox'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
-import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
-import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-
-import { toReadableDate } from '@/utils'
-import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import {
-    IAccount,
-    InterestDeductionEnum,
-} from '@/types/coop-types/accounts/account'
-import { AccountTypeBadge } from '@/components/badges/account-type-badge'
 import { Badge } from '@/components/ui/badge'
-import CopyTextButton from '@/components/copy-text-button'
-import { cn } from '@/lib'
-import { ComputationTypeBadge } from '@/components/badges/computation-type-badge'
-import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
+import { Checkbox } from '@/components/ui/checkbox'
 
 export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccount>[] = [
     { field: 'accountCode', displayText: 'Account Code' },

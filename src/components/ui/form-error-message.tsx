@@ -1,6 +1,7 @@
 import { MdError } from 'react-icons/md'
 
 import { cn } from '@/lib/utils'
+
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {

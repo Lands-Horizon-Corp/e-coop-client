@@ -1,30 +1,35 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Textarea } from '../ui/textarea'
-import ImageField from '../ui/image-field'
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Path, useForm } from 'react-hook-form'
+
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
+
 import { entityIdSchema } from '@/validations/common'
+
 import { useCreateBank, useUpdateBank } from '@/hooks/api-hooks/use-bank'
 
 import {
-    IForm,
     IBank,
+    IBankRequest,
+    IClassProps,
+    IForm,
     IMedia,
     TEntityId,
-    IClassProps,
-    IBankRequest,
 } from '@/types'
+
+import ImageField from '../ui/image-field'
+import { Textarea } from '../ui/textarea'
 
 const bankSchema = z.object({
     name: z.string().min(1, 'Bank name is required'),

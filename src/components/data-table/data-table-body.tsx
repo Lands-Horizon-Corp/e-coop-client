@@ -1,8 +1,8 @@
-import { flexRender, Row } from '@tanstack/react-table'
+import { Row, flexRender } from '@tanstack/react-table'
 
-import { MagnifyingGlassIcon } from '../icons'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 
+import { MagnifyingGlassIcon } from '../icons'
 import { getPinningStyles } from './data-table-utils'
 
 const DataTableBody = <TData,>({

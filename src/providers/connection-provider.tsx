@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 
 import {
     Dialog,
-    DialogTitle,
     DialogContent,
     DialogDescription,
+    DialogTitle,
 } from '@/components/ui/dialog'
 
 import { cn } from '@/lib/utils'

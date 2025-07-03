@@ -1,17 +1,19 @@
+import { cn } from '@/lib'
+import { formatNumber, toReadableDate } from '@/utils'
+
+import { HandCoinsIcon } from '@/components/icons'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import SectionTitle from '../section-title'
-import RawDescription from '../../raw-description'
-import { HandCoinsIcon } from '@/components/icons'
 
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberExpense } from '@/types'
-import { formatNumber, toReadableDate } from '@/utils'
+
+import RawDescription from '../../raw-description'
+import SectionTitle from '../section-title'
 
 interface Props extends IClassProps {
     expenses?: IMemberExpense[]

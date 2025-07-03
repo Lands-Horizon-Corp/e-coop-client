@@ -1,37 +1,38 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
 import {
-    useReactTable,
+    deleteMany,
+    exportAll,
+    exportSelected,
+} from '@/api-service/member-services/member-gender-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
+import {
     getCoreRowModel,
     getSortedRowModel,
+    useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+
+import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member-gender'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { TableProps } from '@/types'
+import { IMemberGender } from '@/types'
 
 import MemberGenderTableColumns, {
     IMemberGenderTableColumnProps,
     genderGlobalSearchTargets,
 } from './columns'
-
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import {
-    exportAll,
-    deleteMany,
-    exportSelected,
-} from '@/api-service/member-services/member-gender-service'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import { useFilteredPaginatedGenders } from '@/hooks/api-hooks/member/use-member-gender'
-
-import { TableProps } from '@/types'
-import { IMemberGender } from '@/types'
 
 export interface MemberGenderTableProps
     extends TableProps<IMemberGender>,

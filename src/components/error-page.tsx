@@ -1,9 +1,9 @@
 import { useRouter } from '@tanstack/react-router'
-
-import { IoMdArrowBack } from 'react-icons/io'
 import { HiXMark } from 'react-icons/hi2'
+import { IoMdArrowBack } from 'react-icons/io'
 
 import { Button } from '@/components/ui/button'
+
 import { BsRocketTakeoffIcon } from './icons'
 
 const ErrorPage = () => {

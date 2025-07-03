@@ -1,22 +1,24 @@
-import { forwardRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { forwardRef, useState } from 'react'
+
+import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
+import { TFilterObject } from '@/contexts/filter-context'
+import { cn } from '@/lib'
 import { PaginationState } from '@tanstack/react-table'
 
-import GenericPicker from './generic-picker'
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
 import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib'
-import useFilterState from '@/hooks/use-filter-state'
-import { TFilterObject } from '@/contexts/filter-context'
-import { useInternalState } from '@/hooks/use-internal-state'
-import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedUserOrganization } from '@/hooks/api-hooks/use-user-organization'
+import useFilterState from '@/hooks/use-filter-state'
+import { useInternalState } from '@/hooks/use-internal-state'
 
-import { IUserOrganization, IUserBase, IPickerBaseProps } from '@/types'
+import { IPickerBaseProps, IUserBase, IUserOrganization } from '@/types'
+
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+import GenericPicker from './generic-picker'
 
 interface Props<T = IUserBase> extends IPickerBaseProps<IUserOrganization<T>> {
     userOrgSearchMode?: 'all' | 'none-member-profile'

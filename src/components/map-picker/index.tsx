@@ -1,8 +1,11 @@
+import { useState } from 'react'
+
 import { LatLngExpression, LatLngLiteral } from 'leaflet'
+
+import { TMainMapProps } from '@/types'
+
 import Map from '../map'
 import Modal, { IModalProps } from '../modals/modal'
-import { TMainMapProps } from '@/types'
-import { useState } from 'react'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 

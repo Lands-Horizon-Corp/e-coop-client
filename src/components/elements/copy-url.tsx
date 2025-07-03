@@ -1,7 +1,9 @@
-import { cn } from '@/lib/utils'
-import { Check, Copy } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+
+import { Check, Copy } from 'lucide-react'
+
+import { cn } from '@/lib/utils'
 
 type Props = {
     url: string

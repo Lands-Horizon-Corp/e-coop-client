@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
 import { createContext, useContext } from 'react'
-import { CheckIcon, LoaderCircleIcon } from 'lucide-react'
 
 import { cn } from '@/lib'
+import { Slot } from '@radix-ui/react-slot'
+import { CheckIcon, LoaderCircleIcon } from 'lucide-react'
 
 type StepperContextValue = {
     activeStep: number

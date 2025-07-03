@@ -1,7 +1,7 @@
 import { cn } from '@/lib'
+import { AccountTypeEnum } from '@/types/coop-types/accounts/account'
 
 import { Badge } from '@/components/ui/badge'
-import { AccountTypeEnum } from '@/types/coop-types/accounts/account'
 
 interface AccountTypeBadgeProps {
     type: AccountTypeEnum

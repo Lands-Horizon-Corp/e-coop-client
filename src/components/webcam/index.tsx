@@ -1,20 +1,22 @@
-import { toast } from 'sonner'
-import Webcam from 'react-webcam'
 import { forwardRef, useCallback, useState } from 'react'
+import { toast } from 'sonner'
 
+import Webcam from 'react-webcam'
+
+import ActionTooltip from '@/components/action-tooltip'
 import {
     CameraFlipIcon,
     CameraOffIcon,
     CameraSelectIcon,
 } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import ActionTooltip from '@/components/action-tooltip'
-import CameraDevicePicker from './camera-device-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
 
 import { IClassProps } from '@/types'
+
+import CameraDevicePicker from './camera-device-picker'
 
 interface Props extends IClassProps {}
 

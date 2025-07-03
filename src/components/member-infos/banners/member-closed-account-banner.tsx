@@ -1,16 +1,18 @@
+import { cn } from '@/lib'
+import { toReadableDate } from '@/utils'
+
+import { WarningFillIcon } from '@/components/icons'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import { WarningFillIcon } from '@/components/icons'
-import RawDescription from '../../raw-description'
 
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { toReadableDate } from '@/utils'
 import { IMemberCloseRemark } from '@/types'
+
+import RawDescription from '../../raw-description'
 
 const MemberCloseAccountBanner = ({
     className,

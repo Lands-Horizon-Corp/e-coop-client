@@ -1,31 +1,34 @@
 import z from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { otpSchema } from '@/validations'
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp'
+import { useForm } from 'react-hook-form'
+
+import ResendVerifyContactButton from '@/components/auth/resend-verify-button'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 import {
     Form,
-    FormItem,
-    FormField,
     FormControl,
+    FormField,
+    FormItem,
     FormMessage,
 } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import {
     InputOTP,
-    InputOTPSlot,
     InputOTPGroup,
     InputOTPSeparator,
+    InputOTPSlot,
 } from '@/components/ui/input-otp'
-import { Button } from '@/components/ui/button'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import ResendVerifyContactButton from '@/components/auth/resend-verify-button'
 
 import { cn } from '@/lib/utils'
-import { otpSchema } from '@/validations'
+
+import { useVerify } from '@/hooks/api-hooks/use-auth'
 
 import { IForm, IUserBase } from '@/types'
-import { useVerify } from '@/hooks/api-hooks/use-auth'
 
 type TVerifyForm = z.infer<typeof otpSchema>
 

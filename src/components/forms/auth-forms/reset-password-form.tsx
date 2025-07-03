@@ -1,7 +1,12 @@
 import z from 'zod'
-import { useForm } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { useForm } from 'react-hook-form'
+
+import { KeyIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 import {
     Form,
     FormControl,
@@ -9,21 +14,21 @@ import {
     FormItem,
     FormLabel,
 } from '@/components/ui/form'
-import { KeyIcon } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import PasswordInput from '@/components/ui/password-input'
 import FormErrorMessage from '@/components/ui/form-error-message'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-
-import { cn } from '@/lib/utils'
-import { IAuthForm } from '@/types'
-import { useChangePassword } from '@/hooks/api-hooks/use-auth'
-import { ResetPasswordSchema } from '@/validations/form-validation/reset-password-schema'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import PasswordInput from '@/components/ui/password-input'
 import {
     ChecklistTemplate,
     ValueChecklistMeter,
 } from '@/components/value-checklist-indicator'
+
+import { cn } from '@/lib/utils'
+
+import { ResetPasswordSchema } from '@/validations/form-validation/reset-password-schema'
+
+import { useChangePassword } from '@/hooks/api-hooks/use-auth'
+
+import { IAuthForm } from '@/types'
 
 type TResetPasswordForm = z.infer<typeof ResetPasswordSchema>
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import { getTimeDifference } from './utils'
 
 type Props = { hours: number; minutes: number; seconds: number }

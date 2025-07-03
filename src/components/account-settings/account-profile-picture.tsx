@@ -1,13 +1,14 @@
 import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
+import { cn } from '@/lib'
+
+import ActionTooltip from '@/components/action-tooltip'
 import { CameraFillIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import ActionTooltip from '@/components/action-tooltip'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import SingleImageUploaderModal from '@/components/single-image-uploader/single-image-uploader-modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib'
 import { useUpdateUserSettingsPhoto } from '@/hooks/api-hooks/use-user-settings'
 
 import { IClassProps, IUserBase } from '@/types'

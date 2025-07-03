@@ -1,18 +1,22 @@
 import z from 'zod'
-import { useForm } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Separator } from '@/components/ui/separator'
+import { toInputDateString } from '@/utils'
+import { useForm } from 'react-hook-form'
+
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
+
 import {
     useCreateHoliday,
     useUpdateHoliday,
@@ -20,13 +24,12 @@ import {
 import { useFormHelper } from '@/hooks/use-form-helper'
 
 import {
+    IClassProps,
     IForm,
     IHoliday,
-    TEntityId,
-    IClassProps,
     IHolidayRequest,
+    TEntityId,
 } from '@/types'
-import { toInputDateString } from '@/utils'
 
 const holidaySchema = z.object({
     name: z.string().min(1, 'Holiday name is required'),

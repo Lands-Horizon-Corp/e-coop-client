@@ -1,11 +1,11 @@
+import { forwardRef, useState } from 'react'
 import { toast } from 'sonner'
-import { useState, forwardRef } from 'react'
 
-import { Button } from '@/components/ui/button'
+import ActionTooltip from '@/components/action-tooltip'
 import { CameraFillIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import ActionTooltip from '@/components/action-tooltip'
 import SingleImageUploaderModal from '@/components/single-image-uploader/single-image-uploader-modal'
+import { Button } from '@/components/ui/button'
 
 import { IMedia, TEntityId } from '@/types'
 

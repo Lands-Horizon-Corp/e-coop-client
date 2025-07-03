@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
-import { Navigate } from '@tanstack/react-router'
 
 import { useAuthUser } from '@/store/user-auth-store'
+import { Navigate } from '@tanstack/react-router'
 
 import { IChildProps } from '@/types'
 

@@ -1,24 +1,27 @@
 import z from 'zod'
-import { useForm } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import {
-    Form,
-    FormItem,
-    FormField,
-    FormControl,
-    FormMessage,
-} from '@/components/ui/form'
+import { useForm } from 'react-hook-form'
 
 import { KeyIcon } from '@/components/icons'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import { Input } from '@/components/ui/input'
 
 import { cn } from '@/lib/utils'
-import { IForm, IClassProps } from '@/types'
+
 import { useForgotPassword } from '@/hooks/api-hooks/use-auth'
+
+import { IClassProps, IForm } from '@/types'
 
 const forgotPasswordFormSchema = z.object({
     key: z.string().min(1, 'Please provide Email, Number or Email'),

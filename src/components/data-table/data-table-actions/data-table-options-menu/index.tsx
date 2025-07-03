@@ -1,23 +1,24 @@
+import { cn } from '@/lib'
 import { Table } from '@tanstack/react-table'
 
+import { MixerHorizontalIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuTrigger,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { MixerHorizontalIcon } from '@/components/icons'
 
-import DataTableScrollOption, {
-    IDataTableScrollableOptionProps,
-} from './scroll-option'
-import ColumnVisibilityOption from './column-visibility-option'
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
+
+import ColumnVisibilityOption from './column-visibility-option'
 import DataTableFilterLogicOption, {
     IDataTableFilterLogicOptionProps,
 } from './filter-logic-option'
+import DataTableScrollOption, {
+    IDataTableScrollableOptionProps,
+} from './scroll-option'
 
 interface Props<T> extends IClassProps {
     table: Table<T>

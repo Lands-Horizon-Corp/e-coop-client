@@ -1,6 +1,7 @@
-import { useLocation } from '@tanstack/react-router'
-import VerifyContactBar from './verify-contact-bar'
 import { useAuthUser } from '@/store/user-auth-store'
+import { useLocation } from '@tanstack/react-router'
+
+import VerifyContactBar from './verify-contact-bar'
 
 const VerifyNotice = () => {
     const { pathname } = useLocation()

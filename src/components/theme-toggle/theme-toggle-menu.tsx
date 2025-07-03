@@ -1,15 +1,17 @@
+import { useTheme } from '@/providers/theme-provider'
+
+import { MoonIcon, SunIcon, SunMoonIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
+
 import { IBaseProps } from '@/types'
-import { useTheme } from '@/providers/theme-provider'
-import { MoonIcon, SunIcon, SunMoonIcon } from '@/components/icons'
 
 export const ThemeToggleMenu = ({ className }: IBaseProps) => {
     const { setTheme } = useTheme()

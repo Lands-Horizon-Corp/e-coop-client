@@ -1,13 +1,14 @@
 import { useMemo } from 'react'
 
-import { Button } from '@/components/ui/button'
+import { useFilter } from '@/contexts/filter-context'
+import { cn } from '@/lib'
+
+import ActionTooltip from '@/components/action-tooltip'
 import FilterChip from '@/components/filter-chip'
 import { TrashIcon } from '@/components/icons'
-import ActionTooltip from '@/components/action-tooltip'
+import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
-import { useFilter } from '@/contexts/filter-context'
 
 const DataTableActiveFilters = ({ className }: IClassProps) => {
     const { filters, resetFilter, removeFilter } = useFilter()

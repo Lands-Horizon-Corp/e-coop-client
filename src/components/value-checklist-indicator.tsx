@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 
-import { Progress } from '@/components/ui/progress'
-import { CheckIcon, XIcon } from '@/components/icons'
-
 import { cn } from '@/lib'
+
+import { CheckIcon, XIcon } from '@/components/icons'
+import { Progress } from '@/components/ui/progress'
+
 import { IClassProps } from '@/types'
 
 export interface Requirement {

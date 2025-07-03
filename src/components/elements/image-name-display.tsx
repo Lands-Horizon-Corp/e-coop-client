@@ -1,6 +1,6 @@
-import ImageDisplay from '@/components/image-display'
-
 import { cn } from '@/lib'
+
+import ImageDisplay from '@/components/image-display'
 
 import { IClassProps } from '@/types'
 

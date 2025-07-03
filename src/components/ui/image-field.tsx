@@ -1,12 +1,13 @@
-import { forwardRef, ReactElement, useState } from 'react'
+import { ReactElement, forwardRef, useState } from 'react'
 
-import ImageDisplay from '@/components/image-display'
+import { cn } from '@/lib'
+
 import { ImageIcon, XIcon } from '@/components/icons'
-import { Button, ButtonProps } from '@/components/ui/button'
+import ImageDisplay from '@/components/image-display'
 import SingleImageUploaderModal from '@/components/single-image-uploader/single-image-uploader-modal'
+import { Button, ButtonProps } from '@/components/ui/button'
 
 import { IClassProps, IMedia } from '@/types'
-import { cn } from '@/lib'
 
 interface ImageFieldProps extends Omit<ButtonProps, 'onChange'>, IClassProps {
     name?: string

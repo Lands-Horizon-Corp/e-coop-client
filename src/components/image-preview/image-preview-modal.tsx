@@ -1,10 +1,20 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+import { cn } from '@/lib'
+import { useImagePreview } from '@/store/image-preview-store'
+import * as ImagePreviewPrimitive from '@radix-ui/react-dialog'
+import { X } from 'lucide-react'
+
+import { DownloadProps } from '@/types'
+
 import {
-    CarouselApi,
     Carousel,
+    CarouselApi,
     CarouselContent,
     CarouselItem,
 } from '../ui/carousel'
-
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog'
+import { TooltipProvider } from '../ui/tooltip'
 import {
     CarouselOptions,
     ImageContainer,
@@ -13,17 +23,6 @@ import {
     ImagePreviewPanel,
     ImagePreviewPrevious,
 } from './image-preview'
-import * as ImagePreviewPrimitive from '@radix-ui/react-dialog'
-
-import { Dialog, DialogContent, DialogTitle } from '../ui/dialog'
-
-import { useImagePreview } from '@/store/image-preview-store'
-import { DownloadProps } from '@/types'
-
-import { cn } from '@/lib'
-import { X } from 'lucide-react'
-import { useState, useRef, useCallback, useEffect } from 'react'
-import { TooltipProvider } from '../ui/tooltip'
 
 const ImagePreviewModal = () => {
     const [api, setApi] = useState<CarouselApi | undefined>()

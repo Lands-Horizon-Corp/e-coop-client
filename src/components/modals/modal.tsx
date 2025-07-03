@@ -1,16 +1,16 @@
+import { ReactNode } from 'react'
+
+import { cn } from '@/lib'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import {
     Dialog,
-    DialogTitle,
     DialogContent,
     DialogDescription,
     DialogExtraProps,
+    DialogTitle,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-
-import { cn } from '@/lib'
-import { ReactNode } from 'react'
 
 import { IBaseProps, IClassProps } from '@/types'
 

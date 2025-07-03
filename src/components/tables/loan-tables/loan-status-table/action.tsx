@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { ILoanStatusTableActionComponentProp } from './columns'
+
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { LoanStatusCreateUpdateFormModal } from '@/components/forms/loan/loan-status-create-update-form'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteLoanStatus } from '@/hooks/api-hooks/loan/use-loan-status'
+
+import { ILoanStatusTableActionComponentProp } from './columns'
 
 interface ILoanStatusTableActionProps
     extends ILoanStatusTableActionComponentProp {

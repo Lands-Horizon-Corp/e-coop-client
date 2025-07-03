@@ -1,22 +1,26 @@
+import { useEffect } from 'react'
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import useActionSecurityStore from '@/store/action-security-store'
+import { Path, useForm } from 'react-hook-form'
+
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
-import useActionSecurityStore from '@/store/action-security-store'
+
 import { userSettingsProfileSchema } from '@/validations/user-settings'
+
 import { useUpdateUserSettingsProfile } from '@/hooks/api-hooks/use-user-settings'
 
 import { IClassProps, IForm, IUserBase } from '@/types'
-import { useEffect } from 'react'
 
 type TAccountProfileFormValues = z.infer<typeof userSettingsProfileSchema>
 

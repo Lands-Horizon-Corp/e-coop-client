@@ -1,10 +1,9 @@
+import { cn } from '@/lib'
 import { IconType } from 'react-icons/lib'
 
 import { PlusIcon } from '@/components/icons'
-import { Button, ButtonProps } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-
-import { cn } from '@/lib'
+import { Button, ButtonProps } from '@/components/ui/button'
 
 export interface IDataTableCreateActionProps
     extends Omit<ButtonProps, 'onClick'> {

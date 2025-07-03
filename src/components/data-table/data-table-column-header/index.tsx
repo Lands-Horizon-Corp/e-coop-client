@@ -1,14 +1,16 @@
 import { CSSProperties } from 'react'
-import { CSS } from '@dnd-kit/utilities'
+
 import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { Column, Header, Table } from '@tanstack/react-table'
 
-import ColumnResizeHandle from './column-drag-resize'
 import ActionTooltip from '@/components/action-tooltip'
+import { PushPinSlashIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { PushPinSlashIcon } from '@/components/icons'
+
+import ColumnResizeHandle from './column-drag-resize'
 
 interface DataTableColumnHeaderProps<TData, TValue>
     extends React.HTMLAttributes<HTMLDivElement> {

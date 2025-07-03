@@ -1,5 +1,7 @@
-import { IDepositEntryTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+
+import { IDepositEntryTableActionComponentProp } from './columns'
+
 // import { DepositEntryCreateUpdateFormModal } from '@/components/forms/deposit-entry-create-update-form'
 
 interface IDepositEntryTableActionProps

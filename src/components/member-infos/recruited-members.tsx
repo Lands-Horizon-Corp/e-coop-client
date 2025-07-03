@@ -1,22 +1,25 @@
 import { forwardRef } from 'react'
 
-import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
 import { cn } from '@/lib'
+import { toReadableDate } from '@/utils'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
+import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+
+import GeneralStatusBadge from '../badges/general-status-badge'
+import ImageNameDisplay from '../elements/image-name-display'
 import { UserPlusIcon } from '../icons'
+import LoadingSpinner from '../spinners/loading-spinner'
 import {
     Table,
-    TableRow,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
+    TableRow,
 } from '../ui/table'
 import SectionTitle from './section-title'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-import LoadingSpinner from '../spinners/loading-spinner'
-import ImageNameDisplay from '../elements/image-name-display'
-import GeneralStatusBadge from '../badges/general-status-badge'
-import { toReadableDate } from '@/utils'
 
 interface Props extends IBaseProps {
     profileId: TEntityId

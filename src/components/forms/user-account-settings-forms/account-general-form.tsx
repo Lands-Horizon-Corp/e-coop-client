@@ -1,25 +1,29 @@
-import z from 'zod'
 import { useEffect } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, Path, UseFormReturn } from 'react-hook-form'
+import z from 'zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Separator } from '@/components/ui/separator'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import useActionSecurityStore from '@/store/action-security-store'
+import { Path, UseFormReturn, useForm } from 'react-hook-form'
+
+import { PhoneInput } from '@/components/contact-input/contact-input'
 import { VerifiedPatchIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { PhoneInput } from '@/components/contact-input/contact-input'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
-import useActionSecurityStore from '@/store/action-security-store'
+
 import { userSettingsGeneralSchema } from '@/validations/user-settings'
+
 import { useUpdateUserSettingsGeneral } from '@/hooks/api-hooks/use-user-settings'
 
-import { IForm, IUserBase, IClassProps, TEntityId } from '@/types'
+import { IClassProps, IForm, IUserBase, TEntityId } from '@/types'
 
 type TAccountGeneralFormValues = z.infer<typeof userSettingsGeneralSchema>
 

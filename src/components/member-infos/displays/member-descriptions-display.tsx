@@ -1,11 +1,13 @@
-import SectionTitle from '../section-title'
-import RawDescription from '../../raw-description'
-import { DetailsIcon } from '@/components/icons'
-import CopyTextButton from '@/components/copy-text-button'
-
 import { toReadableDate } from '@/utils'
-import { IMemberDescription } from '@/types'
 import { abbreviateUUID } from '@/utils/formatting-utils'
+
+import CopyTextButton from '@/components/copy-text-button'
+import { DetailsIcon } from '@/components/icons'
+
+import { IMemberDescription } from '@/types'
+
+import RawDescription from '../../raw-description'
+import SectionTitle from '../section-title'
 
 interface Props {
     descriptions?: IMemberDescription[]

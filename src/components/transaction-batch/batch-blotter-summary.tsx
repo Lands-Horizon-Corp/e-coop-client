@@ -1,14 +1,14 @@
-import { Separator } from '../ui/separator'
-
 import { cn } from '@/lib'
-import {
-    getLessTotal,
-    getCollectionTotal,
-    getTransactionStatus,
-} from './transaction-batch-utils'
 import { formatNumber } from '@/utils'
 
 import { ITransactionBatch } from '@/types'
+
+import { Separator } from '../ui/separator'
+import {
+    getCollectionTotal,
+    getLessTotal,
+    getTransactionStatus,
+} from './transaction-batch-utils'
 
 export interface BatchBlotterSummaryViewProps {
     transBatch: ITransactionBatch

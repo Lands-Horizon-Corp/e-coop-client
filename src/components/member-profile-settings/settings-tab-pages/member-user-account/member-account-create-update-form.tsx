@@ -1,38 +1,42 @@
-import z from 'zod'
 import { useEffect } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import z from 'zod'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { toReadableDate } from '@/utils'
+import { useForm, useWatch } from 'react-hook-form'
+
+import { PhoneInput } from '@/components/contact-input/contact-input'
+import { VerifiedPatchIcon } from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Form, FormItem } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
+import PasswordInput from '@/components/ui/password-input'
+import { Separator } from '@/components/ui/separator'
 import {
     ChecklistTemplate,
     ValueChecklistMeter,
 } from '@/components/value-checklist-indicator'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Form, FormItem } from '@/components/ui/form'
-import { Separator } from '@/components/ui/separator'
-import { VerifiedPatchIcon } from '@/components/icons'
-import PasswordInput from '@/components/ui/password-input'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib/utils'
-import { toReadableDate } from '@/utils'
+
+import { memberProfileUserAccountSchema } from '@/validations/member/member-profile-schema'
+
 import {
     useCreateMemberProfileUserAccount,
     useUpdateMemberProfileUserAccount,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
-import { memberProfileUserAccountSchema } from '@/validations/member/member-profile-schema'
 
 import {
-    IForm,
-    TEntityId,
     IClassProps,
+    IForm,
     IMemberProfile,
     IMemberProfileUserAccountRequest,
+    TEntityId,
 } from '@/types'
 
 type TForm = z.infer<typeof memberProfileUserAccountSchema>

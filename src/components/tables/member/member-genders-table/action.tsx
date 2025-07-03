@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { IMemberGenderTableActionComponentProp } from './columns'
+
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { MemberGenderCreateUpdateFormModal } from '@/components/forms/member-forms/member-gender-create-update-form'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteGender } from '@/hooks/api-hooks/member/use-member-gender'
+
+import { IMemberGenderTableActionComponentProp } from './columns'
 
 interface IMemberGenderTableActionProps
     extends IMemberGenderTableActionComponentProp {

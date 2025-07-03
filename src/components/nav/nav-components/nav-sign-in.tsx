@@ -1,8 +1,7 @@
+import { useAuthStore } from '@/store/user-auth-store'
 import { Link } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
-
-import { useAuthStore } from '@/store/user-auth-store'
 
 const NavSignIn = () => {
     const { authStatus } = useAuthStore()

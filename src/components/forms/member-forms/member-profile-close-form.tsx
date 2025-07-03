@@ -1,28 +1,32 @@
 import z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Path, useFieldArray, useForm } from 'react-hook-form'
 
-import {
-    XIcon,
-    PlusIcon,
-    CommentDashedIcon,
-    HeartBreakFillIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Separator } from '@/components/ui/separator'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Form, FormControl, FormItem } from '@/components/ui/form'
-import AccountClosureReasonCombobox from '@/components/comboboxes/closure-reasons-combobox'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/lib'
-import { TEntityId, IClassProps, IForm } from '@/types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useCloseMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { Path, useFieldArray, useForm } from 'react-hook-form'
+
+import AccountClosureReasonCombobox from '@/components/comboboxes/closure-reasons-combobox'
+import {
+    CommentDashedIcon,
+    HeartBreakFillIcon,
+    PlusIcon,
+    XIcon,
+} from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form, FormControl, FormItem } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Separator } from '@/components/ui/separator'
+
 import { memberCreateCloseRemarksSchema } from '@/validations/member/member-close-remark-schema'
+
+import { useCloseMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
+import { IClassProps, IForm, TEntityId } from '@/types'
 
 type TMemberCloseForm = z.infer<typeof memberCreateCloseRemarksSchema>
 

@@ -1,7 +1,8 @@
 'use client'
 
-import { cn } from '@/lib/utils'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
+import { cn } from '@/lib/utils'
 
 interface FlickeringGridProps extends React.HTMLAttributes<HTMLDivElement> {
     squareSize?: number

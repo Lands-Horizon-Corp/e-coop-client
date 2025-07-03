@@ -1,14 +1,15 @@
+import { BriefCaseClockIcon, DotBigIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
 import WorkTimer from '@/components/worktimer'
-import { Button } from '@/components/ui/button'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { BriefCaseClockIcon, DotBigIcon } from '@/components/icons'
 
 import { cn } from '@/lib/utils'
+
 import { useCurrentTimesheet } from '@/hooks/api-hooks/use-timesheet'
 
 const NavTimeInBar = () => {

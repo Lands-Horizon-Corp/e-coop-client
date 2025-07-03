@@ -1,8 +1,9 @@
-import React, { MouseEvent, cloneElement, ReactElement } from 'react'
+import React, { MouseEvent, ReactElement, cloneElement } from 'react'
+
+import { cn } from '@/lib'
+import { useImagePreview } from '@/store/image-preview-store'
 
 import { IMedia } from '@/types'
-import { useImagePreview } from '@/store/image-preview-store'
-import { cn } from '@/lib'
 
 type WithClickWrapperProps<T extends HTMLElement> = {
     media?: IMedia

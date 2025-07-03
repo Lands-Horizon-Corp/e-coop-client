@@ -1,10 +1,11 @@
-import { cn } from '@/lib'
 import React, { memo } from 'react'
 
-import SafeImage from '../safe-image'
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { cn } from '@/lib'
 
 import { useRandomGradient } from '@/hooks/use-random-gradient'
+
+import SafeImage from '../safe-image'
 
 export const colorPalette = [
     '#073B3A', // Midnight green

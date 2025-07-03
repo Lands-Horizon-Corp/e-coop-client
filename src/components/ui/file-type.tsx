@@ -1,6 +1,8 @@
 // FileTypeIcon.tsx
 import React from 'react'
+
 import { getFileType } from '@/helpers'
+
 import { FileTypeIcons } from './FileTypeIcons'
 
 interface FileTypeIconProps {

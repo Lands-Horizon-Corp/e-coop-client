@@ -1,22 +1,24 @@
 import { useRef } from 'react'
 
+import { cn } from '@/lib'
+
+import { ChevronDownIcon, DownloadIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
+    DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import QrCode, { IQrCodeProps } from './qr-code'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { ChevronDownIcon, DownloadIcon } from '@/components/icons'
 
-import { cn } from '@/lib'
 import {
-    useDownloadElement,
     UseDownloadOptions,
+    useDownloadElement,
 } from '@/hooks/use-download-element'
+
+import QrCode, { IQrCodeProps } from './qr-code'
 
 interface Props
     extends Omit<IQrCodeProps, 'children'>,

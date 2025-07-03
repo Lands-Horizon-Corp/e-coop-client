@@ -1,32 +1,34 @@
-import { ReactNode } from 'react'
-import { IconType } from 'react-icons/lib'
 import { useQueryClient } from '@tanstack/react-query'
-
-import {
-    UserIcon,
-    BankIcon,
-    UserCogIcon,
-    UserTagIcon,
-    CreditCardIcon,
-    FolderFillIcon,
-    UserPlusIcon,
-} from '../icons'
-import { useSubscribe } from '@/hooks/use-pubsub'
-import MemberMediasInfo from './member-medias-info'
-import Modal, { IModalProps } from '../modals/modal'
-import MemberPersonalInfo from './member-personal-info'
-import { ScrollArea, ScrollBar } from '../ui/scroll-area'
-import MemberFinancialInfo from './member-financial-info'
-import MemberInfoBanner from './banners/member-info-banner'
-import MemberMembershipInfo from './member-general-membership-info'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import MemberGovernmentBenefits from './member-government-benefits-info'
-import MemberCloseAccountBanner from './banners/member-closed-account-banner'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { ReactNode } from 'react'
 
 import { cn } from '@/lib'
+import { IconType } from 'react-icons/lib'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
+
+import {
+    BankIcon,
+    CreditCardIcon,
+    FolderFillIcon,
+    UserCogIcon,
+    UserIcon,
+    UserPlusIcon,
+    UserTagIcon,
+} from '../icons'
+import Modal, { IModalProps } from '../modals/modal'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import MemberCloseAccountBanner from './banners/member-closed-account-banner'
+import MemberInfoBanner from './banners/member-info-banner'
+import MemberFinancialInfo from './member-financial-info'
+import MemberMembershipInfo from './member-general-membership-info'
+import MemberGovernmentBenefits from './member-government-benefits-info'
+import MemberMediasInfo from './member-medias-info'
+import MemberPersonalInfo from './member-personal-info'
 import RecruitedMembers from './recruited-members'
 
 interface MemberOverallInfoProps {

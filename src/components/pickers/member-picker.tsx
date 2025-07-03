@@ -1,24 +1,26 @@
-import { forwardRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { forwardRef, useState } from 'react'
+
+import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
+import { type TFilterObject } from '@/contexts/filter-context'
+import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PaginationState } from '@tanstack/react-table'
 
-import GenericPicker from './generic-picker'
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
-import { useShortcut } from '../use-shorcuts'
-import useFilterState from '@/hooks/use-filter-state'
-import { abbreviateUUID } from '@/utils/formatting-utils'
-import { useInternalState } from '@/hooks/use-internal-state'
-import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { useFilteredPaginatedMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import useFilterState from '@/hooks/use-filter-state'
+import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IMemberProfile, IPickerBaseProps } from '@/types'
-import { type TFilterObject } from '@/contexts/filter-context'
+
+import { useShortcut } from '../use-shorcuts'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+import GenericPicker from './generic-picker'
 
 interface Props extends IPickerBaseProps<IMemberProfile> {
     value?: IMemberProfile

@@ -1,31 +1,32 @@
-import qs from 'query-string'
-import { toast } from 'sonner'
-import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
-
-import {
-    XIcon,
-    KeySharpIcon,
-    AddressCardIcon,
-    BarcodeScanIcon,
-    PinLocationIcon,
-} from '@/components/icons'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
-import { useModalState } from '@/hooks/use-modal-state'
-import ActionTooltip from '@/components/action-tooltip'
-import PlainTextEditor from '@/components/plain-text-editor'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import { QrCodeScannerModal } from '@/components/qrcode-scanner'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib'
-import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
+import { useNavigate } from '@tanstack/react-router'
+import qs from 'query-string'
+
+import ActionTooltip from '@/components/action-tooltip'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import {
+    AddressCardIcon,
+    BarcodeScanIcon,
+    KeySharpIcon,
+    PinLocationIcon,
+    XIcon,
+} from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import PlainTextEditor from '@/components/plain-text-editor'
+import { QrCodeScannerModal } from '@/components/qrcode-scanner'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import { Input } from '@/components/ui/input'
+
 import { useInvitationCodeByCode } from '@/hooks/api-hooks/use-invitation-code'
+import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
+import { useModalState } from '@/hooks/use-modal-state'
 
 const JoinBranchWithCodeFormModal = ({
     title,

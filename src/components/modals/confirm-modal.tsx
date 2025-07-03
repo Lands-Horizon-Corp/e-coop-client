@@ -1,8 +1,8 @@
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-
-import useConfirmModalStore from '@/store/confirm-modal-store'
 
 const ConfirmModal = () => {
     const { isOpen, modalData, onConfirm, onClose, onCancel } =

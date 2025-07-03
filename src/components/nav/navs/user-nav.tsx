@@ -1,20 +1,20 @@
-import { useRouter } from '@tanstack/react-router'
-
-import RootNav from '@/components/nav/root-nav'
-import { Button } from '@/components/ui/button'
-import { BadgeCheckFillIcon } from '@/components/icons'
-import NavContainer from '@/components/nav/nav-container'
-import PageBreadCrumb from '@/components/pages-breadcrumbs'
-import NavTimeInBar from '../nav-components/nav-time-in-bar'
-import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
-import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
-import NavProfileMenu from '@/components/nav/nav-components/nav-profile-menu'
-import TransactionBatchNavButton from '@/components/nav/nav-components/batch-nav-button'
-
 import { cn } from '@/lib'
 import { useAuthStore } from '@/store/user-auth-store'
+import { useRouter } from '@tanstack/react-router'
+
+import { BadgeCheckFillIcon } from '@/components/icons'
+import TransactionBatchNavButton from '@/components/nav/nav-components/batch-nav-button'
+import NavProfileMenu from '@/components/nav/nav-components/nav-profile-menu'
+import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
+import NavContainer from '@/components/nav/nav-container'
+import RootNav from '@/components/nav/root-nav'
+import PageBreadCrumb from '@/components/pages-breadcrumbs'
+import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
+import { Button } from '@/components/ui/button'
 
 import { IClassProps } from '@/types'
+
+import NavTimeInBar from '../nav-components/nav-time-in-bar'
 
 const UserNav = ({
     homeUrl,

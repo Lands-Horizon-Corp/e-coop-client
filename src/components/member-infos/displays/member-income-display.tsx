@@ -1,10 +1,12 @@
-import SectionTitle from '../section-title'
+import { cn } from '@/lib'
+import { formatNumber, toReadableDate } from '@/utils'
+
 import { WalletIcon } from '@/components/icons'
 
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberIncome } from '@/types'
-import { formatNumber, toReadableDate } from '@/utils'
+
+import SectionTitle from '../section-title'
 
 interface Props extends IClassProps {
     incomes?: IMemberIncome[]

@@ -1,22 +1,22 @@
 import { ReactNode } from 'react'
+
+import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
+import { useAuthStore } from '@/store/user-auth-store'
 import { Navigate, useRouter } from '@tanstack/react-router'
 
 import {
-    RefreshIcon,
     ArrowRightIcon,
-    ShieldExclamationIcon,
     BadgeExclamationFillIcon,
+    RefreshIcon,
+    ShieldExclamationIcon,
 } from '@/components/icons'
-import ImageDisplay from '../image-display'
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
+
+import { IBaseProps, IUserBase, TPageType } from '@/types'
+
 import { FlickeringGrid } from '../elements/backgrounds/flickering-grid'
-
-import { useAuthStore } from '@/store/user-auth-store'
-
-import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
-
-import { IBaseProps, TPageType, IUserBase } from '@/types'
+import ImageDisplay from '../image-display'
 
 interface Props extends IBaseProps {
     pageType?: TPageType

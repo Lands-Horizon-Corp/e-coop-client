@@ -1,16 +1,18 @@
 import DOMPurify from 'dompurify'
 
+import { HandShakeHeartIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import ImageDisplay from '@/components/image-display'
-import { IMemberJointAccount } from '@/types'
-import SectionTitle from '../section-title'
-import { HandShakeHeartIcon } from '@/components/icons'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IMemberJointAccount } from '@/types'
+
+import SectionTitle from '../section-title'
 
 interface Props {
     jointAccounts?: IMemberJointAccount[]

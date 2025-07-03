@@ -1,9 +1,10 @@
-import { Badge } from '@/components/ui/badge'
+import { ArrowDownIcon, ShieldIcon, UserIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { IMemberProfile, IUserOrganization } from '@/types'
-import { UserIcon, ShieldIcon, ArrowDownIcon } from '@/components/icons'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IMemberProfile, IUserOrganization } from '@/types'
 
 interface Props {
     memberProfile: IMemberProfile

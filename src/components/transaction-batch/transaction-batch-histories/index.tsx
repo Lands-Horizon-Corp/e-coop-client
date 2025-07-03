@@ -1,31 +1,32 @@
 import { ReactNode } from 'react'
+
+import { cn } from '@/lib'
 import { IconType } from 'react-icons/lib'
 
 import {
-    ReceiptIcon,
+    HandDepositIcon,
+    HandWithdrawIcon,
     MoneyBagIcon,
     MoneyCheckIcon,
     MoneyStackIcon,
-    HandDepositIcon,
-    HandWithdrawIcon,
     OnlinePaymentIcon,
+    ReceiptIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import BatchFundingHistory from './batch-funding-history'
-import BatchCashEntryHistory from './batch-cash-entry-history'
-import BatchCheckEntryHistory from './batch-check-entry-history'
-import BatchOnlineEntryHistory from './batch-online-entry-history'
-import BatchDepositEntryHistory from './batch-deposit-entry-history'
-
-import { cn } from '@/lib'
 import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, TEntityId } from '@/types'
-import BatchWithdrawalEntryHistory from './batch-withdrwal-entry-history'
+
+import BatchCashEntryHistory from './batch-cash-entry-history'
+import BatchCheckEntryHistory from './batch-check-entry-history'
+import BatchDepositEntryHistory from './batch-deposit-entry-history'
+import BatchFundingHistory from './batch-funding-history'
+import BatchOnlineEntryHistory from './batch-online-entry-history'
 import BatchTransactionEntryHistory from './batch-transaction-entry-history'
+import BatchWithdrawalEntryHistory from './batch-withdrwal-entry-history'
 
 export interface TransBatchHistoryTabsContentProps extends IClassProps {
     transactionBatchId: TEntityId

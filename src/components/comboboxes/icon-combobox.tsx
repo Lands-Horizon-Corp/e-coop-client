@@ -1,22 +1,23 @@
+import { forwardRef, useMemo, useState } from 'react'
+
 import Fuse from 'fuse.js'
 import { Check } from 'lucide-react'
-import { useState, useMemo, forwardRef } from 'react'
 
+import { ChevronDownIcon, IconMap } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     Command,
-    CommandItem,
-    CommandList,
     CommandEmpty,
     CommandGroup,
     CommandInput,
+    CommandItem,
+    CommandList,
 } from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon, IconMap } from '@/components/icons'
 
 import { cn } from '@/lib/utils'
 

@@ -1,6 +1,8 @@
 import { MutableRefObject } from 'react'
-import WebCam from '../webcam'
+
 import Webcam from 'react-webcam'
+
+import WebCam from '../webcam'
 
 interface CaptureSignatureProps {
     camRef: MutableRefObject<Webcam | null>

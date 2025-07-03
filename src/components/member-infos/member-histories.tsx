@@ -1,29 +1,32 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { ReactNode } from 'react'
-import { IconType } from 'react-icons/lib'
 
-import Modal, { IModalProps } from '../modals/modal'
-import { ScrollArea, ScrollBar } from '../ui/scroll-area'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import {
-    // BankIco,
-    UserIcon,
-    GendersIcon,
-    UserCogIcon,
-    UserGroupIcon,
-    BriefCaseIcon,
-} from '../icons'
-import MemberCenterHistoryTable from '../tables/member/members-profile-table/member-histories/center-history'
-import MemberGenderHistoryTable from '../tables/member/members-profile-table/member-histories/gender-history'
-import MemberTypeHistoryTable from '../tables/member/members-profile-table/member-histories/member-type-history'
 // import MemberMutualFundsHistoryTable from '../tables/member/members-profile-table/member-histories/mutualfunds-history'
 
 import { cn } from '@/lib'
-import { TEntityId, IClassProps } from '@/types'
-import MemberGroupHistoryTable from '../tables/member/members-profile-table/member-histories/group-history'
-import MemberClassificationHistoryTable from '../tables/member/members-profile-table/member-histories/classification-history'
-import MemberOccupationHistoryTable from '../tables/member/members-profile-table/member-histories/occupation-history'
+import { IconType } from 'react-icons/lib'
+
 import { useSubscribe } from '@/hooks/use-pubsub'
-import { useQueryClient } from '@tanstack/react-query'
+
+import { IClassProps, TEntityId } from '@/types'
+
+import {
+    BriefCaseIcon,
+    GendersIcon,
+    UserCogIcon,
+    UserGroupIcon,
+    // BankIco,
+    UserIcon,
+} from '../icons'
+import Modal, { IModalProps } from '../modals/modal'
+import MemberCenterHistoryTable from '../tables/member/members-profile-table/member-histories/center-history'
+import MemberClassificationHistoryTable from '../tables/member/members-profile-table/member-histories/classification-history'
+import MemberGenderHistoryTable from '../tables/member/members-profile-table/member-histories/gender-history'
+import MemberGroupHistoryTable from '../tables/member/members-profile-table/member-histories/group-history'
+import MemberTypeHistoryTable from '../tables/member/members-profile-table/member-histories/member-type-history'
+import MemberOccupationHistoryTable from '../tables/member/members-profile-table/member-histories/occupation-history'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 
 interface IMemberHistoriesProps {
     profileId: TEntityId

@@ -1,8 +1,7 @@
+import { cn } from '@/lib'
 import { Header, Table } from '@tanstack/react-table'
 
 import { DragHandleIcon } from '@/components/icons'
-
-import { cn } from '@/lib'
 
 interface Props<TData, TValue> {
     table: Table<TData>

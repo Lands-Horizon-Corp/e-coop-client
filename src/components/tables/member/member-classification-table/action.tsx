@@ -1,11 +1,13 @@
 import { useState } from 'react'
 
-import { IMemberClassificationTableActionComponentProp } from './columns'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { MemberClassificationCreateUpdateFormModal } from '@/components/forms/member-forms/member-classification-create-update-form'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberClassification } from '@/hooks/api-hooks/member/use-member-classification'
+
+import { IMemberClassificationTableActionComponentProp } from './columns'
 
 interface IMemberClassificationTableActionProps
     extends IMemberClassificationTableActionComponentProp {

@@ -1,13 +1,14 @@
-import ImageDisplay from '@/components/image-display'
-import { Card, CardContent } from '@/components/ui/card'
-import { EmailIcon, PhoneIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-
 import { toReadableDate } from '@/utils'
+
+import { EmailIcon, PhoneIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Card, CardContent } from '@/components/ui/card'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
 import { useUser } from '@/hooks/api-hooks/use-user'
 
 import { IUserBase, TEntityId } from '@/types'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 type Props = {
     userId: TEntityId

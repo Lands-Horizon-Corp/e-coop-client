@@ -1,11 +1,12 @@
-import { toast } from 'sonner'
 import { DragEvent, useState } from 'react'
-
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ImageIcon } from '@/components/icons'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib'
+
+import { ImageIcon } from '@/components/icons'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
 import { IBaseProps } from '@/types'
 
 interface Props extends IBaseProps {

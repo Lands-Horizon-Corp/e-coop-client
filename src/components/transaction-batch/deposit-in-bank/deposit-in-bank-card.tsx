@@ -1,18 +1,19 @@
 import { useState } from 'react'
 
+import { cn } from '@/lib'
+import { formatNumber } from '@/utils'
+
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '../../ui/button'
-import { PencilFillIcon } from '../../icons'
-import DepositInBankCreateForm from './deposit-in-bank-edit-form'
-
-import { cn } from '@/lib'
-import { formatNumber } from '@/utils'
 
 import { IClassProps, TEntityId } from '@/types'
+
+import { PencilFillIcon } from '../../icons'
+import { Button } from '../../ui/button'
+import DepositInBankCreateForm from './deposit-in-bank-edit-form'
 
 interface Props extends IClassProps {
     transactionBatchId: TEntityId

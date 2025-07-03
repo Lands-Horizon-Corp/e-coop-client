@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
-import UseCooldown from '@/hooks/use-cooldown'
 import { useForgotPassword } from '@/hooks/api-hooks/use-auth'
+import UseCooldown from '@/hooks/use-cooldown'
 
 type TSentTo = { key: string }
 

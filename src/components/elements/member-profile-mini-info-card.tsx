@@ -1,25 +1,26 @@
+import { cn } from '@/lib'
+import { HoverCardContent } from '@radix-ui/react-hover-card'
+
+import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
+
+import { IClassProps, IMemberProfile } from '@/types'
+
 import {
-    XIcon,
-    UserIcon,
-    PhoneIcon,
     CheckIcon,
     ClockIcon,
     IdCardIcon,
+    PhoneIcon,
+    UserIcon,
+    XIcon,
 } from '../icons'
-import { Badge } from '../ui/badge'
-import { Skeleton } from '../ui/skeleton'
 import ImageDisplay from '../image-display'
+import { Badge } from '../ui/badge'
 import { Card, CardContent } from '../ui/card'
-import ImageNameDisplay from './image-name-display'
-import HoveruserInfo from './hover-elements/hover-user-info'
-import { HoverCardContent } from '@radix-ui/react-hover-card'
 import { HoverCard, HoverCardTrigger } from '../ui/hover-card'
-import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
-
-import { cn } from '@/lib'
-
-import { IClassProps, IMemberProfile } from '@/types'
+import { Skeleton } from '../ui/skeleton'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+import HoveruserInfo from './hover-elements/hover-user-info'
+import ImageNameDisplay from './image-name-display'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile

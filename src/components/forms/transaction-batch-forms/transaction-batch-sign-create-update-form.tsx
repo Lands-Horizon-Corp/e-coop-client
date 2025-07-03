@@ -279,7 +279,9 @@ const TransactionBatchSignCreateUpdateForm = ({
                                                 }
                                             >
                                                 {title}{' '}
-                                                {!!form.getValues(Steps[i].fields[1]) && (
+                                                {!!form.getValues(
+                                                    Steps[i].fields[1]
+                                                ) && (
                                                     <CheckFillIcon className="inline ml-1 text-primary" />
                                                 )}
                                             </StepperTitle>

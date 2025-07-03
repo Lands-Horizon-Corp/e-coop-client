@@ -1,12 +1,12 @@
+import { cn } from '@/lib'
 import {
     SortableContext,
     horizontalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { flexRender, HeaderGroup } from '@tanstack/react-table'
+import { HeaderGroup, flexRender } from '@tanstack/react-table'
 
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
-import { cn } from '@/lib'
 import { getPinningStyles } from './data-table-utils'
 
 const DataTableHeader = <TData,>({
