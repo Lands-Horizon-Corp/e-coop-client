@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { AccountServices } from '@/api-service/accounting-services'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/lib'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { IAccount } from '@/types/coop-types/accounts/account'
 import {
     getCoreRowModel,
@@ -22,6 +23,7 @@ import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sort
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { TableProps } from '@/types'
 
@@ -56,6 +58,12 @@ const AccountsTable = ({
     const { pagination, setPagination } = usePagination()
     const { tableSorting, setTableSorting, sortingState } =
         useDataTableSorting()
+
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
 
     const columns = useMemo(
         () =>
@@ -127,6 +135,10 @@ const AccountsTable = ({
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
+
+    useSubscribe(`account.create.branch.${branch_id}`, refetch)
+    useSubscribe(`account.update.branch.${branch_id}`, refetch)
+    useSubscribe(`account.delete.branch.${branch_id}`, refetch)
 
     return (
         <FilterContext.Provider value={filterState}>

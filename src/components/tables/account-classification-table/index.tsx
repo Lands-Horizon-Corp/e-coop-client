@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { deleteManyAccountClassifications } from '@/api-service/account-classification-services/account-classification'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/lib'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { IAccountClassification } from '@/types/coop-types/account-classification'
 import {
     getCoreRowModel,
@@ -22,6 +23,7 @@ import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sort
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { TableProps } from '@/types'
 
@@ -53,6 +55,12 @@ const AccountClassificationTable = ({
     actionComponent,
 }: AccountClassificationTableProps) => {
     const queryClient = useQueryClient()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
@@ -127,6 +135,10 @@ const AccountClassificationTable = ({
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
+
+    useSubscribe(`account_classification.update.branch.${branch_id}`, refetch)
+    useSubscribe(`account_classification.create.branch.${branch_id}`, refetch)
+    useSubscribe(`account_classification.delete.branch.${branch_id}`, refetch)
 
     return (
         <FilterContext.Provider value={filterState}>

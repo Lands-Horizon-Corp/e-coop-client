@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { deleteManyAccountCategories } from '@/api-service/account-category-services/account-category-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/lib'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { IAccountCategory } from '@/types/coop-types/account-category'
 import {
     getCoreRowModel,
@@ -22,6 +23,7 @@ import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sort
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { TableProps } from '@/types'
 
@@ -56,6 +58,12 @@ const AccountCategoryTable = ({
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
+
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
 
     const columns = useMemo(
         () =>
@@ -127,6 +135,10 @@ const AccountCategoryTable = ({
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
+
+    useSubscribe(`account_category.update.branch.${branch_id}`, refetch)
+    useSubscribe(`account_category.delete.branch.${branch_id}`, refetch)
+    useSubscribe(`account_category.create.branch.${branch_id}`, refetch)
 
     return (
         <FilterContext.Provider value={filterState}>
