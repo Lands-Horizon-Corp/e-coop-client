@@ -14,6 +14,7 @@ export interface ImagePreviewData {
     scaleInterval?: number
     className?: string
     Images?: IMedia[]
+    title?: string
 }
 
 interface ImagePreviewActions {

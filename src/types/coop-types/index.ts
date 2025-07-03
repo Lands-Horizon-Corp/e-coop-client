@@ -12,6 +12,7 @@ export * from './transactions/check-clearing'
 export * from './transactions/payments-entry'
 export * from './transactions/generate-or-number'
 export * from './transactions/transaction-payment-types'
+export * from './transaction-tag'
 
 /* Member Related Types */
 export * from './member/member-asset'
@@ -43,6 +44,7 @@ export * from './member/member-educational-attainment'
 export * from './member/member-occupation'
 export * from './member/member-occupation-history'
 export * from './member/member-profile-settings'
+export * from './member/member-accounting-ledger'
 
 export * from './account-classification'
 

@@ -35,5 +35,29 @@ export interface IDepositEntry extends IBaseEntityMeta {
     amount: number
 }
 
+export interface IDepositEntryRequest {
+    id?: TEntityId
+
+    organization_id: TEntityId
+    branch_id: TEntityId
+
+    member_profile_id?: TEntityId | null
+    transaction_id?: TEntityId | null
+
+    member_joint_account_id?: TEntityId | null
+
+    general_accounting_ledger_id?: TEntityId | null
+
+    transaction_batch_id?: TEntityId | null
+    signature_media_id?: TEntityId | null
+
+    account_id?: TEntityId | null
+
+    employee_user_id?: TEntityId | null
+
+    reference_number?: string
+    amount: number
+}
+
 export interface IDepositEntryPaginated
     extends IPaginatedResult<IDepositEntry> {}
