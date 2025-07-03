@@ -32,6 +32,7 @@ import {
 import { commaSeparators } from '@/helpers'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useState } from 'react'
+import { useShortcut } from '@/components/use-shorcuts'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/fund-movement'
@@ -86,6 +87,16 @@ function RouteComponent() {
     const referenceNumber = 'RF-6J8C-1M9P-2K3Q-4T5R'
     const totalAmount = 12431231
 
+    useShortcut(
+        'shift+d',
+        () => {
+            setSelectedMember(null)
+        },
+        {
+            disableTextInputs: true,
+        }
+    )
+
     return (
         <PageContainer className="flex h-full w-full items-center">
             <TransactionEntryModal
@@ -116,6 +127,7 @@ function RouteComponent() {
                                         <CloseIcon />
                                     </Button>
                                     <MemberPicker
+                                        allowShorcutCommand
                                         modalState={{
                                             open: openMemberSelectModalState,
                                             onOpenChange:
