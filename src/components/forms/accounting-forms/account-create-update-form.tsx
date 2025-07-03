@@ -56,14 +56,14 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import AccountCategoryPicker from '@/components/pickers/account-category-picker'
-import MemberTypePicker from '@/components/pickers/account-classification-picker'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import AccountClassificationPicker from '@/components/pickers/account-classification-picker'
+import AccountCategoryComboBox from '@/components/comboboxes/account-category-combobox'
+import AccountClassificationComboBox from '@/components/comboboxes/account-classification-combobox'
+import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
 
 type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
-interface IAccountCreateUpdateFormProps
+export interface IAccountCreateUpdateFormProps
     extends IClassProps,
         IForm<Partial<IAccountRequest>, IAccount, string, TAccountFormValues> {
     accountId?: TEntityId
@@ -136,77 +136,6 @@ const AccountCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="alternative_code"
-                            label="Alternative Code"
-                            disabled={isLoading}
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    id={field.name}
-                                    placeholder="Account Name"
-                                    autoComplete="off"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="account_classification_id"
-                            label="Account Classification"
-                            render={({ field }) => (
-                                <AccountClassificationPicker
-                                    {...field}
-                                    onSelect={(selectedAccountClassification) =>
-                                        field.onChange(
-                                            selectedAccountClassification.id
-                                        )
-                                    }
-                                    placeholder="Select Account Classification"
-                                    disabled={
-                                        isDisabled(field.name) || isLoading
-                                    }
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="account_category_id"
-                            label="Account Category"
-                            disabled={isLoading}
-                            render={({ field }) => (
-                                <AccountCategoryPicker
-                                    {...field}
-                                    onSelect={(selectedAccountCategory) =>
-                                        field.onChange(
-                                            selectedAccountCategory.id
-                                        )
-                                    }
-                                    placeholder="Select Account Category"
-                                    disabled={
-                                        isDisabled(field.name) || isLoading
-                                    }
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="member_type_id"
-                            label="Member Type *"
-                            disabled={isLoading}
-                            render={({ field }) => (
-                                <MemberTypePicker
-                                    {...field}
-                                    onSelect={(selectedMemberType) =>
-                                        field.onChange(selectedMemberType.id)
-                                    }
-                                    placeholder="Select Member Type"
-                                    disabled={
-                                        isDisabled(field.name) || isLoading
-                                    }
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
                             label="Account type"
                             name="type"
                             className="col-span-4"
@@ -245,6 +174,71 @@ const AccountCreateUpdateForm = ({
                                 </FormControl>
                             )}
                         />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="alternative_code"
+                            label="Alternative Code"
+                            disabled={isLoading}
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    placeholder="Account Name"
+                                    autoComplete="off"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="member_type_id"
+                            label="Member Type"
+                            className="col-span-1"
+                            render={({ field }) => (
+                                <MemberTypeCombobox
+                                    {...field}
+                                    placeholder="Select Member Type"
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="account_classification_id"
+                            label="Account Classification"
+                            render={({ field }) => (
+                                <AccountClassificationComboBox
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Account Classification"
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="account_category_id"
+                            label="Account Category"
+                            disabled={isLoading}
+                            render={({ field }) => (
+                                <AccountCategoryComboBox
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Account Category"
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
+                                />
+                            )}
+                        />
+
                         <FormFieldWrapper
                             control={form.control}
                             label="Account Description *"

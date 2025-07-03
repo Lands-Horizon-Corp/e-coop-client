@@ -1,47 +1,63 @@
-import { Image2Icon } from '@/components/icons'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import React, { forwardRef } from 'react'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { cn } from '@/lib/utils'
+import { Image2Icon } from './icons'
 
-import { cn } from '@/lib'
-import { IBaseProps } from '@/types'
+interface IBaseProps {
+    className?: string
+    style?: React.CSSProperties
+}
 
-interface Props extends IBaseProps {
+interface ImageDisplayProps extends IBaseProps {
     src?: string
     fallback?: string
     imageClassName?: string
     fallbackClassName?: string
     onClick?: () => void
+    imageProps?: Omit<React.HTMLProps<HTMLImageElement>, 'ref'>
+    avatarRef?: React.Ref<HTMLDivElement>
 }
 
-const ImageDisplay = ({
-    src,
-    fallback,
-    children,
-    className,
-    imageClassName,
-    fallbackClassName,
-    onClick,
-}: Props) => {
-    return (
-        <Avatar
-            onClick={onClick}
-            className={cn('size-6 bg-secondary dark:bg-popover', className)}
-        >
-            <AvatarImage
-                className={cn('object-cover', imageClassName)}
-                src={src ?? '-'}
-            />
-            <AvatarFallback
-                className={cn('rounded-none capitalize', fallbackClassName)}
+const ImageDisplay = forwardRef<HTMLImageElement, ImageDisplayProps>(
+    (
+        {
+            src,
+            fallback,
+            className,
+            imageClassName,
+            fallbackClassName,
+            onClick,
+            imageProps,
+            avatarRef,
+            ...props
+        },
+        ref
+    ) => {
+        return (
+            <Avatar
+                ref={avatarRef}
+                {...props}
+                onClick={onClick}
+                className={cn('size-6 bg-secondary dark:bg-popover', className)}
             >
-                {fallback ? (
-                    fallback
-                ) : (
-                    <Image2Icon className="size-[50%] text-foreground/20" />
-                )}
-            </AvatarFallback>
-            {children}
-        </Avatar>
-    )
-}
+                <AvatarImage
+                    ref={ref}
+                    {...imageProps}
+                    className={cn('object-cover', imageClassName)}
+                    src={src ?? '-'}
+                />
+                <AvatarFallback
+                    className={cn('rounded-none capitalize', fallbackClassName)}
+                >
+                    {fallback ? (
+                        fallback
+                    ) : (
+                        <Image2Icon className="size-[50%] text-foreground/20" />
+                    )}
+                </AvatarFallback>
+            </Avatar>
+        )
+    }
+)
 
 export default ImageDisplay

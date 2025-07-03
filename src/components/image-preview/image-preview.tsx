@@ -33,6 +33,7 @@ import {
     ImagePreviewActionProps,
     ImagePreviewButtonActionProps,
 } from '@/types/components/image-preview'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 export type CarouselOptions = UseCarouselParameters[0]
@@ -264,7 +265,7 @@ export const ImageContainer = ({
             <div className="flex items-center justify-center">
                 <img
                     className="h-full w-full cursor-pointer overflow-hidden rounded-lg object-cover"
-                    ref={imageRef}
+                    // ref={imageRef}
                     onLoad={handleImageLoad}
                     style={{
                         width: '70%',
@@ -277,9 +278,8 @@ export const ImageContainer = ({
                         backgroundSize: 'cover',
                     }}
                     onMouseDown={onMouseDown}
-                    crossOrigin="anonymous"
-                    src={media.url}
-                    alt="Zoomable"
+                    src={media.download_url}
+                    alt="Image Preview"
                 />
             </div>
             <div className="flex w-full justify-between">
@@ -324,14 +324,28 @@ export const ImagePreviewButtonAction = React.forwardRef<
             onClick={onClick}
             {...props}
         >
-            {Icon && (
-                <span className={cn(defaultIconStyles, iconClassName)}>
-                    {React.cloneElement(Icon as React.ReactElement, {
-                        className: cn(defaultIconStyles, iconClassName),
-                    })}
-                </span>
-            )}
-            <p className="hidden lg:block">{name}</p>
+            <Tooltip>
+                <TooltipTrigger className="flex items-center space-x-2">
+                    {' '}
+                    {Icon && (
+                        <span
+                            className={cn(
+                                'mr-2',
+                                defaultIconStyles,
+                                iconClassName
+                            )}
+                        >
+                            {React.cloneElement(Icon as React.ReactElement, {
+                                className: cn(defaultIconStyles, iconClassName),
+                            })}
+                        </span>
+                    )}
+                    <p className="hidden lg:block">{name}</p>
+                </TooltipTrigger>
+                <TooltipContent>
+                    {name && <p className="hidden lg:block">{name}</p>}
+                </TooltipContent>
+            </Tooltip>
             <span className="sr-only">{name}</span>
         </Button>
     )
@@ -358,10 +372,7 @@ export const ImagePreviewActions = React.forwardRef<
     ) => {
         return (
             <div
-                className={cn(
-                    'absolute bottom-32 right-2 flex w-[100vw] items-center px-5 lg:bottom-4 lg:right-4 lg:px-2',
-                    className
-                )}
+                className={cn('absolute items-center overflow-auto', className)}
             >
                 <Card
                     ref={ref}
@@ -422,14 +433,6 @@ export const ImagePreviewPanel = forwardRef<
     HTMLDivElement,
     ImagePreviewPanelProps
 >(({ Images, focusIndex, scrollToIndex, scrollIntoView }, ref) => {
-    if (!Images || Images.length === 0) {
-        return (
-            <div className="flex h-fit w-full items-center justify-center p-5 text-gray-500">
-                No images available
-            </div>
-        )
-    }
-
     if (Images.length === 1) {
         return null
     }
@@ -437,15 +440,15 @@ export const ImagePreviewPanel = forwardRef<
     return (
         <div
             ref={ref}
-            className="!z-10 flex items-center space-y-2 overflow-x-auto overflow-y-hidden border-r-[.5px] border-background/20 bg-black/10 p-10 backdrop-blur duration-100 ease-in-out dark:border-slate-400/20 dark:bg-black/70 lg:h-full lg:flex-col lg:overflow-y-auto"
+            className="flex items-center space-x-2 overflow-x-auto overflow-y-hidden border-r-[.5px] border-background/20 bg-gray-200 p-10 backdrop-blur duration-100 ease-in-out dark:border-slate-400/20 dark:bg-black/10 lg:h-full lg:flex-col lg:space-x-0 lg:space-y-2 lg:overflow-y-auto lg:overflow-x-hidden"
         >
             {Images.map((data, index) => (
                 <div
                     onClick={() => scrollToIndex(index)}
                     className={cn(
-                        `content:[''] relative flex aspect-square max-h-64 max-w-64 scroll-mb-4 scroll-mt-4 whitespace-nowrap bg-transparent ${
+                        `content:[''] relative flex aspect-square size-28 scroll-mb-4 scroll-mt-4 whitespace-nowrap bg-transparent ${
                             focusIndex === index
-                                ? 'scale-105 duration-300 ease-in-out before:absolute before:-right-2.5 before:top-1/2 before:h-[40%] before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-primary'
+                                ? 'scale-105 duration-300 ease-in-out before:absolute before:left-1/2 before:top-[110%] before:h-1 before:w-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-primary before:lg:left-[110%] before:lg:top-1/2 before:lg:h-[40%] before:lg:w-1'
                                 : 'border-none'
                         }`
                     )}

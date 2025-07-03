@@ -13,6 +13,7 @@ import {
     TbCreditCard as CreditCardIcon2,
     TbTargetArrow as TargetArrowIcon,
     TbHeartHandshake as HandShakeHeartIcon,
+    TbTransactionDollar as TransactionDollarIcon,
 } from 'react-icons/tb'
 
 import {
@@ -62,6 +63,7 @@ import {
     BsBuildingGear as BuildingCogIcon,
     BsLayoutSidebarInset as SidebarIcon,
     BsLayoutSidebarInsetReverse as SidebarRightIcon,
+    BsRocketTakeoff as BsRocketTakeoffIcon,
 } from 'react-icons/bs'
 
 import {
@@ -572,6 +574,7 @@ export {
     MessageOutlineIcon,
     HeartBreakFillIcon,
     BriefCaseClockIcon,
+    BsRocketTakeoffIcon,
     PlugConnectFillIcon,
     FaCalendarCheckIcon,
     MagnifyingGlassIcon,
@@ -587,6 +590,7 @@ export {
     DocumentFileFillIcon,
     ShieldExclamationIcon,
     BadgeQuestionFillIcon,
+    TransactionDollarIcon,
     LocationPinOutlineIcon,
     QuestionCircleFillIcon,
     FlipHorizontalLineIcon,

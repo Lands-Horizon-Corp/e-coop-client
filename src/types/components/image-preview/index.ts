@@ -25,7 +25,7 @@ export interface ImagePreviewActionProps extends Partial<DownloadProps> {
     handleFlipHorizontal: () => void
     handleFlipVertical: () => void
     downloadImage: DownloadProps
-    className: string
+    className?: string
 }
 
 export interface ImagePreviewPanelProps {
