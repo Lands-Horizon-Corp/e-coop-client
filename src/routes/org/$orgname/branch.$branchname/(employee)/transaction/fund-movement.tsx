@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/resizable'
 import { commaSeparators } from '@/helpers'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useState } from 'react'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/fund-movement'
@@ -48,6 +49,9 @@ function RouteComponent() {
 
     const { setOpenPaymentsEntryModal, openPaymentsEntryModal } =
         usePaymentsModalStore()
+
+    const [openMemberSelectModalState, setOpenMemberSelectModal] =
+        useState(false)
 
     const resetSelectedMember = () => {
         setSelectedMember(null)
@@ -112,6 +116,11 @@ function RouteComponent() {
                                         <CloseIcon />
                                     </Button>
                                     <MemberPicker
+                                        modalState={{
+                                            open: openMemberSelectModalState,
+                                            onOpenChange:
+                                                setOpenMemberSelectModal,
+                                        }}
                                         onSelect={(member) => {
                                             setSelectedMember(member)
                                         }}
@@ -222,7 +231,9 @@ function RouteComponent() {
                                         memberInfo={selectedMember}
                                     />
                                 ) : (
-                                    <NoSelectedMemberView />
+                                    <NoSelectedMemberView
+                                        onOpenChange={setOpenMemberSelectModal}
+                                    />
                                 )}
                             </div>
                         </ResizablePanel>
