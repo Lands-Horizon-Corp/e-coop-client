@@ -25,6 +25,7 @@ import {
     FaTimesIcon,
     PushPinSlashIcon,
 } from '@/components/icons'
+import RawDescription from '@/components/raw-description'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -263,7 +264,7 @@ const AccountsTableColumns = (
                 },
             }) => (
                 <div className="line-clamp-1 text-xs text-gray-500">
-                    {description}
+                    <RawDescription content={description} />
                 </div>
             ),
             enableMultiSort: true,
@@ -505,7 +506,7 @@ const AccountsTableColumns = (
                 },
             }) => (
                 <div className="line-clamp-1 text-xs text-gray-500">
-                    {description}
+                    <RawDescription content={description} />
                 </div>
             ),
             enableMultiSort: true,

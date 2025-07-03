@@ -148,17 +148,18 @@ const AccountClassificationTable = ({
                         isLoading: isPending || isRefetching,
                     }}
                     deleteActionProps={{
-                        onDeleteSuccess: () =>
+                        onDeleteSuccess: () => {
                             queryClient.invalidateQueries({
                                 queryKey: [
                                     'account-classification',
                                     'resource-query',
                                 ],
-                            }),
+                            })
+                        },
                         onDelete: (selectedData) =>
                             deleteManyAccountClassifications(
                                 selectedData.map((data) => data.id)
-                            ), // Update delete function
+                            ),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{

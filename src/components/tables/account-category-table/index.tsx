@@ -151,7 +151,7 @@ const AccountCategoryTable = ({
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
                                 queryKey: [
-                                    'account_category',
+                                    'account-category',
                                     'resource-query',
                                 ],
                             }),

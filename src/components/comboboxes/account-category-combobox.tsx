@@ -22,7 +22,7 @@ import {
 
 import { cn } from '@/lib/utils'
 
-import { useFilteredPaginatedAccountCategory } from '@/hooks/api-hooks/use-account-category'
+import { useAccountCategory } from '@/hooks/api-hooks/use-account-category'
 
 import { TEntityId } from '@/types'
 
@@ -43,8 +43,7 @@ const AccountCategoryComboBox = ({
 }: Props) => {
     const [open, setOpen] = React.useState(false)
 
-    const { data: accountCategory, isLoading } =
-        useFilteredPaginatedAccountCategory()
+    const { data: accountCategory, isLoading } = useAccountCategory()
 
     return (
         <>
@@ -58,7 +57,7 @@ const AccountCategoryComboBox = ({
                         disabled={disabled || isLoading}
                     >
                         {value ? (
-                            accountCategory.data.find(
+                            accountCategory.find(
                                 (option) => option.id === value
                             )?.name
                         ) : (
@@ -86,7 +85,7 @@ const AccountCategoryComboBox = ({
                                     No Account Category found
                                 </CommandEmpty>
                                 <CommandGroup>
-                                    {accountCategory.data.map((option) => (
+                                    {accountCategory.map((option) => (
                                         <CommandItem
                                             key={option.id}
                                             value={option.name}

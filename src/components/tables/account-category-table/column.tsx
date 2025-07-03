@@ -8,6 +8,7 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
+import RawDescription from '@/components/raw-description'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import AccountCategoryAction from './action'
@@ -108,7 +109,11 @@ const AccountCategoryTableColumns = (
             row: {
                 original: { description },
             },
-        }) => <div>{description || '-'}</div>,
+        }) => (
+            <div>
+                <RawDescription content={description ?? '-'} />
+            </div>
+        ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
