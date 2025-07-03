@@ -19,5 +19,5 @@ export interface IAccountCategoryRequest {
     branch_id?: TEntityId
 }
 
-export interface IAccountCategoryPaginatedResource
+export interface IAccountCategoryPaginated
     extends IPaginatedResult<IAccountCategory> {}

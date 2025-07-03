@@ -13,8 +13,12 @@ import { toBase64, withCatchAsync } from '@/utils'
 
 import { TEntityId } from '@/types'
 
-import { createMutationHook } from '../../factory/api-hook-factory'
-import ACCOUNT_DATA from './paginatedAccountSample.json'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../../factory/api-hook-factory'
 
 export const useAccountById = (
     id: TEntityId,
@@ -42,7 +46,7 @@ export const useAccountById = (
 export const useFilteredPaginatedAccount = ({
     sort,
     enabled,
-    // initialData,
+    initialData,
     mode = 'all',
     filterPayload,
     showMessage = true,
@@ -51,7 +55,7 @@ export const useFilteredPaginatedAccount = ({
     IQueryProps<IAccountPaginated> & { mode?: 'all' | 'pendings' }) => {
     return useQuery<IAccountPaginated, string>({
         queryKey: [
-            'gender',
+            'account',
             'resource-query',
             mode,
             filterPayload,
@@ -76,7 +80,13 @@ export const useFilteredPaginatedAccount = ({
 
             return result
         },
-        initialData: ACCOUNT_DATA as unknown as IAccountPaginated,
+        initialData: initialData ?? {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
         enabled,
         retry: 1,
     })
@@ -88,7 +98,8 @@ export const useCreateAccount = createMutationHook<
     IAccountRequest
 >(
     (payload) => AccountServices.createAccount(payload),
-    'New Account Created Successfully!'
+    'New Account Created Successfully!',
+    (args) => createMutationInvalidateFn('account', args)
 )
 
 export const useUpdateAccount = createMutationHook<
@@ -100,10 +111,12 @@ export const useUpdateAccount = createMutationHook<
     }
 >(
     (payload) => AccountServices.updateAccount(payload.accountId, payload.data),
-    'Account Updated Successfully!'
+    'Account Updated Successfully!',
+    (args) => updateMutationInvalidationFn('account', args)
 )
 
 export const useDeleteAccount = createMutationHook<void, string, TEntityId>(
     (accountId) => AccountServices.deleteAccount(accountId),
-    'Account Deleted Successfully!'
+    'Account Deleted Successfully!',
+    (args) => deleteMutationInvalidationFn('account', args)
 )

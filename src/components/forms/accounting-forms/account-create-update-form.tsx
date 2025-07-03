@@ -58,7 +58,10 @@ import {
     IAccountRequestSchema,
 } from '@/validations/accounting/account-schema'
 
-import { useCreateAccount } from '@/hooks/api-hooks/use-account'
+import {
+    useCreateAccount,
+    useUpdateAccount,
+} from '@/hooks/api-hooks/use-account'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -76,6 +79,7 @@ const AccountCreateUpdateForm = ({
     readOnly,
     disabledFields,
     accountId,
+    onSuccess,
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
     const organizationId = currentAuth.user_organization.organization_id
@@ -91,6 +95,7 @@ const AccountCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
+            computation_type: undefined,
             type: AccountTypeEnum.Deposit,
             ...defaultValues,
         },
@@ -99,9 +104,21 @@ const AccountCreateUpdateForm = ({
     const isDisabled = (field: Path<TAccountFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
-    const { mutate: createAccount, isPending, error } = useCreateAccount()
+    const {
+        mutate: createAccount,
+        isPending: isPendingCreateAccount,
+        error: createAccountError,
+    } = useCreateAccount({
+        onSuccess: onSuccess,
+    })
 
-    const isLoading = isPending
+    const {
+        mutate: updateAccount,
+        isPending: isPendingUpdateAccount,
+        error: updateAccountError,
+    } = useUpdateAccount({ onSuccess: onSuccess })
+
+    const isLoading = isPendingCreateAccount || isPendingUpdateAccount
 
     const handleSubmit = form.handleSubmit((data: TAccountFormValues) => {
         const request = {
@@ -109,13 +126,19 @@ const AccountCreateUpdateForm = ({
             organization_id: organizationId,
             ...data,
         }
-        createAccount(request)
+        if (accountId) {
+            updateAccount({ accountId: accountId, data: request })
+        } else {
+            createAccount(request)
+        }
     })
+
+    const errorMessage = createAccountError || updateAccountError
 
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit} className={cn('w-full', className)}>
-                <FormErrorMessage errorMessage={error} />
+                <FormErrorMessage errorMessage={errorMessage} />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
                         disabled={readOnly}
@@ -212,9 +235,11 @@ const AccountCreateUpdateForm = ({
                             label="Account Classification"
                             render={({ field }) => (
                                 <AccountClassificationComboBox
+                                    {...field}
                                     onChange={(selected) =>
                                         field.onChange(selected.id)
                                     }
+                                    value={field.value}
                                     placeholder="Select Account Classification"
                                     disabled={
                                         isDisabled(field.name) || isLoading
@@ -229,9 +254,11 @@ const AccountCreateUpdateForm = ({
                             disabled={isLoading}
                             render={({ field }) => (
                                 <AccountCategoryComboBox
+                                    {...field}
                                     onChange={(selected) =>
                                         field.onChange(selected.id)
                                     }
+                                    value={field.value}
                                     placeholder="Select Account Category"
                                     disabled={
                                         isDisabled(field.name) || isLoading
@@ -667,7 +694,9 @@ const AccountCreateUpdateForm = ({
                                                         selectedValue
                                                     )
                                                 }}
-                                                defaultValue={field.value}
+                                                defaultValue={
+                                                    field.value || undefined
+                                                }
                                             >
                                                 <SelectTrigger className="w-full">
                                                     {field.value ||

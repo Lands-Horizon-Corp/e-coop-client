@@ -21,7 +21,7 @@ import {
 
 import { cn } from '@/lib/utils'
 
-import { useFilteredPaginatedAccountClassification } from '@/hooks/api-hooks/use-account-classification'
+import { useAccountClassification } from '@/hooks/api-hooks/use-account-classification'
 
 import { IAccountClassification, TEntityId } from '@/types'
 
@@ -42,8 +42,8 @@ const AccountClassificationComboBox = ({
 }: Props) => {
     const [open, setOpen] = React.useState(false)
 
-    const { data: accountCategory, isLoading } =
-        useFilteredPaginatedAccountClassification()
+    const { data: accountClassification, isLoading } =
+        useAccountClassification()
 
     return (
         <>
@@ -57,7 +57,7 @@ const AccountClassificationComboBox = ({
                         disabled={disabled || isLoading}
                     >
                         {value ? (
-                            accountCategory.data.find(
+                            accountClassification.find(
                                 (option) => option.id === value
                             )?.name
                         ) : (
@@ -85,7 +85,7 @@ const AccountClassificationComboBox = ({
                                     No Account Classfication found
                                 </CommandEmpty>
                                 <CommandGroup>
-                                    {accountCategory.data.map((option) => (
+                                    {accountClassification.map((option) => (
                                         <CommandItem
                                             key={option.id}
                                             value={option.name}

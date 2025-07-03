@@ -47,8 +47,10 @@ export const IAccountRequestSchema = z.object({
         .nativeEnum(AccountExclusiveSettingTypeEnum)
         .default(AccountExclusiveSettingTypeEnum.None),
 
-    computation_type: z.nativeEnum(ComputationTypeEnum).optional(),
-
+    computation_type: z.preprocess(
+        (val) => (val === '' || val === null ? undefined : val),
+        z.nativeEnum(ComputationTypeEnum).optional()
+    ),
     fines_amort: z
         .number()
         .min(0, 'Fines amort must be non-negative')

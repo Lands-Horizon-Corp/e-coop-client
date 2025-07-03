@@ -32,7 +32,7 @@ export const getPaginatedAccount = async ({
 }) => {
     const finalUrl = qs.stringifyUrl(
         {
-            url: `invitation-code/paginated`,
+            url: `/account/search`,
             query: {
                 sort,
                 filter: filters,
