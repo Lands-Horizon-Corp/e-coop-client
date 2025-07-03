@@ -79,7 +79,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     !isFetching &&
                     allowShorcutCommand
                 ) {
-                    setState(false)
+                    setState(true)
                 }
             },
             { disableTextInputs: true }
