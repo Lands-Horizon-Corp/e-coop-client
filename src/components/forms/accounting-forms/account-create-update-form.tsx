@@ -58,7 +58,10 @@ import {
     IAccountRequestSchema,
 } from '@/validations/accounting/account-schema'
 
-import { useCreateAccount } from '@/hooks/api-hooks/use-account'
+import {
+    useCreateAccount,
+    useUpdateAccount,
+} from '@/hooks/api-hooks/use-account'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
