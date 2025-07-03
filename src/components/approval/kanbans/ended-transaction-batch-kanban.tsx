@@ -1,32 +1,45 @@
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { formatNumber } from '@/utils'
+
+import { TransactionBatchSignCreateUpdateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-sign-create-update-form'
 import {
     EyeIcon,
     LayersSharpDotIcon,
     SignatureLightIcon,
 } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import KanbanTitle from '../kanban/kanban-title'
-import { Separator } from '@/components/ui/separator'
 import ImageDisplay from '@/components/image-display'
-import KanbanContainer from '../kanban/kanban-container'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import KanbanItemsContainer from '../kanban/kanban-items-container'
 import { BatchBlotterQuickViewModal } from '@/components/transaction-batch/transaction-batch-quick-view'
 import TransactionBatchStatusIndicator from '@/components/transaction-batch/transaction-batch-status-indicator'
-import { TransactionBatchSignCreateUpdateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-sign-create-update-form'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
-import { formatNumber } from '@/utils'
 import {
-    useTransactionBatchEndApprovals,
     useTransactionBatchAcceptBlotterView,
+    useTransactionBatchEndApprovals,
 } from '@/hooks/api-hooks/use-transaction-batch'
 import { useModalState } from '@/hooks/use-modal-state'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IClassProps, ITransactionBatch } from '@/types'
+
+import KanbanContainer from '../kanban/kanban-container'
+import KanbanItemsContainer from '../kanban/kanban-items-container'
+import KanbanTitle from '../kanban/kanban-title'
 
 interface Props extends IClassProps {}
 
 const EndedTransactionBatchKanban = (_props: Props) => {
-    const { data, isPending } = useTransactionBatchEndApprovals()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+    const { data, isPending, refetch } = useTransactionBatchEndApprovals()
+
+    useSubscribe(`transaction_batch.update.branch.${branch_id}`, () =>
+        refetch()
+    )
 
     return (
         <KanbanContainer className="w-[360px]">
@@ -46,6 +59,11 @@ const EndedTransactionBatchKanban = (_props: Props) => {
                         key={transactionBatch.id}
                     />
                 ))}
+                {data.length === 0 && (
+                    <p className="text-center text-xs text-muted-foreground/60">
+                        no pending request
+                    </p>
+                )}
             </KanbanItemsContainer>
         </KanbanContainer>
     )

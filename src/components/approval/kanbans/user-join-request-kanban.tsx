@@ -89,6 +89,11 @@ const UserJoinRequestKanban = (_props: Props) => {
                 {data.map((userOrg) => (
                     <JoinRequestCard userOrg={userOrg} key={userOrg.id} />
                 ))}
+                {data.length === 0 && (
+                    <p className="text-center text-xs text-muted-foreground/60">
+                        no pending request
+                    </p>
+                )}
             </KanbanItemsContainer>
         </KanbanContainer>
     )

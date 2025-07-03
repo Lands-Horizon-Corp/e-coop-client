@@ -64,6 +64,11 @@ const NewMemberProfileKanban = (_props: Props) => {
                 {data.map((member) => (
                     <MemberProfileCard member={member} key={member.id} />
                 ))}
+                {data.length === 0 && (
+                    <p className="text-center text-xs text-muted-foreground/60">
+                        no pending request
+                    </p>
+                )}
             </KanbanItemsContainer>
         </KanbanContainer>
     )
