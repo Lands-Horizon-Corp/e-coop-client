@@ -1,7 +1,7 @@
 import { IUserBase } from '../auth/user'
 import { IBaseEntityMeta, TEntityId, TUserType } from '../common'
 import { IBranch, IPaginatedResult } from '../coop-types'
-import { TPermission } from '../coop-types/permission'
+// import { TPermission } from '../coop-types/permission'
 import { IOrganization } from './organization'
 
 export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
@@ -26,7 +26,7 @@ export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
     // Perms
     permission_name: string
     permission_description: string
-    permissions: TPermission[]
+    permissions: /*TPermission*/ string[]
 }
 
 export interface IUserOrganizationResponse {
