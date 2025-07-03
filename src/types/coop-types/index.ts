@@ -76,5 +76,5 @@ export * from './transaction-entry'
 export * from './loan-types'
 
 /* Permission */
-export * from './permission'
-export * from './permission-template'
+// export * from './permission'
+// export * from './permission-template'
