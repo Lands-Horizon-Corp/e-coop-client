@@ -3,29 +3,39 @@ import { toast } from 'sonner'
 
 import { AccountCategoryServices } from '@/api-service/account-category-services'
 import { serverRequestErrExtractor } from '@/helpers'
-import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
+import {
+    IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IQueryProps,
+} from '@/types/api-hooks-types'
 import {
     IAccountCategory,
-    IAccountCategoryPaginatedResource,
+    IAccountCategoryPaginated,
     IAccountCategoryRequest,
 } from '@/types/coop-types/account-category'
 import { toBase64, withCatchAsync } from '@/utils'
 
 import { TEntityId } from '@/types'
 
-import { createMutationHook } from '../../factory/api-hook-factory'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../../factory/api-hook-factory'
 
 export const useFilteredPaginatedAccountCategory = ({
     sort,
     enabled,
     filterPayload,
+    initialData,
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IAccountCategoryPaginatedResource, string> &
-    IQueryProps = {}) => {
-    return useQuery<IAccountCategoryPaginatedResource, string>({
+}: IAPIFilteredPaginatedHook<IAccountCategoryPaginated, string> &
+    IQueryProps<IAccountCategoryPaginated> = {}) => {
+    return useQuery<IAccountCategoryPaginated, string>({
         queryKey: [
-            'account_category', // Unique query key for account category
+            'account-category',
             'resource-query',
             filterPayload,
             pagination,
@@ -48,7 +58,7 @@ export const useFilteredPaginatedAccountCategory = ({
 
             return result
         },
-        initialData: {
+        initialData: initialData ?? {
             data: [],
             pages: [],
             totalSize: 0,
@@ -66,7 +76,8 @@ export const useCreateAccountCategory = createMutationHook<
     IAccountCategoryRequest
 >(
     (payload) => AccountCategoryServices.createAccountCategory(payload),
-    'New Account Category Created'
+    'New Account Category Created',
+    (args) => createMutationInvalidateFn('account-category', args)
 )
 
 export const useUpdateAccountCategory = createMutationHook<
@@ -82,7 +93,8 @@ export const useUpdateAccountCategory = createMutationHook<
             payload.accountCategoryId,
             payload.data
         ),
-    'Account Category Updated'
+    'Account Category Updated',
+    (args) => updateMutationInvalidationFn('account-category', args)
 )
 
 export const useDeleteAccountCategory = createMutationHook<
@@ -92,7 +104,8 @@ export const useDeleteAccountCategory = createMutationHook<
 >(
     (accountCategoryId) =>
         AccountCategoryServices.deleteAccountCategory(accountCategoryId),
-    'Account Category Deleted'
+    'Account Category Deleted',
+    (args) => deleteMutationInvalidationFn('account-category', args)
 )
 
 export const useGetAccountCategoryById = (
@@ -100,7 +113,7 @@ export const useGetAccountCategoryById = (
     showMessage = true
 ) => {
     return useQuery<IAccountCategory, string>({
-        queryKey: ['account_category', accountCategoryId],
+        queryKey: ['account-category', accountCategoryId],
         queryFn: async () => {
             if (!accountCategoryId) {
                 throw new Error(
@@ -122,6 +135,30 @@ export const useGetAccountCategoryById = (
             return result
         },
         enabled: !!accountCategoryId,
+        retry: 1,
+    })
+}
+
+export const useAccountCategory = ({
+    enabled,
+    showMessage = true,
+}: IAPIHook<IAccountCategory[], string> & IQueryProps = {}) => {
+    return useQuery<IAccountCategory[], string>({
+        queryKey: ['account-category', 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                AccountCategoryServices.getAllAccountCategories()
+            )
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: [],
+        enabled,
         retry: 1,
     })
 }
