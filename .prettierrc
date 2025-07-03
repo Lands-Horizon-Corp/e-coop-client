@@ -11,5 +11,21 @@
             }
         }
     ],
-    "plugins": ["prettier-plugin-tailwindcss"]
+    "importOrder": [
+        "^(react|zod|sonner|@tanstack/react-query)$",
+        "^@hookform/(.*)$",
+        "<THIRD_PARTY_MODULES>",
+        "^@/components/(.*)$",
+        "^@/lib/(.*)$",
+        "^@/validations/(.*)$",
+        "^@/hooks/(.*)$",
+        "^@/types$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "plugins": [
+        "prettier-plugin-tailwindcss",
+        "@trivago/prettier-plugin-sort-imports"
+    ]
 }
