@@ -48,7 +48,11 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysImport
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
+<<<<<<< HEAD
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/role-permission-template'
+=======
+import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template'
+>>>>>>> ef75c57 (fix: Rename permission template route)
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-management'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type'
@@ -330,11 +334,19 @@ const OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute =
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 
+<<<<<<< HEAD
 const OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute =
   OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateImport.update(
     {
       id: '/(maintenance)/(employees)/role-permission-template',
       path: '/role-permission-template',
+=======
+const OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute =
+  OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateImport.update(
+    {
+      id: '/(maintenance)/(employees)/permission-template',
+      path: '/permission-template',
+>>>>>>> ef75c57 (fix: Rename permission template route)
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
@@ -960,11 +972,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+<<<<<<< HEAD
     '/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template'
       path: '/role-permission-template'
       fullPath: '/org/$orgname/branch/$branchname/role-permission-template'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateImport
+=======
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
+      path: '/permission-template'
+      fullPath: '/org/$orgname/branch/$branchname/permission-template'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateImport
+>>>>>>> ef75c57 (fix: Rename permission template route)
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': {
@@ -1285,7 +1305,11 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
+<<<<<<< HEAD
   OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute
+=======
+  OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+>>>>>>> ef75c57 (fix: Rename permission template route)
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -1355,8 +1379,13 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute:
       OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute,
+<<<<<<< HEAD
     OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute:
       OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute,
+=======
+    OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute:
+      OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute,
+>>>>>>> ef75c57 (fix: Rename permission template route)
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
@@ -1479,7 +1508,11 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
+<<<<<<< HEAD
   '/org/$orgname/branch/$branchname/role-permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute
+=======
+  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+>>>>>>> ef75c57 (fix: Rename permission template route)
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -1552,7 +1585,11 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
+<<<<<<< HEAD
   '/org/$orgname/branch/$branchname/role-permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute
+=======
+  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+>>>>>>> ef75c57 (fix: Rename permission template route)
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -1631,7 +1668,11 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
+<<<<<<< HEAD
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesRolePermissionTemplateRoute
+=======
+  '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+>>>>>>> ef75c57 (fix: Rename permission template route)
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -1710,7 +1751,11 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/permission-management'
+<<<<<<< HEAD
     | '/org/$orgname/branch/$branchname/role-permission-template'
+=======
+    | '/org/$orgname/branch/$branchname/permission-template'
+>>>>>>> ef75c57 (fix: Rename permission template route)
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
@@ -1782,7 +1827,11 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/permission-management'
+<<<<<<< HEAD
     | '/org/$orgname/branch/$branchname/role-permission-template'
+=======
+    | '/org/$orgname/branch/$branchname/permission-template'
+>>>>>>> ef75c57 (fix: Rename permission template route)
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
@@ -1859,7 +1908,11 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management'
+<<<<<<< HEAD
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template'
+=======
+    | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
+>>>>>>> ef75c57 (fix: Rename permission template route)
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
@@ -2080,7 +2133,7 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-type",
         "/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management",
-        "/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template",
+        "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins",
@@ -2187,8 +2240,8 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-management.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/role-permission-template.tsx",
+    "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members": {

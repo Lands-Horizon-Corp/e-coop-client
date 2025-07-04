@@ -4,18 +4,21 @@ import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
+import { PermissionTemplateCreateUpdateFormModal } from '@/components/forms/permission-template-create-update-form'
+import PermissionTemplateTable from '@/components/tables/permission-template-table'
+import PermissionTemplateTableAction from '@/components/tables/permission-template-table/action'
 
-// import { useModalState } from '@/hooks/use-modal-state'
+import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/role-permission-template'
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
 )({
     component: RouteComponent,
 })
 
 function RouteComponent() {
-    // const createModal = useModalState()
+    const createModal = useModalState()
 
     const queryClient = useQueryClient()
     const {
@@ -24,19 +27,19 @@ function RouteComponent() {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`member_profile.created.branch.${branch_id}`, () => {
+    useSubscribe(`permission_template.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['permission-template', 'resource-query'],
         })
     })
 
-    useSubscribe(`member_profile.updated.branch.${branch_id}`, () => {
+    useSubscribe(`permission_template.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['permission-template', 'resource-query'],
         })
     })
 
-    useSubscribe(`member_profile.deleted.branch.${branch_id}`, () => {
+    useSubscribe(`permission_template.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['permission-template', 'resource-query'],
         })
@@ -44,7 +47,7 @@ function RouteComponent() {
 
     return (
         <PageContainer>
-            {/* <PermissionTemplateCreateUpdateFormModal {...createModal} />
+            <PermissionTemplateCreateUpdateFormModal {...createModal} />
             <PermissionTemplateTable
                 toolbarProps={{
                     createActionProps: {
@@ -55,7 +58,7 @@ function RouteComponent() {
                     <PermissionTemplateTableAction {...prop} />
                 )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
-            /> */}
+            />
         </PageContainer>
     )
 }
