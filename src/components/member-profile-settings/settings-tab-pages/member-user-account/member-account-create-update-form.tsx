@@ -15,6 +15,7 @@ import { Form, FormItem } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 import PasswordInput from '@/components/ui/password-input'
 import { Separator } from '@/components/ui/separator'
 import {
@@ -190,12 +191,14 @@ const MemberUserAccountCreateUpdateForm = ({
                             control={form.control}
                             name="birthdate"
                             label="Date of Birth *"
+                            className="relative"
+                            description="mm/dd/yyyy"
+                            descriptionClassName="absolute top-0 right-0"
                             render={({ field }) => (
-                                <Input
-                                    type="date"
+                                <InputDate
                                     {...field}
                                     value={field.value ?? ''}
-                                    className="block [&::-webkit-calendar-picker-indicator]:hidden"
+                                    className="block"
                                 />
                             )}
                         />

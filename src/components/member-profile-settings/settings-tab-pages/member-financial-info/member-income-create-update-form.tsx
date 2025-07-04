@@ -12,6 +12,7 @@ import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
@@ -168,12 +169,14 @@ const MemberIncomeCreateUpdateForm = ({
                                 control={form.control}
                                 name="release_date"
                                 label="Date Received *"
+                                className="relative"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
                                         placeholder="Release Date"
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
+                                        className="block"
                                         value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
                                     />

@@ -15,6 +15,7 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 import { Separator } from '@/components/ui/separator'
 import SignatureField from '@/components/ui/signature-field'
 
@@ -285,9 +286,11 @@ const MemberJointAccountCreateUpdateForm = ({
                                 control={form.control}
                                 name="birthday"
                                 label="Birthday *"
+                                className="relative"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
                                         id={field.name}
                                         placeholder="Birthday"

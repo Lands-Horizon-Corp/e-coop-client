@@ -31,6 +31,8 @@ import {
     TEntityId,
 } from '@/types'
 
+import InputDate from '../ui/input-date'
+
 const holidaySchema = z.object({
     name: z.string().min(1, 'Holiday name is required'),
     entry_date: z.string().min(1, 'Date is required'),
@@ -124,13 +126,16 @@ const HolidayCreateUpdateForm = ({
                             control={form.control}
                             name="entry_date"
                             label="Date"
+                            className="relative"
+                            description="mm/dd/yyyy"
+                            descriptionClassName="absolute top-0 right-0"
                             render={({ field }) => (
-                                <Input
+                                <InputDate
                                     type="date"
                                     {...field}
                                     value={field.value ?? ''}
                                     {...getDisableHideFieldProps(field.name)}
-                                    className="block [&::-webkit-calendar-picker-indicator]:hidden"
+                                    className="block"
                                 />
                             )}
                         />
