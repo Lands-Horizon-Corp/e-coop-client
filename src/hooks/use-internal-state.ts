@@ -2,9 +2,9 @@ import { useCallback, useState } from 'react'
 
 export function useInternalState<T>(
     initialValue: T,
-    controlledValue?: T | undefined,
-    onChange?: ((value: T) => void) | undefined
-): [T, (value: T) => void] {
+    controlledValue?: T,
+    onChange?: (value: T) => void
+): [T, (value: T | ((prev: T) => T)) => void] {
     const isControlled = controlledValue !== undefined
 
     const [internalValue, setInternalValue] = useState<T>(initialValue)
@@ -12,14 +12,19 @@ export function useInternalState<T>(
     const value = isControlled ? controlledValue : internalValue
 
     const setValue = useCallback(
-        (newValue: T) => {
+        (valueOrUpdater: T | ((prev: T) => T)) => {
+            const nextValue =
+                typeof valueOrUpdater === 'function'
+                    ? (valueOrUpdater as (prev: T) => T)(value)
+                    : valueOrUpdater
+
             if (isControlled) {
-                onChange?.(newValue)
+                onChange?.(nextValue)
             } else {
-                setInternalValue(newValue)
+                setInternalValue(nextValue)
             }
         },
-        [isControlled, onChange]
+        [isControlled, value, onChange]
     )
 
     return [value, setValue]
