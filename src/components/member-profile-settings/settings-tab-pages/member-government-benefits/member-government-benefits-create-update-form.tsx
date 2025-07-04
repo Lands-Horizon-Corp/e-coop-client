@@ -14,6 +14,7 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
@@ -187,13 +188,14 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                 control={form.control}
                                 name="expiry_date"
                                 label="Expiry Date *"
-                                className="col-span-4"
+                                className="relative col-span-4"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
                                         placeholder="Expiry Date"
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
+                                        className="block"
                                         value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
                                     />

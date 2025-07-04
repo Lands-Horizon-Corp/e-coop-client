@@ -27,6 +27,7 @@ import { IClassProps, IForm, IInvitationCode, TEntityId } from '@/types'
 import { UserIcon, UsersAddIcon } from '../icons'
 import FormFieldWrapper from '../ui/form-field-wrapper'
 import { Input } from '../ui/input'
+import InputDate from '../ui/input-date'
 import { Label } from '../ui/label'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 import { Textarea } from '../ui/textarea'
@@ -236,16 +237,16 @@ const InvitationCodeCreateUpdateForm = ({
                             control={form.control}
                             name="expiration_date"
                             label="Expiration Date"
-                            render={({ field }) => {
-                                return (
-                                    <Input
-                                        type="date"
-                                        {...field}
-                                        value={field.value ?? ''}
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
-                                    />
-                                )
-                            }}
+                            className="relative"
+                            description="mm/dd/yyyy"
+                            descriptionClassName="absolute top-0 right-0"
+                            render={({ field }) => (
+                                <InputDate
+                                    {...field}
+                                    value={field.value ?? ''}
+                                    className="block"
+                                />
+                            )}
                         />
 
                         <FormFieldWrapper
