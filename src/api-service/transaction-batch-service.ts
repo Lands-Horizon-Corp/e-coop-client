@@ -1,6 +1,7 @@
 import {
     createAPICollectionService,
     createAPICrudService,
+    createAPIExportableService,
 } from '@/factory/api-factory-service'
 
 import {
@@ -17,12 +18,14 @@ import {
 import APIService from './api-service'
 
 const CollectionServices =
-    createAPICollectionService<ITransactionBatch>('/transaction-batch')
+    createAPICollectionService<ITransactionBatch>('transaction-batch')
 
 const CrudServices = createAPICrudService<
     ITransactionBatch | ITransactionBatchMinimal,
     ITransactionBatchRequest
->('/transaction-batch')
+>('transaction-batch')
+
+const ExportServices = createAPIExportableService('transaction-batch')
 
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
@@ -91,6 +94,7 @@ export const updateEndedBatchApprovals = async (
 export const { allList, search } = CollectionServices
 export const { create, deleteById, deleteMany, getById, updateById } =
     CrudServices
+export const { exportAll, exportFiltered, exportSelected } = ExportServices
 
 export default {
     endCurrentBatch,
@@ -102,5 +106,6 @@ export default {
     getAllTransactionBatchViewRequest,
     requestTransactionBatchBlotterView,
     ...CrudServices,
+    ...ExportServices,
     ...CollectionServices,
 }

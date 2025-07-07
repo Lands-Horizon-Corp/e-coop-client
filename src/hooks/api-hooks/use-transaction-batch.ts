@@ -3,15 +3,17 @@ import { toast } from 'sonner'
 
 import TransactionBatchService from '@/api-service/transaction-batch-service'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
-import { withCatchAsync } from '@/utils'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
+    IAPIFilteredPaginatedHook,
     IAPIHook,
     IQueryProps,
     ITransactionBatch,
     ITransactionBatchDepositInBankRequest,
     ITransactionBatchEndRequest,
     ITransactionBatchMinimal,
+    ITransactionBatchPaginated,
     ITransactionBatchRequest,
     ITransactionBatchSignatures,
     TEntityId,
@@ -21,6 +23,8 @@ import {
 import {
     createMutationHook,
     createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
 } from '../../factory/api-hook-factory'
 
 export const useCurrentTransactionBatch = ({
@@ -86,6 +90,17 @@ export const useCreateTransactionBatch = createMutationHook<
     (args) => createMutationInvalidateFn('transaction-batch', args)
 )
 
+export const useDeleteTransactionBatch = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (transactionBatchId) =>
+        TransactionBatchService.deleteById(transactionBatchId),
+    'Transaction batch deleted',
+    (args) => deleteMutationInvalidationFn('transaction-batch', args)
+)
+
 export const useTransactionBatchRequestBlotterView = createMutationHook<
     ITransactionBatchMinimal,
     string,
@@ -112,6 +127,51 @@ export const useTransactionBatchEndCurrentBatch = createMutationHook<
     (data) => TransactionBatchService.endCurrentBatch(data),
     'Transaction Batch Ended'
 )
+
+export const useFilteredPaginatedTransactionBatch = ({
+    sort,
+    enabled,
+    filterPayload,
+    showMessage = true,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<ITransactionBatchPaginated, string> &
+    IQueryProps = {}) => {
+    return useQuery<ITransactionBatchPaginated, string>({
+        queryKey: [
+            'transaction-batch',
+            'resource-query',
+            filterPayload,
+            pagination,
+            sort,
+        ],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                TransactionBatchService.search({
+                    pagination,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
+        enabled,
+        retry: 1,
+    })
+}
 
 // GET ALL TRANSACTION BATCH BLOTTER VIEW REQUEST
 export const useTransactionBatchBlotterViewRequests = ({
@@ -148,7 +208,11 @@ export const useTransactionBatchAcceptBlotterView = createMutationHook<
     ITransactionBatch,
     string,
     TEntityId
->((id) => TransactionBatchService.allowBlotterView(id), 'Batch view allowed')
+>(
+    (id) => TransactionBatchService.allowBlotterView(id),
+    'Batch view allowed',
+    (args) => updateMutationInvalidationFn('transaction-batch', args)
+)
 
 // GET ALL ENDED BATCH THAT CAN BE SIGNED BY OTHER
 export const useTransactionBatchEndApprovals = ({
