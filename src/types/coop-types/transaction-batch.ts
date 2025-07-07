@@ -4,6 +4,7 @@ import { IOrganization } from '../lands-types'
 import { IBatchFundingRequest } from './batch-funding'
 import { IBranch } from './branch'
 import { IMedia } from './media'
+import { IPaginatedResult } from './paginated-result'
 
 export type TBatchBalanceStatus =
     | 'balanced'
@@ -151,3 +152,6 @@ export interface ITransactionBatchEndRequest {
     employee_by_name: string
     employee_by_position: string
 }
+
+export interface ITransactionBatchPaginated
+    extends IPaginatedResult<ITransactionBatch> {}
