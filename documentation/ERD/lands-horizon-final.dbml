@@ -1727,7 +1727,7 @@ Table general_ledger_definition {
   updated_by_id varchar(50) [ref: - user.id]
   deleted_by_id varchar(50) [ref: - user.id]
 
-  general_ledger_definition_entry_id varchar(50)
+  general_ledger_definition_entries_id varchar(50)
 
   name varchar(255) [not null, unique]
   description text
@@ -1752,7 +1752,7 @@ Table general_ledger_definition {
 
 Ref: general_ledger_definition.organization_id > organization.id [delete: cascade, update: cascade]
 Ref: general_ledger_definition.branch_id > branch.id [delete:cascade, update:cascade]
-Ref: general_ledger_definition.general_ledger_definition_entry_id < general_ledger_definition.id
+Ref: general_ledger_definition.general_ledger_definition_entries_id < general_ledger_definition.id
 
 // 🔑
 Table general_account_grouping_net_surplus_positive {
