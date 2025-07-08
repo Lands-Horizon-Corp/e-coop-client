@@ -68,7 +68,7 @@ export const useGetAllGeneralLedgerAccountsGroupings = ({
     showMessage = true,
 }: IAPIHook<IGeneralLedgerAccountsGrouping[], string> & IQueryProps = {}) => {
     return useQuery<IGeneralLedgerAccountsGrouping[], string>({
-        queryKey: ['general-ledger-accounts-groupings', 'all'],
+        queryKey: ['general-ledger-accounts-groupings'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 GeneralLedgerDefinitionServices.getAllGeneralLedgerAccountsGrouping()
@@ -86,3 +86,21 @@ export const useGetAllGeneralLedgerAccountsGroupings = ({
         retry: 1,
     })
 }
+
+export const useConnectAccountToGeneralLedgerDefinition = createMutationHook<
+    IGeneralLedgerDefinition,
+    string,
+    {
+        generalLedgerDefinitionId: TEntityId
+        accountId: TEntityId
+    }
+>(
+    (payload) =>
+        GeneralLedgerDefinitionServices.connectAccountToGeneralLedgerDefinition(
+            payload.generalLedgerDefinitionId,
+            payload.accountId
+        ),
+    'Account Connected to General Ledger Definition',
+    (args) =>
+        createMutationInvalidateFn('general-ledger-accounts-groupings', args)
+)
