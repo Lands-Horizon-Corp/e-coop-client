@@ -20,7 +20,6 @@ export const GeneralLedgerDefinitionSchema = z.object({
     name: z.string().min(1, 'The name is Required!'),
     description: z.string().optional(),
     index: z.coerce.number().optional(),
-    type: GeneralLedgerFinancialStatementNodeTypeEnumSchema,
     name_in_total: z.string().optional(),
     is_posting: z.boolean().optional(),
     general_ledger_type: GeneralLedgerTypeEnumSchema,

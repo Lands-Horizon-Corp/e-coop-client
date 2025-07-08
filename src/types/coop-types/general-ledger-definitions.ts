@@ -19,13 +19,14 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
     organization_id: TEntityId
     branch_id: TEntityId
 
-    general_ledger_definition_entries_id?: TEntityId
+    general_ledger_definition_entry_id?: TEntityId
 
     type: GeneralLedgerFinancialStatementNodeType
     parent_id?: TEntityId
     parent?: IGeneralLedgerDefinition
     accounts?: IAccount[]
     general_ledger_definition?: IGeneralLedgerDefinition[]
+    general_ledger_accounts_grouping_id: TEntityId
 
     name: string
     description?: string
@@ -50,6 +51,6 @@ export interface IGeneralLedgerDefinitionRequest {
     beginning_balance_of_the_year_credit?: number
     beginning_balance_of_the_year_debit?: number
 
-    general_ledger_definition_entries_id: TEntityId
+    general_ledger_definition_entry_id: TEntityId
     general_ledger_accounts_grouping_id: TEntityId
 }

@@ -63,3 +63,16 @@ export const deleteManyGeneralLedgerDefinitions = async (
     )
     return response.data
 }
+
+export const connectAccountToGeneralLedgerDefinition = async (
+    generalLedgerDefinitionId: TEntityId,
+    accountId: TEntityId
+): Promise<IGeneralLedgerDefinition> => {
+    const response = await APIService.post<
+        { generalLedgerDefinitionId: TEntityId; accountId: TEntityId },
+        IGeneralLedgerDefinition
+    >(
+        `/general-ledger-definition/${generalLedgerDefinitionId}/account/${accountId}/connect`
+    )
+    return response.data
+}
