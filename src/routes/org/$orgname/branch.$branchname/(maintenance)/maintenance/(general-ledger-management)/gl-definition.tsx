@@ -4,7 +4,7 @@ import { AccordionContent, AccordionItem } from '@radix-ui/react-accordion'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { SigiBookIcon } from '@/components/icons'
 import { Accordion, AccordionTrigger } from '@/components/ui/accordion'
 
 import { useGetAllGeneralLedgerAccountsGroupings } from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
@@ -18,14 +18,40 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const { data: generalLedgerGropings } =
-        useGetAllGeneralLedgerAccountsGroupings()
+    const {
+        data: generalLedgerGropings,
+        refetch: refetchGeneralLedgerAccountsGrouping,
+    } = useGetAllGeneralLedgerAccountsGroupings()
 
     const { setGeneralLedgerAccountsGroupingId } = useGeneralLedgerStore()
 
+    const refetch = () => {
+        refetchGeneralLedgerAccountsGrouping()
+    }
+
+    const hasGeneralLedgerGropings =
+        generalLedgerGropings && generalLedgerGropings.length > 0
+
     return (
-        <PageContainer className="w-full">
-            <h1>General Ledger Definition</h1>
+        <PageContainer className="w-full relative min-h-[100vh] p-5 ">
+            <div className="my-5 w-full flex items-center gap-2 ">
+                <h1 className="font-extrabold text-2xl my-5 relative text-start flex items-center justify-start gap-4 ">
+                    <span className="relative before:content-[''] before:size-5 before:bg-primary before:blur-lg before:rounded-full before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2">
+                        <SigiBookIcon className="relative size-7" />
+                    </span>
+                    General Ledger Definition
+                </h1>
+            </div>
+            <span
+                className="absolute left-1/2 top-[30%] size-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{
+                    backgroundImage: `url(${payment_bg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    opacity: 0.1,
+                }}
+            />
             <Accordion
                 type="single"
                 collapsible
@@ -33,52 +59,31 @@ function RouteComponent() {
                 defaultValue="item-1"
             >
                 {generalLedgerGropings?.map((grouping) => (
-                    <GradientBackground
-                        gradientOnly
-                        opacity={0.07}
-                        className="p-5"
+                    <AccordionItem
                         key={grouping.id}
+                        value={grouping.id}
+                        className="w-full bg-sidebar/50 p-5 rounded-xl"
                     >
-                        <span
-                            className="absolute -right-10 -top-16 size-72 -rotate-45"
-                            style={{
-                                backgroundImage: `url(${payment_bg})`,
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                backgroundRepeat: 'no-repeat',
-                                opacity: 0.2,
-                            }}
-                        />
-                        <AccordionItem
-                            key={grouping.id}
-                            value={grouping.id}
-                            className="w-full"
+                        <AccordionTrigger
+                            onClick={() =>
+                                setGeneralLedgerAccountsGroupingId(grouping.id)
+                            }
+                            className="w-full text-2xl font-bold text-left text-accent-foreground/80"
                         >
-                            <AccordionTrigger
-                                onClick={() =>
-                                    setGeneralLedgerAccountsGroupingId(
-                                        grouping.id
-                                    )
-                                }
-                                className="w-full text-2xl font-bold text-left text-accent-foreground"
-                            >
-                                {grouping.name}
-                            </AccordionTrigger>
-                            <AccordionContent className="w-full">
-                                <p className="text-sm">
-                                    {grouping.description}
-                                </p>
-                                {grouping.general_ledger_definition.length >
-                                    0 && (
-                                    <GeneralLedgerTreeViewer
-                                        treeData={
-                                            grouping.general_ledger_definition
-                                        }
-                                    />
-                                )}
-                            </AccordionContent>
-                        </AccordionItem>
-                    </GradientBackground>
+                            {grouping.name}
+                        </AccordionTrigger>
+                        <AccordionContent className="w-full">
+                            <p className="text-sm">{grouping.description}</p>
+                            {hasGeneralLedgerGropings && (
+                                <GeneralLedgerTreeViewer
+                                    refetch={refetch}
+                                    treeData={
+                                        grouping.general_ledger_definition
+                                    }
+                                />
+                            )}
+                        </AccordionContent>
+                    </AccordionItem>
                 ))}
             </Accordion>
         </PageContainer>

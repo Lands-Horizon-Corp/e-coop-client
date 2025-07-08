@@ -1450,7 +1450,7 @@ Table general_ledger_definition [headercolor: #00FF00] {
   updated_by_id varchar(50) [ref: - user.id]
   deleted_by_id varchar(50) [ref: - user.id]
 
-  general_ledger_definition_entries_id varchar(50)
+  general_ledger_definition_entry_id varchar(50)
 
   name varchar(255) [not null, unique]
   description text
@@ -1469,7 +1469,7 @@ Table general_ledger_definition [headercolor: #00FF00] {
 }
 
 Ref: general_ledger_definition.branch_id > branch.id [delete:cascade, update:cascade]
-Ref: general_ledger_definition.general_ledger_definition_entries_id < general_ledger_definition.id
+Ref: general_ledger_definition.general_ledger_definition_entry_id < general_ledger_definition.id
 
 enum general_ledger_transaction_type {
   "Daily Collection Book"
