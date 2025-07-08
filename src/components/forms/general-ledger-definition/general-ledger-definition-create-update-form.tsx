@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/lib'
-import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
 import {
     GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
@@ -34,7 +33,10 @@ import {
     IGeneralLedgerDefinitionFormValues,
 } from '@/validations/general-ledger-definition/general-ledger-definition-schema'
 
-import { useCreateGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
+import {
+    useCreateGeneralLedgerDefinition,
+    useUpdateGeneralLedgerDefinition,
+} from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -47,6 +49,8 @@ interface IGeneralLedgerDefinitionCreateUpdateFormProps
             IGeneralLedgerDefinitionFormValues
         > {
     generalLedgerDefinitionEntriesId?: TEntityId
+    generalLedgerDefinitionId?: TEntityId
+    generalLedgerAccountsGroupingId?: TEntityId
 }
 const GeneralLedgerDefinitionCreateUpdateForm = ({
     defaultValues,
@@ -54,10 +58,10 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
     readOnly,
     disabledFields,
     generalLedgerDefinitionEntriesId,
+    generalLedgerAccountsGroupingId,
+    generalLedgerDefinitionId,
     onSuccess,
 }: IGeneralLedgerDefinitionCreateUpdateFormProps) => {
-    const { generalLedgerAccountsGroupingId } = useGeneralLedgerStore()
-
     const form = useForm<IGeneralLedgerDefinitionFormValues>({
         resolver: zodResolver(GeneralLedgerDefinitionSchema),
         reValidateMode: 'onChange',
@@ -74,7 +78,10 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
         useCreateGeneralLedgerDefinition({
             onSuccess: onSuccess,
         })
-
+    const { mutate: UpdateGeneralLedgerDefinition, isPending: isUpdating } =
+        useUpdateGeneralLedgerDefinition({
+            onSuccess: onSuccess,
+        })
     // Handle form submission
     const handleSubmit = form.handleSubmit((data) => {
         if (
@@ -87,15 +94,25 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
             })
             return
         }
+
         const request = {
             ...data,
-            general_ledger_definition_entries_id:
+            general_ledger_definition_entry_id:
                 generalLedgerDefinitionEntriesId,
             general_ledger_accounts_grouping_id:
                 generalLedgerAccountsGroupingId,
         }
-        CreateGeneralLedgerDefinition(request)
+        if (generalLedgerDefinitionId) {
+            UpdateGeneralLedgerDefinition({
+                generalLedgerDefinitionId: generalLedgerDefinitionId,
+                data: request,
+            })
+        } else {
+            CreateGeneralLedgerDefinition(request)
+        }
     })
+
+    const isLoading = isCreating || isUpdating
 
     const isFormChange = form.formState.isDirty
 
@@ -302,7 +319,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                     size="sm"
                                     type="submit"
                                     disabled={
-                                        generalLedgerDefinitionEntriesId
+                                        isLoading || generalLedgerDefinitionId
                                             ? !isFormChange
                                             : isCreating
                                     }
@@ -310,7 +327,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                 >
                                     {isCreating ? (
                                         <LoadingSpinner />
-                                    ) : generalLedgerDefinitionEntriesId ? (
+                                    ) : generalLedgerDefinitionId ? (
                                         'Update'
                                     ) : (
                                         'Create'
