@@ -118,6 +118,7 @@ import {
     GoArrowLeft as ArrowLeftIcon,
     GoArrowRight as ArrowRightIcon,
     GoDotFill as DotBigIcon,
+    GoKebabHorizontal as DotsHorizontalIcon,
     GoSearch as MagnifyingGlassIcon,
     GoOrganization as OrganizationIcon,
 } from 'react-icons/go'
@@ -282,6 +283,7 @@ import {
     RxFontItalic as ToolbarItalicIcon,
 } from 'react-icons/rx'
 import { RxDotFilled as DotMediumIcon } from 'react-icons/rx'
+import { SiGitbook as SigiBookIcon } from 'react-icons/si'
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 import {
     TbBlockquote as BlockQuoteIcon,
@@ -429,6 +431,7 @@ export {
     TreeCityIcon,
     KeySharpIcon,
     MoneyBagIcon,
+    SigiBookIcon,
     CheckFillIcon,
     HandCoinsIcon,
     MapMarkedIcon,
@@ -530,6 +533,7 @@ export {
     UserClockFillIcon,
     CommentDashedIcon,
     ArrowChevronRight,
+    DotsHorizontalIcon,
     FinanceReportsIcon,
     LayersSharpDotIcon,
     SignatureLightIcon,
