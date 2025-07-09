@@ -82,6 +82,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
         useUpdateGeneralLedgerDefinition({
             onSuccess: onSuccess,
         })
+
     // Handle form submission
     const handleSubmit = form.handleSubmit((data) => {
         if (
@@ -104,7 +105,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
         }
         if (generalLedgerDefinitionId) {
             UpdateGeneralLedgerDefinition({
-                generalLedgerDefinitionId: generalLedgerDefinitionId,
+                generalLedgerDefinitionId: generalLedgerDefinitionEntriesId,
                 data: request,
             })
         } else {
@@ -356,6 +357,7 @@ export const GeneralLedgerDefinitionCreateUpdateFormModal = ({
             title={title}
             description={description}
             className={cn('', className)}
+            overlayClassName="!bg-transparent !backdrop-blur-sm"
             {...props}
         >
             <GeneralLedgerDefinitionCreateUpdateForm
