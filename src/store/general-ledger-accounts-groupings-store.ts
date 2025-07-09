@@ -12,6 +12,7 @@ export interface GeneralLedgerAccountsGroupingStore {
     openCreateGeneralLedgerModal: boolean
     expandedNodeIds: Set<string>
     targetNodeId: string | null
+    selectedGeneralLedgerDefinition: IGeneralLedgerDefinition | null
 
     setGeneralLedgerAccountsGroupingId: (paymentType: string) => void
     setSelectedGeneralLedgerDefinitionId: (id: string | null) => void
@@ -33,13 +34,20 @@ export interface GeneralLedgerAccountsGroupingStore {
     setTargetNodeId: (nodeId: string | null) => void
     clearTargetNodeIdAfterScroll: (nodeId: string) => void
     resetExpansion: () => void
+    setSelectedGeneralLedgerDefinition?: (
+        generalLedgerDefinitions: IGeneralLedgerDefinition
+    ) => void
 }
 export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
     (set, get) => ({
+        targetNodeId: null,
+        expandedNodeIds: new Set(),
         generalLedgerDefitions: [],
         openCreateGeneralLedgerModal: false,
         generalLedgerAccountsGroupingId: null,
+        selectedGeneralLedgerDefinition: null,
         selectedGeneralLedgerDefinitionId: null,
+
         setSelectedGeneralLedgerDefinitionId: (id) =>
             set({ selectedGeneralLedgerDefinitionId: id }),
         clearSelectedGeneralLedgerDefinitionId: () =>
@@ -129,8 +137,6 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
         setOnCreate: (onCreate) => set({ onCreate }),
         setOpenCreateGeneralLedgerModal: (open) =>
             set({ openCreateGeneralLedgerModal: open }),
-        expandedNodeIds: new Set(),
-        targetNodeId: null,
         toggleNode: (nodeId, isExpanded) =>
             set((state) => {
                 const newExpandedIds = new Set(state.expandedNodeIds)
@@ -153,5 +159,9 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
         },
         resetExpansion: () =>
             set({ expandedNodeIds: new Set(), targetNodeId: null }),
+        setSelectedGeneralLedgerDefinition: (generalLedgerDefinitions) =>
+            set({
+                selectedGeneralLedgerDefinition: generalLedgerDefinitions,
+            }),
     })
 )
