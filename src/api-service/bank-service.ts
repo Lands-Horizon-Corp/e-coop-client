@@ -1,8 +1,9 @@
+import qs from 'query-string'
+
 import {
     createAPICollectionService,
     createAPICrudService,
 } from '@/factory/api-factory-service'
-import qs from 'query-string'
 
 import { IBank, IBankRequest, TEntityId } from '@/types'
 

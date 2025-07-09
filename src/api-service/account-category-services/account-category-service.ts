@@ -1,9 +1,10 @@
+import qs from 'query-string'
+
 import {
     IAccountCategory,
     IAccountCategoryPaginated,
     IAccountCategoryRequest,
 } from '@/types/coop-types/account-category'
-import qs from 'query-string'
 
 import { TPagination } from '@/hooks/use-pagination'
 

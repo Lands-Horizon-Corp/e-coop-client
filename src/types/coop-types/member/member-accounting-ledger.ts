@@ -1,10 +1,16 @@
-import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IBaseEntityMeta, TEntityId } from '../../common'
+import { IAccount } from '../accounts/account'
+import { IPaginatedResult } from '../paginated-result'
+import { IMemberProfile } from './member-profile'
 
-export interface IMemberAccountingLedger extends ITimeStamps, IAuditable {
+export interface IMemberAccountingLedger extends IBaseEntityMeta {
     id: TEntityId
 
     member_profile_id: TEntityId
+    member_profile: IMemberProfile
+
     account_id: TEntityId
+    account: IAccount
 
     count: number
     balance: number
@@ -15,5 +21,16 @@ export interface IMemberAccountingLedger extends ITimeStamps, IAuditable {
     carried_forward_due: number
     stored_value_facility: number
     principal_due: number
-    last_pay?: string | null
+    last_pay?: string
+
+    hold_out?: string
+}
+
+export interface IMemberAccountingLedgerPaginated
+    extends IPaginatedResult<IMemberAccountingLedger> {}
+
+export interface IMemberAccountingLedgerTotal {
+    total_share_capital_plus_fixed_savings: number
+    total_deposits: number
+    total_loans: number
 }

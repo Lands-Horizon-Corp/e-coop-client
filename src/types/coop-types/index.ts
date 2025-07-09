@@ -75,6 +75,9 @@ export * from './transaction-entry'
 
 export * from './loan-types'
 
+/* Ledgers */
+export * from './general-ledger'
+
 /* Permissions */
 export * from './permission'
 export * from './permission-template'

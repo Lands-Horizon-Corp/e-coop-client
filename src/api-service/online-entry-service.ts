@@ -1,9 +1,10 @@
+import qs from 'query-string'
+
 import {
     createAPICollectionService,
     createAPICrudService,
     createAPIExportableService,
 } from '@/factory/api-factory-service'
-import qs from 'query-string'
 
 import { IOnlineEntry, IOnlineEntryPaginated, TEntityId } from '@/types'
 
