@@ -98,7 +98,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
 
         const request = {
             ...data,
-            general_ledger_definition_entry_id:
+            general_ledger_definition_entries_id:
                 generalLedgerDefinitionEntriesId,
             general_ledger_accounts_grouping_id:
                 generalLedgerAccountsGroupingId,

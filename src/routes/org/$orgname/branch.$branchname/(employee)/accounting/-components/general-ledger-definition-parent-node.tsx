@@ -28,28 +28,25 @@ import GeneralLedgerDefinitionActions from './general-ledger-definition-actions'
 import GeneralLedgerNode from './general-ledger-definition-node'
 
 type GeneralLedgerDefinitionParentNodeProps = {
-    generalLedgerDefinition: IGeneralLedgerDefinition
+    node: IGeneralLedgerDefinition
     onDragEndNested: (
         path: string[],
         oldIndex: number | string,
         newIndex: number | string
     ) => void
-    refetch?: () => void
 }
 const GeneralLedgerDefinitionParentNode = ({
-    generalLedgerDefinition,
+    node,
     onDragEndNested,
-    refetch,
 }: GeneralLedgerDefinitionParentNodeProps) => {
     const dragHandleRef = useRef<HTMLDivElement>(null)
 
     const { expandedNodeIds, toggleNode } = useGeneralLedgerStore()
-
-    const isNodeExpanded = expandedNodeIds.has(generalLedgerDefinition.id)
+    const isNodeExpanded = expandedNodeIds.has(node.id)
 
     const hasChildren =
-        generalLedgerDefinition.general_ledger_definition &&
-        generalLedgerDefinition.general_ledger_definition.length > 0
+        node.general_ledger_definition &&
+        node.general_ledger_definition.length > 0
 
     const {
         attributes,
@@ -58,7 +55,7 @@ const GeneralLedgerDefinitionParentNode = ({
         transform,
         transition,
         isDragging,
-    } = useSortable({ id: generalLedgerDefinition.id })
+    } = useSortable({ id: node.id })
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -70,7 +67,7 @@ const GeneralLedgerDefinitionParentNode = ({
     const handleChildDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
         if (over && active.id !== over?.id) {
-            onDragEndNested([generalLedgerDefinition.id], active.id, over.id)
+            onDragEndNested([node.id], active.id, over.id)
         }
     }
 
@@ -83,18 +80,17 @@ const GeneralLedgerDefinitionParentNode = ({
         }
         e.stopPropagation()
         if (hasChildren) {
-            toggleNode(generalLedgerDefinition.id, !isNodeExpanded)
+            toggleNode(node.id, !isNodeExpanded)
         }
     }
 
-    const childLength =
-        generalLedgerDefinition.general_ledger_definition?.length
+    const childLength = node.general_ledger_definition?.length
 
-    const generalLegerData = generalLedgerDefinition.general_ledger_definition
+    const generalLegerData = node.general_ledger_definition
 
     const hasGeneralChildren =
-        generalLedgerDefinition.general_ledger_definition &&
-        generalLedgerDefinition.general_ledger_definition?.length > 0
+        node.general_ledger_definition &&
+        node.general_ledger_definition?.length > 0
 
     return (
         <div
@@ -125,14 +121,10 @@ const GeneralLedgerDefinitionParentNode = ({
                     </div>
                 )}
                 <div className="grow flex flex-col">
-                    <h1 className="font-bold text-xl">
-                        {generalLedgerDefinition.name}
-                    </h1>
-                    {generalLedgerDefinition.description && (
+                    <h1 className="font-bold text-xl">{node.name}</h1>
+                    {node.description && (
                         <span className="text-xs text-accent-foreground/70">
-                            <RawDescription
-                                content={generalLedgerDefinition.description}
-                            />
+                            <RawDescription content={node.description} />
                         </span>
                     )}
                     {hasChildren && (
@@ -141,10 +133,7 @@ const GeneralLedgerDefinitionParentNode = ({
                         </p>
                     )}
                 </div>
-                <GeneralLedgerDefinitionActions
-                    refetch={refetch}
-                    node={generalLedgerDefinition}
-                />
+                <GeneralLedgerDefinitionActions node={node} />
             </div>
             {hasChildren && isNodeExpanded && (
                 <DndContext
@@ -155,7 +144,7 @@ const GeneralLedgerDefinitionParentNode = ({
                     {hasGeneralChildren && (
                         <SortableContext
                             items={
-                                generalLedgerDefinition.general_ledger_definition?.map(
+                                node.general_ledger_definition?.map(
                                     (child) => child.id
                                 ) || []
                             }
@@ -171,9 +160,7 @@ const GeneralLedgerDefinitionParentNode = ({
                                     <GeneralLedgerNode
                                         key={child.id}
                                         node={child}
-                                        parentPath={[
-                                            generalLedgerDefinition.id,
-                                        ]}
+                                        parentPath={[node.id]}
                                         onDragEndNested={onDragEndNested}
                                         depth={0}
                                     />

@@ -2,7 +2,6 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
 import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
 
-import { GeneralLedgerDefinitionCreateUpdateFormModal } from '@/components/forms/general-ledger-definition/general-ledger-definition-create-update-form'
 import {
     DotsHorizontalIcon,
     EditPencilIcon,
@@ -23,12 +22,10 @@ import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledg
 
 type GeneralLedgerDefinitionActionsProps = {
     node: IGeneralLedgerDefinition
-    refetch?: () => void
 }
 
 const GeneralLedgerDefinitionActions = ({
     node,
-    refetch,
 }: GeneralLedgerDefinitionActionsProps) => {
     const { onOpen } = useConfirmModalStore()
 
@@ -38,9 +35,7 @@ const GeneralLedgerDefinitionActions = ({
         setOnCreate,
         setOpenCreateGeneralLedgerModal,
         setIsReadyOnly,
-        onCreate,
-        isReadOnly,
-        openCreateGeneralLedgerModal,
+        setSelectedGeneralLedgerDefinition,
     } = useGeneralLedgerStore()
 
     const {
@@ -51,26 +46,6 @@ const GeneralLedgerDefinitionActions = ({
     return (
         <div>
             <DropdownMenu>
-                <GeneralLedgerDefinitionCreateUpdateFormModal
-                    onOpenChange={setOpenCreateGeneralLedgerModal}
-                    open={openCreateGeneralLedgerModal}
-                    title={`${onCreate ? 'Create' : 'Update'} General Ledger Definition`}
-                    description={`Fill out the form to ${onCreate ? 'add a new' : 'edit'} General Ledger Definition.`}
-                    formProps={{
-                        defaultValues: onCreate ? {} : node,
-                        generalLedgerDefinitionEntriesId: node.id,
-                        generalLedgerAccountsGroupingId:
-                            node.general_ledger_accounts_grouping_id,
-                        generalLedgerDefinitionId: onCreate
-                            ? undefined
-                            : node.id,
-                        readOnly: isReadOnly,
-                        onSuccess: () => {
-                            refetch?.()
-                        },
-                    }}
-                />
-
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="outline"
@@ -96,9 +71,12 @@ const GeneralLedgerDefinitionActions = ({
                         <DropdownMenuItem
                             onClick={(e) => {
                                 e.stopPropagation()
+                                e.preventDefault()
                                 setIsReadyOnly?.(false)
                                 setOnCreate?.(true)
+                                setSelectedGeneralLedgerDefinitionId(node.id)
                                 setOpenCreateGeneralLedgerModal?.(true)
+                                setSelectedGeneralLedgerDefinition?.(node)
                             }}
                         >
                             <PlusIcon className="mr-2">+</PlusIcon>
@@ -109,7 +87,12 @@ const GeneralLedgerDefinitionActions = ({
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     setOnCreate?.(false)
+                                    setIsReadyOnly?.(false)
                                     setOpenCreateGeneralLedgerModal?.(true)
+                                    setSelectedGeneralLedgerDefinitionId?.(
+                                        node.id
+                                    )
+                                    setSelectedGeneralLedgerDefinition?.(node)
                                 }}
                             >
                                 <EditPencilIcon className="mr-2" />

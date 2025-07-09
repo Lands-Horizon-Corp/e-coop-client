@@ -109,10 +109,6 @@ const GeneralLedgerNode = ({
     }
 
     useEffect(() => {
-        const isAccountNode = node.accounts?.find(
-            (account) => account.id === targetNodeId
-        )
-        console.log(isAccountNode, targetNodeId)
         if (targetNodeId === node.id && ref.current) {
             ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
             clearTargetNodeIdAfterScroll(node.id)

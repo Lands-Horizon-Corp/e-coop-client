@@ -13,6 +13,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
+import { GeneralLedgerDefinitionCreateUpdateFormModal } from '@/components/forms/general-ledger-definition/general-ledger-definition-create-update-form'
 import { MagnifyingGlassIcon } from '@/components/icons'
 import AccountPicker from '@/components/pickers/account-picker'
 import { Button } from '@/components/ui/button'
@@ -67,11 +68,16 @@ const GeneralLedgerTreeViewer = ({
         setGEneralLedgerDefitions,
         generalLedgerDefitions,
         expandPath,
+        setOpenCreateGeneralLedgerModal,
+        onCreate,
+        isReadOnly,
         setTargetNodeId,
         resetExpansion,
         setAddAccountPickerModalOpen,
         openAddAccountPickerModal,
         selectedGeneralLedgerDefinitionId,
+        openCreateGeneralLedgerModal,
+        selectedGeneralLedgerDefinition: node,
     } = useGeneralLedgerStore()
 
     const [searchTerm, setSearchTerm] = useState('')
@@ -134,9 +140,31 @@ const GeneralLedgerTreeViewer = ({
     }
 
     const isSearchOnChanged = searchTerm.length > 0
-
     return (
         <div className="w-full rounded-lg p-4 shadow-md">
+            {node && openCreateGeneralLedgerModal && (
+                <GeneralLedgerDefinitionCreateUpdateFormModal
+                    onOpenChange={setOpenCreateGeneralLedgerModal}
+                    open={openCreateGeneralLedgerModal}
+                    title={`${onCreate ? 'Create' : 'Update'} General Ledger Definition`}
+                    description={`Fill out the form to ${onCreate ? 'add a new' : 'edit'} General Ledger Definition.`}
+                    formProps={{
+                        defaultValues: onCreate ? {} : node,
+                        generalLedgerDefinitionEntriesId:
+                            node.general_ledger_definition_entries_id,
+                        generalLedgerAccountsGroupingId:
+                            node.general_ledger_accounts_grouping_id,
+                        generalLedgerDefinitionId: onCreate
+                            ? undefined
+                            : node.id,
+                        readOnly: isReadOnly,
+                        onSuccess: () => {
+                            refetch?.()
+                        },
+                    }}
+                />
+            )}
+
             <AccountPicker
                 open={openAddAccountPickerModal}
                 onOpenChange={setAddAccountPickerModalOpen}
@@ -181,9 +209,8 @@ const GeneralLedgerTreeViewer = ({
                         return (
                             <GeneralLedgerDefinitionParentNode
                                 key={node.id}
-                                generalLedgerDefinition={node}
+                                node={node}
                                 onDragEndNested={moveNode}
-                                refetch={refetch}
                             />
                         )
                     })}
