@@ -32,7 +32,11 @@ const HoveruserInfo = ({ userId, defaultValue }: Props) => {
                             <PreviewMediaWrapper media={user?.media}>
                                 <ImageDisplay
                                     src={user?.media?.download_url}
-                                    fallback={user?.user_name.charAt(0) ?? '-'}
+                                    fallback={
+                                        user?.full_name !== undefined
+                                            ? user?.full_name.charAt(0)
+                                            : '-'
+                                    }
                                     className="size-16 border-2 border-gray-700"
                                 />
                             </PreviewMediaWrapper>
@@ -69,7 +73,10 @@ const HoveruserInfo = ({ userId, defaultValue }: Props) => {
                             </div>
                             <div className="text-xs text-muted-foreground/60">
                                 <span>
-                                    Joined {toReadableDate(user.created_at)}
+                                    Joined{' '}
+                                    {user?.created_at
+                                        ? toReadableDate(user.created_at)
+                                        : ''}
                                 </span>
                             </div>
                         </div>
