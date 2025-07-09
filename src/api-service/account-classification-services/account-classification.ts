@@ -1,9 +1,10 @@
+import qs from 'query-string'
+
 import {
     IAccountClassification,
     IAccountClassificationPaginated,
     IAccountClassificationRequest,
 } from '@/types/coop-types/account-classification'
-import qs from 'query-string'
 
 import { TPagination } from '@/hooks/use-pagination'
 

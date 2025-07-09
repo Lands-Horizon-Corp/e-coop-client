@@ -1,10 +1,11 @@
+import qs from 'query-string'
+
 import { downloadFile } from '@/helpers'
 import {
     IAccount,
     IAccountPaginated,
     IAccountRequest,
 } from '@/types/coop-types/accounts/account'
-import qs from 'query-string'
 
 import { TEntityId } from '@/types'
 

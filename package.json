@@ -112,7 +112,7 @@
         "react-webcam": "^7.2.0",
         "sass": "^1.81.0",
         "sonner": "^1.7.0",
-        "tailwind-merge": "^2.5.5",
+        "tailwind-merge": "^2.6.0",
         "tailwindcss-animate": "^1.0.7",
         "zod": "^3.23.8",
         "zustand": "5.0.0-rc.2"

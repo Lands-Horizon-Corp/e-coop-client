@@ -12,7 +12,7 @@
         }
     ],
     "importOrder": [
-        "^(react|zod|sonner|@tanstack/react-query)$",
+        "^(react|zod|sonner|@tanstack/react-query|query-string)$",
         "^@hookform/(.*)$",
         "<THIRD_PARTY_MODULES>",
         "^@/components/(.*)$",

@@ -32,7 +32,7 @@ export interface IAPIHook<TData = unknown, TError = unknown>
     extends IOperationCallbacks<TData, TError> {}
 
 export interface IAPIFilteredPaginatedHook<TData = unknown, TError = unknown>
-    extends IQueryProps,
+    extends IQueryProps<TData>,
         IOperationCallbacks<TData, TError>,
         IFilterPaginatedHookProps {}
 
