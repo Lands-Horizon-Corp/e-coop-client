@@ -1,4 +1,9 @@
-import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
+import { toast } from 'sonner'
+
+import {
+    IGeneralLedgerDefinition,
+    IGeneralLedgerUpdateIndexRequest,
+} from '@/types/coop-types/general-ledger-definitions'
 import { arrayMove } from '@dnd-kit/sortable'
 import { create } from 'zustand'
 
@@ -13,6 +18,7 @@ export interface GeneralLedgerAccountsGroupingStore {
     expandedNodeIds: Set<string>
     targetNodeId: string | null
     selectedGeneralLedgerDefinition: IGeneralLedgerDefinition | null
+    changedGeneralLedgerItems: IGeneralLedgerUpdateIndexRequest[]
 
     setGeneralLedgerAccountsGroupingId: (paymentType: string) => void
     setSelectedGeneralLedgerDefinitionId: (id: string | null) => void
@@ -37,7 +43,11 @@ export interface GeneralLedgerAccountsGroupingStore {
     setSelectedGeneralLedgerDefinition?: (
         generalLedgerDefinitions: IGeneralLedgerDefinition
     ) => void
+    setChangedGeneralLedgerItems: (
+        data: IGeneralLedgerUpdateIndexRequest[]
+    ) => void
 }
+
 export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
     (set, get) => ({
         targetNodeId: null,
@@ -47,7 +57,10 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
         generalLedgerAccountsGroupingId: null,
         selectedGeneralLedgerDefinition: null,
         selectedGeneralLedgerDefinitionId: null,
+        changedGeneralLedgerItems: [],
 
+        setChangedGeneralLedgerItems: (data) =>
+            set({ changedGeneralLedgerItems: data }),
         setSelectedGeneralLedgerDefinitionId: (id) =>
             set({ selectedGeneralLedgerDefinitionId: id }),
         clearSelectedGeneralLedgerDefinitionId: () =>
@@ -58,10 +71,11 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
             set({ openAddAccountPickerModal: open }),
         setGEneralLedgerDefitions: (generalLedgerDefitions) =>
             set({ generalLedgerDefitions }),
-        moveGeneralLedgerNode: (path, activeId, overId) => {
+        moveGeneralLedgerNode: async (path, activeId, overId) => {
             const prevLedgerData = get().generalLedgerDefitions
             const newLedger = structuredClone(prevLedgerData)
 
+            // Helper to locate the nested target array
             const findTargetArray = (
                 data: IGeneralLedgerDefinition[],
                 path: string[]
@@ -79,7 +93,7 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
                 path.length === 0 ? newLedger : findTargetArray(newLedger, path)
 
             if (!targetArray) {
-                console.error('Target array not found for drag operation.')
+                toast.error('Target array not found for drag operation.')
                 return
             }
 
@@ -91,7 +105,12 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
             const newIndex = sorted.findIndex((item) => item.id === overId)
 
             if (oldIndex === -1 || newIndex === -1) {
-                console.warn('Invalid drag indexes.')
+                toast.warning('Invalid drag indexes.')
+                return
+            }
+
+            if (oldIndex === newIndex) {
+                toast.info('No change in position.')
                 return
             }
 
@@ -101,6 +120,19 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
                     index: i,
                 })
             )
+
+            const changedItems = updated
+                .filter(
+                    (item, i) =>
+                        item.id !== sorted[i]?.id ||
+                        item.index !== sorted[i]?.index
+                )
+                .map((item) => ({
+                    id: item.id,
+                    index: item.index,
+                }))
+
+            set({ changedGeneralLedgerItems: changedItems })
 
             const updateTree = (
                 nodes: IGeneralLedgerDefinition[],

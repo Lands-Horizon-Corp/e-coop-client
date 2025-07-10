@@ -51,6 +51,11 @@ export interface IGeneralLedgerDefinitionRequest {
     beginning_balance_of_the_year_credit?: number
     beginning_balance_of_the_year_debit?: number
 
-    general_ledger_definition_entries_id: TEntityId
+    general_ledger_definition_entries_id?: TEntityId
     general_ledger_accounts_grouping_id: TEntityId
+}
+
+export interface IGeneralLedgerUpdateIndexRequest {
+    id: TEntityId
+    index: number
 }
