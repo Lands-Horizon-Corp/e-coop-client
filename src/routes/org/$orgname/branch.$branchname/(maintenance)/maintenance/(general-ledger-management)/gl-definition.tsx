@@ -6,10 +6,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { SigiBookIcon } from '@/components/icons'
 import { Accordion, AccordionTrigger } from '@/components/ui/accordion'
+import { Skeleton } from '@/components/ui/skeleton'
 
-import { useGetAllGeneralLedgerAccountsGroupings } from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
+import { useGetAllGeneralLedgerAccountsGroupings } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-accounts-groupings'
 
-import GeneralLedgerTreeViewer from '../../../(employee)/accounting/-components/general-ledger-tree'
+import GeneralLedgerTreeViewer from './-components/general-ledger-tree'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition'
@@ -21,6 +22,8 @@ function RouteComponent() {
     const {
         data: generalLedgerGropings,
         refetch: refetchGeneralLedgerAccountsGrouping,
+        isRefetching: isRefetchingGeneralLedgerAccountsGrouping,
+        isLoading: isLoadingGeneralLedgerAccountsGrouping,
     } = useGetAllGeneralLedgerAccountsGroupings()
 
     const { setGeneralLedgerAccountsGroupingId } = useGeneralLedgerStore()
@@ -52,40 +55,67 @@ function RouteComponent() {
                     opacity: 0.1,
                 }}
             />
-            <Accordion
-                type="single"
-                collapsible
-                className="w-full space-y-2"
-                defaultValue="item-1"
-            >
-                {generalLedgerGropings?.map((grouping) => (
-                    <AccordionItem
-                        key={grouping.id}
-                        value={grouping.id}
-                        className="w-full bg-sidebar/50 p-5 rounded-xl"
-                    >
-                        <AccordionTrigger
-                            onClick={() =>
-                                setGeneralLedgerAccountsGroupingId(grouping.id)
-                            }
-                            className="w-full text-2xl font-bold text-left text-accent-foreground/80"
+            {isLoadingGeneralLedgerAccountsGrouping ? (
+                <div className="flex flex-col gap-2 mb-5 w-full">
+                    {Array.from({ length: 4 }).map((_, index) => (
+                        <GeneralLederSkeleton key={index} />
+                    ))}
+                </div>
+            ) : (
+                <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full space-y-2"
+                    defaultValue="item-1"
+                >
+                    {generalLedgerGropings?.map((grouping) => (
+                        <AccordionItem
+                            key={grouping.id}
+                            value={grouping.id}
+                            className="w-full bg-sidebar/50 p-5 rounded-xl"
                         >
-                            {grouping.name}
-                        </AccordionTrigger>
-                        <AccordionContent className="w-full">
-                            <p className="text-sm">{grouping.description}</p>
-                            {hasGeneralLedgerGropings && (
-                                <GeneralLedgerTreeViewer
-                                    refetch={refetch}
-                                    treeData={
-                                        grouping.general_ledger_definition
-                                    }
-                                />
-                            )}
-                        </AccordionContent>
-                    </AccordionItem>
-                ))}
-            </Accordion>
+                            <AccordionTrigger
+                                onClick={() =>
+                                    setGeneralLedgerAccountsGroupingId(
+                                        grouping.id
+                                    )
+                                }
+                                className="w-full text-2xl font-bold text-left text-accent-foreground/80"
+                            >
+                                {grouping.name}
+                            </AccordionTrigger>
+                            <AccordionContent className="w-full">
+                                <p className="text-sm">
+                                    {grouping.description}
+                                </p>
+                                {hasGeneralLedgerGropings && (
+                                    <GeneralLedgerTreeViewer
+                                        refetch={refetch}
+                                        treeData={
+                                            grouping.general_ledger_definition
+                                        }
+                                        isRefetchingGeneralLedgerAccountsGrouping={
+                                            isRefetchingGeneralLedgerAccountsGrouping
+                                        }
+                                    />
+                                )}
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            )}
         </PageContainer>
+    )
+}
+
+export const GeneralLederSkeleton = () => {
+    return (
+        <Skeleton className="flex w-full gap-x-2 bg-secondary/30 p-5 rounded-xl">
+            <div className="flex-1 space-y-1.5">
+                <Skeleton className="h-5 w-1/2" />
+                <Skeleton className="h-5 w-3/4" />
+            </div>
+            <Skeleton className="size-5" />
+        </Skeleton>
     )
 }

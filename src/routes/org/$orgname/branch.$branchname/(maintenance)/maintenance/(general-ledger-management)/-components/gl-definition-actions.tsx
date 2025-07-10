@@ -18,7 +18,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
+import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-definition'
 
 type GeneralLedgerDefinitionActionsProps = {
     node: IGeneralLedgerDefinition

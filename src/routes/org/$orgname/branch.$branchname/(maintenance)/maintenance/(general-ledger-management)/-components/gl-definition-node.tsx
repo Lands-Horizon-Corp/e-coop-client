@@ -1,0 +1,254 @@
+import { useEffect, useRef } from 'react'
+
+import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
+import {
+    DndContext,
+    DragEndEvent,
+    PointerSensor,
+    closestCorners,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core'
+import {
+    SortableContext,
+    useSortable,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
+import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
+import {
+    ArrowChevronDown,
+    ArrowChevronRight,
+    DragHandleIcon,
+} from '@/components/icons'
+import RawDescription from '@/components/raw-description'
+import { Card } from '@/components/ui/card'
+
+import AccountsCardList from './gl-account-card'
+import GeneralLedgerDefinitionActions from './gl-definition-actions'
+
+interface GeneralLedgerTreeNodeProps {
+    node: IGeneralLedgerDefinition
+    handleOpenAccountPicker?: () => void
+    parentPath: string[]
+    onDragEndNested: (
+        path: string[],
+        oldIndex: number | string,
+        newIndex: number | string
+    ) => void
+    renderNestedAsSimpleList?: boolean
+    depth?: number
+    refetch?: () => void
+}
+
+const GeneralLedgerNode = ({
+    node,
+    depth = 0,
+    handleOpenAccountPicker,
+    onDragEndNested,
+    parentPath,
+}: GeneralLedgerTreeNodeProps) => {
+    const ref = useRef<HTMLDivElement>(null)
+
+    const {
+        expandedNodeIds,
+        targetNodeId,
+        clearTargetNodeIdAfterScroll,
+        toggleNode,
+    } = useGeneralLedgerStore()
+
+    const isNodeExpanded = expandedNodeIds.has(node.id)
+
+    const dragHandleRef = useRef<HTMLDivElement>(null)
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: node.id })
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    }
+
+    const grandchildSensors = useSensors(useSensor(PointerSensor))
+
+    const handleGrandchildDragEnd = (event: DragEndEvent) => {
+        const { active, over = { id: '' } } = event
+        if (over && active.id !== over.id) {
+            const currentPath = [...parentPath, node.id]
+            onDragEndNested(currentPath, active.id, over.id)
+        }
+    }
+
+    const hasChildren =
+        node.general_ledger_definition &&
+        node.general_ledger_definition.length > 0
+
+    const isFirstLevel = depth === 0
+    const childLength = node.general_ledger_definition?.length
+    const hasAccountNode = node.accounts && node.accounts.length > 0
+
+    const toggleAccordion = (e: React.MouseEvent) => {
+        if (
+            dragHandleRef.current &&
+            dragHandleRef.current.contains(e.target as Node)
+        ) {
+            return
+        }
+        e.stopPropagation()
+        if (hasChildren || hasAccountNode) {
+            toggleNode(node.id, !isNodeExpanded)
+        }
+    }
+
+    useEffect(() => {
+        if (targetNodeId === node.id && ref.current) {
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            clearTargetNodeIdAfterScroll(node.id)
+        }
+    }, [targetNodeId, node.id, clearTargetNodeIdAfterScroll])
+
+    const firstLevelItemLabel = childLength
+        ? `${childLength} item${childLength > 1 ? 's' : ''}`
+        : ''
+
+    const firstLevelAccountsLabel = hasAccountNode
+        ? `${node.accounts?.length ?? 0} account${(node.accounts?.length ?? 0) > 1 ? 's' : ''}`
+        : ''
+
+    if (node.general_ledger_definition_entries_id && isFirstLevel) {
+        return null
+    }
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            className={`${isFirstLevel ? '' : 'pt-1.5'} ${isDragging ? 'rounded-lg border-2 border-primary' : ''} `}
+        >
+            <Card
+                className={`flex h-fit border cursor-pointer items-center rounded-md px-3 py-2 duration-200 ${isFirstLevel ? 'mt-1 bg-background border-0 py-5 rounded-lg' : 'mt-0 bg-black'} `}
+                onClick={(event) => {
+                    toggleAccordion(event)
+                }}
+                ref={ref}
+            >
+                <div
+                    ref={dragHandleRef}
+                    {...listeners}
+                    className="cursor-grab mr-2"
+                >
+                    <DragHandleIcon size={16} />
+                </div>
+                {(hasChildren || hasAccountNode) && (
+                    <div className="flex h-full items-center">
+                        <span className="mr-2">
+                            {isNodeExpanded ? (
+                                <ArrowChevronDown size={16} />
+                            ) : (
+                                <ArrowChevronRight size={16} />
+                            )}
+                        </span>
+                    </div>
+                )}
+                <div className="flex flex-1 flex-col">
+                    <span>
+                        <div className="flex items-center gap-x-2">
+                            <h1
+                                className={` ${isFirstLevel ? 'text-xl font-semibold' : `text-md font-semibold`}`}
+                            >
+                                {node.name}
+                            </h1>
+                            {!isFirstLevel && (
+                                <span className="text-xs text-accent-foreground/50">
+                                    {node && node.general_ledger_type && (
+                                        <GeneralLedgerTypeBadge
+                                            type={node.general_ledger_type}
+                                        />
+                                    )}
+                                    {!node ||
+                                        (!node.general_ledger_type && (
+                                            <div>
+                                                Loading type... or Type not
+                                                found
+                                            </div>
+                                        ))}
+                                </span>
+                            )}
+                        </div>
+                    </span>
+                    {node.description && (
+                        <span className="text-xs text-accent-foreground/70">
+                            <RawDescription content={node.description} />
+                        </span>
+                    )}
+
+                    {isFirstLevel && (
+                        <p className="text-xs text-accent-foreground/30">
+                            {firstLevelItemLabel}
+                            {childLength && hasAccountNode ? ' • ' : ''}
+                            {firstLevelAccountsLabel}
+                        </p>
+                    )}
+
+                    {isNodeExpanded &&
+                        node.accounts &&
+                        node.accounts.length > 0 && (
+                            <AccountsCardList accounts={node.accounts} />
+                        )}
+                    <DndContext
+                        sensors={grandchildSensors}
+                        onDragEnd={handleGrandchildDragEnd}
+                        collisionDetection={closestCorners}
+                    >
+                        {hasChildren && (
+                            <SortableContext
+                                items={
+                                    node.general_ledger_definition?.map(
+                                        (gc) => gc.id
+                                    ) || []
+                                }
+                                strategy={verticalListSortingStrategy}
+                            >
+                                {isNodeExpanded && hasChildren && (
+                                    <div className="ml-4">
+                                        {node.general_ledger_definition?.map(
+                                            (childNode) => (
+                                                <GeneralLedgerNode
+                                                    key={childNode.id}
+                                                    handleOpenAccountPicker={
+                                                        handleOpenAccountPicker
+                                                    }
+                                                    parentPath={[
+                                                        ...parentPath,
+                                                        node.id,
+                                                    ]}
+                                                    onDragEndNested={
+                                                        onDragEndNested
+                                                    }
+                                                    node={childNode}
+                                                    depth={depth + 1}
+                                                />
+                                            )
+                                        )}
+                                    </div>
+                                )}
+                            </SortableContext>
+                        )}
+                    </DndContext>
+                </div>
+                <GeneralLedgerDefinitionActions node={node} />
+            </Card>
+        </div>
+    )
+}
+
+export default GeneralLedgerNode

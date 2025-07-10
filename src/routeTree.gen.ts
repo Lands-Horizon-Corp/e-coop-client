@@ -72,9 +72,8 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerM
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-category'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-occupation'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-group'
@@ -518,29 +517,20 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitat
     } as any,
   )
 
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsImport.update(
+    {
+      id: '/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings',
+      path: '/maintenance/fs-definition-accounts-groupings',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionImport.update(
     {
       id: '/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition',
       path: '/maintenance/fs-definition',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingImport.update(
-    {
-      id: '/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping',
-      path: '/maintenance/fs-accounts-grouping',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionImport.update(
-    {
-      id: '/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition',
-      path: '/maintenance/fs-accounts-definition',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
@@ -1072,25 +1062,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition'
-      path: '/maintenance/fs-accounts-definition'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/fs-accounts-definition'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping'
-      path: '/maintenance/fs-accounts-grouping'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/fs-accounts-grouping'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
-    }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
       path: '/maintenance/fs-definition'
       fullPath: '/org/$orgname/branch/$branchname/maintenance/fs-definition'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings'
+      path: '/maintenance/fs-definition-accounts-groupings'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': {
@@ -1301,9 +1284,8 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
@@ -1387,12 +1369,10 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute:
@@ -1495,9 +1475,8 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-accounts-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-accounts-grouping': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute
   '/org/$orgname/branch/$branchname/maintenance/fs-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
+  '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
@@ -1568,9 +1547,8 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-accounts-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-accounts-grouping': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute
   '/org/$orgname/branch/$branchname/maintenance/fs-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
+  '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
@@ -1647,9 +1625,8 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsDefinitionRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsAccountsGroupingRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
@@ -1726,9 +1703,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
     | '/org/$orgname/branch/$branchname/members/member-types'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-accounts-definition'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-accounts-grouping'
     | '/org/$orgname/branch/$branchname/maintenance/fs-definition'
+    | '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings'
     | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
@@ -1798,9 +1774,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
     | '/org/$orgname/branch/$branchname/members/member-types'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-accounts-definition'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-accounts-grouping'
     | '/org/$orgname/branch/$branchname/maintenance/fs-definition'
+    | '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings'
     | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
@@ -1875,9 +1850,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
@@ -2096,9 +2070,8 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types",
-        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition",
-        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition",
+        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification",
@@ -2251,16 +2224,12 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-definition.tsx",
-      "parent": "/org/$orgname/branch/$branchname"
-    },
-    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-accounts-grouping.tsx",
-      "parent": "/org/$orgname/branch/$branchname"
-    },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code": {

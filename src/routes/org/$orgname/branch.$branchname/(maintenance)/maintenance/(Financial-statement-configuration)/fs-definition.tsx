@@ -2,9 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 
-import { useGetALlFinancialStatement } from '@/hooks/api-hooks/financial-statement-definition'
-
-import FinancialStatementTreeViewer from './-components/financial-statement-tree'
+import { useGetAllFinancialStatementAccountsGroupings } from '@/hooks/api-hooks/financial-statement-definition/use-financial-statement-definition'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
@@ -13,21 +11,13 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    const { data: financialTreeData } = useGetALlFinancialStatement()
+    const { data: getllFinancialStatementDefinitions } =
+        useGetAllFinancialStatementAccountsGroupings()
 
-    if (!financialTreeData || financialTreeData.length === 0) {
-        return (
-            <PageContainer className="flex h-fit w-full flex-row items-start overflow-auto bg-black">
-                <div className="p-4 text-center text-white">
-                    No financial statement data available.
-                </div>
-            </PageContainer>
-        )
-    }
-
-    return (
-        <PageContainer>
-            <FinancialStatementTreeViewer treeData={financialTreeData} />
-        </PageContainer>
+    console.log(
+        'Financial Statement Definitions:',
+        getllFinancialStatementDefinitions
     )
+
+    return <PageContainer>Hello</PageContainer>
 }

@@ -3,7 +3,10 @@ import { toast } from 'sonner'
 
 import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
 import { IAccount } from '@/types/coop-types/accounts/account'
-import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
+import {
+    IGeneralLedgerDefinition,
+    IGeneralLedgerUpdateIndexRequest,
+} from '@/types/coop-types/general-ledger-definitions'
 import {
     DndContext,
     PointerSensor,
@@ -16,16 +19,21 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { GeneralLedgerDefinitionCreateUpdateFormModal } from '@/components/forms/general-ledger-definition/general-ledger-definition-create-update-form'
 import { MagnifyingGlassIcon } from '@/components/icons'
 import AccountPicker from '@/components/pickers/account-picker'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import { useConnectAccountToGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
+import {
+    useConnectAccountToGeneralLedgerDefinition,
+    useUpdateIndexGeneralLedgerDefinition,
+} from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-definition'
 
-import GeneralLedgerDefinitionParentNode from './general-ledger-definition-parent-node'
+import GeneralLedgerDefinitionNode from './gl-definition-node'
 
 type GeneralLedgerTreeViewerProps = {
     treeData: IGeneralLedgerDefinition[]
     refetch?: () => void
+    isRefetchingGeneralLedgerAccountsGrouping?: boolean
 }
 
 const findNodePathWithAccounts = (
@@ -63,36 +71,51 @@ const findNodePathWithAccounts = (
 const GeneralLedgerTreeViewer = ({
     treeData,
     refetch,
+    isRefetchingGeneralLedgerAccountsGrouping,
 }: GeneralLedgerTreeViewerProps) => {
     const {
-        setGEneralLedgerDefitions,
-        generalLedgerDefitions,
-        expandPath,
-        setOpenCreateGeneralLedgerModal,
         onCreate,
         isReadOnly,
-        setTargetNodeId,
+        expandPath,
         resetExpansion,
-        setAddAccountPickerModalOpen,
+        setTargetNodeId,
+        generalLedgerDefitions,
         openAddAccountPickerModal,
-        selectedGeneralLedgerDefinitionId,
+        setGEneralLedgerDefitions,
+        setAddAccountPickerModalOpen,
         openCreateGeneralLedgerModal,
+        setOpenCreateGeneralLedgerModal,
+        selectedGeneralLedgerDefinitionId,
         selectedGeneralLedgerDefinition: node,
+        changedGeneralLedgerItems,
+        setChangedGeneralLedgerItems,
     } = useGeneralLedgerStore()
 
     const [searchTerm, setSearchTerm] = useState('')
 
+    const { mutateAsync: updateIndex, isPending } =
+        useUpdateIndexGeneralLedgerDefinition({
+            onSuccess: () => {
+                refetch?.()
+                setChangedGeneralLedgerItems([])
+                toast.success(
+                    'General Ledger Definition Accounts Grouping Index Updated'
+                )
+            },
+        })
+
+    const { mutateAsync: addAccountsToGeneralDefinition, isSuccess } =
+        useConnectAccountToGeneralLedgerDefinition({
+            onSuccess: () => {
+                refetch?.()
+            },
+        })
+
     const moveNode = useGeneralLedgerStore(
         (state) => state.moveGeneralLedgerNode
     )
-    const { mutateAsync: addAccountsToGeneralDefinition, isSuccess } =
-        useConnectAccountToGeneralLedgerDefinition()
 
-    useEffect(() => {
-        if (treeData ?? false) {
-            setGEneralLedgerDefitions(treeData)
-        }
-    }, [treeData])
+    const topLevelSensors = useSensors(useSensor(PointerSensor))
 
     const handleSearch = () => {
         if (!searchTerm.trim()) {
@@ -115,8 +138,6 @@ const GeneralLedgerTreeViewer = ({
         }
     }
 
-    const topLevelSensors = useSensors(useSensor(PointerSensor))
-
     const handleAccountSelection = async (account: IAccount) => {
         if (account && selectedGeneralLedgerDefinitionId) {
             await addAccountsToGeneralDefinition({
@@ -131,6 +152,12 @@ const GeneralLedgerTreeViewer = ({
         }
     }
 
+    useEffect(() => {
+        if (treeData ?? false) {
+            setGEneralLedgerDefitions(treeData)
+        }
+    }, [treeData])
+
     if (!treeData || treeData.length === 0) {
         return (
             <div className="p-4 text-center text-gray-500">
@@ -140,6 +167,15 @@ const GeneralLedgerTreeViewer = ({
     }
 
     const isSearchOnChanged = searchTerm.length > 0
+
+    const handleUpdateIndex = async (
+        changedGeneralLedgerItems: IGeneralLedgerUpdateIndexRequest[]
+    ) => {
+        await updateIndex(changedGeneralLedgerItems)
+    }
+
+    const hasChangedItems = changedGeneralLedgerItems.length > 0
+
     return (
         <div className="w-full rounded-lg p-4 shadow-md">
             {node && openCreateGeneralLedgerModal && (
@@ -151,7 +187,8 @@ const GeneralLedgerTreeViewer = ({
                     formProps={{
                         defaultValues: onCreate ? {} : node,
                         generalLedgerDefinitionEntriesId:
-                            node.general_ledger_definition_entries_id,
+                            node.general_ledger_definition_entries_id ??
+                            node.id,
                         generalLedgerAccountsGroupingId:
                             node.general_ledger_accounts_grouping_id,
                         generalLedgerDefinitionId: onCreate
@@ -193,6 +230,22 @@ const GeneralLedgerTreeViewer = ({
                     <MagnifyingGlassIcon className="mr-2" />
                     Search
                 </Button>
+                <Button
+                    disabled={
+                        !hasChangedItems ||
+                        isPending ||
+                        isRefetchingGeneralLedgerAccountsGrouping
+                    }
+                    className="rounded-xl"
+                    size="sm"
+                    onClick={() => handleUpdateIndex(changedGeneralLedgerItems)}
+                >
+                    {isPending ? (
+                        <LoadingSpinner className="animate-spin" />
+                    ) : (
+                        'Save Changes'
+                    )}
+                </Button>
             </div>
             <DndContext
                 sensors={topLevelSensors}
@@ -207,9 +260,11 @@ const GeneralLedgerTreeViewer = ({
                 >
                     {generalLedgerDefitions.map((node) => {
                         return (
-                            <GeneralLedgerDefinitionParentNode
+                            <GeneralLedgerDefinitionNode
                                 key={node.id}
                                 node={node}
+                                depth={0}
+                                parentPath={[]}
                                 onDragEndNested={moveNode}
                             />
                         )

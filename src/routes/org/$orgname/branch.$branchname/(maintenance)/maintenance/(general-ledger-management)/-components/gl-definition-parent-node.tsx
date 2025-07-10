@@ -24,8 +24,8 @@ import {
 } from '@/components/icons'
 import RawDescription from '@/components/raw-description'
 
-import GeneralLedgerDefinitionActions from './general-ledger-definition-actions'
-import GeneralLedgerNode from './general-ledger-definition-node'
+import GeneralLedgerDefinitionActions from './gl-definition-actions'
+import GeneralLedgerNode from './gl-definition-node'
 
 type GeneralLedgerDefinitionParentNodeProps = {
     node: IGeneralLedgerDefinition
@@ -88,6 +88,10 @@ const GeneralLedgerDefinitionParentNode = ({
 
     const generalLegerData = node.general_ledger_definition
 
+    const excludeLedgerWithEntries = generalLegerData?.filter((child) => {
+        return child.general_ledger_definition_entries_id
+    })
+
     const hasGeneralChildren =
         node.general_ledger_definition &&
         node.general_ledger_definition?.length > 0
@@ -122,6 +126,8 @@ const GeneralLedgerDefinitionParentNode = ({
                 )}
                 <div className="grow flex flex-col">
                     <h1 className="font-bold text-xl">{node.name}</h1>
+                    <h1 className="font-bold text-xl">{node.id}</h1>
+
                     {node.description && (
                         <span className="text-xs text-accent-foreground/70">
                             <RawDescription content={node.description} />
@@ -156,7 +162,7 @@ const GeneralLedgerDefinitionParentNode = ({
                                 <p className="text-xs text-accent-foreground/30">
                                     {childLength} items
                                 </p>
-                                {generalLegerData?.map((child) => (
+                                {excludeLedgerWithEntries?.map((child) => (
                                     <GeneralLedgerNode
                                         key={child.id}
                                         node={child}
