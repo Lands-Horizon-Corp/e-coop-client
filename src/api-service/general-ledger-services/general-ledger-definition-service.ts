@@ -1,19 +1,12 @@
-import { IGeneralLedgerAccountsGrouping } from '@/types/coop-types/general-ledger-accounts-grouping'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
+    IGeneralLedgerUpdateIndexRequest,
 } from '@/types/coop-types/general-ledger-definitions'
 
 import { TEntityId } from '@/types'
 
 import APIService from '../api-service'
-
-export const getAllGeneralLedgerAccountsGrouping = async () => {
-    const response = await APIService.get<IGeneralLedgerAccountsGrouping[]>(
-        `/general-ledger-accounts-grouping`
-    )
-    return response.data
-}
 
 export const getGeneralLedgerDefinitionById = async (
     generalLedgerDefinitionId: TEntityId
@@ -75,4 +68,18 @@ export const connectAccountToGeneralLedgerDefinition = async (
         `/general-ledger-definition/${generalLedgerDefinitionId}/account/${accountId}/connect`
     )
     return response.data
+}
+
+export const generalLedgerUpdateIndex = async (
+    changedItems: IGeneralLedgerUpdateIndexRequest[]
+): Promise<IGeneralLedgerDefinition> => {
+    const response = await Promise.all(
+        changedItems.map((item) =>
+            APIService.put<
+                { generalLedgerDefinitionId: TEntityId; index: number },
+                IGeneralLedgerDefinition
+            >(`/general-ledger-definition/${item.id}/index/${item.index}`)
+        )
+    )
+    return response[0].data
 }

@@ -1,9 +1,10 @@
+import qs from 'query-string'
+
 import {
     createAPICollectionService,
     createAPICrudService,
 } from '@/factory/api-factory-service'
 import { downloadFileService } from '@/helpers'
-import qs from 'query-string'
 
 import { IMemberGender, IMemberGenderRequest, TEntityId } from '@/types'
 

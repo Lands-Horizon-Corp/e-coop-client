@@ -1,8 +1,9 @@
+import qs from 'query-string'
+
 import {
     ITransaction,
     ITransactionPaginated,
 } from '@/types/coop-types/transaction'
-import qs from 'query-string'
 
 import { IMemberAccountingLedger, TEntityId } from '@/types'
 

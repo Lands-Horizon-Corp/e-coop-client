@@ -3,7 +3,11 @@ import { toast } from 'sonner'
 
 import { AccountServices } from '@/api-service/accounting-services'
 import { serverRequestErrExtractor } from '@/helpers'
-import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
+import {
+    IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IQueryProps,
+} from '@/types/api-hooks-types'
 import {
     IAccount,
     IAccountPaginated,
@@ -40,6 +44,33 @@ export const useAccountById = (
         },
         enabled,
         retry: 1,
+    })
+}
+
+export const useAccount = ({
+    id,
+    enabled,
+    showMessage = true,
+    ...other
+}: IAPIHook<IAccount> & IQueryProps<IAccount> & { id: TEntityId }) => {
+    return useQuery<IAccount, string>({
+        queryKey: ['account', id],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                AccountServices.getAccountById(id)
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        enabled,
+        retry: 1,
+        ...other,
     })
 }
 

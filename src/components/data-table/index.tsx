@@ -34,6 +34,7 @@ interface ITableProps<TData> extends IClassProps {
 const DataTable = <TData,>({
     table,
     className,
+    rowClassName,
     isScrollable,
     isStickyHeader,
     isStickyFooter,
@@ -91,6 +92,7 @@ const DataTable = <TData,>({
                     headerGroups={table.getHeaderGroups()}
                 />
                 <DataTableBody
+                    rowClassName={rowClassName}
                     onRowClick={onRowClick}
                     rows={table.getRowModel().rows}
                     colCount={table.getVisibleLeafColumns().length}

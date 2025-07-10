@@ -24,6 +24,7 @@ import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 import MemberInfoBanner from './banners/member-info-banner'
+import MemberAccountSummary from './member-account-summary'
 import MemberFinancialInfo from './member-financial-info'
 import MemberMembershipInfo from './member-general-membership-info'
 import MemberGovernmentBenefits from './member-government-benefits-info'
@@ -47,6 +48,27 @@ const memberInfoTabs: {
         }
     ) => ReactNode
 }[] = [
+    {
+        value: 'accounts-summary',
+        title: 'Accounts Summary',
+        Icon: BankIcon,
+        Component: (props) => (
+            <MemberAccountSummary
+                memberProfileId={props.profileId}
+                {...props}
+            />
+        ),
+    },
+    {
+        value: 'loans-info',
+        title: 'Loans Info',
+        Icon: BankIcon,
+        Component: () => (
+            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                <p className="text-sm">Loans</p>
+            </div>
+        ),
+    },
     {
         value: 'general-infos',
         title: 'General/Membership',
@@ -83,16 +105,6 @@ const memberInfoTabs: {
         Icon: UserPlusIcon,
         Component: (props) => <RecruitedMembers {...props} />,
     },
-    {
-        value: 'accounts',
-        title: 'Accounts Info',
-        Icon: BankIcon,
-        Component: () => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">Accounts</p>
-            </div>
-        ),
-    },
 ]
 
 const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
@@ -125,7 +137,10 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
                     )}
                 </>
             )}
-            <Tabs defaultValue="general-infos" className="mt-2 flex-1 flex-col">
+            <Tabs
+                defaultValue="accounts-summary"
+                className="mt-2 flex-1 flex-col"
+            >
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {memberInfoTabs.map((tab) => (
@@ -169,7 +184,8 @@ export const MemberOverallInfoModal = ({
             {...props}
             titleClassName="hidden"
             descriptionClassName="hidden"
-            className={cn('!max-w-[90vw]', className)}
+            closeButtonClassName="hidden"
+            className={cn('!max-w-[90vw] p-3', className)}
         >
             <MemberOverallInfo {...overallInfoProps} />
         </Modal>

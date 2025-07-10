@@ -75,6 +75,13 @@ export * from './transaction-entry'
 
 export * from './loan-types'
 
+/* Ledgers */
+export * from './general-ledger'
+
 /* Permissions */
 export * from './permission'
 export * from './permission-template'
+
+/* General Ledger Definitions */
+export * from './general-ledger-definitions'
+export * from './financial-statement-definition'

@@ -1,5 +1,6 @@
-import { downloadFileService } from '@/helpers'
 import qs from 'query-string'
+
+import { downloadFileService } from '@/helpers'
 
 import {
     IFeedback,

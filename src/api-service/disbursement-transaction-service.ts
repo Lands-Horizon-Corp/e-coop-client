@@ -1,9 +1,10 @@
+import qs from 'query-string'
+
 import {
     IDisbursementTransaction,
     IDisbursementTransactionPaginated,
     IDisbursementTransactionRequest,
 } from '@/types/coop-types/disbursement-transaction'
-import qs from 'query-string'
 
 import { TEntityId } from '@/types'
 

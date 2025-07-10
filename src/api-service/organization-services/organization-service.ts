@@ -1,6 +1,7 @@
+import qs from 'query-string'
+
 import APIService from '@/api-service/api-service'
 import { downloadFileService } from '@/helpers'
-import qs from 'query-string'
 
 import {
     ICreateOrganizationResponse,
