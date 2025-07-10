@@ -1,4 +1,5 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IAccount } from './accounts/account'
 import { GeneralLedgerFinancialStatementNodeType } from './general-ledger-definitions'
 
 export enum FinancialStatementTypeEnum {
@@ -26,7 +27,8 @@ export interface IFinancialStatementDefinition extends IAuditable, ITimeStamps {
 
     parent_id?: TEntityId
     parent?: IFinancialStatementDefinition
-    financial_statement_accounts: IFinancialStatementDefinition[]
+    financial_statement_definition: IFinancialStatementDefinition[]
+    accounts: IAccount[]
 
     name_in_total?: string
     is_posting?: boolean
@@ -35,18 +37,17 @@ export interface IFinancialStatementDefinition extends IAuditable, ITimeStamps {
 
 export interface IFinancialStatementDefinitionRequest {
     name: string
+    financial_statement_type?: FinancialStatementTypeEnum
 
     description?: string
     index?: number
     name_in_total?: string
     is_posting?: boolean
-    exclude?: boolean
-    type: GeneralLedgerFinancialStatementNodeType
-    financial_statement_type?: FinancialStatementTypeEnum
+    beginning_balance_of_the_year_credit?: number
+    beginning_balance_of_the_year_debit?: number
 
-    organization_id?: TEntityId
-    branch_id?: TEntityId
-    financial_statement_definition_id?: TEntityId
+    financial_statement_definition_entries_id?: TEntityId
+    financial_statement_accounts_grouping_id?: TEntityId
 }
 
 export interface IFinancialStatementDefinitionNode

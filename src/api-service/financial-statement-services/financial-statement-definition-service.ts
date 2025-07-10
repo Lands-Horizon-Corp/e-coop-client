@@ -1,16 +1,16 @@
 import {
     IFinancialStatementDefinition,
     IFinancialStatementDefinitionRequest,
-} from '@/types/coop-types/financial-statement-definition'
-
-import { TEntityId } from '@/types'
+    TEntityId,
+} from '@/types'
 
 import APIService from '../api-service'
 
 export const getAllFinancialStatementDefinition = async () => {
-    const response = await APIService.get<IFinancialStatementDefinition[]>(
-        `/general-ledger-definition`
-    )
+    const response =
+        await APIService.get<IFinancialStatementDefinition[]>(
+            `/financial-statement`
+        )
     return response.data
 }
 
@@ -18,7 +18,7 @@ export const getFinancialStatementDefinitionById = async (
     financialStatementDefinitionId: TEntityId
 ): Promise<IFinancialStatementDefinition> => {
     const response = await APIService.get<IFinancialStatementDefinition>(
-        `/general-ledger-definition/${financialStatementDefinitionId}`
+        `/financial-statement/${financialStatementDefinitionId}`
     )
     return response.data
 }
@@ -29,7 +29,7 @@ export const createFinancialStatementDefinition = async (
     const response = await APIService.post<
         IFinancialStatementDefinitionRequest,
         IFinancialStatementDefinition
-    >(`/general-ledger-definition`, payload)
+    >(`/financial-statement`, payload)
     return response.data
 }
 
@@ -40,7 +40,7 @@ export const updateFinancialStatementDefinition = async (
     const response = await APIService.put<
         IFinancialStatementDefinitionRequest,
         IFinancialStatementDefinition
-    >(`/general-ledger-definition/${financialStatementDefinitionId}`, data)
+    >(`/financial-statement/${financialStatementDefinitionId}`, data)
     return response.data
 }
 
@@ -48,7 +48,7 @@ export const deleteFinancialStatementDefinition = async (
     financialStatementDefinitionId: TEntityId
 ): Promise<void> => {
     const response = await APIService.delete<void>(
-        `/general-ledger-definition/${financialStatementDefinitionId}`
+        `/financial-statement/${financialStatementDefinitionId}`
     )
     return response.data
 }
@@ -57,7 +57,7 @@ export const deleteManyFinancialStatementDefinitions = async (
     ids: TEntityId[]
 ): Promise<void> => {
     const response = await APIService.post<{ ids: TEntityId[] }, void>(
-        `/general-ledger-definition/bulk-delete`,
+        `/financial-statement/bulk-delete`,
         { ids }
     )
     return response.data

@@ -1,16 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'sonner'
-
-import { GeneralLedgerDefinitionServices } from '@/api-service/general-ledger-accounts-groupings-services'
-import { serverRequestErrExtractor } from '@/helpers'
-import { IGeneralLedgerAccountsGrouping } from '@/types/coop-types/general-ledger-accounts-grouping'
+import { GeneralLedgerDefinitionServices } from '@/api-service/general-ledger-services'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
+    IGeneralLedgerUpdateIndexRequest,
 } from '@/types/coop-types/general-ledger-definitions'
-import { withCatchAsync } from '@/utils'
 
-import { IAPIHook, IQueryProps, TEntityId } from '@/types'
+import { TEntityId } from '@/types'
 
 import {
     createMutationHook,
@@ -63,30 +58,6 @@ export const useDeleteGeneralLedgerDefinition = createMutationHook<
         deleteMutationInvalidationFn('general-ledger-accounts-groupings', args)
 )
 
-export const useGetAllGeneralLedgerAccountsGroupings = ({
-    enabled,
-    showMessage = true,
-}: IAPIHook<IGeneralLedgerAccountsGrouping[], string> & IQueryProps = {}) => {
-    return useQuery<IGeneralLedgerAccountsGrouping[], string>({
-        queryKey: ['general-ledger-accounts-groupings'],
-        queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                GeneralLedgerDefinitionServices.getAllGeneralLedgerAccountsGrouping()
-            )
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                throw errorMessage
-            }
-
-            return result
-        },
-        initialData: [],
-        enabled,
-        retry: 1,
-    })
-}
-
 export const useConnectAccountToGeneralLedgerDefinition = createMutationHook<
     IGeneralLedgerDefinition,
     string,
@@ -103,4 +74,16 @@ export const useConnectAccountToGeneralLedgerDefinition = createMutationHook<
     'Account Connected to General Ledger Definition',
     (args) =>
         createMutationInvalidateFn('general-ledger-accounts-groupings', args)
+)
+
+export const useUpdateIndexGeneralLedgerDefinition = createMutationHook<
+    IGeneralLedgerDefinition,
+    number,
+    IGeneralLedgerUpdateIndexRequest[]
+>(
+    (payload) =>
+        GeneralLedgerDefinitionServices.generalLedgerUpdateIndex([...payload]),
+    undefined,
+    (args) =>
+        updateMutationInvalidationFn('general-ledger-accounts-groupings', args)
 )
