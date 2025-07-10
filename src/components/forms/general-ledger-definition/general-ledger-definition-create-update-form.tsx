@@ -36,7 +36,7 @@ import {
 import {
     useCreateGeneralLedgerDefinition,
     useUpdateGeneralLedgerDefinition,
-} from '@/hooks/api-hooks/general-ledger-accounts-groupings/use-general-ledger-accounts-groupings'
+} from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-definition'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -85,10 +85,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
 
     // Handle form submission
     const handleSubmit = form.handleSubmit((data) => {
-        if (
-            !generalLedgerAccountsGroupingId ||
-            !generalLedgerDefinitionEntriesId
-        ) {
+        if (!generalLedgerAccountsGroupingId) {
             form.setError('root', {
                 type: 'manual',
                 message: 'Please select a General Ledger Accounts Grouping.',
@@ -103,12 +100,14 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
             general_ledger_accounts_grouping_id:
                 generalLedgerAccountsGroupingId,
         }
+
         if (generalLedgerDefinitionId) {
             UpdateGeneralLedgerDefinition({
-                generalLedgerDefinitionId: generalLedgerDefinitionEntriesId,
+                generalLedgerDefinitionId: generalLedgerDefinitionId,
                 data: request,
             })
         } else {
+            console.log('Creating new GL Definition:', request)
             CreateGeneralLedgerDefinition(request)
         }
     })
