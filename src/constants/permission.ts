@@ -76,8 +76,6 @@ export const PERMISSION_ALL_ACTIONS: {
     },
 ] as const
 
-type ActionType = (typeof PERMISSION_ALL_ACTIONS)[number]['action']
-
 export const PERMISSION_BASE_RESOURCE = [
     'User',
     'UserOrganization',
@@ -100,6 +98,8 @@ export const PERMISSION_BASE_RESOURCE = [
     'Footstep',
     'Approvals',
 ] as const
+
+type ActionType = (typeof PERMISSION_ALL_ACTIONS)[number]['action']
 
 export const PERMISSION_ALL_RESOURCE_ACTION: {
     resource: (typeof PERMISSION_BASE_RESOURCE)[number]
