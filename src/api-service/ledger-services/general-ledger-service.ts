@@ -23,7 +23,7 @@ export const getMemberAccountGeneralLedger = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/general-ledger/member-profile/${memberProfileId}/account/${accountId}`,
+            url: `/general-ledger/member-profile/${memberProfileId}/account/${accountId}/search`,
             query: {
                 sort,
                 filter: filters,

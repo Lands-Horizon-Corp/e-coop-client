@@ -52,7 +52,7 @@ export const useDeletePermissionTemplate = createMutationHook<
     (args) => deleteMutationInvalidationFn('permission-template', args)
 )
 
-export const useMemberClassifications = ({
+export const useAllPermissionTemplates = ({
     enabled,
     showMessage,
 }: IAPIHook<IPermissionTemplate[], string> & IQueryProps = {}) => {
