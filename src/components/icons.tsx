@@ -309,6 +309,7 @@ import {
 import { TiBook as BookIcon } from 'react-icons/ti'
 import {
     VscBracketError as BracketErrorIcon,
+    VscCollapseAll as CollapseIcon,
     VscCommentDraft as CommentDashedIcon,
     VscError as ErrorIcon,
     VscExclude as ExcludeIcon,
@@ -414,6 +415,7 @@ export {
     FaCheckIcon,
     FaTimesIcon,
     ArrowUpLong,
+    CollapseIcon,
     LandmarkIcon,
     SignPostIcon,
     InternalIcon,
@@ -851,6 +853,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Rotate 90 Degree Right': Rotate90DegreeRightIcon,
     'Badge Exclamation Fill': BadgeExclamationFillIcon,
     'Text Strikethrough Light': TextStrikethroughLightIcon,
+    'Collapse All': CollapseIcon,
 }
 
 export const RenderIcon = ({

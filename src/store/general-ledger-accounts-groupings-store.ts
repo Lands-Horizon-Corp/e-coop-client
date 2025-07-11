@@ -104,7 +104,6 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
             const prevLedgerData = get().generalLedgerDefitions
             const newLedger = structuredClone(prevLedgerData)
 
-            // Helper to locate the nested target array
             const findTargetArray = (
                 data: IGeneralLedgerDefinition[],
                 path: string[]
