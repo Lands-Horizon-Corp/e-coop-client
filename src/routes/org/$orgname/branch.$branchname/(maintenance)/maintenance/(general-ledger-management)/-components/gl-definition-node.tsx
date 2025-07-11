@@ -24,9 +24,10 @@ import {
     DragHandleIcon,
 } from '@/components/icons'
 import RawDescription from '@/components/raw-description'
-import { Card } from '@/components/ui/card'
 
-import AccountsCardList from './gl-account-card'
+import { TEntityId } from '@/types'
+
+import GLAccountsCardList from './gl-account-list'
 import GeneralLedgerDefinitionActions from './gl-definition-actions'
 
 interface GeneralLedgerTreeNodeProps {
@@ -41,6 +42,9 @@ interface GeneralLedgerTreeNodeProps {
     renderNestedAsSimpleList?: boolean
     depth?: number
     refetch?: () => void
+    hanldeDeleteGeneralLedgerDefinition: (id: TEntityId) => void
+    isDeletingGLDefinition?: boolean
+    handleRemoveAccountFromGLDefinition: (accountId: TEntityId) => void
 }
 
 const GeneralLedgerNode = ({
@@ -49,8 +53,12 @@ const GeneralLedgerNode = ({
     handleOpenAccountPicker,
     onDragEndNested,
     parentPath,
+    isDeletingGLDefinition,
+    hanldeDeleteGeneralLedgerDefinition,
+    handleRemoveAccountFromGLDefinition,
 }: GeneralLedgerTreeNodeProps) => {
     const ref = useRef<HTMLDivElement>(null)
+    const dragHandleRef = useRef<HTMLDivElement>(null)
 
     const {
         expandedNodeIds,
@@ -60,8 +68,6 @@ const GeneralLedgerNode = ({
     } = useGeneralLedgerStore()
 
     const isNodeExpanded = expandedNodeIds.has(node.id)
-
-    const dragHandleRef = useRef<HTMLDivElement>(null)
 
     const {
         attributes,
@@ -87,14 +93,6 @@ const GeneralLedgerNode = ({
         }
     }
 
-    const hasChildren =
-        node.general_ledger_definition &&
-        node.general_ledger_definition.length > 0
-
-    const isFirstLevel = depth === 0
-    const childLength = node.general_ledger_definition?.length
-    const hasAccountNode = node.accounts && node.accounts.length > 0
-
     const toggleAccordion = (e: React.MouseEvent) => {
         if (
             dragHandleRef.current &&
@@ -115,6 +113,14 @@ const GeneralLedgerNode = ({
         }
     }, [targetNodeId, node.id, clearTargetNodeIdAfterScroll])
 
+    const hasChildren =
+        node.general_ledger_definition &&
+        node.general_ledger_definition.length > 0
+
+    const isFirstLevel = depth === 0
+    const childLength = node.general_ledger_definition?.length
+    const hasAccountNode = node.accounts && node.accounts.length > 0
+
     const firstLevelItemLabel = childLength
         ? `${childLength} item${childLength > 1 ? 's' : ''}`
         : ''
@@ -126,16 +132,26 @@ const GeneralLedgerNode = ({
     if (node.general_ledger_definition_entries_id && isFirstLevel) {
         return null
     }
+    const showGLAccountsCardList =
+        isNodeExpanded && hasAccountNode && node.accounts
+
+    const showExpanded = hasChildren || hasAccountNode
+
+    const showGLDefinitionNode = isNodeExpanded && hasChildren
+
+    if (node.general_ledger_definition_entries_id && isFirstLevel) {
+        return null
+    }
 
     return (
         <div
             ref={setNodeRef}
             style={style}
             {...attributes}
-            className={`${isFirstLevel ? '' : 'pt-1.5'} ${isDragging ? 'rounded-lg border-2 border-primary' : ''} `}
+            className={` ${isFirstLevel ? 'bg-background border-0 py-5 pl-0 rounded-lg mt-1' : 'pt-1.5 pb-3  border bg-black pl-0 rounded-lg mt-2 px-0'} ${isDragging ? 'rounded-lg border-2 border-primary ' : ''} `}
         >
-            <Card
-                className={`flex h-fit border cursor-pointer items-center rounded-md px-3 py-2 duration-200 ${isFirstLevel ? 'mt-1 bg-background border-0 py-5 rounded-lg' : 'mt-0 bg-black'} `}
+            <div
+                className={`flex h-fit cursor-pointer items-center px-3 `}
                 onClick={(event) => {
                     toggleAccordion(event)
                 }}
@@ -148,7 +164,7 @@ const GeneralLedgerNode = ({
                 >
                     <DragHandleIcon size={16} />
                 </div>
-                {(hasChildren || hasAccountNode) && (
+                {showExpanded && (
                     <div className="flex h-full items-center">
                         <span className="mr-2">
                             {isNodeExpanded ? (
@@ -169,18 +185,11 @@ const GeneralLedgerNode = ({
                             </h1>
                             {!isFirstLevel && (
                                 <span className="text-xs text-accent-foreground/50">
-                                    {node && node.general_ledger_type && (
+                                    {node?.general_ledger_type && (
                                         <GeneralLedgerTypeBadge
                                             type={node.general_ledger_type}
                                         />
                                     )}
-                                    {!node ||
-                                        (!node.general_ledger_type && (
-                                            <div>
-                                                Loading type... or Type not
-                                                found
-                                            </div>
-                                        ))}
                                 </span>
                             )}
                         </div>
@@ -198,55 +207,77 @@ const GeneralLedgerNode = ({
                             {firstLevelAccountsLabel}
                         </p>
                     )}
-
-                    {isNodeExpanded &&
-                        node.accounts &&
-                        node.accounts.length > 0 && (
-                            <AccountsCardList accounts={node.accounts} />
-                        )}
-                    <DndContext
-                        sensors={grandchildSensors}
-                        onDragEnd={handleGrandchildDragEnd}
-                        collisionDetection={closestCorners}
-                    >
-                        {hasChildren && (
-                            <SortableContext
-                                items={
-                                    node.general_ledger_definition?.map(
-                                        (gc) => gc.id
-                                    ) || []
-                                }
-                                strategy={verticalListSortingStrategy}
-                            >
-                                {isNodeExpanded && hasChildren && (
-                                    <div className="ml-4">
-                                        {node.general_ledger_definition?.map(
-                                            (childNode) => (
-                                                <GeneralLedgerNode
-                                                    key={childNode.id}
-                                                    handleOpenAccountPicker={
-                                                        handleOpenAccountPicker
-                                                    }
-                                                    parentPath={[
-                                                        ...parentPath,
-                                                        node.id,
-                                                    ]}
-                                                    onDragEndNested={
-                                                        onDragEndNested
-                                                    }
-                                                    node={childNode}
-                                                    depth={depth + 1}
-                                                />
-                                            )
-                                        )}
-                                    </div>
-                                )}
-                            </SortableContext>
-                        )}
-                    </DndContext>
                 </div>
-                <GeneralLedgerDefinitionActions node={node} />
-            </Card>
+                <GeneralLedgerDefinitionActions
+                    depth={depth}
+                    canDelete={hasAccountNode}
+                    node={node}
+                    isDeletingGLDefinition={isDeletingGLDefinition}
+                    hanldeDeleteGeneralLedgerDefinition={(
+                        nodeId: TEntityId
+                    ) => {
+                        hanldeDeleteGeneralLedgerDefinition(nodeId)
+                    }}
+                />
+            </div>
+
+            <div className={`w-full ${isNodeExpanded ? 'pl-5 pr-5' : ''}`}>
+                {Array.isArray(showGLAccountsCardList) && (
+                    <GLAccountsCardList
+                        removeAccount={handleRemoveAccountFromGLDefinition}
+                        accounts={showGLAccountsCardList}
+                    />
+                )}
+                <DndContext
+                    sensors={grandchildSensors}
+                    onDragEnd={handleGrandchildDragEnd}
+                    collisionDetection={closestCorners}
+                >
+                    {hasChildren && (
+                        <SortableContext
+                            items={
+                                node.general_ledger_definition?.map(
+                                    (gc) => gc.id
+                                ) || []
+                            }
+                            strategy={verticalListSortingStrategy}
+                        >
+                            {showGLDefinitionNode && (
+                                <div className="ml-4">
+                                    {node.general_ledger_definition?.map(
+                                        (childNode) => (
+                                            <GeneralLedgerNode
+                                                key={childNode.id}
+                                                handleOpenAccountPicker={
+                                                    handleOpenAccountPicker
+                                                }
+                                                parentPath={[
+                                                    ...parentPath,
+                                                    node.id,
+                                                ]}
+                                                onDragEndNested={
+                                                    onDragEndNested
+                                                }
+                                                hanldeDeleteGeneralLedgerDefinition={
+                                                    hanldeDeleteGeneralLedgerDefinition
+                                                }
+                                                isDeletingGLDefinition={
+                                                    isDeletingGLDefinition
+                                                }
+                                                handleRemoveAccountFromGLDefinition={
+                                                    handleRemoveAccountFromGLDefinition
+                                                }
+                                                node={childNode}
+                                                depth={depth + 1}
+                                            />
+                                        )
+                                    )}
+                                </div>
+                            )}
+                        </SortableContext>
+                    )}
+                </DndContext>
+            </div>
         </div>
     )
 }

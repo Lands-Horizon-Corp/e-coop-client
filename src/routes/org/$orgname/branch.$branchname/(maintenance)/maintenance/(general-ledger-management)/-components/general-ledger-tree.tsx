@@ -4,8 +4,8 @@ import { toast } from 'sonner'
 import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
 import { IAccount } from '@/types/coop-types/accounts/account'
 import {
+    GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
-    IGeneralLedgerUpdateIndexRequest,
 } from '@/types/coop-types/general-ledger-definitions'
 import {
     DndContext,
@@ -15,7 +15,9 @@ import {
     useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { PlusIcon } from 'lucide-react'
 
+import { AccountCreateUpdateFormModal } from '@/components/forms/accounting-forms/account-create-update-form'
 import { GeneralLedgerDefinitionCreateUpdateFormModal } from '@/components/forms/general-ledger-definition/general-ledger-definition-create-update-form'
 import { MagnifyingGlassIcon } from '@/components/icons'
 import AccountPicker from '@/components/pickers/account-picker'
@@ -25,9 +27,17 @@ import { Input } from '@/components/ui/input'
 
 import {
     useConnectAccountToGeneralLedgerDefinition,
+    useDeleteGeneralLedgerDefinition,
     useUpdateIndexGeneralLedgerDefinition,
 } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-definition'
+import {
+    useDeleteAccountFromGLDefintion,
+    useUpdateAccountIndex,
+} from '@/hooks/api-hooks/use-account'
 
+import { TEntityId, UpdateIndexRequest } from '@/types'
+
+import GeneralLedgerAccountsModal from './general-ledger-accounts-view-modal'
 import GeneralLedgerDefinitionNode from './gl-definition-node'
 
 type GeneralLedgerTreeViewerProps = {
@@ -77,23 +87,36 @@ const GeneralLedgerTreeViewer = ({
         onCreate,
         isReadOnly,
         expandPath,
+        setOnCreate,
         resetExpansion,
         setTargetNodeId,
         generalLedgerDefitions,
+        changedGeneralLedgerItems,
         openAddAccountPickerModal,
         setGEneralLedgerDefitions,
         setAddAccountPickerModalOpen,
         openCreateGeneralLedgerModal,
+        setChangedGeneralLedgerItems,
         setOpenCreateGeneralLedgerModal,
         selectedGeneralLedgerDefinitionId,
+        setSelectedGeneralLedgerDefinitionId,
         selectedGeneralLedgerDefinition: node,
-        changedGeneralLedgerItems,
-        setChangedGeneralLedgerItems,
+        setSelectedGeneralLedgerDefinition,
+        generalLedgerAccountsGroupingId,
+        generalDefinitionEntriesId,
+        setGeneralLedgerDefinitionEntriesId,
+        moveGeneralLedgerNode,
+        changedAccounts,
+        openViewAccountModal,
+        setViewAccountModalOpen,
+        selectedAccounts,
+        openGeneralLedgerAccountTableModal,
+        setOpenGeneralLedgerAccountTableModal,
     } = useGeneralLedgerStore()
 
     const [searchTerm, setSearchTerm] = useState('')
 
-    const { mutateAsync: updateIndex, isPending } =
+    const { mutate: updateIndex, isPending } =
         useUpdateIndexGeneralLedgerDefinition({
             onSuccess: () => {
                 refetch?.()
@@ -104,16 +127,48 @@ const GeneralLedgerTreeViewer = ({
             },
         })
 
-    const { mutateAsync: addAccountsToGeneralDefinition, isSuccess } =
+    const { mutateAsync: addAccountsToGeneralDefinition } =
         useConnectAccountToGeneralLedgerDefinition({
             onSuccess: () => {
                 refetch?.()
+                setAddAccountPickerModalOpen?.(false)
             },
         })
 
-    const moveNode = useGeneralLedgerStore(
-        (state) => state.moveGeneralLedgerNode
-    )
+    const {
+        mutate: deleteGeneralLedgerDefinition,
+        isPending: isDeletingGLDefinition,
+    } = useDeleteGeneralLedgerDefinition({
+        onSuccess: () => {
+            refetch?.()
+            setSelectedGeneralLedgerDefinitionId?.(null)
+            setSelectedGeneralLedgerDefinition?.(null)
+            setOpenCreateGeneralLedgerModal?.(false)
+        },
+    })
+
+    const { mutate: updateAccountIndex } = useUpdateAccountIndex({
+        onSuccess: () => {
+            refetch?.()
+        },
+    })
+
+    const { mutate: removeGLAccount } = useDeleteAccountFromGLDefintion({
+        onSuccess: () => {
+            refetch?.()
+            setAddAccountPickerModalOpen?.(false)
+        },
+    })
+
+    const handleRemoveAccountFromGLDefinition = (accountId: TEntityId) => {
+        if (accountId) {
+            removeGLAccount(accountId)
+        }
+    }
+
+    const hanldeDeleteGeneralLedgerDefinition = (nodeId: TEntityId) => {
+        deleteGeneralLedgerDefinition(nodeId)
+    }
 
     const topLevelSensors = useSensors(useSensor(PointerSensor))
 
@@ -144,11 +199,8 @@ const GeneralLedgerTreeViewer = ({
                 generalLedgerDefinitionId: selectedGeneralLedgerDefinitionId,
                 accountId: account.id,
             })
-
-            if (isSuccess) {
-                refetch?.()
-                setAddAccountPickerModalOpen?.(false)
-            }
+        } else {
+            toast.error('Please select a General Ledger Definition first.')
         }
     }
 
@@ -158,6 +210,69 @@ const GeneralLedgerTreeViewer = ({
         }
     }, [treeData])
 
+    const OnSuccessCreateUpdateGLModal = () => {
+        refetch?.()
+        setOpenCreateGeneralLedgerModal?.(false)
+        setSelectedGeneralLedgerDefinition?.(null)
+        setSelectedGeneralLedgerDefinitionId?.(null)
+        setGeneralLedgerDefinitionEntriesId?.(undefined)
+    }
+
+    const addGeneralLedgerDefinition = () => {
+        setSelectedGeneralLedgerDefinitionId?.(null)
+        setOpenCreateGeneralLedgerModal?.(true)
+        resetExpansion()
+        setSearchTerm('')
+        setAddAccountPickerModalOpen?.(false)
+        setTargetNodeId?.('')
+        setSelectedGeneralLedgerDefinition?.(null)
+        setTimeout(() => {
+            setOnCreate?.(true)
+        }, 100)
+        setGeneralLedgerDefinitionEntriesId?.(undefined)
+    }
+
+    const handleUpdateOrder = (
+        changedGeneralLedgerItems: UpdateIndexRequest[],
+        changedAccounts: UpdateIndexRequest[]
+    ) => {
+        if (changedAccounts.length > 0) {
+            updateAccountIndex(changedAccounts)
+        }
+        if (changedGeneralLedgerItems.length > 0) {
+            updateIndex(changedGeneralLedgerItems)
+        }
+    }
+
+    const { selectedGeneralLedgerTypes } = useGeneralLedgerStore()
+
+    const isSearchOnChanged = searchTerm.length > 0
+
+    const createOrUpdateTitle = `${onCreate ? 'Create' : 'Update'} General Ledger Definition`
+    const createOrUpdateDescription = `Fill out the form to ${onCreate ? 'add a new' : 'edit'} General Ledger Definition.`
+
+    const formDefaultValues = onCreate
+        ? {
+              general_ledger_type:
+                  selectedGeneralLedgerTypes || GeneralLedgerTypeEnum.Assets,
+          }
+        : {
+              ...node,
+          }
+
+    const generalLedgerDefinitionId = onCreate
+        ? undefined
+        : (node?.id ?? undefined)
+
+    const hasAnyOrderChanged = Boolean(
+        changedGeneralLedgerItems.length || changedAccounts.length
+    )
+
+    const isHandleOrderDisabled =
+        !hasAnyOrderChanged ||
+        isPending ||
+        isRefetchingGeneralLedgerAccountsGrouping
+
     if (!treeData || treeData.length === 0) {
         return (
             <div className="p-4 text-center text-gray-500">
@@ -166,38 +281,43 @@ const GeneralLedgerTreeViewer = ({
         )
     }
 
-    const isSearchOnChanged = searchTerm.length > 0
-
-    const handleUpdateIndex = async (
-        changedGeneralLedgerItems: IGeneralLedgerUpdateIndexRequest[]
-    ) => {
-        await updateIndex(changedGeneralLedgerItems)
-    }
-
-    const hasChangedItems = changedGeneralLedgerItems.length > 0
-
     return (
         <div className="w-full rounded-lg p-4 shadow-md">
-            {node && openCreateGeneralLedgerModal && (
+            {selectedAccounts?.id && (
+                <GeneralLedgerAccountsModal
+                    open={openGeneralLedgerAccountTableModal}
+                    onOpenChange={setOpenGeneralLedgerAccountTableModal}
+                    title="General Ledger Accounts"
+                    description="This is the general ledger based on selected account"
+                    className="max-w-3xl"
+                    accountId={selectedAccounts.id}
+                />
+            )}
+            <AccountCreateUpdateFormModal
+                open={openViewAccountModal}
+                onOpenChange={setViewAccountModalOpen}
+                title="Account Details"
+                description="this account is part of the General Ledger Definition"
+                formProps={{
+                    defaultValues: { ...selectedAccounts },
+                    readOnly: true,
+                }}
+            />
+            {generalLedgerAccountsGroupingId && (
                 <GeneralLedgerDefinitionCreateUpdateFormModal
                     onOpenChange={setOpenCreateGeneralLedgerModal}
                     open={openCreateGeneralLedgerModal}
-                    title={`${onCreate ? 'Create' : 'Update'} General Ledger Definition`}
-                    description={`Fill out the form to ${onCreate ? 'add a new' : 'edit'} General Ledger Definition.`}
+                    title={createOrUpdateTitle}
+                    description={createOrUpdateDescription}
                     formProps={{
-                        defaultValues: onCreate ? {} : node,
+                        defaultValues: formDefaultValues,
                         generalLedgerDefinitionEntriesId:
-                            node.general_ledger_definition_entries_id ??
-                            node.id,
+                            generalDefinitionEntriesId,
                         generalLedgerAccountsGroupingId:
-                            node.general_ledger_accounts_grouping_id,
-                        generalLedgerDefinitionId: onCreate
-                            ? undefined
-                            : node.id,
+                            generalLedgerAccountsGroupingId,
+                        generalLedgerDefinitionId: generalLedgerDefinitionId,
                         readOnly: isReadOnly,
-                        onSuccess: () => {
-                            refetch?.()
-                        },
+                        onSuccess: OnSuccessCreateUpdateGLModal,
                     }}
                 />
             )}
@@ -206,9 +326,20 @@ const GeneralLedgerTreeViewer = ({
                 open={openAddAccountPickerModal}
                 onOpenChange={setAddAccountPickerModalOpen}
                 modalOnly
-                onSelect={handleAccountSelection}
+                onSelect={(account) => {
+                    handleAccountSelection(account)
+                }}
             />
             <div className="flex gap-2 py-4">
+                <Button
+                    size="sm"
+                    className="rounded-xl"
+                    onClick={addGeneralLedgerDefinition}
+                    disabled={isReadOnly}
+                >
+                    <PlusIcon size={15} className="mr-2" />
+                    Add GL
+                </Button>
                 <Input
                     type="text"
                     className="rounded-2xl"
@@ -230,27 +361,35 @@ const GeneralLedgerTreeViewer = ({
                     <MagnifyingGlassIcon className="mr-2" />
                     Search
                 </Button>
+            </div>
+            <div className="w-full flex items-center gap-x-2 justify-end">
                 <Button
-                    disabled={
-                        !hasChangedItems ||
-                        isPending ||
-                        isRefetchingGeneralLedgerAccountsGrouping
-                    }
-                    className="rounded-xl"
+                    disabled={isHandleOrderDisabled}
+                    variant={'outline'}
+                    className="rounded-xl text-xs"
                     size="sm"
-                    onClick={() => handleUpdateIndex(changedGeneralLedgerItems)}
+                    onClick={() =>
+                        handleUpdateOrder(
+                            changedGeneralLedgerItems,
+                            changedAccounts
+                        )
+                    }
                 >
                     {isPending ? (
                         <LoadingSpinner className="animate-spin" />
                     ) : (
-                        'Save Changes'
+                        'update order'
                     )}
                 </Button>
             </div>
             <DndContext
                 sensors={topLevelSensors}
                 onDragEnd={(event) =>
-                    moveNode([], event.active.id, event.over?.id || '')
+                    moveGeneralLedgerNode(
+                        [],
+                        event.active.id,
+                        event.over?.id || ''
+                    )
                 }
                 collisionDetection={closestCorners}
             >
@@ -265,7 +404,15 @@ const GeneralLedgerTreeViewer = ({
                                 node={node}
                                 depth={0}
                                 parentPath={[]}
-                                onDragEndNested={moveNode}
+                                refetch={refetch}
+                                onDragEndNested={moveGeneralLedgerNode}
+                                isDeletingGLDefinition={isDeletingGLDefinition}
+                                hanldeDeleteGeneralLedgerDefinition={
+                                    hanldeDeleteGeneralLedgerDefinition
+                                }
+                                handleRemoveAccountFromGLDefinition={
+                                    handleRemoveAccountFromGLDefinition
+                                }
                             />
                         )
                     })}

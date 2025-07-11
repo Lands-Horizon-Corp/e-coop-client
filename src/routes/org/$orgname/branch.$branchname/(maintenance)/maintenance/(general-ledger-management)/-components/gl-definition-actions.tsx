@@ -1,3 +1,4 @@
+import { GENERAL_LEDGER_DEFINITION_MAX_DEPTH } from '@/constants'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
 import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
@@ -18,14 +19,24 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { useDeleteGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-definition'
+import { TEntityId } from '@/types'
 
 type GeneralLedgerDefinitionActionsProps = {
     node: IGeneralLedgerDefinition
+    canDelete?: boolean
+    depth: number
+    hanldeDeleteGeneralLedgerDefinition: (id: TEntityId) => void
+    isDeletingGLDefinition?: boolean
 }
+
+type ActionType = 'addAccount' | 'addGL' | 'edit' | 'view' | 'remove'
 
 const GeneralLedgerDefinitionActions = ({
     node,
+    canDelete,
+    depth,
+    hanldeDeleteGeneralLedgerDefinition,
+    isDeletingGLDefinition,
 }: GeneralLedgerDefinitionActionsProps) => {
     const { onOpen } = useConfirmModalStore()
 
@@ -36,12 +47,61 @@ const GeneralLedgerDefinitionActions = ({
         setOpenCreateGeneralLedgerModal,
         setIsReadyOnly,
         setSelectedGeneralLedgerDefinition,
+        setGeneralLedgerDefinitionEntriesId,
     } = useGeneralLedgerStore()
 
-    const {
-        mutate: deleteGeneralLedgerDefinition,
-        isPending: isDeletingGLDefinition,
-    } = useDeleteGeneralLedgerDefinition()
+    const handleGeneralLedgerAction = (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        action: ActionType,
+        nodeId?: TEntityId
+    ) => {
+        e.stopPropagation()
+        e.preventDefault()
+        setIsReadyOnly?.(false)
+
+        switch (action) {
+            case 'addAccount':
+                setAddAccountPickerModalOpen?.(true)
+                setSelectedGeneralLedgerDefinitionId?.(node.id)
+                break
+
+            case 'addGL':
+                setOnCreate?.(true)
+                setOpenCreateGeneralLedgerModal?.(true)
+                setSelectedGeneralLedgerDefinition?.(null)
+                setGeneralLedgerDefinitionEntriesId?.(node.id)
+                break
+
+            case 'edit':
+                setOnCreate?.(false)
+                setOpenCreateGeneralLedgerModal?.(true)
+                setSelectedGeneralLedgerDefinition?.(node)
+                setSelectedGeneralLedgerDefinitionId?.(node.id)
+                break
+
+            case 'view':
+                setOnCreate?.(false)
+                setIsReadyOnly?.(true)
+                setSelectedGeneralLedgerDefinition?.(node)
+                setOpenCreateGeneralLedgerModal?.(true)
+                break
+            case 'remove':
+                onOpen({
+                    title: `Delete this Account/Definition`,
+                    description: `You are about to delete this Account/Definition, are you sure you want to proceed?`,
+                    onConfirm: () => {
+                        if (
+                            typeof hanldeDeleteGeneralLedgerDefinition ===
+                            'function'
+                        )
+                            if (nodeId) {
+                                hanldeDeleteGeneralLedgerDefinition(nodeId)
+                            }
+                    },
+                    confirmString: 'Proceed',
+                })
+        }
+    }
 
     return (
         <div>
@@ -58,72 +118,49 @@ const GeneralLedgerDefinitionActions = ({
                 <DropdownMenuContent className="w-56" align="start">
                     <DropdownMenuGroup>
                         <DropdownMenuItem
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                setIsReadyOnly?.(false)
-                                setSelectedGeneralLedgerDefinitionId(node.id)
-                                setAddAccountPickerModalOpen?.(true)
-                            }}
+                            onClick={(e) =>
+                                handleGeneralLedgerAction(e, 'addAccount')
+                            }
                         >
                             <PlusIcon className="mr-2">+</PlusIcon>
                             Add Account
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                e.preventDefault()
-                                setIsReadyOnly?.(false)
-                                setOnCreate?.(true)
-                                setSelectedGeneralLedgerDefinitionId(node.id)
-                                setOpenCreateGeneralLedgerModal?.(true)
-                                setSelectedGeneralLedgerDefinition?.(node)
-                            }}
-                        >
-                            <PlusIcon className="mr-2">+</PlusIcon>
-                            Add GL Definition
-                        </DropdownMenuItem>
+                        {depth < GENERAL_LEDGER_DEFINITION_MAX_DEPTH && (
+                            <DropdownMenuItem
+                                onClick={(e) =>
+                                    handleGeneralLedgerAction(e, 'addGL')
+                                }
+                            >
+                                <PlusIcon className="mr-2" />
+                                Add GL Definition
+                            </DropdownMenuItem>
+                        )}
                         <div>
                             <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    setOnCreate?.(false)
-                                    setIsReadyOnly?.(false)
-                                    setOpenCreateGeneralLedgerModal?.(true)
-                                    setSelectedGeneralLedgerDefinitionId?.(
-                                        node.id
-                                    )
-                                    setSelectedGeneralLedgerDefinition?.(node)
-                                }}
+                                onClick={(e) =>
+                                    handleGeneralLedgerAction(e, 'edit')
+                                }
                             >
                                 <EditPencilIcon className="mr-2" />
                                 edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    setOnCreate?.(false)
-                                    setOpenCreateGeneralLedgerModal?.(true)
-                                    setIsReadyOnly?.(true)
-                                }}
+                                onClick={(e) =>
+                                    handleGeneralLedgerAction(e, 'view')
+                                }
                             >
                                 <EyeViewIcon className="mr-2" />
                                 View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                disabled={isDeletingGLDefinition}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onOpen({
-                                        title: `Delete this Account/Definition`,
-                                        description: `You are about definition/Account are you sure you want to proceed?`,
-                                        onConfirm: () => {
-                                            deleteGeneralLedgerDefinition(
-                                                node.id
-                                            )
-                                        },
-                                        confirmString: 'Proceed',
-                                    })
-                                }}
+                                disabled={isDeletingGLDefinition || canDelete}
+                                onClick={(e) =>
+                                    handleGeneralLedgerAction(
+                                        e,
+                                        'remove',
+                                        node.id
+                                    )
+                                }
                             >
                                 <TrashIcon className="mr-2 text-destructive" />
                                 Remove

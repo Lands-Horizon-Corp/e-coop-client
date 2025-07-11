@@ -1,5 +1,6 @@
 import { payment_bg } from '@/assets/transactions'
 import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { IGeneralLedgerAccountsGrouping } from '@/types/coop-types/general-ledger-accounts-grouping'
 import { AccordionContent, AccordionItem } from '@radix-ui/react-accordion'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -9,6 +10,8 @@ import { Accordion, AccordionTrigger } from '@/components/ui/accordion'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { useGetAllGeneralLedgerAccountsGroupings } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-accounts-groupings'
+
+import { GeneralLedgerTypeEnum } from '@/types'
 
 import GeneralLedgerTreeViewer from './-components/general-ledger-tree'
 
@@ -26,7 +29,8 @@ function RouteComponent() {
         isLoading: isLoadingGeneralLedgerAccountsGrouping,
     } = useGetAllGeneralLedgerAccountsGroupings()
 
-    const { setGeneralLedgerAccountsGroupingId } = useGeneralLedgerStore()
+    const { setGeneralLedgerAccountsGroupingId, setGeneralLedgerType } =
+        useGeneralLedgerStore()
 
     const refetch = () => {
         refetchGeneralLedgerAccountsGrouping()
@@ -35,6 +39,15 @@ function RouteComponent() {
     const hasGeneralLedgerGropings =
         generalLedgerGropings && generalLedgerGropings.length > 0
 
+    const handleAccountTrigger = (grouping: IGeneralLedgerAccountsGrouping) => {
+        setGeneralLedgerAccountsGroupingId(grouping.id)
+
+        const GeneralLedgerTypeArray = Object.values(GeneralLedgerTypeEnum)
+        const matchedType = GeneralLedgerTypeArray.find(
+            (type) => type === grouping.name
+        )
+        setGeneralLedgerType?.(matchedType ?? null)
+    }
     return (
         <PageContainer className="w-full relative min-h-[100vh] p-5 ">
             <div className="my-5 w-full flex items-center gap-2 ">
@@ -52,7 +65,7 @@ function RouteComponent() {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    opacity: 0.1,
+                    opacity: 0.02,
                 }}
             />
             {isLoadingGeneralLedgerAccountsGrouping ? (
@@ -75,19 +88,19 @@ function RouteComponent() {
                             className="w-full bg-sidebar/50 p-5 rounded-xl"
                         >
                             <AccordionTrigger
-                                onClick={() =>
-                                    setGeneralLedgerAccountsGroupingId(
-                                        grouping.id
-                                    )
-                                }
-                                className="w-full text-2xl font-bold text-left text-accent-foreground/80"
+                                onClick={() => handleAccountTrigger(grouping)}
+                                className="w-full hover:no-underline  text-left text-accent-foreground/80"
                             >
-                                {grouping.name}
+                                <div>
+                                    <h1 className="font-bold text-2xl">
+                                        {grouping.name}
+                                    </h1>
+                                    <p className="text-sm">
+                                        {grouping.description}
+                                    </p>
+                                </div>
                             </AccordionTrigger>
                             <AccordionContent className="w-full">
-                                <p className="text-sm">
-                                    {grouping.description}
-                                </p>
                                 {hasGeneralLedgerGropings && (
                                     <GeneralLedgerTreeViewer
                                         refetch={refetch}

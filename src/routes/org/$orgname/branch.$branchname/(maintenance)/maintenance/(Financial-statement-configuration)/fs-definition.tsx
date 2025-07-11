@@ -1,3 +1,4 @@
+import logger from '@/helpers/loggers/logger'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
@@ -14,7 +15,7 @@ function RouteComponent() {
     const { data: getllFinancialStatementDefinitions } =
         useGetAllFinancialStatementAccountsGroupings()
 
-    console.log(
+    logger.log(
         'Financial Statement Definitions:',
         getllFinancialStatementDefinitions
     )

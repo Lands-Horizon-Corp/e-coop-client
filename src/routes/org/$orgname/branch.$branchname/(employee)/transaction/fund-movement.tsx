@@ -8,6 +8,7 @@ import {
     usePaymentsModalStore,
 } from '@/store/transaction/payments-entry-store'
 import { createFileRoute } from '@tanstack/react-router'
+import { isArray } from 'lodash-es'
 
 import PageContainer from '@/components/containers/page-container'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
@@ -251,9 +252,9 @@ function RouteComponent() {
                         <ResizableHandle withHandle />
                         <ResizablePanel defaultSize={50} className="p-2">
                             <div className="w-full p-2">
-                                <MemberAccountingLedgerTable
-                                    data={MemberAccountSampleData}
-                                />
+                                {isArray(MemberAccountSampleData) && (
+                                    <MemberAccountingLedgerTable data={[]} />
+                                )}
                             </div>
                         </ResizablePanel>
                     </ResizablePanelGroup>
