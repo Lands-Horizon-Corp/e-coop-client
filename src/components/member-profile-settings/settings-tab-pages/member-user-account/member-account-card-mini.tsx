@@ -1,5 +1,5 @@
+import CopyWrapper from '@/components/elements/copy-wrapper'
 import ImageDisplay from '@/components/image-display'
-import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IUserBase } from '@/types'
@@ -29,7 +29,7 @@ const UserAccountCardMini = ({ user }: Props) => {
                     <CopyWrapper>{user.email}</CopyWrapper>
                 </p>
                 <p className="!mt-2 text-xs text-muted-foreground/40">
-                    <CopyWrapper hidden>{user.id}</CopyWrapper>
+                    <CopyWrapper>{user.id}</CopyWrapper>
                 </p>
             </div>
         </div>

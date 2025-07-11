@@ -2,7 +2,11 @@ import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { toReadableDate } from '@/utils'
+import {
+    permissionArrayToMap,
+    permissionMapToPermissionArray,
+    toReadableDate,
+} from '@/utils'
 import { setHours } from 'date-fns'
 import { Path, useForm } from 'react-hook-form'
 
@@ -21,10 +25,19 @@ import {
     useCreateInvitationCode,
     useUpdateInvitationCode,
 } from '@/hooks/api-hooks/use-invitation-code'
+import { useModalState } from '@/hooks/use-modal-state'
 
-import { IClassProps, IForm, IInvitationCode, TEntityId } from '@/types'
+import {
+    IClassProps,
+    IForm,
+    IInvitationCode,
+    IInvitationCodeRequest,
+    TEntityId,
+} from '@/types'
 
-import { UserIcon, UsersAddIcon } from '../icons'
+import { ShieldCheckIcon, UserIcon, UsersAddIcon } from '../icons'
+import PermissionMatrix from '../permission/permission-matrix'
+import PermissionPicker from '../pickers/permission-template-picker'
 import FormFieldWrapper from '../ui/form-field-wrapper'
 import { Input } from '../ui/input'
 import InputDate from '../ui/input-date'
@@ -39,6 +52,10 @@ const InviationCodeSchema = z.object({
     max_use: z.coerce.number().min(0, 'Current use cannot be negative'),
     description: z.string(),
     user_type: userAccountTypeSchema,
+
+    permission_name: z.string(),
+    permission_description: z.string(),
+    permissions: z.array(z.string()),
 })
 
 type TInvitationCodeFormValues = z.infer<typeof InviationCodeSchema>
@@ -63,6 +80,8 @@ const InvitationCodeCreateUpdateForm = ({
     onSuccess,
     defaultValues,
 }: InvitationCodeFormProps) => {
+    const permissionTemplate = useModalState()
+
     const form = useForm<TInvitationCodeFormValues>({
         resolver: zodResolver(InviationCodeSchema),
         reValidateMode: 'onChange',
@@ -73,7 +92,10 @@ const InvitationCodeCreateUpdateForm = ({
             current_use: 0,
             max_use: 1,
             description: '',
+            permission_name: '',
+            permission_description: '',
             ...defaultValues,
+            permissions: defaultValues?.permissions ?? [],
             expiration_date: toReadableDate(
                 defaultValues?.expiration_date ?? new Date(),
                 'yyyy-MM-dd'
@@ -105,12 +127,12 @@ const InvitationCodeCreateUpdateForm = ({
         }
         if (invitationCodeId) {
             updateInvitationCode({
-                data: requestData,
+                data: requestData as IInvitationCodeRequest,
                 invitationCodeId: invitationCodeId,
             })
         } else {
             createInvitationCode({
-                data: requestData,
+                data: requestData as IInvitationCodeRequest,
             })
         }
     })
@@ -128,11 +150,14 @@ const InvitationCodeCreateUpdateForm = ({
         <Form {...form}>
             <form
                 onSubmit={onSubmit}
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn(
+                    'flex w-full flex-col gap-y-4  max-w-full min-w-0',
+                    className
+                )}
             >
                 <fieldset
                     disabled={isPending || readOnly}
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="grid gap-x-6 gap-y-4 sm:gap-y-3  max-w-full min-w-0"
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
@@ -233,38 +258,23 @@ const InvitationCodeCreateUpdateForm = ({
                                 />
                             )}
                         />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="expiration_date"
-                            label="Expiration Date"
-                            className="relative"
-                            description="mm/dd/yyyy"
-                            descriptionClassName="absolute top-0 right-0"
-                            render={({ field }) => (
-                                <InputDate
-                                    {...field}
-                                    value={field.value ?? ''}
-                                    className="block"
-                                />
-                            )}
-                        />
 
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="description"
-                            label="Description"
-                            render={({ field }) => (
-                                <Textarea
-                                    {...field}
-                                    id={field.name}
-                                    autoComplete="off"
-                                    placeholder="Description"
-                                    className="max-h-40"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-                        <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-3">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="expiration_date"
+                                label="Expiration Date"
+                                className="relative"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
+                                render={({ field }) => (
+                                    <InputDate
+                                        {...field}
+                                        value={field.value ?? ''}
+                                        className="block"
+                                    />
+                                )}
+                            />
                             <FormFieldWrapper
                                 control={form.control}
                                 name="max_use"
@@ -305,6 +315,108 @@ const InvitationCodeCreateUpdateForm = ({
                                 )}
                             />
                         </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="description"
+                            label="Description"
+                            render={({ field }) => (
+                                <Textarea
+                                    {...field}
+                                    id={field.name}
+                                    autoComplete="off"
+                                    placeholder="Description"
+                                    className="max-h-40"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+                    </fieldset>
+                    <Separator />
+                    <div className="border p-2 rounded-xl flex items-center justify-between bg-card">
+                        <div>
+                            <p>Quick permission template</p>
+                            <p className="text-xs text-muted-foreground/80">
+                                Choose from pre-configured permission templates
+                                based on common roles like Admin, Editor, or
+                                Viewer
+                            </p>
+                        </div>
+                        <PermissionPicker
+                            triggerClassName="hidden"
+                            modalState={permissionTemplate}
+                            onSelect={(picked) => {
+                                form.setValue('permission_name', picked.name)
+                                form.setValue(
+                                    'permission_description',
+                                    picked.description
+                                )
+                                form.setValue('permissions', picked.permissions)
+                            }}
+                        />
+                        <Button
+                            size="sm"
+                            type="button"
+                            variant="secondary"
+                            onClick={() =>
+                                permissionTemplate.onOpenChange(true)
+                            }
+                        >
+                            <ShieldCheckIcon className="mr-1" />
+                            Choose Permission Template
+                        </Button>
+                    </div>
+
+                    <fieldset className="space-y-3 max-w-full min-w-0">
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="permission_name"
+                            label="Permission Name *"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    placeholder="Permission Name"
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="permission_description"
+                            label="Permission Description *"
+                            render={({ field }) => (
+                                <Textarea
+                                    {...field}
+                                    id={field.name}
+                                    placeholder="Describe the permission"
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
+                                    rows={3}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="permissions"
+                            label="Permissions *"
+                            render={({ field }) => (
+                                <PermissionMatrix
+                                    controlledState={{
+                                        value: permissionArrayToMap(
+                                            field.value
+                                        ),
+                                        onValueChange: (value) =>
+                                            field.onChange(
+                                                permissionMapToPermissionArray(
+                                                    value
+                                                )
+                                            ),
+                                    }}
+                                />
+                            )}
+                        />
                     </fieldset>
                 </fieldset>
                 <Separator />
@@ -358,7 +470,7 @@ export const InivationCodeFormModal = ({
         <Modal
             title={title}
             description={description}
-            className={cn('', className)}
+            className={cn('max-w-[90vw] max-h-[95vh]', className)}
             {...props}
         >
             <InvitationCodeCreateUpdateForm

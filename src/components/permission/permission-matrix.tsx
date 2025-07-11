@@ -213,6 +213,7 @@ const PermissionMatrix = forwardRef<
                                     <TableCell className="text-center">
                                         <Checkbox
                                             id={`${resource.resource}-all`}
+                                            className="size-5"
                                             checked={
                                                 isResourceAllSelected(
                                                     resource.resource
@@ -260,7 +261,7 @@ const PermissionMatrix = forwardRef<
                                                         checked as boolean
                                                     )
                                                 }
-                                                className="duration-200 ease-in-out data-[state=checked]:border-primary"
+                                                className="duration-200 size-5 ease-in-out data-[state=checked]:border-primary"
                                             />
                                         </TableCell>
                                     ))}

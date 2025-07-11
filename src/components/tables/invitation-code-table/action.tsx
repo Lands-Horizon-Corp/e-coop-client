@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useInfoModalStore } from '@/store/info-modal-store'
@@ -6,7 +7,7 @@ import { useInfoModalStore } from '@/store/info-modal-store'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import CopyURL from '@/components/elements/copy-url'
 import { InivationCodeFormModal } from '@/components/forms/inivitation-code-create-update.form'
-import { QrCodeIcon } from '@/components/icons'
+import { KeySharpIcon, LinkIcon, QrCodeIcon } from '@/components/icons'
 import { QrCodeDownloadable } from '@/components/qr-code'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
@@ -42,7 +43,6 @@ const InvitationCodeAction = ({
         <>
             <div onClick={(e) => e.stopPropagation()}>
                 <InivationCodeFormModal
-                    className="!max-w-2xl"
                     onOpenChange={setUpdateModalForm}
                     open={updateModalForm}
                     title="Edit Invitation Code"
@@ -108,6 +108,38 @@ const InvitationCodeAction = ({
                         >
                             <QrCodeIcon className="mr-2" />
                             Show QR
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => {
+                                try {
+                                    navigator.clipboard.writeText(
+                                        invitationCode.code
+                                    )
+                                    toast.success('Invitation Code Copied')
+                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                } catch (e) {
+                                    toast.error(
+                                        'Failed to copy Invitation Code'
+                                    )
+                                }
+                            }}
+                        >
+                            <KeySharpIcon className="mr-2" />
+                            Copy Code
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => {
+                                try {
+                                    navigator.clipboard.writeText(invitationUrl)
+                                    toast.success('Invitation URL Copied')
+                                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                } catch (e) {
+                                    toast.error('Failed to copy')
+                                }
+                            }}
+                        >
+                            <LinkIcon className="mr-2" />
+                            Copy URL
                         </DropdownMenuItem>
                     </>
                 }
