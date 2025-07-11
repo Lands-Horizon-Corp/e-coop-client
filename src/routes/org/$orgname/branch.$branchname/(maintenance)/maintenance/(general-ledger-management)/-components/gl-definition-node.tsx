@@ -42,8 +42,8 @@ interface GeneralLedgerTreeNodeProps {
     renderNestedAsSimpleList?: boolean
     depth?: number
     refetch?: () => void
-    hanldeDeleteGeneralLedgerDefinition: (id: TEntityId) => void
     isDeletingGLDefinition?: boolean
+    hanldeDeleteGeneralLedgerDefinition: (id: TEntityId) => void
     handleRemoveAccountFromGLDefinition: (accountId: TEntityId) => void
 }
 

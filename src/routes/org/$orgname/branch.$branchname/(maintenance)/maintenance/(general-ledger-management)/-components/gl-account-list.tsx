@@ -32,7 +32,7 @@ type AccountItemProps = {
     account: IAccount
 }
 
-export const AccountGlItem = ({
+export const GeneralLedgerAccountItem = ({
     id,
     title,
     handleDeleteAccount,
@@ -83,6 +83,13 @@ export default function GLAccountsCardList({
             coordinateGetter: sortableKeyboardCoordinates,
         })
     )
+
+    const handleRemoveAcount = (accountId: TEntityId) => {
+        setAccount((prev) => prev.filter((acc) => acc.id !== accountId))
+        if (typeof removeAccount === 'function') {
+            removeAccount(accountId)
+        }
+    }
 
     const getTaskPos = (id: string | number) =>
         account.findIndex((task) => task.id === id)
@@ -136,8 +143,8 @@ export default function GLAccountsCardList({
                 >
                     <div className="flex flex-col gap-2">
                         {account.map((accountItem) => (
-                            <AccountGlItem
-                                handleDeleteAccount={removeAccount}
+                            <GeneralLedgerAccountItem
+                                handleDeleteAccount={handleRemoveAcount}
                                 account={accountItem}
                                 key={accountItem.id}
                                 id={accountItem.id}

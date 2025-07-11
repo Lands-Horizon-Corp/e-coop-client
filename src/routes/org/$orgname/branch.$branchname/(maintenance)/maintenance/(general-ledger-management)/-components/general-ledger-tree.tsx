@@ -19,11 +19,16 @@ import { PlusIcon } from 'lucide-react'
 
 import { AccountCreateUpdateFormModal } from '@/components/forms/accounting-forms/account-create-update-form'
 import { GeneralLedgerDefinitionCreateUpdateFormModal } from '@/components/forms/general-ledger-definition/general-ledger-definition-create-update-form'
-import { MagnifyingGlassIcon } from '@/components/icons'
+import { CollapseIcon, MagnifyingGlassIcon } from '@/components/icons'
 import AccountPicker from '@/components/pickers/account-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 import {
     useConnectAccountToGeneralLedgerDefinition,
@@ -44,6 +49,31 @@ type GeneralLedgerTreeViewerProps = {
     treeData: IGeneralLedgerDefinition[]
     refetch?: () => void
     isRefetchingGeneralLedgerAccountsGrouping?: boolean
+}
+
+const findNodePathByGlIdOnly = (
+    nodes: IGeneralLedgerDefinition[],
+    path: string[] = [],
+    glId: string
+): string[] | null => {
+    for (const node of nodes) {
+        const newPath = [...path, node.id]
+
+        if (node.id === glId) {
+            return newPath
+        }
+
+        if (node.general_ledger_definition) {
+            const found = findNodePathByGlIdOnly(
+                node.general_ledger_definition,
+                newPath,
+                glId
+            )
+            if (found) return found
+        }
+    }
+
+    return null
 }
 
 const findNodePathWithAccounts = (
@@ -84,38 +114,45 @@ const GeneralLedgerTreeViewer = ({
     isRefetchingGeneralLedgerAccountsGrouping,
 }: GeneralLedgerTreeViewerProps) => {
     const {
-        onCreate,
-        isReadOnly,
-        expandPath,
-        setOnCreate,
-        resetExpansion,
-        setTargetNodeId,
+        // ── General Ledger Definition State ──
         generalLedgerDefitions,
-        changedGeneralLedgerItems,
-        openAddAccountPickerModal,
         setGEneralLedgerDefitions,
-        setAddAccountPickerModalOpen,
-        openCreateGeneralLedgerModal,
+        changedGeneralLedgerItems,
         setChangedGeneralLedgerItems,
-        setOpenCreateGeneralLedgerModal,
         selectedGeneralLedgerDefinitionId,
         setSelectedGeneralLedgerDefinitionId,
         selectedGeneralLedgerDefinition: node,
         setSelectedGeneralLedgerDefinition,
-        generalLedgerAccountsGroupingId,
         generalDefinitionEntriesId,
         setGeneralLedgerDefinitionEntriesId,
-        moveGeneralLedgerNode,
-        changedAccounts,
+
+        // ── Modal Controls ──
+        openCreateGeneralLedgerModal,
+        setOpenCreateGeneralLedgerModal,
+        openAddAccountPickerModal,
+        setAddAccountPickerModalOpen,
         openViewAccountModal,
         setViewAccountModalOpen,
-        selectedAccounts,
         openGeneralLedgerAccountTableModal,
         setOpenGeneralLedgerAccountTableModal,
+
+        // ── View & Interaction State ──
+        onCreate,
+        setOnCreate,
+        isReadOnly,
+        expandPath,
+        resetExpansion,
+        setTargetNodeId,
+
+        // ── Accounts Management ──
+        changedAccounts,
+        selectedAccounts,
+        moveGeneralLedgerNode,
+        generalLedgerAccountsGroupingId,
+        setChangedAccounts,
     } = useGeneralLedgerStore()
 
     const [searchTerm, setSearchTerm] = useState('')
-
     const { mutate: updateIndex, isPending } =
         useUpdateIndexGeneralLedgerDefinition({
             onSuccess: () => {
@@ -127,29 +164,42 @@ const GeneralLedgerTreeViewer = ({
             },
         })
 
+    const hanldeFoundPath = (glId: TEntityId) => {
+        const foundPath = findNodePathByGlIdOnly(
+            generalLedgerDefitions,
+            [],
+            glId
+        )
+
+        if (foundPath) {
+            expandPath(foundPath)
+            setTargetNodeId(foundPath[foundPath.length - 1])
+        }
+    }
+
     const { mutateAsync: addAccountsToGeneralDefinition } =
         useConnectAccountToGeneralLedgerDefinition({
-            onSuccess: () => {
+            onSuccess: (generalLedgerDefinition) => {
                 refetch?.()
                 setAddAccountPickerModalOpen?.(false)
+                hanldeFoundPath(generalLedgerDefinition.id)
             },
         })
 
-    const {
-        mutate: deleteGeneralLedgerDefinition,
-        isPending: isDeletingGLDefinition,
-    } = useDeleteGeneralLedgerDefinition({
-        onSuccess: () => {
-            refetch?.()
-            setSelectedGeneralLedgerDefinitionId?.(null)
-            setSelectedGeneralLedgerDefinition?.(null)
-            setOpenCreateGeneralLedgerModal?.(false)
-        },
-    })
+    const { mutate: deleteGeneralLedgerDefinition } =
+        useDeleteGeneralLedgerDefinition({
+            onSuccess: () => {
+                refetch?.()
+                setSelectedGeneralLedgerDefinitionId?.(null)
+                setSelectedGeneralLedgerDefinition?.(null)
+                setOpenCreateGeneralLedgerModal?.(false)
+            },
+        })
 
     const { mutate: updateAccountIndex } = useUpdateAccountIndex({
         onSuccess: () => {
             refetch?.()
+            setChangedAccounts?.([])
         },
     })
 
@@ -210,12 +260,16 @@ const GeneralLedgerTreeViewer = ({
         }
     }, [treeData])
 
-    const OnSuccessCreateUpdateGLModal = () => {
+    const OnSuccessCreateUpdateGLModal = (
+        generalLedgerDefinitions: IGeneralLedgerDefinition
+    ) => {
         refetch?.()
         setOpenCreateGeneralLedgerModal?.(false)
         setSelectedGeneralLedgerDefinition?.(null)
         setSelectedGeneralLedgerDefinitionId?.(null)
         setGeneralLedgerDefinitionEntriesId?.(undefined)
+
+        hanldeFoundPath(generalLedgerDefinitions.id)
     }
 
     const addGeneralLedgerDefinition = () => {
@@ -362,7 +416,22 @@ const GeneralLedgerTreeViewer = ({
                     Search
                 </Button>
             </div>
-            <div className="w-full flex items-center gap-x-2 justify-end">
+            <div className="w-full flex items-center gap-x-2 justify-start">
+                <Tooltip>
+                    <TooltipTrigger>
+                        <Button
+                            size={'sm'}
+                            variant={'outline'}
+                            className="rounded-xl text-xs"
+                            onClick={() => {
+                                resetExpansion()
+                            }}
+                        >
+                            <CollapseIcon />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Collapse All</TooltipContent>
+                </Tooltip>
                 <Button
                     disabled={isHandleOrderDisabled}
                     variant={'outline'}
@@ -406,7 +475,6 @@ const GeneralLedgerTreeViewer = ({
                                 parentPath={[]}
                                 refetch={refetch}
                                 onDragEndNested={moveGeneralLedgerNode}
-                                isDeletingGLDefinition={isDeletingGLDefinition}
                                 hanldeDeleteGeneralLedgerDefinition={
                                     hanldeDeleteGeneralLedgerDefinition
                                 }
