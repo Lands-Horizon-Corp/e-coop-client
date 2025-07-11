@@ -1,15 +1,3 @@
-import { IconType } from 'react-icons/lib'
-
-import {
-    BankIcon,
-    BillIcon,
-    CalendarDotsIcon,
-    HandWithdrawIcon,
-    ShieldIcon,
-    UserIcon,
-    Users3Icon,
-} from '@/components/icons'
-
 export const PERMISSION_BASE_ACTIONS = [
     'Create',
     'Read',
@@ -104,14 +92,12 @@ type ActionType = (typeof PERMISSION_ALL_ACTIONS)[number]['action']
 export const PERMISSION_ALL_RESOURCE_ACTION: {
     resource: (typeof PERMISSION_BASE_RESOURCE)[number]
     label: string
-    icon?: IconType
     description: string
     supportedActions: ActionType[]
 }[] = [
     {
         resource: 'MemberType',
         label: 'Member Type',
-        icon: UserIcon,
         description: 'Classification type for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -122,7 +108,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'MemberGroup',
         label: 'Member Group',
-        icon: Users3Icon,
         description: 'Groupings of members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -133,7 +118,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'MemberCenter',
         label: 'Member Center',
-        icon: Users3Icon,
         description: 'Centers associated with members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -144,7 +128,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'MemberGender',
         label: 'Member Gender',
-        icon: Users3Icon,
         description: 'Gender classification for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -155,7 +138,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'MemberOccupation',
         label: 'Member Occupation',
-        icon: Users3Icon,
         description: 'Occupational classification for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -166,7 +148,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'MemberClassification',
         label: 'Member Classification',
-        icon: Users3Icon,
         description: 'General classification for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -177,7 +158,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'MemberProfile',
         label: 'Member Profile',
-        icon: UserIcon,
         description: 'Profile details of a member',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -188,14 +168,12 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'Approvals',
         description: 'Approve requests',
-        icon: ShieldIcon,
         label: 'Approval',
         supportedActions: ['Read', 'Approve'],
     },
     {
         resource: 'Banks',
         label: 'Banks',
-        icon: BankIcon,
         description: 'Bank-related resources',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -206,7 +184,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'Holidays',
         label: 'Holidays',
-        icon: CalendarDotsIcon,
         description: 'Holiday schedules and information',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -217,7 +194,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'BillsAndCoin',
         label: 'Bills And Coin',
-        icon: BillIcon,
         description: 'Bills and coin denomination settings',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
@@ -228,7 +204,6 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     {
         resource: 'Loan',
         label: 'Loan',
-        icon: HandWithdrawIcon,
         description: 'Loan details and management',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
