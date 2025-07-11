@@ -32,16 +32,6 @@ const ColumnVisibilityOption = <TData,>({
         <DropdownMenuGroup>
             <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {hiddenColumnsLength > 0 ? (
-                <DropdownMenuItem onClick={onShowAllColumns}>
-                    <EyeIcon className="mr-2" />
-                    Show All
-                </DropdownMenuItem>
-            ) : (
-                <DropdownMenuLabel className="text-center text-xs font-normal text-muted-foreground">
-                    No columns to hide
-                </DropdownMenuLabel>
-            )}
             {allColumns
                 .filter(
                     (column) =>
@@ -53,6 +43,7 @@ const ColumnVisibilityOption = <TData,>({
                         <DropdownMenuCheckboxItem
                             key={column.id}
                             className="capitalize"
+                            onSelect={(e) => e.preventDefault()}
                             checked={column.getIsVisible()}
                             onCheckedChange={(value) =>
                                 column.toggleVisibility(!!value)
@@ -62,6 +53,18 @@ const ColumnVisibilityOption = <TData,>({
                         </DropdownMenuCheckboxItem>
                     )
                 })}
+            {hiddenColumnsLength > 0 && (
+                <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                        onClick={onShowAllColumns}
+                        onSelect={(e) => e.preventDefault()}
+                    >
+                        <EyeIcon className="mr-2" />
+                        Show All
+                    </DropdownMenuItem>
+                </>
+            )}
         </DropdownMenuGroup>
     )
 }

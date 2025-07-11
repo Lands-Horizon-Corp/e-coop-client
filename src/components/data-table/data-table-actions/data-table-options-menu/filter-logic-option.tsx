@@ -27,8 +27,18 @@ const DataTableFilterLogicOption = ({
                     setFilterLogic(selected as TFilterLogic)
                 }
             >
-                <DropdownMenuRadioItem value="AND">AND</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="OR">OR</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                    value="AND"
+                    onSelect={(e) => e.preventDefault()}
+                >
+                    AND
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                    value="OR"
+                    onSelect={(e) => e.preventDefault()}
+                >
+                    OR
+                </DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
     )
