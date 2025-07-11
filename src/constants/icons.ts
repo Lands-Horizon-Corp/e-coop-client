@@ -261,4 +261,5 @@ export const ICONS = [
     'Rotate 90 Degree Right',
     'Badge Exclamation Fill',
     'Text Strikethrough Light',
+    'Collapse All',
 ] as const
