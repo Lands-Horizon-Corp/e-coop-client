@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import CopyWrapper from '@/components/elements/copy-wrapper'
 import HoveruserInfo from '@/components/elements/hover-elements/hover-user-info'
 import ImageNameDisplay from '@/components/elements/image-name-display'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
@@ -16,7 +17,6 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IMemberProfile } from '@/types'
@@ -92,7 +92,7 @@ const MemberProfileTransactionView = ({
                             <div className="flex items-center gap-2">
                                 <PhoneIcon className="400 size-3" />
                                 <span>
-                                    <CopyWrapper iconSide="right">
+                                    <CopyWrapper>
                                         {memberInfo.contact_number}
                                     </CopyWrapper>
                                 </span>
@@ -105,7 +105,7 @@ const MemberProfileTransactionView = ({
                             <div className="flex items-center gap-2">
                                 <IdCardIcon className="size-3" />
                                 <span className="font-mono">
-                                    <CopyWrapper iconSide="right">
+                                    <CopyWrapper>
                                         {memberInfo.passbook}
                                     </CopyWrapper>
                                 </span>
@@ -118,7 +118,7 @@ const MemberProfileTransactionView = ({
                             <div className="flex items-center gap-2">
                                 <UserIcon className="size-3" />
                                 <span>
-                                    <CopyWrapper iconSide="right">
+                                    <CopyWrapper>
                                         {memberInfo.member_type.name}
                                     </CopyWrapper>
                                 </span>
@@ -130,9 +130,7 @@ const MemberProfileTransactionView = ({
                             </h3>
                             <div className="flex items-center gap-2">
                                 <span className="truncate font-mono">
-                                    <CopyWrapper iconSide="right">
-                                        {memberInfo.id}
-                                    </CopyWrapper>
+                                    <CopyWrapper>{memberInfo.id}</CopyWrapper>
                                 </span>
                             </div>
                         </div>
