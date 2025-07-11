@@ -48,7 +48,37 @@ export const getMemberAccountGeneralLedgerTotal = async (
     return response.data
 }
 
+export const getPaginatedGeneralLedger = async ({
+    sort,
+    filters,
+    pagination,
+    accountId,
+}: {
+    accountId: TEntityId
+} & {
+    sort?: string
+    filters?: string
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `/general-ledger/account/${accountId}/search`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IGeneralLedgerPaginated>(url)
+    return response.data
+}
+
 export default {
     getMemberAccountGeneralLedger,
     getMemberAccountGeneralLedgerTotal,
+    getPaginatedGeneralLedger,
 }

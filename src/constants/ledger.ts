@@ -9,3 +9,5 @@ export const GENERAL_LEDGER_SOURCES = [
     'journal voucher',
     'check voucher',
 ] as const
+
+export const GENERAL_LEDGER_DEFINITION_MAX_DEPTH = 3
