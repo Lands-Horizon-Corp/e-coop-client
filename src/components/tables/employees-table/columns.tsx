@@ -1,5 +1,7 @@
 import { ColumnDef, Row } from '@tanstack/react-table'
 
+import { UserOrganizationApplicationStatusBadge } from '@/components/badges/user-organization-application-status-badge'
+import { UserTypeBadge } from '@/components/badges/user-type-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
@@ -8,11 +10,15 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { PermissionViewModal } from '@/components/permission/permission-view'
 import { createUpdateColumns } from '@/components/tables/common-columns'
+import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { IUserOrganization, TGeneralStatus } from '@/types'
+import { useModalState } from '@/hooks/use-modal-state'
+
+import { IUserOrganization, TGeneralStatus, TPermission } from '@/types'
 
 export const employeesGlobalSearchTargets: IGlobalSearchTargets<IUserOrganization>[] =
     [
@@ -131,8 +137,120 @@ const EmployeesTableColumns = (
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
-        size: 100,
-        minSize: 100,
+        size: 200,
+        minSize: 200,
+    },
+    {
+        id: 'full_name',
+        accessorKey: 'user.full_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Full Name">
+                <ColumnActions {...props}>
+                    <TextFilter<IUserOrganization>
+                        displayText="Full Name"
+                        field="user.full_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: {
+                    user: { full_name },
+                },
+            },
+        }) => (
+            <div className="flex min-w-0 items-center gap-3">{full_name}</div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        size: 200,
+        minSize: 200,
+    },
+    {
+        id: 'first_name',
+        accessorKey: 'user.first_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="First Name">
+                <ColumnActions {...props}>
+                    <TextFilter<IUserOrganization>
+                        displayText="First Name"
+                        field="user.first_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: {
+                    user: { first_name },
+                },
+            },
+        }) => (
+            <div className="flex min-w-0 items-center gap-3">{first_name}</div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        size: 200,
+        minSize: 200,
+    },
+    {
+        id: 'middle_name',
+        accessorKey: 'user.middle_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Middle Name">
+                <ColumnActions {...props}>
+                    <TextFilter<IUserOrganization>
+                        displayText="Middle Name"
+                        field="user.middle_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: {
+                    user: { middle_name },
+                },
+            },
+        }) => (
+            <div className="flex min-w-0 items-center gap-3">{middle_name}</div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        size: 200,
+        minSize: 200,
+    },
+    {
+        id: 'last_name',
+        accessorKey: 'user.last_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Last Name">
+                <ColumnActions {...props}>
+                    <TextFilter<IUserOrganization>
+                        displayText="Last Name"
+                        field="user.last_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: {
+                    user: { last_name },
+                },
+            },
+        }) => (
+            <div className="flex min-w-0 items-center gap-3">{last_name}</div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        size: 200,
+        minSize: 200,
     },
     {
         id: 'application_status',
@@ -164,43 +282,19 @@ const EmployeesTableColumns = (
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                {application_status}
+                <UserOrganizationApplicationStatusBadge
+                    size="sm"
+                    status={application_status}
+                />
             </div>
         ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
-        enableHiding: false,
-        size: 100,
-        minSize: 100,
+        size: 200,
+        minSize: 200,
     },
-    {
-        id: 'branch',
-        accessorKey: 'branch',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Branch">
-                <ColumnActions {...props}>
-                    <TextFilter<IUserOrganization>
-                        displayText="Branch"
-                        field="branch"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { branch },
-            },
-        }) => (
-            <div className="flex min-w-0 items-center gap-3">{branch.name}</div>
-        ),
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 100,
-        minSize: 100,
-    },
+
     {
         id: 'type',
         accessorKey: 'user_type',
@@ -218,16 +312,80 @@ const EmployeesTableColumns = (
             row: {
                 original: { user_type },
             },
-        }) => <span className="text-sm font-semibold">{user_type || '-'}</span>,
+        }) => <UserTypeBadge userType={user_type} size="sm" />,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
-        enableHiding: false,
-        size: 140,
-        minSize: 100,
+        size: 150,
+        minSize: 150,
     },
-
+    {
+        id: 'permission',
+        accessorKey: 'permission_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Permission">
+                <ColumnActions {...props}>
+                    <TextFilter<IUserOrganization>
+                        displayText="Permission"
+                        field="permission_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row: { original } }) => (
+            <PermissionCell
+                permissions={original.permissions}
+                permission_name={original.permission_name}
+                permission_description={original.permission_description}
+            />
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        size: 350,
+        minSize: 350,
+    },
     ...createUpdateColumns<IUserOrganization>(),
 ]
+
+const PermissionCell = ({
+    permission_name,
+    permission_description,
+    permissions,
+}: {
+    permission_name: string
+    permission_description: string
+    permissions: TPermission[]
+}) => {
+    const viewPermissions = useModalState()
+
+    return (
+        <div
+            onClick={(e) => e.stopPropagation()}
+            className="flex w-full min-w-0 justify-between items-center gap-3"
+        >
+            <div>
+                <p className="capitalize">{permission_name}</p>
+                <p className="text-xs text-muted-foreground/80">
+                    {permission_description}
+                </p>
+            </div>
+            <PermissionViewModal
+                permissions={permissions}
+                {...viewPermissions}
+            />
+            <Badge
+                onClick={(e) => {
+                    e.stopPropagation()
+                    viewPermissions.onOpenChange(true)
+                }}
+                variant="success"
+                className="text-xs px-2 py-1 h-fit cursor-pointer opacity-90 hover:opacity-100 duration-200 ease-in-out"
+            >
+                <p>{permissions.length} permissions</p>
+            </Badge>
+        </div>
+    )
+}
 
 export default EmployeesTableColumns

@@ -13,13 +13,12 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import CopyWrapper from '@/components/elements/copy-wrapper'
+import ImageNameDisplay from '@/components/elements/image-name-display'
 import { PushPinSlashIcon, QrCodeIcon } from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
 import { QrCodeDownloadable } from '@/components/qr-code'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { CopyWrapper } from '@/components/wrappers/copy-wrapper'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IMemberProfile, TCivilStatus, TGeneralStatus } from '@/types'
 
@@ -87,31 +86,35 @@ const MemberProfileTableColumns = (
             minSize: 80,
         },
         {
-            id: 'Media',
-            accessorKey: 'media',
+            id: 'full_name',
+            accessorKey: 'full_name',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Picture">
-                    <ColumnActions {...props} />
+                <DataTableColumnHeader {...props} title="Full Name">
+                    <ColumnActions {...props}>
+                        <TextFilter
+                            field="full_name"
+                            displayText="Full Name"
+                            defaultMode="contains"
+                        />
+                    </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { media },
+                    original: { full_name, media },
                 },
             }) => (
-                <div className="mx-auto">
-                    <PreviewMediaWrapper media={media}>
-                        <ImageDisplay
-                            src={media?.download_url}
-                            className="mx-auto size-7"
-                        />
-                    </PreviewMediaWrapper>
+                <div onClick={(e) => e.stopPropagation()}>
+                    <ImageNameDisplay
+                        name={full_name}
+                        src={media?.download_url}
+                        className="mx-auto"
+                    />
                 </div>
             ),
-            enableSorting: false,
-            enableResizing: false,
-            enableHiding: false,
-            maxSize: 100,
+            enableMultiSort: true,
+            enableResizing: true,
+            minSize: 250,
         },
         {
             id: 'first_name',
@@ -227,15 +230,15 @@ const MemberProfileTableColumns = (
             }) => (
                 <div onClick={(e) => e.stopPropagation()} className="uppercase">
                     <CopyWrapper>
-                        <p className="rounded-lg bg-popover px-2 py-1 text-primary/70">
+                        <span className="rounded-lg bg-popover px-2 py-1 text-primary/70">
                             {passbook}
-                        </p>
+                        </span>
                     </CopyWrapper>
                 </div>
             ),
             enableMultiSort: true,
             enableResizing: true,
-            minSize: 150,
+            minSize: 200,
         },
         {
             id: 'contact_number',
@@ -257,13 +260,15 @@ const MemberProfileTableColumns = (
             }) => (
                 <div onClick={(e) => e.stopPropagation()}>
                     {contact_number && (
-                        <CopyWrapper>{contact_number}</CopyWrapper>
+                        <CopyWrapper>
+                            <span>{contact_number}</span>
+                        </CopyWrapper>
                     )}
                 </div>
             ),
             enableMultiSort: true,
             enableResizing: true,
-            minSize: 150,
+            minSize: 200,
         },
         {
             id: 'member_gender',

@@ -130,3 +130,10 @@ export const CIVIL_STATUS = [
 ] as const
 
 export const USER_TYPE = ['owner', 'employee', 'member', 'ban'] as const
+
+export const USER_ORG_APPLICATION_STATUS = [
+    'pending',
+    'reported',
+    'accepted',
+    'ban',
+] as const

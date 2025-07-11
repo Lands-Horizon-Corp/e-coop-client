@@ -2,6 +2,7 @@ import { cn } from '@/lib'
 
 import { IClassProps, IMemberProfile } from '@/types'
 
+import CopyWrapper from '../elements/copy-wrapper'
 import {
     CheckIcon,
     ClockIcon,
@@ -14,7 +15,6 @@ import ImageDisplay from '../image-display'
 import { Badge } from '../ui/badge'
 import { Card, CardContent } from '../ui/card'
 import { Skeleton } from '../ui/skeleton'
-import { CopyWrapper } from '../wrappers/copy-wrapper'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props extends IClassProps {
@@ -116,7 +116,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                                 </h3>
                                 <div className="flex items-center gap-2">
                                     <span className="truncate font-mono">
-                                        <CopyWrapper iconSide="right">
+                                        <CopyWrapper>
                                             {memberProfile.id}
                                         </CopyWrapper>
                                     </span>
@@ -130,7 +130,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                                 <div className="flex items-center gap-2">
                                     <PhoneIcon className="400 size-3" />
                                     <span>
-                                        <CopyWrapper iconSide="right">
+                                        <CopyWrapper>
                                             {memberProfile.contact_number}
                                         </CopyWrapper>
                                     </span>
@@ -144,7 +144,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                                 <div className="flex items-center gap-2">
                                     <IdCardIcon className="size-3" />
                                     <span className="font-mono">
-                                        <CopyWrapper iconSide="right">
+                                        <CopyWrapper>
                                             {memberProfile.passbook}
                                         </CopyWrapper>
                                     </span>
@@ -158,7 +158,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                                 <div className="flex items-center gap-2">
                                     <UserIcon className="size-3" />
                                     <span>
-                                        <CopyWrapper iconSide="right">
+                                        <CopyWrapper>
                                             {memberProfile.member_type.name}
                                         </CopyWrapper>
                                     </span>

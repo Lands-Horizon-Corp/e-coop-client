@@ -6,6 +6,7 @@ import {
     IOwner,
     IUserOrganization,
     IUserOrganizationPaginated,
+    IUserOrganizationPermissionRequest,
     TEntityId,
 } from '@/types'
 
@@ -87,4 +88,15 @@ export const getPaginatedUserOrg = async <
 export const deleteManyEmployees = async (ids: TEntityId[]) => {
     const payload = { ids }
     await APIService.delete<void>('user-organization/bulk-delete', payload)
+}
+
+export const updateUserOrganizationPermission = async (
+    userOrgId: TEntityId,
+    data: IUserOrganizationPermissionRequest
+) => {
+    const response = await APIService.put<
+        IUserOrganizationPermissionRequest,
+        IUserOrganization
+    >(`/user-organization/${userOrgId}/permission`, data)
+    return response.data
 }
