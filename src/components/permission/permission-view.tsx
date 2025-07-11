@@ -10,8 +10,9 @@ import { permissionArrayToMap } from '@/utils'
 
 import useDebounce from '@/hooks/use-debounce'
 
-import { IBaseProps, TPermission } from '@/types'
+import { IBaseProps, TPermission, TPermissionResource } from '@/types'
 
+import { PERMISSION_RESOURCE_ICON_MAP } from '.'
 import { PermissionActionBadge } from '../badges/permission-action-badge'
 import { MagnifyingGlassIcon } from '../icons'
 import Modal, { IModalProps } from '../modals/modal'
@@ -88,14 +89,17 @@ const PermissionView = ({ permissions, className }: Props) => {
             <Separator />
             <div className="overflow-y-auto bg-background ecoop-scroll">
                 {Object.entries(perms).map(([resource, perms]) => {
-                    const {
-                        label: resourceLabel,
-                        description,
-                        icon: Icon,
-                    } = allPerms[resource] ?? {
+                    const { label: resourceLabel, description } = allPerms[
+                        resource
+                    ] ?? {
                         label: resource,
                         description: '',
                     }
+
+                    const Icon =
+                        PERMISSION_RESOURCE_ICON_MAP[
+                            resource as TPermissionResource
+                        ]
 
                     return (
                         <div key={resource} className="space-y-1 p-2">
