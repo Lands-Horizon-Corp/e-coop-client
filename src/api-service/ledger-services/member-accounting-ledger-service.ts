@@ -28,7 +28,7 @@ export const getMemberAccountingLedger = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-accounting-ledger/member-profile/:${memberProfileId}`,
+            url: `/member-accounting-ledger/member-profile/${memberProfileId}/searchsdasfa`,
             query: {
                 sort,
                 filter: filters,

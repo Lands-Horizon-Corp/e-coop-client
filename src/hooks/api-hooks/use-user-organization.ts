@@ -20,10 +20,14 @@ import {
     IUserBase,
     IUserOrganization,
     IUserOrganizationPaginated,
+    IUserOrganizationPermissionRequest,
     TEntityId,
 } from '@/types'
 
-import { createMutationHook } from '../../factory/api-hook-factory'
+import {
+    createMutationHook,
+    updateMutationInvalidationFn,
+} from '../../factory/api-hook-factory'
 
 export const useGetUserOrganizationByUserId = (id: TEntityId) => {
     return useQuery<IOrgUserOrganizationGroup[], string>({
@@ -326,3 +330,14 @@ export const useFilteredPaginatedUserOrganization = <
         retry: 1,
     })
 }
+
+export const useUpdateUserOrganizationPermission = createMutationHook<
+    IUserOrganization,
+    string,
+    { id: TEntityId; data: IUserOrganizationPermissionRequest }
+>(
+    ({ id, data }) =>
+        UserOrganizationService.updateUserOrganizationPermission(id, data),
+    'Permission updated',
+    (args) => updateMutationInvalidationFn('user-organization', args)
+)
