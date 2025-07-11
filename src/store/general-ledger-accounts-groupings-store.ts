@@ -1,11 +1,14 @@
 import { toast } from 'sonner'
 
+import { IAccount } from '@/types/coop-types/accounts/account'
 import {
+    GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
-    IGeneralLedgerUpdateIndexRequest,
 } from '@/types/coop-types/general-ledger-definitions'
 import { arrayMove } from '@dnd-kit/sortable'
 import { create } from 'zustand'
+
+import { UpdateIndexRequest } from '@/types'
 
 export interface GeneralLedgerAccountsGroupingStore {
     generalLedgerAccountsGroupingId: string | null
@@ -18,8 +21,21 @@ export interface GeneralLedgerAccountsGroupingStore {
     expandedNodeIds: Set<string>
     targetNodeId: string | null
     selectedGeneralLedgerDefinition: IGeneralLedgerDefinition | null
-    changedGeneralLedgerItems: IGeneralLedgerUpdateIndexRequest[]
+    changedGeneralLedgerItems: UpdateIndexRequest[]
+    selectedGeneralLedgerTypes: GeneralLedgerTypeEnum | null
+    generalDefinitionEntriesId?: string
+    changedAccounts: UpdateIndexRequest[]
+    openViewAccountModal?: boolean
+    selectedAccounts?: IAccount | null
+    openGeneralLedgerAccountTableModal?: boolean
 
+    setOpenGeneralLedgerAccountTableModal?: (open: boolean) => void
+    setSelectedAccounts?: (accounts: IAccount | null) => void
+    setViewAccountModalOpen?: (open: boolean) => void
+    setChangedAccounts?: (data: UpdateIndexRequest[]) => void
+    setGeneralLedgerDefinitionEntriesId?: (
+        generalLedgerDefinitionEntriesId: string | undefined
+    ) => void
     setGeneralLedgerAccountsGroupingId: (paymentType: string) => void
     setSelectedGeneralLedgerDefinitionId: (id: string | null) => void
     setAddAccountPickerModalOpen?: (open: boolean) => void
@@ -41,10 +57,11 @@ export interface GeneralLedgerAccountsGroupingStore {
     clearTargetNodeIdAfterScroll: (nodeId: string) => void
     resetExpansion: () => void
     setSelectedGeneralLedgerDefinition?: (
-        generalLedgerDefinitions: IGeneralLedgerDefinition
+        generalLedgerDefinitions: IGeneralLedgerDefinition | null
     ) => void
-    setChangedGeneralLedgerItems: (
-        data: IGeneralLedgerUpdateIndexRequest[]
+    setChangedGeneralLedgerItems: (data: UpdateIndexRequest[]) => void
+    setGeneralLedgerType?: (
+        generalLedgerType: GeneralLedgerTypeEnum | null
     ) => void
 }
 
@@ -58,7 +75,19 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
         selectedGeneralLedgerDefinition: null,
         selectedGeneralLedgerDefinitionId: null,
         changedGeneralLedgerItems: [],
+        selectedGeneralLedgerTypes: null,
+        changedAccounts: [],
+        openViewAccountModal: false,
+        selectedAccounts: null,
+        openGeneralLedgerAccountTableModal: false,
 
+        setOpenGeneralLedgerAccountTableModal: (open) =>
+            set({ openGeneralLedgerAccountTableModal: open }),
+        setSelectedAccounts: (accounts) => set({ selectedAccounts: accounts }),
+        setViewAccountModalOpen: (open) => set({ openViewAccountModal: open }),
+        setChangedAccounts: (data) => set({ changedAccounts: data }),
+        setGeneralLedgerType: (generalLedgerType) =>
+            set({ selectedGeneralLedgerTypes: generalLedgerType }),
         setChangedGeneralLedgerItems: (data) =>
             set({ changedGeneralLedgerItems: data }),
         setSelectedGeneralLedgerDefinitionId: (id) =>
@@ -194,6 +223,12 @@ export const useGeneralLedgerStore = create<GeneralLedgerAccountsGroupingStore>(
         setSelectedGeneralLedgerDefinition: (generalLedgerDefinitions) =>
             set({
                 selectedGeneralLedgerDefinition: generalLedgerDefinitions,
+            }),
+        setGeneralLedgerDefinitionEntriesId: (
+            generalLedgerDefinitionEntriesId
+        ) =>
+            set({
+                generalDefinitionEntriesId: generalLedgerDefinitionEntriesId,
             }),
     })
 )

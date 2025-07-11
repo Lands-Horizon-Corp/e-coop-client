@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { GeneralLedgerDefinitionAccountsGroupingServices } from '@/api-service/general-ledger-services'
+import { GeneralLedgerDefinitionAccountsGroupingServices } from '@/api-service/general-ledger-definition-services'
 import { serverRequestErrExtractor } from '@/helpers'
 import { IGeneralLedgerAccountsGrouping } from '@/types/coop-types/general-ledger-accounts-grouping'
 import { withCatchAsync } from '@/utils'

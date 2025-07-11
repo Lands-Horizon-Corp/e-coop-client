@@ -1,6 +1,5 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IAccount } from './accounts/account'
-import { GeneralLedgerFinancialStatementNodeType } from './general-ledger-definitions'
 
 export enum FinancialStatementTypeEnum {
     Assets = 'Assets',
@@ -19,7 +18,6 @@ export interface IFinancialStatementDefinition extends IAuditable, ITimeStamps {
     financial_statement_definition_id?: TEntityId
     financial_statement_grouping_id?: TEntityId
 
-    type: GeneralLedgerFinancialStatementNodeType
     name: string
     index?: number
     exclude?: boolean

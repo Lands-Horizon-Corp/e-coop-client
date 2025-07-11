@@ -1,10 +1,9 @@
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
-    IGeneralLedgerUpdateIndexRequest,
 } from '@/types/coop-types/general-ledger-definitions'
 
-import { TEntityId } from '@/types'
+import { TEntityId, UpdateIndexRequest } from '@/types'
 
 import APIService from '../api-service'
 
@@ -71,7 +70,7 @@ export const connectAccountToGeneralLedgerDefinition = async (
 }
 
 export const generalLedgerUpdateIndex = async (
-    changedItems: IGeneralLedgerUpdateIndexRequest[]
+    changedItems: UpdateIndexRequest[]
 ): Promise<IGeneralLedgerDefinition> => {
     const response = await Promise.all(
         changedItems.map((item) =>

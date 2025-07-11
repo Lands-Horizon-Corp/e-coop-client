@@ -70,3 +70,8 @@ export type TCivilStatus = (typeof CIVIL_STATUS)[number]
 export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]
 
 export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number]
+
+export interface UpdateIndexRequest {
+    id: TEntityId
+    index: number
+}
