@@ -49,11 +49,12 @@ export const permissionArrayToMap = (perms: string[]) => {
     return perms.reduce(
         (acc, perm) => {
             const [key, action] = perm.split(':')
-            if (!acc[key]) acc[key] = []
-            acc[key].push(action as TPermissionAction)
+            if (!acc[key as TPermissionResource])
+                acc[key as TPermissionResource] = []
+            acc[key as TPermissionResource].push(action as TPermissionAction)
             return acc
         },
-        {} as Record<string, TPermissionAction[]>
+        {} as Record<TPermissionResource, TPermissionAction[]>
     )
 }
 
