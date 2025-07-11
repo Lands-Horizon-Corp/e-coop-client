@@ -1,6 +1,6 @@
+import Fuse from 'fuse.js'
 import { forwardRef, useMemo, useState } from 'react'
 
-import Fuse from 'fuse.js'
 import { Check } from 'lucide-react'
 
 import { ChevronDownIcon, IconMap } from '@/components/icons'

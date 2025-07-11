@@ -25,10 +25,16 @@ const DataTableScrollOption = ({
                     setIsScrollable(newVal === 'true' ? true : false)
                 }
             >
-                <DropdownMenuRadioItem value="true">
+                <DropdownMenuRadioItem
+                    value="true"
+                    onSelect={(e) => e.preventDefault()}
+                >
                     Default (Scroll)
                 </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="false">
+                <DropdownMenuRadioItem
+                    value="false"
+                    onSelect={(e) => e.preventDefault()}
+                >
                     Full (No Scroll)
                 </DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
