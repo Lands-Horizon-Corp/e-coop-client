@@ -167,9 +167,6 @@ const AccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <FormControl>
                                     <Select
-                                        disabled={
-                                            isDisabled(field.name) || isLoading
-                                        }
                                         onValueChange={(selectedValue) => {
                                             field.onChange(selectedValue)
                                             setSelectedItem(selectedValue)
@@ -235,7 +232,6 @@ const AccountCreateUpdateForm = ({
                             label="Account Classification"
                             render={({ field }) => (
                                 <AccountClassificationComboBox
-                                    {...field}
                                     onChange={(selected) =>
                                         field.onChange(selected.id)
                                     }
@@ -254,7 +250,6 @@ const AccountCreateUpdateForm = ({
                             disabled={isLoading}
                             render={({ field }) => (
                                 <AccountCategoryComboBox
-                                    {...field}
                                     onChange={(selected) =>
                                         field.onChange(selected.id)
                                     }
@@ -278,7 +273,9 @@ const AccountCreateUpdateForm = ({
                                     <TextEditor
                                         {...rest}
                                         content={field.value ?? ''}
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                         textEditorClassName="!max-w-none !h-32"
                                         placeholder="Write some description about the account..."
                                     />
@@ -628,11 +625,14 @@ const AccountCreateUpdateForm = ({
                                     label="Min Amount"
                                     name="minAmount"
                                     className="grow"
-                                    disabled={isLoading}
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                                 value={field.value ?? ''}
                                                 onChange={(e) =>
                                                     field.onChange(
@@ -653,12 +653,15 @@ const AccountCreateUpdateForm = ({
                                     label="Max Amount"
                                     name="maxAmount"
                                     className="grow"
-                                    disabled={isLoading}
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
                                                 value={field.value ?? ''}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                                 onChange={(e) =>
                                                     field.onChange(
                                                         e.target.value === ''
@@ -686,7 +689,10 @@ const AccountCreateUpdateForm = ({
                                     render={({ field }) => (
                                         <FormControl>
                                             <Select
-                                                disabled={isLoading}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                                 onValueChange={(
                                                     selectedValue
                                                 ) => {
@@ -732,6 +738,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -759,6 +770,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -787,6 +803,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -815,6 +836,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -844,6 +870,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -871,6 +902,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -897,6 +933,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -929,7 +970,10 @@ const AccountCreateUpdateForm = ({
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                                disabled={isLoading}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                             >
                                                 {Object.values(
                                                     EarnedUnearnedInterestEnum
@@ -988,7 +1032,10 @@ const AccountCreateUpdateForm = ({
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                                disabled={isLoading}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                             >
                                                 {Object.values(
                                                     LoanSavingTypeEnum
@@ -1102,7 +1149,10 @@ const AccountCreateUpdateForm = ({
                                             onValueChange={(selectedValue) => {
                                                 field.onChange(selectedValue)
                                             }}
-                                            disabled={isLoading}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger className="w-full">
@@ -1139,7 +1189,10 @@ const AccountCreateUpdateForm = ({
                                                 field.onChange(selectedValue)
                                             }}
                                             defaultValue={field.value}
-                                            disabled={isLoading}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
                                         >
                                             <SelectTrigger className="w-full">
                                                 {field.value ||
@@ -1177,7 +1230,11 @@ const AccountCreateUpdateForm = ({
                                                         onCheckedChange={
                                                             field.onChange
                                                         }
-                                                        disabled={isLoading}
+                                                        disabled={
+                                                            isDisabled(
+                                                                field.name
+                                                            ) || isLoading
+                                                        }
                                                         name={field.name}
                                                         className="order-1 after:absolute after:inset-0"
                                                         aria-describedby={`${field.name}`}
@@ -1224,7 +1281,11 @@ const AccountCreateUpdateForm = ({
                                                             field.onChange
                                                         }
                                                         name={field.name}
-                                                        disabled={isLoading}
+                                                        disabled={
+                                                            isDisabled(
+                                                                field.name
+                                                            ) || isLoading
+                                                        }
                                                         className="order-1 after:absolute after:inset-0"
                                                         aria-describedby={`${field.name}`}
                                                     />
@@ -1269,7 +1330,10 @@ const AccountCreateUpdateForm = ({
                                     >
                                         <RadioGroup
                                             value={field.value}
-                                            disabled={isLoading}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
                                             onValueChange={field.onChange}
                                             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                         >
@@ -1331,7 +1395,9 @@ const AccountCreateUpdateForm = ({
                                 >
                                     <RadioGroup
                                         value={field.value}
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                         onValueChange={field.onChange}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                     >
@@ -1389,7 +1455,9 @@ const AccountCreateUpdateForm = ({
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                     >
                                         {Object.values(
                                             InterestSavingTypeDiminishingStraightEnum
@@ -1446,7 +1514,9 @@ const AccountCreateUpdateForm = ({
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                     >
                                         {Object.values(
                                             OtherInformationOfAnAccountEnum
@@ -1494,35 +1564,41 @@ const AccountCreateUpdateForm = ({
                         />
                     </div>
                 </div>
-                <div className="space-y-2">
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            disabled={isLoading}
-                            onClick={() => {
-                                form.reset()
-                            }}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button type="submit" disabled={isLoading} className="">
-                            {isLoading ? (
-                                <div className="flex space-x-2">
-                                    {accountId ? 'updating ' : 'Creating '}{' '}
-                                    <LoadingSpinnerIcon
-                                        size={18}
-                                        className="ml-2 animate-spin"
-                                    />
-                                </div>
-                            ) : (
-                                `${accountId ? 'Update' : 'Create'} Account `
-                            )}
-                        </Button>
+                {!readOnly && (
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-end gap-x-2">
+                            <Button
+                                size="sm"
+                                type="button"
+                                variant="ghost"
+                                disabled={isLoading}
+                                onClick={() => {
+                                    form.reset()
+                                }}
+                                className="w-full self-end px-8 sm:w-fit"
+                            >
+                                Reset
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={isLoading}
+                                className=""
+                            >
+                                {isLoading ? (
+                                    <div className="flex space-x-2">
+                                        {accountId ? 'updating ' : 'Creating '}{' '}
+                                        <LoadingSpinnerIcon
+                                            size={18}
+                                            className="ml-2 animate-spin"
+                                        />
+                                    </div>
+                                ) : (
+                                    `${accountId ? 'Update' : 'Create'} Account `
+                                )}
+                            </Button>
+                        </div>
                     </div>
-                </div>
+                )}
             </form>
         </Form>
     )

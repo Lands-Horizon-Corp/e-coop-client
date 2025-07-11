@@ -93,22 +93,27 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
             return
         }
 
-        const request = {
-            ...data,
-            general_ledger_definition_entries_id:
-                generalLedgerDefinitionEntriesId,
-            general_ledger_accounts_grouping_id:
-                generalLedgerAccountsGroupingId,
-        }
-
         if (generalLedgerDefinitionId) {
+            const request = {
+                ...data,
+                general_ledger_definition_entries_id:
+                    defaultValues?.general_ledger_definition_entries_id,
+                general_ledger_accounts_grouping_id:
+                    generalLedgerAccountsGroupingId,
+            }
             UpdateGeneralLedgerDefinition({
                 generalLedgerDefinitionId: generalLedgerDefinitionId,
                 data: request,
             })
         } else {
-            console.log('Creating new GL Definition:', request)
-            CreateGeneralLedgerDefinition(request)
+            const CreateRequest = {
+                ...data,
+                general_ledger_definition_entries_id:
+                    generalLedgerDefinitionEntriesId,
+                general_ledger_accounts_grouping_id:
+                    generalLedgerAccountsGroupingId,
+            }
+            CreateGeneralLedgerDefinition(CreateRequest)
         }
     })
 
@@ -189,12 +194,12 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                             <Input
                                 {...field}
                                 value={field.value ?? ''}
-                                pattern="\d*"
                                 onChange={(e) =>
                                     field.onChange(
                                         parseFloat(e.target.value) || undefined
                                     )
                                 }
+                                type="number"
                                 disabled={isDisabled(field.name)}
                                 placeholder="e.g., 100"
                             />
