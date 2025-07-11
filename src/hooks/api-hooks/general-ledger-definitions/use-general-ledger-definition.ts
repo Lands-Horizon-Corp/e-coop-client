@@ -1,11 +1,10 @@
-import { GeneralLedgerDefinitionServices } from '@/api-service/general-ledger-services'
+import { GeneralLedgerDefinitionServices } from '@/api-service/general-ledger-definition-services'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
-    IGeneralLedgerUpdateIndexRequest,
 } from '@/types/coop-types/general-ledger-definitions'
 
-import { TEntityId } from '@/types'
+import { TEntityId, UpdateIndexRequest } from '@/types'
 
 import {
     createMutationHook,
@@ -79,7 +78,7 @@ export const useConnectAccountToGeneralLedgerDefinition = createMutationHook<
 export const useUpdateIndexGeneralLedgerDefinition = createMutationHook<
     IGeneralLedgerDefinition,
     number,
-    IGeneralLedgerUpdateIndexRequest[]
+    UpdateIndexRequest[]
 >(
     (payload) =>
         GeneralLedgerDefinitionServices.generalLedgerUpdateIndex([...payload]),

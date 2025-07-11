@@ -8,11 +8,6 @@ export enum GeneralLedgerTypeEnum {
     Expenses = 'Expenses',
 }
 
-export enum GeneralLedgerFinancialStatementNodeType {
-    DEFINITION = 'DEFINITION',
-    ACCOUNT = 'ACCOUNT',
-}
-
 export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
     id: TEntityId
 
@@ -21,7 +16,6 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
 
     general_ledger_definition_entries_id?: TEntityId
 
-    type: GeneralLedgerFinancialStatementNodeType
     parent_id?: TEntityId
     parent?: IGeneralLedgerDefinition
     accounts?: IAccount[]
@@ -53,9 +47,4 @@ export interface IGeneralLedgerDefinitionRequest {
 
     general_ledger_definition_entries_id?: TEntityId
     general_ledger_accounts_grouping_id: TEntityId
-}
-
-export interface IGeneralLedgerUpdateIndexRequest {
-    id: TEntityId
-    index: number
 }

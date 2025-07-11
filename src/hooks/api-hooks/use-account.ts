@@ -15,7 +15,7 @@ import {
 } from '@/types/coop-types/accounts/account'
 import { toBase64, withCatchAsync } from '@/utils'
 
-import { TEntityId } from '@/types'
+import { TEntityId, UpdateIndexRequest } from '@/types'
 
 import {
     createMutationHook,
@@ -150,4 +150,26 @@ export const useDeleteAccount = createMutationHook<void, string, TEntityId>(
     (accountId) => AccountServices.deleteAccount(accountId),
     'Account Deleted Successfully!',
     (args) => deleteMutationInvalidationFn('account', args)
+)
+
+export const useUpdateAccountIndex = createMutationHook<
+    IAccount,
+    number,
+    UpdateIndexRequest[]
+>(
+    (payload) => AccountServices.AccountUpdateIndex([...payload]),
+    'Updated Account Index Successfully!',
+    (args) =>
+        updateMutationInvalidationFn('general-ledger-accounts-groupings', args)
+)
+
+export const useDeleteAccountFromGLDefintion = createMutationHook<
+    IAccount,
+    string,
+    TEntityId
+>(
+    (payload) => AccountServices.deleteGLAccounts(payload),
+    'general-ledger-definition-accounts-removed',
+    (args) =>
+        updateMutationInvalidationFn('general-ledger-accounts-groupings', args)
 )
