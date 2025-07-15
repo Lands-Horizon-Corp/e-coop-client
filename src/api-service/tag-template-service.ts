@@ -1,15 +1,15 @@
+import { ITagTemplate, ITagTemplateRequest } from '@/types'
+
 import {
     createAPICollectionService,
     createAPICrudService,
-} from '@/factory/api-factory-service'
+} from '../factory/api-factory-service'
 
-import { ILoanPurpose, ILoanPurposeRequest } from '@/types'
-
-const CrudServices = createAPICrudService<ILoanPurpose, ILoanPurposeRequest>(
-    '/loan-purpose'
+const CrudServices = createAPICrudService<ITagTemplate, ITagTemplateRequest>(
+    `tag-template`
 )
 const CollectionServices =
-    createAPICollectionService<ILoanPurpose>('/loan-purpose')
+    createAPICollectionService<ITagTemplate>(`tag-template`)
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

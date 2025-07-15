@@ -50,6 +50,9 @@ export * from './account-classification'
 
 /* Other Types */
 export * from './api'
+export * from './collateral'
+export * from './tag-template'
+
 // export * from './role'
 export * from './media'
 export * from './branch'
@@ -70,6 +73,7 @@ export * from './cash-entry'
 export * from './check-entry'
 export * from './online-entry'
 export * from './deposit-entry'
+export * from './transaction-tag'
 export * from './withdrawal-entry'
 export * from './transaction-entry'
 
