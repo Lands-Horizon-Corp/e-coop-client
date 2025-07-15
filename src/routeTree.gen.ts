@@ -44,7 +44,9 @@ import { Route as OrgOrgnameBranchBranchnamecommonMyFootstepsImport } from './ro
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanIndexImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/index'
 import { Route as OrgOrgnameBranchBranchnameemployeeApprovalsIndexImport } from './routes/org/$orgname/branch.$branchname/(employee)/approvals/index'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/tag-template'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/collateral'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
@@ -301,10 +303,24 @@ const OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute =
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateImport.update({
+    id: '/(maintenance)/maintenance/tag-template',
+    path: '/maintenance/tag-template',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysImport.update({
     id: '/(maintenance)/maintenance/holidays',
     path: '/maintenance/holidays',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralImport.update({
+    id: '/(maintenance)/maintenance/collateral',
+    path: '/maintenance/collateral',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 
@@ -978,11 +994,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
+      path: '/maintenance/collateral'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/collateral'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
       path: '/maintenance/holidays'
       fullPath: '/org/$orgname/branch/$branchname/maintenance/holidays'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template'
+      path: '/maintenance/tag-template'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/tag-template'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
     '/org/$orgname/branch/$branchname/(employee)/approvals/': {
@@ -1272,7 +1302,9 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   OrgOrgnameBranchBranchnameemployeeLoanIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -1345,8 +1377,12 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute,
     OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute:
       OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute,
     OrgOrgnameBranchBranchnameemployeeLoanIndexRoute:
@@ -1463,7 +1499,9 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
   '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
+  '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -1535,7 +1573,9 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
   '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
+  '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -1613,7 +1653,9 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/(employee)/approvals/': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/(employee)/loan/': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -1691,7 +1733,9 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/maintenance/collateral'
     | '/org/$orgname/branch/$branchname/maintenance/holidays'
+    | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/loan'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
@@ -1762,7 +1806,9 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/maintenance/collateral'
     | '/org/$orgname/branch/$branchname/maintenance/holidays'
+    | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/loan'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
@@ -1838,7 +1884,9 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/(employee)/approvals/'
     | '/org/$orgname/branch/$branchname/(employee)/loan/'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management'
@@ -2058,7 +2106,9 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins",
+        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays",
+        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template",
         "/org/$orgname/branch/$branchname/(employee)/approvals/",
         "/org/$orgname/branch/$branchname/(employee)/loan/",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management",
@@ -2176,8 +2226,16 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
+    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/collateral.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/tag-template.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(employee)/approvals/": {
