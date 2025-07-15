@@ -14,6 +14,11 @@ import { sanitizeNumberInput } from '@/helpers'
 
 export const entityIdSchema = z.coerce.string().uuid('Invalid')
 
+export const organizationBranchIdsSchema = z.object({
+    organization_id: entityIdSchema.optional(),
+    branch_id: entityIdSchema.optional(),
+})
+
 export const mediaSchema = z.object({
     id: entityIdSchema.optional(),
     file_name: z.string(),
