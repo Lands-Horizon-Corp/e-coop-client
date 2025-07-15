@@ -87,8 +87,8 @@ const GeneralLedgerDefinitionActions = ({
                 break
             case 'remove':
                 onOpen({
-                    title: `Delete this Account/Definition`,
-                    description: `You are about to delete this Account/Definition, are you sure you want to proceed?`,
+                    title: `Delete this GL Definition`,
+                    description: `You are about to delete this GL Definition, are you sure you want to proceed?`,
                     onConfirm: () => {
                         if (
                             typeof hanldeDeleteGeneralLedgerDefinition ===

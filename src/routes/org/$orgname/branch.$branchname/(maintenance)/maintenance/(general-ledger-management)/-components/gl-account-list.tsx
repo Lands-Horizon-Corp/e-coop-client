@@ -103,16 +103,13 @@ export default function GLAccountsCardList({
             const originalPos = getTaskPos(active.id)
             const newPos = over ? getTaskPos(over.id) : -1
 
-            // Move the item
             const updatedAccounts = arrayMove(account, originalPos, newPos)
 
-            // Add updated index to each item
             const finalAccounts = updatedAccounts.map((item, i) => ({
                 ...item,
                 index: i,
             }))
 
-            // Create UpdateIndexRequest list for only changed items
             const changed: UpdateIndexRequest[] = finalAccounts
                 .filter(
                     (item, i) =>

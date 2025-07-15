@@ -210,7 +210,7 @@ const GeneralLedgerNode = ({
                 </div>
                 <GeneralLedgerDefinitionActions
                     depth={depth}
-                    canDelete={hasAccountNode}
+                    canDelete={hasAccountNode || hasChildren}
                     node={node}
                     isDeletingGLDefinition={isDeletingGLDefinition}
                     hanldeDeleteGeneralLedgerDefinition={(
