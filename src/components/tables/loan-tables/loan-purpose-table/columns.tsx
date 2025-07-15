@@ -8,6 +8,7 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon, RenderIcon } from '@/components/icons'
+import RawDescription from '@/components/raw-description'
 import { createUpdateColumns } from '@/components/tables/common-columns'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -77,7 +78,7 @@ const LoanPurposeTableColumns = (
                 row: {
                     original: { description },
                 },
-            }) => <div>{description}</div>,
+            }) => <RawDescription content={description} />,
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,
