@@ -13,6 +13,7 @@ import {
     FootstepsIcon,
     GendersIcon,
     HandCoinsIcon,
+    HouseLockIcon,
     LayersIcon,
     MaintenanceIcon,
     MoneyCheckIcon,
@@ -22,6 +23,7 @@ import {
     QrCodeIcon,
     SettingsIcon,
     ShieldIcon,
+    TagIcon,
     TargetArrowIcon,
     UserCogIcon,
     UserListIcon,
@@ -81,14 +83,14 @@ export const generateSidebarGroups = (
         },
         {
             title: 'Transaction',
-            userType: ['employee'],
+            userType: ['employee', 'owner'],
             navItems: [
                 {
                     type: 'item',
                     icon: HandCoinsIcon,
                     title: 'Fund Movement',
                     url: `${baseUrl}/transaction/fund-movement`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Manage fund transfers and movements',
                 },
                 {
@@ -96,7 +98,7 @@ export const generateSidebarGroups = (
                     icon: BillIcon,
                     title: 'Payment Types',
                     url: `${baseUrl}/transaction/payment-types`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Configure available payment types',
                 },
                 {
@@ -104,14 +106,14 @@ export const generateSidebarGroups = (
                     title: 'Maintenance',
                     url: `${baseUrl}/transaction/maintenance`,
                     type: 'dropdown',
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             title: 'Cash Count',
                             url: `/cash-count`,
                             type: 'item',
                             icon: HandCoinsIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Record and review cash counts',
                         },
                         {
@@ -119,7 +121,7 @@ export const generateSidebarGroups = (
                             url: `/disbursement`,
                             type: 'item',
                             icon: HandCoinsIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription:
                                 'Manage disbursement transactions',
                         },
@@ -128,7 +130,7 @@ export const generateSidebarGroups = (
                             url: `/financial-statement`,
                             type: 'item',
                             icon: BillIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'View financial statements',
                         },
                         {
@@ -136,7 +138,7 @@ export const generateSidebarGroups = (
                             url: `/general-ledger`,
                             type: 'item',
                             icon: BillIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Access general ledger records',
                         },
                     ],
@@ -146,7 +148,7 @@ export const generateSidebarGroups = (
 
         {
             title: 'Transaction Batch & Entries',
-            userType: ['employee'],
+            userType: ['employee', 'owner'],
             navItems: [
                 {
                     type: 'item',
@@ -177,14 +179,14 @@ export const generateSidebarGroups = (
 
         {
             title: 'Members',
-            userType: ['employee'],
+            userType: ['employee', 'owner'],
             navItems: [
                 {
                     title: 'All Members',
                     url: `${baseUrl}/view-members`,
                     type: 'item',
                     icon: UserListIcon,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Browse all cooperative members',
                 },
                 {
@@ -192,14 +194,14 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/members`,
                     icon: MaintenanceIcon,
                     type: 'dropdown',
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             title: 'Member Types',
                             url: `/member-types`,
                             type: 'item',
                             icon: UserCogIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage member types',
                         },
                         {
@@ -207,7 +209,7 @@ export const generateSidebarGroups = (
                             url: `/member-group`,
                             type: 'item',
                             icon: Users3Icon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage member groups',
                         },
                         {
@@ -215,7 +217,7 @@ export const generateSidebarGroups = (
                             url: `/member-center`,
                             type: 'item',
                             icon: UserCogIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage member centers',
                         },
                         {
@@ -223,7 +225,7 @@ export const generateSidebarGroups = (
                             url: `/member-classification`,
                             type: 'item',
                             icon: UserTagIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage member classifications',
                         },
                         {
@@ -231,7 +233,7 @@ export const generateSidebarGroups = (
                             url: `/member-occupation`,
                             type: 'item',
                             icon: BriefCaseIcon,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage member occupations',
                         },
                         {
@@ -239,7 +241,7 @@ export const generateSidebarGroups = (
                             icon: GendersIcon,
                             type: 'item',
                             url: `/member-gender`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage member genders',
                         },
                     ],
@@ -248,28 +250,28 @@ export const generateSidebarGroups = (
         },
         {
             title: 'Approval & Request',
-            userType: ['employee'],
+            userType: ['employee', 'owner'],
             navItems: [
                 {
                     title: 'Approvals',
                     url: `${baseUrl}/approvals`,
                     icon: ChecksGridIcon,
                     type: 'item',
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Approve or review pending requests',
                 },
             ],
         },
         {
             title: 'Employee',
-            userType: ['employee'],
+            userType: ['employee', 'owner'],
             navItems: [
                 {
                     title: 'View Employees',
                     url: `${baseUrl}/employees/view-employees`,
                     icon: UserListIcon,
                     type: 'item',
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Browse all employees',
                 },
                 {
@@ -277,21 +279,21 @@ export const generateSidebarGroups = (
                     icon: ShieldIcon,
                     type: 'item',
                     url: `${baseUrl}/permission-template`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Manage role template permissions',
                 },
             ],
         },
         {
             title: 'Accounting',
-            userType: ['employee'],
+            userType: ['employee', 'owner'],
             navItems: [
                 {
                     type: 'item',
                     icon: BankIcon,
                     title: 'Accounts',
                     url: `${baseUrl}/accounting/accounts`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'View and manage accounts',
                 },
                 {
@@ -299,7 +301,7 @@ export const generateSidebarGroups = (
                     icon: BankIcon,
                     title: 'Computation Type',
                     url: `${baseUrl}/accounting/computation-type`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Configure computation types',
                 },
             ],
@@ -356,10 +358,26 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
+                    icon: TagIcon,
+                    title: 'Tag Templates',
+                    url: `${baseUrl}/maintenance/tag-template`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage bills and coins',
+                },
+                {
+                    type: 'item',
+                    icon: HouseLockIcon,
+                    title: 'Collateral',
+                    url: `${baseUrl}/maintenance/collateral`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage bills and coins',
+                },
+                {
+                    type: 'item',
                     icon: BankDuoToneIcon,
                     title: 'Banks',
                     url: `${baseUrl}/maintenance/banks`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Manage bank records',
                 },
                 {
@@ -367,7 +385,7 @@ export const generateSidebarGroups = (
                     icon: CalendarDotsIcon,
                     title: 'Holidays',
                     url: `${baseUrl}/maintenance/holidays`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     shortDescription: 'Manage holiday schedules',
                 },
                 {
@@ -375,14 +393,14 @@ export const generateSidebarGroups = (
                     icon: UserLockIcon,
                     type: 'dropdown',
                     url: `${baseUrl}/maintenance/`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             icon: QrCodeIcon,
                             title: 'invitation Code',
                             url: `/invitation-code`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage invitation codes',
                         },
                     ],
@@ -392,20 +410,20 @@ export const generateSidebarGroups = (
                     icon: AccountSetupIcon,
                     type: 'dropdown',
                     url: `${baseUrl}/maintenance/`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             title: 'Account Classification',
                             url: `/account-classification`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage account classifications',
                         },
                         {
                             type: 'item',
                             title: 'Account Category',
                             url: `/account-category`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage account categories',
                         },
                     ],
@@ -415,13 +433,13 @@ export const generateSidebarGroups = (
                     icon: CreditCardIcon2,
                     type: 'dropdown',
                     url: `${baseUrl}/maintenance/`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             title: 'Payment Type',
                             url: `/payment-type`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Configure payment types',
                         },
                     ],
@@ -431,20 +449,20 @@ export const generateSidebarGroups = (
                     icon: BookIcon,
                     type: 'dropdown',
                     url: `${baseUrl}/maintenance/`,
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             title: 'GL Account Grouping',
                             url: `/gl-accounts-grouping`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Manage GL account groupings',
                         },
                         {
                             type: 'item',
                             title: 'GL Definition',
                             url: `/gl-definition`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Define general ledger accounts',
                         },
                     ],
@@ -454,20 +472,20 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/maintenance/`,
                     icon: FinanceReportsIcon,
                     type: 'dropdown',
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             title: 'FS Definition',
                             url: `/fs-definition`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Define financial statements',
                         },
                         {
                             type: 'item',
                             title: 'FS Account Grouping',
                             url: `/fs-account-grouping`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Group FS accounts',
                         },
                     ],
@@ -476,20 +494,20 @@ export const generateSidebarGroups = (
                     title: 'Surplus Handling',
                     icon: FinanceReportsIcon,
                     type: 'dropdown',
-                    userType: ['employee'],
+                    userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             title: '++Net Surplus Grouping',
                             url: `${baseUrl}/maintenace/net-surplus-grouping(positive)`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Group positive net surplus',
                         },
                         {
                             type: 'item',
                             title: '--Net Surplus Grouping',
                             url: `${baseUrl}/maintenace/net-surplus-grouping(negative)`,
-                            userType: ['employee'],
+                            userType: ['employee', 'owner'],
                             shortDescription: 'Group negative net surplus',
                         },
                     ],
@@ -543,7 +561,7 @@ export const generateSidebarGroups = (
                     title: 'Settings',
                     icon: SettingsIcon,
                     url: `${baseUrl}/settings`,
-                    userType: ['employee', 'member'],
+                    userType: ['employee', 'member', 'owner'],
                     shortDescription: 'Application settings and preferences',
                 },
             ],
