@@ -2939,8 +2939,6 @@ Ref: deposit_entry.account_id > account.id [delete:restrict, update:cascade]
 
 
 // ITO AY PAYMENT DATI SA OLD COOP SYS
-//
-
 // 🔑
 Table transaction_entry {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
@@ -3345,7 +3343,7 @@ Ref: loan_guaranteed_fund_per_month.branch_id > branch.id [delete:cascade, updat
 
 // Maintenance End
 
-// 🔑
+// 🔑 
 Table loan_status {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3401,7 +3399,7 @@ Table loan_guaranteed_fund {
 Ref: loan_guaranteed_fund.organization_id > organization.id [delete: cascade, update: cascade]
 Ref: loan_guaranteed_fund.branch_id > branch.id [delete:cascade, update:cascade]
 
-
+// ✅
 enum loan_mode_of_payment {
   daily
   weekly
@@ -3412,6 +3410,7 @@ enum loan_mode_of_payment {
   lumpsum
 }
 
+// ✅
 enum weekdays {
   monday
   tuesday
@@ -3422,17 +3421,20 @@ enum weekdays {
   sunday
 }
 
+// ✅
 enum loan_collector_place {
   office
   field
 }
 
+// ✅
 enum loan_comaker_type {
   member
   deposit
   others
 }
 
+// ✅
 enum loan_type {
   standard
   restructured
@@ -3441,13 +3443,14 @@ enum loan_type {
   "renewal without deduction"
 }
 
+// ✅
 enum loan_amortization_type {
   suggested
   none
 }
 
 // this is where all loan application is stored
-// 🔑
+// 🔑 ✅
 Table loan_transaction {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3675,7 +3678,7 @@ Ref: loan_comaker_member.branch_id > branch.id [delete:cascade, update:cascade]
 Ref: loan_comaker_member.loan_transaction_id > loan_transaction.id [delete:restrict, update:cascade]
 Ref: loan_comaker_member.member_profile_id > member_profile.id [delete:restrict, update:cascade]
 
-// 🔑
+// 🔑 ✅
 Table loan_transaction_entry {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3707,7 +3710,7 @@ Ref: loan_transaction_entry.organization_id > organization.id [delete: cascade, 
 Ref: loan_transaction_entry.branch_id > branch.id [delete:cascade, update:cascade]
 Ref: loan_transaction_entry.loan_transaction_id > loan_transaction.id [delete:restrict, update:cascade]
 
-// 🔑
+// 🔑 ✅
 Table loan_tag {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3800,7 +3803,7 @@ Ref: loan_terms_and_condition_amount_receipt.loan_transaction_id > loan_transact
 Ref: loan_terms_and_condition_amount_receipt.account_id > account.id [delete:cascade, update:cascade]
 
 // NOTE: This is maintenance table that wwwould reflect to all loan entry/application
-// 🔑
+// 🔑 ✅
 Table loan_purpose {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3858,7 +3861,7 @@ Ref: loan_ledger.branch_id > branch.id [delete:cascade, update:cascade]
 
 // ---- Maintenance ---- //
 
-
+// ✅
 enum tag_category {
   accounting
   voucher
@@ -3869,7 +3872,7 @@ enum tag_category {
   "general acconting ledger"
 }
 
-// 🔑
+// 🔑 ✅
 Table tag_template {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3900,7 +3903,7 @@ Ref: tag_template.organization_id > organization.id [delete: cascade, update: ca
 Ref: tag_template.branch_id > branch.id [delete:cascade, update:cascade]
 
 
-// 🔑
+// 🔑 ✅
 Table holidays {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -4294,7 +4297,7 @@ Ref: member_deduction_entry.branch_id > branch.id [delete:cascade, update:cascad
 Ref: member_deduction_entry.member_profile_id > member_profile.id [delete:cascade, update:cascade]
 Ref: member_deduction_entry.account_id - account.id [delete:restrict, update:cascade]
 
-// 🔑
+// 🔑 ✅
 Table collateral {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
