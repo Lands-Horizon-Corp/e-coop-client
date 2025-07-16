@@ -1,9 +1,10 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IFinancialStatementDefinition } from './financial-statement-definition'
 import { AccountingPrincipleType } from './general-ledger-accounts-grouping'
-import { IPaginatedResult } from './paginated-result'
 
-export interface FinancialStatementGrouping extends IAuditable, ITimeStamps {
+export interface IFinancialStatementAccountsGrouping
+    extends IAuditable,
+        ITimeStamps {
     id: TEntityId
 
     organization_id: TEntityId
@@ -19,5 +20,16 @@ export interface FinancialStatementGrouping extends IAuditable, ITimeStamps {
     to_code?: number
 }
 
-export interface IPaginatedFinancialStatementAccountsGroupingResource
-    extends IPaginatedResult<FinancialStatementGrouping> {}
+export interface IFinancialStatementAccountsGroupingRequest {
+    debit: AccountingPrincipleType
+    credit: AccountingPrincipleType
+
+    name: string
+    description?: string
+
+    from_code?: number
+    to_code?: number
+
+    branch_id: TEntityId
+    organization_id: TEntityId
+}

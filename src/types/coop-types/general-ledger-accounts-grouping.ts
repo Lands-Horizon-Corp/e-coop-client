@@ -24,16 +24,13 @@ export interface IGeneralLedgerAccountsGrouping
 
 export interface IGeneralLedgerAccountsGroupingRequest {
     name: string
-    description: string
+    description?: string
 
     debit: AccountingPrincipleType
     credit: AccountingPrincipleType
 
     from_code?: number
     to_code?: number
-
-    organization_id?: TEntityId
-    branch_id?: TEntityId
 }
 
 export interface IPaginatedGeneralLedgerAccountsGroupingRequest

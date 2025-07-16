@@ -29,7 +29,7 @@ export interface GeneralLedgerAccountsGroupingStore {
     ) => void
     setGeneralLedgerAccountsGroupingId: (paymentType: string) => void
     setSelectedGeneralLedgerDefinitionId: (id: string | null) => void
-    setgeneralLedgerDefinitions: (
+    setGeneralLedgerDefinition: (
         generalLedgerDefinitions: IGeneralLedgerDefinition[]
     ) => void
     moveGeneralLedgerNode: (
@@ -72,7 +72,7 @@ export const useGeneralLedgerAccountsGroupingStore =
             set({ selectedGeneralLedgerDefinitionId: null }),
         setGeneralLedgerAccountsGroupingId: (paymentType) =>
             set({ generalLedgerAccountsGroupingId: paymentType }),
-        setgeneralLedgerDefinitions: (generalLedgerDefinitions) =>
+        setGeneralLedgerDefinition: (generalLedgerDefinitions) =>
             set({ generalLedgerDefinitions }),
         moveGeneralLedgerNode: async (path, activeId, overId) => {
             const prevLedgerData = get().generalLedgerDefinitions

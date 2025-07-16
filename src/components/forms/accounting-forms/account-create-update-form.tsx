@@ -93,9 +93,6 @@ const AccountCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            name: '',
-            description: '',
-            computation_type: undefined,
             type: AccountTypeEnum.Deposit,
             ...defaultValues,
         },

@@ -33,7 +33,7 @@ export const IAccountRequestSchema = z.object({
     member_type_id: entityIdSchema.optional(),
 
     name: z.string().min(1, 'Name is required'),
-    description: z.string().min(1, 'Description is required'),
+    description: z.string().max(250, 'Description is required').optional(),
 
     minAmount: z.number().min(0, 'Min amount must be non-negative').optional(),
     maxAmount: z.number().min(0, 'Max amount must be non-negative').optional(),

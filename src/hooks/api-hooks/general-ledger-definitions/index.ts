@@ -1,2 +1,2 @@
 export * as useGeneralLedgerDefinitions from './use-general-ledger-definition'
-export * as useGeneralLedgerAccountsGroupings from './use-general-ledger-accounts-groupings'
+export * as useGeneralLedgerAccountsGroupings from './use-general-ledger-accounts-grouping'

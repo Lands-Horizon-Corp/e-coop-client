@@ -264,7 +264,7 @@ const AccountsTableColumns = (
                 },
             }) => (
                 <div className="line-clamp-1 text-xs text-gray-500">
-                    <RawDescription content={description} />
+                    <RawDescription content={description ?? ''} />
                 </div>
             ),
             enableMultiSort: true,
@@ -506,7 +506,7 @@ const AccountsTableColumns = (
                 },
             }) => (
                 <div className="line-clamp-1 text-xs text-gray-500">
-                    <RawDescription content={description} />
+                    <RawDescription content={description ?? ''} />
                 </div>
             ),
             enableMultiSort: true,
