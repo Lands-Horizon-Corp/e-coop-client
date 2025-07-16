@@ -66,7 +66,6 @@ import { Route as OrgOrgnameBranchBranchnameemployeeAccountingComputationTypeImp
 import { Route as OrgOrgnameBranchBranchnameemployeeAccountingAccountsImport } from './routes/org/$orgname/branch.$branchname/(employee)/accounting/accounts'
 import { Route as OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsImport } from './routes/org/$orgname/branch.$branchname/(common)/(timesheets)/timesheets'
 import { Route as OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetImport } from './routes/org/$orgname/branch.$branchname/(common)/(timesheets)/my-timesheet'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
@@ -458,15 +457,6 @@ const OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute =
     path: '/my-timesheet',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-
-const OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeImport.update(
-    {
-      id: '/(maintenance)/maintenance/(payment-configuration)/payment-type',
-      path: '/maintenance/payment-type',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
 
 const OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveImport.update(
@@ -1121,13 +1111,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type'
-      path: '/maintenance/payment-type'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/payment-type'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
-    }
     '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id': {
       id: '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id'
       path: '/timesheet/user/$id'
@@ -1289,7 +1272,6 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
   OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute: typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
@@ -1383,8 +1365,6 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute,
     OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute:
       OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute:
@@ -1480,7 +1460,6 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
-  '/org/$orgname/branch/$branchname/maintenance/payment-type': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
   '/org/$orgname/branch/$branchname/timesheet/user/$id': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute
   '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
@@ -1552,7 +1531,6 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
-  '/org/$orgname/branch/$branchname/maintenance/payment-type': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
   '/org/$orgname/branch/$branchname/timesheet/user/$id': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute
   '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
@@ -1630,7 +1608,6 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
   '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
@@ -1708,7 +1685,6 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive'
-    | '/org/$orgname/branch/$branchname/maintenance/payment-type'
     | '/org/$orgname/branch/$branchname/timesheet/user/$id'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
   fileRoutesByTo: FileRoutesByTo
@@ -1779,7 +1755,6 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive'
-    | '/org/$orgname/branch/$branchname/maintenance/payment-type'
     | '/org/$orgname/branch/$branchname/timesheet/user/$id'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
   id:
@@ -1855,7 +1830,6 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type'
     | '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/'
   fileRoutesById: FileRoutesById
@@ -2075,7 +2049,6 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive",
-        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type",
         "/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/"
       ]
@@ -2254,10 +2227,6 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive.tsx",
-      "parent": "/org/$orgname/branch/$branchname"
-    },
-    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id": {
