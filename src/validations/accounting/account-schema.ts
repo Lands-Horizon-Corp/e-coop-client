@@ -27,7 +27,7 @@ export enum AccountExclusiveSettingTypeEnum {
 
 export const IAccountRequestSchema = z.object({
     general_ledger_definition_id: entityIdSchema.optional(),
-    financial_statement_definition_id: entityIdSchema.optional(),
+    financial_statement_definition_entries_id: entityIdSchema.optional(),
     account_classification_id: entityIdSchema.optional(),
     account_category_id: entityIdSchema.optional(),
     member_type_id: entityIdSchema.optional(),

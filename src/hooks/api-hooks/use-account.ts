@@ -169,7 +169,7 @@ export const useDeleteAccountFromGLDefintion = createMutationHook<
     TEntityId
 >(
     (payload) => AccountServices.deleteGLAccounts(payload),
-    'general-ledger-definition-accounts-removed',
+    undefined,
     (args) =>
         updateMutationInvalidationFn('general-ledger-accounts-groupings', args)
 )

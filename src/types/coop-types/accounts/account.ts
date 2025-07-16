@@ -104,7 +104,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
     branch_id?: TEntityId
 
     general_ledger_definition_id?: TEntityId
-    financial_statement_definition_id?: TEntityId
+    financial_statement_definition_entries_id?: TEntityId
     account_classification_id?: TEntityId
     account_category_id?: TEntityId
     member_type_id: TEntityId
@@ -190,7 +190,7 @@ export interface IAccountRequest {
     branch_id: TEntityId
 
     general_ledger_definition_id?: TEntityId
-    financial_statement_definition_id?: TEntityId
+    financial_statement_definition_entries_id?: TEntityId
     account_classification_id?: TEntityId
     account_category_id?: TEntityId
     member_type_id?: TEntityId

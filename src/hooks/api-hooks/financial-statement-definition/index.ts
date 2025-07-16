@@ -63,17 +63,6 @@ export const useDeleteFinancialStatementDefinition = createMutationHook<
         deleteMutationInvalidationFn('financial-statement-definition', args)
 )
 
-export const useDeleteManyFinancialStatementDefinitions = createMutationHook<
-    void,
-    string,
-    TEntityId[]
->(
-    (ids) =>
-        FinancialStatementDefinitionServices.deleteManyFinancialStatementDefinitions(
-            ids
-        ),
-    'Financial Statement Definitions Deleted'
-)
 export const useGetALlFinancialStatement = ({
     enabled,
     showMessage = true,
