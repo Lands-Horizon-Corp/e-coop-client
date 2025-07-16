@@ -110,7 +110,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
     member_type_id: TEntityId
 
     name: string
-    description: string
+    description?: string
 
     minAmount?: number
     maxAmount?: number
@@ -196,7 +196,7 @@ export interface IAccountRequest {
     member_type_id?: TEntityId
 
     name: string
-    description: string
+    description?: string
 
     minAmount?: number
     maxAmount?: number

@@ -1,19 +1,20 @@
+// services/account-tag-service.ts
 import {
     createAPICollectionService,
     createAPICrudService,
 } from '@/factory/api-factory-service'
 
-import { IPaymentType, IPaymentTypeRequest } from '@/types'
+import { IAccounTagRequest, IAccountTag } from '@/types'
 
-const CrudServices = createAPICrudService<IPaymentType, IPaymentTypeRequest>(
-    '/payment-type'
+const CrudServices = createAPICrudService<IAccountTag, IAccounTagRequest>(
+    '/bank'
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices
 
 const CollectionServices =
-    createAPICollectionService<IPaymentType>('/payment-type')
+    createAPICollectionService<IAccountTag>('/account-tag')
 
 export const { search, allList } = CollectionServices
 
