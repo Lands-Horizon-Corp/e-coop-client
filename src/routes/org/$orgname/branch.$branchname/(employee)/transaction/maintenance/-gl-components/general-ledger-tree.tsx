@@ -117,7 +117,7 @@ const GeneralLedgerTreeViewer = ({
     const {
         // ── General Ledger Definition State ──
         generalLedgerDefinitions,
-        setgeneralLedgerDefinitions,
+        setGeneralLedgerDefinition,
         changedGeneralLedgerItems,
         setChangedGeneralLedgerItems,
         selectedGeneralLedgerDefinitionId,
@@ -261,9 +261,9 @@ const GeneralLedgerTreeViewer = ({
 
     useEffect(() => {
         if (treeData ?? false) {
-            setgeneralLedgerDefinitions(treeData)
+            setGeneralLedgerDefinition(treeData)
         }
-    }, [treeData])
+    }, [treeData, setGeneralLedgerDefinition])
 
     const OnSuccessCreateUpdateGLModal = (
         generalLedgerDefinitions: IGeneralLedgerDefinition
@@ -423,17 +423,13 @@ const GeneralLedgerTreeViewer = ({
             </div>
             <div className="w-full flex items-center gap-x-2 justify-start">
                 <Tooltip>
-                    <TooltipTrigger>
-                        <Button
-                            size={'sm'}
-                            variant={'outline'}
-                            className="rounded-xl text-xs"
-                            onClick={() => {
-                                resetExpansion()
-                            }}
-                        >
-                            <CollapseIcon />
-                        </Button>
+                    <TooltipTrigger
+                        onClick={() => {
+                            resetExpansion()
+                        }}
+                        className="rounded-sm p-1 hover:bg-secondary/50 text-xs"
+                    >
+                        <CollapseIcon size={15} />
                     </TooltipTrigger>
                     <TooltipContent>Collapse All</TooltipContent>
                 </Tooltip>

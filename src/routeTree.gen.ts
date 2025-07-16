@@ -69,13 +69,9 @@ import { Route as OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetImport } 
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-category'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-occupation'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-group'
@@ -85,6 +81,8 @@ import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCente
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/view-employees'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/roles-management'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/permission-management'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/general-ledger-definition'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/financial-statement'
 import { Route as OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(timesheets)/timesheet.user.$id/route'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-profile.$memberId.$settings/index'
 
@@ -488,24 +486,6 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurpl
     } as any,
   )
 
-const OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionImport.update(
-    {
-      id: '/(maintenance)/maintenance/(general-ledger-management)/gl-definition',
-      path: '/maintenance/gl-definition',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-
-const OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingImport.update(
-    {
-      id: '/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping',
-      path: '/maintenance/gl-accounts-grouping',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationImport.update(
     {
@@ -529,24 +509,6 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitat
     {
       id: '/(maintenance)/maintenance/(access-and-onboarding)/invitation-code',
       path: '/maintenance/invitation-code',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsImport.update(
-    {
-      id: '/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings',
-      path: '/maintenance/fs-definition-accounts-groupings',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionImport.update(
-    {
-      id: '/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition',
-      path: '/maintenance/fs-definition',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
@@ -620,6 +582,24 @@ const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagemen
     {
       id: '/(maintenance)/(employees)/employees/permission-management',
       path: '/employees/permission-management',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+
+const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionImport.update(
+    {
+      id: '/(employee)/transaction/maintenance/general-ledger-definition',
+      path: '/transaction/maintenance/general-ledger-definition',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+
+const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementImport.update(
+    {
+      id: '/(employee)/transaction/maintenance/financial-statement',
+      path: '/transaction/maintenance/financial-statement',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
@@ -1029,6 +1009,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement'
+      path: '/transaction/maintenance/financial-statement'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition'
+      path: '/transaction/maintenance/general-ledger-definition'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management'
       path: '/employees/permission-management'
@@ -1092,20 +1086,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
-      path: '/maintenance/fs-definition'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/fs-definition'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings'
-      path: '/maintenance/fs-definition-accounts-groupings'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
-    }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
       path: '/maintenance/invitation-code'
@@ -1125,20 +1105,6 @@ declare module '@tanstack/react-router' {
       path: '/maintenance/account-classification'
       fullPath: '/org/$orgname/branch/$branchname/maintenance/account-classification'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping'
-      path: '/maintenance/gl-accounts-grouping'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/gl-accounts-grouping'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition'
-      path: '/maintenance/gl-definition'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/gl-definition'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative': {
@@ -1307,6 +1273,8 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   OrgOrgnameBranchBranchnameemployeeLoanIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -1316,13 +1284,9 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
@@ -1387,6 +1351,10 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute,
     OrgOrgnameBranchBranchnameemployeeLoanIndexRoute:
       OrgOrgnameBranchBranchnameemployeeLoanIndexRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute:
       OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute:
@@ -1405,20 +1373,12 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute:
@@ -1504,6 +1464,8 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
+  '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -1513,13 +1475,9 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  '/org/$orgname/branch/$branchname/maintenance/gl-accounts-grouping': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute
-  '/org/$orgname/branch/$branchname/maintenance/gl-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
   '/org/$orgname/branch/$branchname/maintenance/payment-type': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
@@ -1578,6 +1536,8 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
+  '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -1587,13 +1547,9 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
-  '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  '/org/$orgname/branch/$branchname/maintenance/gl-accounts-grouping': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute
-  '/org/$orgname/branch/$branchname/maintenance/gl-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
   '/org/$orgname/branch/$branchname/maintenance/payment-type': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
@@ -1658,6 +1614,8 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/(employee)/approvals/': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/(employee)/loan/': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -1667,13 +1625,9 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceFinancialStatementConfigurationFsDefinitionAccountsGroupingsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlAccountsGroupingRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancegeneralLedgerManagementGlDefinitionRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingNegativeRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancenetSurplusHandlingNetSurplusGroupingPositiveRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenancepaymentConfigurationPaymentTypeRoute
@@ -1738,6 +1692,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/loan'
+    | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement'
+    | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
     | '/org/$orgname/branch/$branchname/employees/roles-management'
     | '/org/$orgname/branch/$branchname/employees/view-employees'
@@ -1747,13 +1703,9 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
     | '/org/$orgname/branch/$branchname/members/member-types'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-definition'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings'
     | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
-    | '/org/$orgname/branch/$branchname/maintenance/gl-accounts-grouping'
-    | '/org/$orgname/branch/$branchname/maintenance/gl-definition'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive'
     | '/org/$orgname/branch/$branchname/maintenance/payment-type'
@@ -1811,6 +1763,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/loan'
+    | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement'
+    | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
     | '/org/$orgname/branch/$branchname/employees/roles-management'
     | '/org/$orgname/branch/$branchname/employees/view-employees'
@@ -1820,13 +1774,9 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
     | '/org/$orgname/branch/$branchname/members/member-types'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-definition'
-    | '/org/$orgname/branch/$branchname/maintenance/fs-definition-accounts-groupings'
     | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
-    | '/org/$orgname/branch/$branchname/maintenance/gl-accounts-grouping'
-    | '/org/$orgname/branch/$branchname/maintenance/gl-definition'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-negative'
     | '/org/$orgname/branch/$branchname/maintenance/net-surplus-grouping-positive'
     | '/org/$orgname/branch/$branchname/maintenance/payment-type'
@@ -1889,6 +1839,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/(employee)/approvals/'
     | '/org/$orgname/branch/$branchname/(employee)/loan/'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees'
@@ -1898,13 +1850,9 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type'
@@ -2111,6 +2059,8 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template",
         "/org/$orgname/branch/$branchname/(employee)/approvals/",
         "/org/$orgname/branch/$branchname/(employee)/loan/",
+        "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement",
+        "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees",
@@ -2120,13 +2070,9 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types",
-        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition",
-        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification",
-        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping",
-        "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-positive",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(payment-configuration)/payment-type",
@@ -2246,6 +2192,14 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(employee)/loan/index.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
+    "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/maintenance/financial-statement.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/maintenance/general-ledger-definition.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
     "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/permission-management.tsx",
       "parent": "/org/$orgname/branch/$branchname"
@@ -2282,14 +2236,6 @@ export const routeTree = rootRoute
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
-    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition.tsx",
-      "parent": "/org/$orgname/branch/$branchname"
-    },
-    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(Financial-statement-configuration)/fs-definition-accounts-groupings.tsx",
-      "parent": "/org/$orgname/branch/$branchname"
-    },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code.tsx",
       "parent": "/org/$orgname/branch/$branchname"
@@ -2300,14 +2246,6 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification.tsx",
-      "parent": "/org/$orgname/branch/$branchname"
-    },
-    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-accounts-grouping.tsx",
-      "parent": "/org/$orgname/branch/$branchname"
-    },
-    "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition": {
-      "filePath": "org/$orgname/branch.$branchname/(maintenance)/maintenance/(general-ledger-management)/gl-definition.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/maintenance/(net-surplus-handling)/net-surplus-grouping-negative": {

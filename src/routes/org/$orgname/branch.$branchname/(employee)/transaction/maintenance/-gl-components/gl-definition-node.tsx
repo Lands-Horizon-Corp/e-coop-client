@@ -27,7 +27,7 @@ import RawDescription from '@/components/raw-description'
 
 import { TEntityId } from '@/types'
 
-import GLFSAccountsCardList from '../../-common/gl-fs-components/gl-account-list'
+import GLFSAccountsCardList from '../-gl-fs-components/gl-account-list'
 import GeneralLedgerDefinitionActions from './gl-definition-actions'
 
 interface GeneralLedgerTreeNodeProps {

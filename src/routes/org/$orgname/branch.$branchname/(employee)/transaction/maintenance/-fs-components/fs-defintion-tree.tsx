@@ -45,10 +45,10 @@ import {
     UpdateIndexRequest,
 } from '@/types'
 
-import GeneralLedgerAccountsModal from '../../(general-ledger-management)/-components/general-ledger-accounts-view-modal'
+import GeneralLedgerAccountsModal from '../-gl-components/general-ledger-accounts-view-modal'
 import FinancialStatementDefinitionNode from './fs-definition-node'
 
-type GeneralLedgerTreeViewerProps = {
+type FinancialStatementDefinitionTreeViewerProps = {
     treeData: IFinancialStatementDefinition[]
     refetch?: () => void
     isRefetchingGeneralLedgerAccountsGrouping?: boolean
@@ -111,11 +111,11 @@ const findNodePathWithAccounts = (
     return null
 }
 
-const GeneralLedgerTreeViewer = ({
+const FinancialStatementDefinitionTreeViewer = ({
     treeData,
     refetch,
     isRefetchingGeneralLedgerAccountsGrouping,
-}: GeneralLedgerTreeViewerProps) => {
+}: FinancialStatementDefinitionTreeViewerProps) => {
     const {
         // ── finacial statement Definition State ──
         financialStatementDefinition,
@@ -269,7 +269,7 @@ const GeneralLedgerTreeViewer = ({
         if (treeData ?? false) {
             setFinancialStatementDefinition(treeData.sort(sortBy('index')))
         }
-    }, [treeData])
+    }, [treeData, setFinancialStatementDefinition])
 
     const OnSuccessCreateUpdateFSModal = (
         financialStatementDefinition: IFinancialStatementDefinition
@@ -526,4 +526,4 @@ const GeneralLedgerTreeViewer = ({
     )
 }
 
-export default GeneralLedgerTreeViewer
+export default FinancialStatementDefinitionTreeViewer
