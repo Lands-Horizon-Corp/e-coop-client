@@ -97,7 +97,7 @@ export const generateSidebarGroups = (
                     type: 'item',
                     icon: BillIcon,
                     title: 'Payment Types',
-                    url: `${baseUrl}/transaction/payment-types`,
+                    url: `${baseUrl}/transaction/payment-type`,
                     userType: ['employee', 'owner'],
                     shortDescription: 'Configure available payment types',
                 },
@@ -135,7 +135,7 @@ export const generateSidebarGroups = (
                         },
                         {
                             title: 'General Ledger',
-                            url: `/general-ledger`,
+                            url: `/general-ledger-definition`,
                             type: 'item',
                             icon: BillIcon,
                             userType: ['employee', 'owner'],

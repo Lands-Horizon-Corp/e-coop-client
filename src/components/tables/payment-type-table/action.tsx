@@ -30,7 +30,6 @@ const PaymentTypeAction = ({
         <>
             <div onClick={(e) => e.stopPropagation()}>
                 <PaymentTypeFormModal
-                    className="!max-w-2xl"
                     onOpenChange={setUpdateModalForm}
                     open={updateModalForm}
                     title="Edit Payment Type"
