@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
+import { useGLFSStore } from '@/store/gl-fs-store'
 import { IAccount } from '@/types/coop-types/accounts/account'
 import {
     GeneralLedgerTypeEnum,
@@ -115,42 +116,45 @@ const GeneralLedgerTreeViewer = ({
 }: GeneralLedgerTreeViewerProps) => {
     const {
         // ── General Ledger Definition State ──
-        generalLedgerDefitions,
-        setGEneralLedgerDefitions,
+        generalLedgerDefinitions,
+        setgeneralLedgerDefinitions,
         changedGeneralLedgerItems,
         setChangedGeneralLedgerItems,
         selectedGeneralLedgerDefinitionId,
         setSelectedGeneralLedgerDefinitionId,
         selectedGeneralLedgerDefinition: node,
         setSelectedGeneralLedgerDefinition,
-        generalDefinitionEntriesId,
+        generalLedgerDefinitionEntriesId,
         setGeneralLedgerDefinitionEntriesId,
 
         // ── Modal Controls ──
         openCreateGeneralLedgerModal,
         setOpenCreateGeneralLedgerModal,
-        openAddAccountPickerModal,
-        setAddAccountPickerModalOpen,
-        openViewAccountModal,
-        setViewAccountModalOpen,
-        openGeneralLedgerAccountTableModal,
-        setOpenGeneralLedgerAccountTableModal,
 
         // ── View & Interaction State ──
         onCreate,
         setOnCreate,
         isReadOnly,
-        expandPath,
-        resetExpansion,
-        setTargetNodeId,
 
         // ── Accounts Management ──
         changedAccounts,
-        selectedAccounts,
         moveGeneralLedgerNode,
         generalLedgerAccountsGroupingId,
+    } = useGeneralLedgerAccountsGroupingStore()
+
+    const {
+        selectedAccounts,
+        openViewAccountModal,
+        setViewAccountModalOpen,
+        openGeneralLedgerAccountTableModal,
+        setOpenGeneralLedgerAccountTableModal,
         setChangedAccounts,
-    } = useGeneralLedgerStore()
+        expandPath,
+        resetExpansion,
+        setTargetNodeId,
+        openAddAccountPickerModal,
+        setAddAccountPickerModalOpen,
+    } = useGLFSStore()
 
     const [searchTerm, setSearchTerm] = useState('')
     const { mutate: updateIndex, isPending } =
@@ -166,7 +170,7 @@ const GeneralLedgerTreeViewer = ({
 
     const hanldeFoundPath = (glId: TEntityId) => {
         const foundPath = findNodePathByGlIdOnly(
-            generalLedgerDefitions,
+            generalLedgerDefinitions,
             [],
             glId
         )
@@ -204,9 +208,10 @@ const GeneralLedgerTreeViewer = ({
     })
 
     const { mutate: removeGLAccount } = useDeleteAccountFromGLDefintion({
-        onSuccess: () => {
+        onSuccess: (account) => {
             refetch?.()
             setAddAccountPickerModalOpen?.(false)
+            toast.success(`${account.name} account removed.`)
         },
     })
 
@@ -229,7 +234,7 @@ const GeneralLedgerTreeViewer = ({
         }
 
         const path = findNodePathWithAccounts(
-            generalLedgerDefitions,
+            generalLedgerDefinitions,
             [],
             searchTerm
         )
@@ -256,7 +261,7 @@ const GeneralLedgerTreeViewer = ({
 
     useEffect(() => {
         if (treeData ?? false) {
-            setGEneralLedgerDefitions(treeData)
+            setgeneralLedgerDefinitions(treeData)
         }
     }, [treeData])
 
@@ -298,7 +303,8 @@ const GeneralLedgerTreeViewer = ({
         }
     }
 
-    const { selectedGeneralLedgerTypes } = useGeneralLedgerStore()
+    const { selectedGeneralLedgerTypes } =
+        useGeneralLedgerAccountsGroupingStore()
 
     const isSearchOnChanged = searchTerm.length > 0
 
@@ -327,13 +333,9 @@ const GeneralLedgerTreeViewer = ({
         isPending ||
         isRefetchingGeneralLedgerAccountsGrouping
 
-    if (!treeData || treeData.length === 0) {
-        return (
-            <div className="p-4 text-center text-gray-500">
-                No General Ledger data available.
-            </div>
-        )
-    }
+    const hasChildren =
+        (treeData?.length ?? 0) > 0 ||
+        (generalLedgerDefinitions?.length ?? 0) > 0
 
     return (
         <div className="w-full rounded-lg p-4 shadow-md">
@@ -366,7 +368,7 @@ const GeneralLedgerTreeViewer = ({
                     formProps={{
                         defaultValues: formDefaultValues,
                         generalLedgerDefinitionEntriesId:
-                            generalDefinitionEntriesId,
+                            generalLedgerDefinitionEntriesId,
                         generalLedgerAccountsGroupingId:
                             generalLedgerAccountsGroupingId,
                         generalLedgerDefinitionId: generalLedgerDefinitionId,
@@ -388,8 +390,10 @@ const GeneralLedgerTreeViewer = ({
                 <Button
                     size="sm"
                     className="rounded-xl"
-                    onClick={addGeneralLedgerDefinition}
-                    disabled={isReadOnly}
+                    onClick={() => {
+                        addGeneralLedgerDefinition()
+                    }}
+                    disabled={isReadOnly || isPending}
                 >
                     <PlusIcon size={15} className="mr-2" />
                     Add GL
@@ -398,6 +402,7 @@ const GeneralLedgerTreeViewer = ({
                     type="text"
                     className="rounded-2xl"
                     placeholder="Search General Ledger..."
+                    disabled={isReadOnly || !hasChildren || isPending}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => {
@@ -410,7 +415,7 @@ const GeneralLedgerTreeViewer = ({
                     onClick={handleSearch}
                     variant={'secondary'}
                     className="flex items-center rounded-2xl space-x-2"
-                    disabled={!isSearchOnChanged}
+                    disabled={!isSearchOnChanged || isReadOnly || isPending}
                 >
                     <MagnifyingGlassIcon className="mr-2" />
                     Search
@@ -463,27 +468,43 @@ const GeneralLedgerTreeViewer = ({
                 collisionDetection={closestCorners}
             >
                 <SortableContext
-                    items={generalLedgerDefitions.map((ledger) => ledger.id)}
+                    items={generalLedgerDefinitions.map((ledger) => ledger.id)}
                     strategy={verticalListSortingStrategy}
                 >
-                    {generalLedgerDefitions.map((node) => {
-                        return (
-                            <GeneralLedgerDefinitionNode
-                                key={node.id}
-                                node={node}
-                                depth={0}
-                                parentPath={[]}
-                                refetch={refetch}
-                                onDragEndNested={moveGeneralLedgerNode}
-                                hanldeDeleteGeneralLedgerDefinition={
-                                    hanldeDeleteGeneralLedgerDefinition
-                                }
-                                handleRemoveAccountFromGLDefinition={
-                                    handleRemoveAccountFromGLDefinition
-                                }
-                            />
-                        )
-                    })}
+                    {treeData ? (
+                        <>
+                            {generalLedgerDefinitions?.map((node) => {
+                                return (
+                                    <GeneralLedgerDefinitionNode
+                                        key={node.id}
+                                        node={node}
+                                        depth={0}
+                                        parentPath={[]}
+                                        refetch={refetch}
+                                        onDragEndNested={moveGeneralLedgerNode}
+                                        hanldeDeleteGeneralLedgerDefinition={
+                                            hanldeDeleteGeneralLedgerDefinition
+                                        }
+                                        handleRemoveAccountFromGLDefinition={
+                                            handleRemoveAccountFromGLDefinition
+                                        }
+                                    />
+                                )
+                            })}
+                        </>
+                    ) : (
+                        <div className="flex flex-col gap-y-5 items-center justify-center h-64">
+                            <p>No Financial Statement Definitions found.</p>
+                            <Button
+                                variant="outline"
+                                className="ml-4 z-10"
+                                onClick={addGeneralLedgerDefinition}
+                            >
+                                <PlusIcon size={15} className="mr-2" />
+                                Add General Ledger Definition
+                            </Button>
+                        </div>
+                    )}
                 </SortableContext>
             </DndContext>
         </div>

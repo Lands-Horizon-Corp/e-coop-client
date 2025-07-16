@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { sortBy } from '@/helpers'
+import { useGLFSStore } from '@/store/gl-fs-store'
 import { IAccount } from '@/types/coop-types/accounts/account'
 import {
     DndContext,
@@ -23,7 +24,7 @@ import { DragHandleIcon } from '@/components/icons'
 
 import { TEntityId, UpdateIndexRequest } from '@/types'
 
-import GLAccountActions from './gl-account-actions'
+import GLFSAccountActions from './gl-fs-account-actions'
 
 type AccountItemProps = {
     id: string
@@ -58,7 +59,7 @@ export const GeneralLedgerAccountItem = ({
             </div>
             <div className="w-full flex items-center justify-between">
                 {title}
-                <GLAccountActions
+                <GLFSAccountActions
                     node={account}
                     handleDeleteAccount={handleDeleteAccount}
                 />
@@ -70,12 +71,13 @@ type GlAccountListProps = {
     accounts: IAccount[]
     removeAccount: (accountId: string) => void
 }
-export default function GLAccountsCardList({
+
+export default function GLFSAccountsCardList({
     accounts,
     removeAccount,
 }: GlAccountListProps) {
-    const [account, setAccount] = useState(accounts)
-    const { setChangedAccounts } = useGeneralLedgerStore()
+    const [account, setAccount] = useState(accounts.sort(sortBy('index')))
+    const { setChangedAccounts } = useGLFSStore()
 
     const sensors = useSensors(
         useSensor(PointerSensor),

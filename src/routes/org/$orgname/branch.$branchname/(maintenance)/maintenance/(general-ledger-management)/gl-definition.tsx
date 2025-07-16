@@ -1,5 +1,5 @@
 import { payment_bg } from '@/assets/transactions'
-import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 import { IGeneralLedgerAccountsGrouping } from '@/types/coop-types/general-ledger-accounts-grouping'
 import { AccordionContent, AccordionItem } from '@radix-ui/react-accordion'
 import { createFileRoute } from '@tanstack/react-router'
@@ -30,7 +30,7 @@ function RouteComponent() {
     } = useGetAllGeneralLedgerAccountsGroupings()
 
     const { setGeneralLedgerAccountsGroupingId, setGeneralLedgerType } =
-        useGeneralLedgerStore()
+        useGeneralLedgerAccountsGroupingStore()
 
     const refetch = () => {
         refetchGeneralLedgerAccountsGrouping()

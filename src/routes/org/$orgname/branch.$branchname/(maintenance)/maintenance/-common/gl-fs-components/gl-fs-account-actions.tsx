@@ -1,5 +1,5 @@
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { useGLFSStore } from '@/store/gl-fs-store'
 import { IAccount } from '@/types/coop-types/accounts/account'
 
 import { DotsHorizontalIcon, EyeViewIcon, TrashIcon } from '@/components/icons'
@@ -21,7 +21,7 @@ type GeneralLedgerDefinitionActionsProps = {
 
 type ActionType = 'viewLedger' | 'viewAccount' | 'remove'
 
-const GLAccountActions = ({
+const GLFSAccountActions = ({
     node,
     handleDeleteAccount,
 }: GeneralLedgerDefinitionActionsProps) => {
@@ -31,7 +31,7 @@ const GLAccountActions = ({
         setViewAccountModalOpen,
         setSelectedAccounts,
         setOpenGeneralLedgerAccountTableModal,
-    } = useGeneralLedgerStore()
+    } = useGLFSStore()
 
     const handleGLAccountAction = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -52,8 +52,16 @@ const GLAccountActions = ({
                 break
             case 'remove':
                 onOpen({
-                    title: `Remove this Account from GL Definition`,
-                    description: `You are about to remove this Account, are you sure you want to proceed?`,
+                    title: (
+                        <>
+                            Remove this{' '}
+                            <span className="font-bold italic underline text-primary">
+                                {node.name}
+                            </span>{' '}
+                            Account
+                        </>
+                    ),
+                    description: `You are about to remove this ${node.name} account, are you sure you want to proceed?`,
                     onConfirm: () => {
                         if (typeof handleDeleteAccount === 'function')
                             if (nodeId) {
@@ -110,4 +118,4 @@ const GLAccountActions = ({
     )
 }
 
-export default GLAccountActions
+export default GLFSAccountActions

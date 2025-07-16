@@ -1,6 +1,7 @@
 import { GENERAL_LEDGER_DEFINITION_MAX_DEPTH } from '@/constants'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
+import { useGLFSStore } from '@/store/gl-fs-store'
 import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
 
 import {
@@ -42,13 +43,14 @@ const GeneralLedgerDefinitionActions = ({
 
     const {
         setSelectedGeneralLedgerDefinitionId,
-        setAddAccountPickerModalOpen,
         setOnCreate,
         setOpenCreateGeneralLedgerModal,
         setIsReadyOnly,
         setSelectedGeneralLedgerDefinition,
         setGeneralLedgerDefinitionEntriesId,
-    } = useGeneralLedgerStore()
+    } = useGeneralLedgerAccountsGroupingStore()
+
+    const { setAddAccountPickerModalOpen } = useGLFSStore()
 
     const handleGeneralLedgerAction = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -110,7 +112,7 @@ const GeneralLedgerDefinitionActions = ({
                     <Button
                         variant="outline"
                         size={'sm'}
-                        className="border-0 text-xl"
+                        className="border-0 !px-0 text-xl"
                     >
                         <DotsHorizontalIcon className="h-5 w-5 rotate-90" />
                     </Button>

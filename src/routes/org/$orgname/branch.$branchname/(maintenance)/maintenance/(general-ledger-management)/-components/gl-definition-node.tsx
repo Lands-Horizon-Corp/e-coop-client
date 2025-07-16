@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import { useGeneralLedgerStore } from '@/store/general-ledger-accounts-groupings-store'
+import { useGLFSStore } from '@/store/gl-fs-store'
 import { IGeneralLedgerDefinition } from '@/types/coop-types/general-ledger-definitions'
 import {
     DndContext,
@@ -27,7 +27,7 @@ import RawDescription from '@/components/raw-description'
 
 import { TEntityId } from '@/types'
 
-import GLAccountsCardList from './gl-account-list'
+import GLFSAccountsCardList from '../../-common/gl-fs-components/gl-account-list'
 import GeneralLedgerDefinitionActions from './gl-definition-actions'
 
 interface GeneralLedgerTreeNodeProps {
@@ -65,7 +65,7 @@ const GeneralLedgerNode = ({
         targetNodeId,
         clearTargetNodeIdAfterScroll,
         toggleNode,
-    } = useGeneralLedgerStore()
+    } = useGLFSStore()
 
     const isNodeExpanded = expandedNodeIds.has(node.id)
 
@@ -132,7 +132,7 @@ const GeneralLedgerNode = ({
     if (node.general_ledger_definition_entries_id && isFirstLevel) {
         return null
     }
-    const showGLAccountsCardList =
+    const showGLFSAccountsCardList =
         isNodeExpanded && hasAccountNode && node.accounts
 
     const showExpanded = hasChildren || hasAccountNode
@@ -157,24 +157,37 @@ const GeneralLedgerNode = ({
                 }}
                 ref={ref}
             >
-                <div
-                    ref={dragHandleRef}
-                    {...listeners}
-                    className="cursor-grab mr-2"
-                >
-                    <DragHandleIcon size={16} />
-                </div>
-                {showExpanded && (
-                    <div className="flex h-full items-center">
-                        <span className="mr-2">
-                            {isNodeExpanded ? (
-                                <ArrowChevronDown size={16} />
-                            ) : (
-                                <ArrowChevronRight size={16} />
-                            )}
-                        </span>
+                <div className="flex items-center justify-center mr-2">
+                    <div
+                        ref={dragHandleRef}
+                        {...listeners}
+                        className="cursor-grab mr-2"
+                    >
+                        <DragHandleIcon size={16} />
                     </div>
-                )}
+                    {showExpanded && (
+                        <div className="flex h-full items-center">
+                            <span className="mr-2">
+                                {isNodeExpanded ? (
+                                    <ArrowChevronDown size={16} />
+                                ) : (
+                                    <ArrowChevronRight size={16} />
+                                )}
+                            </span>
+                        </div>
+                    )}
+                    <GeneralLedgerDefinitionActions
+                        depth={depth}
+                        canDelete={hasAccountNode || hasChildren}
+                        node={node}
+                        isDeletingGLDefinition={isDeletingGLDefinition}
+                        hanldeDeleteGeneralLedgerDefinition={(
+                            nodeId: TEntityId
+                        ) => {
+                            hanldeDeleteGeneralLedgerDefinition(nodeId)
+                        }}
+                    />
+                </div>
                 <div className="flex flex-1 flex-col">
                     <span>
                         <div className="flex items-center gap-x-2">
@@ -208,24 +221,13 @@ const GeneralLedgerNode = ({
                         </p>
                     )}
                 </div>
-                <GeneralLedgerDefinitionActions
-                    depth={depth}
-                    canDelete={hasAccountNode || hasChildren}
-                    node={node}
-                    isDeletingGLDefinition={isDeletingGLDefinition}
-                    hanldeDeleteGeneralLedgerDefinition={(
-                        nodeId: TEntityId
-                    ) => {
-                        hanldeDeleteGeneralLedgerDefinition(nodeId)
-                    }}
-                />
             </div>
 
             <div className={`w-full ${isNodeExpanded ? 'pl-5 pr-5' : ''}`}>
-                {Array.isArray(showGLAccountsCardList) && (
-                    <GLAccountsCardList
+                {Array.isArray(showGLFSAccountsCardList) && (
+                    <GLFSAccountsCardList
                         removeAccount={handleRemoveAccountFromGLDefinition}
-                        accounts={showGLAccountsCardList}
+                        accounts={showGLFSAccountsCardList}
                     />
                 )}
                 <DndContext
