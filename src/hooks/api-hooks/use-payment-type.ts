@@ -1,19 +1,66 @@
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { PaymentTypeServices } from '@/api-service/payment-type-services'
-import { serverRequestErrExtractor } from '@/helpers'
-import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
+import PaymentTypeServices from '@/api-service/payment-type'
 import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '@/factory/api-hook-factory'
+import { serverRequestErrExtractor } from '@/helpers'
+import { toBase64, withCatchAsync } from '@/utils'
+
+import {
+    IAPIFilteredPaginatedHook,
     IPaymentType,
     IPaymentTypePaginatedResource,
     IPaymentTypeRequest,
-} from '@/types/coop-types/payment-type'
-import { toBase64, withCatchAsync } from '@/utils'
+    IQueryProps,
+    TEntityId,
+} from '@/types'
 
-import { TEntityId } from '@/types'
+const KEY = 'payment_type'
 
-import { createMutationHook } from '../../factory/api-hook-factory'
+export const useCreatePaymentType = createMutationHook<
+    IPaymentType,
+    string,
+    IPaymentTypeRequest
+>(
+    (payload) => PaymentTypeServices.create(payload),
+    'Payment Type Created',
+    (args) => createMutationInvalidateFn(KEY, args)
+)
+
+export const useUpdatePaymentType = createMutationHook<
+    IPaymentType,
+    string,
+    {
+        paymentTypeId: TEntityId
+        data: IPaymentTypeRequest
+    }
+>(
+    (payload) =>
+        PaymentTypeServices.updateById(payload.paymentTypeId, payload.data),
+    'Payment Type Updated',
+    (args) => updateMutationInvalidationFn(KEY, args)
+)
+
+export const useDeletePaymentType = createMutationHook<void, string, TEntityId>(
+    (paymentTypeId) => PaymentTypeServices.deleteById(paymentTypeId),
+    'Payment Type Deleted',
+    (args) => deleteMutationInvalidationFn(KEY, args)
+)
+
+export const useDeletePaymentTypesBulk = createMutationHook<
+    void,
+    string,
+    TEntityId[]
+>(
+    (paymentTypeIds) => PaymentTypeServices.deleteMany(paymentTypeIds),
+    'Payment Types Deleted',
+    (args) => deleteMutationInvalidationFn(KEY, args)
+)
 
 export const useFilteredPaginatedPaymentType = ({
     sort,
@@ -33,7 +80,7 @@ export const useFilteredPaginatedPaymentType = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                PaymentTypeServices.getPaginatedPaymentTypes({
+                PaymentTypeServices.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
@@ -56,63 +103,6 @@ export const useFilteredPaginatedPaymentType = ({
             ...pagination,
         },
         enabled,
-        retry: 1,
-    })
-}
-
-export const useCreatePaymentType = createMutationHook<
-    IPaymentType,
-    string,
-    IPaymentTypeRequest
->(
-    (payload) => PaymentTypeServices.createPaymentType(payload),
-    'New Payment Type Created'
-)
-
-export const useUpdatePaymentType = createMutationHook<
-    IPaymentType,
-    string,
-    {
-        paymentTypeId: TEntityId
-        data: IPaymentTypeRequest
-    }
->(
-    (payload) =>
-        PaymentTypeServices.updatePaymentType(
-            payload.paymentTypeId,
-            payload.data
-        ),
-    'Payment Type Updated'
-)
-
-export const useDeletePaymentType = createMutationHook<void, string, TEntityId>(
-    (paymentTypeId) => PaymentTypeServices.deletePaymentType(paymentTypeId),
-    'Payment Type Deleted'
-)
-
-export const useGetPaymentTypeById = (
-    paymentTypeId?: TEntityId,
-    showMessage = true
-) => {
-    return useQuery<IPaymentType, string>({
-        queryKey: ['payment_type', paymentTypeId],
-        queryFn: async () => {
-            if (!paymentTypeId) {
-                throw new Error('Payment Type ID is required to fetch details.')
-            }
-            const [error, result] = await withCatchAsync(
-                PaymentTypeServices.getPaymentTypeById(paymentTypeId)
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                throw errorMessage
-            }
-
-            return result
-        },
-        enabled: !!paymentTypeId,
         retry: 1,
     })
 }

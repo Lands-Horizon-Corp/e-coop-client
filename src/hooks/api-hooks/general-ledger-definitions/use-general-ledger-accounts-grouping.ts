@@ -2,11 +2,18 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { GeneralLedgerDefinitionAccountsGroupingServices } from '@/api-service/general-ledger-definition-services'
+import {
+    createMutationHook,
+    updateMutationInvalidationFn,
+} from '@/factory/api-hook-factory'
 import { serverRequestErrExtractor } from '@/helpers'
-import { IGeneralLedgerAccountsGrouping } from '@/types/coop-types/general-ledger-accounts-grouping'
+import {
+    IGeneralLedgerAccountsGrouping,
+    IGeneralLedgerAccountsGroupingRequest,
+} from '@/types/coop-types/general-ledger-accounts-grouping'
 import { withCatchAsync } from '@/utils'
 
-import { IAPIHook, IQueryProps } from '@/types'
+import { IAPIHook, IQueryProps, TEntityId } from '@/types'
 
 export const useGetAllGeneralLedgerAccountsGroupings = ({
     enabled,
@@ -31,3 +38,21 @@ export const useGetAllGeneralLedgerAccountsGroupings = ({
         retry: 1,
     })
 }
+
+export const useUpdateGeneralLedgerAccountsGrouping = createMutationHook<
+    IGeneralLedgerAccountsGrouping,
+    string,
+    {
+        generalLedgerAccountsGroupingId: TEntityId
+        data: IGeneralLedgerAccountsGroupingRequest
+    }
+>(
+    (payload) =>
+        GeneralLedgerDefinitionAccountsGroupingServices.updateGeneralLedgerAccountsGrouping(
+            payload.generalLedgerAccountsGroupingId,
+            payload.data
+        ),
+    'General Ledger Definition Updated',
+    (args) =>
+        updateMutationInvalidationFn('general-ledger-accounts-groupings', args)
+)

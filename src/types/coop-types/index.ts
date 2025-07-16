@@ -89,3 +89,4 @@ export * from './permission-template'
 /* General Ledger Definitions */
 export * from './general-ledger-definitions'
 export * from './financial-statement-definition'
+export * from './general-ledger-accounts-grouping'
