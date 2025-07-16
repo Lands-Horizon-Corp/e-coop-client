@@ -188,3 +188,43 @@ export const downloadFile = async (url: string, fileName: string) => {
 
 export const capitalize = (text: string) =>
     text && String(text[0]).toUpperCase() + String(text).slice(1)
+
+export type SortOrder = 'asc' | 'desc'
+/**
+ * Generic sorter helper for arrays of objects.
+ *
+ * @param key - The key of the object to sort by.
+ * @param order - 'asc' (default) or 'desc'.
+ *
+ * @example
+ * items.sort(sortBy('name'))
+ * items.sort(sortBy('createdAt', 'desc'))
+ */
+export function sortBy<T>(
+    key: keyof T,
+    order: SortOrder = 'asc'
+): (a: T, b: T) => number {
+    return (a, b) => {
+        const valA = a[key]
+        const valB = b[key]
+
+        if (valA === valB) return 0
+
+        const direction = order === 'asc' ? 1 : -1
+
+        // Handle different value types
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            return valA.localeCompare(valB) * direction
+        }
+
+        if (typeof valA === 'number' && typeof valB === 'number') {
+            return (valA - valB) * direction
+        }
+
+        if (valA instanceof Date && valB instanceof Date) {
+            return (valA.getTime() - valB.getTime()) * direction
+        }
+
+        return 0
+    }
+}
