@@ -1,98 +1,75 @@
-import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { arrayMove } from '@dnd-kit/sortable'
 import { create } from 'zustand'
 
-import { IFinancialStatementDefinition, TEntityId } from '@/types'
+import {
+    FinancialStatementTypeEnum,
+    IFinancialStatementDefinition,
+    TEntityId,
+    UpdateIndexRequest,
+} from '@/types'
 
-interface FinancialStatementStore {
+interface FinancialStatementAccountsGroupingStore {
     financialStatementAccountsGroupingId: string | null
     selectedFinancialStatementDefinitionId?: string | null
-    openAddAccountPickerModal?: boolean
-    financialStatementDefinitions: IFinancialStatementDefinition[]
+    financialStatementDefinition: IFinancialStatementDefinition[]
     onCreate?: boolean
     isReadOnly?: boolean
     openCreateFinancialStatementModal: boolean
-    expandedNodeIds: Set<string>
-    targetNodeId: string | null
+
     selectedFinancialStatementDefinition: IFinancialStatementDefinition | null
+    financialStatementDefinitionEntriesId?: TEntityId
+    changedFinancialStatementItems: UpdateIndexRequest[]
+    selectedFinancialStatementTypes?: FinancialStatementTypeEnum | null
 
     setFinancialStatmentAccountsGroupingId: (paymentType: string) => void
-    setselectedFinancialStatementDefinitionId: (id: string | null) => void
-    setAddAccountPickerModalOpen?: (open: boolean) => void
-    setFinancialStatementDefinitions: (
-        financialStatementDefinitions: IFinancialStatementDefinition[]
+    setSelectedFinancialStatementDefinitionId: (id: string | null) => void
+    setFinancialStatementDefinition: (
+        financialStatementDefinition: IFinancialStatementDefinition[]
     ) => void
     moveFinancialStatementLedgerNode: (
         path: string[],
         activeId: string | number,
-        overId: string | number,
-        updateIndex: UseMutateAsyncFunction<
-            IFinancialStatementDefinition,
-            number,
-            {
-                generalLedgerDefinitionId: TEntityId
-                index: number
-            },
-            unknown
-        >
+        overId: string | number
     ) => void
     setOnCreate?: (onCreate: boolean) => void
     setIsReadyOnly?: (isReadyOnly: boolean) => void
     setOpenCreateFinancialStatementModal?: (open: boolean) => void
-    setOpenAddAccountPickerModal?: (open: boolean) => void
-    toggleNode: (nodeId: string, isExpanded: boolean) => void
-    expandPath: (path: string[]) => void
-    setTargetNodeId: (nodeId: string | null) => void
-    clearTargetNodeIdAfterScroll: (nodeId: string) => void
-    resetExpansion: () => void
+
     setSelectedFinancialStatementDefinition?: (
-        generalLedgerDefinitions: IFinancialStatementDefinition
+        financialStatementDefinition: IFinancialStatementDefinition | null
+    ) => void
+    setFinancialStatementDefinitionEntriesId: (
+        financialStatementDefinitionEntriesId: TEntityId | undefined
+    ) => void
+    setChangedFinancialStatementItems: (data: UpdateIndexRequest[]) => void
+    setFinancialStatementType?: (
+        financialStatementType: FinancialStatementTypeEnum | null
     ) => void
 }
 
-export const useFinancialStatementStore = create<FinancialStatementStore>(
-    (set, get) => ({
-        targetNodeId: null,
-        expandedNodeIds: new Set(),
-        financialStatementDefinitions: [],
+export const useFinancialStatementAccountsGroupingStore =
+    create<FinancialStatementAccountsGroupingStore>((set, get) => ({
+        financialStatementDefinition: [],
         openCreateFinancialStatementModal: false,
         financialStatementAccountsGroupingId: null,
         selectedFinancialStatementDefinition: null,
         selectedFinancialStatementDefinitionId: null,
+        changedFinancialStatementItems: [],
 
-        setselectedFinancialStatementDefinitionId: (id) =>
+        setFinancialStatementType: (financialStatementType) =>
+            set({ selectedFinancialStatementTypes: financialStatementType }),
+        setSelectedFinancialStatementDefinitionId: (id) =>
             set({ selectedFinancialStatementDefinitionId: id }),
         clearselectedFinancialStatementDefinitionId: () =>
             set({ selectedFinancialStatementDefinitionId: null }),
         setFinancialStatmentAccountsGroupingId: (paymentType) =>
             set({ financialStatementAccountsGroupingId: paymentType }),
-        setAddAccountPickerModalOpen: (open) =>
-            set({ openAddAccountPickerModal: open }),
-        setFinancialStatementDefinitions: (financialStatementDefinitions) =>
-            set({ financialStatementDefinitions }),
-        moveFinancialStatementLedgerNode: async (
-            path,
-            activeId,
-            overId,
-            updateIndex
-        ) => {
-            if (!activeId || !overId) {
-                toast.error('Invalid drag operation.')
-                return
-            }
-            if (activeId === overId) {
-                toast.info('No change in position.')
-                return
-            }
-
-            if (typeof updateIndex !== 'function') {
-                toast.error('Update index function is not provided.')
-                return
-            }
-
-            const prevLedgerData = get().financialStatementDefinitions
+        setFinancialStatementDefinition: (financialStatementDefinition) =>
+            set({ financialStatementDefinition }),
+        moveFinancialStatementLedgerNode: async (path, activeId, overId) => {
+            const prevLedgerData = get().financialStatementDefinition
             const newLedger = structuredClone(prevLedgerData)
 
             const findTargetArray = (
@@ -103,7 +80,7 @@ export const useFinancialStatementStore = create<FinancialStatementStore>(
                 for (const id of path) {
                     const node = current.find((item) => item.id === id)
                     if (!node) return null
-                    current = node.financial_statement_definition || []
+                    current = node.financial_statement_definition_entries || []
                 }
                 return current
             }
@@ -133,19 +110,25 @@ export const useFinancialStatementStore = create<FinancialStatementStore>(
                 return
             }
 
-            if (typeof updateIndex === 'function') {
-                await updateIndex({
-                    generalLedgerDefinitionId: activeId as TEntityId,
-                    index: newIndex,
-                })
-            }
-
             const updated = arrayMove(sorted, oldIndex, newIndex).map(
                 (item, i) => ({
                     ...item,
                     index: i,
                 })
             )
+
+            const changedItems = updated
+                .filter(
+                    (item, i) =>
+                        item.id !== sorted[i]?.id ||
+                        item.index !== sorted[i]?.index
+                )
+                .map((item) => ({
+                    id: item.id,
+                    index: item.index,
+                }))
+
+            set({ changedFinancialStatementItems: changedItems })
 
             const updateTree = (
                 nodes: IFinancialStatementDefinition[],
@@ -157,13 +140,14 @@ export const useFinancialStatementStore = create<FinancialStatementStore>(
                         if (level === path.length - 1) {
                             return {
                                 ...node,
-                                general_ledger_definition: updated,
+                                financial_statement_definition_entries: updated,
                             }
                         }
                         return {
                             ...node,
-                            general_ledger_definition: updateTree(
-                                node.financial_statement_definition || [],
+                            financial_statement_definition_entries: updateTree(
+                                node.financial_statement_definition_entries ||
+                                    [],
                                 path,
                                 level + 1
                             ),
@@ -176,37 +160,23 @@ export const useFinancialStatementStore = create<FinancialStatementStore>(
             const finalLedger =
                 path.length === 0 ? updated : updateTree(newLedger, path)
 
-            set({ financialStatementDefinitions: finalLedger })
+            set({ financialStatementDefinition: finalLedger })
         },
         setIsReadyOnly: (isReadyOnly) => set({ isReadOnly: isReadyOnly }),
         setOnCreate: (onCreate) => set({ onCreate }),
         setOpenCreateFinancialStatementModal: (open) =>
             set({ openCreateFinancialStatementModal: open }),
-        toggleNode: (nodeId, isExpanded) =>
-            set((state) => {
-                const newExpandedIds = new Set(state.expandedNodeIds)
-                if (isExpanded) {
-                    newExpandedIds.add(nodeId)
-                } else {
-                    newExpandedIds.delete(nodeId)
-                }
-                return { expandedNodeIds: newExpandedIds }
-            }),
-        expandPath: (path) =>
-            set(() => ({
-                expandedNodeIds: new Set(path),
-            })),
-        setTargetNodeId: (nodeId) => set({ targetNodeId: nodeId }),
-        clearTargetNodeIdAfterScroll: (nodeId) => {
-            if (get().targetNodeId === nodeId) {
-                set({ targetNodeId: null })
-            }
-        },
-        resetExpansion: () =>
-            set({ expandedNodeIds: new Set(), targetNodeId: null }),
-        setSelectedFinancialStatementDefinition: (generalLedgerDefinitions) =>
+
+        setSelectedFinancialStatementDefinition: (
+            financialStatementDefinition
+        ) =>
             set({
-                selectedFinancialStatementDefinition: generalLedgerDefinitions,
+                selectedFinancialStatementDefinition:
+                    financialStatementDefinition,
             }),
-    })
-)
+        setFinancialStatementDefinitionEntriesId: (
+            financialStatementDefinitionEntriesId
+        ) => set({ financialStatementDefinitionEntriesId }),
+        setChangedFinancialStatementItems: (data) =>
+            set({ changedFinancialStatementItems: data }),
+    }))
