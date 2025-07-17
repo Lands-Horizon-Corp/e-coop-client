@@ -32,6 +32,7 @@ import {
     useCreatePaymentType,
     useUpdatePaymentType,
 } from '@/hooks/api-hooks/use-payment-type'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -127,6 +128,10 @@ const PaymentTypeCreateUpdateForm = ({
 
     const isPaymentTypeOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

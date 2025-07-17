@@ -25,6 +25,7 @@ import {
     useCreateAccountCategory,
     useUpdateAccountCategory,
 } from '@/hooks/api-hooks/use-account-category'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -114,6 +115,10 @@ const AccountCategoryCreateUpdateForm = ({
 
     const isAccountCategoryOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

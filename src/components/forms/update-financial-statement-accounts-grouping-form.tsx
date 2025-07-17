@@ -24,6 +24,7 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 import { useUpdateFinancialStatementAccountsGrouping } from '@/hooks/api-hooks/financial-statement-definition/use-financial-statement-accounts-grouping'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IClassProps,
@@ -107,6 +108,10 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
 
     const isDisabled = (field: Path<TFinancialStatementGroupingFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

@@ -21,6 +21,7 @@ import {
     useCreateAccountTag,
     useUpdateAccountTag,
 } from '@/hooks/api-hooks/use-account-tag'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IAccounTagRequest,
@@ -107,6 +108,10 @@ const AccountTagCreateUpdateForm = ({
 
     const isAccountTagChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

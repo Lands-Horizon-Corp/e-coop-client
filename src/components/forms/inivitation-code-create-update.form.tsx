@@ -25,6 +25,7 @@ import {
     useCreateInvitationCode,
     useUpdateInvitationCode,
 } from '@/hooks/api-hooks/use-invitation-code'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import {
@@ -145,6 +146,10 @@ const InvitationCodeCreateUpdateForm = ({
 
     const isInvitationOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

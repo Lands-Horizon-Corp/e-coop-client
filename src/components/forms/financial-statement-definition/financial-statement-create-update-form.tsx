@@ -32,6 +32,7 @@ import {
     useCreateFinancialStatementDefinition,
     useUpdateFinancialStatementDefinition,
 } from '@/hooks/api-hooks/financial-statement-definition'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     FinancialStatementTypeEnum,
@@ -126,6 +127,10 @@ const FinancialStatementCreateUpdateForm = ({
     const isLoading = isCreating || isUpdating
 
     const isFormChange = form.formState.isDirty
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>
