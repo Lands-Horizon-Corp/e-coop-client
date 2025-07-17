@@ -1,4 +1,5 @@
 import { toReadableDate } from '@/utils'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 import CopyTextButton from '@/components/copy-text-button'
 import { UsersAddIcon } from '@/components/icons'
@@ -14,7 +15,6 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import { IMemberRecruitedMembers } from '@/types'
 
 import SectionTitle from '../section-title'
-import { sanitizeHtml } from '@/utils/sanitizer'
 
 interface Props {
     recruits?: IMemberRecruitedMembers[]
