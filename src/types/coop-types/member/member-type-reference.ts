@@ -1,6 +1,6 @@
-import { IAuditable, ITimeStamps, TEntityId } from '../../common'
+import { IBaseEntityMeta, TEntityId } from '../../common'
+import { IAccount } from '../accounts/account'
 import { IAccountResource } from '../accounts/accounts'
-import { IBranch } from '../branch'
 import { IPaginatedResult } from '../paginated-result'
 import { IMemberType } from './member-type'
 
@@ -8,7 +8,9 @@ import { IMemberType } from './member-type'
 export interface IMemberTypeReferenceRequest {
     id?: TEntityId
 
-    branch_id: TEntityId
+    branch_id?: TEntityId
+    organization_id?: TEntityId
+
     account_id: TEntityId
     member_type_id: TEntityId
 
@@ -25,14 +27,11 @@ export interface IMemberTypeReferenceRequest {
 }
 
 // LATEST FROM ERD
-export interface IMemberTypeReference extends ITimeStamps, IAuditable {
+export interface IMemberTypeReference extends IBaseEntityMeta {
     id: TEntityId
 
-    branch_id: TEntityId
-    branch: IBranch
-
     account_id: TEntityId
-    account: IAccountResource
+    account: IAccount
 
     member_type_id: TEntityId
     member_type: IMemberType

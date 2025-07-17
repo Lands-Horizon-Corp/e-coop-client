@@ -63,17 +63,21 @@ export const createAPICollectionService = <
             return response.data
         },
         async search({
+            base = baseEndpoint,
+            targetUrl = 'search',
             sort,
             filters,
             pagination,
         }: {
+            base?: string
+            targetUrl?: string
             sort?: string
             filters?: string
             pagination?: { pageIndex: number; pageSize: number }
         } = {}) {
             const url = qs.stringifyUrl(
                 {
-                    url: `${baseEndpoint}/search`,
+                    url: `${base}/${targetUrl}`,
                     query: {
                         sort,
                         filter: filters,

@@ -4,12 +4,7 @@ import { useFilter } from '@/contexts/filter-context'
 import { cn } from '@/lib'
 
 import ActionTooltip from '@/components/action-tooltip'
-import {
-    FunnelFilledIcon,
-    FunnelIcon,
-    TrashIcon,
-    XIcon,
-} from '@/components/icons'
+import { FunnelFilledIcon, FunnelIcon, XIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -17,6 +12,7 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
@@ -57,24 +53,14 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
         >
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <span className="inline-flex cursor-pointer items-center duration-200 ease-in-out text-muted-foreground/70 hover:text-foreground">
+                    <Button
+                        variant="secondary"
+                        className="inline-flex cursor-pointer items-center duration-200 ease-in-out text-muted-foreground/70 hover:text-foreground"
+                    >
                         <FunnelFilledIcon className="mr-2" />
                         Filter{mappedFilters.length > 1 ? 's' : ''} (
                         {mappedFilters.length})
-                        <ActionTooltip tooltipContent="Remove All Filters">
-                            <Button
-                                size="sm"
-                                variant="secondary"
-                                className="size-fit ml-1 p-1 text-xs text-foreground/60"
-                                onClick={(e) => {
-                                    resetFilter()
-                                    e.stopPropagation()
-                                }}
-                            >
-                                <TrashIcon />
-                            </Button>
-                        </ActionTooltip>
-                    </span>
+                    </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuLabel className="flex flex-col">
@@ -90,6 +76,7 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                             Click to remove a filter
                         </p>
                     </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         {mappedFilters.map((filter) => (
                             <DropdownMenuItem
@@ -106,6 +93,17 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                             </DropdownMenuItem>
                         ))}
                     </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <ActionTooltip tooltipContent="Remove All Filters">
+                        <DropdownMenuItem
+                            onClick={(e) => {
+                                resetFilter()
+                                e.stopPropagation()
+                            }}
+                        >
+                            Clear Filters
+                        </DropdownMenuItem>
+                    </ActionTooltip>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

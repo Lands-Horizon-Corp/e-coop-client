@@ -14,6 +14,10 @@ import { ILoanPurpose } from './loan-purpose'
 import { ILoanStatus } from './loan-status'
 import { ILoanTag } from './loan-tag'
 
+export interface ILoanTransactionRequest {
+    id?: TEntityId
+}
+
 export interface ILoanTransaction extends IBaseEntityMeta {
     transaction_batch_id: TEntityId
     official_receipt_number: string

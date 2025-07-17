@@ -16,6 +16,7 @@ import {
     BuildingIcon,
     GearIcon,
     LogoutIcon,
+    WoodSignsIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -347,14 +348,17 @@ const NavProfileMenu = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="border p-4 text-center text-sm text-muted-foreground shadow-md">
-                        No organizations found{' '}
-                        <span
-                            onClick={() => refetch()}
-                            className="cursor-pointer underline"
-                        >
-                            retry
-                        </span>
+                    <div className="border p-4 text-center text-sm text-muted-foreground bg-popover rounded-xl shadow-md">
+                        <WoodSignsIcon className="opacity-70 mx-auto size-8 my-4" />
+                        <p>
+                            No organizations found{' '}
+                            <span
+                                onClick={() => refetch()}
+                                className="cursor-pointer underline"
+                            >
+                                retry
+                            </span>
+                        </p>
                     </div>
                 )}
 
