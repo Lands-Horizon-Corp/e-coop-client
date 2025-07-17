@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/lib'
 import {
@@ -51,19 +49,12 @@ const MemberAccountingLedgerTable = ({
     memberProfileId,
     onRowClick,
     onSelectData,
-    actionComponent,
 }: MemberAccountingLedgerTableProps) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
-    const columns = useMemo(
-        () =>
-            MemberAccountingLedgerTableColumns({
-                actionComponent,
-            }),
-        [actionComponent]
-    )
+    const columns = MemberAccountingLedgerTableColumns()
 
     const {
         getRowIdFn,
@@ -95,54 +86,6 @@ const MemberAccountingLedgerTable = ({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
-        // TODO: Remove this shit
-        initialData: {
-            data: [
-                {
-                    id: 'ledger-1',
-                    member_profile_id: '3f4406ae-fa7e-41a9-b890-0003f034b38b',
-                    account_id: 'e22b14de-7f5d-40cf-b5a3-dadbb92922bc',
-                    account: {
-                        name: 'e22b14de-7f5d-40cf-b5a3-dadbb92922bc',
-                        alternative_code: 'CH-ACT-SVNG',
-                    },
-                    count: 5,
-                    balance: 1500.75,
-                    interest: 25.5,
-                    fines: 0,
-                    due: 200,
-                    carried_forward_due: 50,
-                    stored_value_facility: 300,
-                    principal_due: 100,
-                    last_pay: '2025-06-01T10:00:00Z',
-                    hold_out: 'N/A',
-                },
-                {
-                    id: 'ledger-2',
-                    member_profile_id: '3f4406ae-fa7e-41a9-b890-0003f034b38b',
-                    account_id: 'e22b14de-7f5d-40cf-b5a3-dadbb92922bc',
-                    account: {
-                        id: 'e22b14de-7f5d-40cf-b5a3-dadbb92922bc',
-                        // ...other IAccount properties
-                    },
-                    count: 2,
-                    balance: 500.0,
-                    interest: 10.0,
-                    fines: 5,
-                    due: 50,
-                    carried_forward_due: 0,
-                    stored_value_facility: 0,
-                    principal_due: 50,
-                    last_pay: '2025-06-10T14:30:00Z',
-                    // hold_out omitted
-                },
-            ],
-            pageIndex: 1,
-            totalPage: 1,
-            pageSize: 10,
-            totalSize: 2,
-            pages: [],
-        } as any,
     })
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
