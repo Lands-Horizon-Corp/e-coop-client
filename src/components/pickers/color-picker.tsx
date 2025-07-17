@@ -1,8 +1,9 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
+
+import { Loader2, PipetteIcon } from 'lucide-react'
+import { HexAlphaColorPicker, HexColorPicker } from 'react-colorful'
 
 import {
     hexToRgb,
@@ -14,9 +15,6 @@ import {
     rgbaToHex,
     rgbaToHsla,
 } from '@/components/helper/color-converter'
-import { Loader2, PipetteIcon } from 'lucide-react'
-import { HexAlphaColorPicker, HexColorPicker } from 'react-colorful'
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
