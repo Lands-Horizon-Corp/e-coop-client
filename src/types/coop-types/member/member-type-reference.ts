@@ -1,6 +1,5 @@
 import { IBaseEntityMeta, TEntityId } from '../../common'
 import { IAccount } from '../accounts/account'
-import { IAccountResource } from '../accounts/accounts'
 import { IPaginatedResult } from '../paginated-result'
 import { IMemberType } from './member-type'
 
