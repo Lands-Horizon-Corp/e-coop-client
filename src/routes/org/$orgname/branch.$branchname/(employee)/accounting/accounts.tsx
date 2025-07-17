@@ -7,6 +7,8 @@ import AccountTableAction from '@/components/tables/account-table/action'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import AccountTag from './-component/account-tag'
+
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/accounting/accounts'
 )({
@@ -26,6 +28,7 @@ function RouteComponent() {
                         createActionProps: {
                             onClick: () => createModal.onOpenChange(true),
                         },
+                        otherActionLeft: <AccountTag />,
                     }}
                     actionComponent={(prop) => <AccountTableAction {...prop} />}
                 />
