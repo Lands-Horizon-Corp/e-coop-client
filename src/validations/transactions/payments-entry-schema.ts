@@ -1,4 +1,5 @@
 import { z } from 'zod'
+
 import { amountPreprocess } from './common'
 
 export const DEFAULT_TRANSACTION_TYPE = 'trans-pay-001'

@@ -1,31 +1,32 @@
 import { useMemo } from 'react'
+
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { Link, useParams, useRouter } from '@tanstack/react-router'
 
+import ActionTooltip from '@/components/action-tooltip'
+import EcoopLogo from '@/components/ecoop-logo'
+import AppSidebarItem from '@/components/ui/app-sidebar/app-sidebar-item'
+import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
+import AppSidebarUser from '@/components/ui/app-sidebar/app-sidebar-user'
+import { flatSidebarGroupItem } from '@/components/ui/app-sidebar/app-sidebar-utils'
+import { Badge } from '@/components/ui/badge'
 import {
     Sidebar,
-    SidebarRail,
-    SidebarMenu,
-    SidebarGroup,
-    SidebarHeader,
-    SidebarFooter,
     SidebarContent,
-    SidebarMenuItem,
-    SidebarMenuButton,
-    SidebarGroupLabel,
+    SidebarFooter,
+    SidebarGroup,
     SidebarGroupContent,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarRail,
 } from '@/components/ui/sidebar'
-import EcoopLogo from '@/components/ecoop-logo'
-import AppSidebarUser from '@/components/ui/app-sidebar/app-sidebar-user'
-import AppSidebarItem from '@/components/ui/app-sidebar/app-sidebar-item'
-import { flatSidebarGroupItem } from '@/components/ui/app-sidebar/app-sidebar-utils'
-import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
-
-import { generateSidebarGroups } from './sidebar-routes'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 
 import { IBaseProps, TUserType } from '@/types'
-import { Badge } from '@/components/ui/badge'
-import ActionTooltip from '@/components/action-tooltip'
+
+import { generateSidebarGroups } from './sidebar-routes'
 
 const OrgBranchSidebar = (props: IBaseProps) => {
     const router = useRouter()

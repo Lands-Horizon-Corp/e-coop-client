@@ -1,6 +1,6 @@
-import { GhostIcon } from '@/components/icons'
-
 import { cn } from '@/lib'
+
+import { GhostIcon } from '@/components/icons'
 
 import { IClassProps } from '@/types'
 

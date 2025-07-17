@@ -1,24 +1,24 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
+import GroupService from '@/api-service/member-services/member-group-service'
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '@/factory/api-hook-factory'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as GroupService from '@/api-service/member-services/member-group-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IMemberGroup,
-    IMemberGroupRequest,
-    IMemberGroupPaginated,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IMemberGroup,
+    IMemberGroupPaginated,
+    IMemberGroupRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useCreateMemberGroup = createMutationHook<
@@ -26,7 +26,7 @@ export const useCreateMemberGroup = createMutationHook<
     string,
     IMemberGroupRequest
 >(
-    (data) => GroupService.createMemberGroup(data),
+    (data) => GroupService.create(data),
     'New member group created',
     (args) => createMutationInvalidateFn('member-group', args)
 )
@@ -36,13 +36,13 @@ export const useUpdateMemberGroup = createMutationHook<
     string,
     { groupId: TEntityId; data: IMemberGroupRequest }
 >(
-    ({ groupId, data }) => GroupService.updateMemberGroup(groupId, data),
+    ({ groupId, data }) => GroupService.updateById(groupId, data),
     'Updated member group',
     (args) => updateMutationInvalidationFn('member-group', args)
 )
 
 export const useDeleteMemberGroup = createMutationHook<void, string, TEntityId>(
-    (groupId) => GroupService.deleteMemberGroup(groupId),
+    (groupId) => GroupService.deleteById(groupId),
     'Member group deleted',
     (args) => deleteMutationInvalidationFn('member-group', args)
 )
@@ -54,9 +54,7 @@ export const useMemberGroups = ({
     return useQuery<IMemberGroup[], string>({
         queryKey: ['member-group', 'all'],
         queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                GroupService.getAllMemberGroups()
-            )
+            const [error, result] = await withCatchAsync(GroupService.allList())
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -90,7 +88,7 @@ export const useFilteredPaginatedMemberGroups = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                GroupService.getPaginatedMemberGroups({
+                GroupService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

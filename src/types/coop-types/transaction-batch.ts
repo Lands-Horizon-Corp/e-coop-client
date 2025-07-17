@@ -1,13 +1,18 @@
-import { IMedia } from './media'
-import { IBranch } from './branch'
 import { IUserBase } from '../auth'
-import { IOrganization } from '../lands-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IOrganization } from '../lands-types'
+import { IBatchFundingRequest } from './batch-funding'
+import { IBranch } from './branch'
+import { IMedia } from './media'
+import { IPaginatedResult } from './paginated-result'
 
 export type TBatchBalanceStatus =
     | 'balanced'
     | 'balance overage'
     | 'balance shortage'
+
+export interface ITransactionBatchRequest
+    extends Omit<IBatchFundingRequest, 'transaction_batch_id'> {}
 
 export interface ITransactionBatch
     extends ITimeStamps,
@@ -147,3 +152,6 @@ export interface ITransactionBatchEndRequest {
     employee_by_name: string
     employee_by_position: string
 }
+
+export interface ITransactionBatchPaginated
+    extends IPaginatedResult<ITransactionBatch> {}

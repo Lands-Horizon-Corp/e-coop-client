@@ -1,106 +1,59 @@
 import qs from 'query-string'
 
-import APIService from '../api-service'
+import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
 import { downloadFileService } from '@/helpers'
 
-import {
-    TEntityId,
-    IMemberGender,
-    IMemberGenderRequest,
-    IMemberGenderPaginated,
-} from '@/types'
+import { IMemberGender, IMemberGenderRequest, TEntityId } from '@/types'
 
-const BASE_ENDPOINT = '/member-gender'
+const CrudServices = createAPICrudService<IMemberGender, IMemberGenderRequest>(
+    `/member-gender`
+)
 
-export const getAllMemberGenders = async () => {
-    const response = await APIService.get<IMemberGender[]>(BASE_ENDPOINT)
-    return response.data
-}
-
-export const createMemberGender = async (genderData: IMemberGenderRequest) => {
-    const response = await APIService.post<IMemberGenderRequest, IMemberGender>(
-        BASE_ENDPOINT,
-        genderData
-    )
-    return response.data
-}
-
-export const deleteMemberGender = async (id: TEntityId) => {
-    const endpoint = `${BASE_ENDPOINT}/${id}`
-    await APIService.delete<void>(endpoint)
-}
-
-export const updateMemberGender = async (
-    id: TEntityId,
-    genderData: IMemberGenderRequest
-) => {
-    const endpoint = `${BASE_ENDPOINT}/${id}`
-    const response = await APIService.put<IMemberGenderRequest, IMemberGender>(
-        endpoint,
-        genderData
-    )
-    return response.data
-}
-
-export const getMemberGenderById = async (id: TEntityId) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}/${id}`,
-        },
-        { skipNull: true }
-    )
-    const response = await APIService.get<IMemberGender>(url)
-    return response.data
-}
-
-export const getPaginatedMemberGenders = async (props?: {
-    sort?: string
-    filters?: string
-    pagination?: { pageIndex: number; pageSize: number }
-}) => {
-    const { filters, pagination, sort } = props || {}
-
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}/search`,
-            query: {
-                sort,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IMemberGenderPaginated>(url)
-    return response.data
-}
-
-export const deleteMany = async (ids: TEntityId[]) => {
-    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
-    const payload = { ids }
-    await APIService.delete<void>(endpoint, payload)
-}
+const CollectionServices =
+    createAPICollectionService<IMemberGender>(`/member-gender`)
 
 export const exportAll = async () => {
-    const url = `${BASE_ENDPOINT}/export`
+    const url = `/member-gender/export`
     await downloadFileService(url, 'all_genders_export.xlsx')
 }
 
 export const exportAllFiltered = async (filters?: string) => {
-    const url = `${BASE_ENDPOINT}/export-search?filter=${filters || ''}`
-    await downloadFileService(url, 'filtered_genders_export.xlsx')
+    const url = qs.stringifyUrl(
+        {
+            url: `/member-gender/export-search`,
+            query: { filters },
+        },
+        { skipNull: true }
+    )
+    return downloadFileService(
+        url,
+        'filtered_member_educational_attainments_export.csv'
+    )
 }
 
 export const exportSelected = async (ids: TEntityId[]) => {
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/export-selected`,
+            url: `/member-gender/export-selected`,
             query: { ids },
         },
         { skipNull: true }
     )
 
     await downloadFileService(url, 'selected_genders_export.xlsx')
+}
+
+export const { allList, search } = CollectionServices
+export const { create, getById, updateById, deleteById, deleteMany } =
+    CrudServices
+
+export default {
+    ...CrudServices,
+    ...CollectionServices,
+    exportAll,
+    exportSelected,
+    exportAllFiltered,
 }

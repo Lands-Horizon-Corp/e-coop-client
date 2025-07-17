@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 
-import { useShortcut } from './use-shorcuts'
 import { PaymentsDataStore } from '@/store/transaction/payments-entry-store'
 
 import { IPaymentsEntry } from '@/types'
+
+import { useShortcut } from './use-shorcuts'
 
 type usePaymentsShortcutsTypes = Pick<
     PaymentsDataStore,

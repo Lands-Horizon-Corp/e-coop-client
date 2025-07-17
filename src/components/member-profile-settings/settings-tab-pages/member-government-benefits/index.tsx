@@ -1,25 +1,28 @@
 import { forwardRef, useState } from 'react'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { toReadableDate } from '@/utils'
+
 import {
-    PlusIcon,
-    TrashIcon,
     IdCardIcon,
     PencilFillIcon,
+    PlusIcon,
+    TrashIcon,
     WoodSignsIcon,
 } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import ImageDisplay from '@/components/image-display'
-import EmptyListIndicator from '../empty-list-indicator'
 import RawDescription from '@/components/raw-description'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { MemberGovernmentBenefitCreateUpdateFormModal } from './member-government-benefits-create-update-form'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { toReadableDate } from '@/utils'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberGovernmentBenefit } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberGovernmentBenefit, IMemberProfile } from '@/types'
+
+import EmptyListIndicator from '../empty-list-indicator'
+import { MemberGovernmentBenefitCreateUpdateFormModal } from './member-government-benefits-create-update-form'
 
 const MemberGovernmentBenefitCard = ({
     benefit,
@@ -91,19 +94,23 @@ const MemberGovernmentBenefitCard = ({
             <Separator className="!my-2" />
             <div className="mb-4 flex gap-4">
                 <div className="flex flex-1 flex-col items-center">
-                    <ImageDisplay
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                        src={benefit.front_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={benefit.front_media}>
+                        <ImageDisplay
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={benefit.front_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Front
                     </span>
                 </div>
                 <div className="flex flex-1 flex-col items-center">
-                    <ImageDisplay
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                        src={benefit.back_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={benefit.back_media}>
+                        <ImageDisplay
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={benefit.back_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Back
                     </span>

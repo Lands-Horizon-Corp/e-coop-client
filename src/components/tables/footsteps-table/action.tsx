@@ -1,5 +1,6 @@
-import { IFootstepTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+
+import { IFootstepTableActionComponentProp } from './columns'
 
 interface IFootstepTableActionProps extends IFootstepTableActionComponentProp {}
 

@@ -1,146 +1,114 @@
+import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { toBase64, withCatchAsync } from '@/utils'
+import MemberTypeReferenceService from '@/api-service/member-services/member-type/member-type-reference-service'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '@/factory/api-hook-factory'
 import { serverRequestErrExtractor } from '@/helpers'
-import * as MemberTypeReferenceService from '@/api-service/member-services/member-type/member-type-reference-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IMutationProps,
-    IMemberTypeReference,
     IAPIFilteredPaginatedHook,
-    IMemberTypeReferenceRequest,
+    IMemberTypeReference,
     IMemberTypeReferencePaginated,
+    IMemberTypeReferenceRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
-export const useCreateMemberTypeReference = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}:
-    | undefined
-    | (IAPIHook<IMemberTypeReference, string> & IMutationProps) = {}) => {
-    const queryClient = useQueryClient()
+export const useCreateMemberTypeReference = createMutationHook<
+    IMemberTypeReference,
+    string,
+    IMemberTypeReferenceRequest
+>(
+    (data) => MemberTypeReferenceService.create(data),
+    'Member type reference created',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                'member-type-reference',
+                'member-type-id',
+                args.payload.member_type_id,
+            ],
+        })
+        createMutationInvalidateFn('member-type-reference', args)
+    }
+)
 
-    return useMutation<
-        IMemberTypeReference,
-        string,
-        IMemberTypeReferenceRequest
-    >({
-        mutationKey: ['member-type-reference', 'create'],
-        mutationFn: async (data) => {
-            const [error, newMemberTypeReference] = await withCatchAsync(
-                MemberTypeReferenceService.createMemberTypeReference(data)
-            )
+export const useUpdateMemberTypeReference = createMutationHook<
+    IMemberTypeReference,
+    string,
+    { memberTypeReferenceId: TEntityId; data: IMemberTypeReferenceRequest }
+>(
+    ({ memberTypeReferenceId, data }) =>
+        MemberTypeReferenceService.updateById(memberTypeReferenceId, data),
+    'Member type reference updated',
+    (args) => {
+        updateMutationInvalidationFn('member-type-reference', args)
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                'member-type-reference',
+                'member-type-id',
+                args.payload.data.member_type_id,
+            ],
+        })
+    }
+)
 
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
+export const useDeleteMemberTypeReference = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (memberTypeReferenceId) =>
+        MemberTypeReferenceService.deleteById(memberTypeReferenceId),
+    'Member Type reference deleted',
+    (args) => {
+        deleteMutationInvalidationFn('member-type-reference', args)
+        args.queryClient.invalidateQueries({
+            queryKey: ['member-type-reference', 'member-type-id'],
+        })
+    }
+)
 
-            queryClient.invalidateQueries({
-                queryKey: [
-                    'member-type-reference',
-                    data.member_type_id,
-                    'resource-query',
-                ],
-            })
+export type TMemberTypeReferenceFetchMode = 'all' | 'specific'
 
-            queryClient.invalidateQueries({
-                queryKey: ['member-type-reference', data.member_type_id],
-            })
-
-            if (showMessage) toast.success('New Member Type Reference Created')
-            onSuccess?.(newMemberTypeReference)
-
-            return newMemberTypeReference
-        },
-    })
-}
-
-export const useUpdateMemberTypeReference = ({
-    showMessage = true,
-    onSuccess,
-    onError,
-}: IAPIHook<IMemberTypeReference, string> & IMutationProps) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        void,
-        string,
-        { memberTypeReferenceId: TEntityId; data: IMemberTypeReferenceRequest }
-    >({
-        mutationKey: ['member-type-reference', 'update'],
-        mutationFn: async ({ memberTypeReferenceId, data }) => {
-            const [error, result] = await withCatchAsync(
-                MemberTypeReferenceService.updateMemberTypeReference(
-                    memberTypeReferenceId,
-                    data
-                )
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                onError?.(errorMessage)
-                throw errorMessage
-            }
-
-            queryClient.invalidateQueries({
-                queryKey: [
-                    'member-type-reference',
-                    data.member_type_id,
-                    'resource-query',
-                ],
-            })
-
-            queryClient.invalidateQueries({
-                queryKey: ['member-type-reference', memberTypeReferenceId],
-            })
-
-            queryClient.removeQueries({
-                queryKey: [
-                    'member-type-reference',
-                    'loader',
-                    memberTypeReferenceId,
-                ],
-            })
-
-            if (showMessage) toast.success('Member Type Reference updated')
-            onSuccess?.(result)
-        },
-    })
-}
-
-export const useFilteredPaginatedMemberTypeReferences = ({
+export const useFilteredPaginatedMemberTypeReference = ({
+    memberTypeId,
+    mode = 'all',
     sort,
     enabled,
-    memberTypeId,
     filterPayload,
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<IMemberTypeReferencePaginated, string> & {
-    memberTypeId: TEntityId
-} & IQueryProps) => {
+}: IAPIFilteredPaginatedHook<IMemberTypeReferencePaginated, string> &
+    IQueryProps & {
+        memberTypeId?: TEntityId
+        mode?: TMemberTypeReferenceFetchMode
+    }) => {
     return useQuery<IMemberTypeReferencePaginated, string>({
         queryKey: [
             'member-type-reference',
+            'member-type-id',
             memberTypeId,
             'resource-query',
+            mode,
             filterPayload,
             pagination,
             sort,
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                MemberTypeReferenceService.getPaginatedMemberTypeReferences({
+                MemberTypeReferenceService.search({
+                    targetUrl:
+                        memberTypeId !== undefined && mode === 'specific'
+                            ? `member-type/${memberTypeId}/search`
+                            : undefined,
                     pagination,
-                    memberTypeId,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
                 })

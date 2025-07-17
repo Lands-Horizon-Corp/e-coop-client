@@ -1,4 +1,5 @@
 import { ISubscriptionPlan, ISubscriptionPlanRequest, TEntityId } from '@/types'
+
 import APIService from '../api-service'
 
 export const getALLSubscriptionPlans = async () => {

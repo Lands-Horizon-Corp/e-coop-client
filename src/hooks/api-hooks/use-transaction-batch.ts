@@ -1,28 +1,38 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { withCatchAsync } from '@/utils'
+import TransactionBatchService from '@/api-service/transaction-batch-service'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
-import { createMutationHook } from './api-hook-factory'
-import * as TransactionBatchService from '@/api-service/transaction-batch-service'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
+    IAPIFilteredPaginatedHook,
     IAPIHook,
-    TEntityId,
     IQueryProps,
     ITransactionBatch,
-    IBatchFundingRequest,
-    ITransactionBatchMinimal,
-    TTransactionBatchFullorMin,
-    ITransactionBatchEndRequest,
-    ITransactionBatchSignatures,
     ITransactionBatchDepositInBankRequest,
+    ITransactionBatchEndRequest,
+    ITransactionBatchMinimal,
+    ITransactionBatchPaginated,
+    ITransactionBatchRequest,
+    ITransactionBatchSignatures,
+    TEntityId,
+    TTransactionBatchFullorMin,
 } from '@/types'
+
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../../factory/api-hook-factory'
 
 export const useCurrentTransactionBatch = ({
     enabled,
+    onError,
+    onSuccess,
     showMessage = true,
-}: IAPIHook<TTransactionBatchFullorMin, string> & IQueryProps = {}) => {
+}: IAPIHook<TTransactionBatchFullorMin> & IQueryProps = {}) => {
     return useQuery<TTransactionBatchFullorMin, string>({
         queryKey: ['transaction-batch', 'current'],
         queryFn: async () => {
@@ -32,10 +42,12 @@ export const useCurrentTransactionBatch = ({
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
+                onError?.(errorMessage, error)
                 if (showMessage) toast.error(errorMessage)
                 throw errorMessage
             }
 
+            onSuccess?.(result)
             return result
         },
         enabled,
@@ -43,16 +55,16 @@ export const useCurrentTransactionBatch = ({
     })
 }
 
-export const useTransactionBatch = ({
+export const useTransactionBatch = <TData = ITransactionBatch>({
     id,
     enabled,
     showMessage = true,
-}: IAPIHook<ITransactionBatch, string> & IQueryProps & { id: TEntityId }) => {
-    return useQuery<ITransactionBatch, string>({
+}: IAPIHook<TData, string> & IQueryProps & { id: TEntityId }) => {
+    return useQuery<TData, string>({
         queryKey: ['transaction-batch', id],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                TransactionBatchService.getTransactionBatchById(id)
+                TransactionBatchService.getById<TData>(id)
             )
 
             if (error) {
@@ -71,8 +83,23 @@ export const useTransactionBatch = ({
 export const useCreateTransactionBatch = createMutationHook<
     ITransactionBatchMinimal,
     string,
-    Omit<IBatchFundingRequest, 'transaction_batch_id'>
->((variables) => TransactionBatchService.createTransactionBatch(variables))
+    ITransactionBatchRequest
+>(
+    (variables) => TransactionBatchService.create(variables),
+    'Transaction batch created.',
+    (args) => createMutationInvalidateFn('transaction-batch', args)
+)
+
+export const useDeleteTransactionBatch = createMutationHook<
+    void,
+    string,
+    TEntityId
+>(
+    (transactionBatchId) =>
+        TransactionBatchService.deleteById(transactionBatchId),
+    'Transaction batch deleted',
+    (args) => deleteMutationInvalidationFn('transaction-batch', args)
+)
 
 export const useTransactionBatchRequestBlotterView = createMutationHook<
     ITransactionBatchMinimal,
@@ -100,6 +127,51 @@ export const useTransactionBatchEndCurrentBatch = createMutationHook<
     (data) => TransactionBatchService.endCurrentBatch(data),
     'Transaction Batch Ended'
 )
+
+export const useFilteredPaginatedTransactionBatch = ({
+    sort,
+    enabled,
+    filterPayload,
+    showMessage = true,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<ITransactionBatchPaginated, string> &
+    IQueryProps = {}) => {
+    return useQuery<ITransactionBatchPaginated, string>({
+        queryKey: [
+            'transaction-batch',
+            'resource-query',
+            filterPayload,
+            pagination,
+            sort,
+        ],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                TransactionBatchService.search({
+                    pagination,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
+        enabled,
+        retry: 1,
+    })
+}
 
 // GET ALL TRANSACTION BATCH BLOTTER VIEW REQUEST
 export const useTransactionBatchBlotterViewRequests = ({
@@ -136,7 +208,11 @@ export const useTransactionBatchAcceptBlotterView = createMutationHook<
     ITransactionBatch,
     string,
     TEntityId
->((id) => TransactionBatchService.allowBlotterView(id), 'Batch view allowed')
+>(
+    (id) => TransactionBatchService.allowBlotterView(id),
+    'Batch view allowed',
+    (args) => updateMutationInvalidationFn('transaction-batch', args)
+)
 
 // GET ALL ENDED BATCH THAT CAN BE SIGNED BY OTHER
 export const useTransactionBatchEndApprovals = ({
@@ -148,7 +224,7 @@ export const useTransactionBatchEndApprovals = ({
         queryKey: ['transaction-batch', 'end-approvals'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                TransactionBatchService.getAllTransactionBatchViewRequest()
+                TransactionBatchService.getAllEndedBatchViewRequest()
             )
 
             if (error) {

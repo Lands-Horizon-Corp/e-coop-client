@@ -1,13 +1,15 @@
+import qs from 'query-string'
+
+import { downloadFileService } from '@/helpers'
+
 import {
-    TEntityId,
+    IAccountsComputationTypePaginatedResource,
     IAccountsComputationTypeRequest,
     IAccountsComputationTypeResource,
-    IAccountsComputationTypePaginatedResource,
+    TEntityId,
 } from '@/types'
 
-import qs from 'query-string'
 import APIService from '../api-service'
-import { downloadFileService } from '@/helpers'
 
 /**
  * Service class to handle CRUD operations for Computation Types.

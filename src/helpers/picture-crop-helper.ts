@@ -1,4 +1,5 @@
 import { Area } from 'react-easy-crop'
+
 import logger from './loggers/logger'
 
 export const createImage = (url: string): Promise<HTMLImageElement> =>

@@ -1,22 +1,23 @@
+import { cn } from '@/lib'
 import { Link } from '@tanstack/react-router'
 import { useRouter } from '@tanstack/react-router'
 import { useLocation } from '@tanstack/react-router'
 
+import { useIsMobile } from '@/hooks/use-mobile'
+
+import { IBaseProps } from '@/types'
+
+import { ArrowRightIcon, GearIcon } from '../icons'
+import { Button } from '../ui/button'
 import {
     DropdownMenu,
+    DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
-import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
-import { ArrowRightIcon, GearIcon } from '../icons'
-
-import { cn } from '@/lib'
-import { IBaseProps } from '@/types'
-import { useIsMobile } from '@/hooks/use-mobile'
 
 interface Props extends IBaseProps {}
 

@@ -1,9 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
 import { InvitationCodeService } from '@/api-service/invitation-code-services'
 import { serverRequestErrExtractor } from '@/helpers'
 import { toBase64, withCatchAsync } from '@/utils'
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { createMutationHook } from './api-hook-factory'
+
 import {
     IAPIFilteredPaginatedHook,
     IAPIHook,
@@ -13,6 +14,8 @@ import {
     IQueryProps,
     TEntityId,
 } from '@/types'
+
+import { createMutationHook } from '../../factory/api-hook-factory'
 
 export const useInvitationCodeByCode = ({
     code,

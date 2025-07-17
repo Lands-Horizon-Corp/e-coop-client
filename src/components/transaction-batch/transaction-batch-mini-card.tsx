@@ -1,16 +1,17 @@
-import { Button } from '../ui/button'
-import { LayersSharpDotIcon } from '../icons'
-import CopyTextButton from '../copy-text-button'
-import ImageNameDisplay from '../elements/image-name-display'
-import { BatchBlotterQuickViewModal } from './transaction-batch-quick-view'
-import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
-import TransactionBatchStatusIndicator from './transaction-batch-status-indicator'
-
 import { cn } from '@/lib'
-import { useModalState } from '@/hooks/use-modal-state'
 import { formatNumber, toReadableDateTime } from '@/utils'
 
+import { useModalState } from '@/hooks/use-modal-state'
+
 import { IClassProps, ITransactionBatch } from '@/types'
+
+import CopyTextButton from '../copy-text-button'
+import ImageNameDisplay from '../elements/image-name-display'
+import { LayersSharpDotIcon } from '../icons'
+import { Button } from '../ui/button'
+import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
+import { BatchBlotterQuickViewModal } from './transaction-batch-quick-view'
+import TransactionBatchStatusIndicator from './transaction-batch-status-indicator'
 
 interface Props extends IClassProps {
     transactionBatch: ITransactionBatch

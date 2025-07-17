@@ -1,30 +1,36 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
+import { AccountServices } from '@/api-service/accounting-services'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { IAccount } from '@/types/coop-types/accounts/account'
+import {
+    getCoreRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
+
 import DataTable from '@/components/data-table'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import FilterContext from '@/contexts/filter-context/filter-context'
+
+import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { usePagination } from '@/hooks/use-pagination'
-import { cn } from '@/lib'
-import {
-    useReactTable,
-    getCoreRowModel,
-    getSortedRowModel,
-} from '@tanstack/react-table'
-import { useMemo } from 'react'
 import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
+import { TableProps } from '@/types'
 
 import accountTableColumns, {
-    accountsGlobalSearchTargets,
     IAccountsTableColumnProps,
+    accountsGlobalSearchTargets,
 } from './columns'
-import { useQueryClient } from '@tanstack/react-query'
-import { TableProps } from '@/types'
-import { IAccount } from '@/types/coop-types/accounts/account'
-import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
-import { AccountServices } from '@/api-service/accounting-services'
 
 export interface AccountsTableProps
     extends TableProps<IAccount>,
@@ -49,9 +55,16 @@ const AccountsTable = ({
     actionComponent,
 }: AccountsTableProps) => {
     const queryClient = useQueryClient()
+
     const { pagination, setPagination } = usePagination()
     const { tableSorting, setTableSorting, sortingState } =
         useDataTableSorting()
+
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
 
     const columns = useMemo(
         () =>
@@ -124,6 +137,10 @@ const AccountsTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
+    useSubscribe(`account.create.branch.${branch_id}`, refetch)
+    useSubscribe(`account.update.branch.${branch_id}`, refetch)
+    useSubscribe(`account.delete.branch.${branch_id}`, refetch)
+
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -147,7 +164,7 @@ const AccountsTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['accounts', 'resource-query'],
+                                queryKey: ['account', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
                             AccountServices.deleteMany(

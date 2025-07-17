@@ -1,10 +1,10 @@
-import { IMedia } from './media'
-import { IBranch } from './branch'
 import { IUserBase } from '../auth'
-import { IOrganization } from '../lands-types'
-import { ITransactionBatch } from './transaction-batch'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IOrganization } from '../lands-types'
+import { IBranch } from './branch'
+import { IMedia } from './media'
 import { IPaginatedResult } from './paginated-result'
+import { ITransactionBatch } from './transaction-batch'
 
 export interface IBatchFundingRequest {
     id?: TEntityId

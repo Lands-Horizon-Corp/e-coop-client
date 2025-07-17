@@ -1,12 +1,15 @@
 import { forwardRef } from 'react'
-import SectionTitle from './section-title'
-import { BankDuoToneIcon } from '../icons'
-import MemberGovernmentBenefitsDisplay from './displays/member-government-benefits-display'
 
 import { cn } from '@/lib'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
+import { BankDuoToneIcon } from '../icons'
+import MemberGovernmentBenefitsDisplay from './displays/member-government-benefits-display'
+import SectionTitle from './section-title'
 
 interface Props extends IClassProps {
     profileId: TEntityId

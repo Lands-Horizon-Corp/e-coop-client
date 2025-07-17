@@ -1,37 +1,42 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 
-import { Label } from '@/components/ui/label'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { toInputDateString } from '@/utils'
+import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
+import { Path, useForm } from 'react-hook-form'
+
+import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
+import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
+import MemberGenderCombobox from '@/components/comboboxes/member-gender-combobox'
+import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
+import { PhoneInput } from '@/components/contact-input/contact-input'
+import { VerifiedPatchIcon } from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormItem } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
+import { Label } from '@/components/ui/label'
+import PasswordInput from '@/components/ui/password-input'
+import { Separator } from '@/components/ui/separator'
+import { Switch } from '@/components/ui/switch'
 import {
     ChecklistTemplate,
     ValueChecklistMeter,
 } from '@/components/value-checklist-indicator'
-import { Switch } from '@/components/ui/switch'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormItem } from '@/components/ui/form'
-import { Separator } from '@/components/ui/separator'
-import PasswordInput from '@/components/ui/password-input'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
-import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
-import MemberGenderCombobox from '@/components/comboboxes/member-gender-combobox'
-import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
 
 import { cn } from '@/lib/utils'
-import { useQuickCreateMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
 import { quickCreateMemberProfileSchema } from '@/validations/member/member-profile-schema'
 
-import { IForm, IClassProps, IMemberProfile } from '@/types'
-import { VerifiedPatchIcon } from '@/components/icons'
-import { PhoneInput } from '@/components/contact-input/contact-input'
-import { toInputDateString } from '@/utils'
+import { useQuickCreateMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
+import { IClassProps, IForm, IMemberProfile } from '@/types'
 
 type TMemberProfileQuickFormValues = z.infer<
     typeof quickCreateMemberProfileSchema
@@ -63,8 +68,8 @@ const MemberProfileQuickCreateForm = ({
             is_micro_finance_member: false,
             create_new_user: false,
             ...defaultValues,
-            birth_date: toInputDateString(
-                defaultValues?.birth_date ?? new Date()
+            birthdate: toInputDateString(
+                defaultValues?.birthdate ?? new Date()
             ),
         },
     })
@@ -80,10 +85,13 @@ const MemberProfileQuickCreateForm = ({
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        mutate({
-            ...formData,
-            full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
-        })
+        mutate(
+            {
+                ...formData,
+                full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+            },
+            { onSuccess: (data) => form.reset(data) }
+        )
     })
 
     const createNewUser = form.watch('create_new_user')
@@ -268,13 +276,14 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="birth_date"
+                                name="birthdate"
                                 label="Date of Birth *"
+                                className="relative"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
                                         value={field.value ?? ''}
                                     />
                                 )}

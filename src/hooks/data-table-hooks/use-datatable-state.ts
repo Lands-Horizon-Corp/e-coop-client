@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+
 import { OnChangeFn, RowSelectionState } from '@tanstack/react-table'
 
 export type TDataTableDisplayType = 'Default' | 'Full'

@@ -1,9 +1,9 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import * as UserService from '@/api-service/user-service'
+import { serverRequestErrExtractor } from '@/helpers'
+import { withCatchAsync } from '@/utils'
 
 import { IAPIHook, IMedia, IQueryProps, IUserBase, TEntityId } from '@/types'
 

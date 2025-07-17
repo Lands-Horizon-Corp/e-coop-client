@@ -1,24 +1,24 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
+import BillsAndCoinService from '@/api-service/bills-and-coins-service'
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from './api-hook-factory'
-import * as BillsAndCoinService from '@/api-service/bills-and-coins-service'
+} from '@/factory/api-hook-factory'
+import { serverRequestErrExtractor } from '@/helpers'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IBillsAndCoin,
-    IBillsAndCoinRequest,
-    IBillsAndCoinPaginated,
     IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IBillsAndCoin,
+    IBillsAndCoinPaginated,
+    IBillsAndCoinRequest,
+    IQueryProps,
+    TEntityId,
 } from '@/types'
 
 export const useCreateBillsAndCoin = createMutationHook<
@@ -26,7 +26,7 @@ export const useCreateBillsAndCoin = createMutationHook<
     string,
     IBillsAndCoinRequest
 >(
-    (data) => BillsAndCoinService.createBillsCoin(data),
+    (data) => BillsAndCoinService.create(data),
     'New Bill/Coin Created',
     (args) => createMutationInvalidateFn('bills-and-coin', args)
 )
@@ -36,7 +36,7 @@ export const useUpdateBillsAndCoin = createMutationHook<
     string,
     { id: TEntityId; data: IBillsAndCoinRequest }
 >(
-    ({ id, data }) => BillsAndCoinService.updateBillsCoin(id, data),
+    ({ id, data }) => BillsAndCoinService.updateById(id, data),
     'New Bill/Coin Created',
     (args) => updateMutationInvalidationFn('bills-and-coin', args)
 )
@@ -46,7 +46,7 @@ export const useDeleteBillsAndCoins = createMutationHook<
     string,
     TEntityId
 >(
-    (id) => BillsAndCoinService.deleteBillsAndCoin(id),
+    (id) => BillsAndCoinService.deleteById(id),
     'Bills and coins deleted',
     (args) => deleteMutationInvalidationFn('bills-and-coin', args)
 )
@@ -55,10 +55,7 @@ export const useDeleteManyBillsAndCoins = createMutationHook<
     void,
     string,
     TEntityId[]
->(
-    (ids) => BillsAndCoinService.deleteManyBillsAndCoin(ids),
-    'Bills and coins deleted'
-)
+>((ids) => BillsAndCoinService.deleteMany(ids), 'Bills and coins deleted')
 
 export const useBillsAndCoins = ({
     enabled,
@@ -68,7 +65,7 @@ export const useBillsAndCoins = ({
         queryKey: ['bills-and-coin', 'all'],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                BillsAndCoinService.getAllBillsCoins()
+                BillsAndCoinService.allList()
             )
 
             if (error) {
@@ -103,7 +100,7 @@ export const useFilteredPaginatedBillsAndCoin = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                BillsAndCoinService.getPaginatedBillsAndCoins({
+                BillsAndCoinService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

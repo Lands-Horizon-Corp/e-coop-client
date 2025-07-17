@@ -1,20 +1,20 @@
 import {
+    IFilterComponentProps,
+    TFilterModes,
+    TSearchFilter,
+    filterModeMap,
+    useFilter,
+} from '@/contexts/filter-context'
+
+import { Button } from '@/components/ui/button'
+import { DebouncedInput } from '@/components/ui/debounced-input'
+import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { DebouncedInput } from '@/components/ui/debounced-input'
-
-import {
-    useFilter,
-    TFilterModes,
-    TSearchFilter,
-    filterModeMap,
-    IFilterComponentProps,
-} from '@/contexts/filter-context'
 
 const TextFilter = <T,>({
     field,

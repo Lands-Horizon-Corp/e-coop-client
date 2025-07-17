@@ -1,17 +1,23 @@
-import { Checkbox } from '@/components/ui/checkbox'
-import { PushPinSlashIcon } from '@/components/icons'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import { toReadableDateShort } from '@/utils'
+import { ColumnDef, Row } from '@tanstack/react-table'
+
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-
-import { IInvitationCode } from '@/types'
-import InvitationCodeAction from './action'
-
-import { ColumnDef, Row } from '@tanstack/react-table'
 import DateFilter from '@/components/data-table/data-table-filters/date-filter'
-import { toReadableDate, toReadableDateShort } from '@/utils'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
+import CopyWrapper from '@/components/elements/copy-wrapper'
+import { PushPinSlashIcon, ShieldExclamationIcon } from '@/components/icons'
+import { PermissionViewModal } from '@/components/permission/permission-view'
+import { Badge } from '@/components/ui/badge'
+import { Checkbox } from '@/components/ui/checkbox'
+
+import { useModalState } from '@/hooks/use-modal-state'
+
+import { IInvitationCode, TPermission } from '@/types'
+
+import { createUpdateColumns } from '../common-columns'
 
 export const InvitationCodeGlobalSearchTargets: IGlobalSearchTargets<IInvitationCode>[] =
     [
@@ -79,10 +85,15 @@ const InvitationCodeTableColumns = (
                 original: { code },
             },
         }) => (
-            <div className="flex min-w-0 items-center gap-3">
-                <span className="truncate text-xs text-muted-foreground/70">
-                    {code || '-'}
-                </span>
+            <div
+                onClick={(e) => e.stopPropagation()}
+                className="flex min-w-0 items-center gap-3"
+            >
+                <CopyWrapper>
+                    <span className="truncate group-hover:text-foreground ease-in duration-200 text-xs text-muted-foreground/90">
+                        {code || '-'}
+                    </span>
+                </CopyWrapper>
             </div>
         ),
         enableMultiSort: true,
@@ -90,7 +101,7 @@ const InvitationCodeTableColumns = (
         enableResizing: true,
         enableHiding: false,
         size: 220,
-        minSize: 180,
+        minSize: 220,
     },
     {
         id: 'expiry',
@@ -143,9 +154,31 @@ const InvitationCodeTableColumns = (
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
-        size: 180,
-        minSize: 180,
+        size: 350,
+        minSize: 350,
     },
+    {
+        id: 'permission',
+        accessorKey: 'permission_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Permission">
+                <ColumnActions {...props}>
+                    <TextFilter<IInvitationCode>
+                        displayText="Permission"
+                        field="permission_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row: { original } }) => <PermissionCell {...original} />,
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 180,
+        minSize: 150,
+    },
+
     {
         id: 'max_uses',
         accessorKey: 'max uses',
@@ -194,62 +227,50 @@ const InvitationCodeTableColumns = (
         size: 180,
         minSize: 150,
     },
-
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
-                <ColumnActions {...props}>
-                    <DateFilter displayText="Date Updated" field="created_at" />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { created_at },
-            },
-        }) => <div>{created_at ? toReadableDate(created_at) : ''}</div>,
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 180,
-    },
-
-    {
-        id: 'updated_at',
-        accessorKey: 'updated_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Updated">
-                <ColumnActions {...props}>
-                    <DateFilter displayText="Date Updated" field="updated_at" />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { updated_at },
-            },
-        }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 180,
-    },
-    {
-        id: 'actions',
-        header: () => null,
-        cell: ({ row }) => <InvitationCodeAction row={row} />,
-        enableSorting: false,
-        enableResizing: false,
-        enableHiding: false,
-        size: 80,
-        minSize: 80,
-    },
+    ...createUpdateColumns<IInvitationCode>(),
 ]
+
+const PermissionCell = ({
+    permission_name,
+    permission_description,
+    permissions,
+}: {
+    permission_name: string
+    permission_description: string
+    permissions: TPermission[]
+}) => {
+    const viewPermissions = useModalState()
+
+    return (
+        <div
+            onClick={(e) => e.stopPropagation()}
+            className="flex w-full min-w-0 justify-between items-center gap-3"
+        >
+            <div>
+                <p className="capitalize">
+                    {permission_name ?? 'No permission name'}
+                </p>
+                <p className="text-xs text-muted-foreground/80">
+                    {permission_description ?? 'No description'}
+                </p>
+            </div>
+            <PermissionViewModal
+                permissions={permissions}
+                {...viewPermissions}
+            />
+            <Badge
+                onClick={(e) => {
+                    e.stopPropagation()
+                    viewPermissions.onOpenChange(true)
+                }}
+                variant="success"
+                className="text-xs px-2 py-1 h-fit cursor-pointer opacity-90 hover:opacity-100 duration-200 ease-in-out"
+            >
+                <ShieldExclamationIcon className="mr-1" />
+                <p>{(permissions ?? []).length} permissions</p>
+            </Badge>
+        </div>
+    )
+}
 
 export default InvitationCodeTableColumns

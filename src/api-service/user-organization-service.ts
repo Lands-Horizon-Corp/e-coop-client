@@ -1,15 +1,16 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
-
 import {
-    TEntityId,
     IEmployee,
-    IUserOrganization,
-    IUserOrganizationPaginated,
     IMember,
     IOwner,
+    IUserOrganization,
+    IUserOrganizationPaginated,
+    IUserOrganizationPermissionRequest,
+    TEntityId,
 } from '@/types'
+
+import APIService from './api-service'
 
 export const deleteEmployee = async (id: TEntityId) => {
     const response = await APIService.delete<void>(`/user-organization/${id}`)
@@ -87,4 +88,15 @@ export const getPaginatedUserOrg = async <
 export const deleteManyEmployees = async (ids: TEntityId[]) => {
     const payload = { ids }
     await APIService.delete<void>('user-organization/bulk-delete', payload)
+}
+
+export const updateUserOrganizationPermission = async (
+    userOrgId: TEntityId,
+    data: IUserOrganizationPermissionRequest
+) => {
+    const response = await APIService.put<
+        IUserOrganizationPermissionRequest,
+        IUserOrganization
+    >(`/user-organization/${userOrgId}/permission`, data)
+    return response.data
 }

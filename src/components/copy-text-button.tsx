@@ -1,8 +1,9 @@
-import { toast } from 'sonner'
 import { useCallback, useState } from 'react'
-import { CheckIcon, CopyIcon } from './icons'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib'
+
+import { CheckIcon, CopyIcon } from './icons'
 
 interface Props<TErr = unknown> {
     textContent: string

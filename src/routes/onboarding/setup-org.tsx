@@ -1,5 +1,6 @@
-import OrganizationForm from '@/components/forms/onboarding-forms/organization-forms'
 import { createFileRoute } from '@tanstack/react-router'
+
+import OrganizationForm from '@/components/forms/onboarding-forms/organization-forms'
 
 export const Route = createFileRoute('/onboarding/setup-org')({
     component: RouteComponent,

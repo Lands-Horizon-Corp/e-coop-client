@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { StringCodec, Subscription } from 'nats.ws'
 
 import logger from '@/helpers/loggers/logger'
 import { INatsConnectOpts, useNatsStore } from '@/store/nats-pubsub-store'
+import { StringCodec, Subscription } from 'nats.ws'
 
 const sc = StringCodec()
 

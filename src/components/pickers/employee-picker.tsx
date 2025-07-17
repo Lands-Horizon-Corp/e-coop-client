@@ -1,19 +1,22 @@
-import { forwardRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { forwardRef, useState } from 'react'
+
+import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { PaginationState } from '@tanstack/react-table'
 
-import GenericPicker from './generic-picker'
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
 import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import { Button } from '@/components/ui/button'
 
-import { useShortcut } from '../use-shorcuts'
-import useFilterState from '@/hooks/use-filter-state'
 import { useFilteredPaginatedEmployees } from '@/hooks/api-hooks/use-employee'
-import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
+import useFilterState from '@/hooks/use-filter-state'
 
 import { IUserBase, IUserOrganization } from '@/types'
+
+import { useShortcut } from '../use-shorcuts'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+import GenericPicker from './generic-picker'
 
 interface Props {
     value?: IUserBase
@@ -108,9 +111,14 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                     renderItem={(employee) => (
                         <div className="flex w-full items-center justify-between py-1">
                             <div className="flex items-center gap-x-2">
-                                <ImageDisplay
-                                    src={employee.user?.media?.download_url}
-                                />
+                                <PreviewMediaWrapper
+                                    media={employee.user?.media}
+                                >
+                                    <ImageDisplay
+                                        src={employee.user?.media?.download_url}
+                                    />
+                                </PreviewMediaWrapper>
+
                                 <span className="text-ellipsis text-foreground/80">
                                     {employee.user?.full_name}{' '}
                                     {employee.application_status ===
@@ -153,9 +161,11 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
                             <div>
-                                <ImageDisplay
-                                    src={value?.media?.download_url}
-                                />
+                                <PreviewMediaWrapper media={value?.media}>
+                                    <ImageDisplay
+                                        src={value?.media?.download_url}
+                                    />
+                                </PreviewMediaWrapper>
                             </div>
                             {!value ? (
                                 <span className="text-foreground/70">

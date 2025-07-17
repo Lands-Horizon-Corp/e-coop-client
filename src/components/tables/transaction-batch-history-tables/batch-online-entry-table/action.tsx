@@ -1,5 +1,7 @@
-import { IOnlineEntryTableActionComponentProp } from './columns'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+
+import { IOnlineEntryTableActionComponentProp } from './columns'
+
 // import { OnlineEntryCreateUpdateFormModal } from '@/components/forms/online-entry-create-update-form'
 
 interface IOnlineEntryTableActionProps

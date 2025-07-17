@@ -1,15 +1,11 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IAccount } from './accounts/account'
 
 export enum GeneralLedgerTypeEnum {
     Assets = 'Assets',
     LiabilitiesEquityAndReserves = 'Liabilities, Equity & Reserves',
     Income = 'Income',
     Expenses = 'Expenses',
-}
-
-export enum GeneralLedgerFinancialStatementNodeType {
-    DEFINITION = 'DEFINITION',
-    ACCOUNT = 'ACCOUNT',
 }
 
 export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
@@ -20,10 +16,11 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
 
     general_ledger_definition_entries_id?: TEntityId
 
-    type: GeneralLedgerFinancialStatementNodeType
     parent_id?: TEntityId
     parent?: IGeneralLedgerDefinition
-    general_ledger_accounts: IGeneralLedgerDefinition[]
+    accounts?: IAccount[]
+    general_ledger_definition?: IGeneralLedgerDefinition[]
+    general_ledger_accounts_grouping_id: TEntityId
 
     name: string
     description?: string
@@ -38,8 +35,6 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
 }
 
 export interface IGeneralLedgerDefinitionRequest {
-    organization_id: TEntityId
-    branch_id: TEntityId
     name: string
     general_ledger_type: GeneralLedgerTypeEnum
 
@@ -51,6 +46,5 @@ export interface IGeneralLedgerDefinitionRequest {
     beginning_balance_of_the_year_debit?: number
 
     general_ledger_definition_entries_id?: TEntityId
-
-    general_ledger_accounts_grouping_id?: TEntityId
+    general_ledger_accounts_grouping_id: TEntityId
 }

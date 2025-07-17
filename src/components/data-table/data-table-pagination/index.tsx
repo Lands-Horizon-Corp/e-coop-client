@@ -1,13 +1,5 @@
+import { PAGE_SIZES_DENSE } from '@/constants'
 import { Table } from '@tanstack/react-table'
-
-import {
-    Select,
-    SelectItem,
-    SelectValue,
-    SelectContent,
-    SelectTrigger,
-} from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
 
 import {
     ChevronLeftIcon,
@@ -15,9 +7,16 @@ import {
     ChevronsLeftIcon,
     ChevronsRightIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
 import { cn } from '@/lib/utils'
-import { PAGE_SIZES_DENSE } from '@/constants'
 
 interface DataTablePaginationProps<TData> {
     className?: string

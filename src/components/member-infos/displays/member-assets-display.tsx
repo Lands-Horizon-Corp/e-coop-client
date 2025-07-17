@@ -1,9 +1,6 @@
-import SectionTitle from '../section-title'
-
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
-import { IClassProps } from '@/types'
-import { IMemberAsset } from '@/types'
+
 import { BoxesStackedIcon } from '@/components/icons'
 import {
     Accordion,
@@ -11,7 +8,12 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
+
+import { IClassProps } from '@/types'
+import { IMemberAsset } from '@/types'
+
 import RawDescription from '../../raw-description'
+import SectionTitle from '../section-title'
 
 interface Props extends IClassProps {
     assets?: IMemberAsset[]

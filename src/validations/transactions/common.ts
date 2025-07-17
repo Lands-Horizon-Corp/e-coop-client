@@ -1,5 +1,6 @@
-import { sanitizeNumberInput } from '@/helpers'
 import { z } from 'zod'
+
+import { sanitizeNumberInput } from '@/helpers'
 
 export const amountPreprocess = z.preprocess(
     (val) => {

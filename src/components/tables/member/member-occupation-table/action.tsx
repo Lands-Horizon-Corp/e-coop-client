@@ -1,11 +1,13 @@
 import { useState } from 'react'
 
-import { IMemberOccupationTableActionComponentProp } from './columns'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { MemberOccupationCreateUpdateFormModal } from '@/components/forms/member-forms/member-occupation-create-update-form'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberOccupation } from '@/hooks/api-hooks/member/use-member-occupation'
+
+import { IMemberOccupationTableActionComponentProp } from './columns'
 
 interface IMemberOccupationTableActionProps
     extends IMemberOccupationTableActionComponentProp {

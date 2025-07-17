@@ -1,101 +1,22 @@
-// services/member-center-service.ts
 import qs from 'query-string'
 
-import APIService from '../api-service'
+import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
 import { downloadFileService } from '@/helpers'
 
-import {
-    TEntityId,
-    IMemberCenter,
-    IMemberCenterRequest,
-    IMemberCenterPaginated,
-} from '@/types'
+import { IMemberCenter, IMemberCenterRequest, TEntityId } from '@/types'
 
-const BASE_ENDPOINT = '/member-center'
-
-export const getMemberCenterById = async (id: TEntityId) => {
-    const url = qs.stringifyUrl({
-        url: `${BASE_ENDPOINT}/${id}`,
-    })
-
-    const response = await APIService.get<IMemberCenter>(url)
-    return response.data
-}
-
-export const createMemberCenter = async (data: IMemberCenterRequest) => {
-    const url = qs.stringifyUrl(
-        {
-            url: BASE_ENDPOINT,
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.post<IMemberCenterRequest, IMemberCenter>(
-        url,
-        data
-    )
-    return response.data
-}
-
-export const deleteMemberCenter = async (id: TEntityId) => {
-    const endpoint = `${BASE_ENDPOINT}/${id}`
-    await APIService.delete<void>(endpoint)
-}
-
-export const updateMemberCenter = async (
-    id: TEntityId,
-    data: IMemberCenterRequest
-) => {
-    const url = qs.stringifyUrl({
-        url: `${BASE_ENDPOINT}/${id}`,
-    })
-
-    const response = await APIService.put<IMemberCenterRequest, IMemberCenter>(
-        url,
-        data
-    )
-    return response.data
-}
-
-export const getAllMemberCenters = async () => {
-    const url = qs.stringifyUrl(
-        {
-            url: BASE_ENDPOINT,
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IMemberCenter[]>(url)
-    return response.data
-}
-
-export const getPaginatedMemberCenters = async (props?: {
-    sort?: string
-    filters?: string
-    pagination?: { pageIndex: number; pageSize: number }
-}) => {
-    const { filters, pagination, sort } = props || {}
-
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}/search`,
-            query: {
-                sort,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IMemberCenterPaginated>(url)
-    return response.data
-}
+const CrudServices = createAPICrudService<IMemberCenter, IMemberCenterRequest>(
+    `/member-center`
+)
+const CollectionServices =
+    createAPICollectionService<IMemberCenter>(`/member-center`)
 
 export const exportAllMemberCenters = async () => {
-    const url = `${BASE_ENDPOINT}/export`
-    await downloadFileService(url, 'all_member_types_export.csv')
+    const url = `/member-center/export`
+    await downloadFileService(url, 'all_member_center_export.csv')
 }
 
 export const exportSelectedMemberCenters = async (ids: TEntityId[]) => {
@@ -105,16 +26,21 @@ export const exportSelectedMemberCenters = async (ids: TEntityId[]) => {
 
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/export-selected`,
+            url: `/member-center/export-selected`,
             query: { ids },
         },
         { skipNull: true }
     )
 
-    await downloadFileService(url, 'selected_member_types_export.csv')
+    await downloadFileService(url, 'selected_member_center_export.csv')
 }
 
-export const deleteManyMemberCenters = async (ids: TEntityId[]) => {
-    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
-    await APIService.delete<void>(endpoint, { ids })
+export const { create, getById, updateById, deleteById, deleteMany } =
+    CrudServices
+export const { allList, search } = CollectionServices
+export default {
+    ...CrudServices,
+    ...CollectionServices,
+    exportAllMemberCenters,
+    exportSelectedMemberCenters,
 }

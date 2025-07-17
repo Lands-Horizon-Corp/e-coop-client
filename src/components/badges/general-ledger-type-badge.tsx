@@ -1,8 +1,7 @@
 import { cn } from '@/lib'
+import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
 import { Badge } from '@/components/ui/badge'
-
-import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
 interface GeneralLedgerTypeBadgeProps {
     type: GeneralLedgerTypeEnum
@@ -45,6 +44,9 @@ export const GeneralLedgerTypeBadge = ({
     className,
     description,
 }: GeneralLedgerTypeBadgeProps) => {
+    if (generalLedgerTypeStyles[type] === undefined) {
+        return null
+    }
     const { label, bgColor, textColor } = generalLedgerTypeStyles[type]
     const hover = `hover:${bgColor}`
     return (

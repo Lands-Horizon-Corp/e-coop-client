@@ -1,3 +1,7 @@
+import { IPaymentType } from '@/types/coop-types/payment-type'
+import { toReadableDate } from '@/utils'
+import { ColumnDef, Row } from '@tanstack/react-table'
+
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
@@ -5,12 +9,6 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
-
-import { IPaymentType } from '@/types/coop-types/payment-type'
-
-import { toReadableDate } from '@/utils'
-import { ColumnDef, Row } from '@tanstack/react-table'
-import PaymentTypeAction from './action'
 
 export const PaymentTypeGlobalSearchTargets: IGlobalSearchTargets<IPaymentType>[] =
     [
@@ -192,15 +190,5 @@ export const PaymentTypeTableColumns = (
         enableHiding: false,
         size: 180,
         minSize: 150,
-    },
-    {
-        id: 'actions',
-        header: () => null,
-        cell: ({ row }) => <PaymentTypeAction row={row} />,
-        enableSorting: false,
-        enableResizing: false,
-        enableHiding: false,
-        size: 80,
-        minSize: 80,
     },
 ]

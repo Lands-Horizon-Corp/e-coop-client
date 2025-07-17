@@ -1,19 +1,21 @@
-import { Button } from '../../ui/button'
-import { LayersSharpDotIcon } from '../../icons'
-import TransactionBatch from '../../transaction-batch'
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
-import { TransactionBatchCreateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-create-form'
-
+import { useTransactionBatchStore } from '@/store/transaction-batch-store'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 // import { useAuthUser } from '@/store/user-auth-store'
 
 import { toReadableDate } from '@/utils'
-import { useSubscribe } from '@/hooks/use-pubsub'
-import { useModalState } from '@/hooks/use-modal-state'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
-import { useTransactionBatchStore } from '@/store/transaction-batch-store'
-import { useCurrentTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
 
-import { IEmployee, IClassProps, TTransactionBatchFullorMin } from '@/types'
+import { TransactionBatchCreateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-create-form'
+
+import { useCurrentTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
+import { useModalState } from '@/hooks/use-modal-state'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
+import { IClassProps, IEmployee, TTransactionBatchFullorMin } from '@/types'
+
+import { LayersSharpDotIcon } from '../../icons'
+import TransactionBatch from '../../transaction-batch'
+import { Button } from '../../ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
 
 interface Props extends IClassProps {}
 
@@ -37,16 +39,10 @@ const TransactionBatchNavButton = (_props: Props) => {
     })
 
     useSubscribe<TTransactionBatchFullorMin>(
-        `transaction-batch.${transactionBatch?.id}.update`,
+        `transaction_batch.update.${transactionBatch?.id}`,
         (transactionBatch) => {
-            setData(transactionBatch)
-        }
-    )
-
-    useSubscribe<TTransactionBatchFullorMin>(
-        `transaction-batch.${transactionBatch?.id}.delete`,
-        () => {
             reset()
+            setData(transactionBatch)
         }
     )
 
@@ -70,6 +66,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                             branch_id: user_organization.branch_id,
                             organization_id: user_organization.organization_id,
                         },
+                        onSuccess: setData,
                     }}
                 />
             </>
@@ -93,6 +90,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                 className="h-fit w-fit border-none bg-transparent p-0 shadow-none"
             >
                 <TransactionBatch
+                    onBatchEnded={() => setData(null)}
                     transactionBatch={
                         transactionBatch as TTransactionBatchFullorMin
                     }

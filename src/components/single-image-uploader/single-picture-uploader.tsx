@@ -1,12 +1,14 @@
+import { useEffect, useState } from 'react'
+
 import { cn } from '@/lib'
-import { useState, useEffect } from 'react'
+
 import ActionTooltip from '../action-tooltip'
 import { AdjustIcon } from '../icons'
 import Modal, { IModalProps } from '../modals/modal'
 import PictureCrop from '../picture-crop'
+import { Button } from '../ui/button'
 import UserAvatar from '../user-avatar'
 import PictureDrop from './picture-drop'
-import { Button } from '../ui/button'
 
 interface singlePictureUploadModalProps extends IModalProps {
     onPhotoChoose: (imageBase64: string) => void

@@ -1,8 +1,8 @@
 import {
-    TEntityId,
     IAuditable,
     ITimeStamps,
     TAccountClosureReasonType,
+    TEntityId,
 } from '../../common'
 import { IMemberProfile } from './member-profile'
 

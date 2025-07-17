@@ -1,24 +1,25 @@
 import { useState } from 'react'
 
 import {
+    IFilterComponentProps,
+    TFilterModes,
+    TSearchFilter,
+    filterModeMap,
+    useFilter,
+} from '@/contexts/filter-context'
+import logger from '@/helpers/loggers/logger'
+
+import TimePicker from '@/components/date-time-pickers/time-picker'
+import { Button } from '@/components/ui/button'
+import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import TimeRange from './time-range'
-import { Button } from '@/components/ui/button'
-import TimePicker from '@/components/date-time-pickers/time-picker'
 
-import {
-    useFilter,
-    TFilterModes,
-    TSearchFilter,
-    filterModeMap,
-    IFilterComponentProps,
-} from '@/contexts/filter-context'
-import logger from '@/helpers/loggers/logger'
+import TimeRange from './time-range'
 
 const TimePickerWithApply = ({
     value,

@@ -1,14 +1,14 @@
-import MultiSelectFilter, {
-    IMultiSelectOption,
-} from '@/components/multi-select-filter'
-
 import {
-    filterModeMap,
     IFilterComponentProps,
     TColumnDataTypes,
     TSearchFilter,
+    filterModeMap,
     useFilter,
 } from '@/contexts/filter-context'
+
+import MultiSelectFilter, {
+    IMultiSelectOption,
+} from '@/components/multi-select-filter'
 
 type AllowedMode<T extends keyof typeof filterModeMap> =
     (typeof filterModeMap)[T][number]['value']

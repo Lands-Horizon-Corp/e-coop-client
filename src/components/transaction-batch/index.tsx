@@ -1,32 +1,52 @@
-import { Button } from '../ui/button'
-import BatchBlotter from './batch-blotter'
-import { Separator } from '../ui/separator'
-import { EyeIcon, LayersSharpDotIcon } from '../icons'
-import BatchCheckRemitance from './remittance/check-remittance'
-import BatchOnlineRemitance from './remittance/online-remittance'
-import BeginningBalanceCard from './transaction-batch-funding-card'
-import TransactionBatchCashCount from './transaction-batch-cash-count'
-import DepositInBankCard from './deposit-in-bank/deposit-in-bank-card'
-import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
-import { TransactionBatchEndFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-end-form'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
+
+import { TransactionBatchEndFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-end-form'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 import {
     IClassProps,
     ITransactionBatch,
     TTransactionBatchFullorMin,
 } from '@/types'
-import { useModalState } from '@/hooks/use-modal-state'
+
+import { EyeIcon, LayersSharpDotIcon } from '../icons'
+import { Button } from '../ui/button'
+import { Separator } from '../ui/separator'
+import BatchBlotter from './batch-blotter'
+import DepositInBankCard from './deposit-in-bank/deposit-in-bank-card'
+import BatchCheckRemitance from './remittance/check-remittance'
+import BatchOnlineRemitance from './remittance/online-remittance'
+import TransactionBatchCashCount from './transaction-batch-cash-count'
+import BeginningBalanceCard from './transaction-batch-funding-card'
+import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
 
 interface Props extends IClassProps {
     transactionBatch: TTransactionBatchFullorMin
+    onBatchEnded?: () => void
 }
 
-const TransactionBatch = ({ className, transactionBatch }: Props) => {
+const TransactionBatch = ({
+    className,
+    transactionBatch,
+    onBatchEnded,
+}: Props) => {
+    const queryClient = useQueryClient()
     const historyModal = useModalState()
     const endModal = useModalState()
+
+    const invalidateTransactionBatch = () => {
+        queryClient.invalidateQueries({
+            queryKey: ['transaction-batch', transactionBatch.id],
+        })
+
+        queryClient.invalidateQueries({
+            queryKey: ['transaction-batch', 'current'],
+        })
+    }
 
     return (
         <div
@@ -43,7 +63,12 @@ const TransactionBatch = ({ className, transactionBatch }: Props) => {
                     transactionBatchId: transactionBatch?.id,
                 }}
             />
-            <TransactionBatchEndFormModal {...endModal} />
+            <TransactionBatchEndFormModal
+                {...endModal}
+                formProps={{
+                    onSuccess: onBatchEnded,
+                }}
+            />
             <div className="flex items-center justify-between">
                 <div className="flex items-start gap-x-2">
                     <LayersSharpDotIcon className="mt-1 inline text-primary" />{' '}
@@ -71,22 +96,33 @@ const TransactionBatch = ({ className, transactionBatch }: Props) => {
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
                     <div className="flex gap-x-2">
                         <BeginningBalanceCard
+                            onAdd={() => invalidateTransactionBatch()}
                             transactionBatch={transactionBatch}
                         />
                         <DepositInBankCard
                             transactionBatchId={transactionBatch?.id}
-                            depositInBankAmount={0}
+                            depositInBankAmount={
+                                transactionBatch?.deposit_in_bank ?? 0
+                            }
+                            onUpdate={() => invalidateTransactionBatch()}
                         />
                     </div>
                     <TransactionBatchCashCount
+                        onCashCountUpdate={() => invalidateTransactionBatch()}
                         transactionBatch={transactionBatch}
                     />
                     <Separator />
                     <BatchCheckRemitance
                         transactionBatchId={transactionBatch?.id}
+                        onCheckRemittanceUpdate={() =>
+                            invalidateTransactionBatch()
+                        }
                     />
                     <BatchOnlineRemitance
                         transactionBatchId={transactionBatch?.id}
+                        onOnlineRemittanceUpdate={() =>
+                            invalidateTransactionBatch()
+                        }
                     />
                 </div>
                 <BatchBlotter

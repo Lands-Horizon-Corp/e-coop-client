@@ -1,6 +1,7 @@
-import { Link } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/user-auth-store'
+import { Link } from '@tanstack/react-router'
+
+import { Button } from '@/components/ui/button'
 
 const NavSignUp = () => {
     const { authStatus } = useAuthStore()

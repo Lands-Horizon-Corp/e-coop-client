@@ -10,6 +10,7 @@ export interface ICashCount extends IBaseEntityMeta {
     transaction_batch_id?: string
 
     country_code: string
+    name: string // this is just for comparison of coins
     bill_amount: number
     quantity: number
     amount: number
@@ -24,8 +25,9 @@ export interface ICashCountRequest {
 
     employee_user_id?: TEntityId
 
+    name: string
     country_code: string
-    bill_amount: number
+    bill_amount: number // this is just for comparison of coins
     quantity: number
     amount: number
 }

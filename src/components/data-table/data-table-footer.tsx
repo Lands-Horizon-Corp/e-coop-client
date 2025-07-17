@@ -1,8 +1,8 @@
-import { flexRender, Table } from '@tanstack/react-table'
-
-import { TableFooter, TableRow, TableCell } from '@/components/ui/table'
-
 import { cn } from '@/lib'
+import { Table, flexRender } from '@tanstack/react-table'
+
+import { TableCell, TableFooter, TableRow } from '@/components/ui/table'
+
 import { getPinningStyles } from './data-table-utils'
 
 const DataTableFooter = <TData,>({

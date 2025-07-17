@@ -1,28 +1,32 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Separator } from '@/components/ui/separator'
-import SignatureField from '@/components/ui/signature-field'
+import { Path, useForm } from 'react-hook-form'
+
 import Modal, { IModalProps } from '@/components/modals/modal'
+import EmployeePicker from '@/components/pickers/employee-picker'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import EmployeePicker from '@/components/pickers/employee-picker'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import SignatureField from '@/components/ui/signature-field'
 
 import { cn } from '@/lib/utils'
+
 import { entityIdSchema } from '@/validations/common'
+
 import { useCreateTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
 
 import {
+    IBatchFundingRequest,
+    IClassProps,
     IForm,
     IMedia,
-    IClassProps,
-    IBatchFundingRequest,
     ITransactionBatchMinimal,
 } from '@/types'
 
@@ -110,9 +114,9 @@ const TransactionBatchCreateForm = ({
                                 />
                             )}
                         />
-                        <div>
+                        <div className="space-y-1">
                             <p>Starting Balance Info</p>
-                            <div className="grid gap-x-4">
+                            <div className="grid gap-x-4 space-y-4">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="amount"
@@ -140,10 +144,7 @@ const TransactionBatchCreateForm = ({
                                                 'provided_by_user'
                                             )}
                                             onSelect={(value) => {
-                                                form.setValue(
-                                                    'provided_by_user_id',
-                                                    value.user_id
-                                                )
+                                                field.onChange(value?.user_id)
                                                 form.setValue(
                                                     'provided_by_user',
                                                     value.user

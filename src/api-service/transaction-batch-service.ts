@@ -1,23 +1,31 @@
-import APIService from './api-service'
+import {
+    createAPICollectionService,
+    createAPICrudService,
+    createAPIExportableService,
+} from '@/factory/api-factory-service'
 
 import {
-    TEntityId,
     ITransactionBatch,
-    ITransactionBatchMinimal,
-    TTransactionBatchFullorMin,
-    ITransactionBatchEndRequest,
-    ITransactionBatchSignatures,
     ITransactionBatchDepositInBankRequest,
+    ITransactionBatchEndRequest,
+    ITransactionBatchMinimal,
+    ITransactionBatchRequest,
+    ITransactionBatchSignatures,
+    TEntityId,
+    TTransactionBatchFullorMin,
 } from '@/types'
 
-import { IBatchFundingRequest } from '@/types/coop-types/batch-funding'
+import APIService from './api-service'
 
-export const getTransactionBatchById = async (id: TEntityId) => {
-    const response = await APIService.get<ITransactionBatch>(
-        `/transaction-batch/${id}`
-    )
-    return response.data
-}
+const CollectionServices =
+    createAPICollectionService<ITransactionBatch>('transaction-batch')
+
+const CrudServices = createAPICrudService<
+    ITransactionBatch | ITransactionBatchMinimal,
+    ITransactionBatchRequest
+>('transaction-batch')
+
+const ExportServices = createAPIExportableService('transaction-batch')
 
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
@@ -25,20 +33,6 @@ export const currentTransactionBatch = async () => {
     >('/transaction-batch/current')
     return response.data
 }
-
-export const createTransactionBatch = async (
-    data: Omit<IBatchFundingRequest, 'transaction_batch_id'>
-) => {
-    const response = await APIService.post<
-        Omit<IBatchFundingRequest, 'transaction_batch_id'>,
-        ITransactionBatchMinimal
-    >('/trnsaction-batch', data)
-    return response.data
-}
-
-// Create TransactionBatch -> id
-// TransactionBatch Funding
-
 export const requestTransactionBatchBlotterView = async (id: TEntityId) => {
     const response = await APIService.put<void, ITransactionBatchMinimal>(
         `/transaction-batch/${id}/view-request`
@@ -81,7 +75,7 @@ export const allowBlotterView = async (id: TEntityId) => {
 
 export const getAllEndedBatchViewRequest = async () => {
     const response = await APIService.get<ITransactionBatch[]>(
-        '/transaction-batch/view-approval'
+        '/transaction-batch/ended-batch'
     )
     return response.data
 }
@@ -93,6 +87,25 @@ export const updateEndedBatchApprovals = async (
     const response = await APIService.put<
         ITransactionBatchSignatures,
         ITransactionBatch
-    >(`/transaction-batch/${id}/view-accept`, data)
+    >(`/transaction-batch/${id}/signature`, data)
     return response.data
+}
+
+export const { allList, search } = CollectionServices
+export const { create, deleteById, deleteMany, getById, updateById } =
+    CrudServices
+export const { exportAll, exportFiltered, exportSelected } = ExportServices
+
+export default {
+    endCurrentBatch,
+    setDepositInBank,
+    allowBlotterView,
+    currentTransactionBatch,
+    updateEndedBatchApprovals,
+    getAllEndedBatchViewRequest,
+    getAllTransactionBatchViewRequest,
+    requestTransactionBatchBlotterView,
+    ...CrudServices,
+    ...ExportServices,
+    ...CollectionServices,
 }

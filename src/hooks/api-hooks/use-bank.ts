@@ -1,28 +1,29 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
+import BankService from '@/api-service/bank-service'
 import { serverRequestErrExtractor } from '@/helpers'
+import { toBase64, withCatchAsync } from '@/utils'
+
+import {
+    IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IBank,
+    IBankPaginated,
+    IBankRequest,
+    IQueryProps,
+    TEntityId,
+} from '@/types'
+
 import {
     createMutationHook,
     createMutationInvalidateFn,
     deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
-} from './api-hook-factory'
-import * as BankService from '@/api-service/bank-service'
-
-import {
-    IBank,
-    IAPIHook,
-    TEntityId,
-    IQueryProps,
-    IBankRequest,
-    IBankPaginated,
-    IAPIFilteredPaginatedHook,
-} from '@/types'
+} from '../../factory/api-hook-factory'
 
 export const useCreateBank = createMutationHook<IBank, string, IBankRequest>(
-    (data) => BankService.createBank(data),
+    (data) => BankService.create(data),
     'Bank created',
     (args) => createMutationInvalidateFn('bank', args)
 )
@@ -32,13 +33,13 @@ export const useUpdateBank = createMutationHook<
     string,
     { bankId: TEntityId; data: IBankRequest }
 >(
-    ({ bankId, data }) => BankService.updateBank(bankId, data),
+    ({ bankId, data }) => BankService.updateById(bankId, data),
     'Bank updated',
     (args) => updateMutationInvalidationFn('bank', args)
 )
 
 export const useDeleteBank = createMutationHook<void, string, TEntityId>(
-    (id) => BankService.deleteBank(id),
+    (id) => BankService.deleteById(id),
     'Bank deleted',
     (args) => deleteMutationInvalidationFn('bank', args)
 )
@@ -50,9 +51,7 @@ export const useBanks = ({
     return useQuery<IBank[], string>({
         queryKey: ['bank', 'all'],
         queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                BankService.getAllBanks()
-            )
+            const [error, result] = await withCatchAsync(BankService.allList())
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -79,7 +78,7 @@ export const useFilteredPaginatedBanks = ({
         queryKey: ['bank', 'resource-query', filterPayload, pagination, sort],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                BankService.getPaginatedBanks({
+                BankService.search({
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

@@ -1,46 +1,23 @@
 import {
-    IInvitationCode,
-    ITransactionPaymentTypePaginated,
-    TEntityId,
-} from '@/types'
-import APIService from './api-service'
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
 
-// GET /invitation-code/
-export const getAllPaymentType = async () => {
-    const response =
-        await APIService.get<ITransactionPaymentTypePaginated[]>(
-            `/payment-type`
-        )
-    return response.data
-}
+import { IPaymentType, IPaymentTypeRequest } from '@/types'
 
-// POST /invitation-code/organization/:organization_id/branch/:branch_id
-export const createPaymentType = async (
-    organizationId: TEntityId,
-    branchId: TEntityId
-) => {
-    const response = await APIService.post<IInvitationCode>(
-        `/invitation-code/organization/${organizationId}/branch/${branchId}`
-    )
-    return response.data
-}
+const CrudServices = createAPICrudService<IPaymentType, IPaymentTypeRequest>(
+    '/payment-type'
+)
 
-// PUT /invitation-code/:invitation_code_id/
-export const updateInvitationCode = async (inviationCodeId: TEntityId) => {
-    const response = await APIService.put<IInvitationCode>(
-        `/invitation-code/${inviationCodeId}`
-    )
-    return response.data
-}
+export const { create, getById, updateById, deleteById, deleteMany } =
+    CrudServices
 
-// DELETE /invitation-code/:invitation_code_id/organization/:organization_id/branch/:branch_id
-export const deleteInvitationCode = async (
-    inviationCodeId: TEntityId,
-    organizationId: TEntityId,
-    branchId: TEntityId
-) => {
-    const response = await APIService.delete<IInvitationCode>(
-        ` /invitation-code/${inviationCodeId}/organization/${organizationId}/branch/${branchId}`
-    )
-    return response.data
+const CollectionServices =
+    createAPICollectionService<IPaymentType>('/payment-type')
+
+export const { search, allList } = CollectionServices
+
+export default {
+    ...CrudServices,
+    ...CollectionServices,
 }

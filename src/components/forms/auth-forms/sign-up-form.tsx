@@ -1,29 +1,34 @@
-import z from 'zod'
 import { useEffect } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import z from 'zod'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { toReadableDate } from '@/utils'
+import { useForm, useWatch } from 'react-hook-form'
+
+import { PhoneInput } from '@/components/contact-input/contact-input'
+import { VerifiedPatchIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormItem } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
+import PasswordInput from '@/components/ui/password-input'
 import {
     ChecklistTemplate,
     ValueChecklistMeter,
 } from '@/components/value-checklist-indicator'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormItem } from '@/components/ui/form'
-import { VerifiedPatchIcon } from '@/components/icons'
-import PasswordInput from '@/components/ui/password-input'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { PhoneInput } from '@/components/contact-input/contact-input'
 
 import { cn } from '@/lib/utils'
-import { toReadableDate } from '@/utils'
-import { useSignUp } from '@/hooks/api-hooks/use-auth'
+
 import { signUpSchema } from '@/validations/form-validation/sign-up-schema'
 
-import { IForm, IClassProps, ISignUpRequest, IAuthContext } from '@/types'
+import { useSignUp } from '@/hooks/api-hooks/use-auth'
+
+import { IAuthContext, IClassProps, IForm, ISignUpRequest } from '@/types'
 
 type TSignUpForm = z.infer<typeof signUpSchema>
 
@@ -154,12 +159,13 @@ const SignUpForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="birthdate"
+                            className="relative"
+                            description="mm/dd/yyyy"
+                            descriptionClassName="absolute top-0 right-0"
                             render={({ field }) => (
-                                <Input
-                                    type="date"
+                                <InputDate
                                     {...field}
                                     value={field.value ?? ''}
-                                    className="block [&::-webkit-calendar-picker-indicator]:hidden"
                                 />
                             )}
                         />

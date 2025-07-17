@@ -1,5 +1,4 @@
 // THIS IS ONLY USE FOR MEMBER PROFILE UPDATE
-
 import { TCivilStatus, TEntityId, TGeneralStatus } from '@/types/common'
 
 // 📌 Identity & Personal Info
@@ -10,7 +9,7 @@ export interface IMemberProfilePersonalInfoRequest {
     full_name?: string
     suffix?: string
     member_gender_id?: TEntityId
-    birth_date?: string
+    birthdate?: string
     contact_number?: string
     business_contact_number?: string
 

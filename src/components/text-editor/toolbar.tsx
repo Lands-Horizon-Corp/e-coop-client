@@ -1,20 +1,19 @@
 import { type Editor } from '@tiptap/react'
 
-import { Toggle } from '@/components/ui/toggle'
-import { Button } from '@/components/ui/button'
-
 import {
-    ToolbarItalicIcon,
-    ListOrderedIcon,
-    UndoIcon,
-    RedoIcon,
-    TextStrikethroughLightIcon,
-    ListBulletsBoldIcon,
+    BlockQuoteIcon,
     CodeBlockIcon,
     FaBoldIcon,
     IoIosCodeIcon,
-    BlockQuoteIcon,
+    ListBulletsBoldIcon,
+    ListOrderedIcon,
+    RedoIcon,
+    TextStrikethroughLightIcon,
+    ToolbarItalicIcon,
+    UndoIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import { Toggle } from '@/components/ui/toggle'
 
 import { THeadingLevel } from '.'
 import ActionTooltip from '../action-tooltip'

@@ -1,21 +1,23 @@
-import DOMPurify from 'dompurify'
+import { toReadableDate } from '@/utils'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
+import CopyTextButton from '@/components/copy-text-button'
+import { UsersAddIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IMemberRecruitedMembers } from '@/types'
 
 import SectionTitle from '../section-title'
-import { UsersAddIcon } from '@/components/icons'
-import { IMemberRecruits } from '@/types'
-import ImageDisplay from '@/components/image-display'
-import CopyTextButton from '@/components/copy-text-button'
-import { toReadableDate } from '@/utils'
 
 interface Props {
-    recruits?: IMemberRecruits[]
+    recruits?: IMemberRecruitedMembers[]
 }
 
 const MemberRecruitsDisplay = ({ recruits }: Props) => {
@@ -38,13 +40,17 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
                     className="space-y-2 rounded-xl bg-secondary/20 p-4"
                 >
                     <div className="flex items-center gap-x-4">
-                        <ImageDisplay
-                            src={
-                                recruit.membersProfileRecruited?.media
-                                    ?.download_url
-                            }
-                            className="size-16 rounded-xl"
-                        />
+                        <PreviewMediaWrapper
+                            media={recruit.membersProfileRecruited?.media}
+                        >
+                            <ImageDisplay
+                                src={
+                                    recruit.membersProfileRecruited?.media
+                                        ?.download_url
+                                }
+                                className="size-16 rounded-xl"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="grid flex-1 gap-2 md:grid-cols-5">
                             <div className="space-y-2">
                                 <p>
@@ -96,7 +102,11 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
                             </div>
 
                             <div className="space-y-2">
-                                <p>{toReadableDate(recruit.dateRecruited)}</p>
+                                <p>
+                                    {recruit.dateRecruited
+                                        ? toReadableDate(recruit.dateRecruited)
+                                        : '-'}
+                                </p>
                                 <p className="text-xs text-muted-foreground/70">
                                     Date Recruited
                                 </p>
@@ -111,7 +121,7 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
                             <AccordionContent className="prose-h1: prose w-full !max-w-full rounded-xl p-4 text-sm text-foreground/70 dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                                 <div
                                     dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
+                                        __html: sanitizeHtml(
                                             recruit.description &&
                                                 recruit.description.length > 0
                                                 ? recruit.description

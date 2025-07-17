@@ -1,12 +1,14 @@
-import { Button } from '../ui/button'
-import { Progress } from '../ui/progress'
-import FileTypeIcon from '../ui/file-type'
-import { DotMediumIcon, TrashIcon } from '../icons'
-
 import { formatBytes } from '@/helpers'
+
 import { IMedia } from '@/types'
-import { AspectRatio } from '../ui/aspect-ratio'
+
+import { DotMediumIcon, TrashIcon } from '../icons'
 import ImageDisplay from '../image-display'
+import { AspectRatio } from '../ui/aspect-ratio'
+import { Button } from '../ui/button'
+import FileTypeIcon from '../ui/file-type'
+import { Progress } from '../ui/progress'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface FileItemProps {
     file?: File
@@ -34,10 +36,12 @@ const FileItem = ({
                 {media ? (
                     <div className="size-12">
                         <AspectRatio ratio={1 / 1}>
-                            <ImageDisplay
-                                src={media.download_url}
-                                className="size-full rounded-none object-cover"
-                            />
+                            <PreviewMediaWrapper media={media}>
+                                <ImageDisplay
+                                    src={media.download_url}
+                                    className="size-full rounded-none object-cover"
+                                />
+                            </PreviewMediaWrapper>
                         </AspectRatio>
                     </div>
                 ) : file ? (

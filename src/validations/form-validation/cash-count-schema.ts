@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import { entityIdSchema } from '../common'
 
 export const cashCountSchema = z.object({
@@ -9,6 +10,7 @@ export const cashCountSchema = z.object({
     employee_user_id: entityIdSchema.optional(),
 
     country_code: z.string().min(2, 'Invalid country'),
+    name: z.string().min(1, 'name required'),
     bill_amount: z.coerce.number(),
     quantity: z.coerce.number(),
     amount: z.coerce.number(),

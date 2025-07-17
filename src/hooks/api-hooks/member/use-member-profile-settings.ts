@@ -1,35 +1,36 @@
 import * as MemberProfileService from '@/api-service/member-services/member-profile-service'
 
 import {
-    TEntityId,
-    IMemberAsset,
-    IMemberIncome,
-    IMemberProfile,
     IMemberAddress,
-    IMemberExpense,
-    IMemberJointAccount,
-    IMemberAssetRequest,
-    IMemberIncomeRequest,
-    IMemberExpenseRequest,
     IMemberAddressRequest,
-    IMemberRelativeAccount,
+    IMemberAsset,
+    IMemberAssetRequest,
     IMemberContactReference,
-    IMemberGovernmentBenefit,
-    IMemberJointAccountRequest,
-    IMemberEducationalAttainment,
-    IMemberRelativeAccountRequest,
     IMemberContactReferenceRequest,
-    IMemberGovernmentBenefitRequest,
-    IMemberProfileUserAccountRequest,
-    IMemberProfilePersonalInfoRequest,
-    IMemberProfileMembershipInfoRequest,
+    IMemberEducationalAttainment,
     IMemberEducationalAttainmentRequest,
+    IMemberExpense,
+    IMemberExpenseRequest,
+    IMemberGovernmentBenefit,
+    IMemberGovernmentBenefitRequest,
+    IMemberIncome,
+    IMemberIncomeRequest,
+    IMemberJointAccount,
+    IMemberJointAccountRequest,
+    IMemberProfile,
+    IMemberProfileMembershipInfoRequest,
+    IMemberProfilePersonalInfoRequest,
+    IMemberProfileUserAccountRequest,
+    IMemberRelativeAccount,
+    IMemberRelativeAccountRequest,
+    TEntityId,
 } from '@/types'
+
 import {
     createMutationHook,
     createMutationInvalidateFn,
     updateMutationInvalidationFn,
-} from '../api-hook-factory'
+} from '../../../factory/api-hook-factory'
 
 export const useUpdateMemberProfilePersonalInfo = createMutationHook<
     IMemberProfile,

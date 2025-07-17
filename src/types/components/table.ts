@@ -1,6 +1,7 @@
-import { IClassProps } from '@/types'
 import { TFilterObject } from '@/contexts/filter-context'
 import { Row } from '@tanstack/react-table'
+
+import { IClassProps } from '@/types'
 
 export interface TableProps<T> extends IClassProps {
     defaultFilter?: TFilterObject

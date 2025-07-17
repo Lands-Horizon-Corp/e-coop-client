@@ -1,4 +1,5 @@
 import logger from '@/helpers/loggers/logger'
+
 import contactNumberVerificationRaw from '../assets/sms-templates/message.json'
 
 // Define the types of templates available

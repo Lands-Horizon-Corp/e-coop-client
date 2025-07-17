@@ -1,25 +1,29 @@
 import { useState } from 'react'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { toReadableDate } from '@/utils'
+
 import {
+    CalendarIcon,
+    PencilFillIcon,
     PlusIcon,
     TrashIcon,
     Users3Icon,
-    CalendarIcon,
     WoodSignsIcon,
-    PencilFillIcon,
 } from '@/components/icons'
-import { Button } from '@/components/ui/button'
 import ImageDisplay from '@/components/image-display'
-import { Separator } from '@/components/ui/separator'
-import EmptyListIndicator from '../empty-list-indicator'
+import RawDescription from '@/components/raw-description'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { MemberJointAccountCreateUpdateFormModal } from './member-joint-account-create-update-form'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useDeleteMemberJointAccount } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberJointAccount, IMemberProfile } from '@/types'
-import { toReadableDate } from '@/utils'
+
+import EmptyListIndicator from '../empty-list-indicator'
+import { MemberJointAccountCreateUpdateFormModal } from './member-joint-account-create-update-form'
 
 const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
     const [edit, setEdit] = useState(false)
@@ -86,35 +90,35 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
             <Separator className="!my-2" />
             <div className="mb-4 grid grid-cols-4 gap-4">
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
-                    <ImageDisplay
-                        src={joint.picture_media?.download_url}
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                    />
+                    <PreviewMediaWrapper media={joint.picture_media}>
+                        <ImageDisplay
+                            src={joint.picture_media?.download_url}
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Picture
                     </span>
                 </div>
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
-                    <ImageDisplay
-                        src={joint.signature_media?.download_url}
-                        className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
-                    />
+                    <PreviewMediaWrapper media={joint.signature_media}>
+                        <ImageDisplay
+                            src={joint.signature_media?.download_url}
+                            className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                        />
+                    </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
                         Signature
                     </span>
                 </div>
             </div>
             <div className="grid grid-cols-4 space-y-2 text-sm">
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        First Name
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">First Name</p>
                     <p>{joint.first_name}</p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Middle Name
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Middle Name</p>
                     <p>
                         {joint.middle_name || (
                             <span className="italic text-muted-foreground/60">
@@ -123,14 +127,12 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                         )}
                     </p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Last Name
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Last Name</p>
                     <p>{joint.last_name}</p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">Suffix</p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Suffix</p>
                     <p>
                         {joint.suffix || (
                             <span className="italic text-muted-foreground/60">
@@ -139,26 +141,24 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                         )}
                     </p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Birthday
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Birthday</p>
                     <p>
-                        <CalendarIcon className="mr-1 inline size-4 text-muted-foreground/60" />
+                        <CalendarIcon className="mr-1 hidden size-4 text-muted-foreground/60 2xl:inline" />
                         {joint.birthday ? toReadableDate(joint.birthday) : '-'}
                     </p>
                 </div>
-                <div className="space-y-1 font-semibold">
-                    <p className="font-thin text-muted-foreground/70">
-                        Relationship
-                    </p>
+                <div className="space-y-1">
+                    <p className="text-muted-foreground/70">Relationship</p>
                     <p>{joint.family_relationship}</p>
                 </div>
             </div>
             <div className="col-span-full !mt-4 space-y-2">
                 <p className="text-muted-foreground/70">Description</p>
                 {joint?.description ? (
-                    <p>{joint.description}</p>
+                    <RawDescription
+                        content={joint.description ?? 'no description'}
+                    />
                 ) : (
                     <p className="text-sm italic text-muted-foreground/60">
                         No Description <WoodSignsIcon className="ml-1 inline" />

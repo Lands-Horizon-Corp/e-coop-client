@@ -1,9 +1,10 @@
-import { Button } from '@/components/ui/button'
+import useActionSecurityStore from '@/store/action-security-store'
+import { toReadableDate } from '@/utils'
+
 import { EyeNoneIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
-import { toReadableDate } from '@/utils'
-import useActionSecurityStore from '@/store/action-security-store'
 import { useTransactionBatchRequestBlotterView } from '@/hooks/api-hooks/use-transaction-batch'
 
 import {
@@ -11,6 +12,7 @@ import {
     ITransactionBatch,
     ITransactionBatchMinimal,
 } from '@/types'
+
 import { BatchBlotterSummaryView } from './batch-blotter-summary'
 
 interface Props extends IClassProps {
@@ -39,8 +41,9 @@ const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
                                         "MM-dd-yyyy 'at' hh:mm a"
                                     )}
                                 </span>
-                                . Please wait for the authorized person to
-                                approve your request.
+                                . <br />
+                                Please wait for the authorized person to approve
+                                your request.
                             </p>
                         </>
                     ) : (

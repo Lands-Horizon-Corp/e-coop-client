@@ -1,7 +1,33 @@
-import { z } from 'zod'
-import { cn } from '@/lib'
 import { useState } from 'react'
+import { z } from 'zod'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { cn } from '@/lib'
+import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import {
+    AccountTypeEnum,
+    ComputationTypeEnum,
+    EarnedUnearnedInterestEnum,
+    FinancialStatementTypeEnum,
+    GeneralLedgerTypeEnum,
+    IAccount,
+    IAccountRequest,
+    InterestDeductionEnum,
+    InterestFinesComputationDiminishingEnum,
+    InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
+    InterestSavingTypeDiminishingStraightEnum,
+    LoanSavingTypeEnum,
+    LumpsumComputationTypeEnum,
+    OtherDeductionEntryEnum,
+    OtherInformationOfAnAccountEnum,
+} from '@/types/coop-types/accounts/account'
+import { Path, useForm } from 'react-hook-form'
+
+import AccountCategoryComboBox from '@/components/comboboxes/account-category-combobox'
+import AccountClassificationComboBox from '@/components/comboboxes/account-classification-combobox'
+import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     ExcludeIcon,
     FaCalendarCheckIcon,
@@ -10,60 +36,38 @@ import {
     MoneyBagIcon,
     MoneyIcon,
 } from '@/components/icons'
-
-import {
-    IAccountRequestSchema,
-    AccountExclusiveSettingTypeEnum,
-} from '@/validations/accounting/account-schema'
-
-import { Path, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useCreateAccount } from '@/hooks/api-hooks/use-account'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
-
-import {
-    IAccount,
-    IAccountRequest,
-    AccountTypeEnum,
-    LoanSavingTypeEnum,
-    ComputationTypeEnum,
-    InterestDeductionEnum,
-    GeneralLedgerTypeEnum,
-    OtherDeductionEntryEnum,
-    LumpsumComputationTypeEnum,
-    FinancialStatementTypeEnum,
-    EarnedUnearnedInterestEnum,
-    OtherInformationOfAnAccountEnum,
-    InterestFinesComputationDiminishingEnum,
-    InterestSavingTypeDiminishingStraightEnum,
-    InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
-} from '@/types/coop-types/accounts/account'
-import { IClassProps, IForm, TEntityId } from '@/types'
-
+import Modal, { IModalProps } from '@/components/modals/modal'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormControl } from '@/components/ui/form'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import AccountCategoryPicker from '@/components/pickers/account-category-picker'
-import MemberTypePicker from '@/components/pickers/account-classification-picker'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import AccountClassificationPicker from '@/components/pickers/account-classification-picker'
+
+import {
+    AccountExclusiveSettingTypeEnum,
+    IAccountRequestSchema,
+} from '@/validations/accounting/account-schema'
+
+import {
+    useCreateAccount,
+    useUpdateAccount,
+} from '@/hooks/api-hooks/use-account'
+
+import { IClassProps, IForm, TEntityId } from '@/types'
 
 type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
-interface IAccountCreateUpdateFormProps
+export interface IAccountCreateUpdateFormProps
     extends IClassProps,
         IForm<Partial<IAccountRequest>, IAccount, string, TAccountFormValues> {
     accountId?: TEntityId
@@ -75,6 +79,7 @@ const AccountCreateUpdateForm = ({
     readOnly,
     disabledFields,
     accountId,
+    onSuccess,
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
     const organizationId = currentAuth.user_organization.organization_id
@@ -88,8 +93,6 @@ const AccountCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            name: '',
-            description: '',
             type: AccountTypeEnum.Deposit,
             ...defaultValues,
         },
@@ -98,9 +101,21 @@ const AccountCreateUpdateForm = ({
     const isDisabled = (field: Path<TAccountFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
-    const { mutate: createAccount, isPending, error } = useCreateAccount()
+    const {
+        mutate: createAccount,
+        isPending: isPendingCreateAccount,
+        error: createAccountError,
+    } = useCreateAccount({
+        onSuccess: onSuccess,
+    })
 
-    const isLoading = isPending
+    const {
+        mutate: updateAccount,
+        isPending: isPendingUpdateAccount,
+        error: updateAccountError,
+    } = useUpdateAccount({ onSuccess: onSuccess })
+
+    const isLoading = isPendingCreateAccount || isPendingUpdateAccount
 
     const handleSubmit = form.handleSubmit((data: TAccountFormValues) => {
         const request = {
@@ -108,13 +123,19 @@ const AccountCreateUpdateForm = ({
             organization_id: organizationId,
             ...data,
         }
-        createAccount(request)
+        if (accountId) {
+            updateAccount({ accountId: accountId, data: request })
+        } else {
+            createAccount(request)
+        }
     })
+
+    const errorMessage = createAccountError || updateAccountError
 
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit} className={cn('w-full', className)}>
-                <FormErrorMessage errorMessage={error} />
+                <FormErrorMessage errorMessage={errorMessage} />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
                         disabled={readOnly}
@@ -136,77 +157,6 @@ const AccountCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="alternative_code"
-                            label="Alternative Code"
-                            disabled={isLoading}
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    id={field.name}
-                                    placeholder="Account Name"
-                                    autoComplete="off"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="account_classification_id"
-                            label="Account Classification"
-                            render={({ field }) => (
-                                <AccountClassificationPicker
-                                    {...field}
-                                    onSelect={(selectedAccountClassification) =>
-                                        field.onChange(
-                                            selectedAccountClassification.id
-                                        )
-                                    }
-                                    placeholder="Select Account Classification"
-                                    disabled={
-                                        isDisabled(field.name) || isLoading
-                                    }
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="account_category_id"
-                            label="Account Category"
-                            disabled={isLoading}
-                            render={({ field }) => (
-                                <AccountCategoryPicker
-                                    {...field}
-                                    onSelect={(selectedAccountCategory) =>
-                                        field.onChange(
-                                            selectedAccountCategory.id
-                                        )
-                                    }
-                                    placeholder="Select Account Category"
-                                    disabled={
-                                        isDisabled(field.name) || isLoading
-                                    }
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="member_type_id"
-                            label="Member Type *"
-                            disabled={isLoading}
-                            render={({ field }) => (
-                                <MemberTypePicker
-                                    {...field}
-                                    onSelect={(selectedMemberType) =>
-                                        field.onChange(selectedMemberType.id)
-                                    }
-                                    placeholder="Select Member Type"
-                                    disabled={
-                                        isDisabled(field.name) || isLoading
-                                    }
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
                             label="Account type"
                             name="type"
                             className="col-span-4"
@@ -214,9 +164,6 @@ const AccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <FormControl>
                                     <Select
-                                        disabled={
-                                            isDisabled(field.name) || isLoading
-                                        }
                                         onValueChange={(selectedValue) => {
                                             field.onChange(selectedValue)
                                             setSelectedItem(selectedValue)
@@ -247,6 +194,73 @@ const AccountCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
+                            name="alternative_code"
+                            label="Alternative Code"
+                            disabled={isLoading}
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    placeholder="Account Name"
+                                    autoComplete="off"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="member_type_id"
+                            label="Member Type"
+                            className="col-span-1"
+                            render={({ field }) => (
+                                <MemberTypeCombobox
+                                    {...field}
+                                    placeholder="Select Member Type"
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="account_classification_id"
+                            label="Account Classification"
+                            render={({ field }) => (
+                                <AccountClassificationComboBox
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    value={field.value}
+                                    placeholder="Select Account Classification"
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="account_category_id"
+                            label="Account Category"
+                            disabled={isLoading}
+                            render={({ field }) => (
+                                <AccountCategoryComboBox
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    value={field.value}
+                                    placeholder="Select Account Category"
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
                             label="Account Description *"
                             name="description"
                             className="col-span-4"
@@ -256,7 +270,9 @@ const AccountCreateUpdateForm = ({
                                     <TextEditor
                                         {...rest}
                                         content={field.value ?? ''}
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                         textEditorClassName="!max-w-none !h-32"
                                         placeholder="Write some description about the account..."
                                     />
@@ -606,11 +622,14 @@ const AccountCreateUpdateForm = ({
                                     label="Min Amount"
                                     name="minAmount"
                                     className="grow"
-                                    disabled={isLoading}
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                                 value={field.value ?? ''}
                                                 onChange={(e) =>
                                                     field.onChange(
@@ -631,12 +650,15 @@ const AccountCreateUpdateForm = ({
                                     label="Max Amount"
                                     name="maxAmount"
                                     className="grow"
-                                    disabled={isLoading}
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
                                                 value={field.value ?? ''}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                                 onChange={(e) =>
                                                     field.onChange(
                                                         e.target.value === ''
@@ -664,7 +686,10 @@ const AccountCreateUpdateForm = ({
                                     render={({ field }) => (
                                         <FormControl>
                                             <Select
-                                                disabled={isLoading}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                                 onValueChange={(
                                                     selectedValue
                                                 ) => {
@@ -672,7 +697,9 @@ const AccountCreateUpdateForm = ({
                                                         selectedValue
                                                     )
                                                 }}
-                                                defaultValue={field.value}
+                                                defaultValue={
+                                                    field.value || undefined
+                                                }
                                             >
                                                 <SelectTrigger className="w-full">
                                                     {field.value ||
@@ -708,6 +735,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -735,6 +767,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -763,6 +800,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -791,6 +833,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -820,6 +867,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -847,6 +899,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -873,6 +930,11 @@ const AccountCreateUpdateForm = ({
                                                 <Input
                                                     {...field}
                                                     value={field.value ?? ''}
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     onChange={(e) =>
                                                         field.onChange(
                                                             e.target.value ===
@@ -905,7 +967,10 @@ const AccountCreateUpdateForm = ({
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                                disabled={isLoading}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                             >
                                                 {Object.values(
                                                     EarnedUnearnedInterestEnum
@@ -964,7 +1029,10 @@ const AccountCreateUpdateForm = ({
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                                disabled={isLoading}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
                                             >
                                                 {Object.values(
                                                     LoanSavingTypeEnum
@@ -1078,7 +1146,10 @@ const AccountCreateUpdateForm = ({
                                             onValueChange={(selectedValue) => {
                                                 field.onChange(selectedValue)
                                             }}
-                                            disabled={isLoading}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger className="w-full">
@@ -1115,7 +1186,10 @@ const AccountCreateUpdateForm = ({
                                                 field.onChange(selectedValue)
                                             }}
                                             defaultValue={field.value}
-                                            disabled={isLoading}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
                                         >
                                             <SelectTrigger className="w-full">
                                                 {field.value ||
@@ -1153,7 +1227,11 @@ const AccountCreateUpdateForm = ({
                                                         onCheckedChange={
                                                             field.onChange
                                                         }
-                                                        disabled={isLoading}
+                                                        disabled={
+                                                            isDisabled(
+                                                                field.name
+                                                            ) || isLoading
+                                                        }
                                                         name={field.name}
                                                         className="order-1 after:absolute after:inset-0"
                                                         aria-describedby={`${field.name}`}
@@ -1200,7 +1278,11 @@ const AccountCreateUpdateForm = ({
                                                             field.onChange
                                                         }
                                                         name={field.name}
-                                                        disabled={isLoading}
+                                                        disabled={
+                                                            isDisabled(
+                                                                field.name
+                                                            ) || isLoading
+                                                        }
                                                         className="order-1 after:absolute after:inset-0"
                                                         aria-describedby={`${field.name}`}
                                                     />
@@ -1245,7 +1327,10 @@ const AccountCreateUpdateForm = ({
                                     >
                                         <RadioGroup
                                             value={field.value}
-                                            disabled={isLoading}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
                                             onValueChange={field.onChange}
                                             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                         >
@@ -1307,7 +1392,9 @@ const AccountCreateUpdateForm = ({
                                 >
                                     <RadioGroup
                                         value={field.value}
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                         onValueChange={field.onChange}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                     >
@@ -1365,7 +1452,9 @@ const AccountCreateUpdateForm = ({
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                     >
                                         {Object.values(
                                             InterestSavingTypeDiminishingStraightEnum
@@ -1422,7 +1511,9 @@ const AccountCreateUpdateForm = ({
                                         onValueChange={field.onChange}
                                         value={field.value}
                                         className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                                        disabled={isLoading}
+                                        disabled={
+                                            isDisabled(field.name) || isLoading
+                                        }
                                     >
                                         {Object.values(
                                             OtherInformationOfAnAccountEnum
@@ -1470,35 +1561,41 @@ const AccountCreateUpdateForm = ({
                         />
                     </div>
                 </div>
-                <div className="space-y-2">
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            disabled={isLoading}
-                            onClick={() => {
-                                form.reset()
-                            }}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button type="submit" disabled={isLoading} className="">
-                            {isLoading ? (
-                                <div className="flex space-x-2">
-                                    {accountId ? 'updating ' : 'Creating '}{' '}
-                                    <LoadingSpinnerIcon
-                                        size={18}
-                                        className="ml-2 animate-spin"
-                                    />
-                                </div>
-                            ) : (
-                                `${accountId ? 'Update' : 'Create'} Account `
-                            )}
-                        </Button>
+                {!readOnly && (
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-end gap-x-2">
+                            <Button
+                                size="sm"
+                                type="button"
+                                variant="ghost"
+                                disabled={isLoading}
+                                onClick={() => {
+                                    form.reset()
+                                }}
+                                className="w-full self-end px-8 sm:w-fit"
+                            >
+                                Reset
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={isLoading}
+                                className=""
+                            >
+                                {isLoading ? (
+                                    <div className="flex space-x-2">
+                                        {accountId ? 'updating ' : 'Creating '}{' '}
+                                        <LoadingSpinnerIcon
+                                            size={18}
+                                            className="ml-2 animate-spin"
+                                        />
+                                    </div>
+                                ) : (
+                                    `${accountId ? 'Update' : 'Create'} Account `
+                                )}
+                            </Button>
+                        </div>
                     </div>
-                </div>
+                )}
             </form>
         </Form>
     )

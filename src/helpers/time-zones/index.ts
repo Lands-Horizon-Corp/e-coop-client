@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import TimeZoneData from './timeZones.json'
+
 import { TimezoneData } from './time-zone-type'
+import TimeZoneData from './timeZones.json'
 
 export const useGetTimeZones = () => {
     return useQuery<Record<string, TimezoneData>>({

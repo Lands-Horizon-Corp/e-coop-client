@@ -1,4 +1,5 @@
 import { z } from 'zod'
+
 import { entityIdSchema, passwordSchema } from '../common'
 
 export const userSettingsSecuritySchema = z

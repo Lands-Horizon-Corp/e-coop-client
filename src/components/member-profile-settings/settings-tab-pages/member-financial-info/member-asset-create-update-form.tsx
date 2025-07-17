@@ -1,27 +1,33 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import ImageField from '../../../ui/image-field'
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Separator } from '@/components/ui/separator'
+import { toInputDateString } from '@/utils'
+import { Path, useForm } from 'react-hook-form'
+
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
+
 import { entityIdSchema } from '@/validations/common'
+
 import {
     useCreateMemberProfileAsset,
     useUpdateMemberProfileAsset,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
-import { IForm, TEntityId, IClassProps, IMemberAsset, IMedia } from '@/types'
-import { toInputDateString } from '@/utils'
+import { IClassProps, IForm, IMedia, IMemberAsset, TEntityId } from '@/types'
+
+import ImageField from '../../../ui/image-field'
 
 export const memberAssetSchema = z.object({
     id: z.string().optional(),
@@ -155,9 +161,11 @@ const MemberAssetCreateUpdateForm = ({
                                 control={form.control}
                                 name="entry_date"
                                 label="Entry Date *"
+                                className="relative"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
                                         placeholder="Entry Date"
                                         className="block [&::-webkit-calendar-picker-indicator]:hidden"

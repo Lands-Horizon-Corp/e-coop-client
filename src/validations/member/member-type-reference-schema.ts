@@ -1,46 +1,29 @@
-import z from 'zod'
+import { z } from 'zod'
+
 import { entityIdSchema } from '../common'
 
-export const createMemberTypeReferenceSchema = z.object({
+export const memberTypeReferenceSchema = z.object({
     id: entityIdSchema.optional(),
-    accountId: entityIdSchema,
-    memberTypeId: entityIdSchema,
 
-    description: z.string().optional(),
+    description: z.string().min(1, 'Description is required'),
+    account_id: entityIdSchema,
+    member_type_id: entityIdSchema,
 
-    maintainingBalance: z.coerce
-        .number()
-        .nonnegative('Maintaining Balance must be zero or positive')
-        .default(0),
-    minimumBalance: z.coerce
-        .number()
-        .nonnegative('Minimum Balance must be zero or positive'),
-    interestRate: z.coerce
-        .number()
-        .min(0, 'Interest Rate must be at least 0')
-        .max(100, 'Interest Rate must be less than or equal to 100')
-        .default(0),
-    charges: z.coerce.number().nonnegative('Charges must be zero or positive'),
+    interest_rate: z.coerce.number().min(0, 'Interest rate is required'),
+    charges: z.coerce.number().min(0, 'Charges are required'),
 
-    activeMemberMinimumBalance: z.coerce
+    minimum_balance: z.coerce.number().min(0, 'Minimum balance is required'),
+    maintaining_balance: z.coerce
         .number()
-        .nonnegative('Active Member Minimum Balance must be zero or positive')
-        .default(0),
+        .min(0, 'Maintaining balance is required'),
 
-    activeMemberRatio: z.coerce
-        .number()
-        .min(0, 'Active Member Ratio must be at least 0')
-        .max(1, 'Active Member Ratio must not exceed 1')
-        .default(0),
+    active_member_ratio: z.coerce.number().min(0),
+    active_member_minimum_balance: z.coerce.number().min(0),
 
-    otherInterestOnSavingComputationMinimumBalance: z.coerce
+    other_interest_on_saving_computation_minimum_balance: z.coerce
         .number()
-        .nonnegative('Minimum Balance must be zero or positive')
-        .default(0),
-
-    otherInterestOnSavingComputationInterestRate: z.coerce
+        .min(0),
+    other_interest_on_saving_computation_interest_rate: z.coerce
         .number()
-        .min(0, 'Interest Rate must be at least 0')
-        .max(100, 'Interest Rate must be less than or equal to 100')
-        .default(0),
+        .min(0),
 })

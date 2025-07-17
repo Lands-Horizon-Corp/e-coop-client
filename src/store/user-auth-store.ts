@@ -1,9 +1,10 @@
 import { create } from 'zustand'
+
 import {
-    IBranch,
-    IUserBase,
     IAuthContext,
+    IBranch,
     IOrganization,
+    IUserBase,
     IUserOrganization,
 } from '@/types'
 

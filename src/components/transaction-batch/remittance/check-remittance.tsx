@@ -1,35 +1,43 @@
 import { useQueryClient } from '@tanstack/react-query'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { formatNumber } from '@/utils'
+
+import { CheckRemittanceCreateUpdateFormModal } from '@/components/forms/remittance/check-remittance-create-update-form'
 import {
-    PlusIcon,
-    TrashIcon,
     MoneyCheckIcon,
     PencilFillIcon,
+    PlusIcon,
+    TrashIcon,
 } from '@/components/icons'
-import { Button } from '@/components/ui/button'
 import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
-import { CheckRemittanceCreateUpdateFormModal } from '@/components/forms/remittance/check-remittance-create-update-form'
+import { Button } from '@/components/ui/button'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import {
     useCurrentBatchCheckRemittances,
     useDeleteBatchCheckRemittance,
 } from '@/hooks/api-hooks/use-check-remittance'
-import { useSubscribe } from '@/hooks/use-pubsub'
 import { useModalState } from '@/hooks/use-modal-state'
-import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { ICheckRemittance, TEntityId } from '@/types'
 
 type Props = {
     transactionBatchId: TEntityId
+    onCheckRemittanceUpdate?: () => void
 }
 
-const BatchCheckRemitance = ({ transactionBatchId }: Props) => {
+const BatchCheckRemitance = ({
+    transactionBatchId,
+    onCheckRemittanceUpdate,
+}: Props) => {
     const queryClient = useQueryClient()
     const modalState = useModalState()
-    const { data } = useCurrentBatchCheckRemittances()
+    const { data, refetch } = useCurrentBatchCheckRemittances({
+        onSuccess: onCheckRemittanceUpdate,
+    })
 
     useSubscribe<ICheckRemittance>(
         `check-remittance.transaction-batch.${transactionBatchId}.create`,
@@ -82,18 +90,29 @@ const BatchCheckRemitance = ({ transactionBatchId }: Props) => {
         }
     )
 
+    const totalRemittance = data.reduce((prev, curr) => prev + curr.amount, 0)
+
     return (
         <div className="rounded-xl bg-secondary dark:bg-popover/70">
             <CheckRemittanceCreateUpdateFormModal
                 {...modalState}
                 formProps={{
+                    onSuccess: () => {
+                        refetch()
+                        onCheckRemittanceUpdate?.()
+                    },
                     defaultValues: {
                         transaction_batch_id: transactionBatchId,
                     },
                 }}
             />
             <div className="flex w-full items-center justify-between px-4 py-2">
-                <p>Check Remittance</p>
+                <div>
+                    <p>Check Remittance</p>
+                    <p className="text-sm font-bold text-primary">
+                        {formatNumber(totalRemittance, 2)}
+                    </p>
+                </div>
                 <Button
                     size="icon"
                     className="size-fit p-1"
@@ -102,92 +121,140 @@ const BatchCheckRemitance = ({ transactionBatchId }: Props) => {
                     <PlusIcon />
                 </Button>
             </div>
-            <RemittanceList list={data} />
+            <RemittanceList
+                list={data}
+                onUpdate={() => {
+                    refetch()
+                    onCheckRemittanceUpdate?.()
+                }}
+            />
         </div>
     )
 }
 
-const RemittanceList = ({ list }: { list: ICheckRemittance[] }) => {
+const RemittanceList = ({
+    list,
+    onUpdate,
+}: {
+    list: ICheckRemittance[]
+    onUpdate?: () => void
+}) => {
     return (
-        <div className="max-h-64 w-full overflow-auto bg-background/70 dark:bg-popover">
-            <Table>
-                <TableBody>
-                    {list && list.length > 0 ? (
-                        list.map((checkRemittance) => {
-                            return (
-                                <RemittanceListRow
-                                    key={checkRemittance.id}
-                                    checkRemittance={checkRemittance}
-                                />
-                            )
-                        })
-                    ) : (
-                        <TableRow>
-                            <TableCell colSpan={4}>
-                                <div className="flex flex-col items-center justify-center gap-y-4 py-6 text-center text-xs text-muted-foreground/60">
-                                    <MoneyCheckIcon />
-                                    No check remittance yet
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
+        <div className="ecoop-scroll max-h-64 w-full space-y-2 overflow-auto bg-background/70 p-2 dark:bg-popover/40">
+            {list && list.length > 0 ? (
+                list.map((checkRemittance) => {
+                    return (
+                        <RemittanceListRow
+                            key={checkRemittance.id}
+                            onUpdate={onUpdate}
+                            checkRemittance={checkRemittance}
+                        />
+                    )
+                })
+            ) : (
+                <div className="flex flex-col items-center justify-center gap-y-4 py-6 text-center text-xs text-muted-foreground/60">
+                    <MoneyCheckIcon />
+                    No check remittance yet
+                </div>
+            )}
         </div>
     )
 }
 
 const RemittanceListRow = ({
     checkRemittance,
+    onUpdate,
 }: {
     checkRemittance: ICheckRemittance
+    onUpdate?: () => void
 }) => {
     const modalState = useModalState()
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: deleteCheckRemittance, isPending: isDeleting } =
-        useDeleteBatchCheckRemittance()
+        useDeleteBatchCheckRemittance({
+            onSuccess: onUpdate,
+        })
 
     return (
-        <TableRow key={checkRemittance.id} className="text-xs">
+        <div
+            key={checkRemittance.id}
+            className="space-y-4 rounded-xl bg-background p-4 text-xs"
+        >
             <CheckRemittanceCreateUpdateFormModal
                 {...modalState}
                 title="Edit Check Remittance"
                 description="edit/update check remittance details"
                 formProps={{
+                    onSuccess: onUpdate,
+                    checkRemittanceId: checkRemittance.id,
                     defaultValues: checkRemittance,
                 }}
             />
-            <TableCell>
+            <div className="flex items-center justify-between">
                 <div className="flex min-w-0 items-center gap-3">
-                    <ImageDisplay
-                        src={checkRemittance.bank?.media?.download_url}
-                        className="h-9 w-9 rounded-full border bg-muted object-cover"
-                    />
-                    <div className="flex min-w-0 flex-col">Bank</div>
+                    <PreviewMediaWrapper media={checkRemittance.bank?.media}>
+                        <ImageDisplay
+                            src={checkRemittance.bank?.media?.download_url}
+                            className="h-9 w-9 rounded-full border bg-muted object-cover"
+                        />
+                    </PreviewMediaWrapper>
+                    <div className="flex flex-col items-start">
+                        <span className="text-sm font-semibold">
+                            {checkRemittance.bank?.name ?? '-'}
+                        </span>
+                        <span className="text-xs text-muted-foreground/70">
+                            Bank
+                        </span>
+                    </div>
                 </div>
-            </TableCell>
-            <TableCell>
-                <div className="flex flex-col items-start">
-                    <span className="text-sm font-semibold">
-                        {checkRemittance.reference_number ?? '-'}
-                    </span>
-                    <span className="text-xs text-muted-foreground/70">
-                        REF NO.
-                    </span>
+                <div className="text-right">
+                    <div className="flex justify-end gap-1">
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                            disabled={isDeleting}
+                            onClick={() => modalState.onOpenChange(true)}
+                        >
+                            <PencilFillIcon className="size-4" />
+                        </Button>
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            hoverVariant="destructive"
+                            className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                            disabled={isDeleting}
+                            onClick={() =>
+                                onOpen({
+                                    title: 'Delete Check Remittance',
+                                    description:
+                                        'Are you sure to delete this check remittance?',
+                                    onConfirm: () =>
+                                        deleteCheckRemittance(
+                                            checkRemittance.id
+                                        ),
+                                })
+                            }
+                        >
+                            {isDeleting ? (
+                                <LoadingSpinner />
+                            ) : (
+                                <TrashIcon className="size-4" />
+                            )}
+                        </Button>
+                    </div>
                 </div>
-            </TableCell>
-            <TableCell>
-                <div className="flex flex-col items-start">
-                    <span className="text-sm font-semibold">
-                        {checkRemittance.bank?.name ?? '-'}
-                    </span>
-                    <span className="text-xs text-muted-foreground/70">
-                        Bank
-                    </span>
-                </div>
-            </TableCell>
-            <TableCell>
+            </div>
+            <div className="flex flex-col items-start">
+                <span className="text-sm font-semibold">
+                    {checkRemittance.reference_number ?? '-'}
+                </span>
+                <span className="text-xs text-muted-foreground/70">
+                    REF NO.
+                </span>
+            </div>
+            <div className="flex items-center justify-between">
                 <div className="flex flex-col items-start">
                     <span className="text-sm font-semibold">
                         {checkRemittance.account_name ?? '-'}
@@ -196,53 +263,16 @@ const RemittanceListRow = ({
                         Acct Name
                     </span>
                 </div>
-            </TableCell>
-            <TableCell>
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-end">
                     <span className="text-sm font-semibold">
-                        {checkRemittance.amount ?? '-'}
+                        {formatNumber(checkRemittance.amount ?? 0, 2)}
                     </span>
                     <span className="text-xs text-muted-foreground/70">
                         Amount
                     </span>
                 </div>
-            </TableCell>
-            <TableCell className="text-right">
-                <div className="flex justify-end gap-1">
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                        disabled={isDeleting}
-                        onClick={() => modalState.onOpenChange(true)}
-                    >
-                        <PencilFillIcon className="size-4" />
-                    </Button>
-                    <Button
-                        size="icon"
-                        variant="ghost"
-                        hoverVariant="destructive"
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                        disabled={isDeleting}
-                        onClick={() =>
-                            onOpen({
-                                title: 'Delete Relative Account',
-                                description:
-                                    'Are you sure to delete this relative account?',
-                                onConfirm: () =>
-                                    deleteCheckRemittance(checkRemittance.id),
-                            })
-                        }
-                    >
-                        {isDeleting ? (
-                            <LoadingSpinner />
-                        ) : (
-                            <TrashIcon className="size-4" />
-                        )}
-                    </Button>
-                </div>
-            </TableCell>
-        </TableRow>
+            </div>
+        </div>
     )
 }
 

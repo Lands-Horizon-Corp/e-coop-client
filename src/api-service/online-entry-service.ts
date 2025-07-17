@@ -1,8 +1,23 @@
 import qs from 'query-string'
 
+import {
+    createAPICollectionService,
+    createAPICrudService,
+    createAPIExportableService,
+} from '@/factory/api-factory-service'
+
+import { IOnlineEntry, IOnlineEntryPaginated, TEntityId } from '@/types'
+
 import APIService from './api-service'
 
-import { IOnlineEntryPaginated, TEntityId } from '@/types'
+const CrudService = createAPICrudService<IOnlineEntry, void>('/online-entry')
+
+const CollectionService =
+    createAPICollectionService<IOnlineEntry>('/online-entry')
+
+const ExportService = createAPIExportableService('/online-entry', {
+    base: 'online_entry',
+})
 
 export const getPaginatedBatchOnlineEntry = async ({
     sort,
@@ -31,4 +46,17 @@ export const getPaginatedBatchOnlineEntry = async ({
 
     const response = await APIService.get<IOnlineEntryPaginated>(url)
     return response.data
+}
+
+export const { getById, deleteById, deleteMany } = CrudService
+
+export const { exportAll, exportFiltered, exportSelected } = ExportService
+
+export default {
+    getById,
+    deleteById,
+    deleteMany,
+    getPaginatedBatchOnlineEntry,
+    ...CollectionService,
+    ...ExportService,
 }

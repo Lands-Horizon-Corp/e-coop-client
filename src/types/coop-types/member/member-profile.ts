@@ -1,49 +1,50 @@
+import { IOrganization } from '@/types/lands-types'
+
+import { ISignUpRequest, IUserBase } from '../../auth'
 import {
-    TEntityId,
     IAuditable,
     ITimeStamps,
     TCivilStatus,
+    TEntityId,
     TGeneralStatus,
 } from '../../common'
+import { IQrScanResult } from '../../qr/index'
+import { IBranch } from '../branch'
+import { IMedia } from '../media'
+import { IPaginatedResult } from '../paginated-result'
+import { IMemberAddress, IMemberAddressRequest } from './member-address'
+import { IMemberAsset, IMemberAssetRequest } from './member-asset'
+import { IMemberCenter } from './member-center'
+import { IMemberClassification } from './member-classification'
 import {
     IMemberCloseRemark,
     IMemberCloseRemarkRequest,
 } from './member-close-remark'
 import {
-    IMemberJointAccount,
-    IMemberJointAccountRequest,
-} from './member-joint-account'
-import { IMedia } from '../media'
-import {
-    IMemberRelativeAccount,
-    IMemberRelativeAccountRequest,
-} from './member-relative-account'
-import {
     IMemberContactReference,
     IMemberContactReferenceRequest,
 } from './member-contact-reference'
-import { IBranch } from '../branch'
+import { IMemberDescriptionRequest } from './member-description'
+import { IMemberEducationalAttainment } from './member-educational-attainment'
+import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
+import { IMemberGender } from './member-gender'
 import {
     IMemberGovernmentBenefit,
     IMemberGovernmentBenefitRequest,
 } from './member-government-benefit'
-import { IMemberType } from './member-type'
 import { IMemberGroup } from './member-group'
-import { IQrScanResult } from '../../qr/index'
-import { IMemberGender } from './member-gender'
-import { IMemberCenter } from './member-center'
-import { IMemberRecruits } from './member-recruits'
-import { IOrganization } from '@/types/lands-types'
-import { IPaginatedResult } from '../paginated-result'
-import { ISignUpRequest, IUserBase } from '../../auth'
-import { IMemberOccupation } from './member-occupation'
-import { IMemberClassification } from './member-classification'
-import { IMemberDescriptionRequest } from './member-description'
-import { IMemberAsset, IMemberAssetRequest } from './member-asset'
 import { IMemberIncome, IMemberIncomeRequest } from './member-income'
-import { IMemberAddress, IMemberAddressRequest } from './member-address'
-import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
-import { IMemberEducationalAttainment } from './member-educational-attainment'
+import {
+    IMemberJointAccount,
+    IMemberJointAccountRequest,
+} from './member-joint-account'
+import { IMemberOccupation } from './member-occupation'
+import { IMemberRecruitedMembers } from './member-recruits'
+import {
+    IMemberRelativeAccount,
+    IMemberRelativeAccountRequest,
+} from './member-relative-account'
+import { IMemberType } from './member-type'
 
 // For creation of member user account
 export interface IMemberProfileUserAccountRequest
@@ -68,7 +69,7 @@ export interface IMemberProfileQuickCreateRequest {
     full_name?: string
     suffix?: string
     member_gender_id?: TEntityId
-    birth_date?: string
+    birthdate?: string
     contact_number?: string
 
     civil_status: TCivilStatus
@@ -190,7 +191,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     last_name: string
     full_name: string
     suffix?: string
-    birth_date?: string
+    birthdate?: string
     status: TGeneralStatus
 
     description: string
@@ -212,11 +213,12 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // memberEducationalAttainmentId?: TEntityId
     member_educational_attainments?: IMemberEducationalAttainment[]
 
+    recruited_members?: IMemberRecruitedMembers[]
+
     member_assets?: IMemberAsset[]
     member_incomes?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
     member_addresses?: IMemberAddress[]
-    member_recruits?: IMemberRecruits[]
     member_expenses?: IMemberExpense[]
     // memberDescriptions?: IMemberDescription[]
     member_close_remarks?: IMemberCloseRemark[]

@@ -1,34 +1,33 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
+import { deleteManyPaymentTypes } from '@/api-service/payment-type-services/payment-type-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
+import { TableProps } from '@/types/components'
+import { IPaymentType } from '@/types/coop-types/payment-type'
+import {
+    getCoreRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
+
 import DataTable from '@/components/data-table'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import FilterContext from '@/contexts/filter-context/filter-context'
 
 import { useFilteredPaginatedPaymentType } from '@/hooks/api-hooks/use-payment-type'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { usePagination } from '@/hooks/use-pagination'
 import useDatableFilterState from '@/hooks/use-filter-state'
-
-import { TableProps } from '@/types/components'
-import { IPaymentType } from '@/types/coop-types/payment-type'
-
-import { deleteManyPaymentTypes } from '@/api-service/payment-type-services/payment-type-service'
-
-import { cn } from '@/lib'
-import { useQueryClient } from '@tanstack/react-query'
-import {
-    useReactTable,
-    getCoreRowModel,
-    getSortedRowModel,
-} from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { usePagination } from '@/hooks/use-pagination'
 
 import {
     IPaymentTypeTableColumnProps,
-    PaymentTypeTableColumns,
     PaymentTypeGlobalSearchTargets,
+    PaymentTypeTableColumns,
 } from './column'
 
 export interface PaymentTypeTableProps

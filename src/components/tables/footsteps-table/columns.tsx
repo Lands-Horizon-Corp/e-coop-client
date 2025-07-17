@@ -1,13 +1,14 @@
 import { ReactNode } from 'react'
+
+import { IFootstep } from '@/types/coop-types/footstep'
+import { toReadableDateTime } from '@/utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import { toReadableDateTime } from '@/utils'
-import { IFootstep } from '@/types/coop-types/footstep'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 
 export const footstepGlobalSearchTargets: IGlobalSearchTargets<IFootstep>[] = [
     { field: 'user.username', displayText: 'User' },

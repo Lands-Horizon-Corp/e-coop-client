@@ -1,32 +1,37 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import ImageField from '@/components/ui/image-field'
-import { Separator } from '@/components/ui/separator'
+import { Path, useForm } from 'react-hook-form'
+
+import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { CountryCombobox } from '@/components/comboboxes/country-combobox'
+import ImageField from '@/components/ui/image-field'
+import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
+import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
+
 import { entityIdSchema } from '@/validations/common'
+
 import {
     useCreateMemberGovernmentBenefit,
     useUpdateMemberGovernmentBenefit,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
+    IClassProps,
     IForm,
     IMedia,
-    TEntityId,
-    IClassProps,
     IMemberGovernmentBenefit,
+    TEntityId,
 } from '@/types'
 
 export const memberGovernmentBenefitSchema = z.object({
@@ -183,13 +188,14 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                 control={form.control}
                                 name="expiry_date"
                                 label="Expiry Date *"
-                                className="col-span-4"
+                                className="relative col-span-4"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
                                         placeholder="Expiry Date"
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
+                                        className="block"
                                         value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
                                     />

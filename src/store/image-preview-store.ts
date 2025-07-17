@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+
 import { IMedia } from '@/types'
 
 interface ImagePreviewState {
@@ -14,6 +15,7 @@ export interface ImagePreviewData {
     scaleInterval?: number
     className?: string
     Images?: IMedia[]
+    title?: string
 }
 
 interface ImagePreviewActions {

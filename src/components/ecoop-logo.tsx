@@ -1,6 +1,8 @@
-import { cn } from '@/lib/utils'
-import { IClassProps } from '@/types'
 import { ResolvedTheme, useTheme } from '@/providers/theme-provider'
+
+import { cn } from '@/lib/utils'
+
+import { IClassProps } from '@/types'
 
 type TEcoopThemeMode = 'dynamic' | ResolvedTheme
 

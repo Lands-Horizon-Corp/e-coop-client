@@ -1,30 +1,34 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Separator } from '@/components/ui/separator'
-import SignatureField from '@/components/ui/signature-field'
+import { Path, useForm } from 'react-hook-form'
+
 import Modal, { IModalProps } from '@/components/modals/modal'
 import EmployeePicker from '@/components/pickers/employee-picker'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import SignatureField from '@/components/ui/signature-field'
 
 import { cn } from '@/lib/utils'
+
 import { entityIdSchema } from '@/validations/common'
+
 import { useCreateBatchFunding } from '@/hooks/api-hooks/use-batch-funding'
 
 import {
+    IBatchFunding,
+    IBatchFundingRequest,
+    IClassProps,
     IForm,
     IMedia,
     TEntityId,
-    IClassProps,
-    IBatchFunding,
-    IBatchFundingRequest,
 } from '@/types'
 
 const batchFundingSchema = z.object({
@@ -146,10 +150,7 @@ const BatchFundingCreateForm = ({
                                     {...field}
                                     value={form.getValues('provided_by_user')}
                                     onSelect={(value) => {
-                                        form.setValue(
-                                            'provided_by_user_id',
-                                            value.user_id
-                                        )
+                                        field.onChange(value?.user_id)
                                         form.setValue(
                                             'provided_by_user',
                                             value.user

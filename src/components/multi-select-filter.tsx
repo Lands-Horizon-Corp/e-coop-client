@@ -1,5 +1,6 @@
 import { CheckIcon } from 'lucide-react'
 
+import { Button } from '@/components/ui/button'
 import {
     Command,
     CommandEmpty,
@@ -10,7 +11,6 @@ import {
 } from '@/components/ui/command'
 
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 
 export interface IMultiSelectOption<TValue> {
     label: string
@@ -60,7 +60,7 @@ const MultiSelectFilter = <TValue,>({
 
                             return (
                                 <CommandItem
-                                    key={`${option.label}-${i}`}
+                                    key={`${option.label}-${i}-${option.value}`}
                                     onSelect={() => {
                                         const updatedValues = new Set(
                                             selectedValues

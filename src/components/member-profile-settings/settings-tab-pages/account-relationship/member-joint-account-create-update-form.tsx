@@ -1,39 +1,44 @@
 import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Form } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { toInputDateString } from '@/utils'
+import { Path, useForm } from 'react-hook-form'
+
+import RelationshipCombobox from '@/components/comboboxes/relationship-combobox'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import ImageField from '@/components/ui/image-field'
+import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
+import { Separator } from '@/components/ui/separator'
+import SignatureField from '@/components/ui/signature-field'
 
 import { cn } from '@/lib/utils'
+
 import {
     entityIdSchema,
     familyRelationshipSchema,
     stringDateWithTransformSchema,
 } from '@/validations/common'
+
 import {
     useCreateMemberJointAccount,
     useUpdateMemberJointAccount,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import {
-    IForm,
-    TEntityId,
     IClassProps,
-    IMemberJointAccount,
+    IForm,
     IMedia,
+    IMemberJointAccount,
+    TEntityId,
 } from '@/types'
-import ImageField from '@/components/ui/image-field'
-import RelationshipCombobox from '@/components/comboboxes/relationship-combobox'
-import SignatureField from '@/components/ui/signature-field'
-import TextEditor from '@/components/text-editor'
-import { toInputDateString } from '@/utils'
 
 export const memberJointAccountSchema = z.object({
     id: z.string().optional(),
@@ -281,9 +286,11 @@ const MemberJointAccountCreateUpdateForm = ({
                                 control={form.control}
                                 name="birthday"
                                 label="Birthday *"
+                                className="relative"
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
                                 render={({ field }) => (
-                                    <Input
-                                        type="date"
+                                    <InputDate
                                         {...field}
                                         id={field.name}
                                         placeholder="Birthday"

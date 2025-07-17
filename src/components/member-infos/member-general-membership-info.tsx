@@ -1,28 +1,30 @@
 import { forwardRef } from 'react'
 
+import { cn } from '@/lib'
+import { toDateTimeFormatFile } from '@/utils'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+
+import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+
+import CopyTextButton from '../copy-text-button'
 import {
+    DetailsIcon,
+    HandCoinsIcon,
+    PieChartIcon,
     QrCodeIcon,
     UserTagIcon,
-    DetailsIcon,
-    PieChartIcon,
-    HandCoinsIcon,
 } from '../icons'
-import SectionTitle from './section-title'
-import { Separator } from '../ui/separator'
 import ImageDisplay from '../image-display'
 import { QrCodeDownloadable } from '../qr-code'
-import CopyTextButton from '../copy-text-button'
 import ExpandableDescription from '../raw-description'
+import { Separator } from '../ui/separator'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import OrganizationBranchDisplay from './banners/company-branch-display'
 import JointAccountsDisplay from './displays/joint-accounts-display'
 import MemberRecruitsDisplay from './displays/member-recruits-display'
 import RelativeAccountsDisplay from './displays/relative-accounts-display'
-
-import { cn } from '@/lib'
-import { toDateTimeFormatFile } from '@/utils'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
-
-import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+import SectionTitle from './section-title'
 
 interface Props extends IBaseProps {
     profileId: TEntityId
@@ -86,14 +88,20 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                         </p>
                     </div>
                     <div className="flex max-w-full items-end gap-x-2">
-                        <ImageDisplay
-                            src={
+                        <PreviewMediaWrapper
+                            media={
                                 data?.member_verified_by_employee_user?.media
-                                    ?.download_url
                             }
-                            className="size-16 rounded-xl"
-                            fallbackClassName="rounded-xl"
-                        />
+                        >
+                            <ImageDisplay
+                                src={
+                                    data?.member_verified_by_employee_user
+                                        ?.media?.download_url
+                                }
+                                className="size-16 rounded-xl"
+                                fallbackClassName="rounded-xl"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="flex-1 space-y-2">
                             {data?.member_verified_by_employee_user ? (
                                 <>
@@ -277,7 +285,7 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                         relativeAccounts={data?.member_relative_accounts}
                     />
 
-                    <MemberRecruitsDisplay recruits={data?.member_recruits} />
+                    <MemberRecruitsDisplay recruits={data?.recruited_members} />
                 </div>
             </div>
         )

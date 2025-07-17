@@ -1,5 +1,7 @@
-import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 import { softwareUpdates } from '@/constants'
+
+import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
+
 import { cn } from '@/lib/utils'
 
 const VersionUpdates = () => {

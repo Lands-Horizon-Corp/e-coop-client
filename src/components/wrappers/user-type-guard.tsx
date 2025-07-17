@@ -1,12 +1,12 @@
 import { ReactNode } from 'react'
-import { Navigate, useRouter } from '@tanstack/react-router'
-
-import { Button } from '@/components/ui/button'
-import UserAvatar from '@/components/user-avatar'
-import { BadgeExclamationFillIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 import { useAuthStore } from '@/store/user-auth-store'
+import { Navigate, useRouter } from '@tanstack/react-router'
+
+import { BadgeExclamationFillIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import UserAvatar from '@/components/user-avatar'
 
 import { IBaseProps, IUserBase, TUserType } from '@/types'
 

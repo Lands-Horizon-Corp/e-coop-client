@@ -1,14 +1,15 @@
 import qs from 'query-string'
 
-import APIService from './api-service'
 import { downloadFileService } from '@/helpers'
 
 import {
-    TEntityId,
     IFeedback,
-    IFeedbackRequest,
     IFeedbackPaginated,
+    IFeedbackRequest,
+    TEntityId,
 } from '@/types'
+
+import APIService from './api-service'
 
 const BASE_ENDPOINT = '/feedback'
 

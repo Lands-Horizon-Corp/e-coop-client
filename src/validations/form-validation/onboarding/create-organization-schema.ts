@@ -1,5 +1,6 @@
-import { entityIdSchema } from '@/validations/common'
 import { z } from 'zod'
+
+import { entityIdSchema } from '@/validations/common'
 
 export const TOrganizationMigrationStatus = z.enum([
     'pending',

@@ -1,11 +1,10 @@
+import { cn } from '@/lib'
 import { cva } from 'class-variance-authority'
+
+import { IClassProps, ITransactionBatch } from '@/types'
 
 import { DotBigIcon } from '../icons'
 import { getTransactionStatus } from './transaction-batch-utils'
-
-import { cn } from '@/lib'
-
-import { IClassProps, ITransactionBatch } from '@/types'
 
 interface Props extends IClassProps {
     transBatch: ITransactionBatch

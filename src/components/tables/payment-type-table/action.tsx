@@ -1,10 +1,12 @@
+import { useState } from 'react'
+
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { PaymentTypeFormModal } from '@/components/forms/payment-type-forms/payment-type-create-update-form'
 
 import { useDeletePaymentType } from '@/hooks/api-hooks/use-payment-type'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 
-import { useState } from 'react'
 import { IPaymentTypeTableActionComponentProp } from './column'
 
 interface IPaymentTypeActionProps extends IPaymentTypeTableActionComponentProp {
@@ -28,7 +30,6 @@ const PaymentTypeAction = ({
         <>
             <div onClick={(e) => e.stopPropagation()}>
                 <PaymentTypeFormModal
-                    className="!max-w-2xl"
                     onOpenChange={setUpdateModalForm}
                     open={updateModalForm}
                     title="Edit Payment Type"

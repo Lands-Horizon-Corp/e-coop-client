@@ -1,7 +1,9 @@
 import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
+
 import { IPaginatedResult } from '../paginated-result'
 
 export enum AccountTypeEnum {
+    Other = 'Other',
     Deposit = 'Deposit',
     Loan = 'Loan',
     ARLedger = 'A/R-Ledger',
@@ -11,7 +13,6 @@ export enum AccountTypeEnum {
     SVFLedger = 'SVF-Ledger',
     WOff = 'W-Off',
     APLedger = 'A/P-Ledger',
-    Other = 'Other',
 }
 
 export enum ComputationTypeEnum {
@@ -103,13 +104,13 @@ export interface IAccount extends IAuditable, ITimeStamps {
     branch_id?: TEntityId
 
     general_ledger_definition_id?: TEntityId
-    financial_statement_definition_id?: TEntityId
+    financial_statement_definition_entries_id?: TEntityId
     account_classification_id?: TEntityId
     account_category_id?: TEntityId
     member_type_id: TEntityId
 
     name: string
-    description: string
+    description?: string
 
     minAmount?: number
     maxAmount?: number
@@ -189,13 +190,13 @@ export interface IAccountRequest {
     branch_id: TEntityId
 
     general_ledger_definition_id?: TEntityId
-    financial_statement_definition_id?: TEntityId
+    financial_statement_definition_entries_id?: TEntityId
     account_classification_id?: TEntityId
     account_category_id?: TEntityId
     member_type_id?: TEntityId
 
     name: string
-    description: string
+    description?: string
 
     minAmount?: number
     maxAmount?: number

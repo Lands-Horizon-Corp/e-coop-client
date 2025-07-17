@@ -1,5 +1,5 @@
-import { IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult } from '../coop-types'
 import { IOrganization, TOrganizationMigrationStatus } from './organization'
 
 export interface IMigrationHistory extends ITimeStamps, IAuditable {

@@ -1,8 +1,9 @@
 import { ReactNode, useMemo } from 'react'
-import { Column, Header, Table } from '@tanstack/react-table'
 
 import { cn } from '@/lib'
 import { formatNumber } from '@/utils'
+import { Column, Header, Table } from '@tanstack/react-table'
+
 import { IClassProps } from '@/types'
 
 interface DataTableFooterSummationProps<TData, TValue> extends IClassProps {

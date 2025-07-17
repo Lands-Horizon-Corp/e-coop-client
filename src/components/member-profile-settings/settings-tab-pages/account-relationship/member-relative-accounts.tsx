@@ -1,22 +1,25 @@
 import { useState } from 'react'
 
-import {
-    TrashIcon,
-    PencilFillIcon,
-    BadgeQuestionIcon,
-    BadgeCheckFillIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
-import { Separator } from '@/components/ui/separator'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { MemberRelativeAccountCreateUpdateFormModal } from './member-relative-account-create-update-form'
-
-import { toReadableDate } from '@/utils'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { toReadableDate } from '@/utils'
+
+import {
+    BadgeCheckFillIcon,
+    BadgeQuestionIcon,
+    PencilFillIcon,
+    TrashIcon,
+} from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
 import { useDeleteMemberRelativeAccount } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberProfile, IMemberRelativeAccount } from '@/types'
+
+import { MemberRelativeAccountCreateUpdateFormModal } from './member-relative-account-create-update-form'
 
 const MemberRelativeAccountCard = ({
     relative,
@@ -47,10 +50,12 @@ const MemberRelativeAccountCard = ({
             />
             <div className="flex items-start justify-between">
                 <div className="flex min-w-0 items-center gap-3">
-                    <ImageDisplay
-                        src={relProfile?.media?.download_url}
-                        className="h-9 w-9 rounded-full border bg-muted object-cover"
-                    />
+                    <PreviewMediaWrapper media={relProfile?.media}>
+                        <ImageDisplay
+                            src={relProfile?.media?.download_url}
+                            className="h-9 w-9 rounded-full border bg-muted object-cover"
+                        />
+                    </PreviewMediaWrapper>
                     <div className="flex min-w-0 flex-col">
                         <span className="flex items-center gap-1 truncate font-semibold">
                             {relProfile?.full_name || '-'}

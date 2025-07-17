@@ -1,5 +1,6 @@
-import APIService from './api-service'
 import { ICheckRemittance, ICheckRemittanceRequest, TEntityId } from '@/types'
+
+import APIService from './api-service'
 
 export const createTransactionBatchCheckRemittance = async (
     data: ICheckRemittanceRequest

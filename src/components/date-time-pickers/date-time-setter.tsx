@@ -1,13 +1,13 @@
+import { toReadableDate } from '@/utils'
+
+import TimePicker from '@/components/date-time-pickers/time-picker'
+import { ClockIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import TimePicker from '@/components/date-time-pickers/time-picker'
-
-import { toReadableDate } from '@/utils'
-import { ClockIcon } from '@/components/icons'
 
 interface Props {
     date: Date

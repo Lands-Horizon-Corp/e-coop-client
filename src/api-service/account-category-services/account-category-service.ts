@@ -1,13 +1,16 @@
-import { TPagination } from '@/hooks/use-pagination'
-import { TEntityId, IPaginatedResult } from '@/types'
+import qs from 'query-string'
+
 import {
     IAccountCategory,
-    IAccountCategoryPaginatedResource,
+    IAccountCategoryPaginated,
     IAccountCategoryRequest,
 } from '@/types/coop-types/account-category'
 
+import { TPagination } from '@/hooks/use-pagination'
+
+import { IPaginatedResult, TEntityId } from '@/types'
+
 import APIService from '../api-service'
-import qs from 'query-string'
 
 // GET /account-category/:id
 export const getAccountCategoryById = async (id: TEntityId) => {
@@ -24,7 +27,7 @@ export const getAllAccountCategories = async () => {
     return response.data
 }
 
-// GET /account-category/paginated
+// GET /account-category/search
 export const getPaginatedAccountCategories = async (props?: {
     sort?: string
     filters?: string
@@ -34,7 +37,7 @@ export const getPaginatedAccountCategories = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/account-category`,
+            url: `/account-category/search`,
             query: {
                 sort,
                 filters,
@@ -45,8 +48,7 @@ export const getPaginatedAccountCategories = async (props?: {
         { skipNull: true }
     )
 
-    const response =
-        await APIService.get<IAccountCategoryPaginatedResource>(url)
+    const response = await APIService.get<IAccountCategoryPaginated>(url)
     return response.data
 }
 

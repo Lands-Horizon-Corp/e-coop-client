@@ -1,12 +1,13 @@
-import { toast } from 'sonner'
 import { useState } from 'react'
-
-import Modal from '@/components/modals/modal'
-import { QrCodeIcon } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { QrCode, QrCodeDownloadable } from '@/components/qr-code'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib'
+
+import { QrCodeIcon } from '@/components/icons'
+import Modal from '@/components/modals/modal'
+import { QrCode, QrCodeDownloadable } from '@/components/qr-code'
+import { Button } from '@/components/ui/button'
+
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {

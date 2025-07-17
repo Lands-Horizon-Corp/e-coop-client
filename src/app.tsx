@@ -1,16 +1,15 @@
-import { useState } from 'react';
-import SpySvg from '../src/assets/spy.svg';
-import { createRouter, RouterProvider } from '@tanstack/react-router';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-import { routeTree } from './routeTree.gen';
+import { useState } from 'react';
 
 import { ThemeProvider } from '@/providers/theme-provider';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+
+import SpySvg from '../src/assets/spy.svg';
 import PageContainer from './components/containers/page-container';
 import LoadingSpinner from './components/spinners/loading-spinner';
-
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
+import { routeTree } from './routeTree.gen';
 
 const router = createRouter({ routeTree });
 

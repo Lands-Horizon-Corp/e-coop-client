@@ -1,7 +1,7 @@
+import { IBaseEntityMeta, TEntityId } from '../../common'
+import { IPaginatedResult } from '../paginated-result'
 import { IMemberGroup } from './member-group'
 import { IMemberProfile } from './member-profile'
-import { IPaginatedResult } from '../paginated-result'
-import { TEntityId, IBaseEntityMeta } from '../../common'
 
 export interface IMemberGroupHistory extends IBaseEntityMeta {
     id: TEntityId

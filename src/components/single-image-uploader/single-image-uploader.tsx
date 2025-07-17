@@ -1,18 +1,21 @@
 import { useState } from 'react'
 
-import ImageDisplay from '../image-display'
-import { Button } from '@/components/ui/button'
-import { AdjustIcon } from '@/components/icons'
-import { Progress } from '@/components/ui/progress'
-import PictureCrop from '@/components/picture-crop'
-import SingleImageUploadOption from './upload-options'
+import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
+import { cn } from '@/lib'
+
 import ActionTooltip from '@/components/action-tooltip'
+import { AdjustIcon } from '@/components/icons'
+import PictureCrop from '@/components/picture-crop'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 
 import { IMedia } from '@/types'
-import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
-import { cn } from '@/lib'
+
+import ImageDisplay from '../image-display'
+import SingleImageUploadOption from './upload-options'
 
 export interface ISingleImageUploadProps {
     disableCrop?: boolean

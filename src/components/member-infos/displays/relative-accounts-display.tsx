@@ -1,18 +1,20 @@
-import DOMPurify from 'dompurify'
+import { toReadableDate } from '@/utils'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
+import CopyTextButton from '@/components/copy-text-button'
+import { FamilyIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IMemberRelativeAccount } from '@/types'
-import ImageDisplay from '@/components/image-display'
-import CopyTextButton from '@/components/copy-text-button'
+
 import SectionTitle from '../section-title'
-import { FamilyIcon } from '@/components/icons'
-import { toReadableDate } from '@/utils'
 
 interface Props {
     relativeAccounts?: IMemberRelativeAccount[]
@@ -37,13 +39,17 @@ const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {
                     className="space-y-2 rounded-xl bg-secondary/20 p-4"
                 >
                     <div className="flex items-center gap-x-4">
-                        <ImageDisplay
-                            src={
-                                relativeAcc.relative_member_profile?.media
-                                    ?.download_url
-                            }
-                            className="size-16 rounded-xl"
-                        />
+                        <PreviewMediaWrapper
+                            media={relativeAcc.relative_member_profile?.media}
+                        >
+                            <ImageDisplay
+                                src={
+                                    relativeAcc.relative_member_profile?.media
+                                        ?.download_url
+                                }
+                                className="size-16 rounded-xl"
+                            />
+                        </PreviewMediaWrapper>
                         <div className="grid flex-1 gap-2 md:grid-cols-5">
                             <div className="space-y-2">
                                 <p>
@@ -110,7 +116,7 @@ const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {
                             <AccordionContent className="prose-h1: prose w-full !max-w-full rounded-xl p-4 text-sm text-foreground/70 dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                                 <div
                                     dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
+                                        __html: sanitizeHtml(
                                             relativeAcc.description &&
                                                 relativeAcc.description.length >
                                                     0

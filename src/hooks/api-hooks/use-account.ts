@@ -1,20 +1,28 @@
-import { TEntityId } from '@/types'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
+import { AccountServices } from '@/api-service/accounting-services'
+import { serverRequestErrExtractor } from '@/helpers'
+import {
+    IAPIFilteredPaginatedHook,
+    IAPIHook,
+    IQueryProps,
+} from '@/types/api-hooks-types'
 import {
     IAccount,
-    IAccountRequest,
     IAccountPaginated,
+    IAccountRequest,
 } from '@/types/coop-types/accounts/account'
-import { IAPIFilteredPaginatedHook, IQueryProps } from '@/types/api-hooks-types'
-
-import { createMutationHook } from './api-hook-factory'
-import { AccountServices } from '@/api-service/accounting-services'
-
-import { toast } from 'sonner'
-import { useQuery } from '@tanstack/react-query'
 import { toBase64, withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 
-import ACCOUNT_DATA from './paginatedAccountSample.json'
+import { TEntityId, UpdateIndexRequest } from '@/types'
+
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '../../factory/api-hook-factory'
 
 export const useAccountById = (
     id: TEntityId,
@@ -39,10 +47,37 @@ export const useAccountById = (
     })
 }
 
+export const useAccount = ({
+    id,
+    enabled,
+    showMessage = true,
+    ...other
+}: IAPIHook<IAccount> & IQueryProps<IAccount> & { id: TEntityId }) => {
+    return useQuery<IAccount, string>({
+        queryKey: ['account', id],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                AccountServices.getAccountById(id)
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        enabled,
+        retry: 1,
+        ...other,
+    })
+}
+
 export const useFilteredPaginatedAccount = ({
     sort,
     enabled,
-    // initialData,
+    initialData,
     mode = 'all',
     filterPayload,
     showMessage = true,
@@ -51,7 +86,7 @@ export const useFilteredPaginatedAccount = ({
     IQueryProps<IAccountPaginated> & { mode?: 'all' | 'pendings' }) => {
     return useQuery<IAccountPaginated, string>({
         queryKey: [
-            'gender',
+            'account',
             'resource-query',
             mode,
             filterPayload,
@@ -76,7 +111,13 @@ export const useFilteredPaginatedAccount = ({
 
             return result
         },
-        initialData: ACCOUNT_DATA as unknown as IAccountPaginated,
+        initialData: initialData ?? {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
         enabled,
         retry: 1,
     })
@@ -88,7 +129,8 @@ export const useCreateAccount = createMutationHook<
     IAccountRequest
 >(
     (payload) => AccountServices.createAccount(payload),
-    'New Account Created Successfully!'
+    'New Account Created Successfully!',
+    (args) => createMutationInvalidateFn('account', args)
 )
 
 export const useUpdateAccount = createMutationHook<
@@ -100,10 +142,34 @@ export const useUpdateAccount = createMutationHook<
     }
 >(
     (payload) => AccountServices.updateAccount(payload.accountId, payload.data),
-    'Account Updated Successfully!'
+    'Account Updated Successfully!',
+    (args) => updateMutationInvalidationFn('account', args)
 )
 
 export const useDeleteAccount = createMutationHook<void, string, TEntityId>(
     (accountId) => AccountServices.deleteAccount(accountId),
-    'Account Deleted Successfully!'
+    'Account Deleted Successfully!',
+    (args) => deleteMutationInvalidationFn('account', args)
+)
+
+export const useUpdateAccountIndex = createMutationHook<
+    IAccount,
+    number,
+    UpdateIndexRequest[]
+>(
+    (payload) => AccountServices.AccountUpdateIndex([...payload]),
+    'Updated Account Index Successfully!',
+    (args) =>
+        updateMutationInvalidationFn('general-ledger-accounts-groupings', args)
+)
+
+export const useDeleteAccountFromGLDefintion = createMutationHook<
+    IAccount,
+    string,
+    TEntityId
+>(
+    (payload) => AccountServices.deleteGLAccounts(payload),
+    undefined,
+    (args) =>
+        updateMutationInvalidationFn('general-ledger-accounts-groupings', args)
 )

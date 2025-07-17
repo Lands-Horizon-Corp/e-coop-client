@@ -1,10 +1,12 @@
-import SectionTitle from '../section-title'
-import { MapMarkedIcon } from '@/components/icons'
-
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
+
+import { MapMarkedIcon } from '@/components/icons'
+
 import { IClassProps } from '@/types'
 import { IMemberAddress } from '@/types'
+
+import SectionTitle from '../section-title'
 
 interface Props extends IClassProps {
     addresses?: IMemberAddress[]

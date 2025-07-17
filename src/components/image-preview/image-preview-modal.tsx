@@ -1,15 +1,20 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { cn } from '@/lib'
 import { useImagePreview } from '@/store/image-preview-store'
-import { DownloadProps } from '@/types'
-import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog'
+import * as ImagePreviewPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
-import { useState, useRef, useCallback, useEffect } from 'react'
+
+import { DownloadProps } from '@/types'
+
 import {
-    CarouselApi,
     Carousel,
+    CarouselApi,
     CarouselContent,
     CarouselItem,
 } from '../ui/carousel'
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog'
+import { TooltipProvider } from '../ui/tooltip'
 import {
     CarouselOptions,
     ImageContainer,
@@ -18,12 +23,6 @@ import {
     ImagePreviewPanel,
     ImagePreviewPrevious,
 } from './image-preview'
-import * as ImagePreviewPrimitive from '@radix-ui/react-dialog'
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from '@/components/ui/resizable'
 
 const ImagePreviewModal = () => {
     const [api, setApi] = useState<CarouselApi | undefined>()
@@ -104,8 +103,8 @@ const ImagePreviewModal = () => {
         if (scrollIntoView.current) {
             scrollIntoView.current.scrollIntoView({
                 behavior: 'smooth',
-                block: 'nearest',
-                inline: 'nearest',
+                //block: 'end',
+                inline: 'center',
             })
         }
     }, [api, setFocusIndex, scrollIntoView])
@@ -144,110 +143,114 @@ const ImagePreviewModal = () => {
 
     return (
         <>
-            <Dialog
-                open={isOpen}
-                onOpenChange={(isOpen) => {
-                    if (!isOpen) handleResetActionState()
-                    onClose()
-                }}
-            >
-                <DialogContent
-                    className={cn(
-                        '!h-max-[100vh] h-full w-full max-w-[100vw] bg-transparent'
-                    )}
+            <TooltipProvider>
+                <Dialog
+                    open={isOpen}
+                    onOpenChange={(isOpen) => {
+                        if (!isOpen) handleResetActionState()
+                        onClose()
+                    }}
                 >
-                    <DialogTitle />
-                    <div
-                        id="overlay"
+                    <DialogTitle>{ImagePreviewData.title}</DialogTitle>
+                    <DialogContent
+                        overlayClassName="bg-transparent"
                         className={cn(
-                            'fixed left-[50%] top-[50%] z-50 flex h-full w-full translate-x-[-50%] translate-y-[-50%] flex-col-reverse border shadow-lg backdrop-blur duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] lg:flex-row',
-                            className
+                            '!h-max-[100vh] h-full w-full max-w-[100vw] border-[0px] border-primary bg-transparent'
                         )}
                     >
-                        <ImagePreviewActions
-                            className="z-20 w-full lg:w-fit"
-                            imageRef={imageRef}
-                            downloadImage={downloadImage}
-                            handleResetActionState={handleResetActionState}
-                            handleRotateRight={handleRotateRight}
-                            handleRotateLeft={handleRotateLeft}
-                            handleZoomIn={handleZoomIn}
-                            handleZoomOut={handleZoomOut}
-                            handleFlipHorizontal={handleFlipHorizontal}
-                            handleFlipVertical={handleFlipVertical}
-                        />
-                        <ResizablePanelGroup direction="horizontal">
-                            <ResizablePanel
-                                maxSize={30}
-                                minSize={10}
-                                defaultSize={10}
-                            >
-                                {Images && (
-                                    <ImagePreviewPanel
-                                        focusIndex={focusIndex}
-                                        Images={Images}
-                                        scrollToIndex={scrollToIndex}
-                                        scrollIntoView={scrollIntoView}
+                        <div
+                            className={cn(
+                                'fixed left-[50%] top-[50%] z-50 flex h-full w-full translate-x-[-50%] translate-y-[-50%] flex-col-reverse space-y-3 shadow-lg backdrop-blur duration-200 lg:flex-row lg:space-y-0',
+                                className
+                            )}
+                        >
+                            <ImagePreviewActions
+                                className="lg-absolute hidden lg:bottom-5 lg:right-5 lg:z-50 lg:flex"
+                                imageRef={imageRef}
+                                downloadImage={downloadImage}
+                                handleResetActionState={handleResetActionState}
+                                handleRotateRight={handleRotateRight}
+                                handleRotateLeft={handleRotateLeft}
+                                handleZoomIn={handleZoomIn}
+                                handleZoomOut={handleZoomOut}
+                                handleFlipHorizontal={handleFlipHorizontal}
+                                handleFlipVertical={handleFlipVertical}
+                            />
+
+                            {isMultipleImage && (
+                                <ImagePreviewPanel
+                                    focusIndex={focusIndex}
+                                    Images={Images}
+                                    scrollToIndex={scrollToIndex}
+                                    scrollIntoView={scrollIntoView}
+                                />
+                            )}
+                            <div className="static z-50 flex min-h-12 w-full items-center justify-center overflow-auto lg:hidden">
+                                <ImagePreviewActions
+                                    className="min-h-12 w-full justify-center overflow-auto"
+                                    imageRef={imageRef}
+                                    downloadImage={downloadImage}
+                                    handleResetActionState={
+                                        handleResetActionState
+                                    }
+                                    handleRotateRight={handleRotateRight}
+                                    handleRotateLeft={handleRotateLeft}
+                                    handleZoomIn={handleZoomIn}
+                                    handleZoomOut={handleZoomOut}
+                                    handleFlipHorizontal={handleFlipHorizontal}
+                                    handleFlipVertical={handleFlipVertical}
+                                />
+                            </div>
+                            <div className="flex h-full w-full items-center justify-center backdrop-blur-none dark:bg-transparent">
+                                <Carousel
+                                    opts={options}
+                                    setApi={setApi}
+                                    className="flex h-fit w-full max-w-4xl justify-center bg-transparent"
+                                >
+                                    <CarouselContent className="">
+                                        {Images?.map((data, index) => {
+                                            return (
+                                                <CarouselItem
+                                                    className="flex items-center justify-center"
+                                                    key={index}
+                                                >
+                                                    <ImageContainer
+                                                        flipScale={flipScale}
+                                                        rotateDegree={
+                                                            rotateDegree
+                                                        }
+                                                        scale={scale}
+                                                        media={data}
+                                                        imageRef={imageRef}
+                                                    ></ImageContainer>
+                                                </CarouselItem>
+                                            )
+                                        })}
+                                    </CarouselContent>
+                                    <ImagePreviewPrevious
+                                        className={`left-5 border-0`}
                                     />
-                                )}
-                            </ResizablePanel>
-                            <ResizableHandle withHandle />
-                            <ResizablePanel minSize={10} defaultSize={90}>
-                                <div className="flex h-full w-full items-center justify-center bg-black/20 dark:bg-transparent">
-                                    <Carousel
-                                        opts={options}
-                                        setApi={setApi}
-                                        className="flex h-fit w-full max-w-4xl justify-center bg-transparent"
+                                    <ImagePreviewNext
+                                        className={`${isMultipleImage ? '' : 'hidden'} right-5 border-0`}
+                                    />
+                                </Carousel>
+                                {!hideCloseButton && (
+                                    <ImagePreviewPrimitive.Close
+                                        onClick={handleResetActionState}
+                                        className={cn(
+                                            'absolute right-5 top-5 size-8 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
+                                            closeButtonClassName
+                                        )}
                                     >
-                                        <CarouselContent className="">
-                                            {Images?.map((data, index) => {
-                                                return (
-                                                    <CarouselItem
-                                                        className="flex items-center justify-center"
-                                                        key={index}
-                                                    >
-                                                        <ImageContainer
-                                                            flipScale={
-                                                                flipScale
-                                                            }
-                                                            rotateDegree={
-                                                                rotateDegree
-                                                            }
-                                                            scale={scale}
-                                                            media={data}
-                                                            imageRef={imageRef}
-                                                        ></ImageContainer>
-                                                    </CarouselItem>
-                                                )
-                                            })}
-                                        </CarouselContent>
-                                        <ImagePreviewPrevious
-                                            className={`border-0`}
-                                        />
-                                        <ImagePreviewNext
-                                            className={`${isMultipleImage ? '' : 'hidden'} border-0`}
-                                        />
-                                    </Carousel>
-                                    {!hideCloseButton && (
-                                        <ImagePreviewPrimitive.Close
-                                            onClick={handleResetActionState}
-                                            className={cn(
-                                                'absolute right-5 top-5 size-8 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
-                                                closeButtonClassName
-                                            )}
-                                        >
-                                            <X className="size-full" />
-                                            <span className="sr-only">
-                                                Close
-                                            </span>
-                                        </ImagePreviewPrimitive.Close>
-                                    )}
-                                </div>
-                            </ResizablePanel>
-                        </ResizablePanelGroup>
-                    </div>
-                </DialogContent>
-            </Dialog>
+                                        <X className="size-full" />
+                                        <span className="sr-only">Close</span>
+                                    </ImagePreviewPrimitive.Close>
+                                )}
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            </TooltipProvider>
         </>
     )
 }

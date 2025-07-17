@@ -1,32 +1,34 @@
 import { toast } from 'sonner'
+
+import { useTheme } from '@/providers/theme-provider'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useAuthUser } from '@/store/user-auth-store'
 import { useRouter } from '@tanstack/react-router'
 
 import {
-    DevIcon,
-    SunIcon,
-    MoonIcon,
-    LogoutIcon,
-    SunMoonIcon,
-    QuestionIcon,
     ChevronsUpDownIcon,
+    DevIcon,
+    LogoutIcon,
+    MoonIcon,
+    QuestionIcon,
+    SunIcon,
+    SunMoonIcon,
 } from '@/components/icons'
+import UserAvatar from '@/components/user-avatar'
+
+import { useSignOut } from '@/hooks/api-hooks/use-auth'
+
 import {
     DropdownMenu,
-    DropdownMenuSub,
+    DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuPortal,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
+    DropdownMenuSub,
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
 } from '../dropdown-menu'
-import UserAvatar from '@/components/user-avatar'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../sidebar'
-
-import { useAuthUser } from '@/store/user-auth-store'
-import { useTheme } from '@/providers/theme-provider'
-import { useSignOut } from '@/hooks/api-hooks/use-auth'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 
 const AppSidebarUser = () => {
     const router = useRouter()

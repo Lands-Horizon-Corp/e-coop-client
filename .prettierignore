@@ -8,6 +8,7 @@
 # Ignore specific folders
 src/config/
 src/utils/config/
+src/routeTree.gen.ts
 
 # Ignore node_modules
 node_modules/

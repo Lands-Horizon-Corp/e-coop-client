@@ -1,15 +1,18 @@
-import DOMPurify from 'dompurify'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
+import { HandShakeHeartIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import ImageDisplay from '@/components/image-display'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
 import { IMemberJointAccount } from '@/types'
+
 import SectionTitle from '../section-title'
-import { HandShakeHeartIcon } from '@/components/icons'
 
 interface Props {
     jointAccounts?: IMemberJointAccount[]
@@ -37,20 +40,33 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
                     <div className="flex gap-x-4">
                         <div className="grid w-80 grid-cols-2 gap-x-4">
                             <div className="">
-                                <ImageDisplay
-                                    src={jointAcc.picture_media?.download_url}
-                                    className="h-24 w-full rounded-xl"
-                                />
+                                <PreviewMediaWrapper
+                                    media={jointAcc.picture_media}
+                                >
+                                    <ImageDisplay
+                                        src={
+                                            jointAcc.picture_media?.download_url
+                                        }
+                                        className="h-24 w-full rounded-xl"
+                                    />
+                                </PreviewMediaWrapper>
                                 <p className="mt-1 text-xs text-muted-foreground/70">
                                     Photo
                                 </p>
                             </div>
 
                             <div className="">
-                                <ImageDisplay
-                                    src={jointAcc.signature_media?.download_url}
-                                    className="h-24 w-full rounded-xl"
-                                />
+                                <PreviewMediaWrapper
+                                    media={jointAcc.signature_media}
+                                >
+                                    <ImageDisplay
+                                        src={
+                                            jointAcc.signature_media
+                                                ?.download_url
+                                        }
+                                        className="h-24 w-full rounded-xl"
+                                    />
+                                </PreviewMediaWrapper>
                                 <p className="mt-1 text-xs text-muted-foreground/70">
                                     Signature
                                 </p>
@@ -98,7 +114,7 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
                             <AccordionContent className="prose-h1: prose w-full !max-w-full rounded-xl p-4 text-sm text-foreground/70 dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                                 <div
                                     dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
+                                        __html: sanitizeHtml(
                                             jointAcc.description &&
                                                 jointAcc.description.length > 0
                                                 ? jointAcc.description

@@ -1,28 +1,33 @@
-import { toast } from 'sonner'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { groupBy, toBase64, withCatchAsync } from '@/utils'
-import { createMutationHook } from './api-hook-factory'
 import { BranchService } from '@/api-service/branch-services'
-import { isArray, serverRequestErrExtractor } from '@/helpers'
-import { UserOrganization } from '@/api-service/user-organization-services'
 import * as UserOrganizationService from '@/api-service/user-organization-service'
+import { UserOrganization } from '@/api-service/user-organization-services'
+import { isArray, serverRequestErrExtractor } from '@/helpers'
+import { groupBy, toBase64, withCatchAsync } from '@/utils'
 
 import {
+    IAPIFilteredPaginatedHook,
     IBranch,
-    TEntityId,
-    IQueryProps,
-    IUserOrganization,
+    IEmployee,
+    IMember,
+    IMutationProps,
     IOperationCallbacks,
     IOrgUserOrganizationGroup,
-    IMutationProps,
-    IAPIFilteredPaginatedHook,
-    IEmployee,
     IOwner,
-    IMember,
-    IUserOrganizationPaginated,
+    IQueryProps,
     IUserBase,
+    IUserOrganization,
+    IUserOrganizationPaginated,
+    IUserOrganizationPermissionRequest,
+    TEntityId,
 } from '@/types'
+
+import {
+    createMutationHook,
+    updateMutationInvalidationFn,
+} from '../../factory/api-hook-factory'
 
 export const useGetUserOrganizationByUserId = (id: TEntityId) => {
     return useQuery<IOrgUserOrganizationGroup[], string>({
@@ -325,3 +330,14 @@ export const useFilteredPaginatedUserOrganization = <
         retry: 1,
     })
 }
+
+export const useUpdateUserOrganizationPermission = createMutationHook<
+    IUserOrganization,
+    string,
+    { id: TEntityId; data: IUserOrganizationPermissionRequest }
+>(
+    ({ id, data }) =>
+        UserOrganizationService.updateUserOrganizationPermission(id, data),
+    'Permission updated',
+    (args) => updateMutationInvalidationFn('user-organization', args)
+)

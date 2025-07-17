@@ -1,10 +1,19 @@
-import { Form } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import z from 'zod'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { useAuthUserWithOrg } from '@/store/user-auth-store'
+import {
+    IPaymentType,
+    IPaymentTypeRequest,
+} from '@/types/coop-types/payment-type'
+import { Path, useForm } from 'react-hook-form'
+
 import Modal, { IModalProps } from '@/components/modals/modal'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import {
@@ -14,29 +23,23 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
 
-import { IForm, IClassProps, TEntityId } from '@/types'
-import {
-    IPaymentType,
-    IPaymentTypeRequest,
-} from '@/types/coop-types/payment-type'
+import { cn } from '@/lib/utils'
 
 import {
     useCreatePaymentType,
     useUpdatePaymentType,
 } from '@/hooks/api-hooks/use-payment-type'
 
-import { cn } from '@/lib/utils'
-import z from 'zod'
-import { useForm, Path } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useAuthUserWithOrg } from '@/store/user-auth-store'
+import { IClassProps, IForm, TEntityId } from '@/types'
 
 const PaymentTypeSchema = z.object({
     name: z.string().min(1, 'Payment type name is required'),
     description: z
         .string()
-        .max(50, 'Description must contain at most 50 character(s)')
+        .max(100, 'Description must contain at most 50 character(s)')
         .optional(),
     number_of_days: z
         .number()

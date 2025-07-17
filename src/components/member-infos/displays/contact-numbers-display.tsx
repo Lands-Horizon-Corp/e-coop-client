@@ -1,17 +1,19 @@
-import {
-    Accordion,
-    AccordionItem,
-    AccordionContent,
-    AccordionTrigger,
-} from '@/components/ui/accordion'
-import SectionTitle from '../section-title'
-import RawDescription from '../../raw-description'
-import { TelephoneIcon } from '@/components/icons'
-
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
+
+import { TelephoneIcon } from '@/components/icons'
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion'
+
 import { IClassProps } from '@/types'
 import { IMemberContactReference } from '@/types'
+
+import RawDescription from '../../raw-description'
+import SectionTitle from '../section-title'
 
 interface Props extends IClassProps {
     contactNumbers?: IMemberContactReference[]

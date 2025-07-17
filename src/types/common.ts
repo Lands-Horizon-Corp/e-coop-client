@@ -1,14 +1,15 @@
-import { IBranch } from './coop-types'
-import { IUserBase } from './auth/user'
-import { IOrganization } from './lands-types'
 import {
-    CIVIL_STATUS,
-    GENERAL_STATUS,
-    FAMILY_RELATIONSHIP,
     AccountClosureReasons,
+    CIVIL_STATUS,
     EDUCATIONAL_ATTAINMENT,
+    FAMILY_RELATIONSHIP,
+    GENERAL_STATUS,
     USER_TYPE,
 } from '@/constants'
+
+import { IUserBase } from './auth/user'
+import { IBranch } from './coop-types'
+import { IOrganization } from './lands-types'
 
 export type TEntityId = string
 
@@ -69,3 +70,8 @@ export type TCivilStatus = (typeof CIVIL_STATUS)[number]
 export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]
 
 export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number]
+
+export interface UpdateIndexRequest {
+    id: TEntityId
+    index: number
+}

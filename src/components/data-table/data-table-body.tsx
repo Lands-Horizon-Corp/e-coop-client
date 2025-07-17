@@ -1,13 +1,15 @@
-import { flexRender, Row } from '@tanstack/react-table'
+import { cn } from '@/lib'
+import { Row, flexRender } from '@tanstack/react-table'
 
-import { MagnifyingGlassIcon } from '../icons'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 
+import { MagnifyingGlassIcon } from '../icons'
 import { getPinningStyles } from './data-table-utils'
 
 const DataTableBody = <TData,>({
     rows,
     colCount,
+    rowClassName,
     onRowClick,
 }: {
     rows: Row<TData>[]
@@ -22,7 +24,7 @@ const DataTableBody = <TData,>({
                 <TableRow
                     key={row.id}
                     data-row-id={row.id}
-                    className="h-14"
+                    className={cn('h-14', rowClassName)}
                     onClick={() => onRowClick?.(row)}
                     data-state={row.getIsSelected() && 'selected'}
                 >

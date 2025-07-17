@@ -3,7 +3,6 @@ export const PASSWORD_MIN_LENGTH = 8
 export const HELP_CONTACT = '09123456789'
 
 export const PICKERS_SELECT_PAGE_SIZE = 100 // Use for Selects or Pickers with Filter/Pagination fetching
-
 export const predefinedSuffixes = [
     'Jr.',
     'Sr.',
@@ -131,3 +130,10 @@ export const CIVIL_STATUS = [
 ] as const
 
 export const USER_TYPE = ['owner', 'employee', 'member', 'ban'] as const
+
+export const USER_ORG_APPLICATION_STATUS = [
+    'pending',
+    'reported',
+    'accepted',
+    'ban',
+] as const

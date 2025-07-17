@@ -1,5 +1,6 @@
+import React, { forwardRef, useEffect, useRef, useState } from 'react'
+
 import { cn } from '@/lib'
-import React, { useState, useEffect, useRef, forwardRef } from 'react'
 
 interface BumpOnClickProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode

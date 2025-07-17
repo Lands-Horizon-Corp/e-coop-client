@@ -1,14 +1,16 @@
-import { EyeIcon } from '../icons'
-import { Button } from '../ui/button'
-import ImageDisplay from '../image-display'
-import { TransactionBatchHistoriesModal } from '../transaction-batch/transaction-batch-histories'
-
 import { cn } from '@/lib'
 import { toReadableDateTime } from '@/utils'
 
-import { IClassProps, ITransactionBatch } from '@/types'
 import { useModalState } from '@/hooks/use-modal-state'
+
+import { IClassProps, ITransactionBatch } from '@/types'
+
 import CopyTextButton from '../copy-text-button'
+import { EyeIcon } from '../icons'
+import ImageDisplay from '../image-display'
+import { TransactionBatchHistoriesModal } from '../transaction-batch/transaction-batch-histories'
+import { Button } from '../ui/button'
+import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 
 interface Props extends IClassProps {
     transBatch: ITransactionBatch
@@ -33,14 +35,14 @@ const TransBatchTitleUserDisplay = ({ transBatch, className }: Props) => {
                     {transBatch.created_at
                         ? toReadableDateTime(
                               transBatch.created_at,
-                              'MM-dd-yyyy @ hh:mm a '
+                              'MM-dd-yyyy hh:mm a '
                           )
                         : 'invalid start'}{' '}
                     -{' '}
                     {transBatch.ended_at
                         ? toReadableDateTime(
                               transBatch.ended_at,
-                              'MM-dd-yyyy @ hh:mm a '
+                              'MM-dd-yyyy hh:mm a '
                           )
                         : 'not ended'}
                 </p>
@@ -61,10 +63,14 @@ const TransBatchTitleUserDisplay = ({ transBatch, className }: Props) => {
             </p>
             <div className="flex items-center justify-between gap-x-2">
                 <div className="flex items-center gap-x-2">
-                    <ImageDisplay
-                        className="size-8"
-                        src={transBatch?.employee_user?.media?.download_url}
-                    />
+                    <PreviewMediaWrapper
+                        media={transBatch?.employee_user?.media}
+                    >
+                        <ImageDisplay
+                            className="size-8"
+                            src={transBatch?.employee_user?.media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <div>
                         <p>{transBatch.employee_user?.full_name}</p>
                         <p className="text-xs text-muted-foreground/70">

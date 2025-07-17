@@ -1,6 +1,8 @@
-import MemberMembershipForm from '@/components/forms/member-forms/member-profile-settings-forms/member-membership-form'
-import { IMemberProfile } from '@/types'
 import { forwardRef } from 'react'
+
+import MemberMembershipForm from '@/components/forms/member-forms/member-profile-settings-forms/member-membership-form'
+
+import { IMemberProfile } from '@/types'
 
 interface Props {
     memberProfile: IMemberProfile

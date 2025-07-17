@@ -1,33 +1,33 @@
-import {
-    useReactTable,
-    getCoreRowModel,
-    getSortedRowModel,
-} from '@tanstack/react-table'
 import { useMemo } from 'react'
 
+import { PAGE_SIZES_SMALL } from '@/constants'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
+import {
+    getCoreRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
+
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+
+import { useMemberGenderHistory } from '@/hooks/api-hooks/member/use-member-history'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { TableProps } from '@/types'
+import { IMemberGenderHistory, TEntityId } from '@/types'
 
 import memberGenderHistoryColumns, {
     IMemberGenderHistoryColumnProps,
     memberGenderHistoryGlobalSearchTargets,
 } from './columns'
-
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-
-import { PAGE_SIZES_SMALL } from '@/constants'
-import { useMemberGenderHistory } from '@/hooks/api-hooks/member/use-member-history'
-
-import { TableProps } from '@/types'
-import { IMemberGenderHistory, TEntityId } from '@/types'
 
 export interface MemberGenderHistoryTableProps
     extends TableProps<IMemberGenderHistory>,

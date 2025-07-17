@@ -1,7 +1,6 @@
-import { create } from 'zustand'
-import { connect, NatsConnection } from 'nats.ws'
-
 import { WS_URL } from '@/constants'
+import { NatsConnection, connect } from 'nats.ws'
+import { create } from 'zustand'
 
 export interface INatsConnectOpts {
     wsUrl?: string

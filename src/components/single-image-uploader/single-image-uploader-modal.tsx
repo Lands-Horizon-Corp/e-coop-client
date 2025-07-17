@@ -1,7 +1,7 @@
+import Modal, { IModalProps } from '../modals/modal'
 import SingleImageUpload, {
     ISingleImageUploadProps,
 } from './single-image-uploader'
-import Modal, { IModalProps } from '../modals/modal'
 
 interface Props extends IModalProps {
     singleImageUploadProps: ISingleImageUploadProps

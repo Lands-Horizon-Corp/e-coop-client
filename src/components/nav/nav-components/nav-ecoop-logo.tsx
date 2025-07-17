@@ -1,8 +1,9 @@
+import { cn } from '@/lib'
 import { Link } from '@tanstack/react-router'
 
-import { cn } from '@/lib'
-import { IClassProps } from '@/types'
 import EcoopLogo from '@/components/ecoop-logo'
+
+import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {
     linkUrl?: string

@@ -1,17 +1,19 @@
-import DOMPurify from 'dompurify'
+import { cn } from '@/lib'
+import { toReadableDate } from '@/utils'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
-    AccordionItem,
     AccordionContent,
+    AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import ImageDisplay from '@/components/image-display'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
 import { IMemberGovernmentBenefit } from '@/types'
-import { toReadableDate } from '@/utils'
+
 interface IGovernmentCardDisplay
     extends IClassProps,
         IMemberGovernmentBenefit {}
@@ -35,19 +37,23 @@ export const GovernmentCardDisplay = ({
         >
             <div className="relative flex gap-x-2 rounded-xl">
                 <div className="space-y-4">
-                    <ImageDisplay
-                        className="h-36 w-64 rounded-lg"
-                        src={front_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={front_media}>
+                        <ImageDisplay
+                            className="h-36 w-64 rounded-lg"
+                            src={front_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <p className="text-xs text-muted-foreground/70">
                         ID Front Photo
                     </p>
                 </div>
                 <div className="space-y-2">
-                    <ImageDisplay
-                        className="h-36 w-64 rounded-lg"
-                        src={back_media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={back_media}>
+                        <ImageDisplay
+                            className="h-36 w-64 rounded-lg"
+                            src={back_media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                     <p className="text-xs text-muted-foreground/70">
                         ID Back Photo
                     </p>
@@ -86,7 +92,7 @@ export const GovernmentCardDisplay = ({
                     <AccordionContent className="w-full !max-w-full rounded-xl bg-popover p-4 text-sm text-foreground/70 prose-h1:prose dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                         <div
                             dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(
+                                __html: sanitizeHtml(
                                     description ?? '<i>No Description</i>'
                                 ),
                             }}

@@ -1,31 +1,32 @@
 import z from 'zod'
+
 import { isBefore, startOfDay } from 'date-fns'
 
 import {
-    mediaSchema,
-    emailSchema,
-    lastNameSchema,
-    entityIdSchema,
-    userNameSchema,
-    passwordSchema,
-    firstNameSchema,
-    middleNameSchema,
-    stringDateSchema,
     civilStatusSchema,
     contactNumberSchema,
+    emailSchema,
+    entityIdSchema,
+    firstNameSchema,
     generalStatusSchema,
+    lastNameSchema,
+    mediaSchema,
+    middleNameSchema,
+    passwordSchema,
+    stringDateSchema,
+    userNameSchema,
 } from '../common'
-import { memberCenterSchema } from './member-center-schema'
-import { memberAssetsSchema } from './member-assets-schema'
-import { memberIncomeSchema } from './member-income-schema'
 import { memberAddressSchema } from './member-address-schema'
-import { memberExpenseSchema } from './member-expense-schema'
-import { memberDescriptionSchema } from './member-description-schema'
+import { memberAssetsSchema } from './member-assets-schema'
+import { memberCenterSchema } from './member-center-schema'
 import { memberCloseRemarkSchema } from './member-close-remark-schema'
+import { memberContactReferenceSchema } from './member-contact-number-references-schema'
+import { memberDescriptionSchema } from './member-description-schema'
+import { memberExpenseSchema } from './member-expense-schema'
 import { memberGovernmentBenefitSchema } from './member-government-benefit'
+import { memberIncomeSchema } from './member-income-schema'
 import { memberJointAccountsSchema } from './member-joint-accounts-schema'
 import { memberRelativeAccountsSchema } from './member-relative-accounts-schema'
-import { memberContactReferenceSchema } from './member-contact-number-references-schema'
 
 export const createMemberProfileSchema = z.object({
     id: entityIdSchema.optional(),
@@ -128,7 +129,7 @@ export const quickCreateMemberProfileSchema = z
         full_name: z.string().optional(),
         suffix: z.string().max(15).optional(),
         contact_number: z.string().optional(),
-        birth_date: stringDateSchema
+        birthdate: stringDateSchema
             .refine(
                 (val) => {
                     const date = startOfDay(new Date(val))
@@ -199,7 +200,7 @@ export const memberProfileUserAccountSchema = z
 //     full_name: z.string().optional(),
 //     suffix: z.string().max(15).optional(),
 //     contact_number: z.string().optional(),
-//     birth_date: stringDateSchema.transform((val) =>
+//     birthdate: stringDateSchema.transform((val) =>
 //         new Date(val).toISOString()
 //     ),
 //     member_gender_id: entityIdSchema.optional(),

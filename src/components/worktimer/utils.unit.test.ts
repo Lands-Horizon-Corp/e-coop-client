@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest'
+
 import { getTimeDifference } from './utils'
-import { describe, it, expect } from 'vitest'
 
 describe('getTimeDifference', () => {
     it('minutes should be 45', () => {

@@ -1,17 +1,19 @@
 import { ReactNode } from 'react'
+
+import { formatNumber } from '@/utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-
-import { formatNumber, toReadableDate } from '@/utils'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import ImageNameDisplay from '@/components/elements/image-name-display'
+import ImageDisplay from '@/components/image-display'
+import { createUpdateColumns } from '@/components/tables/common-columns'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IBatchFunding } from '@/types'
-import ImageNameDisplay from '@/components/elements/image-name-display'
 
 export const batchFundingGlobalSearchTargets: IGlobalSearchTargets<IBatchFunding>[] =
     [
@@ -91,15 +93,28 @@ const BatchFundingTableColumns = (
         ),
         cell: ({
             row: {
-                original: { provided_by_user },
+                original: { provided_by_user, signature_media },
             },
         }) => (
-            <span>
+            <span className="inline-flex gap-x-2">
+                {signature_media && (
+                    <>
+                        <PreviewMediaWrapper media={signature_media}>
+                            <ImageDisplay
+                                className="size-8 rounded-lg"
+                                src={signature_media?.download_url}
+                            />
+                        </PreviewMediaWrapper>
+                    </>
+                )}
                 {provided_by_user ? (
-                    <ImageNameDisplay
-                        name={provided_by_user.full_name}
-                        src={provided_by_user.media?.download_url}
-                    />
+                    <PreviewMediaWrapper media={provided_by_user.media}>
+                        <ImageNameDisplay
+                            imageClassName="size-8 rounded-lg"
+                            name={provided_by_user.full_name}
+                            src={provided_by_user.media?.download_url}
+                        />
+                    </PreviewMediaWrapper>
                 ) : (
                     '-'
                 )}
@@ -112,36 +127,8 @@ const BatchFundingTableColumns = (
         size: 140,
         minSize: 100,
     },
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date & Time">
-                <ColumnActions {...props}>
-                    <DateFilter<IBatchFunding>
-                        displayText="Date Created"
-                        field="created_at"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({ row }) => (
-            <span>
-                {row.original.created_at
-                    ? toReadableDate(
-                          row.original.created_at,
-                          "MMM dd yyyy 'at' hh:mm a"
-                      )
-                    : '-'}
-            </span>
-        ),
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 150,
-    },
+
+    ...createUpdateColumns<IBatchFunding>(),
 ]
 
 export default BatchFundingTableColumns

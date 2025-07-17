@@ -1,14 +1,14 @@
 import qs from 'query-string'
 
-import { downloadFileService } from '@/helpers'
 import APIService from '@/api-service/api-service'
+import { downloadFileService } from '@/helpers'
 
 import {
-    TEntityId,
-    IOrganization,
-    IOrganizationRequest,
-    IOrganizationPaginated,
     ICreateOrganizationResponse,
+    IOrganization,
+    IOrganizationPaginated,
+    IOrganizationRequest,
+    TEntityId,
 } from '@/types'
 
 export const getAllOrganizations = async () => {

@@ -1,9 +1,10 @@
-import { ITransactionBatch, ITransactionBatchMinimal } from '@/types'
 import { create } from 'zustand'
+
+import { ITransactionBatch, ITransactionBatchMinimal } from '@/types'
 
 interface ITransactionBatchStore {
     data: ITransactionBatch | ITransactionBatchMinimal | null
-    setData: (data: ITransactionBatch | ITransactionBatchMinimal) => void
+    setData: (data: ITransactionBatch | ITransactionBatchMinimal | null) => void
     reset: () => void
 }
 
@@ -12,10 +13,13 @@ export const useTransactionBatchStore = create<ITransactionBatchStore>(
         data: null,
         setData: (newData) => {
             set((state) => ({
-                data: {
-                    ...state.data,
-                    ...newData,
-                },
+                data:
+                    newData !== null
+                        ? {
+                              ...state.data,
+                              ...newData,
+                          }
+                        : newData,
             }))
         },
         reset: () => {

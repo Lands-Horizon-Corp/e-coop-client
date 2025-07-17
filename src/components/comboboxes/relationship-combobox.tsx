@@ -1,26 +1,29 @@
 import * as React from 'react'
+
+import { FAMILY_RELATIONSHIP } from '@/constants'
 import { Check } from 'lucide-react'
 
+import { ChevronDownIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     Command,
-    CommandItem,
-    CommandList,
     CommandEmpty,
     CommandGroup,
     CommandInput,
+    CommandItem,
+    CommandList,
 } from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon } from '@/components/icons'
-
-import { FAMILY_RELATIONSHIP } from '@/constants'
 
 import { cn } from '@/lib/utils'
-import { TRelationship } from '@/types' // Assuming this is where your type and const are
+
+import { TRelationship } from '@/types'
+
+// Assuming this is where your type and const are
 
 interface Props {
     id?: string

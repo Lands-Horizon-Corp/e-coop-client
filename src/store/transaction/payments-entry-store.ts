@@ -1,15 +1,16 @@
 import { create } from 'zustand'
-import { IUserBase, IAccountsRequest, IPaymentsEntry } from '@/types'
+
+import { IAccountsRequest, IMemberProfile, IPaymentsEntry } from '@/types'
 
 // Payments Data
 export interface PaymentsDataStore {
-    selectedMember: IUserBase | null
+    selectedMember: IMemberProfile | null
     ORNumber: string
     selectedPayments: IPaymentsEntry[]
     selectedAccounts: IAccountsRequest | null
     focusTypePayment: string | null
 
-    setSelectedMember: (member: IUserBase | null) => void
+    setSelectedMember: (member: IMemberProfile | null) => void
     setORNumber: (orNumber: string) => void
     setSelectedPayments: (payments: IPaymentsEntry[]) => void
     setSelectedAccounts: (accounts: IAccountsRequest | null) => void
@@ -47,7 +48,7 @@ export interface PaymentsModalStore {
     openDepositCheckClearingFormModal: boolean
 
     setTransactionType: (paymentType: string) => void
-    setOpenPaymentsEntryModal: (isOpen: boolean) => void
+    setOpenPaymentsEntryModal: (open: boolean) => void
     setOpenCheckClearingFormModal: (isOpen: boolean) => void
 }
 
@@ -59,8 +60,7 @@ export const usePaymentsModalStore = create<PaymentsModalStore>((set) => ({
     openPaymentsEntryModal: false,
 
     setTransactionType: (paymentType) => set({ transactionType: paymentType }),
-    setOpenPaymentsEntryModal: (isOpen) =>
-        set({ openPaymentsEntryModal: isOpen }),
+    setOpenPaymentsEntryModal: (open) => set({ openPaymentsEntryModal: open }),
     setOpenCheckClearingFormModal: (isOpen) =>
         set({ openCheckClearingFormModal: isOpen }),
 }))

@@ -1,13 +1,22 @@
 import { useMemo } from 'react'
 
-import { Button } from '@/components/ui/button'
-import FilterChip from '@/components/filter-chip'
-import { TrashIcon } from '@/components/icons'
-import ActionTooltip from '@/components/action-tooltip'
-
-import { cn } from '@/lib'
-import { IClassProps } from '@/types'
 import { useFilter } from '@/contexts/filter-context'
+import { cn } from '@/lib'
+
+import ActionTooltip from '@/components/action-tooltip'
+import { FunnelFilledIcon, FunnelIcon, XIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+import { IClassProps } from '@/types'
 
 const DataTableActiveFilters = ({ className }: IClassProps) => {
     const { filters, resetFilter, removeFilter } = useFilter()
@@ -36,28 +45,67 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
     if (mappedFilters.length <= 0) return null
 
     return (
-        <div className={cn('flex max-w-full items-center gap-x-2', className)}>
-            <span className="inline-flex items-center">Filters</span>
-            <div className="ecoop-scroll flex flex-wrap items-center gap-x-2 gap-y-1">
-                <ActionTooltip tooltipContent="Remove All Filters">
+        <div
+            className={cn(
+                'flex max-w-full min-w-0 items-center gap-x-2',
+                className
+            )}
+        >
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                     <Button
-                        size="sm"
                         variant="secondary"
-                        className="size-fit p-1 text-xs text-foreground/60"
-                        onClick={() => resetFilter()}
+                        className="inline-flex cursor-pointer items-center duration-200 ease-in-out text-muted-foreground/70 hover:text-foreground"
                     >
-                        <TrashIcon />
+                        <FunnelFilledIcon className="mr-2" />
+                        Filter{mappedFilters.length > 1 ? 's' : ''} (
+                        {mappedFilters.length})
                     </Button>
-                </ActionTooltip>
-                {mappedFilters.map((filter) => (
-                    <FilterChip
-                        key={filter.field}
-                        label={filter.displayText ?? filter.field}
-                        tooltipDescription="Remove Filter"
-                        onClick={() => removeFilter(filter.field)}
-                    />
-                ))}
-            </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuLabel className="flex flex-col">
+                        <div className="flex">
+                            Filters{' '}
+                            <FunnelIcon
+                                size={16}
+                                className="opacity-60 inline ml-auto"
+                                aria-hidden="true"
+                            />
+                        </div>
+                        <p className="text-xs text-muted-foreground/60 font-light">
+                            Click to remove a filter
+                        </p>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        {mappedFilters.map((filter) => (
+                            <DropdownMenuItem
+                                key={filter.field}
+                                className="focus:bg-background"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    removeFilter(filter.field)
+                                }}
+                            >
+                                {filter.displayText ?? filter.field}
+                                <XIcon className="" />
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <ActionTooltip tooltipContent="Remove All Filters">
+                        <DropdownMenuItem
+                            onClick={(e) => {
+                                resetFilter()
+                                e.stopPropagation()
+                            }}
+                        >
+                            Clear Filters
+                        </DropdownMenuItem>
+                    </ActionTooltip>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     )
 }

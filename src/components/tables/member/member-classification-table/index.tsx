@@ -1,33 +1,34 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
+import * as MemberClassificationService from '@/api-service/member-services/member-classification-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
 import {
-    useReactTable,
     getCoreRowModel,
     getSortedRowModel,
+    useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+
+import { useFilteredPaginatedMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { TableProps } from '@/types'
+import { IMemberClassification } from '@/types'
 
 import memberClassificationColumns, {
     IMemberClassificationTableColumnProps,
     memberClassificationGlobalSearchTargets,
 } from './columns'
-
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-
-import { TableProps } from '@/types'
-import { IMemberClassification } from '@/types'
-import * as MemberClassificationService from '@/api-service/member-services/member-classification-service'
-import { useFilteredPaginatedMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
 
 const MemberClassificationTable = ({
     className,
@@ -152,7 +153,7 @@ const MemberClassificationTable = ({
                                 ],
                             }),
                         onDelete: (selectedData) =>
-                            MemberClassificationService.deleteManyMemberClassifications(
+                            MemberClassificationService.deleteMany(
                                 selectedData.map((data) => data.id)
                             ),
                     }}

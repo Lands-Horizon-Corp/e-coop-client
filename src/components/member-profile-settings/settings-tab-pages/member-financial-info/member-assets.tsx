@@ -1,26 +1,29 @@
 import { useState } from 'react'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { formatNumber, toReadableDate } from '@/utils'
+
 import {
+    CalendarDotsIcon,
+    MoneyIcon,
+    PencilFillIcon,
     PlusIcon,
     TrashIcon,
-    MoneyIcon,
     WoodSignsIcon,
-    PencilFillIcon,
-    CalendarDotsIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import RawDescription from '@/components/raw-description'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { MemberAssetCreateUpdateFormModal } from './member-asset-create-update-form'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useDeleteMemberProfileAsset } from '@/hooks/api-hooks/member/use-member-profile-settings'
 
 import { IMemberAsset, IMemberProfile } from '@/types'
+
 import EmptyListIndicator from '../empty-list-indicator'
-import { useDeleteMemberProfileAsset } from '@/hooks/api-hooks/member/use-member-profile-settings'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import ImageDisplay from '@/components/image-display'
-import { formatNumber, toReadableDate } from '@/utils'
-import RawDescription from '@/components/raw-description'
+import { MemberAssetCreateUpdateFormModal } from './member-asset-create-update-form'
 
 const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
     const [edit, setEdit] = useState(false)
@@ -83,10 +86,12 @@ const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
                 </div>
             </div>
             <Separator className="!my-2" />
-            <ImageDisplay
-                className="mb-4 h-[150px] w-full rounded-lg"
-                src={asset.media?.download_url}
-            />
+            <PreviewMediaWrapper media={asset.media}>
+                <ImageDisplay
+                    className="mb-4 h-[150px] w-full rounded-lg"
+                    src={asset.media?.download_url}
+                />
+            </PreviewMediaWrapper>
             <div className="space-y-2 text-sm">
                 <div>
                     <MoneyIcon className="mr-2 inline size-5 text-muted-foreground/70" />

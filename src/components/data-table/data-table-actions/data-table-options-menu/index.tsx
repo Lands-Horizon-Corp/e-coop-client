@@ -1,23 +1,23 @@
+import { cn } from '@/lib'
 import { Table } from '@tanstack/react-table'
 
+import { MixerHorizontalIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuTrigger,
     DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { MixerHorizontalIcon } from '@/components/icons'
 
-import DataTableScrollOption, {
-    IDataTableScrollableOptionProps,
-} from './scroll-option'
-import ColumnVisibilityOption from './column-visibility-option'
-import { cn } from '@/lib'
 import { IClassProps } from '@/types'
+
 import DataTableFilterLogicOption, {
     IDataTableFilterLogicOptionProps,
 } from './filter-logic-option'
+import DataTableScrollOption, {
+    IDataTableScrollableOptionProps,
+} from './scroll-option'
 
 interface Props<T> extends IClassProps {
     table: Table<T>
@@ -26,7 +26,6 @@ interface Props<T> extends IClassProps {
 }
 
 const DataTableOptionsMenu = <T,>({
-    table,
     className,
     scrollOption,
     filterLogicOption,
@@ -46,7 +45,6 @@ const DataTableOptionsMenu = <T,>({
                 align="end"
                 className="ecoop-scroll max-h-[70vh] min-w-[180px] overflow-y-scroll [&::-webkit-scrollbar]:w-[3px]"
             >
-                <ColumnVisibilityOption table={table} />
                 {scrollOption && (
                     <>
                         <DropdownMenuSeparator />

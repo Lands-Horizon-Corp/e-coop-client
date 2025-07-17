@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react'
 
-import Signature from '.'
-import { Button } from '../ui/button'
-import ImageDisplay from '../image-display'
-import FileItem from '../uploaders/file-item'
-import Modal, { IModalProps } from '../modals/modal'
-import LoadingSpinner from '../spinners/loading-spinner'
+import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 
 import { IMedia } from '@/types'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
+
+import Signature from '.'
+import ImageDisplay from '../image-display'
+import Modal, { IModalProps } from '../modals/modal'
+import LoadingSpinner from '../spinners/loading-spinner'
+import { Button } from '../ui/button'
+import FileItem from '../uploaders/file-item'
 
 interface Props {
     onSignatureUpload: (signatureMedia: IMedia) => void

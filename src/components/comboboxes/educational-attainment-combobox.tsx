@@ -1,24 +1,26 @@
 import * as React from 'react'
+
+import { EDUCATIONAL_ATTAINMENT } from '@/constants'
 import { Check } from 'lucide-react'
 
+import { ChevronDownIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     Command,
-    CommandItem,
-    CommandList,
     CommandEmpty,
     CommandGroup,
     CommandInput,
+    CommandItem,
+    CommandList,
 } from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon } from '@/components/icons'
 
-import { EDUCATIONAL_ATTAINMENT } from '@/constants'
 import { cn } from '@/lib/utils'
+
 import { TEducationalAttainment } from '@/types'
 
 interface Props {
@@ -36,17 +38,20 @@ const EducationalAttainmentCombobox = React.forwardRef<
     HTMLButtonElement,
     Props
 >(
-    ({
-        value,
-        className,
-        disabled = false,
-        placeholder = 'Select Educational Attainment...',
-        attainments = Object.values(
-            EDUCATIONAL_ATTAINMENT
-        ) as TEducationalAttainment[],
-        onChange,
-        ...other
-    }: Props) => {
+    (
+        {
+            value,
+            className,
+            disabled = false,
+            placeholder = 'Select Educational Attainment...',
+            attainments = Object.values(
+                EDUCATIONAL_ATTAINMENT
+            ) as TEducationalAttainment[],
+            onChange,
+            ...other
+        }: Props,
+        ref
+    ) => {
         const [open, setOpen] = React.useState(false)
 
         return (
@@ -54,6 +59,7 @@ const EducationalAttainmentCombobox = React.forwardRef<
                 <PopoverTrigger asChild>
                     <Button
                         {...other}
+                        ref={ref}
                         type="button"
                         role="combobox"
                         variant="outline"

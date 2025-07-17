@@ -1,14 +1,14 @@
-import { IoMdArrowBack } from 'react-icons/io'
-import { ErrorComponentProps, useRouter } from '@tanstack/react-router'
-
-import { Button } from '@/components/ui/button'
-import { BracketErrorIcon, RefreshIcon } from '@/components/icons'
-import { FlickeringGrid } from '../backgrounds/flickering-grid'
-
+import { allErrorMessageExtractor } from '@/helpers'
 import { cn } from '@/lib'
+import { ErrorComponentProps, useRouter } from '@tanstack/react-router'
+import { IoMdArrowBack } from 'react-icons/io'
+
+import { BracketErrorIcon, RefreshIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 
 import { IBaseProps } from '@/types'
-import { allErrorMessageExtractor } from '@/helpers'
+
+import { FlickeringGrid } from '../backgrounds/flickering-grid'
 
 interface Props extends IBaseProps, ErrorComponentProps {}
 

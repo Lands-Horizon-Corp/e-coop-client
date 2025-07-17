@@ -1,6 +1,6 @@
-import { IOrganization } from './organization'
-import { IPaginatedResult } from '../coop-types'
 import { ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult } from '../coop-types'
+import { IOrganization } from './organization'
 
 export interface IOrganizationDailyUsage extends ITimeStamps {
     id: TEntityId

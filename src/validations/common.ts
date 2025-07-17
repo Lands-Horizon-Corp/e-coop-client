@@ -1,4 +1,5 @@
 import z from 'zod'
+
 import {
     CIVIL_STATUS,
     EDUCATIONAL_ATTAINMENT,
@@ -9,8 +10,14 @@ import {
     PASSWORD_MIN_LENGTH,
     USER_TYPE,
 } from '@/constants'
+import { sanitizeNumberInput } from '@/helpers'
 
 export const entityIdSchema = z.coerce.string().uuid('Invalid')
+
+export const organizationBranchIdsSchema = z.object({
+    organization_id: entityIdSchema.optional(),
+    branch_id: entityIdSchema.optional(),
+})
 
 export const mediaSchema = z.object({
     id: entityIdSchema.optional(),
@@ -97,3 +104,73 @@ export const civilStatusSchema = z.enum(CIVIL_STATUS)
 export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT)
 
 export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP)
+
+export const TEntityId = z.string()
+
+// export const amount = z.preprocess(
+//     (val) => {
+//         if (typeof val === 'string') {
+//             const sanitized = sanitizeNumberInput(val);
+
+//             // If it's an empty string or just a dot, treat as undefined for initial parsing.
+//             // This allows the input to temporarily be empty or "." during typing without error.
+//             if (sanitized === '' || sanitized === '.') {
+//                 return undefined;
+//             }
+
+//             // Reject if multiple decimal points
+//             if ((sanitized.match(/\./g)?.length ?? 0) > 1) {
+//                 return undefined; // Or throw a specific error, depending on desired strictness
+//             }
+
+//             const parsed = parseFloat(sanitized);
+
+//             // If parsed is NaN, or if it was supposed to be a number but resulted in 0 (e.g., "0"),
+//             // return undefined to trigger `required_error` or `invalid_type_error` if needed.
+//             // Be careful with `parsed === 0`. If `0` is a valid amount, remove `|| parsed === 0`.
+//             if (isNaN(parsed)) {
+//                 return undefined;
+//             }
+
+//             return parsed;
+//         }
+
+//         return typeof val === 'number' && !isNaN(val) && val !== 0
+//             ? val
+//             : undefined;
+//     },
+//     z.number({
+//         required_error: 'Amount is required',
+//         invalid_type_error: 'Amount must be a number',
+//     })
+//     .min(0.01, "Amount must be greater than zero")
+// )
+//
+
+export const amount = z.preprocess(
+    (val) => {
+        if (typeof val === 'string') {
+            const sanitized = sanitizeNumberInput(val)
+
+            if ((sanitized.match(/\./g)?.length ?? 0) > 1) {
+                return undefined
+            }
+
+            const parsed = parseFloat(sanitized)
+
+            return sanitized === '' || isNaN(parsed) || parsed === 0
+                ? undefined
+                : parsed
+        }
+
+        return typeof val === 'number' && !isNaN(val) && val !== 0
+            ? val
+            : undefined
+    },
+    z
+        .number({
+            invalid_type_error: 'Amount must be a number',
+        })
+        .min(0.01, 'Amount must be greater than zero')
+        .max(1000000, 'Amount cannot exceed 1,000,000')
+)

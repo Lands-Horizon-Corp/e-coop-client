@@ -1,15 +1,15 @@
 import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import ActionTooltip from '@/components/action-tooltip'
-import { MagnifyingGlassIcon, XIcon } from '@/components/icons'
-import { DebouncedInput } from '@/components/ui/debounced-input'
-
 import {
-    useFilter,
     TFilterModes,
     TSearchFilter,
+    useFilter,
 } from '@/contexts/filter-context'
+
+import ActionTooltip from '@/components/action-tooltip'
+import { ChevronLeftIcon, MagnifyingGlassIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import { DebouncedInput } from '@/components/ui/debounced-input'
 
 import { KeysOfOrString } from '@/types'
 
@@ -80,7 +80,7 @@ const DataTableGlobalSearch = <T,>({
                             className="p-.5 absolute right-2 top-1/2 size-fit -translate-y-1/2 rounded-full"
                             onClick={() => setVisible(false)}
                         >
-                            <XIcon className="size-4" />
+                            <ChevronLeftIcon className="size-4" />
                         </Button>
                     </span>
                 </ActionTooltip>

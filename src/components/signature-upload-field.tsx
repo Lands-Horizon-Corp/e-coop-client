@@ -1,14 +1,15 @@
+import { forwardRef, useState } from 'react'
 import { toast } from 'sonner'
-import { IconType } from 'react-icons/lib'
-import { useState, forwardRef } from 'react'
 
-import { Button } from '@/components/ui/button'
-import ImageDisplay from '@/components/image-display'
+import { cn } from '@/lib'
+import { IconType } from 'react-icons/lib'
+
 import { ImageIcon, TrashIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import { SignaturePickerUploaderModal } from '@/components/signature/signature-picker-uploader'
+import { Button } from '@/components/ui/button'
 
 import { IClassProps, IMedia, TEntityId } from '@/types'
-import { cn } from '@/lib'
 
 export interface SignatureUploadField extends IClassProps {
     id?: string

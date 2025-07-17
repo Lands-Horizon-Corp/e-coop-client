@@ -1,31 +1,36 @@
-import { ReactNode } from 'react'
-import { IconType } from 'react-icons/lib'
 import { useQueryClient } from '@tanstack/react-query'
-
-import {
-    UserIcon,
-    BankIcon,
-    UserCogIcon,
-    UserTagIcon,
-    CreditCardIcon,
-    FolderFillIcon,
-} from '../icons'
-import { useSubscribe } from '@/hooks/use-pubsub'
-import MemberMediasInfo from './member-medias-info'
-import Modal, { IModalProps } from '../modals/modal'
-import MemberPersonalInfo from './member-personal-info'
-import { ScrollArea, ScrollBar } from '../ui/scroll-area'
-import MemberFinancialInfo from './member-financial-info'
-import MemberInfoBanner from './banners/member-info-banner'
-import MemberMembershipInfo from './member-general-membership-info'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import MemberGovernmentBenefits from './member-government-benefits-info'
-import MemberCloseAccountBanner from './banners/member-closed-account-banner'
-import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { ReactNode } from 'react'
 
 import { cn } from '@/lib'
+import { IconType } from 'react-icons/lib'
+
+import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
 import { IClassProps } from '@/types'
 import { IMemberProfile, TEntityId } from '@/types'
+
+import {
+    BankIcon,
+    CreditCardIcon,
+    FolderFillIcon,
+    UserCogIcon,
+    UserIcon,
+    UserPlusIcon,
+    UserTagIcon,
+} from '../icons'
+import Modal, { IModalProps } from '../modals/modal'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import MemberCloseAccountBanner from './banners/member-closed-account-banner'
+import MemberInfoBanner from './banners/member-info-banner'
+import MemberAccountsLoans from './member-accounts-loans'
+import MemberFinancialInfo from './member-financial-info'
+import MemberMembershipInfo from './member-general-membership-info'
+import MemberGovernmentBenefits from './member-government-benefits-info'
+import MemberMediasInfo from './member-medias-info'
+import MemberPersonalInfo from './member-personal-info'
+import RecruitedMembers from './recruited-members'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
@@ -43,6 +48,14 @@ const memberInfoTabs: {
         }
     ) => ReactNode
 }[] = [
+    {
+        value: 'accounts-loans',
+        title: 'Accounts & Loans',
+        Icon: BankIcon,
+        Component: (props) => (
+            <MemberAccountsLoans memberProfileId={props.profileId} {...props} />
+        ),
+    },
     {
         value: 'general-infos',
         title: 'General/Membership',
@@ -74,14 +87,10 @@ const memberInfoTabs: {
         Component: (props) => <MemberFinancialInfo {...props} />,
     },
     {
-        value: 'accounts',
-        title: 'Accounts Info',
-        Icon: BankIcon,
-        Component: () => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">Accounts</p>
-            </div>
-        ),
+        value: 'recruited-members',
+        title: 'Recruited Members',
+        Icon: UserPlusIcon,
+        Component: (props) => <RecruitedMembers {...props} />,
     },
 ]
 
@@ -115,7 +124,10 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
                     )}
                 </>
             )}
-            <Tabs defaultValue="general-infos" className="mt-2 flex-1 flex-col">
+            <Tabs
+                defaultValue="accounts-loans"
+                className="mt-2 flex-1 flex-col"
+            >
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {memberInfoTabs.map((tab) => (
@@ -159,7 +171,8 @@ export const MemberOverallInfoModal = ({
             {...props}
             titleClassName="hidden"
             descriptionClassName="hidden"
-            className={cn('!max-w-[90vw]', className)}
+            closeButtonClassName="hidden"
+            className={cn('!max-w-[90vw] p-3', className)}
         >
             <MemberOverallInfo {...overallInfoProps} />
         </Modal>

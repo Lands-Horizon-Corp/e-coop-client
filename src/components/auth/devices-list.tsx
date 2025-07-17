@@ -1,22 +1,27 @@
-import { ILoggedInUser } from '@/types'
 import { toast } from 'sonner'
+
+import useActionSecurityStore from '@/store/action-security-store'
+import { useAuthUser } from '@/store/user-auth-store'
+import { useRouter } from '@tanstack/react-router'
+
+import { useCurrentLoggedInUserLogout } from '@/hooks/api-hooks/use-auth'
+
+import { ILoggedInUser } from '@/types'
+
 import {
-    SmartphoneIcon,
-    MonitorIcon,
-    UserIcon,
-    LogoutIcon,
     GlobeIcon,
     LanguageIcon,
     LocationPinIcon,
+    LogoutIcon,
+    MonitorIcon,
     NavigationIcon,
+    SmartphoneIcon,
+    UserIcon,
 } from '../icons'
+import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
-import { Badge } from '../ui/badge'
-import { useCurrentLoggedInUserLogout } from '@/hooks/api-hooks/use-auth'
-import { useAuthUser } from '@/store/user-auth-store'
-import { useRouter } from '@tanstack/react-router'
-import useActionSecurityStore from '@/store/action-security-store'
+
 interface Props {
     devices: ILoggedInUser[]
 }

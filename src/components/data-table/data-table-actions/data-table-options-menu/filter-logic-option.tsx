@@ -1,9 +1,10 @@
+import { FunnelIcon } from '@/components/icons'
 import {
     DropdownMenuGroup,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
+    DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 
 import { TFilterLogic } from '../../../../contexts/filter-context'
@@ -19,7 +20,10 @@ const DataTableFilterLogicOption = ({
 }: IDataTableFilterLogicOptionProps) => {
     return (
         <DropdownMenuGroup>
-            <DropdownMenuLabel>Filter Logic</DropdownMenuLabel>
+            <DropdownMenuLabel className="flex justify-between items-center">
+                Filter Logic
+                <FunnelIcon />
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
                 value={filterLogic}
@@ -27,8 +31,18 @@ const DataTableFilterLogicOption = ({
                     setFilterLogic(selected as TFilterLogic)
                 }
             >
-                <DropdownMenuRadioItem value="AND">AND</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="OR">OR</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                    value="AND"
+                    onSelect={(e) => e.preventDefault()}
+                >
+                    AND
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                    value="OR"
+                    onSelect={(e) => e.preventDefault()}
+                >
+                    OR
+                </DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
     )

@@ -1,15 +1,18 @@
-import { toast } from 'sonner'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { toBase64, withCatchAsync } from '@/utils'
-import { serverRequestErrExtractor } from '@/helpers'
 import * as TransactionEntryService from '@/api-service/transaction-entry-service'
+import { createMutationHook } from '@/factory/api-hook-factory'
+import { serverRequestErrExtractor } from '@/helpers'
+import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    TEntityId,
-    IQueryProps,
     IAPIFilteredPaginatedHook,
+    IQueryProps,
+    ITransactionEntry,
     ITransactionEntryPaginated,
+    ITransactionEntryRequest,
+    TEntityId,
 } from '@/types'
 
 export const useFilteredBatchTransactionEntry = ({
@@ -62,3 +65,12 @@ export const useFilteredBatchTransactionEntry = ({
         retry: 1,
     })
 }
+
+export const useCreateTransactionEntry = createMutationHook<
+    ITransactionEntry,
+    string,
+    ITransactionEntryRequest
+>(
+    (payload) => TransactionEntryService.createTransactionEntry(payload),
+    'Successfully sumit Payment entry'
+)

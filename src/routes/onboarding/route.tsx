@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from '@tanstack/react-router'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 
-import AuthGuard from '@/components/wrappers/auth-guard'
-import LocationBack from './-components/onboarding-back'
+import { useCategoryStore } from '@/store/onboarding/category-store'
+import { useAuthStore } from '@/store/user-auth-store'
+import { useRouter } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
+
+import OrganizationCategoryPicker from '@/components/category-pickers/organization-category-picker'
 import AuthFooter from '@/components/footers/auth-footer'
 import OnboardingNav from '@/components/nav/navs/onboarding-nav'
-import OrganizationCategoryPicker from '@/components/category-pickers/organization-category-picker'
+import AuthGuard from '@/components/wrappers/auth-guard'
 
-import { useAuthStore } from '@/store/user-auth-store'
 import { useGetAllCategory } from '@/hooks/api-hooks/use-category'
-import { useCategoryStore } from '@/store/onboarding/category-store'
+
+import LocationBack from './-components/onboarding-back'
 
 export const Route = createFileRoute('/onboarding')({
     component: RouteComponent,

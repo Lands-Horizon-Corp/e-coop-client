@@ -1,21 +1,22 @@
+import z from 'zod'
+
 import {
     AccountTypeEnum,
     ComputationTypeEnum,
-    LumpsumComputationTypeEnum,
+    EarnedUnearnedInterestEnum,
+    InterestDeductionEnum,
     InterestFinesComputationDiminishingEnum,
     InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
-    EarnedUnearnedInterestEnum,
-    LoanSavingTypeEnum,
-    InterestDeductionEnum,
-    OtherDeductionEntryEnum,
     InterestSavingTypeDiminishingStraightEnum,
+    LoanSavingTypeEnum,
+    LumpsumComputationTypeEnum,
+    OtherDeductionEntryEnum,
     OtherInformationOfAnAccountEnum,
 } from '@/types/coop-types/accounts/account'
 import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
-import z from 'zod'
 
-const TEntityIdSchema = z.string().min(1, 'Name is required')
+import { entityIdSchema } from '../common'
 
 export enum AccountExclusiveSettingTypeEnum {
     None = 'None',
@@ -25,14 +26,14 @@ export enum AccountExclusiveSettingTypeEnum {
 }
 
 export const IAccountRequestSchema = z.object({
-    general_ledger_definition_id: TEntityIdSchema.optional(),
-    financial_statement_definition_id: TEntityIdSchema.optional(),
-    account_classification_id: TEntityIdSchema.optional(),
-    account_category_id: TEntityIdSchema.optional(),
-    member_type_id: TEntityIdSchema.optional(),
+    general_ledger_definition_id: entityIdSchema.optional(),
+    financial_statement_definition_entries_id: entityIdSchema.optional(),
+    account_classification_id: entityIdSchema.optional(),
+    account_category_id: entityIdSchema.optional(),
+    member_type_id: entityIdSchema.optional(),
 
     name: z.string().min(1, 'Name is required'),
-    description: z.string().min(1, 'Description is required'),
+    description: z.string().max(250, 'Description is required').optional(),
 
     minAmount: z.number().min(0, 'Min amount must be non-negative').optional(),
     maxAmount: z.number().min(0, 'Max amount must be non-negative').optional(),
@@ -46,8 +47,10 @@ export const IAccountRequestSchema = z.object({
         .nativeEnum(AccountExclusiveSettingTypeEnum)
         .default(AccountExclusiveSettingTypeEnum.None),
 
-    computation_type: z.nativeEnum(ComputationTypeEnum).optional(),
-
+    computation_type: z.preprocess(
+        (val) => (val === '' || val === null ? undefined : val),
+        z.nativeEnum(ComputationTypeEnum).optional()
+    ),
     fines_amort: z
         .number()
         .min(0, 'Fines amort must be non-negative')
@@ -66,7 +69,7 @@ export const IAccountRequestSchema = z.object({
         .min(0, 'Interest secured must be non-negative')
         .optional(),
 
-    computation_sheet_id: TEntityIdSchema.optional(),
+    computation_sheet_id: entityIdSchema.optional(),
 
     coh_cib_fines_grace_period_entry_daily_amortization: z
         .number()

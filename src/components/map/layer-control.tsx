@@ -1,4 +1,4 @@
-import { TileLayer, LayersControl, LayerGroup } from 'react-leaflet'
+import { LayerGroup, LayersControl, TileLayer } from 'react-leaflet'
 
 const LayerControl = () => {
     return (

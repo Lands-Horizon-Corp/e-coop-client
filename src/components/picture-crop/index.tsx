@@ -1,28 +1,28 @@
-import { toast } from 'sonner'
 import { useState } from 'react'
-import Cropper, { Area } from 'react-easy-crop'
-
-import {
-    ZoomInIcon,
-    ZoomOutIcon,
-    RotateBoxLeftIcon,
-    RotateBoxRightIcon,
-    FlipVerticalIcon,
-    FlipHorizontalIcon,
-    FlipVerticalLineIcon,
-    FlipHorizontalLineIcon,
-    Rotate90DegreeLeftIcon,
-    Rotate90DegreeRightIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
-import ActionTooltip from '@/components/action-tooltip'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { toast } from 'sonner'
 
 import { getCroppedImg } from '@/helpers'
-
 import { cn } from '@/lib'
 import { withCatchAsync } from '@/utils'
+import Cropper, { Area } from 'react-easy-crop'
+
+import ActionTooltip from '@/components/action-tooltip'
+import {
+    FlipHorizontalIcon,
+    FlipHorizontalLineIcon,
+    FlipVerticalIcon,
+    FlipVerticalLineIcon,
+    Rotate90DegreeLeftIcon,
+    Rotate90DegreeRightIcon,
+    RotateBoxLeftIcon,
+    RotateBoxRightIcon,
+    ZoomInIcon,
+    ZoomOutIcon,
+} from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import { Slider } from '@/components/ui/slider'
+
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {

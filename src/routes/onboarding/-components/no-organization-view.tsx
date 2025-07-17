@@ -1,13 +1,11 @@
+import { cn } from '@/lib'
+import { useCategoryStore } from '@/store/onboarding/category-store'
 import { useNavigate } from '@tanstack/react-router'
 
+import { BuildingIcon, PlusIcon } from '@/components/icons'
+import { HikingLandscape } from '@/components/svg/svg'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { HikingLandscape } from '@/components/svg/svg'
-import { BuildingIcon, PlusIcon } from '@/components/icons'
-
-import { useCategoryStore } from '@/store/onboarding/category-store'
-
-import { cn } from '@/lib'
 
 const NoOrganizationView = () => {
     const { handleProceedToSetupOrg } = useCategoryStore()

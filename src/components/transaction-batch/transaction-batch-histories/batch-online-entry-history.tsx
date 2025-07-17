@@ -1,7 +1,8 @@
-import BatchOnlineEntryTable from '@/components/tables/transaction-batch-history-tables/batch-online-entry-table'
-import { TransBatchHistoryTabsContentProps } from '.'
-
 import { cn } from '@/lib'
+
+import BatchOnlineEntryTable from '@/components/tables/transaction-batch-history-tables/batch-online-entry-table'
+
+import { TransBatchHistoryTabsContentProps } from '.'
 
 const BatchOnlineEntryHistory = ({
     transactionBatchId,

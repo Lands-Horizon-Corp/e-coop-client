@@ -1,17 +1,11 @@
-import { TEntityId } from '@/types'
 import {
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionRequest,
 } from '@/types/coop-types/general-ledger-definitions'
 
-import APIService from '../api-service'
+import { TEntityId, UpdateIndexRequest } from '@/types'
 
-export const getAllGeneralLedgerDefinition = async () => {
-    const response = await APIService.get<IGeneralLedgerDefinition[]>(
-        `/general-ledger-definition`
-    )
-    return response.data
-}
+import APIService from '../api-service'
 
 export const getGeneralLedgerDefinitionById = async (
     generalLedgerDefinitionId: TEntityId
@@ -60,4 +54,31 @@ export const deleteManyGeneralLedgerDefinitions = async (
         { ids }
     )
     return response.data
+}
+
+export const connectAccountToGeneralLedgerDefinition = async (
+    generalLedgerDefinitionId: TEntityId,
+    accountId: TEntityId
+): Promise<IGeneralLedgerDefinition> => {
+    const response = await APIService.post<
+        { generalLedgerDefinitionId: TEntityId; accountId: TEntityId },
+        IGeneralLedgerDefinition
+    >(
+        `/general-ledger-definition/${generalLedgerDefinitionId}/account/${accountId}/connect`
+    )
+    return response.data
+}
+
+export const generalLedgerUpdateIndex = async (
+    changedItems: UpdateIndexRequest[]
+): Promise<IGeneralLedgerDefinition> => {
+    const response = await Promise.all(
+        changedItems.map((item) =>
+            APIService.put<
+                { generalLedgerDefinitionId: TEntityId; index: number },
+                IGeneralLedgerDefinition
+            >(`/general-ledger-definition/${item.id}/index/${item.index}`)
+        )
+    )
+    return response[0].data
 }

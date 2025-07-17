@@ -1,14 +1,15 @@
 import { useState } from 'react'
+
+import { useAuthUser } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
-import { Button } from '@/components/ui/button'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import VerifyForm from '@/components/forms/auth-forms/verify-form'
 import { BadgeCheckFillIcon, BadgeQuestionFillIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
-import { useSubscribe } from '@/hooks/use-pubsub'
-import { useAuthUser } from '@/store/user-auth-store'
 import { useOTPVerification } from '@/hooks/api-hooks/use-auth'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IUserBase } from '@/types'
 

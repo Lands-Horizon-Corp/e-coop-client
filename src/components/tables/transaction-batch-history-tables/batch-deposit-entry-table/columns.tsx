@@ -1,15 +1,18 @@
 import { ReactNode } from 'react'
+
+import { IDepositEntry } from '@/types/coop-types/deposit-entry'
+import { formatNumber, toReadableDateTime } from '@/utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import ImageNameDisplay from '@/components/elements/image-name-display'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import { formatNumber, toReadableDateTime } from '@/utils'
-import { IDepositEntry } from '@/types/coop-types/deposit-entry'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import ImageNameDisplay from '@/components/elements/image-name-display'
+
+import { createUpdateColumns } from '../../common-columns'
 
 export const depositEntryGlobalSearchTargets: IGlobalSearchTargets<IDepositEntry>[] =
     [
@@ -205,6 +208,7 @@ const BatchDepositEntryTableColumns = (
         size: 180,
         minSize: 150,
     },
+    ...createUpdateColumns<IDepositEntry>(),
 ]
 
 export default BatchDepositEntryTableColumns

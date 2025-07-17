@@ -1,14 +1,15 @@
 import qs from 'query-string'
 
-import APIService from '../api-service'
-
-import { TEntityId } from '@/types'
+import { downloadFile } from '@/helpers'
 import {
     IAccount,
     IAccountPaginated,
     IAccountRequest,
 } from '@/types/coop-types/accounts/account'
-import { downloadFile } from '@/helpers'
+
+import { TEntityId, UpdateIndexRequest } from '@/types'
+
+import APIService from '../api-service'
 
 export const getAccountById = async (id: TEntityId) => {
     const response = await APIService.get<IAccount>(`/account/${id}`)
@@ -32,7 +33,7 @@ export const getPaginatedAccount = async ({
 }) => {
     const finalUrl = qs.stringifyUrl(
         {
-            url: `invitation-code/paginated`,
+            url: `/account/search`,
             query: {
                 sort,
                 filter: filters,
@@ -96,4 +97,26 @@ export const exportSelected = async (ids: TEntityId[]) => {
     )
 
     await downloadFile(url, 'selected_banks_export.xlsx')
+}
+
+export const AccountUpdateIndex = async (
+    changedItems: UpdateIndexRequest[]
+): Promise<IAccount> => {
+    const response = await Promise.all(
+        changedItems.map((item) =>
+            APIService.put<{ accountId: TEntityId; index: number }, IAccount>(
+                `/account/${item.id}/index/${item.index}`
+            )
+        )
+    )
+    return response[0].data
+}
+
+export const deleteGLAccounts = async (
+    accountId: TEntityId
+): Promise<IAccount> => {
+    const response = await APIService.put<{ accountId: TEntityId }, IAccount>(
+        `/account/${accountId}/general-ledger-definition/remove`
+    )
+    return response.data
 }

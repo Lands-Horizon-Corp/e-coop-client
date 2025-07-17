@@ -1,28 +1,30 @@
 import { forwardRef } from 'react'
 
-import { Button } from '@/components/ui/button'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { cn } from '@/lib'
+import useActionSecurityStore from '@/store/action-security-store'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
+import ProfileConnectUserModalDisplay from '@/components/elements/modal-displays/profile-connect-user-content'
 import {
     LinkIcon,
-    UserPlusIcon,
     PlugConnectFillIcon,
     UnlinkIcon,
+    UserPlusIcon,
 } from '@/components/icons'
 import UserOrganizationPicker from '@/components/pickers/user-organization-picker'
-import ProfileConnectUserModalDisplay from '@/components/elements/modal-displays/profile-connect-user-content'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib'
-import { useModalState } from '@/hooks/use-modal-state'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import {
     useConnectMemberProfileToUserAccount,
     useDisconnectMemberProfileUserAccount,
 } from '@/hooks/api-hooks/member/use-member-profile-settings'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IMember, IMemberProfile, IUserOrganization } from '@/types'
+
 import UserAccountCardMini from './member-account-card-mini'
 import { MemberUserAccountCreateUpdateFormModal } from './member-account-create-update-form'
-import useActionSecurityStore from '@/store/action-security-store'
 
 interface Props {
     memberProfile: IMemberProfile
@@ -98,7 +100,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 formProps={{
                                     memberProfileId: memberProfile.id,
                                     defaultValues: {
-                                        birthdate: memberProfile.birth_date,
+                                        birthdate: memberProfile.birthdate,
                                         contact_number:
                                             memberProfile.contact_number,
                                         first_name: memberProfile.first_name,

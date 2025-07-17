@@ -1,125 +1,30 @@
 import qs from 'query-string'
 
-import APIService from '../api-service'
+import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
 import { downloadFileService } from '@/helpers'
 
-import {
-    TEntityId,
+import { IMemberOccupation, IMemberOccupationRequest, TEntityId } from '@/types'
+
+const CrudServices = createAPICrudService<
     IMemberOccupation,
-    IMemberOccupationRequest,
-    IMemberOccupationPaginated,
-} from '@/types'
+    IMemberOccupationRequest
+>(`/member-occupation`)
 
-const BASE_ENDPOINT = '/member-occupation'
+const CollectionServices =
+    createAPICollectionService<IMemberOccupation>(`/member-occupation`)
 
-export const getMemberOccupationById = async (id: TEntityId) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}/${id}`,
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IMemberOccupation>(url, {
-        headers: {
-            Authorization: `Bearer YOUR_TOKEN`,
-        },
-    })
-
-    return response.data
-}
-
-export const createMemberOccupation = async (
-    data: IMemberOccupationRequest
-) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}`,
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.post<
-        IMemberOccupationRequest,
-        IMemberOccupation
-    >(url, data)
-    return response.data
-}
-
-export const updateMemberOccupation = async (
-    id: TEntityId,
-    data: IMemberOccupationRequest
-) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}/${id}`,
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.put<
-        IMemberOccupationRequest,
-        IMemberOccupation
-    >(url, data, {
-        headers: {
-            Authorization: `Bearer YOUR_TOKEN`,
-        },
-    })
-    return response.data
-}
-
-export const removeMemberOccupation = async (id: TEntityId) => {
-    const endpoint = `${BASE_ENDPOINT}/${id}`
-    await APIService.delete(endpoint)
-}
-
-export const getAllMemberOccupation = async () => {
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}`,
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IMemberOccupation[]>(url)
-    return response.data
-}
-
-export const getPaginatedMemberOccupation = async ({
-    filters,
-    pagination,
-    sort,
-}: {
-    sort?: string
-    filters?: string
-    pagination?: { pageIndex: number; pageSize: number }
-} = {}) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `${BASE_ENDPOINT}/search`,
-            query: {
-                sort,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IMemberOccupationPaginated>(url)
-    return response.data
-}
-
-export const exportAllMemberOccupation = async () => {
-    const url = `${BASE_ENDPOINT}/export`
+export const exportAll = async () => {
+    const url = `/member-occupation/export`
     await downloadFileService(url, 'all_member_occupations_export.csv')
 }
 
-export const exportAllFilteredMemberOccupation = async (filters?: string) => {
+export const exportAllFiltered = async (filters?: string) => {
     const url = qs.stringifyUrl(
         {
-            url: `${BASE_ENDPOINT}/export-search`,
+            url: `/member-occupation/export-search`,
             query: { filters },
         },
         { skipNull: true }
@@ -127,17 +32,23 @@ export const exportAllFilteredMemberOccupation = async (filters?: string) => {
     await downloadFileService(url, 'filtered_member_occupations_export.csv')
 }
 
-export const exportSelectedMemberOccupation = async (ids: TEntityId[]) => {
+export const exportSelected = async (ids: TEntityId[]) => {
     if (ids.length === 0) {
         throw new Error('No member occupation IDs provided for export.')
     }
     const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-    const url = `${BASE_ENDPOINT}/export-selected?${query}`
+    const url = `/member-occupation/export-selected?${query}`
     await downloadFileService(url, 'selected_member_occupations_export.csv')
 }
 
-export const deleteManyMemberOccupation = async (ids: TEntityId[]) => {
-    const endpoint = `${BASE_ENDPOINT}/bulk-delete`
-    const payload = { ids }
-    await APIService.delete<void>(endpoint, payload)
+export const { allList, search } = CollectionServices
+export const { create, getById, updateById, deleteById, deleteMany } =
+    CrudServices
+
+export default {
+    ...CrudServices,
+    ...CollectionServices,
+    exportAll,
+    exportSelected,
+    exportAllFiltered,
 }

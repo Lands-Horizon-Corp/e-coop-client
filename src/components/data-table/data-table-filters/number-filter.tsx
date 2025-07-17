@@ -1,21 +1,22 @@
 import {
+    IFilterComponentProps,
+    TFilterModes,
+    TSearchFilter,
+    filterModeMap,
+    useFilter,
+} from '@/contexts/filter-context'
+
+import { Button } from '@/components/ui/button'
+import { DebouncedInput } from '@/components/ui/debounced-input'
+import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import NumberRange from './number-range'
-import { Button } from '@/components/ui/button'
-import { DebouncedInput } from '@/components/ui/debounced-input'
 
-import {
-    filterModeMap,
-    IFilterComponentProps,
-    TFilterModes,
-    TSearchFilter,
-    useFilter,
-} from '@/contexts/filter-context'
+import NumberRange from './number-range'
 
 const NumberFilter = <T,>({
     field,

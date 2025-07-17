@@ -1,15 +1,16 @@
+import React, { forwardRef, useCallback, useEffect, useState } from 'react'
+
 import { countries } from 'country-data-list'
+import { CheckIcon, ChevronDown, Globe } from 'lucide-react'
 import { CircleFlag } from 'react-circle-flags'
-import { ChevronDown, CheckIcon, Globe } from 'lucide-react'
-import React, { useCallback, useState, forwardRef, useEffect } from 'react'
 
 import {
     Command,
-    CommandItem,
-    CommandList,
     CommandEmpty,
     CommandGroup,
     CommandInput,
+    CommandItem,
+    CommandList,
 } from '@/components/ui/command'
 import {
     Popover,

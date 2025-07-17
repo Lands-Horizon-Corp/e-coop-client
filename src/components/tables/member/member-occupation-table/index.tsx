@@ -1,25 +1,26 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
+import * as MemberOccupationService from '@/api-service/member-services/member-occupation-service'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/lib'
 import {
-    useReactTable,
     getCoreRowModel,
     getSortedRowModel,
+    useReactTable,
 } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 
 import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
 
-import { cn } from '@/lib'
-import { usePagination } from '@/hooks/use-pagination'
-import useDatableFilterState from '@/hooks/use-filter-state'
-import FilterContext from '@/contexts/filter-context/filter-context'
-import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
-import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
-import * as MemberOccupationService from '@/api-service/member-services/member-occupation-service'
 import { useFilteredPaginatedMemberOccupations } from '@/hooks/api-hooks/member/use-member-occupation'
+import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
+import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
 
 import { TableProps } from '@/types'
 import { IMemberOccupation } from '@/types'
@@ -152,7 +153,7 @@ const MemberOccupationTable = ({
                                 ],
                             }),
                         onDelete: (selectedData) =>
-                            MemberOccupationService.deleteManyMemberOccupation(
+                            MemberOccupationService.deleteMany(
                                 selectedData.map((item) => item.id)
                             ),
                     }}
@@ -162,14 +163,13 @@ const MemberOccupationTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll:
-                            MemberOccupationService.exportAllMemberOccupation,
+                        exportAll: MemberOccupationService.exportAll,
                         exportCurrentPage: (ids) =>
-                            MemberOccupationService.exportSelectedMemberOccupation(
+                            MemberOccupationService.exportSelected(
                                 ids.map((item) => item.id)
                             ),
                         exportSelected: (ids) =>
-                            MemberOccupationService.exportSelectedMemberOccupation(
+                            MemberOccupationService.exportSelected(
                                 ids.map((item) => item.id)
                             ),
                     }}

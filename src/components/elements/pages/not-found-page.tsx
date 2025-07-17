@@ -1,13 +1,13 @@
-import { IoMdArrowBack } from 'react-icons/io'
-import { NotFoundRouteProps, useRouter } from '@tanstack/react-router'
-
-import { Button } from '@/components/ui/button'
-import { SignPostIcon } from '@/components/icons'
-import { FlickeringGrid } from '../backgrounds/flickering-grid'
-
 import { cn } from '@/lib'
+import { NotFoundRouteProps, useRouter } from '@tanstack/react-router'
+import { IoMdArrowBack } from 'react-icons/io'
+
+import { SignPostIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 
 import { IBaseProps } from '@/types'
+
+import { FlickeringGrid } from '../backgrounds/flickering-grid'
 
 interface Props extends IBaseProps, NotFoundRouteProps {}
 

@@ -1,25 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-
-import SignaturePad from 'react-signature-canvas'
-import Webcam from 'react-webcam'
-
-import { Button } from '../ui/button'
+import { toast } from 'sonner'
 
 import { dataUrlToFile } from '@/helpers'
-import { FileWithPath } from 'react-dropzone'
+import { cn } from '@/lib'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useSignature } from '@/store/signature-store'
-
-import {
-    SmallBrushIcon,
-    FullscreenExitIcon,
-    FullscreenIcon,
-    CameraIcon,
-    HardDriveUploadIcon,
-    DrawIcon,
-} from '../icons'
+import { format } from 'date-fns'
+import { FileWithPath } from 'react-dropzone'
 import { MdOutlineFileDownload } from 'react-icons/md'
-
-import { toast } from 'sonner'
+import SignaturePad from 'react-signature-canvas'
+import Webcam from 'react-webcam'
 
 import {
     Tooltip,
@@ -28,13 +18,19 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip'
 
+import {
+    CameraIcon,
+    DrawIcon,
+    FullscreenExitIcon,
+    FullscreenIcon,
+    HardDriveUploadIcon,
+    SmallBrushIcon,
+} from '../icons'
+import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
-import { cn } from '@/lib'
-import UploadSignature from './upload-signature'
-import DrawSignature from './draw-signature'
 import CaptureSignature from './capture-signature'
-import useConfirmModalStore from '@/store/confirm-modal-store'
-import { format } from 'date-fns'
+import DrawSignature from './draw-signature'
+import UploadSignature from './upload-signature'
 
 export interface ISignatureProps {
     className?: string

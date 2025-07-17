@@ -1,5 +1,6 @@
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import React, { useEffect, useState } from 'react'
+
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
 
 type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
     fallbackSrc?: string

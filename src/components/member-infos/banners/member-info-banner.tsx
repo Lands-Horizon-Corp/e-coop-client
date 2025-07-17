@@ -1,17 +1,18 @@
-import { toast } from 'sonner'
 import { useState } from 'react'
-import { useRouter } from '@tanstack/react-router'
-
-import { Button } from '@/components/ui/button'
-import { PencilFillIcon, HeartBreakFillIcon } from '@/components/icons'
-import MemberProfileMiniInfoCard from '@/components/elements/member-profile-settings-banner'
-import ProfileClosureContent from '@/components/elements/modal-displays/profile-closure-content'
-import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/member-profile-close-form'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useRouter } from '@tanstack/react-router'
+
+import MemberProfileMiniInfoCard from '@/components/elements/member-profile-mini-info-card'
+import ProfileClosureContent from '@/components/elements/modal-displays/profile-closure-content'
+import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/member-profile-close-form'
+import { HeartBreakFillIcon, PencilFillIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+
 import { IClassProps } from '@/types'
 import { IMemberProfile } from '@/types'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile

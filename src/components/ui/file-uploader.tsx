@@ -1,6 +1,8 @@
+import { useCallback, useState } from 'react'
+import { toast } from 'sonner'
+
 import { formatBytes } from '@/helpers'
 import { cn } from '@/lib'
-import { useCallback, useState } from 'react'
 import {
     DropzoneOptions,
     FileRejection,
@@ -8,10 +10,10 @@ import {
     useDropzone,
 } from 'react-dropzone'
 import { FaCloudUploadAlt } from 'react-icons/fa'
-import { toast } from 'sonner'
+
+import { HardDriveUploadIcon, ReplaceIcon, TrashIcon } from '../icons'
 import { Button } from './button'
 import FileTypeIcon from './file-type'
-import { HardDriveUploadIcon, ReplaceIcon, TrashIcon } from '../icons'
 import { ScrollArea } from './scroll-area'
 
 interface FileUploaderProps extends DropzoneOptions {

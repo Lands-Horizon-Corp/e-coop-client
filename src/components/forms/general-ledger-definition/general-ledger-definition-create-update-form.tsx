@@ -1,44 +1,44 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { cn } from '@/lib'
+import {
+    GeneralLedgerTypeEnum,
+    IGeneralLedgerDefinition,
+    IGeneralLedgerDefinitionRequest,
+} from '@/types/coop-types/general-ledger-definitions'
+import { Path, useForm } from 'react-hook-form'
+
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { MoneyBagIcon } from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import TextEditor from '@/components/text-editor'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
-import { Form, FormControl } from '@/components/ui/form'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-
-import { MoneyBagIcon } from '@/components/icons'
-
-import { IClassProps, IForm, TEntityId } from '@/types'
-import {
-    GeneralLedgerTypeEnum,
-    IGeneralLedgerDefinition,
-    IGeneralLedgerDefinitionRequest,
-    GeneralLedgerFinancialStatementNodeType,
-} from '@/types/coop-types/general-ledger-definitions'
 
 import {
     GeneralLedgerDefinitionSchema,
     IGeneralLedgerDefinitionFormValues,
 } from '@/validations/general-ledger-definition/general-ledger-definition-schema'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
-import { useCreateGeneralLedgerDefinition } from '@/hooks/api-hooks/general-ledger-definition/use-general-ledger-definition'
+import {
+    useCreateGeneralLedgerDefinition,
+    useUpdateGeneralLedgerDefinition,
+} from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-definition'
 
-import { cn } from '@/lib'
-import { Path, useForm } from 'react-hook-form'
+import { IClassProps, IForm, TEntityId } from '@/types'
 
 interface IGeneralLedgerDefinitionCreateUpdateFormProps
     extends IClassProps,
@@ -48,20 +48,20 @@ interface IGeneralLedgerDefinitionCreateUpdateFormProps
             string,
             IGeneralLedgerDefinitionFormValues
         > {
-    generalLedgerId?: TEntityId
+    generalLedgerDefinitionEntriesId?: TEntityId
+    generalLedgerDefinitionId?: TEntityId
+    generalLedgerAccountsGroupingId?: TEntityId
 }
 const GeneralLedgerDefinitionCreateUpdateForm = ({
     defaultValues,
     className,
     readOnly,
     disabledFields,
-    generalLedgerId,
+    generalLedgerDefinitionEntriesId,
+    generalLedgerAccountsGroupingId,
+    generalLedgerDefinitionId,
+    onSuccess,
 }: IGeneralLedgerDefinitionCreateUpdateFormProps) => {
-    const { currentAuth } = useAuthUserWithOrgBranch()
-
-    const organizationId = currentAuth.user_organization.organization_id
-    const branchId = currentAuth.user_organization.branch_id
-
     const form = useForm<IGeneralLedgerDefinitionFormValues>({
         resolver: zodResolver(GeneralLedgerDefinitionSchema),
         reValidateMode: 'onChange',
@@ -76,20 +76,48 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
 
     const { mutate: CreateGeneralLedgerDefinition, isPending: isCreating } =
         useCreateGeneralLedgerDefinition({
-            onSuccess: () => {
-                form.reset()
-            },
+            onSuccess: onSuccess,
+        })
+    const { mutate: UpdateGeneralLedgerDefinition, isPending: isUpdating } =
+        useUpdateGeneralLedgerDefinition({
+            onSuccess: onSuccess,
         })
 
     // Handle form submission
     const handleSubmit = form.handleSubmit((data) => {
-        const request = {
-            organization_id: organizationId,
-            branch_id: branchId,
-            ...data,
+        if (!generalLedgerAccountsGroupingId) {
+            form.setError('root', {
+                type: 'manual',
+                message: 'Please select a General Ledger Accounts Grouping.',
+            })
+            return
         }
-        CreateGeneralLedgerDefinition(request)
+
+        if (generalLedgerDefinitionId) {
+            const request = {
+                ...data,
+                general_ledger_definition_entries_id:
+                    defaultValues?.general_ledger_definition_entries_id,
+                general_ledger_accounts_grouping_id:
+                    generalLedgerAccountsGroupingId,
+            }
+            UpdateGeneralLedgerDefinition({
+                generalLedgerDefinitionId: generalLedgerDefinitionId,
+                data: request,
+            })
+        } else {
+            const CreateRequest = {
+                ...data,
+                general_ledger_definition_entries_id:
+                    generalLedgerDefinitionEntriesId,
+                general_ledger_accounts_grouping_id:
+                    generalLedgerAccountsGroupingId,
+            }
+            CreateGeneralLedgerDefinition(CreateRequest)
+        }
     })
+
+    const isLoading = isCreating || isUpdating
 
     const isFormChange = form.formState.isDirty
 
@@ -166,12 +194,12 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                             <Input
                                 {...field}
                                 value={field.value ?? ''}
-                                pattern="\d*"
                                 onChange={(e) =>
                                     field.onChange(
                                         parseFloat(e.target.value) || undefined
                                     )
                                 }
+                                type="number"
                                 disabled={isDisabled(field.name)}
                                 placeholder="e.g., 100"
                             />
@@ -193,56 +221,6 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         )}
                     />
                 </div>
-                <FormFieldWrapper
-                    control={form.control}
-                    name="type"
-                    className="col-span-2"
-                    render={({ field }) => (
-                        <RadioGroup
-                            onValueChange={field.onChange}
-                            value={field.value || ''}
-                            disabled={isDisabled(field.name)}
-                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                        >
-                            {Object.values(
-                                GeneralLedgerFinancialStatementNodeType
-                            ).map((type) => (
-                                <GradientBackground gradientOnly>
-                                    <div
-                                        key={type}
-                                        className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
-                                    >
-                                        <RadioGroupItem
-                                            value={type}
-                                            id={`interest-fines-diminishing-${type}`}
-                                            className="order-1 after:absolute after:inset-0"
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="grid gap-2">
-                                                <Label
-                                                    htmlFor={`interest-fines-diminishing-${type}`}
-                                                >
-                                                    {type}
-                                                </Label>
-                                                <p
-                                                    id={`interest-fines-diminishing-${type}-description`}
-                                                    className="text-xs text-muted-foreground"
-                                                >
-                                                    {type ===
-                                                        GeneralLedgerFinancialStatementNodeType.DEFINITION &&
-                                                        'General Ledger Definition'}
-                                                    {type ===
-                                                        GeneralLedgerFinancialStatementNodeType.ACCOUNT &&
-                                                        'General Ledger Account.'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </GradientBackground>
-                            ))}
-                        </RadioGroup>
-                    )}
-                />
                 <FormFieldWrapper
                     control={form.control}
                     name="is_posting"
@@ -346,7 +324,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                     size="sm"
                                     type="submit"
                                     disabled={
-                                        generalLedgerId
+                                        isLoading || generalLedgerDefinitionId
                                             ? !isFormChange
                                             : isCreating
                                     }
@@ -354,7 +332,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                 >
                                     {isCreating ? (
                                         <LoadingSpinner />
-                                    ) : generalLedgerId ? (
+                                    ) : generalLedgerDefinitionId ? (
                                         'Update'
                                     ) : (
                                         'Create'
@@ -383,6 +361,7 @@ export const GeneralLedgerDefinitionCreateUpdateFormModal = ({
             title={title}
             description={description}
             className={cn('', className)}
+            overlayClassName="!bg-transparent !backdrop-blur-sm"
             {...props}
         >
             <GeneralLedgerDefinitionCreateUpdateForm

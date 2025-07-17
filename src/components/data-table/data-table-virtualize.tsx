@@ -1,19 +1,19 @@
 /** This table is virtualized, incase big data needs to be displayed */
-
 import { useRef } from 'react'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { Row, Table, flexRender } from '@tanstack/react-table'
-
-import {
-    Table as UITable,
-    TableHeader,
-    TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-} from '@/components/ui/table'
 
 import { cn } from '@/lib'
+import { Row, Table, flexRender } from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
+
+import {
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+    Table as UITable,
+} from '@/components/ui/table'
+
 import { IClassProps } from '@/types'
 
 interface Props<TData> extends IClassProps {

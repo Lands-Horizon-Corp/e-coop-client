@@ -1,6 +1,6 @@
-import { IOrganization } from './organization'
-import { IBranch, IPaginatedResult } from '../coop-types'
 import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
+import { IBranch, IPaginatedResult, TPermission } from '../coop-types'
+import { IOrganization } from './organization'
 
 // Invitation Code Resource
 export interface IInvitationCode extends ITimeStamps, IAuditable {
@@ -12,6 +12,10 @@ export interface IInvitationCode extends ITimeStamps, IAuditable {
     expiration_date?: string
     max_use: number
     current_use: number
+
+    permission_name: string
+    permission_description: string
+    permissions: TPermission[]
 
     description: string
     branch: IBranch
@@ -27,6 +31,10 @@ export interface IInvitationCodeRequest {
     expiration_date?: string
     max_use: number
     current_use?: number
+
+    permission_name: string
+    permission_description: string
+    permissions: TPermission[]
 
     description: string
 }

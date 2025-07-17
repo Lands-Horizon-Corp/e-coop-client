@@ -1,31 +1,34 @@
 import * as React from 'react'
+
 import { Check } from 'lucide-react'
 
+import { ChevronDownIcon, PlusIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from '@/components/ui/command'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-    Command,
-    CommandItem,
-    CommandList,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-} from '@/components/ui/command'
+
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { ChevronDownIcon, PlusIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+
+import { useMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
+
+import { IMemberClassification, TEntityId } from '@/types'
+
 import {
     IMemberClassificationCreateUpdateFormProps,
     MemberClassificationCreateUpdateFormModal,
 } from '../forms/member-forms/member-classification-create-update-form'
-
-import { useMemberClassifications } from '@/hooks/api-hooks/member/use-member-classification'
-
-import { TEntityId, IMemberClassification } from '@/types'
 
 export interface IMemberClassificationComboboxCreateProps
     extends Pick<

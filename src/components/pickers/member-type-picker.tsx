@@ -1,20 +1,22 @@
-import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+
+import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
+import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PaginationState } from '@tanstack/react-table'
 
-import GenericPicker from './generic-picker'
-import { Button } from '@/components/ui/button'
 import { ChevronDownIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import { Button } from '@/components/ui/button'
 
-import useFilterState from '@/hooks/use-filter-state'
-import { abbreviateUUID } from '@/utils/formatting-utils'
-import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
-
-import { useShortcut } from '../use-shorcuts'
-import { IMemberType, TEntityId } from '@/types'
-import LoadingSpinner from '../spinners/loading-spinner'
 import { useFilteredPaginatedMemberTypes } from '@/hooks/api-hooks/member/use-member-type'
+import useFilterState from '@/hooks/use-filter-state'
+
+import { IMemberType, TEntityId } from '@/types'
+
+import LoadingSpinner from '../spinners/loading-spinner'
+import { useShortcut } from '../use-shorcuts'
+import GenericPicker from './generic-picker'
 
 interface Props {
     value?: TEntityId

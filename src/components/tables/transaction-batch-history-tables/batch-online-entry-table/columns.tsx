@@ -1,17 +1,18 @@
 import { ReactNode } from 'react'
+
+import { IOnlineEntry } from '@/types/coop-types/online-entry'
+import { formatNumber, toReadableDateTime } from '@/utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import ImageNameDisplay from '@/components/elements/image-name-display'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
+import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import ImageNameDisplay from '@/components/elements/image-name-display'
 
-import { formatNumber, toReadableDateTime } from '@/utils'
-
-import { IOnlineEntry } from '@/types/coop-types/online-entry'
+import { createUpdateColumns } from '../../common-columns'
 
 export const onlineEntryGlobalSearchTargets: IGlobalSearchTargets<IOnlineEntry>[] =
     [
@@ -249,6 +250,8 @@ const BatchOnlineEntryTableColumns = (
         size: 180,
         minSize: 150,
     },
+
+    ...createUpdateColumns<IOnlineEntry>(),
 ]
 
 export default BatchOnlineEntryTableColumns

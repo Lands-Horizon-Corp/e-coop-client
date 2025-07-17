@@ -1,23 +1,22 @@
-import { AxiosError } from 'axios'
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { ActionSecurityProvider } from '@/providers/action-security-provider'
+import ConnectionProvider from '@/providers/connection-provider'
+import { useAuthStore } from '@/store/user-auth-store'
+import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { AxiosError } from 'axios'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import { Toaster } from '@/components/ui/sonner'
 import CookieConsent from '@/components/cookie-consent'
-import ConfirmModal from '@/components/modals/confirm-modal'
 import ErrorPage from '@/components/elements/pages/error-page'
 import NotFoundPage from '@/components/elements/pages/not-found-page'
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
-
-import { useNatsConnect } from '@/hooks/use-pubsub'
-import { useAuthStore } from '@/store/user-auth-store'
-import { useAuthContext } from '@/hooks/api-hooks/use-auth'
-import ConnectionProvider from '@/providers/connection-provider'
-import { ActionSecurityProvider } from '@/providers/action-security-provider'
-
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import ConfirmModal from '@/components/modals/confirm-modal'
 import InfoModal from '@/components/modals/info-modal'
+import { Toaster } from '@/components/ui/sonner'
+
+import { useAuthContext } from '@/hooks/api-hooks/use-auth'
+import { useNatsConnect } from '@/hooks/use-pubsub'
 
 export const Route = createRootRoute({
     component: RootLayout,

@@ -1,8 +1,9 @@
+import { cn } from '@/lib'
+
 import { ImageIcon } from '@/components/icons'
 
-import { cn } from '@/lib'
-import { IDropAreaProps } from './type'
 import DropHoverOverlay from '../drop-hover-overlay'
+import { IDropAreaProps } from './type'
 
 const DefaultDropArea = ({
     className,

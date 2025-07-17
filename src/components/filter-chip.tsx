@@ -1,8 +1,8 @@
 import { IconType } from 'react-icons/lib'
 
+import ActionTooltip from '@/components/action-tooltip'
 import { XIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
-import ActionTooltip from '@/components/action-tooltip'
 
 interface Props {
     label: string
@@ -22,7 +22,7 @@ const FilterChip = ({
             <Badge
                 onClick={onClick}
                 variant="secondary"
-                className="group relative cursor-pointer pr-6 text-xs font-normal"
+                className="group relative cursor-pointer pr-6 shrink-0 w-fit text-xs font-normal"
             >
                 {label}
                 <span className="absolute right-2 top-1/2 block -translate-y-1/2 rounded-full group-hover:bg-background">
