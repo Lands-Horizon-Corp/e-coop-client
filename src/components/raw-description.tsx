@@ -1,5 +1,5 @@
 import { cn } from '@/lib'
-import DOMPurify from 'dompurify'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 import { IClassProps } from '@/types'
 
@@ -12,7 +12,7 @@ const RawDescription = ({ className, content }: Props) => {
     return (
         <div
             dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(content),
+                __html: sanitizeHtml(content),
             }}
             className={cn('', className)}
         />

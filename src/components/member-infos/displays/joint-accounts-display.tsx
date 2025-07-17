@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 import { HandShakeHeartIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -114,7 +114,7 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
                             <AccordionContent className="prose-h1: prose w-full !max-w-full rounded-xl p-4 text-sm text-foreground/70 dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                                 <div
                                     dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
+                                        __html: sanitizeHtml(
                                             jointAcc.description &&
                                                 jointAcc.description.length > 0
                                                 ? jointAcc.description

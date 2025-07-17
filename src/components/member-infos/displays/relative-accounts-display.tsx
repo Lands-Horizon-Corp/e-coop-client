@@ -1,5 +1,5 @@
 import { toReadableDate } from '@/utils'
-import DOMPurify from 'dompurify'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 import CopyTextButton from '@/components/copy-text-button'
 import { FamilyIcon } from '@/components/icons'
@@ -116,7 +116,7 @@ const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {
                             <AccordionContent className="prose-h1: prose w-full !max-w-full rounded-xl p-4 text-sm text-foreground/70 dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                                 <div
                                     dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
+                                        __html: sanitizeHtml(
                                             relativeAcc.description &&
                                                 relativeAcc.description.length >
                                                     0
