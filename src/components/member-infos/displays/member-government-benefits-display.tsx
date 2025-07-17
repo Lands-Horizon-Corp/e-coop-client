@@ -1,6 +1,5 @@
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
-import DOMPurify from 'dompurify'
 
 import ImageDisplay from '@/components/image-display'
 import {
@@ -13,6 +12,7 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IClassProps } from '@/types'
 import { IMemberGovernmentBenefit } from '@/types'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 interface IGovernmentCardDisplay
     extends IClassProps,
@@ -92,7 +92,7 @@ export const GovernmentCardDisplay = ({
                     <AccordionContent className="w-full !max-w-full rounded-xl bg-popover p-4 text-sm text-foreground/70 prose-h1:prose dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                         <div
                             dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(
+                                __html: sanitizeHtml(
                                     description ?? '<i>No Description</i>'
                                 ),
                             }}

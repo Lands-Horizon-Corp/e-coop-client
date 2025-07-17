@@ -1,5 +1,4 @@
 import { toReadableDate } from '@/utils'
-import DOMPurify from 'dompurify'
 
 import CopyTextButton from '@/components/copy-text-button'
 import { UsersAddIcon } from '@/components/icons'
@@ -15,6 +14,7 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import { IMemberRecruitedMembers } from '@/types'
 
 import SectionTitle from '../section-title'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 interface Props {
     recruits?: IMemberRecruitedMembers[]
@@ -121,7 +121,7 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
                             <AccordionContent className="prose-h1: prose w-full !max-w-full rounded-xl p-4 text-sm text-foreground/70 dark:prose-invert prose-p:text-foreground/80 prose-strong:text-foreground sm:text-sm">
                                 <div
                                     dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
+                                        __html: sanitizeHtml(
                                             recruit.description &&
                                                 recruit.description.length > 0
                                                 ? recruit.description
