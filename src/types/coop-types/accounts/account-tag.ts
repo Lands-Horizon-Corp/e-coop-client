@@ -1,5 +1,6 @@
 import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
+import { IPaginatedResult } from '../paginated-result'
 import { TTagCategory } from '../tag-template'
 
 export interface IAccountTag extends IBaseEntityMeta {
@@ -20,3 +21,5 @@ export interface IAccounTagRequest {
     color?: string
     icon?: string
 }
+
+export interface IAccountTagPaginated extends IPaginatedResult<IAccountTag> {}

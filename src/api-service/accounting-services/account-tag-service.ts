@@ -7,7 +7,7 @@ import {
 import { IAccounTagRequest, IAccountTag } from '@/types'
 
 const CrudServices = createAPICrudService<IAccountTag, IAccounTagRequest>(
-    '/bank'
+    '/account-tag'
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =
