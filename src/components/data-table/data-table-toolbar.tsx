@@ -17,6 +17,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { IClassProps } from '@/types'
 
+import DatatableColumnVisibility from './data-table-actions/data-table-column-visibility'
 import DataTableCreateAction, {
     IDataTableCreateActionProps,
 } from './data-table-actions/data-table-create-action'
@@ -97,6 +98,10 @@ const DataTableToolbar = <TData,>({
                             }}
                         />
                     )}
+                    <DatatableColumnVisibility
+                        table={table}
+                        className="rounded-none border first:rounded-l-md last:rounded-r-md"
+                    />
                     <DataTableOptionsMenu
                         table={table}
                         scrollOption={scrollableProps}

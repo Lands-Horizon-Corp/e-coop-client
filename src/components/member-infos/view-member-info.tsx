@@ -24,7 +24,7 @@ import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 import MemberInfoBanner from './banners/member-info-banner'
-import MemberAccountSummary from './member-account-summary'
+import MemberAccountsLoans from './member-accounts-loans'
 import MemberFinancialInfo from './member-financial-info'
 import MemberMembershipInfo from './member-general-membership-info'
 import MemberGovernmentBenefits from './member-government-benefits-info'
@@ -49,24 +49,11 @@ const memberInfoTabs: {
     ) => ReactNode
 }[] = [
     {
-        value: 'accounts-summary',
-        title: 'Accounts Summary',
+        value: 'accounts-loans',
+        title: 'Accounts & Loans',
         Icon: BankIcon,
         Component: (props) => (
-            <MemberAccountSummary
-                memberProfileId={props.profileId}
-                {...props}
-            />
-        ),
-    },
-    {
-        value: 'loans-info',
-        title: 'Loans Info',
-        Icon: BankIcon,
-        Component: () => (
-            <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
-                <p className="text-sm">Loans</p>
-            </div>
+            <MemberAccountsLoans memberProfileId={props.profileId} {...props} />
         ),
     },
     {
@@ -138,7 +125,7 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
                 </>
             )}
             <Tabs
-                defaultValue="accounts-summary"
+                defaultValue="accounts-loans"
                 className="mt-2 flex-1 flex-col"
             >
                 <ScrollArea>

@@ -12,7 +12,6 @@ import {
 
 import { IClassProps } from '@/types'
 
-import ColumnVisibilityOption from './column-visibility-option'
 import DataTableFilterLogicOption, {
     IDataTableFilterLogicOptionProps,
 } from './filter-logic-option'
@@ -27,7 +26,6 @@ interface Props<T> extends IClassProps {
 }
 
 const DataTableOptionsMenu = <T,>({
-    table,
     className,
     scrollOption,
     filterLogicOption,
@@ -47,7 +45,6 @@ const DataTableOptionsMenu = <T,>({
                 align="end"
                 className="ecoop-scroll max-h-[70vh] min-w-[180px] overflow-y-scroll [&::-webkit-scrollbar]:w-[3px]"
             >
-                <ColumnVisibilityOption table={table} />
                 {scrollOption && (
                     <>
                         <DropdownMenuSeparator />

@@ -1,3 +1,4 @@
+import { RowSpacingIcon } from '@/components/icons'
 import {
     DropdownMenuGroup,
     DropdownMenuLabel,
@@ -17,7 +18,9 @@ const DataTableScrollOption = ({
 }: IDataTableScrollableOptionProps) => {
     return (
         <DropdownMenuGroup>
-            <DropdownMenuLabel>Table Display</DropdownMenuLabel>
+            <DropdownMenuLabel className="flex items-center justify-between">
+                Table Sizing <RowSpacingIcon className="inline" />
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
                 value={isScrollable ? 'true' : 'false'}

@@ -14,16 +14,13 @@ import { Button } from '@/components/ui/button'
 import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
 import useFilterState from '@/hooks/use-filter-state'
 
-import { TEntityId } from '@/types'
+import { IPickerBaseProps, TEntityId } from '@/types'
 
 import { useShortcut } from '../use-shorcuts'
 import GenericPicker from './generic-picker'
 
-interface Props {
+interface Props extends IPickerBaseProps<IAccount> {
     value?: TEntityId
-    disabled?: boolean
-    placeholder?: string
-    onSelect?: (selectedAccount: IAccount) => void
     allowShorcutCommand?: boolean
     modalOnly?: boolean
     open?: boolean
@@ -34,6 +31,7 @@ interface Props {
 const AccountPicker = ({
     value,
     disabled,
+    selectedData,
     allowShorcutCommand = false,
     placeholder,
     onSelect,
@@ -66,7 +64,8 @@ const AccountPicker = ({
             showMessage: false,
         })
 
-    const selectedAccount = data.data.find((account) => account.id === value)
+    const selectedAccount =
+        selectedData ?? data.data.find((account) => account.id === value)
 
     useShortcut(
         'Enter',

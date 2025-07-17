@@ -1,3 +1,4 @@
+import { FunnelIcon } from '@/components/icons'
 import {
     DropdownMenuGroup,
     DropdownMenuLabel,
@@ -19,7 +20,10 @@ const DataTableFilterLogicOption = ({
 }: IDataTableFilterLogicOptionProps) => {
     return (
         <DropdownMenuGroup>
-            <DropdownMenuLabel>Filter Logic</DropdownMenuLabel>
+            <DropdownMenuLabel className="flex justify-between items-center">
+                Filter Logic
+                <FunnelIcon />
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
                 value={filterLogic}

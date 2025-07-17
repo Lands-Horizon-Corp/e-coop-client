@@ -88,7 +88,7 @@ export const MemberAccountingLedgerTotal = ({
     )
 }
 
-const MemberAccountingLedger = ({ memberProfileId }: Props) => {
+const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
     const [focused, setFocused] = useState<
         | {
               memberProfileId: TEntityId
@@ -99,7 +99,7 @@ const MemberAccountingLedger = ({ memberProfileId }: Props) => {
     >()
 
     return (
-        <div className="flex flex-col gap-y-4 h-[80vh]">
+        <div className={cn('flex flex-col gap-y-4 h-[80vh]', className)}>
             {focused !== undefined && (
                 <Modal
                     open={focused !== undefined}
