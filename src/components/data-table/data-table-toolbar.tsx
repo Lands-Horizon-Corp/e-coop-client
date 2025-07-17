@@ -40,6 +40,7 @@ export interface IDataTableToolbarProps<TData = unknown> extends IClassProps {
     hideDeleteButton?: boolean
     hideCreateButton?: boolean
     hideExportButton?: boolean
+    otherActionLeft?: ReactNode
 }
 
 const DataTableToolbar = <TData,>({
@@ -56,6 +57,7 @@ const DataTableToolbar = <TData,>({
     exportActionProps,
     createActionProps,
     refreshActionProps,
+    otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
     return (
         <div className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto">
@@ -64,6 +66,7 @@ const DataTableToolbar = <TData,>({
                     <DataTableGlobalSearch {...globalSearchProps} />
                 ) : null}
                 <DataTableActiveFilters />
+                {otherActionLeft}
             </div>
             <div className="flex items-center gap-x-2">
                 <div className="flex items-center">

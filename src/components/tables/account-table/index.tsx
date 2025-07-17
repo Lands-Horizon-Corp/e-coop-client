@@ -55,6 +55,7 @@ const AccountsTable = ({
     actionComponent,
 }: AccountsTableProps) => {
     const queryClient = useQueryClient()
+
     const { pagination, setPagination } = usePagination()
     const { tableSorting, setTableSorting, sortingState } =
         useDataTableSorting()
