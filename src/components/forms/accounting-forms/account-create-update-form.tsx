@@ -62,6 +62,7 @@ import {
     useCreateAccount,
     useUpdateAccount,
 } from '@/hooks/api-hooks/use-account'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -93,7 +94,7 @@ const AccountCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            type: AccountTypeEnum.Deposit,
+            // type: AccountTypeEnum.Deposit,
             ...defaultValues,
         },
     })
@@ -132,6 +133,10 @@ const AccountCreateUpdateForm = ({
 
     const errorMessage = createAccountError || updateAccountError
 
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
+
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit} className={cn('w-full', className)}>
@@ -150,6 +155,7 @@ const AccountCreateUpdateForm = ({
                                 <Input
                                     {...field}
                                     id={field.name}
+                                    value={field.value ?? ''}
                                     placeholder="Account Name"
                                     autoComplete="off"
                                 />

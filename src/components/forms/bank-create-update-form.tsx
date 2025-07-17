@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils'
 import { entityIdSchema } from '@/validations/common'
 
 import { useCreateBank, useUpdateBank } from '@/hooks/api-hooks/use-bank'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IBank,
@@ -81,6 +82,10 @@ const BankCreateUpdateForm = ({
 
     const isDisabled = (field: Path<TBankFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

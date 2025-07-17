@@ -50,6 +50,7 @@ import {
 
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { useCreateOrganization } from '@/hooks/api-hooks/use-organization'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { ICreateOrganizationResponse, TEntityId } from '@/types'
@@ -195,6 +196,10 @@ const OrganizationForm = () => {
         form.watch('description') === ''
             ? 'This is sample description for your banner'
             : form.watch('description')
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

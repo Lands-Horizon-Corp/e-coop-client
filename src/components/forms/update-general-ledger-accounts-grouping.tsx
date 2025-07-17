@@ -15,6 +15,7 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 import { useUpdateGeneralLedgerAccountsGrouping } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-accounts-grouping'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IClassProps,
@@ -99,6 +100,10 @@ const GLAccountsGroupingUpdateForm = ({
 
     const isDisabled = (field: Path<TGLGroupingFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>
