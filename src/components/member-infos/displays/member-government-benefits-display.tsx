@@ -1,5 +1,6 @@
 import { cn } from '@/lib'
 import { toReadableDate } from '@/utils'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 import ImageDisplay from '@/components/image-display'
 import {
@@ -12,7 +13,6 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IClassProps } from '@/types'
 import { IMemberGovernmentBenefit } from '@/types'
-import { sanitizeHtml } from '@/utils/sanitizer'
 
 interface IGovernmentCardDisplay
     extends IClassProps,
