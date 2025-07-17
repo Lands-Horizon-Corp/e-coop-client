@@ -2,17 +2,12 @@ import {
     createAPICollectionService,
     createAPICrudService,
 } from '@/factory/api-factory-service'
-import {
-    ILoanTransaction,
-    ILoanTransactionRequest,
-} from '@/types/coop-types/loan-types/loan-transaction'
 
-import { ILoanPurpose } from '@/types'
+import { ILoanPurpose, ILoanPurposeRequest } from '@/types'
 
-const CrudServices = createAPICrudService<
-    ILoanTransaction,
-    ILoanTransactionRequest
->('/loan-transaction')
+const CrudServices = createAPICrudService<ILoanPurpose, ILoanPurposeRequest>(
+    '/loan-purpose'
+)
 const CollectionServices =
     createAPICollectionService<ILoanPurpose>('/loan-purpose')
 
