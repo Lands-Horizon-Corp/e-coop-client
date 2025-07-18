@@ -112,7 +112,7 @@ const FinancialStatementDefinitionActions = ({
                 <Button
                     variant="outline"
                     size={'sm'}
-                    className="border-0 !px-0 text-xl"
+                    className="border-0 bg-transparent hover:bg-white dark:hover:bg-secondary/50 !px-0 text-xl"
                 >
                     <DotsHorizontalIcon className="h-5 w-5 rotate-90" />
                 </Button>

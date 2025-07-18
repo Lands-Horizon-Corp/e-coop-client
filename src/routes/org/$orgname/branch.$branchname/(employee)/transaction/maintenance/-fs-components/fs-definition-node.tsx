@@ -147,7 +147,7 @@ const FinancialStatementDefinitionNode = ({
             ref={setNodeRef}
             style={style}
             {...attributes}
-            className={` ${isFirstLevel ? 'bg-background border-0 py-5 pl-0 rounded-lg mt-1' : 'pt-1.5 pb-3  border bg-black pl-0 rounded-lg mt-2 px-0'} ${isDragging ? 'rounded-lg border-2 border-primary ' : ''} `}
+            className={` ${isFirstLevel ? 'dark:border-0 py-5 pl-0 rounded-lg mt-1 border-[1px] border-gray-400/30 dark:bg-background shadow-sm' : 'pt-1.5 pb-3  border-[1px] border-gray-500/40 bg-gray-100 dark:bg-black pl-0 rounded-lg mt-2 px-0'} ${isDragging ? 'rounded-lg border-2 border-primary ' : ''} `}
         >
             <div
                 className={`flex h-fit cursor-pointer items-center px-3 `}

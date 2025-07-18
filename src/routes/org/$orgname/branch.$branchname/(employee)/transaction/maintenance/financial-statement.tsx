@@ -201,7 +201,7 @@ function RouteComponent() {
                         <AccordionItem
                             key={grouping.id}
                             value={grouping.id}
-                            className="w-full bg-sidebar/50 p-5 rounded-xl"
+                            className="w-full shadow-md bg-sidebar/50 p-5 rounded-xl"
                         >
                             <AccordionTrigger
                                 onClick={() => handleAccountTrigger(grouping)}
@@ -209,11 +209,13 @@ function RouteComponent() {
                             >
                                 <div className="flex items-center gap-2">
                                     <DropdownMenu>
-                                        <DropdownMenuTrigger>
-                                            <SettingsIcon
-                                                size={30}
-                                                className="hover:text-accent-foreground cursor-pointer"
-                                            />
+                                        <DropdownMenuTrigger asChild>
+                                            <span className="cursor-pointer">
+                                                <SettingsIcon
+                                                    size={30}
+                                                    className="hover:text-accent-foreground cursor-pointer"
+                                                />
+                                            </span>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             <DropdownMenuItem
