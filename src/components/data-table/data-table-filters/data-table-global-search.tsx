@@ -20,6 +20,7 @@ export interface IGlobalSearchTargets<T> {
 
 export interface IGlobalSearchProps<T> {
     placeHolder?: string
+    defaultVisible?: boolean
     defaultMode: TFilterModes
     targets: IGlobalSearchTargets<T>[]
 }
@@ -31,7 +32,7 @@ const DataTableGlobalSearch = <T,>({
     defaultMode,
     ...otherProps
 }: IGlobalSearchProps<T>) => {
-    const [visible, setVisible] = useState(true)
+    const [visible, setVisible] = useState(otherProps.defaultVisible ?? true)
     const { filters, setFilter, bulkSetFilter, setFilterLogic } = useFilter<
         unknown,
         KeysOfOrString<T>

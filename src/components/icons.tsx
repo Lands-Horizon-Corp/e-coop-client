@@ -91,6 +91,7 @@ import {
     FaIdCard as IdCardIcon,
     FaLandmarkFlag as LandmarkIcon,
     FaMoneyCheck as MoneyCheckIcon,
+    FaPercent as PercentIcon,
     FaChartPie as PieChartIcon,
     FaPlay as PlayIcon,
     FaSchool as SchoolIcon,
@@ -109,6 +110,7 @@ import {
 import {
     GiTreeBranch as BranchIcon,
     GiMoneyStack as GiMoneyStackIcon,
+    GiPayMoney as HandDropCoinsIcon,
     GiTakeMyMoney as MoneyIcon,
     GiMoneyStack as MoneyStackIcon,
     GiVillage as VillageIcon,
@@ -124,13 +126,11 @@ import {
     GoOrganization as OrganizationIcon,
 } from 'react-icons/go'
 import {
+    GrMoney as CoinsStackIcon,
     GrView as EyeViewIcon,
+    GrVmMaintenance as MaintenanceIcon,
     GrFormNextLink as NextIcon,
     GrPowerReset as PowerResetIcon,
-} from 'react-icons/gr'
-import {
-    GrMoney as CoinsStackIcon,
-    GrVmMaintenance as MaintenanceIcon,
 } from 'react-icons/gr'
 import {
     HiAdjustmentsHorizontal as AdjustIcon,
@@ -294,7 +294,10 @@ import {
     RxFontItalic as ToolbarItalicIcon,
 } from 'react-icons/rx'
 import { RxDotFilled as DotMediumIcon } from 'react-icons/rx'
-import { SiGitbook as SigiBookIcon } from 'react-icons/si'
+import {
+    SiBookstack as BookStackIcon,
+    SiGitbook as SigiBookIcon,
+} from 'react-icons/si'
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 import {
     TbBlockquote as BlockQuoteIcon,
@@ -419,10 +422,11 @@ export {
     PushPinIcon,
     EyeNoneIcon,
     UserTagIcon,
-    UserPlusIcon,
+    PercentIcon,
     FaCheckIcon,
     FaTimesIcon,
     ArrowUpLong,
+    UserPlusIcon,
     CollapseIcon,
     LandmarkIcon,
     SignPostIcon,
@@ -453,6 +457,7 @@ export {
     CheckFillIcon,
     HandCoinsIcon,
     MapMarkedIcon,
+    BookStackIcon,
     CodeBlockIcon,
     ArrowLeftIcon,
     BriefCaseIcon,
@@ -558,6 +563,7 @@ export {
     UserClockFillIcon,
     CommentDashedIcon,
     ArrowChevronRight,
+    HandDropCoinsIcon,
     ColumnOutlineIcon,
     DotsHorizontalIcon,
     FinanceReportsIcon,
@@ -681,6 +687,7 @@ export const IconMap: Record<TIcon, IconType> = {
     Sidebar: SidebarIcon,
     Village: VillageIcon,
     Reports: ReportsIcon,
+    Percent: PercentIcon,
     'Image 2': Image2Icon,
     'ID Card': IdCardIcon,
     'Zoom In': ZoomInIcon,
@@ -732,6 +739,7 @@ export const IconMap: Record<TIcon, IconType> = {
     References: ReferencesIcon,
     Navigation: NavigationIcon,
     Fullscreen: FullscreenIcon,
+    'Book Stack': BookStackIcon,
     'Code SandBox': CodeSandBox,
     'House Lock': HouseLockIcon,
     'Check Fill': CheckFillIcon,
@@ -824,9 +832,10 @@ export const IconMap: Record<TIcon, IconType> = {
     'Loading Circle': LoadingCircleIcon,
     'Pencil Outline': PencilOutlineIcon,
     'Comment Dashed': CommentDashedIcon,
+    'Column Outline': ColumnOutlineIcon,
     'User Clock Fill': UserClockFillIcon,
     'Video File Fill': VideoFileFillIcon,
-    'Column Outline': ColumnOutlineIcon,
+    'Hand Drop Coins': HandDropCoinsIcon,
     'Music File Fill': MusicFileFillIcon,
     'Image File Fill': ImageFileFillIcon,
     'Excel File Fill': ExcelFileFillIcon,

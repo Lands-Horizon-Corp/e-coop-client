@@ -12,7 +12,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IClassProps, IEmployee, TTransactionBatchFullorMin } from '@/types'
 
-import { LayersSharpDotIcon } from '../../icons'
+import { LayersIcon, LayersSharpDotIcon } from '../../icons'
 import TransactionBatch from '../../transaction-batch'
 import { Button } from '../../ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
@@ -55,7 +55,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                     className="group rounded-full text-foreground/70"
                     onClick={() => modalState.onOpenChange((prev) => !prev)}
                 >
-                    <LayersSharpDotIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
+                    <LayersIcon className="mr-2 duration-300 group-hover:text-inherit" />
                     Start Batch
                 </Button>
                 <TransactionBatchCreateFormModal
