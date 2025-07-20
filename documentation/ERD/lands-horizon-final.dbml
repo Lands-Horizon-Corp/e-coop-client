@@ -3067,7 +3067,7 @@ enum computation_type {
   "Diminishing Quarterly"
 }
 
-// 🔑
+// 🔑 ✅
 Table computation_sheet {
   id varchar(49) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3161,7 +3161,7 @@ Ref: interest_maturity.organization_id > organization.id [delete: cascade, updat
 Ref: interest_maturity.branch_id > branch.id [delete:cascade, update:cascade]
 Ref: interest_maturity.account_id > account.id [delete:cascade, update:cascade]
 
-// 🔑
+// 🔑 ✅
 Table include_negative_account {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
@@ -3242,7 +3242,7 @@ Ref: automatic_loan_deduction.computation_sheet_id > computation_sheet.id [delet
 Ref: automatic_loan_deduction.account_id - account.id [delete: restrict, update: cascade]
 Ref: automatic_loan_deduction.link_account_id - account.id [delete:restrict, update:cascade]
 
-// 🔑
+// 🔑 ✅
 Table browse_exclude_include_accounts {
   id varchar(50) [primary key, unique, default: `uuid_generate_v4()`]
 
