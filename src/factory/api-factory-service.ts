@@ -58,8 +58,19 @@ export const createAPICollectionService = <
     baseEndpoint: string
 ) => {
     return {
-        async allList() {
-            const response = await APIService.get<TData[]>(`${baseEndpoint}/`)
+        async allList({
+            base = baseEndpoint,
+            filter,
+            sort,
+        }: { base?: string; filter?: string; sort?: string } & {} = {}) {
+            const url = qs.stringifyUrl({
+                url: `${base}/`,
+                query: {
+                    filter,
+                    sort,
+                },
+            })
+            const response = await APIService.get<TData[]>(url)
             return response.data
         },
         async search({
