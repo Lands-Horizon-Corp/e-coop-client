@@ -47,7 +47,7 @@ export const useDeleteLoanStatus = createMutationHook<void, string, TEntityId>(
     (args) => deleteMutationInvalidationFn('loan-status', args)
 )
 
-export const useBillsAndCoins = ({
+export const useLoanStatus = ({
     enabled,
     showMessage = true,
 }: IAPIHook<ILoanStatus[], string> & IQueryProps = {}) => {

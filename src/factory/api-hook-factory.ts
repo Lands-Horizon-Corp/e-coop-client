@@ -120,12 +120,7 @@ export const createMutationInvalidateFn = <TData extends { id: TEntityId }>(
 
     queryClient.setQueryData<TData[]>([rootKey, 'all'], (oldDatas = []) => {
         const oldDatasCopy = [...oldDatas]
-        const index = oldDatas.findIndex((val) => val.id === resultData.id)
-
-        if (index === -1) return oldDatas
-
-        oldDatasCopy.splice(index, 1, resultData)
-        return oldDatasCopy
+        return [resultData, ...oldDatasCopy]
     })
 
     queryClient.invalidateQueries({
@@ -176,8 +171,16 @@ export const deleteMutationInvalidationFn = <
     queryClient.removeQueries({
         queryKey: [rootKey, 'loader', payload],
     })
+    queryClient.setQueryData([rootKey, payload], undefined)
 
-    queryClient.removeQueries({ queryKey: [rootKey, payload] })
+    queryClient.invalidateQueries({ queryKey: [rootKey, payload], exact: true })
+    queryClient.removeQueries({ queryKey: [rootKey, payload], exact: true })
+
+    queryClient.setQueryData<TExistingQueryData | null>(
+        [rootKey, payload],
+        () => null
+    )
+
     queryClient.setQueryData<TExistingQueryData[]>(
         [rootKey, 'all'],
         (oldDatas = []) => oldDatas.filter((val) => val.id !== payload)
