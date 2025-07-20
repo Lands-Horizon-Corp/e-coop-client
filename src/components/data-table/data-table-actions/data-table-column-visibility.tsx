@@ -3,11 +3,11 @@ import { useCallback } from 'react'
 import { cn } from '@/lib'
 import { Table } from '@tanstack/react-table'
 
-import { ColumnOutlineIcon, EyeIcon } from '@/components/icons'
+import { ColumnOutlineIcon, EyeIcon, EyeNoneIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
+    // DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -56,6 +56,15 @@ const DatatableColumnVisibility = <TData,>({
                         Toggle columns <ColumnOutlineIcon />
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                        disabled={hiddenColumnsLength <= 0}
+                        onClick={onShowAllColumns}
+                        onSelect={(e) => e.preventDefault()}
+                    >
+                        <EyeIcon className="mr-2" />
+                        Show All
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     {allColumns
                         .filter(
                             (column) =>
@@ -64,31 +73,35 @@ const DatatableColumnVisibility = <TData,>({
                         )
                         .map((column) => {
                             return (
-                                <DropdownMenuCheckboxItem
+                                // <DropdownMenuCheckboxItem
+                                //     key={column.id}
+                                //     className="capitalize"
+                                //     checked={column.getIsVisible()}
+                                //     onCheckedChange={(value) =>
+                                //         column.toggleVisibility(!!value)
+                                //     }
+                                // >
+                                //     {column.id}
+                                // </DropdownMenuCheckboxItem>
+                                <DropdownMenuItem
                                     key={column.id}
-                                    className="capitalize"
+                                    onClick={() => column.toggleVisibility()}
                                     onSelect={(e) => e.preventDefault()}
-                                    checked={column.getIsVisible()}
-                                    onCheckedChange={(value) =>
-                                        column.toggleVisibility(!!value)
-                                    }
+                                    className={cn(
+                                        'text-foreground',
+                                        column.getIsVisible() === false &&
+                                            ' text-muted-foreground/70'
+                                    )}
                                 >
+                                    {column.getIsVisible() ? (
+                                        <EyeIcon className="mr-2" />
+                                    ) : (
+                                        <EyeNoneIcon className="mr-2" />
+                                    )}
                                     {column.id}
-                                </DropdownMenuCheckboxItem>
+                                </DropdownMenuItem>
                             )
                         })}
-                    {hiddenColumnsLength > 0 && (
-                        <>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={onShowAllColumns}
-                                onSelect={(e) => e.preventDefault()}
-                            >
-                                <EyeIcon className="mr-2" />
-                                Show All
-                            </DropdownMenuItem>
-                        </>
-                    )}
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
