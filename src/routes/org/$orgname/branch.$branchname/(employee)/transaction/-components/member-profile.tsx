@@ -77,7 +77,7 @@ const MemberProfileTransactionView = ({
                                 </HoverCardTrigger>
                                 <HoverCardContent className="border-0 bg-transparent p-0">
                                     <HoveruserInfo
-                                        userId={memberInfo.user_id}
+                                        userId={memberInfo.user.id}
                                         defaultValue={memberInfo.user}
                                     />
                                 </HoverCardContent>
