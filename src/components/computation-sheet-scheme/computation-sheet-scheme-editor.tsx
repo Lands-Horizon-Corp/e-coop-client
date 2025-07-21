@@ -17,7 +17,7 @@ const LoanSchemeEditor = ({ className }: Props) => {
     return (
         <div
             className={cn(
-                'p-2 w-full min-h-[90vh] max-w-full min-w-0 flex items-ceter gap-x-2',
+                'py-2 w-full min-h-[90vh] max-w-full min-w-0 flex items-ceter gap-x-2',
                 className
             )}
         >

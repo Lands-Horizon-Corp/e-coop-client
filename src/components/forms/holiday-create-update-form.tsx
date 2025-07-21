@@ -17,6 +17,8 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
+import { descriptionSchema } from '@/validations/common'
+
 import {
     useCreateHoliday,
     useUpdateHoliday,
@@ -36,7 +38,7 @@ import InputDate from '../ui/input-date'
 const holidaySchema = z.object({
     name: z.string().min(1, 'Holiday name is required'),
     entry_date: z.string().min(1, 'Date is required'),
-    description: z.string(),
+    description: descriptionSchema,
 })
 
 type THolidayFormValues = z.infer<typeof holidaySchema>

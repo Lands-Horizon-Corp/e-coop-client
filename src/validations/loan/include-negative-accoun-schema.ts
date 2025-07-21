@@ -1,6 +1,11 @@
 import { z } from 'zod'
 
-import { entityIdSchema, organizationBranchIdsSchema } from '../common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+    organizationBranchIdsSchema,
+} from '../common'
 
 export const includeNegativeAccountSchema = z
     .object({
@@ -9,6 +14,8 @@ export const includeNegativeAccountSchema = z
         computation_sheet_id: entityIdSchema,
         account_id: entityIdSchema,
 
-        description: z.string().optional(),
+        description: descriptionSchema
+            .optional()
+            .transform(descriptionTransformerSanitizer),
     })
     .merge(organizationBranchIdsSchema)

@@ -22,6 +22,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
 import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
+import {
     useCreateAccountClassification,
     useUpdateAccountClassification,
 } from '@/hooks/api-hooks/use-account-classification'
@@ -31,7 +36,9 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 
 const AccountClassificationSchema = z.object({
     name: z.string().min(1, 'Classification name is required'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
 
 type AccountClassificationFormValues = z.infer<

@@ -18,7 +18,11 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 import {
     useCreateMemberProfileContactReference,
@@ -31,7 +35,7 @@ export const memberContactReferenceSchema = z.object({
     id: z.string().optional(),
     member_profile_id: entityIdSchema.optional(),
     name: z.string().min(1, 'Name is required'),
-    description: z.string().min(1, 'Description is required'),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
     contact_number: z.string().min(1, 'Contact number is required'),
 })
 

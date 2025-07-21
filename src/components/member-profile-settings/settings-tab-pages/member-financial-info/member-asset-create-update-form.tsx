@@ -18,7 +18,11 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 import {
     useCreateMemberProfileAsset,
@@ -41,7 +45,7 @@ export const memberAssetSchema = z.object({
         .date()
         .transform((val) => new Date(val).toISOString()),
 
-    description: z.string().min(1, 'Description is required'),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
 
     media_id: entityIdSchema.optional(),
     media: z.any(),

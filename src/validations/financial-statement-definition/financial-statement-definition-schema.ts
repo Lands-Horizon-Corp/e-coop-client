@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import { FinancialStatementTypeEnum } from '@/types'
 
+import { descriptionSchema, descriptionTransformerSanitizer } from '../common'
+
 export const FinancialStatementTypeSchema = z.enum([
     FinancialStatementTypeEnum.Assets,
     FinancialStatementTypeEnum.Liabilities,
@@ -12,7 +14,9 @@ export const FinancialStatementTypeSchema = z.enum([
 
 export const FinancialStatementDefinitionSchema = z.object({
     name: z.string().min(1, 'The name is Required!'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     index: z.coerce.number().optional(),
     name_in_total: z.string().optional(),
     is_posting: z.boolean().optional(),

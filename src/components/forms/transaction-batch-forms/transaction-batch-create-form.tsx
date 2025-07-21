@@ -18,7 +18,11 @@ import SignatureField from '@/components/ui/signature-field'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 import { useCreateTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
 
@@ -33,7 +37,9 @@ import {
 const transactionBatchSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     amount: z.coerce.number().min(0.01, 'Amount is required'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     organization_id: z.string().optional(),
     branch_id: z.string().optional(),
     provided_by_user_id: entityIdSchema.min(1, 'Provider is required'),

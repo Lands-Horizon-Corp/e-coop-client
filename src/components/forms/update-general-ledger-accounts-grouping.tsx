@@ -14,6 +14,11 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
 import { useUpdateGeneralLedgerAccountsGrouping } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-accounts-grouping'
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
@@ -36,7 +41,9 @@ import {
 
 const glGroupingSchema = z.object({
     name: z.string().min(1, 'Name is required'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     debit: z.enum(['positive', 'negative'], {
         required_error: 'Debit is required',
     }),

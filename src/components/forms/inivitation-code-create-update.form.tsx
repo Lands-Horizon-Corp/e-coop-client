@@ -19,7 +19,12 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
-import { stringDateSchema, userAccountTypeSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    stringDateSchema,
+    userAccountTypeSchema,
+} from '@/validations/common'
 
 import {
     useCreateInvitationCode,
@@ -51,11 +56,13 @@ const InviationCodeSchema = z.object({
     expiration_date: stringDateSchema,
     current_use: z.coerce.number().min(0, 'Current use cannot be negative'),
     max_use: z.coerce.number().min(0, 'Current use cannot be negative'),
-    description: z.string(),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
     user_type: userAccountTypeSchema,
 
     permission_name: z.string(),
-    permission_description: z.string(),
+    permission_description: descriptionSchema.transform(
+        descriptionTransformerSanitizer
+    ),
     permissions: z.array(z.string()),
 })
 
