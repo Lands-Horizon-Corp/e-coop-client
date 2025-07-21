@@ -2,6 +2,8 @@ import z from 'zod'
 
 import { isValidPhoneNumber } from 'react-phone-number-input'
 
+import { descriptionSchema } from '@/validations/common'
+
 export const contactFormSchema = z.object({
     first_name: z
         .string({ required_error: 'First name is required' })
@@ -15,8 +17,7 @@ export const contactFormSchema = z.object({
     contact_number: z
         .string()
         .refine(isValidPhoneNumber, { message: 'Invalid phone number' }),
-    description: z
-        .string({ required_error: 'Message is required' })
+    description: descriptionSchema
         .min(20, 'Message must be at least 20 characters long')
         .max(100, 'Message must not exceed 100 characters'),
 })
