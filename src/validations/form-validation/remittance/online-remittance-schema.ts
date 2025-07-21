@@ -1,6 +1,8 @@
 import { z } from 'zod'
 
 import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
     entityIdSchema,
     stringDateWithTransformSchema,
 } from '@/validations/common'
@@ -26,5 +28,7 @@ export const onlineRemittanceSchema = z.object({
 
     date_entry: stringDateWithTransformSchema,
 
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })

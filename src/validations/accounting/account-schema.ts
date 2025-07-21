@@ -16,7 +16,11 @@ import {
 import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
-import { entityIdSchema } from '../common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '../common'
 
 export enum AccountExclusiveSettingTypeEnum {
     None = 'None',
@@ -33,7 +37,10 @@ export const IAccountRequestSchema = z.object({
     member_type_id: entityIdSchema.optional(),
 
     name: z.string().min(1, 'Name is required'),
-    description: z.string().max(250, 'Description is required').optional(),
+    description: descriptionSchema
+        .max(250, 'Description is required')
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 
     minAmount: z.number().min(0, 'Min amount must be non-negative').optional(),
     maxAmount: z.number().min(0, 'Max amount must be non-negative').optional(),
