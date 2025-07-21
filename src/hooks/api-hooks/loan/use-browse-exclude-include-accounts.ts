@@ -120,6 +120,7 @@ export const useBrowseExcludeIncludeAccounts = ({
             'all',
             computationSheetId,
             filter,
+            sort,
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(

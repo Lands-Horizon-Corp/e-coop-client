@@ -3083,7 +3083,7 @@ Table computation_sheet {
 
   deliquent_account boolean [default: false] // lahat nang loan na past due
   fines_account boolean [default: false] //
-  interest_account_id boolean [default: false]
+  interest_account boolean [default: false]
   comaker_account decimal [default: -1]
   exist_account boolean [default: false]
 

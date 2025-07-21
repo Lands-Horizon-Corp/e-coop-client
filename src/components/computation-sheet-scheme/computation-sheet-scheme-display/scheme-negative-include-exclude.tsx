@@ -23,60 +23,58 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
         const browseExcludeIncludeAccountsCreateModal = useModalState()
 
         return (
-            <div className={cn(' min-h-[70vh]', className)} ref={ref}>
-                <div className="grid grid-cols-2 gap-x-4">
-                    <div className="space-y-2 bg-popover rounded-xl p-4 ">
-                        <p>Include Negative Accounts</p>
-                        <IncludeNegativeAccountCreateUpdateFormModal
-                            {...includeNegativeAccountCreateModal}
-                            formProps={{
-                                defaultValues: {
-                                    computation_sheet_id: computationSheetId,
-                                },
-                            }}
-                        />
-                        <IncludeNegativeAccountTable
-                            actionComponent={(props) => (
-                                <IncludeNegativeAccountAction {...props} />
-                            )}
-                            toolbarProps={{
-                                createActionProps: {
-                                    onClick: () =>
-                                        includeNegativeAccountCreateModal.onOpenChange(
-                                            true
-                                        ),
-                                },
-                            }}
-                            computationSheetId={computationSheetId}
-                            className="max-h-[70vh] max-w-full min-w-0 min-h-[70vh]"
-                        />
-                    </div>
-                    <div className="space-y-2 bg-popover rounded-xl p-4 ">
-                        <p>Browse Excluded/Included Accounts</p>
-                        <BrowseExcludeIncludeAccountsCreateUpdateFormModal
-                            {...browseExcludeIncludeAccountsCreateModal}
-                            formProps={{
-                                defaultValues: {
-                                    computation_sheet_id: computationSheetId,
-                                },
-                            }}
-                        />
-                        <BrowseExcludeIncludeAccountTable
-                            actionComponent={(props) => (
-                                <BrowseExcludeIncludeAccountAction {...props} />
-                            )}
-                            toolbarProps={{
-                                createActionProps: {
-                                    onClick: () =>
-                                        browseExcludeIncludeAccountsCreateModal.onOpenChange(
-                                            true
-                                        ),
-                                },
-                            }}
-                            computationSheetId={computationSheetId}
-                            className="max-h-[70vh] max-w-full min-w-0 min-h-[70vh]"
-                        />
-                    </div>
+            <div className={cn(' min-h-[70vh] space-y-4', className)} ref={ref}>
+                <div className="space-y-2 bg-popover rounded-xl p-4 ">
+                    <p>Include Negative Accounts</p>
+                    <IncludeNegativeAccountCreateUpdateFormModal
+                        {...includeNegativeAccountCreateModal}
+                        formProps={{
+                            defaultValues: {
+                                computation_sheet_id: computationSheetId,
+                            },
+                        }}
+                    />
+                    <IncludeNegativeAccountTable
+                        actionComponent={(props) => (
+                            <IncludeNegativeAccountAction {...props} />
+                        )}
+                        toolbarProps={{
+                            createActionProps: {
+                                onClick: () =>
+                                    includeNegativeAccountCreateModal.onOpenChange(
+                                        true
+                                    ),
+                            },
+                        }}
+                        computationSheetId={computationSheetId}
+                        className="max-h-[40vh] max-w-full min-w-0 min-h-[40vh]"
+                    />
+                </div>
+                <div className="space-y-2 bg-popover rounded-xl p-4 ">
+                    <p>Browse Excluded/Included Accounts</p>
+                    <BrowseExcludeIncludeAccountsCreateUpdateFormModal
+                        {...browseExcludeIncludeAccountsCreateModal}
+                        formProps={{
+                            defaultValues: {
+                                computation_sheet_id: computationSheetId,
+                            },
+                        }}
+                    />
+                    <BrowseExcludeIncludeAccountTable
+                        actionComponent={(props) => (
+                            <BrowseExcludeIncludeAccountAction {...props} />
+                        )}
+                        toolbarProps={{
+                            createActionProps: {
+                                onClick: () =>
+                                    browseExcludeIncludeAccountsCreateModal.onOpenChange(
+                                        true
+                                    ),
+                            },
+                        }}
+                        computationSheetId={computationSheetId}
+                        className="max-h-[45vh] max-w-full min-w-0 min-h-[45vh]"
+                    />
                 </div>
             </div>
         )

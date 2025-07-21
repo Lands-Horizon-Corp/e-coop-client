@@ -19,7 +19,6 @@ import { useIncludeNegativeAccounts } from '@/hooks/api-hooks/loan/use-include-n
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
-import { usePagination } from '@/hooks/use-pagination'
 
 import { IIncludeNegativeAccount, TEntityId, TableProps } from '@/types'
 
@@ -57,7 +56,6 @@ const IncludeNegativeAccountTable = ({
     actionComponent,
 }: IncludeNegativeAccountTableProps) => {
     const queryClient = useQueryClient()
-    const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
@@ -84,11 +82,8 @@ const IncludeNegativeAccountTable = ({
         onSelectData,
     })
 
-    console.log('sorting', sortingState)
-
     const filterState = useDatableFilterState({
         defaultFilter,
-        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
 
     const { isPending, isRefetching, data, refetch } =
@@ -108,14 +103,12 @@ const IncludeNegativeAccountTable = ({
         },
         state: {
             sorting: tableSorting,
-            pagination,
             columnOrder,
             rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
         getRowId: getRowIdFn,
         onSortingChange: setTableSorting,
-        onPaginationChange: setPagination,
         onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
@@ -151,12 +144,6 @@ const IncludeNegativeAccountTable = ({
                             deleteMany(selected.map((item) => item.id)),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    exportActionProps={{
-                        pagination,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        isLoading: isPending,
-                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
