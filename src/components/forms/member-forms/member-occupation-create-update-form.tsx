@@ -16,6 +16,11 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
+import {
     useCreateMemberOccupation,
     useUpdateMemberOccupation,
 } from '@/hooks/api-hooks/member/use-member-occupation'
@@ -30,10 +35,7 @@ import {
 
 export const createMemberOccupationSchema = z.object({
     name: z.string().min(1, { message: 'Name is required' }).trim(),
-    description: z
-        .string()
-        .min(1, { message: 'Description is required' })
-        .trim(),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
 })
 
 type TMemberOccupationForm = z.infer<typeof createMemberOccupationSchema>

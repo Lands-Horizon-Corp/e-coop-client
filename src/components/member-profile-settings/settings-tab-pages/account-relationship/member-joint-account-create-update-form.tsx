@@ -22,6 +22,8 @@ import SignatureField from '@/components/ui/signature-field'
 import { cn } from '@/lib/utils'
 
 import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
     entityIdSchema,
     familyRelationshipSchema,
     stringDateWithTransformSchema,
@@ -50,7 +52,9 @@ export const memberJointAccountSchema = z.object({
 
     branch_id: entityIdSchema.optional(),
     organization_id: entityIdSchema.optional(),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     first_name: z.string().min(1, 'First name is required'),
     middle_name: z.string().optional(),
     last_name: z.string().min(1, 'Last name is required'),

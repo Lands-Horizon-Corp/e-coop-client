@@ -2,7 +2,10 @@ import z from 'zod'
 
 import { FEEDBACK_TYPE } from '@/constants'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 const FeedbackFormSchema = z.object({
     media_id: entityIdSchema.optional(),
@@ -12,7 +15,8 @@ const FeedbackFormSchema = z.object({
     }),
     description: z
         .string({ required_error: 'feedback message is required' })
-        .min(20, 'feedback message must be at least 20 characters long'),
+        .min(20, 'feedback message must be at least 20 characters long')
+        .transform(descriptionTransformerSanitizer),
     email: z
         .string({ required_error: 'Email is required' })
         .email('Email must be valid'),

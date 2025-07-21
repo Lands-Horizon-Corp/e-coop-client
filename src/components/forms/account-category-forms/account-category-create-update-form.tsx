@@ -22,6 +22,11 @@ import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
 import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
+import {
     useCreateAccountCategory,
     useUpdateAccountCategory,
 } from '@/hooks/api-hooks/use-account-category'
@@ -31,7 +36,9 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 
 const AccountCategorySchema = z.object({
     name: z.string().min(1, 'Category name is required'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
 
 type AccountCategoryFormValues = z.infer<typeof AccountCategorySchema>

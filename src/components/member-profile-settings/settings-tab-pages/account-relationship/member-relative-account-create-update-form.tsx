@@ -18,7 +18,12 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema, familyRelationshipSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+    familyRelationshipSchema,
+} from '@/validations/common'
 
 import {
     useCreateMemberRelativeAccount,
@@ -37,7 +42,9 @@ export const memberRelativeAccountSchema = z.object({
     relative_member_profile_id: entityIdSchema,
     relative_member: z.any(),
     family_relationship: familyRelationshipSchema,
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
 
 type TMemberRelativeAccountFormValues = z.infer<

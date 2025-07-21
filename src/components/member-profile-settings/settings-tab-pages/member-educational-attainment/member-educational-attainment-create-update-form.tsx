@@ -18,7 +18,11 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 import {
     useCreateEducationalAttainmentForMember,
@@ -53,7 +57,9 @@ export const memberEducationalAttainmentSchema = z.object({
     educational_attainment: z.enum(EDUCATIONAL_ATTAINMENT, {
         required_error: 'Educational attainment is required',
     }),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
 
 type TEducationalAttainmentFormValues = z.infer<

@@ -28,6 +28,8 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
+import { descriptionTransformerSanitizer } from '@/validations/common'
+
 import {
     useCreatePaymentType,
     useUpdatePaymentType,
@@ -41,7 +43,8 @@ const PaymentTypeSchema = z.object({
     description: z
         .string()
         .max(100, 'Description must contain at most 50 character(s)')
-        .optional(),
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     number_of_days: z
         .number()
         .int()

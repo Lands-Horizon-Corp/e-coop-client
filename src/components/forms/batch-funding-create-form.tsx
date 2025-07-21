@@ -18,7 +18,11 @@ import SignatureField from '@/components/ui/signature-field'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 import { useCreateBatchFunding } from '@/hooks/api-hooks/use-batch-funding'
 
@@ -33,8 +37,10 @@ import {
 
 const batchFundingSchema = z.object({
     name: z.string().min(1, 'Name is required'),
-    amount: z.coerce.number().min(0.01, 'Amount is required'),
-    description: z.string().optional(),
+    amount: z.coerce.number().min(-1, 'Amount is required'),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     organization_id: z.string().optional(),
     branch_id: z.string().optional(),
     transaction_batch_id: entityIdSchema.min(1, 'Batch is required'),
