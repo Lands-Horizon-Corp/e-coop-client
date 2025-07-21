@@ -1,9 +1,13 @@
 import qs from 'query-string'
 
-import { IFootstepPaginated, TEntityId } from '@/types'
+import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
+
+import { IFootstep, TEntityId } from '@/types'
 
 import { downloadFile } from '../helpers'
-import APIService from './api-service'
 
 export const exportAll = async (url: string) => {
     return downloadFile(`/footstep/${url}`, 'all_footsteps_export.csv')
@@ -48,26 +52,9 @@ export const exportSelected = async (url: string, ids: TEntityId[]) => {
     return downloadFile(finalUrl, 'selected_footsteps_export.csv')
 }
 
-export const getPaginatedFootsteps = async (props: {
-    url: string
-    sort?: string
-    filters?: string
-    pagination?: { pageIndex: number; pageSize: number }
-}) => {
-    const { url, filters, pagination, sort } = props || {}
+const CrudServices = createAPICrudService<IFootstep, unknown>('/footstep')
+const CollectionServices = createAPICollectionService<IFootstep>('/footstep')
 
-    const finalUrl = qs.stringifyUrl(
-        {
-            url: `/footstep/${url}`,
-            query: {
-                sort,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    return APIService.get<IFootstepPaginated>(finalUrl).then((res) => res.data)
-}
+export const { getById, updateById, deleteById, deleteMany } = CrudServices
+export const { allList, search } = CollectionServices
+export default { ...CrudServices, ...CollectionServices }
