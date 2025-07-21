@@ -146,8 +146,8 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     organization_id: TEntityId
     organization: IOrganization
 
-    user_id: TEntityId
-    user: IUserBase
+    user_id?: TEntityId
+    user?: IUserBase
 
     media_id?: TEntityId
     media?: IMedia
