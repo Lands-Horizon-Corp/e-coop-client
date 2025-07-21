@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 export const TOrganizationMigrationStatus = z.enum([
     'pending',
@@ -22,7 +26,9 @@ export const OrganizationSchema = z.object({
             message: 'Invalid email',
         }),
     contact_number: z.string().optional(),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
 })

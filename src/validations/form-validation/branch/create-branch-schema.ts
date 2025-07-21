@@ -1,5 +1,10 @@
 import z from 'zod'
 
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
 import { branchTypeEnum } from '@/types'
 
 export const branchRequestSchema = z.object({
@@ -9,10 +14,10 @@ export const branchRequestSchema = z.object({
     }),
     name: z.string().min(1, 'Name is Required'),
     email: z.string().email('Invalid Email').min(1, 'Email is Required'),
-    description: z
-        .string()
+    description: descriptionSchema
         .min(15, 'Description is Required, Min of 15 Characters')
-        .max(150, 'Description only 150 characters long'),
+        .max(150, 'Description only 150 characters long')
+        .transform(descriptionTransformerSanitizer),
     country_code: z.string().min(2, 'Country code is required'),
     contact_number: z
         .string()

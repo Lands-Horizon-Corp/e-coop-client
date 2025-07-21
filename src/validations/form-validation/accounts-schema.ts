@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { descriptionSchema, descriptionTransformerSanitizer } from '../common'
+
 export const TAccountingAccountsEnum = z.enum([
     'Deposit',
     'Loan',
@@ -42,8 +44,10 @@ export const AccountRequestSchema = z.object({
     id: z.string(),
     companyId: z.string(),
     accountCode: z.string().min(5, 'Account Code is required'),
-    description: z.string().min(1, 'Description is required'),
-    altDescription: z.string().optional(),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+    altDescription: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     type: TAccountingAccountsEnum.default('Deposit'),
     maxAmount: z.coerce.number().optional(),
     minAmount: z.coerce.number().optional(),

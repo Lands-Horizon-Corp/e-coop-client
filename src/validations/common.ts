@@ -11,6 +11,7 @@ import {
     USER_TYPE,
 } from '@/constants'
 import { sanitizeNumberInput } from '@/helpers'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 export const entityIdSchema = z.coerce.string().uuid('Invalid')
 
@@ -146,6 +147,18 @@ export const TEntityId = z.string()
 //     .min(0.01, "Amount must be greater than zero")
 // )
 //
+
+export const descriptionTransformerSanitizer = <T>(val: T) => {
+    if (typeof val === 'string') {
+        return sanitizeHtml(val)
+    }
+
+    return val
+}
+
+export const descriptionSchema = z.coerce
+    .string()
+    .min(1, 'Description is required')
 
 export const amount = z.preprocess(
     (val) => {

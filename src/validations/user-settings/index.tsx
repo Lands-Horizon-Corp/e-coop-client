@@ -1,6 +1,11 @@
 import { z } from 'zod'
 
-import { entityIdSchema, passwordSchema } from '../common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+    passwordSchema,
+} from '../common'
 
 export const userSettingsSecuritySchema = z
     .object({
@@ -26,7 +31,9 @@ export const userSettingsPhotoUpdateSchema = z.object({
 
 export const userSettingsGeneralSchema = z.object({
     user_name: z.string().optional(),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     email: z.string().email('Invalid email format').optional(),
     contact_number: z.string().optional(),
 })

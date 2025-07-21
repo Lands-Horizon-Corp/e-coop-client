@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '../common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '../common'
 
 export const automaticLoanDeductionSchema = z.object({
     id: entityIdSchema.optional(),
@@ -9,7 +13,9 @@ export const automaticLoanDeductionSchema = z.object({
     computation_sheet_id: entityIdSchema,
 
     name: z.string().min(1, { message: 'Name is required' }),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 
     charges_percentage_1: z.coerce.number().nonnegative(),
     charges_percentage_2: z.coerce.number().nonnegative(),
