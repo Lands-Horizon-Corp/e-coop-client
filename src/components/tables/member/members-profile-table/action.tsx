@@ -9,18 +9,22 @@ import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/mem
 // import { MemberProfileCreateUpdateFormModal } from '@/components/forms/member-forms/member-application-form/member-profile-create-update-form'
 import {
     EyeIcon,
+    FootstepsIcon,
     HeartBreakFillIcon,
     QrCodeIcon,
     UserClockFillIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import { MemberHistoriesModal } from '@/components/member-infos/member-histories'
 import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
+import Modal from '@/components/modals/modal'
 import { QrCodeDownloadable } from '@/components/qr-code'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import { useDeleteMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import { useModalState } from '@/hooks/use-modal-state'
 
+import FootstepTable from '../../footsteps-table'
 import { IMemberProfileTableActionComponentProp } from './columns'
 
 interface IMemberProfileTableActionProps
@@ -39,6 +43,7 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
     const infoModal = useModalState(false)
     const closeModal = useModalState(false)
     const historyModal = useModalState(false)
+    const footstepModal = useModalState(false)
 
     const { mutate: deleteProfile, isPending: isDeleting } =
         useDeleteMemberProfile()
@@ -69,6 +74,31 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                                 },
                             }}
                         />
+                        <Modal
+                            {...footstepModal}
+                            className="max-w-[95vw]"
+                            title={
+                                <div className="flex gap-x-2 items-center">
+                                    <ImageDisplay
+                                        src={member.media?.download_url}
+                                        className="rounded-xl size-12"
+                                    />
+                                    <div className="space-y-1">
+                                        <p>{member.full_name}</p>
+                                        <p className="text-sm text-muted-foreground/80">
+                                            Member
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                            description={`You are viewing ${member.full_name}'s footstep`}
+                        >
+                            <FootstepTable
+                                mode="member-profile"
+                                memberProfileId={member.id}
+                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                            />
+                        </Modal>
                     </>
                 )}
             </div>
@@ -104,6 +134,13 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                                 strokeWidth={1.5}
                             />
                             Member History
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            disabled={!member.user_id}
+                            onClick={() => footstepModal.onOpenChange(true)}
+                        >
+                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
+                            See Footstep
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() =>
