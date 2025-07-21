@@ -65,7 +65,7 @@ const ComputationSheetCreateUpdateForm = ({
             description: '',
             deliquent_account: false,
             fines_account: false,
-            interest_account_id: false,
+            interest_account: false,
             comaker_account: 0,
             exist_account: false,
             ...defaultValues,
@@ -212,7 +212,7 @@ const ComputationSheetCreateUpdateForm = ({
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="interest_account_id"
+                        name="interest_account"
                         render={({ field }) => (
                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                 <Switch
@@ -333,7 +333,7 @@ export const ComputationSheetUpdateMiniForm = ({
             description: '',
             deliquent_account: false,
             fines_account: false,
-            interest_account_id: false,
+            interest_account: false,
             comaker_account: 0,
             exist_account: false,
             ...defaultValues,
@@ -461,7 +461,7 @@ export const ComputationSheetUpdateMiniForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="interest_account_id"
+                            name="interest_account"
                             render={({ field }) => (
                                 <div className="shadow-xs relative flex w-full items-center gap-2 rounded-lg border border-input p-1 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch

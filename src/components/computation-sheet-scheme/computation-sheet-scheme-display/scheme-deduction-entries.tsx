@@ -47,7 +47,7 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
                     },
                 }}
                 computationSheetId={computationSheetId}
-                className="max-h-[70vh] max-w-full min-w-0 min-h-[70vh]"
+                className="max-h-[60vh] max-w-full min-w-0 min-h-[60vh]"
             />
         </div>
     )

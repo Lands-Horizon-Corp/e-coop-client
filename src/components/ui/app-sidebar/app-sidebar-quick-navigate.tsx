@@ -27,7 +27,7 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
-            if (e.key === 'j' && (e.metaKey || e.ctrlKey)) {
+            if (e.key === 'q' && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault()
                 setOpen((open) => !open)
             }
