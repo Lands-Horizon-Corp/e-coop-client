@@ -6,7 +6,7 @@ export interface IComputationSheet extends IBaseEntityMeta {
 
     deliquent_account: boolean
     fines_account: boolean
-    interest_account_id: boolean
+    interest_account: boolean
     comaker_account: number
     exist_account: boolean
 
@@ -26,7 +26,7 @@ export interface IComputationSheetRequest {
 
     deliquent_account: boolean
     fines_account: boolean
-    interest_account_id: boolean
+    interest_account: boolean
     comaker_account: number
     exist_account: boolean
 }

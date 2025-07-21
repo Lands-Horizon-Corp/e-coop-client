@@ -13,7 +13,7 @@ export const computationSheetSchema = z.object({
 
     deliquent_account: z.boolean(),
     fines_account: z.boolean(),
-    interest_account_id: z.boolean(),
+    interest_account: z.boolean(),
     comaker_account: z.coerce.number().default(-1),
     exist_account: z.boolean(),
 })

@@ -62,7 +62,7 @@ export const createAPICollectionService = <
             base = baseEndpoint,
             filter,
             sort,
-        }: { base?: string; filter?: string; sort?: string } & {} = {}) {
+        }: { base?: string; filter?: string; sort?: string } = {}) {
             const url = qs.stringifyUrl({
                 url: `${base}/`,
                 query: {
