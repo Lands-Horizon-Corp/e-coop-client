@@ -10,7 +10,7 @@ import {
     DevIcon,
     LogoutIcon,
     MoonIcon,
-    QuestionIcon,
+    QuestionCircleIcon,
     SunIcon,
     SunMoonIcon,
 } from '@/components/icons'
@@ -74,7 +74,7 @@ const AppSidebarUser = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent side="right" align="end">
                         <DropdownMenuItem>
-                            <QuestionIcon className="mr-2 size-4 duration-150 ease-in-out" />
+                            <QuestionCircleIcon className="mr-2 size-4 duration-150 ease-in-out" />
                             <span>Help</span>
                         </DropdownMenuItem>
                         <DropdownMenuSub>
