@@ -47,20 +47,19 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
         <div
             ref={rootRef}
             className={cn(
-                'relative inline-block cursor-pointer max-w-full text-foreground/80 group hover:text-foreground',
+                'relative inline-block cursor-pointer max-w-full text-foreground/80 group/copy hover:text-foreground',
                 className,
                 disabled && 'opacity-80 pointer-events-none cursor-not-allowed'
             )}
             onClick={handleCopy}
         >
-            <span className="relative inline mr-1 text-muted-foreground/70 group-hover:text-foreground">
+            <span className="relative inline mr-1 text-muted-foreground/40 group-hover/copy:text-foreground">
                 <CheckIcon
                     data-check-icon-state={copied}
                     className={cn(
                         'transition-all scale-0 opacity-0 data-[check-icon-state=true]:scale-100 data-[check-icon-state=true]:opacity-100',
                         'inline mr-1 text-primary',
                         iconClassName
-                        // copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
                     )}
                 />
                 <CopyIcon
