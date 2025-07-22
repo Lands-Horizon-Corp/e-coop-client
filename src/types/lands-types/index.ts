@@ -1,3 +1,4 @@
+export * from './dev'
 export * from './feedback'
 export * from './contact-us'
 export * from './notification'
