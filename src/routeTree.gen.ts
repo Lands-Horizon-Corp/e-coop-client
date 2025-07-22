@@ -27,6 +27,7 @@ import { Route as AccountSecurityImport } from './routes/account/security'
 import { Route as AccountQrImport } from './routes/account/qr'
 import { Route as AccountProfileImport } from './routes/account/profile'
 import { Route as landingTestImport } from './routes/(landing)/test'
+import { Route as landingFrequentlyAskedQuestionsImport } from './routes/(landing)/frequently-asked-questions'
 import { Route as landingDevelopersImport } from './routes/(landing)/developers'
 import { Route as landingContactImport } from './routes/(landing)/contact'
 import { Route as landingAboutImport } from './routes/(landing)/about'
@@ -187,6 +188,13 @@ const landingTestRoute = landingTestImport.update({
   path: '/test',
   getParentRoute: () => landingRouteRoute,
 } as any)
+
+const landingFrequentlyAskedQuestionsRoute =
+  landingFrequentlyAskedQuestionsImport.update({
+    id: '/frequently-asked-questions',
+    path: '/frequently-asked-questions',
+    getParentRoute: () => landingRouteRoute,
+  } as any)
 
 const landingDevelopersRoute = landingDevelopersImport.update({
   id: '/developers',
@@ -680,6 +688,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingDevelopersImport
       parentRoute: typeof landingRouteImport
     }
+    '/(landing)/frequently-asked-questions': {
+      id: '/(landing)/frequently-asked-questions'
+      path: '/frequently-asked-questions'
+      fullPath: '/frequently-asked-questions'
+      preLoaderRoute: typeof landingFrequentlyAskedQuestionsImport
+      parentRoute: typeof landingRouteImport
+    }
     '/(landing)/test': {
       id: '/(landing)/test'
       path: '/test'
@@ -1151,6 +1166,7 @@ interface landingRouteRouteChildren {
   landingAboutRoute: typeof landingAboutRoute
   landingContactRoute: typeof landingContactRoute
   landingDevelopersRoute: typeof landingDevelopersRoute
+  landingFrequentlyAskedQuestionsRoute: typeof landingFrequentlyAskedQuestionsRoute
   landingTestRoute: typeof landingTestRoute
   landingIndexRoute: typeof landingIndexRoute
 }
@@ -1159,6 +1175,7 @@ const landingRouteRouteChildren: landingRouteRouteChildren = {
   landingAboutRoute: landingAboutRoute,
   landingContactRoute: landingContactRoute,
   landingDevelopersRoute: landingDevelopersRoute,
+  landingFrequentlyAskedQuestionsRoute: landingFrequentlyAskedQuestionsRoute,
   landingTestRoute: landingTestRoute,
   landingIndexRoute: landingIndexRoute,
 }
@@ -1418,6 +1435,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
+  '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/qr': typeof AccountQrRoute
@@ -1490,6 +1508,7 @@ export interface FileRoutesByTo {
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
+  '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/qr': typeof AccountQrRoute
@@ -1567,6 +1586,7 @@ export interface FileRoutesById {
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/developers': typeof landingDevelopersRoute
+  '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/(landing)/test': typeof landingTestRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/qr': typeof AccountQrRoute
@@ -1646,6 +1666,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/developers'
+    | '/frequently-asked-questions'
     | '/test'
     | '/account/profile'
     | '/account/qr'
@@ -1717,6 +1738,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/developers'
+    | '/frequently-asked-questions'
     | '/test'
     | '/account/profile'
     | '/account/qr'
@@ -1792,6 +1814,7 @@ export interface FileRouteTypes {
     | '/(landing)/about'
     | '/(landing)/contact'
     | '/(landing)/developers'
+    | '/(landing)/frequently-asked-questions'
     | '/(landing)/test'
     | '/account/profile'
     | '/account/qr'
@@ -1900,6 +1923,7 @@ export const routeTree = rootRoute
         "/(landing)/about",
         "/(landing)/contact",
         "/(landing)/developers",
+        "/(landing)/frequently-asked-questions",
         "/(landing)/test",
         "/(landing)/"
       ]
@@ -1951,6 +1975,10 @@ export const routeTree = rootRoute
     },
     "/(landing)/developers": {
       "filePath": "(landing)/developers.tsx",
+      "parent": "/(landing)"
+    },
+    "/(landing)/frequently-asked-questions": {
+      "filePath": "(landing)/frequently-asked-questions.tsx",
       "parent": "/(landing)"
     },
     "/(landing)/test": {
