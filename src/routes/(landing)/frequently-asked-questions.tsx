@@ -1,12 +1,14 @@
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
 
+import ARTWORK_FAQ from '@/assets/artworks/artwork-faq.svg'
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import CopyWrapper from '@/components/elements/copy-wrapper'
-import { ChatBubbleIcon, MagnifyingGlassIcon } from '@/components/icons'
+import { MagnifyingGlassIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     Accordion,
     AccordionContent,
@@ -250,8 +252,11 @@ function RouteComponent() {
 
     return (
         <PageContainer className="relative bg-background/80 dark:bg-background/90">
-            <div className="py-16 z-10 max-w-4xl px-4 md:px-8 w-full space-y-6">
-                <ChatBubbleIcon className="size-16 mx-auto text-teal-600" />
+            <div className="py-4 z-10 max-w-4xl px-4 md:px-8 w-full space-y-6">
+                <ImageDisplay
+                    className="size-40 mx-auto rounded-xl !bg-transparent"
+                    src={ARTWORK_FAQ}
+                />
                 <h1 className="text-3xl font-medium text-center">
                     Frequently Asked Questions
                 </h1>

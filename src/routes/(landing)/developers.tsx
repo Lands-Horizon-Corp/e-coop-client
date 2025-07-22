@@ -1,10 +1,12 @@
 import { Fragment, ReactNode } from 'react'
 
+import ARTWORK_EXPERIMENT from '@/assets/artworks/artwork-experiment.svg'
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import CopyWrapper from '@/components/elements/copy-wrapper'
 import { CurlyBracketIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 
 export const Route = createFileRoute('/(landing)/developers')({
     component: RouteComponent,
@@ -135,9 +137,14 @@ const DEVELOPER_POLICY: {
 function RouteComponent() {
     return (
         <PageContainer className="relative bg-background/80 dark:bg-background/90">
-            <div className="py-16 z-10 max-w-4xl px-4 md:px-8 w-full space-y-6">
-                <h1 className="text-3xl font-medium">
-                    Ecoop for Developers
+            <div className="py-4 z-10 max-w-4xl px-4 md:px-8 w-full space-y-6">
+                <ImageDisplay
+                    className="size-40 mx-auto rounded-xl animate-in !bg-transparent"
+                    imageClassName="bg-transparent"
+                    src={ARTWORK_EXPERIMENT}
+                />
+                <h1 className="text-3xl font-medium text-center !mb-12">
+                    Developer API Access Policy
                     <CurlyBracketIcon className="size-9 ml-2 inline mx-auto text-teal-600" />
                 </h1>
                 <p className="text-sm text-muted-foreground">
