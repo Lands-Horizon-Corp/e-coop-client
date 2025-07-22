@@ -11,12 +11,14 @@ interface CopyToClipboardProps extends IBaseProps {
     copyMsg?: string
     cooldown?: number
     disabled?: boolean
+    iconClassName?: string
     onCopy?: () => boolean
 }
 
 export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
     copyMsg = 'Coppied',
     children,
+    iconClassName,
     disabled = false,
     cooldown = 1500,
     className,
@@ -53,17 +55,20 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
         >
             <span className="relative inline mr-1 text-muted-foreground/70 group-hover:text-foreground">
                 <CheckIcon
+                    data-check-icon-state={copied}
                     className={cn(
-                        'transition-all',
+                        'transition-all scale-0 opacity-0 data-[check-icon-state=true]:scale-100 data-[check-icon-state=true]:opacity-100',
                         'inline mr-1 text-primary',
-                        copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+                        iconClassName
+                        // copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
                     )}
                 />
                 <CopyIcon
+                    data-copy-icon-state={copied}
                     className={cn(
                         'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all',
-                        'inline mr-1',
-                        copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
+                        'inline mr-1 scale-0 opacity-0 data-[copy-icon-state=false]:scale-100 data-[copy-icon-state=false]:opacity-100',
+                        iconClassName
                     )}
                 />
             </span>
