@@ -1,7 +1,7 @@
 import { cn } from '@/lib'
 import { Link, ReactNode, useLocation } from '@tanstack/react-router'
-import { TbExternalLink } from 'react-icons/tb'
 
+import { CurlyBracketIcon } from '@/components/icons'
 import NavAuthGroup from '@/components/nav/nav-components/nav-auth-group'
 import NavEcoopLogo from '@/components/nav/nav-components/nav-ecoop-logo'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
@@ -24,13 +24,17 @@ const navLinks: NavLink[] = [
         path: '/about',
     },
     {
+        name: 'FAQ',
+        path: '/frequently-asked-questions',
+    },
+    {
         name: 'Contact',
         path: '/contact',
     },
     {
         name: 'Developers',
-        path: import.meta.env.VITE_CLIENT_DOCUMENT_URL,
-        icon: <TbExternalLink />,
+        path: '/developers',
+        icon: <CurlyBracketIcon />,
     },
 ]
 
