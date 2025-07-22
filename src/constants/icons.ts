@@ -161,6 +161,7 @@ export const ICONS = [
     'Fullscreen',
     'Rotate Left',
     'Power Reset',
+    'Paper Plane',
     'Block Quote',
     'Drag Handle',
     'Camera Fill',
