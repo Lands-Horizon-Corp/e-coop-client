@@ -40,6 +40,7 @@ import { Route as AccountVerifyEmailImport } from './routes/account/verify/email
 import { Route as AccountVerifyContactImport } from './routes/account/verify/contact'
 import { Route as OrgOrgnameBranchBranchnameRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexImport } from './routes/org/$orgname/branch.$branchname/index'
+import { Route as OrgOrgnameBranchBranchnameDevDocumentationImport } from './routes/org/$orgname/branch.$branchname/dev/documentation'
 import { Route as OrgOrgnameBranchBranchnamecommonUsersFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/users-footsteps'
 import { Route as OrgOrgnameBranchBranchnamecommonMyFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/my-footsteps'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
@@ -271,6 +272,13 @@ const OrgOrgnameBranchBranchnameIndexRoute =
   OrgOrgnameBranchBranchnameIndexImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+
+const OrgOrgnameBranchBranchnameDevDocumentationRoute =
+  OrgOrgnameBranchBranchnameDevDocumentationImport.update({
+    id: '/dev/documentation',
+    path: '/dev/documentation',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 
@@ -856,6 +864,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/dev/documentation': {
+      id: '/org/$orgname/branch/$branchname/dev/documentation'
+      path: '/dev/documentation'
+      fullPath: '/org/$orgname/branch/$branchname/dev/documentation'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameDevDocumentationImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(common)/(timesheets)/my-timesheet': {
       id: '/org/$orgname/branch/$branchname/(common)/(timesheets)/my-timesheet'
       path: '/my-timesheet'
@@ -1266,6 +1281,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   OrgOrgnameBranchBranchnamecommonMyFootstepsRoute: typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute: typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
+  OrgOrgnameBranchBranchnameDevDocumentationRoute: typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute: typeof OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute
   OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute: typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute
   OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute
@@ -1320,6 +1336,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamecommonMyFootstepsRoute,
     OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute:
       OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute,
+    OrgOrgnameBranchBranchnameDevDocumentationRoute:
+      OrgOrgnameBranchBranchnameDevDocumentationRoute,
     OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute:
       OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute,
     OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute:
@@ -1458,6 +1476,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   '/org/$orgname/branch/$branchname/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
+  '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/my-timesheet': typeof OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute
@@ -1531,6 +1550,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   '/org/$orgname/branch/$branchname/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
+  '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/my-timesheet': typeof OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute
@@ -1610,6 +1630,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/(common)/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   '/org/$orgname/branch/$branchname/(common)/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
+  '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/(common)/(timesheets)/my-timesheet': typeof OrgOrgnameBranchBranchnamecommontimesheetsMyTimesheetRoute
   '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets': typeof OrgOrgnameBranchBranchnamecommontimesheetsTimesheetsRoute
   '/org/$orgname/branch/$branchname/(employee)/accounting/accounts': typeof OrgOrgnameBranchBranchnameemployeeAccountingAccountsRoute
@@ -1689,6 +1710,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/my-footsteps'
     | '/org/$orgname/branch/$branchname/users-footsteps'
+    | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/my-timesheet'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/accounting/accounts'
@@ -1761,6 +1783,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/my-footsteps'
     | '/org/$orgname/branch/$branchname/users-footsteps'
+    | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/my-timesheet'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/accounting/accounts'
@@ -1838,6 +1861,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
     | '/org/$orgname/branch/$branchname/(common)/my-footsteps'
     | '/org/$orgname/branch/$branchname/(common)/users-footsteps'
+    | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/(common)/(timesheets)/my-timesheet'
     | '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets'
     | '/org/$orgname/branch/$branchname/(employee)/accounting/accounts'
@@ -2063,6 +2087,7 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(common)/dashboard",
         "/org/$orgname/branch/$branchname/(common)/my-footsteps",
         "/org/$orgname/branch/$branchname/(common)/users-footsteps",
+        "/org/$orgname/branch/$branchname/dev/documentation",
         "/org/$orgname/branch/$branchname/(common)/(timesheets)/my-timesheet",
         "/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets",
         "/org/$orgname/branch/$branchname/(employee)/accounting/accounts",
@@ -2122,6 +2147,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(common)/users-footsteps": {
       "filePath": "org/$orgname/branch.$branchname/(common)/users-footsteps.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/dev/documentation": {
+      "filePath": "org/$orgname/branch.$branchname/dev/documentation.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(common)/(timesheets)/my-timesheet": {
