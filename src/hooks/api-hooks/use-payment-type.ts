@@ -62,6 +62,23 @@ export const useDeletePaymentTypesBulk = createMutationHook<
     (args) => deleteMutationInvalidationFn(KEY, args)
 )
 
+export const useGetAllpaymentTypes = () => {
+    return useQuery<IPaymentType[], string>({
+        queryKey: [KEY, 'all'],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                PaymentTypeServices.allList()
+            )
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                throw errorMessage
+            }
+
+            return result
+        },
+    })
+}
+
 export const useFilteredPaginatedPaymentType = ({
     sort,
     enabled,

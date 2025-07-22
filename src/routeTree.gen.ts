@@ -31,12 +31,26 @@ import { Route as landingDevelopersImport } from './routes/(landing)/developers'
 import { Route as landingContactImport } from './routes/(landing)/contact'
 import { Route as landingAboutImport } from './routes/(landing)/about'
 import { Route as OnboardingOrganizationRouteImport } from './routes/onboarding/organization/route'
+import { Route as landingSitePolicyRouteImport } from './routes/(landing)/site-policy/route'
 import { Route as OnboardingOrganizationIndexImport } from './routes/onboarding/organization/index'
 import { Route as OnboardingOrganizationOrganizationidImport } from './routes/onboarding/organization/$organization_id'
 import { Route as OnboardingCreateBranchOrganizationidImport } from './routes/onboarding/create-branch.$organization_id'
 import { Route as AuthPasswordResetResetIdImport } from './routes/auth/password-reset.$resetId'
 import { Route as AccountVerifyEmailImport } from './routes/account/verify/email'
 import { Route as AccountVerifyContactImport } from './routes/account/verify/contact'
+import { Route as landingSitePolicyTermsOfUseImport } from './routes/(landing)/site-policy/terms-of-use'
+import { Route as landingSitePolicyTermsAndConditionsImport } from './routes/(landing)/site-policy/terms-and-conditions'
+import { Route as landingSitePolicySecurityPolicyImport } from './routes/(landing)/site-policy/security-policy'
+import { Route as landingSitePolicyRiskManagementPolicyImport } from './routes/(landing)/site-policy/risk-management-policy'
+import { Route as landingSitePolicyPrivacyPolicyImport } from './routes/(landing)/site-policy/privacy-policy'
+import { Route as landingSitePolicyKnowYourCustomerPolicyImport } from './routes/(landing)/site-policy/know-your-customer-policy'
+import { Route as landingSitePolicyFeeChargesPolicyImport } from './routes/(landing)/site-policy/fee-charges-policy'
+import { Route as landingSitePolicyDeveloperPolicyImport } from './routes/(landing)/site-policy/developer-policy'
+import { Route as landingSitePolicyDataProtectionPolicyImport } from './routes/(landing)/site-policy/data-protection-policy'
+import { Route as landingSitePolicyCookiePolicyImport } from './routes/(landing)/site-policy/cookie-policy'
+import { Route as landingSitePolicyComplaintDisputePolicyImport } from './routes/(landing)/site-policy/complaint-dispute-policy'
+import { Route as landingSitePolicyCodeOfConductPolicyImport } from './routes/(landing)/site-policy/code-of-conduct-policy'
+import { Route as landingSitePolicyAmlCtfPolicyImport } from './routes/(landing)/site-policy/aml-ctf-policy'
 import { Route as OrgOrgnameBranchBranchnameRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexImport } from './routes/org/$orgname/branch.$branchname/index'
 import { Route as OrgOrgnameBranchBranchnamecommonUsersFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/users-footsteps'
@@ -212,6 +226,12 @@ const OnboardingOrganizationRouteRoute =
     getParentRoute: () => OnboardingRouteRoute,
   } as any)
 
+const landingSitePolicyRouteRoute = landingSitePolicyRouteImport.update({
+  id: '/site-policy',
+  path: '/site-policy',
+  getParentRoute: () => landingRouteRoute,
+} as any)
+
 const OnboardingOrganizationIndexRoute =
   OnboardingOrganizationIndexImport.update({
     id: '/',
@@ -250,6 +270,97 @@ const AccountVerifyContactRoute = AccountVerifyContactImport.update({
   path: '/verify/contact',
   getParentRoute: () => AccountRouteRoute,
 } as any)
+
+const landingSitePolicyTermsOfUseRoute =
+  landingSitePolicyTermsOfUseImport.update({
+    id: '/terms-of-use',
+    path: '/terms-of-use',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyTermsAndConditionsRoute =
+  landingSitePolicyTermsAndConditionsImport.update({
+    id: '/terms-and-conditions',
+    path: '/terms-and-conditions',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicySecurityPolicyRoute =
+  landingSitePolicySecurityPolicyImport.update({
+    id: '/security-policy',
+    path: '/security-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyRiskManagementPolicyRoute =
+  landingSitePolicyRiskManagementPolicyImport.update({
+    id: '/risk-management-policy',
+    path: '/risk-management-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyPrivacyPolicyRoute =
+  landingSitePolicyPrivacyPolicyImport.update({
+    id: '/privacy-policy',
+    path: '/privacy-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyKnowYourCustomerPolicyRoute =
+  landingSitePolicyKnowYourCustomerPolicyImport.update({
+    id: '/know-your-customer-policy',
+    path: '/know-your-customer-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyFeeChargesPolicyRoute =
+  landingSitePolicyFeeChargesPolicyImport.update({
+    id: '/fee-charges-policy',
+    path: '/fee-charges-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyDeveloperPolicyRoute =
+  landingSitePolicyDeveloperPolicyImport.update({
+    id: '/developer-policy',
+    path: '/developer-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyDataProtectionPolicyRoute =
+  landingSitePolicyDataProtectionPolicyImport.update({
+    id: '/data-protection-policy',
+    path: '/data-protection-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyCookiePolicyRoute =
+  landingSitePolicyCookiePolicyImport.update({
+    id: '/cookie-policy',
+    path: '/cookie-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyComplaintDisputePolicyRoute =
+  landingSitePolicyComplaintDisputePolicyImport.update({
+    id: '/complaint-dispute-policy',
+    path: '/complaint-dispute-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyCodeOfConductPolicyRoute =
+  landingSitePolicyCodeOfConductPolicyImport.update({
+    id: '/code-of-conduct-policy',
+    path: '/code-of-conduct-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
+
+const landingSitePolicyAmlCtfPolicyRoute =
+  landingSitePolicyAmlCtfPolicyImport.update({
+    id: '/aml-ctf-policy',
+    path: '/aml-ctf-policy',
+    getParentRoute: () => landingSitePolicyRouteRoute,
+  } as any)
 
 const OrgOrgnameBranchBranchnameRouteRoute =
   OrgOrgnameBranchBranchnameRouteImport.update({
@@ -642,6 +753,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRoute
     }
+    '/(landing)/site-policy': {
+      id: '/(landing)/site-policy'
+      path: '/site-policy'
+      fullPath: '/site-policy'
+      preLoaderRoute: typeof landingSitePolicyRouteImport
+      parentRoute: typeof landingRouteImport
+    }
     '/onboarding/organization': {
       id: '/onboarding/organization'
       path: '/organization'
@@ -753,6 +871,97 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding/'
       preLoaderRoute: typeof OnboardingIndexImport
       parentRoute: typeof OnboardingRouteImport
+    }
+    '/(landing)/site-policy/aml-ctf-policy': {
+      id: '/(landing)/site-policy/aml-ctf-policy'
+      path: '/aml-ctf-policy'
+      fullPath: '/site-policy/aml-ctf-policy'
+      preLoaderRoute: typeof landingSitePolicyAmlCtfPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/code-of-conduct-policy': {
+      id: '/(landing)/site-policy/code-of-conduct-policy'
+      path: '/code-of-conduct-policy'
+      fullPath: '/site-policy/code-of-conduct-policy'
+      preLoaderRoute: typeof landingSitePolicyCodeOfConductPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/complaint-dispute-policy': {
+      id: '/(landing)/site-policy/complaint-dispute-policy'
+      path: '/complaint-dispute-policy'
+      fullPath: '/site-policy/complaint-dispute-policy'
+      preLoaderRoute: typeof landingSitePolicyComplaintDisputePolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/cookie-policy': {
+      id: '/(landing)/site-policy/cookie-policy'
+      path: '/cookie-policy'
+      fullPath: '/site-policy/cookie-policy'
+      preLoaderRoute: typeof landingSitePolicyCookiePolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/data-protection-policy': {
+      id: '/(landing)/site-policy/data-protection-policy'
+      path: '/data-protection-policy'
+      fullPath: '/site-policy/data-protection-policy'
+      preLoaderRoute: typeof landingSitePolicyDataProtectionPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/developer-policy': {
+      id: '/(landing)/site-policy/developer-policy'
+      path: '/developer-policy'
+      fullPath: '/site-policy/developer-policy'
+      preLoaderRoute: typeof landingSitePolicyDeveloperPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/fee-charges-policy': {
+      id: '/(landing)/site-policy/fee-charges-policy'
+      path: '/fee-charges-policy'
+      fullPath: '/site-policy/fee-charges-policy'
+      preLoaderRoute: typeof landingSitePolicyFeeChargesPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/know-your-customer-policy': {
+      id: '/(landing)/site-policy/know-your-customer-policy'
+      path: '/know-your-customer-policy'
+      fullPath: '/site-policy/know-your-customer-policy'
+      preLoaderRoute: typeof landingSitePolicyKnowYourCustomerPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/privacy-policy': {
+      id: '/(landing)/site-policy/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/site-policy/privacy-policy'
+      preLoaderRoute: typeof landingSitePolicyPrivacyPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/risk-management-policy': {
+      id: '/(landing)/site-policy/risk-management-policy'
+      path: '/risk-management-policy'
+      fullPath: '/site-policy/risk-management-policy'
+      preLoaderRoute: typeof landingSitePolicyRiskManagementPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/security-policy': {
+      id: '/(landing)/site-policy/security-policy'
+      path: '/security-policy'
+      fullPath: '/site-policy/security-policy'
+      preLoaderRoute: typeof landingSitePolicySecurityPolicyImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/terms-and-conditions': {
+      id: '/(landing)/site-policy/terms-and-conditions'
+      path: '/terms-and-conditions'
+      fullPath: '/site-policy/terms-and-conditions'
+      preLoaderRoute: typeof landingSitePolicyTermsAndConditionsImport
+      parentRoute: typeof landingSitePolicyRouteImport
+    }
+    '/(landing)/site-policy/terms-of-use': {
+      id: '/(landing)/site-policy/terms-of-use'
+      path: '/terms-of-use'
+      fullPath: '/site-policy/terms-of-use'
+      preLoaderRoute: typeof landingSitePolicyTermsOfUseImport
+      parentRoute: typeof landingSitePolicyRouteImport
     }
     '/account/verify/contact': {
       id: '/account/verify/contact'
@@ -1130,7 +1339,54 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface landingSitePolicyRouteRouteChildren {
+  landingSitePolicyAmlCtfPolicyRoute: typeof landingSitePolicyAmlCtfPolicyRoute
+  landingSitePolicyCodeOfConductPolicyRoute: typeof landingSitePolicyCodeOfConductPolicyRoute
+  landingSitePolicyComplaintDisputePolicyRoute: typeof landingSitePolicyComplaintDisputePolicyRoute
+  landingSitePolicyCookiePolicyRoute: typeof landingSitePolicyCookiePolicyRoute
+  landingSitePolicyDataProtectionPolicyRoute: typeof landingSitePolicyDataProtectionPolicyRoute
+  landingSitePolicyDeveloperPolicyRoute: typeof landingSitePolicyDeveloperPolicyRoute
+  landingSitePolicyFeeChargesPolicyRoute: typeof landingSitePolicyFeeChargesPolicyRoute
+  landingSitePolicyKnowYourCustomerPolicyRoute: typeof landingSitePolicyKnowYourCustomerPolicyRoute
+  landingSitePolicyPrivacyPolicyRoute: typeof landingSitePolicyPrivacyPolicyRoute
+  landingSitePolicyRiskManagementPolicyRoute: typeof landingSitePolicyRiskManagementPolicyRoute
+  landingSitePolicySecurityPolicyRoute: typeof landingSitePolicySecurityPolicyRoute
+  landingSitePolicyTermsAndConditionsRoute: typeof landingSitePolicyTermsAndConditionsRoute
+  landingSitePolicyTermsOfUseRoute: typeof landingSitePolicyTermsOfUseRoute
+}
+
+const landingSitePolicyRouteRouteChildren: landingSitePolicyRouteRouteChildren =
+  {
+    landingSitePolicyAmlCtfPolicyRoute: landingSitePolicyAmlCtfPolicyRoute,
+    landingSitePolicyCodeOfConductPolicyRoute:
+      landingSitePolicyCodeOfConductPolicyRoute,
+    landingSitePolicyComplaintDisputePolicyRoute:
+      landingSitePolicyComplaintDisputePolicyRoute,
+    landingSitePolicyCookiePolicyRoute: landingSitePolicyCookiePolicyRoute,
+    landingSitePolicyDataProtectionPolicyRoute:
+      landingSitePolicyDataProtectionPolicyRoute,
+    landingSitePolicyDeveloperPolicyRoute:
+      landingSitePolicyDeveloperPolicyRoute,
+    landingSitePolicyFeeChargesPolicyRoute:
+      landingSitePolicyFeeChargesPolicyRoute,
+    landingSitePolicyKnowYourCustomerPolicyRoute:
+      landingSitePolicyKnowYourCustomerPolicyRoute,
+    landingSitePolicyPrivacyPolicyRoute: landingSitePolicyPrivacyPolicyRoute,
+    landingSitePolicyRiskManagementPolicyRoute:
+      landingSitePolicyRiskManagementPolicyRoute,
+    landingSitePolicySecurityPolicyRoute: landingSitePolicySecurityPolicyRoute,
+    landingSitePolicyTermsAndConditionsRoute:
+      landingSitePolicyTermsAndConditionsRoute,
+    landingSitePolicyTermsOfUseRoute: landingSitePolicyTermsOfUseRoute,
+  }
+
+const landingSitePolicyRouteRouteWithChildren =
+  landingSitePolicyRouteRoute._addFileChildren(
+    landingSitePolicyRouteRouteChildren,
+  )
+
 interface landingRouteRouteChildren {
+  landingSitePolicyRouteRoute: typeof landingSitePolicyRouteRouteWithChildren
   landingAboutRoute: typeof landingAboutRoute
   landingContactRoute: typeof landingContactRoute
   landingDevelopersRoute: typeof landingDevelopersRoute
@@ -1139,6 +1395,7 @@ interface landingRouteRouteChildren {
 }
 
 const landingRouteRouteChildren: landingRouteRouteChildren = {
+  landingSitePolicyRouteRoute: landingSitePolicyRouteRouteWithChildren,
   landingAboutRoute: landingAboutRoute,
   landingContactRoute: landingContactRoute,
   landingDevelopersRoute: landingDevelopersRoute,
@@ -1394,6 +1651,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
+  '/site-policy': typeof landingSitePolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
@@ -1409,6 +1667,19 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/account/': typeof AccountIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
+  '/site-policy/aml-ctf-policy': typeof landingSitePolicyAmlCtfPolicyRoute
+  '/site-policy/code-of-conduct-policy': typeof landingSitePolicyCodeOfConductPolicyRoute
+  '/site-policy/complaint-dispute-policy': typeof landingSitePolicyComplaintDisputePolicyRoute
+  '/site-policy/cookie-policy': typeof landingSitePolicyCookiePolicyRoute
+  '/site-policy/data-protection-policy': typeof landingSitePolicyDataProtectionPolicyRoute
+  '/site-policy/developer-policy': typeof landingSitePolicyDeveloperPolicyRoute
+  '/site-policy/fee-charges-policy': typeof landingSitePolicyFeeChargesPolicyRoute
+  '/site-policy/know-your-customer-policy': typeof landingSitePolicyKnowYourCustomerPolicyRoute
+  '/site-policy/privacy-policy': typeof landingSitePolicyPrivacyPolicyRoute
+  '/site-policy/risk-management-policy': typeof landingSitePolicyRiskManagementPolicyRoute
+  '/site-policy/security-policy': typeof landingSitePolicySecurityPolicyRoute
+  '/site-policy/terms-and-conditions': typeof landingSitePolicyTermsAndConditionsRoute
+  '/site-policy/terms-of-use': typeof landingSitePolicyTermsOfUseRoute
   '/account/verify/contact': typeof AccountVerifyContactRoute
   '/account/verify/email': typeof AccountVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
@@ -1466,6 +1737,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
+  '/site-policy': typeof landingSitePolicyRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
@@ -1481,6 +1753,19 @@ export interface FileRoutesByTo {
   '/': typeof landingIndexRoute
   '/account': typeof AccountIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
+  '/site-policy/aml-ctf-policy': typeof landingSitePolicyAmlCtfPolicyRoute
+  '/site-policy/code-of-conduct-policy': typeof landingSitePolicyCodeOfConductPolicyRoute
+  '/site-policy/complaint-dispute-policy': typeof landingSitePolicyComplaintDisputePolicyRoute
+  '/site-policy/cookie-policy': typeof landingSitePolicyCookiePolicyRoute
+  '/site-policy/data-protection-policy': typeof landingSitePolicyDataProtectionPolicyRoute
+  '/site-policy/developer-policy': typeof landingSitePolicyDeveloperPolicyRoute
+  '/site-policy/fee-charges-policy': typeof landingSitePolicyFeeChargesPolicyRoute
+  '/site-policy/know-your-customer-policy': typeof landingSitePolicyKnowYourCustomerPolicyRoute
+  '/site-policy/privacy-policy': typeof landingSitePolicyPrivacyPolicyRoute
+  '/site-policy/risk-management-policy': typeof landingSitePolicyRiskManagementPolicyRoute
+  '/site-policy/security-policy': typeof landingSitePolicySecurityPolicyRoute
+  '/site-policy/terms-and-conditions': typeof landingSitePolicyTermsAndConditionsRoute
+  '/site-policy/terms-of-use': typeof landingSitePolicyTermsOfUseRoute
   '/account/verify/contact': typeof AccountVerifyContactRoute
   '/account/verify/email': typeof AccountVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
@@ -1541,6 +1826,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
+  '/(landing)/site-policy': typeof landingSitePolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
@@ -1557,6 +1843,19 @@ export interface FileRoutesById {
   '/(landing)/': typeof landingIndexRoute
   '/account/': typeof AccountIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
+  '/(landing)/site-policy/aml-ctf-policy': typeof landingSitePolicyAmlCtfPolicyRoute
+  '/(landing)/site-policy/code-of-conduct-policy': typeof landingSitePolicyCodeOfConductPolicyRoute
+  '/(landing)/site-policy/complaint-dispute-policy': typeof landingSitePolicyComplaintDisputePolicyRoute
+  '/(landing)/site-policy/cookie-policy': typeof landingSitePolicyCookiePolicyRoute
+  '/(landing)/site-policy/data-protection-policy': typeof landingSitePolicyDataProtectionPolicyRoute
+  '/(landing)/site-policy/developer-policy': typeof landingSitePolicyDeveloperPolicyRoute
+  '/(landing)/site-policy/fee-charges-policy': typeof landingSitePolicyFeeChargesPolicyRoute
+  '/(landing)/site-policy/know-your-customer-policy': typeof landingSitePolicyKnowYourCustomerPolicyRoute
+  '/(landing)/site-policy/privacy-policy': typeof landingSitePolicyPrivacyPolicyRoute
+  '/(landing)/site-policy/risk-management-policy': typeof landingSitePolicyRiskManagementPolicyRoute
+  '/(landing)/site-policy/security-policy': typeof landingSitePolicySecurityPolicyRoute
+  '/(landing)/site-policy/terms-and-conditions': typeof landingSitePolicyTermsAndConditionsRoute
+  '/(landing)/site-policy/terms-of-use': typeof landingSitePolicyTermsOfUseRoute
   '/account/verify/contact': typeof AccountVerifyContactRoute
   '/account/verify/email': typeof AccountVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
@@ -1619,6 +1918,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/onboarding'
+    | '/site-policy'
     | '/onboarding/organization'
     | '/about'
     | '/contact'
@@ -1634,6 +1934,19 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/account/'
     | '/onboarding/'
+    | '/site-policy/aml-ctf-policy'
+    | '/site-policy/code-of-conduct-policy'
+    | '/site-policy/complaint-dispute-policy'
+    | '/site-policy/cookie-policy'
+    | '/site-policy/data-protection-policy'
+    | '/site-policy/developer-policy'
+    | '/site-policy/fee-charges-policy'
+    | '/site-policy/know-your-customer-policy'
+    | '/site-policy/privacy-policy'
+    | '/site-policy/risk-management-policy'
+    | '/site-policy/security-policy'
+    | '/site-policy/terms-and-conditions'
+    | '/site-policy/terms-of-use'
     | '/account/verify/contact'
     | '/account/verify/email'
     | '/auth/password-reset/$resetId'
@@ -1690,6 +2003,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
+    | '/site-policy'
     | '/about'
     | '/contact'
     | '/developers'
@@ -1705,6 +2019,19 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/onboarding'
+    | '/site-policy/aml-ctf-policy'
+    | '/site-policy/code-of-conduct-policy'
+    | '/site-policy/complaint-dispute-policy'
+    | '/site-policy/cookie-policy'
+    | '/site-policy/data-protection-policy'
+    | '/site-policy/developer-policy'
+    | '/site-policy/fee-charges-policy'
+    | '/site-policy/know-your-customer-policy'
+    | '/site-policy/privacy-policy'
+    | '/site-policy/risk-management-policy'
+    | '/site-policy/security-policy'
+    | '/site-policy/terms-and-conditions'
+    | '/site-policy/terms-of-use'
     | '/account/verify/contact'
     | '/account/verify/email'
     | '/auth/password-reset/$resetId'
@@ -1763,6 +2090,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/auth'
     | '/onboarding'
+    | '/(landing)/site-policy'
     | '/onboarding/organization'
     | '/(landing)/about'
     | '/(landing)/contact'
@@ -1779,6 +2107,19 @@ export interface FileRouteTypes {
     | '/(landing)/'
     | '/account/'
     | '/onboarding/'
+    | '/(landing)/site-policy/aml-ctf-policy'
+    | '/(landing)/site-policy/code-of-conduct-policy'
+    | '/(landing)/site-policy/complaint-dispute-policy'
+    | '/(landing)/site-policy/cookie-policy'
+    | '/(landing)/site-policy/data-protection-policy'
+    | '/(landing)/site-policy/developer-policy'
+    | '/(landing)/site-policy/fee-charges-policy'
+    | '/(landing)/site-policy/know-your-customer-policy'
+    | '/(landing)/site-policy/privacy-policy'
+    | '/(landing)/site-policy/risk-management-policy'
+    | '/(landing)/site-policy/security-policy'
+    | '/(landing)/site-policy/terms-and-conditions'
+    | '/(landing)/site-policy/terms-of-use'
     | '/account/verify/contact'
     | '/account/verify/email'
     | '/auth/password-reset/$resetId'
@@ -1871,6 +2212,7 @@ export const routeTree = rootRoute
     "/(landing)": {
       "filePath": "(landing)/route.tsx",
       "children": [
+        "/(landing)/site-policy",
         "/(landing)/about",
         "/(landing)/contact",
         "/(landing)/developers",
@@ -1905,6 +2247,25 @@ export const routeTree = rootRoute
         "/onboarding/setup-org",
         "/onboarding/",
         "/onboarding/create-branch/$organization_id"
+      ]
+    },
+    "/(landing)/site-policy": {
+      "filePath": "(landing)/site-policy/route.tsx",
+      "parent": "/(landing)",
+      "children": [
+        "/(landing)/site-policy/aml-ctf-policy",
+        "/(landing)/site-policy/code-of-conduct-policy",
+        "/(landing)/site-policy/complaint-dispute-policy",
+        "/(landing)/site-policy/cookie-policy",
+        "/(landing)/site-policy/data-protection-policy",
+        "/(landing)/site-policy/developer-policy",
+        "/(landing)/site-policy/fee-charges-policy",
+        "/(landing)/site-policy/know-your-customer-policy",
+        "/(landing)/site-policy/privacy-policy",
+        "/(landing)/site-policy/risk-management-policy",
+        "/(landing)/site-policy/security-policy",
+        "/(landing)/site-policy/terms-and-conditions",
+        "/(landing)/site-policy/terms-of-use"
       ]
     },
     "/onboarding/organization": {
@@ -1976,6 +2337,58 @@ export const routeTree = rootRoute
     "/onboarding/": {
       "filePath": "onboarding/index.tsx",
       "parent": "/onboarding"
+    },
+    "/(landing)/site-policy/aml-ctf-policy": {
+      "filePath": "(landing)/site-policy/aml-ctf-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/code-of-conduct-policy": {
+      "filePath": "(landing)/site-policy/code-of-conduct-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/complaint-dispute-policy": {
+      "filePath": "(landing)/site-policy/complaint-dispute-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/cookie-policy": {
+      "filePath": "(landing)/site-policy/cookie-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/data-protection-policy": {
+      "filePath": "(landing)/site-policy/data-protection-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/developer-policy": {
+      "filePath": "(landing)/site-policy/developer-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/fee-charges-policy": {
+      "filePath": "(landing)/site-policy/fee-charges-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/know-your-customer-policy": {
+      "filePath": "(landing)/site-policy/know-your-customer-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/privacy-policy": {
+      "filePath": "(landing)/site-policy/privacy-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/risk-management-policy": {
+      "filePath": "(landing)/site-policy/risk-management-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/security-policy": {
+      "filePath": "(landing)/site-policy/security-policy.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/terms-and-conditions": {
+      "filePath": "(landing)/site-policy/terms-and-conditions.tsx",
+      "parent": "/(landing)/site-policy"
+    },
+    "/(landing)/site-policy/terms-of-use": {
+      "filePath": "(landing)/site-policy/terms-of-use.tsx",
+      "parent": "/(landing)/site-policy"
     },
     "/account/verify/contact": {
       "filePath": "account/verify/contact.tsx",

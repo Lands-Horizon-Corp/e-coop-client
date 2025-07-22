@@ -1,9 +1,5 @@
-import about_bg_element_1 from '@/assets/images/about-page/about_bg_element_1.webp'
-import about_image_1 from '@/assets/images/about-page/about_image_1.webp'
-import about_picture_1 from '@/assets/images/about-page/about_picture_1.webp'
-import about_picture_2 from '@/assets/images/about-page/about_picture_2.webp'
-import about_picture_3 from '@/assets/images/about-page/about_picture_3.webp'
 import bg_element_5 from '@/assets/images/landing-page/bg_element_5.webp'
+import about_us from '@/assets/images/about-page/about_us.webp'
 import { createFileRoute } from '@tanstack/react-router'
 
 const AboutPage = () => {
@@ -18,8 +14,8 @@ const AboutPage = () => {
                     stronger, more prosperous community.
                 </h2>
                 <img
-                    src={about_image_1}
-                    className="h-auto w-[1193px]"
+                    src={about_us}
+                    className="h-auto w-[900px]"
                     alt="image"
                 />
                 <div className="relative flex w-full justify-start lg:pt-10">
@@ -33,30 +29,18 @@ const AboutPage = () => {
                     />
                 </div>
                 <p className="text-justify indent-8 text-[min(20px,3.5vw)] font-normal">
-                    The concept of cooperatives dates back to the early 19th
-                    century, rooted in the principles of mutual aid and
-                    community-driven progress. Cooperatives were initially
-                    established to address the needs of marginalized groups,
-                    particularly in rural and working-class communities. The
-                    first recognized cooperative was formed in Rochdale,
-                    England, in 1844 by a group of weavers known as the Rochdale
-                    Pioneers. They aimed to combat economic hardship by pooling
-                    their resources to create a community store that sold
-                    affordable goods to its members.
+                    At Lands Horizon Corp, we are passionate about empowering
+                    cooperatives and their members. Through our innovative
+                    e-coop-suite platform, we provide secure, transparent, and
+                    user-friendly digital solutions to help cooperatives thrive
+                    in the modern world. We believe in the values of
+                    cooperation, integrity, and shared success. Our dedicated
+                    team works tirelessly to deliver technology that enhances
+                    financial inclusion, operational efficiency, and community
+                    prosperity. Join us on our journey to transform the
+                    cooperative experience—where your growth, security, and
+                    trust are always at the heart of what we do.
                 </p>
-                <div className="relative flex w-full justify-start lg:pt-10">
-                    <h3 className="text-[min(25px,4.2vw)] font-bold">People</h3>
-                    <img
-                        src={about_bg_element_1}
-                        className="absolute left-3 -z-20 h-auto w-[300px] md:left-5 lg:-top-40 lg:w-[464px]"
-                        alt="background"
-                    />
-                </div>
-                <div className="flex w-full justify-between">
-                    <img src={about_picture_1} className="" alt="picture" />
-                    <img src={about_picture_2} className="" alt="picture" />
-                    <img src={about_picture_3} className="" alt="picture" />
-                </div>
                 <h2 className="max-w-[1007px] text-center text-[min(20px,3.5vw)] font-light">
                     The people driving the company are passionate visionaries
                     dedicated to empowering creativity and fostering community

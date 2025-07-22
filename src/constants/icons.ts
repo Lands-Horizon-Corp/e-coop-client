@@ -268,4 +268,7 @@ export const ICONS = [
     'Badge Exclamation Fill',
     'Text Strikethrough Light',
     'Collapse All',
+    'FaTwitter',
+    'FaYoutube',
+    'FaHandsHelping',
 ] as const

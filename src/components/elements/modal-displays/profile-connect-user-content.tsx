@@ -31,7 +31,7 @@ const ProfileConnectUserModalDisplay = ({ memberProfile, userOrg }: Props) => {
                         </PreviewMediaWrapper>
                         <div className="min-w-0 flex-1">
                             <div className="mb-1 flex items-center gap-2">
-                                <UserIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                <UserIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
                                 <Badge
                                     variant="secondary"
                                     className="bg-blue-100 text-xs text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
