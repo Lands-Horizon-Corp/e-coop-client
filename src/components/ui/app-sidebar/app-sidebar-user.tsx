@@ -3,11 +3,14 @@ import { toast } from 'sonner'
 import { useTheme } from '@/providers/theme-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useAuthUser } from '@/store/user-auth-store'
-import { useRouter } from '@tanstack/react-router'
+import { useParams, useRouter } from '@tanstack/react-router'
 
 import {
+    BookOpenIcon,
     ChevronsUpDownIcon,
+    CurlyBracketIcon,
     DevIcon,
+    KeySharpIcon,
     LogoutIcon,
     MoonIcon,
     QuestionCircleIcon,
@@ -32,6 +35,9 @@ import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../sidebar'
 
 const AppSidebarUser = () => {
     const router = useRouter()
+    const { orgname, branchname } = useParams({
+        strict: false,
+    }) as { orgname: string; branchname: string }
 
     const { onOpen } = useConfirmModalStore()
     const { setTheme, resolvedTheme } = useTheme()
@@ -110,10 +116,41 @@ const AppSidebarUser = () => {
                                 </DropdownMenuSubContent>
                             </DropdownMenuPortal>
                         </DropdownMenuSub>
-                        <DropdownMenuItem>
-                            <DevIcon className="mr-2 size-4 duration-150 ease-in-out" />
-                            <span>Dev Mode</span>
-                        </DropdownMenuItem>
+                        <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>
+                                <DevIcon className="mr-2 size-4 duration-150 ease-in-out" />
+                                <span>Developer</span>
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                                <DropdownMenuSubContent>
+                                    <DropdownMenuItem
+                                        onClick={() => setTheme('light')}
+                                    >
+                                        <KeySharpIcon className="mr-2 size-4" />
+                                        <span>API Key</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() =>
+                                            window.open('/developers', '_blank')
+                                        }
+                                    >
+                                        <CurlyBracketIcon className="mr-2 size-4" />
+                                        <span>Developer Policy</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() =>
+                                            window.open(
+                                                `/org/${orgname}/branch/${branchname}/dev/documentation`,
+                                                '_blank'
+                                            )
+                                        }
+                                    >
+                                        <BookOpenIcon className="mr-2 size-4" />
+                                        <span>API Documentation</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                        </DropdownMenuSub>
                         <DropdownMenuItem
                             onClick={() =>
                                 onOpen({
