@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
 
-export const Route = createFileRoute('/(landing)/site-policy/privacy-policy')({
+export const Route = createFileRoute('/(landing)/policy/privacy-policy')({
     component: RouteComponent,
 })
 

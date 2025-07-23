@@ -11,7 +11,7 @@ import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
 
 export const Route = createFileRoute(
-    '/(landing)/site-policy/risk-management-policy'
+    '/(landing)/policy/risk-management-policy'
 )({
     component: RouteComponent,
 })

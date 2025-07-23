@@ -1,5 +1,4 @@
-import { useCallback, useRef } from 'react'
-import { useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -11,16 +10,18 @@ import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
 
 export const Route = createFileRoute(
-    '/(landing)/site-policy/fee-charges-policy'
+    '/(landing)/policy/complaint-handling-and-dispute-policy'
 )({
     component: RouteComponent,
 })
 
 const formatSectionTitle = (id: string): string => {
-    if (id === 'types-of-fees-and-charges') return 'Types of Fees & Charges'
-    if (id === 'fee-changes-and-notifications')
-        return 'Fee Changes & Notifications'
-    if (id === 'refunds-and-disputes') return 'Refunds & Disputes'
+    if (id === 'how-to-lodge-a-complaint') return 'How to Lodge a Complaint'
+    if (id === 'complaint-handling-process') return 'Complaint Handling Process'
+    if (id === 'dispute-resolution') return 'Dispute Resolution'
+    if (id === 'record-keeping') return 'Record Keeping'
+    if (id === 'continuous-improvement') return 'Continuous Improvement'
+    if (id === 'contact-us') return 'Contact Us'
 
     return id.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
 }
@@ -28,35 +29,32 @@ const formatSectionTitle = (id: string): string => {
 function RouteComponent() {
     // Refs for each section
     const purposeScopeRef = useRef<HTMLDivElement>(null)
-    const typesOfFeesChargesRef = useRef<HTMLDivElement>(null)
-    const pricingTransparencyRef = useRef<HTMLDivElement>(null)
-
-    const paymentBillingRef = useRef<HTMLDivElement>(null)
-    const feeChangesNotificationsRef = useRef<HTMLDivElement>(null)
-    const refundsDisputesRef = useRef<HTMLDivElement>(null)
+    const howToLodgeComplaintRef = useRef<HTMLDivElement>(null)
+    const complaintHandlingProcessRef = useRef<HTMLDivElement>(null)
+    const disputeResolutionRef = useRef<HTMLDivElement>(null)
+    const recordKeepingRef = useRef<HTMLDivElement>(null)
+    const continuousImprovementRef = useRef<HTMLDivElement>(null)
     const contactUsRef = useRef<HTMLDivElement>(null)
 
     const sectionRefs = useMemo(() => {
         return {
             'purpose-and-scope': purposeScopeRef,
-            'types-of-fees-and-charges': typesOfFeesChargesRef,
-            'pricing-transparency': pricingTransparencyRef,
-            'payment-and-billing': paymentBillingRef,
-            'fee-changes-and-notifications': feeChangesNotificationsRef,
-            'refunds-and-disputes': refundsDisputesRef,
+            'how-to-lodge-a-complaint': howToLodgeComplaintRef,
+            'complaint-handling-process': complaintHandlingProcessRef,
+            'dispute-resolution': disputeResolutionRef,
+            'record-keeping': recordKeepingRef,
+            'continuous-improvement': continuousImprovementRef,
             'contact-us': contactUsRef,
         }
     }, [
         purposeScopeRef,
-        typesOfFeesChargesRef,
-        pricingTransparencyRef,
-        paymentBillingRef,
-        feeChangesNotificationsRef,
-        refundsDisputesRef,
+        howToLodgeComplaintRef,
+        complaintHandlingProcessRef,
+        disputeResolutionRef,
+        recordKeepingRef,
+        continuousImprovementRef,
         contactUsRef,
     ])
-
-    // Ref for the main scrollable content area
 
     const scrollToSection = useCallback(
         (sectionId: string) => {
@@ -72,24 +70,24 @@ function RouteComponent() {
         },
         [sectionRefs]
     )
+
     const articleList = Object.keys(sectionRefs)
 
     return (
         <PageContainer className="w-full flex flex-row flex-grow">
             <div className="flex-1 overflow-y-auto px-4 py-8 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-theme(spacing.16))]">
                 <h1 className="text-3xl font-bold mb-4">
-                    Lands Horizon Fee and Charges Policy
+                    Lands Horizon Complaint Handling and Dispute Resolution
+                    Policy
                 </h1>
                 <Separator className="my-1" />
                 <h3 className="text-lg font-semibold mt-4 mb-6">
                     Effective Date: January 1, 2026
                 </h3>
                 <p className="mb-6">
-                    This Fee and Charges Policy outlines the principles of
-                    transparency and fairness that Lands Horizon Corp (“we”,
-                    “us”, or “our”) applies to all fees, charges, and
-                    commissions associated with the use of the e-coop-suite
-                    platform{' '}
+                    This policy describes the procedures of Lands Horizon Corp
+                    (“we”, “us”, “our”) for handling complaints and resolving
+                    disputes on the e-coop-suite platform{' '}
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
@@ -97,9 +95,8 @@ function RouteComponent() {
                             name={` (http://ecoop-suite.com/)`}
                         />
                     </span>
-                    . Our goal is to ensure that all users, members, and
-                    cooperatives are fully informed about the costs of our
-                    products and services, including all subscription plans.
+                    . We are committed to ensuring that all complaints and
+                    disputes are addressed fairly, promptly, and transparently.
                     <Separator className="my-5 h-1" />
                 </p>
 
@@ -112,175 +109,189 @@ function RouteComponent() {
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
                             <li>
-                                To provide clear, accessible information on all
-                                applicable fees, charges, and commissions.
+                                To provide a clear and accessible process for
+                                members to lodge complaints and resolve
+                                disputes.
                             </li>
                             <li>
-                                Applies to all users, members, cooperative
-                                organizations, and partners utilizing
-                                e-coop-suite products and services.
+                                Applies to all users, members, cooperatives, and
+                                organizations using e-coop-suite.
                             </li>
                         </ul>
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 2: Types of Fees and Charges --- */}
+                {/* --- Section 2: How to Lodge a Complaint --- */}
                 <SitePolicyItem
-                    ref={typesOfFeesChargesRef}
-                    id="types-of-fees-and-charges"
-                    title="2. Types of Fees and Charges"
+                    ref={howToLodgeComplaintRef}
+                    id="how-to-lodge-a-complaint"
+                    title="2. How to Lodge a Complaint"
                 >
                     <div>
-                        The following fees and charges may apply:
+                        Members can submit complaints through any of the
+                        following channels:
                         <br />
                         <br />
-                        <strong>Subscription Fees:</strong>
+                        <strong>Online Feedback Form:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Regular charges for access to digital platform
-                                features, based on the selected subscription
-                                plan (e.g., Basic, Standard, Premium,
-                                Enterprise).
+                                Available on the homepage or footer of the
+                                e-coop-suite platform.
                             </li>
                         </ul>
                         <br />
-                        <strong>Transaction Fees:</strong>
+                        <strong>Email:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Fees applied to specific financial transactions,
-                                such as payments, transfers, withdrawals, or
-                                loan processing.
+                                Send your complaint to{' '}
+                                <LinkTag
+                                    href="mailto:lands.horizon.corp@gmail.com"
+                                    name="lands.horizon.corp@gmail.com"
+                                />{' '}
+                                with a clear description of the issue and any
+                                supporting documentation.
                             </li>
                         </ul>
                         <br />
-                        <strong>Service Charges:</strong>
+                        <strong>Phone:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Charges for additional or optional services,
-                                such as premium support, customization, or
-                                special integrations.
+                                Contact our support hotline at +63 991 617 1081.
                             </li>
                         </ul>
                         <br />
-                        <strong>Commission Fees:</strong>
+                        <strong>Address:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Commissions charged on certain products,
-                                partnerships, or third-party services.
+                                Address your written complaint to:
+                                <br />
+                                BLK 5 LOT 49, MAKADIYOS STREET
+                                <br />
+                                VILLA MUZON SUBD, MUZON EAST
+                                <br />
+                                CITY OF SAN JOSE DEL MONTE
+                                <br />
+                                BULACAN, REGION III (CENTRAL LUZON), 3023,
+                                PHILIPPINES
                             </li>
                         </ul>
-                        <br />
-                        <strong>Administrative Fees:</strong>
-                        <ul className="list-disc pl-10 space-y-2 mt-2">
-                            <li>
-                                Fees for administrative actions, such as account
-                                maintenance, document requests, or manual
-                                processing.
-                            </li>
-                        </ul>
-                        <br />
-                        For a detailed breakdown of current plans and specific
-                        charges, please refer to the Subscription Plans page or
-                        contact support.
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 3: Pricing Transparency --- */}
+                {/* --- Section 3: Complaint Handling Process --- */}
                 <SitePolicyItem
-                    ref={pricingTransparencyRef}
-                    id="pricing-transparency"
-                    title="3. Pricing Transparency"
+                    ref={complaintHandlingProcessRef}
+                    id="complaint-handling-process"
+                    title="3. Complaint Handling Process"
                 >
                     <div>
-                        <ul className="list-disc pl-10 space-y-2">
+                        <strong>Acknowledgment:</strong>
+                        <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                All fees, charges, and commissions are disclosed
-                                clearly before the user commits to any service
-                                or transaction.
+                                All complaints will be acknowledged within three
+                                (3) business days of receipt.
                             </li>
+                        </ul>
+                        <br />
+                        <strong>Investigation:</strong>
+                        <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Users will receive advance notice of any changes
-                                to fees or the introduction of new charges.
+                                We will investigate the complaint thoroughly and
+                                may request additional information from the
+                                complainant if necessary.
                             </li>
+                        </ul>
+                        <br />
+                        <strong>Resolution:</strong>
+                        <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                No hidden or undisclosed fees will be applied.
+                                We aim to resolve all complaints within fifteen
+                                (15) business days. If more time is needed, we
+                                will keep the complainant informed of progress
+                                and expected resolution timelines.
+                            </li>
+                        </ul>
+                        <br />
+                        <strong>Communication:</strong>
+                        <ul className="list-disc pl-10 space-y-2 mt-2">
+                            <li>
+                                The outcome of the investigation and the
+                                resolution will be communicated to the
+                                complainant via their preferred contact method
+                                (email, phone, or mail).
                             </li>
                         </ul>
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 4: Payment and Billing --- */}
+                {/* --- Section 4: Dispute Resolution --- */}
                 <SitePolicyItem
-                    ref={paymentBillingRef}
-                    id="payment-and-billing"
-                    title="4. Payment and Billing"
-                >
-                    <div>
-                        <ul className="list-disc pl-10 space-y-2">
-                            <li>
-                                Fees and charges are billed according to the
-                                terms of the selected subscription plan or upon
-                                completion of a transaction or service.
-                            </li>
-                            <li>
-                                Accepted payment methods include bank transfer,
-                                credit/debit card, or any other options
-                                specified on the platform.
-                            </li>
-                            <li>
-                                Invoices, receipts, or statements will be
-                                provided for all payments.
-                            </li>
-                        </ul>
-                    </div>
-                </SitePolicyItem>
-
-                {/* --- Section 5: Fee Changes and Notifications --- */}
-                <SitePolicyItem
-                    ref={feeChangesNotificationsRef}
-                    id="fee-changes-and-notifications"
-                    title="5. Fee Changes and Notifications"
+                    ref={disputeResolutionRef}
+                    id="dispute-resolution"
+                    title="4. Dispute Resolution"
                 >
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
                             <li>
-                                We reserve the right to update fees, charges,
-                                and commissions as necessary to reflect
-                                business, regulatory, or market changes.
+                                If a complaint is not resolved to the
+                                satisfaction of the member, the issue may be
+                                escalated to higher management or an independent
+                                mediator.
                             </li>
                             <li>
-                                Users will be notified at least fifteen (15)
-                                days in advance of any fee increases or the
-                                introduction of new fees via email or platform
-                                notification.
+                                Internal mediation between parties (such as
+                                between a member and their cooperative) is
+                                encouraged before involving external parties.
+                            </li>
+                            <li>
+                                For unresolved disputes involving financial or
+                                legal matters, parties may seek resolution
+                                through appropriate regulatory authorities or
+                                the courts in the Philippines.
                             </li>
                         </ul>
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 6: Refunds and Disputes --- */}
+                {/* --- Section 5: Record Keeping --- */}
                 <SitePolicyItem
-                    ref={refundsDisputesRef}
-                    id="refunds-and-disputes"
-                    title="6. Refunds and Disputes"
+                    ref={recordKeepingRef}
+                    id="record-keeping"
+                    title="5. Record Keeping"
                 >
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
                             <li>
-                                Refunds for fees and charges are subject to the
-                                terms of the relevant subscription plan or
-                                service agreement.
+                                All complaints and dispute cases are documented
+                                and retained for at least five (5) years, in
+                                accordance with legal and regulatory
+                                requirements.
                             </li>
                             <li>
-                                Users who believe they have been incorrectly
-                                charged may submit a dispute or request
-                                clarification via the platform’s feedback form,
-                                support email, or hotline.
+                                Records are kept confidential and are accessible
+                                only to authorized personnel.
+                            </li>
+                        </ul>
+                    </div>
+                </SitePolicyItem>
+
+                {/* --- Section 6: Continuous Improvement --- */}
+                <SitePolicyItem
+                    ref={continuousImprovementRef}
+                    id="continuous-improvement"
+                    title="6. Continuous Improvement"
+                >
+                    <div>
+                        <ul className="list-disc pl-10 space-y-2">
+                            <li>
+                                We regularly review complaints and dispute data
+                                to identify trends and improve our products,
+                                services, and processes.
                             </li>
                             <li>
-                                Disputes will be addressed promptly and fairly
-                                according to the Complaint Handling and Dispute
-                                Resolution Policy.
+                                Feedback from complaints is used constructively
+                                to enhance member experience and platform
+                                operations.
                             </li>
                         </ul>
                     </div>
@@ -293,9 +304,8 @@ function RouteComponent() {
                     title="7. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
-                        For questions or clarifications regarding this Fee and
-                        Charges Policy, or for a detailed fee breakdown, please
-                        contact:
+                        For questions about this policy or to lodge a complaint,
+                        please contact:
                         <p className=" text-lg font-bold mt-2">
                             Zalven Lemuel Dayao
                         </p>

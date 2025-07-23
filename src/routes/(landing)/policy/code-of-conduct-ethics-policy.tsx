@@ -10,7 +10,7 @@ import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
 
 export const Route = createFileRoute(
-    '/(landing)/site-policy/code-of-conduct-policy'
+    '/(landing)/policy/code-of-conduct-ethics-policy'
 )({
     component: RouteComponent,
 })

@@ -10,49 +10,53 @@ import { Separator } from '@/components/ui/separator'
 import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
 
-export const Route = createFileRoute('/(landing)/site-policy/cookie-policy')({
+export const Route = createFileRoute(
+    '/(landing)/policy/fee-and-charges-policy'
+)({
     component: RouteComponent,
 })
 
 const formatSectionTitle = (id: string): string => {
-    if (id === 'what-are-cookies') return 'What Are Cookies?'
-    if (id === 'what-data-is-collected') return 'What Data is Collected'
+    if (id === 'types-of-fees-and-charges') return 'Types of Fees & Charges'
+    if (id === 'fee-changes-and-notifications')
+        return 'Fee Changes & Notifications'
+    if (id === 'refunds-and-disputes') return 'Refunds & Disputes'
 
     return id.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
 function RouteComponent() {
     // Refs for each section
-    const whatAreCookiesRef = useRef<HTMLDivElement>(null)
-    const typesOfCookiesRef = useRef<HTMLDivElement>(null)
-    const whatDataCollectedRef = useRef<HTMLDivElement>(null)
-    const howWeUseCookiesRef = useRef<HTMLDivElement>(null)
-    const managingCookiesRef = useRef<HTMLDivElement>(null)
-    const thirdPartyCookiesRef = useRef<HTMLDivElement>(null)
-    const changesToPolicyRef = useRef<HTMLDivElement>(null)
+    const purposeScopeRef = useRef<HTMLDivElement>(null)
+    const typesOfFeesChargesRef = useRef<HTMLDivElement>(null)
+    const pricingTransparencyRef = useRef<HTMLDivElement>(null)
+
+    const paymentBillingRef = useRef<HTMLDivElement>(null)
+    const feeChangesNotificationsRef = useRef<HTMLDivElement>(null)
+    const refundsDisputesRef = useRef<HTMLDivElement>(null)
     const contactUsRef = useRef<HTMLDivElement>(null)
 
     const sectionRefs = useMemo(() => {
         return {
-            'what-are-cookies': whatAreCookiesRef,
-            'types-of-cookies-we-use': typesOfCookiesRef,
-            'what-data-is-collected': whatDataCollectedRef,
-            'how-we-use-cookies': howWeUseCookiesRef,
-            'managing-cookies': managingCookiesRef,
-            'third-party-cookies': thirdPartyCookiesRef,
-            'changes-to-this-policy': changesToPolicyRef,
+            'purpose-and-scope': purposeScopeRef,
+            'types-of-fees-and-charges': typesOfFeesChargesRef,
+            'pricing-transparency': pricingTransparencyRef,
+            'payment-and-billing': paymentBillingRef,
+            'fee-changes-and-notifications': feeChangesNotificationsRef,
+            'refunds-and-disputes': refundsDisputesRef,
             'contact-us': contactUsRef,
         }
     }, [
-        whatAreCookiesRef,
-        typesOfCookiesRef,
-        whatDataCollectedRef,
-        howWeUseCookiesRef,
-        managingCookiesRef,
-        thirdPartyCookiesRef,
-        changesToPolicyRef,
+        purposeScopeRef,
+        typesOfFeesChargesRef,
+        pricingTransparencyRef,
+        paymentBillingRef,
+        feeChangesNotificationsRef,
+        refundsDisputesRef,
         contactUsRef,
     ])
+
+    // Ref for the main scrollable content area
 
     const scrollToSection = useCallback(
         (sectionId: string) => {
@@ -68,23 +72,24 @@ function RouteComponent() {
         },
         [sectionRefs]
     )
-
     const articleList = Object.keys(sectionRefs)
 
     return (
         <PageContainer className="w-full flex flex-row flex-grow">
             <div className="flex-1 overflow-y-auto px-4 py-8 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-theme(spacing.16))]">
                 <h1 className="text-3xl font-bold mb-4">
-                    Lands Horizon Cookie Policy
+                    Lands Horizon Fee and Charges Policy
                 </h1>
                 <Separator className="my-1" />
                 <h3 className="text-lg font-semibold mt-4 mb-6">
                     Effective Date: January 1, 2026
                 </h3>
                 <p className="mb-6">
-                    This Cookie Policy describes how Lands Horizon Corp (“we”,
-                    “us”, or “our”) uses cookies and similar tracking
-                    technologies on the e-coop-suite platform{' '}
+                    This Fee and Charges Policy outlines the principles of
+                    transparency and fairness that Lands Horizon Corp (“we”,
+                    “us”, or “our”) applies to all fees, charges, and
+                    commissions associated with the use of the e-coop-suite
+                    platform{' '}
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
@@ -92,215 +97,205 @@ function RouteComponent() {
                             name={` (http://ecoop-suite.com/)`}
                         />
                     </span>
-                    . By using our website or digital services, you agree to the
-                    placement and use of cookies as described below.
+                    . Our goal is to ensure that all users, members, and
+                    cooperatives are fully informed about the costs of our
+                    products and services, including all subscription plans.
                     <Separator className="my-5 h-1" />
                 </p>
 
-                {/* --- Section 1: What Are Cookies? --- */}
+                {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={whatAreCookiesRef}
-                    id="what-are-cookies"
-                    title="1. What Are Cookies?"
+                    ref={purposeScopeRef}
+                    id="purpose-and-scope"
+                    title="1. Purpose and Scope"
                 >
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
                             <li>
-                                Cookies are small text files stored on your
-                                device by your web browser when you visit a
-                                website.
+                                To provide clear, accessible information on all
+                                applicable fees, charges, and commissions.
                             </li>
                             <li>
-                                Cookies help us recognize your device, remember
-                                your preferences, and enhance your user
-                                experience.
-                            </li>
-                            <li>
-                                We may also use other tracking technologies such
-                                as web beacons, pixels, or local storage.
+                                Applies to all users, members, cooperative
+                                organizations, and partners utilizing
+                                e-coop-suite products and services.
                             </li>
                         </ul>
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 2: Types of Cookies We Use --- */}
+                {/* --- Section 2: Types of Fees and Charges --- */}
                 <SitePolicyItem
-                    ref={typesOfCookiesRef}
-                    id="types-of-cookies-we-use"
-                    title="2. Types of Cookies We Use"
+                    ref={typesOfFeesChargesRef}
+                    id="types-of-fees-and-charges"
+                    title="2. Types of Fees and Charges"
                 >
                     <div>
-                        We use the following types of cookies and tracking
-                        technologies:
+                        The following fees and charges may apply:
                         <br />
                         <br />
-                        <strong>Essential Cookies:</strong>
+                        <strong>Subscription Fees:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Required for the basic operation of our
-                                platform, such as authentication and security.
+                                Regular charges for access to digital platform
+                                features, based on the selected subscription
+                                plan (e.g., Basic, Standard, Premium,
+                                Enterprise).
                             </li>
                         </ul>
                         <br />
-                        <strong>Performance and Analytics Cookies:</strong>
+                        <strong>Transaction Fees:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Help us understand how users interact with our
-                                website, so we can improve features and
-                                performance.
+                                Fees applied to specific financial transactions,
+                                such as payments, transfers, withdrawals, or
+                                loan processing.
                             </li>
                         </ul>
                         <br />
-                        <strong>Functionality Cookies:</strong>
+                        <strong>Service Charges:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Remember your preferences and settings to
-                                provide a more personalized experience.
+                                Charges for additional or optional services,
+                                such as premium support, customization, or
+                                special integrations.
                             </li>
                         </ul>
                         <br />
-                        <strong>Security Cookies:</strong>
+                        <strong>Commission Fees:</strong>
                         <ul className="list-disc pl-10 space-y-2 mt-2">
                             <li>
-                                Used to detect and prevent security risks, such
-                                as fraudulent activities or unauthorized access.
+                                Commissions charged on certain products,
+                                partnerships, or third-party services.
                             </li>
                         </ul>
+                        <br />
+                        <strong>Administrative Fees:</strong>
+                        <ul className="list-disc pl-10 space-y-2 mt-2">
+                            <li>
+                                Fees for administrative actions, such as account
+                                maintenance, document requests, or manual
+                                processing.
+                            </li>
+                        </ul>
+                        <br />
+                        For a detailed breakdown of current plans and specific
+                        charges, please refer to the Subscription Plans page or
+                        contact support.
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 3: What Data is Collected --- */}
+                {/* --- Section 3: Pricing Transparency --- */}
                 <SitePolicyItem
-                    ref={whatDataCollectedRef}
-                    id="what-data-is-collected"
-                    title="3. What Data is Collected"
-                >
-                    <div>
-                        Through cookies, we may collect:
-                        <ul className="list-disc pl-10 space-y-2">
-                            <li>
-                                Device information (type, model, OS, browser)
-                            </li>
-                            <li>IP address and geographic location</li>
-                            <li>
-                                Usage data (pages visited, actions taken, time
-                                spent)
-                            </li>
-                            <li>Authentication and session data</li>
-                            <li>Preferences and settings</li>
-                        </ul>
-                    </div>
-                </SitePolicyItem>
-
-                {/* --- Section 4: How We Use Cookies --- */}
-                <SitePolicyItem
-                    ref={howWeUseCookiesRef}
-                    id="how-we-use-cookies"
-                    title="4. How We Use Cookies"
-                >
-                    <div>
-                        We use cookies and tracking technologies to:
-                        <ul className="list-disc pl-10 space-y-2">
-                            <li>Authenticate users and safeguard accounts</li>
-                            <li>Enhance website and app security</li>
-                            <li>
-                                Analyze website usage and improve our services
-                            </li>
-                            <li>
-                                Remember your login details, preferences, and
-                                settings
-                            </li>
-                            <li>
-                                Provide a seamless and personalized user
-                                experience
-                            </li>
-                        </ul>
-                    </div>
-                </SitePolicyItem>
-
-                {/* --- Section 5: Managing Cookies --- */}
-                <SitePolicyItem
-                    ref={managingCookiesRef}
-                    id="managing-cookies"
-                    title="5. Managing Cookies"
+                    ref={pricingTransparencyRef}
+                    id="pricing-transparency"
+                    title="3. Pricing Transparency"
                 >
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
                             <li>
-                                Most web browsers automatically accept cookies,
-                                but you may set your browser to block or delete
-                                cookies.
+                                All fees, charges, and commissions are disclosed
+                                clearly before the user commits to any service
+                                or transaction.
                             </li>
                             <li>
-                                Please note that disabling cookies may affect
-                                the functionality and performance of our
-                                platform.
+                                Users will receive advance notice of any changes
+                                to fees or the introduction of new charges.
                             </li>
                             <li>
-                                For more information on how to manage cookies,
-                                refer to your browser’s help section.
+                                No hidden or undisclosed fees will be applied.
                             </li>
                         </ul>
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 6: Third-Party Cookies --- */}
+                {/* --- Section 4: Payment and Billing --- */}
                 <SitePolicyItem
-                    ref={thirdPartyCookiesRef}
-                    id="third-party-cookies"
-                    title="6. Third-Party Cookies"
+                    ref={paymentBillingRef}
+                    id="payment-and-billing"
+                    title="4. Payment and Billing"
                 >
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
                             <li>
-                                We may allow certain trusted third-party service
-                                providers (such as analytics or payment
-                                partners) to place cookies or similar
-                                technologies on our platform.
+                                Fees and charges are billed according to the
+                                terms of the selected subscription plan or upon
+                                completion of a transaction or service.
                             </li>
                             <li>
-                                These third parties may collect information
-                                about your online activities over time and
-                                across different websites.
+                                Accepted payment methods include bank transfer,
+                                credit/debit card, or any other options
+                                specified on the platform.
+                            </li>
+                            <li>
+                                Invoices, receipts, or statements will be
+                                provided for all payments.
                             </li>
                         </ul>
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 7: Changes to This Policy --- */}
+                {/* --- Section 5: Fee Changes and Notifications --- */}
                 <SitePolicyItem
-                    ref={changesToPolicyRef}
-                    id="changes-to-this-policy"
-                    title="7. Changes to This Policy"
+                    ref={feeChangesNotificationsRef}
+                    id="fee-changes-and-notifications"
+                    title="5. Fee Changes and Notifications"
                 >
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
                             <li>
-                                We may update this Cookie Policy from time to
-                                time.
+                                We reserve the right to update fees, charges,
+                                and commissions as necessary to reflect
+                                business, regulatory, or market changes.
                             </li>
                             <li>
-                                Changes will be communicated via email or
-                                platform notification.
-                            </li>
-                            <li>
-                                Continued use of our platform after changes
-                                constitutes your acceptance of the updated
-                                policy.
+                                Users will be notified at least fifteen (15)
+                                days in advance of any fee increases or the
+                                introduction of new fees via email or platform
+                                notification.
                             </li>
                         </ul>
                     </div>
                 </SitePolicyItem>
 
-                {/* --- Section 8: Contact Us --- */}
+                {/* --- Section 6: Refunds and Disputes --- */}
+                <SitePolicyItem
+                    ref={refundsDisputesRef}
+                    id="refunds-and-disputes"
+                    title="6. Refunds and Disputes"
+                >
+                    <div>
+                        <ul className="list-disc pl-10 space-y-2">
+                            <li>
+                                Refunds for fees and charges are subject to the
+                                terms of the relevant subscription plan or
+                                service agreement.
+                            </li>
+                            <li>
+                                Users who believe they have been incorrectly
+                                charged may submit a dispute or request
+                                clarification via the platform’s feedback form,
+                                support email, or hotline.
+                            </li>
+                            <li>
+                                Disputes will be addressed promptly and fairly
+                                according to the Complaint Handling and Dispute
+                                Resolution Policy.
+                            </li>
+                        </ul>
+                    </div>
+                </SitePolicyItem>
+
+                {/* --- Section 7: Contact Us --- */}
                 <SitePolicyItem
                     ref={contactUsRef}
                     id="contact-us"
-                    title="8. Contact Us"
+                    title="7. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
-                        For questions or concerns about our Cookie Policy,
-                        please contact:
+                        For questions or clarifications regarding this Fee and
+                        Charges Policy, or for a detailed fee breakdown, please
+                        contact:
                         <p className=" text-lg font-bold mt-2">
                             Zalven Lemuel Dayao
                         </p>

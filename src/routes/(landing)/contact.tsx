@@ -34,7 +34,7 @@ import { useCreateContactUs } from '@/hooks/api-hooks/use-contact-us'
 import UseCooldown from '@/hooks/use-cooldown'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
-import LinkTag from './site-policy/-components/link-tag'
+import LinkTag from './policy/-components/link-tag'
 
 type TContact = z.infer<typeof contactFormSchema>
 

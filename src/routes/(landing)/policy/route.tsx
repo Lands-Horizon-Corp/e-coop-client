@@ -5,7 +5,7 @@ import PageContainer from '@/components/containers/page-container'
 
 import PolicyNav from '../-landing-components/policy-nav'
 
-export const Route = createFileRoute('/(landing)/site-policy')({
+export const Route = createFileRoute('/(landing)/policy')({
     component: RouteComponent,
 })
 

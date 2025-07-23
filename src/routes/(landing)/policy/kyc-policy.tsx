@@ -10,9 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
 
-export const Route = createFileRoute(
-    '/(landing)/site-policy/know-your-customer-policy'
-)({
+export const Route = createFileRoute('/(landing)/policy/kyc-policy')({
     component: RouteComponent,
 })
 const formatSectionTitle = (id: string): string => {

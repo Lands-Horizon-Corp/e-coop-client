@@ -9,11 +9,9 @@ import { Separator } from '@/components/ui/separator'
 import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
 
-export const Route = createFileRoute('/(landing)/site-policy/developer-policy')(
-    {
-        component: RouteComponent,
-    }
-)
+export const Route = createFileRoute('/(landing)/policy/developer-policy')({
+    component: RouteComponent,
+})
 
 const formatSectionTitle = (id: string): string => {
     if (id === 'api-key-management') return 'API Key Management'
