@@ -32,6 +32,7 @@ import {
     TransactionEntrySchema,
 } from '@/validations/transactions/transaction-entry'
 
+import { useGetAllpaymentTypes } from '@/hooks/api-hooks/use-payment-type'
 import { useCreateTransactionEntry } from '@/hooks/api-hooks/use-transaction-entry'
 
 import {
@@ -66,6 +67,7 @@ const PaymentsEntryForm = ({ defaultValues }: TransactionEntryFormProps) => {
     })
 
     const { isPending, error } = useCreateTransactionEntry()
+    const { data: paymentType } = useGetAllpaymentTypes()
 
     const handleSubmit = form.handleSubmit(
         (data: TransactionEntryFormValues) => {
@@ -117,24 +119,16 @@ const PaymentsEntryForm = ({ defaultValues }: TransactionEntryFormProps) => {
                                                 'select Account Type'}
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {Object.values(
-                                                GENERAL_LEDGER_SOURCE
-                                            )
-                                                .filter(
-                                                    (item) =>
-                                                        item !== 'deposit' &&
-                                                        item !== 'withdraw'
+                                            {paymentType?.map((payment) => {
+                                                return (
+                                                    <SelectItem
+                                                        key={payment.id}
+                                                        value={payment.name}
+                                                    >
+                                                        {payment.name}
+                                                    </SelectItem>
                                                 )
-                                                .map((account) => {
-                                                    return (
-                                                        <SelectItem
-                                                            key={account}
-                                                            value={account}
-                                                        >
-                                                            {account}
-                                                        </SelectItem>
-                                                    )
-                                                })}
+                                            })}
                                         </SelectContent>
                                     </Select>
                                 </FormControl>

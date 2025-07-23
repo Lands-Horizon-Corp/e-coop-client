@@ -14,12 +14,12 @@ const PublicLayout = () => {
             <div className="relative overflow-hidden">
                 <img
                     src={bg_element_1}
-                    className="absolute left-[50%] -z-30 h-auto w-[1781px] -translate-x-[50%]"
+                    className="absolute left-[50%] -z-30 w-[1781px] h-full -translate-x-[50%]"
                     alt="background"
                 />
                 <img
                     src={bg_element_2}
-                    className="absolute left-[90%] -z-30 h-auto w-[1681px] -translate-x-[50%] 2xl:left-[85%]"
+                    className="absolute left-[90%] -z-30 h-[50%] w-[1681px]  -translate-x-[50%] 2xl:left-[85%]"
                     alt="background"
                 />
                 <img
