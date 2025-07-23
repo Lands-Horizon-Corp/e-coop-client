@@ -52,15 +52,34 @@ const NeonFooter = () => {
             label: 'AML and CTF Policy',
         },
         {
-            to: '/know-your-customer-policy',
+            to: '/kyc-policy',
             label: 'Know Your Customer (KYC) Policy',
         },
         {
-            to: '/complaint-dispute-policy',
+            to: '/complaint-handling-and-dispute-policy',
             label: 'Complaint Handling and Dispute Resolution Policy',
         },
-        { to: '/fee-charges-policy', label: 'Fee and Charges Policy' },
+        { to: '/fee-and-charges-policy', label: 'Fee and Charges Policy' },
         { to: '/security-policy', label: 'Security Policy' },
+    ]
+    const quickLinks = [
+        { label: 'Home', onClick: () => navigate({ to: '/' }) },
+        { label: 'Get started', onClick: handleGetStarted },
+        {
+            label: 'Terms and Conditions',
+            to: '/terms-and-condition',
+        },
+        { label: 'Privacy Policy', to: '/privacy-policy' },
+        { label: 'Terms of use', to: '/terms-of-use' },
+        { label: 'Cookie policy', to: '/cookie-policy' },
+        {
+            label: 'Data Protection Policy',
+            to: '/data-protection',
+        },
+        {
+            label: 'Risk Management Policy',
+            to: '/risk-management-policy',
+        },
     ]
     const contacts = [
         {
@@ -76,25 +95,6 @@ const NeonFooter = () => {
                 <PinLocationIcon size={18} className="text-destructive mr-2" />
             ),
             text: LOCATION,
-        },
-    ]
-    const quickLinks = [
-        { label: 'Home', onClick: () => navigate({ to: '/' }) },
-        { label: 'Get started', onClick: handleGetStarted },
-        {
-            label: 'Terms and Conditions',
-            to: '/terms-and-conditions',
-        },
-        { label: 'Privacy Policy', to: '/privacy-policy' },
-        { label: 'Terms of use', to: '/terms-of-use' },
-        { label: 'Cookie policy', to: '/cookie-policy' },
-        {
-            label: 'Data Protection Policy',
-            to: '/data-protection-policy',
-        },
-        {
-            label: 'Risk Management Policy',
-            to: '/risk-management-policy',
         },
     ]
     const socialLinks = [
@@ -144,7 +144,7 @@ const NeonFooter = () => {
                             item.to ? (
                                 <Link
                                     key={index}
-                                    to={`/site-policy/${item.to}` as string}
+                                    to={`/policy/${item.to}` as string}
                                     className={linkClass}
                                 >
                                     {item.label}
@@ -152,11 +152,7 @@ const NeonFooter = () => {
                             ) : (
                                 <a
                                     key={index}
-                                    onClick={
-                                        item.label === 'Home'
-                                            ? item.onClick
-                                            : () => {}
-                                    }
+                                    onClick={item.onClick}
                                     className={`${linkClass} cursor-pointer`}
                                 >
                                     {item.label}
@@ -171,7 +167,7 @@ const NeonFooter = () => {
                         {policies.map((item) => (
                             <Link
                                 key={item.to}
-                                to={`/site-policy/${item.to}` as string}
+                                to={`/policy/${item.to}` as string}
                                 className={linkClass}
                             >
                                 {item.label}
