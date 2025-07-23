@@ -81,7 +81,7 @@ const ContactPage = () => {
     const showFieldError = Object.values(form.formState.errors)[0]?.message
 
     return (
-        <div className="flex justify-center px-6 py-5 font-inter sm:px-8 lg:px-[60px] lg:py-10 xl:px-[124px]">
+        <div className="flex justify-center bg-background/70 px-6 py-5 font-inter sm:px-8 lg:px-[60px] lg:py-10 xl:px-[124px]">
             <div className="mt-3 flex max-w-[1300px] flex-col items-center justify-center space-y-4 md:mt-5 lg:mt-16 lg:space-y-7 xl:space-y-10">
                 <h1 className="max-w-[1100px] text-center text-[min(64px,5.5vw)] font-bold">
                     Contact our Team

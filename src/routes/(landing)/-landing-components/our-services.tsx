@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type ServiceCardProps = {
@@ -16,21 +17,29 @@ const ServiceCard = ({
     bgColor,
 }: ServiceCardProps) => {
     return (
-        <Card className=" dark:text-white text-black hover:shadow-xl hover:scale-[1.03] transition-all duration-300">
-            <CardHeader className="flex items-center justify-center">
-                <div
-                    className={`w-16 h-16 ${bgColor} rounded-full flex items-center justify-center text-white`}
-                >
-                    {icon}
-                </div>
-            </CardHeader>
-            <CardContent className="text-center space-y-2">
-                <CardTitle className="text-xl font-semibold">{title}</CardTitle>
-                <p className="dark:text-gray-400 text-gray-500 text-sm">
-                    {description}
-                </p>
-            </CardContent>
-        </Card>
+        <GradientBackground
+            gradientOnly
+            opacity={0.1}
+            className=" hover:shadow-xl border-0 hover:scale-[1.03] transition-all duration-300"
+        >
+            <Card className=" dark:text-white h-full bg-transparent border-0 rounded-full text-black shadow-none">
+                <CardHeader className="flex items-center justify-center">
+                    <div
+                        className={`w-16 h-16 ${bgColor} border-[.5px] border-green-400 rounded-full flex items-center justify-center text-white`}
+                    >
+                        {icon}
+                    </div>
+                </CardHeader>
+                <CardContent className="text-center space-y-2">
+                    <CardTitle className="text-xl font-semibold">
+                        {title}
+                    </CardTitle>
+                    <p className="dark:text-gray-400 text-gray-500 text-sm">
+                        {description}
+                    </p>
+                </CardContent>
+            </Card>
+        </GradientBackground>
     )
 }
 const OurServices = () => {
@@ -39,10 +48,10 @@ const OurServices = () => {
             title: 'Digital Cooperative Banking',
             description:
                 'Secure online account management for members and cooperatives. Digital transactions, savings, loans, and payments. Real-time balance and transaction history.',
-            bgColor: 'bg-blue-500',
+            bgColor: 'bg-green-900',
             icon: (
                 <svg
-                    className="w-8 h-8 text-white"
+                    className="w-8 h-8 text-green-600 "
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -61,10 +70,10 @@ const OurServices = () => {
             title: 'Membership Management',
             description:
                 'Easy onboarding and KYC (Know Your Customer) verification. Member records, profiles, and digital ID. Automated membership renewals and status tracking.',
-            bgColor: 'bg-green-500',
+            bgColor: 'bg-green-900',
             icon: (
                 <svg
-                    className="w-8 h-8 text-white"
+                    className="w-8 h-8 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -83,10 +92,10 @@ const OurServices = () => {
             title: 'Financial Tools and Analytics',
             description:
                 'Automated financial reports and statements. Loan processing, approvals, and management. Budgeting, forecasting, and customizable analytics dashboards.',
-            bgColor: 'bg-purple-500',
+            bgColor: 'bg-green-900',
             icon: (
                 <svg
-                    className="w-8 h-8 text-white"
+                    className="w-8 h-8 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -105,10 +114,10 @@ const OurServices = () => {
             title: 'Secure Document Management',
             description:
                 'Digital storage and sharing of cooperative documents. Role-based access and encrypted file storage. E-signature support for approvals and agreements.',
-            bgColor: 'bg-red-500',
+            bgColor: 'bg-green-900',
             icon: (
                 <svg
-                    className="w-8 h-8 text-white"
+                    className="w-8 h-8 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -127,10 +136,10 @@ const OurServices = () => {
             title: 'Communication & Collaboration',
             description:
                 'Announcements, notifications, and messaging for members. Discussion boards and voting tools for cooperative decisions. Event scheduling and reminders.',
-            bgColor: 'bg-yellow-500',
+            bgColor: 'bg-green-900',
             icon: (
                 <svg
-                    className="w-8 h-8 text-white"
+                    className="w-8 h-8 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -149,10 +158,10 @@ const OurServices = () => {
             title: 'API & Integrations',
             description:
                 'Developer API access for custom integrations (with organization membership). Seamless connection to third-party apps and services.',
-            bgColor: 'bg-teal-500',
+            bgColor: 'bg-green-900',
             icon: (
                 <svg
-                    className="w-8 h-8 text-white"
+                    className="w-8 h-8 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -171,10 +180,10 @@ const OurServices = () => {
             title: 'Support & Training',
             description:
                 'Dedicated customer support via email and phone. Help center, FAQs, and user guides. Training sessions for cooperative leaders and members.',
-            bgColor: 'bg-orange-500',
+            bgColor: 'bg-green-900',
             icon: (
                 <svg
-                    className="w-8 h-8 text-white"
+                    className="w-8 h-8 text-green-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

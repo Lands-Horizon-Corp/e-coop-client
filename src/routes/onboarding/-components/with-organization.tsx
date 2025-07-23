@@ -39,7 +39,7 @@ const WithOrganization = ({
     const navigate = useNavigate()
     const {
         updateCurrentAuth,
-        currentAuth: { user },
+        currentAuth: { user, user_organization },
     } = useAuthUser()
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
     const { handleProceedToSetupOrg } = useCategoryStore()
@@ -69,6 +69,8 @@ const WithOrganization = ({
             toast.error("can't switch Branch")
         }
     }
+
+    const isUserIsOwner = user_organization?.user_type === 'owner'
 
     return (
         <div className="w-full">
@@ -123,6 +125,7 @@ const WithOrganization = ({
                                                 content={org.description}
                                             />
                                             {org?.id &&
+                                                isUserIsOwner &&
                                                 org.created_by_id ===
                                                     user.id && (
                                                     <span

@@ -1,8 +1,11 @@
-import convenience_automation from '@/assets/images/landing-page/convenience_automation.webp'
-import empowerment_growth from '@/assets/images/landing-page/empowerment_growth.webp'
-import security_transparency from '@/assets/images/landing-page/security_transparency.webp'
 import { Link, createFileRoute } from '@tanstack/react-router'
 
+import {
+    ArrowChevronRight,
+    BorderedShieldIcon,
+    GiClockIcon,
+    RiCommunityFillIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
@@ -10,29 +13,27 @@ import { cn } from '@/lib/utils'
 import MissionVisionSection from './-landing-components/mission-vision'
 import OurServices from './-landing-components/our-services'
 
-const Card = ({
-    imageSrc,
-    imageAlt = 'Card Icon',
-    label,
-    description,
-}: {
-    imageSrc: string
-    imageAlt?: string
-    label?: string
+interface CardProps {
+    icon: React.ReactNode
+    label: string
     description: string
-}) => (
-    <div className="flex flex-col items-center text-center max-w-xs px-4">
-        <div className="border-4 rounded-[30%] w-32 h-32 flex items-center justify-center overflow-hidden">
-            <img
-                src={imageSrc}
-                alt={imageAlt}
-                className=" size-32 object-contain"
-            />
+}
+
+const Card: React.FC<CardProps> = ({ icon, label, description }) => {
+    return (
+        <div className="flex flex-col items-center p-6 rounded-lg transition-shadow duration-300">
+            <div className="mb-4 bg-green-900/20 border-primary/20 border-[1px] rounded-full p-7">
+                {icon}
+            </div>
+            <h3 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white text-center">
+                {label}
+            </h3>
+            <p className="text-lg text-gray-600 dark:text-gray-400 text-center">
+                {description}
+            </p>
         </div>
-        {label && <div className="mt-2 font-semibold text-xl">{label}</div>}
-        <p className="mt-2 text-sm leading-snug">{description}</p>
-    </div>
-)
+    )
+}
 
 const LandingPage = () => {
     return (
@@ -59,62 +60,62 @@ const LandingPage = () => {
                         </Link>
                     </div>
                 </div>
-                <div className="flex w-full flex-wrap items-center justify-evenly gap-4 py-10">
+                <div className="flex w-full items-center  gap-4 py-10">
                     <Card
-                        imageSrc={security_transparency}
+                        icon={
+                            <BorderedShieldIcon
+                                size={40}
+                                className="text-primary"
+                            />
+                        }
                         label="Security & Transparency"
                         description="All transactions are protected with advanced security and fully transparent for member trust."
                     />
+                    <div className="flex items-center ">
+                        <ArrowChevronRight
+                            size={20}
+                            className="text-primary/50 opacity-30"
+                        />
+                        <ArrowChevronRight size={20} className="text-primary" />
+                        <ArrowChevronRight
+                            size={20}
+                            className="text-primary/50 opacity-30"
+                        />
+                    </div>
                     <Card
-                        imageSrc={convenience_automation}
+                        icon={
+                            <GiClockIcon size={40} className="text-primary" />
+                        }
                         label="Convenience & Automation"
                         description="Easily manage accounts, loans, and payments anytime with automated digital tools."
                     />
+                    <div className="flex items-center ">
+                        <ArrowChevronRight
+                            size={20}
+                            className="text-primary/50 opacity-30"
+                        />
+                        <ArrowChevronRight
+                            size={20}
+                            className="text-primary "
+                        />
+                        <ArrowChevronRight
+                            size={20}
+                            className="text-primary/50 opacity-30"
+                        />
+                    </div>
                     <Card
-                        imageSrc={empowerment_growth}
-                        imageAlt="Empowerment & Growth Icon"
+                        icon={
+                            <RiCommunityFillIcon
+                                size={40}
+                                className="text-primary"
+                            />
+                        }
                         label="Empowerment & Growth"
                         description="Access financial services and insights designed to help cooperatives and their members prosper."
                     />
                 </div>
                 <MissionVisionSection />
                 <OurServices />
-                <div className="relative mt-20 w-full">
-                    <h3 className="text-[min(25px,3.5vw)] font-bold lg:h-16">
-                        Get to know us
-                    </h3>
-                    <div className="h-fit w-full space-y-5 self-center">
-                        <div>
-                            <p className="mt-10 text-justify indent-8 text-[min(18px,4.5vw)] dark:text-[#cccccc] xl:leading-[41px]">
-                                At Lands Horizon Corp, we are passionate about
-                                empowering cooperatives and their members.
-                                Through our innovative e-coop-suite platform, we
-                                provide secure, transparent, and user-friendly
-                                digital solutions to help cooperatives thrive in
-                                the modern world. We believe in the values of
-                                cooperation, integrity, and shared success. Our
-                                dedicated team works tirelessly to deliver
-                                technology that enhances financial inclusion,
-                                operational efficiency, and community
-                                prosperity. Join us on our journey to transform
-                                the cooperative experience—where your growth,
-                                security, and trust are always at the heart of
-                                what we do.
-                            </p>
-                        </div>
-                        <div className="flex h-[130px] w-full items-center justify-center">
-                            <Link to="/about">
-                                <Button
-                                    className={cn(
-                                        'h-10 rounded-full bg-green-500 text-[min(18px,2.5vw)] hover:bg-green-500 xl:h-14 xl:px-5'
-                                    )}
-                                >
-                                    Read more about us
-                                </Button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     )
