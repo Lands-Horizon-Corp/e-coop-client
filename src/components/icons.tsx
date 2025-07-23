@@ -71,11 +71,14 @@ import {
     FaBold as FaBoldIcon,
     FaCalendarCheck as FaCalendarCheckIcon,
     FaTimesCircle as FaTimesIcon,
+    FaHandsHelping as HandsHelpingIcon,
     FaRegMap as MapIcon,
     FaMoneyCheckAlt as MoneyCheck2Icon,
     FaPhoneAlt as PhoneIcon,
     FaTabletAlt as TabletIcon,
+    FaTwitter as TwitterIcon,
     FaUserClock as UserClockFillIcon,
+    FaYoutube as YoutubeIcon,
 } from 'react-icons/fa'
 import {
     FaAddressCard as AddressCardIcon,
@@ -404,6 +407,7 @@ export {
     SchoolIcon,
     Image2Icon,
     IdCardIcon,
+    TwitterIcon,
     EyeViewIcon,
     CodeSandBox,
     ExcludeIcon,
@@ -432,6 +436,7 @@ export {
     FaTimesIcon,
     ArrowUpLong,
     UserPlusIcon,
+    YoutubeIcon,
     CollapseIcon,
     LandmarkIcon,
     SignPostIcon,
@@ -529,6 +534,7 @@ export {
     PDFFileFillIcon,
     BankDuoToneIcon,
     BarcodeScanIcon,
+    HandsHelpingIcon,
     ArrowUpRightIcon,
     OrganizationIcon,
     CalendarDotsIcon,
@@ -896,6 +902,9 @@ export const IconMap: Record<TIcon, IconType> = {
     'Badge Exclamation Fill': BadgeExclamationFillIcon,
     'Text Strikethrough Light': TextStrikethroughLightIcon,
     'Collapse All': CollapseIcon,
+    FaTwitter: TwitterIcon,
+    FaYoutube: YoutubeIcon,
+    FaHandsHelping: HandsHelpingIcon,
 }
 
 export const RenderIcon = ({
