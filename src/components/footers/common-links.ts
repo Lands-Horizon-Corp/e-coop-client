@@ -5,4 +5,4 @@ export const TWITTER_LINK = 'https://x.com/Lands_Horizon'
 export const EMAIL = 'lands.horizon.corp@gmail.com'
 export const PHONE = '+63 991 617 1081'
 export const LOCATION =
-    'SAN JOSE DEL MONTE, BULACAN, REGION III (CENTRAL LUZON), THE PHILIPPINES.'
+    ' San Jose Del Monte, Bulacan, Region iii (Central Luzon), the Philippines.'
