@@ -12,7 +12,7 @@ interface CopyToClipboardProps extends IBaseProps {
     cooldown?: number
     disabled?: boolean
     iconClassName?: string
-    onCopy?: () => boolean
+    onCopy?: () => boolean | Promise<boolean>
 }
 
 export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
@@ -28,7 +28,12 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
     const [copied, setCopied] = useState(false)
 
     const handleCopy = async () => {
-        if (onCopy) return setCopied(onCopy())
+        if (disabled) return
+        if (onCopy) {
+            const result = await onCopy()
+            setTimeout(() => setCopied(false), cooldown)
+            return setCopied(result)
+        }
 
         if (!rootRef.current || disabled || copied) return
         const text = rootRef.current.innerText
