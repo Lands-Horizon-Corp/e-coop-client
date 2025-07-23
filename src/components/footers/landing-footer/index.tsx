@@ -62,10 +62,9 @@ const NeonFooter = () => {
         { to: '/fee-charges-policy', label: 'Fee and Charges Policy' },
         { to: '/security-policy', label: 'Security Policy' },
     ]
-
     const contacts = [
         {
-            icon: <EmailIcon className="mr-2 text-lg" />,
+            icon: <EmailIcon size={20} className="mr-2 text-lg" />,
             text: EMAIL,
         },
         {
@@ -74,13 +73,13 @@ const NeonFooter = () => {
         },
         {
             icon: (
-                <PinLocationIcon className="text-destructive mr-2 text-3xl" />
+                <PinLocationIcon size={18} className="text-destructive mr-2" />
             ),
             text: LOCATION,
         },
     ]
     const quickLinks = [
-        { label: 'Home', to: '/' },
+        { label: 'Home', onClick: () => navigate({ to: '/' }) },
         { label: 'Get started', onClick: handleGetStarted },
         {
             label: 'Terms and Conditions',
@@ -98,7 +97,6 @@ const NeonFooter = () => {
             to: '/risk-management-policy',
         },
     ]
-
     const socialLinks = [
         {
             label: 'Facebook',
@@ -116,10 +114,8 @@ const NeonFooter = () => {
             icon: <YoutubeIcon className="mr-2 text-lg" />,
         },
     ]
-
     const linkClass =
         'text-gray-500 hover:text-primary transition-colors duration-200 cursor-pointer'
-
     const socialLinkClass =
         'flex items-center text-accent-foreground hover:text-primary transition-colors duration-200'
 
@@ -156,7 +152,11 @@ const NeonFooter = () => {
                             ) : (
                                 <a
                                     key={index}
-                                    onClick={item.onClick}
+                                    onClick={
+                                        item.label === 'Home'
+                                            ? item.onClick
+                                            : () => {}
+                                    }
                                     className={`${linkClass} cursor-pointer`}
                                 >
                                     {item.label}
@@ -183,13 +183,15 @@ const NeonFooter = () => {
                             Contacts
                         </h3>
                         {contacts.map((item, index) => (
-                            <p
+                            <span
                                 key={index}
-                                className="text-accent-foreground flex items-center"
+                                className="text-accent-foreground flex items-center cursor-pointer"
                             >
-                                {item.icon}
-                                {item.text}
-                            </p>
+                                <span className="flex items-center p-1.5">
+                                    {item.icon}
+                                </span>
+                                <span> {item.text}</span>
+                            </span>
                         ))}
                     </div>
                     <div className="flex flex-col gap-3 text-sm">
