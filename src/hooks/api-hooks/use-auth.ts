@@ -267,9 +267,10 @@ export const useChangePassword = ({
 
 // Sign Out
 export const useSignOut = ({
+    showMessage,
     onError,
     onSuccess,
-}: IOperationCallbacks<void> | undefined = {}) => {
+}: IOperationCallbacks<void> & IMutationProps = {}) => {
     const queryClient = useQueryClient()
 
     return useMutation<void, string>({
@@ -279,12 +280,12 @@ export const useSignOut = ({
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(errorMessage)
+                if (showMessage) toast.error(errorMessage)
                 onError?.(errorMessage)
                 throw errorMessage
             }
 
-            toast.success('Signed out successfully')
+            if (showMessage) toast.success('Signed out successfully')
             onSuccess?.()
 
             // Invalidate cached data

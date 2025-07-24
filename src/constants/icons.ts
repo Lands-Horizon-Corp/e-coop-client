@@ -125,6 +125,8 @@ export const ICONS = [
     'Calendar',
     'File Fill',
     'Users Add',
+    'Exit Door',
+    'Exit Door Fill',
     'Tree City',
     'Key Sharp',
     'Money Bag',
