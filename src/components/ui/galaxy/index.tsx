@@ -30,7 +30,7 @@ export function Galaxy3D() {
                     antialias: true,
                 }}
             >
-                <Galaxy mouseRef={mouse} />
+                <Galaxy />
             </Canvas>
         </div>
     )
