@@ -125,7 +125,7 @@ export const useBrowseExcludeIncludeAccounts = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 browseExcludeIncludeAccountService.allList({
-                    base: `browse-exclude-include-accountss/computation-sheet/${computationSheetId}`,
+                    base: `browse-exclude-include-accounts/computation-sheet/${computationSheetId}`,
                     sort: sort && toBase64(sort),
                     filter: filter && toBase64(filter),
                 })
