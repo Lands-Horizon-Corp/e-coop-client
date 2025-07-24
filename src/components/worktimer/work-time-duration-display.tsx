@@ -38,20 +38,23 @@ const WorkTimeDurationDisplay = ({ hours, minutes, seconds }: Props) => {
 export const LiveWorkTimeDurationDisplay = ({
     timeIn,
     pollingInterval = 1_000,
+    onTick,
 }: {
     timeIn: Date | string
     pollingInterval?: number
+    onTick?: (timeValue: Props) => void
 }) => {
     const [values, setValues] = useState(getTimeDifference(timeIn, new Date()))
 
     useEffect(() => {
         const interval = setInterval(() => {
             const timeProgress = getTimeDifference(timeIn, new Date())
+            onTick?.(timeProgress)
             setValues(timeProgress)
         }, pollingInterval)
 
         return () => clearInterval(interval)
-    }, [pollingInterval, timeIn])
+    }, [onTick, pollingInterval, timeIn])
 
     return <WorkTimeDurationDisplay {...values} />
 }
