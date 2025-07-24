@@ -503,6 +503,15 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
+                    title: 'My All Footsteps',
+                    icon: FootstepsIcon,
+                    url: `${baseUrl}/my-all-footsteps`,
+                    userType: ['employee', 'member', 'owner'],
+                    shortDescription:
+                        'Track your all footsteps from all branch and orgs',
+                },
+                {
+                    type: 'item',
                     title: 'Settings',
                     icon: SettingsIcon,
                     url: `${baseUrl}/settings`,

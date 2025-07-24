@@ -42,6 +42,7 @@ const settingsNavItems = [
     { name: 'Verify Email', path: '/account/verify/email' },
     { name: 'Verify Contact', path: '/account/verify/contact' },
     { name: 'Account QR', path: '/account/qr' },
+    { name: 'Activity Logs', path: '/account/activity-logs' },
 ]
 
 const OTHER_LINKS = [
