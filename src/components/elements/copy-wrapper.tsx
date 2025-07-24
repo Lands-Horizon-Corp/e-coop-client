@@ -12,6 +12,8 @@ interface CopyToClipboardProps extends IBaseProps {
     cooldown?: number
     disabled?: boolean
     iconClassName?: string
+    align?: 'left' | 'right'
+    hideCopyIcon?: boolean
     onCopy?: () => boolean | Promise<boolean>
 }
 
@@ -22,6 +24,8 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
     disabled = false,
     cooldown = 1500,
     className,
+    hideCopyIcon = false,
+    align = 'left',
     onCopy,
 }) => {
     const rootRef = useRef<HTMLDivElement>(null)
@@ -48,6 +52,34 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
         }
     }
 
+    const CopyIcons = (
+        <span
+            className={cn(
+                'relative mr-1 text-muted-foreground/40 group-hover/copy:text-foreground',
+                align === 'left' && 'order-1',
+                align === 'right' && 'order-2',
+                hideCopyIcon && 'hidden'
+            )}
+        >
+            <CheckIcon
+                data-check-icon-state={copied}
+                className={cn(
+                    'transition-all scale-0 opacity-0 data-[check-icon-state=true]:scale-100 data-[check-icon-state=true]:opacity-100',
+                    'inline mr-1 text-primary',
+                    iconClassName
+                )}
+            />
+            <CopyIcon
+                data-copy-icon-state={copied}
+                className={cn(
+                    'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all',
+                    'inline mr-1 scale-0 opacity-0 data-[copy-icon-state=false]:scale-100 data-[copy-icon-state=false]:opacity-100',
+                    iconClassName
+                )}
+            />
+        </span>
+    )
+
     return (
         <div
             ref={rootRef}
@@ -58,25 +90,9 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
             )}
             onClick={handleCopy}
         >
-            <span className="relative inline mr-1 text-muted-foreground/40 group-hover/copy:text-foreground">
-                <CheckIcon
-                    data-check-icon-state={copied}
-                    className={cn(
-                        'transition-all scale-0 opacity-0 data-[check-icon-state=true]:scale-100 data-[check-icon-state=true]:opacity-100',
-                        'inline mr-1 text-primary',
-                        iconClassName
-                    )}
-                />
-                <CopyIcon
-                    data-copy-icon-state={copied}
-                    className={cn(
-                        'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all',
-                        'inline mr-1 scale-0 opacity-0 data-[copy-icon-state=false]:scale-100 data-[copy-icon-state=false]:opacity-100',
-                        iconClassName
-                    )}
-                />
-            </span>
+            {align == 'left' ? CopyIcons : ''}
             {children}
+            {align == 'right' ? CopyIcons : ''}
         </div>
     )
 }

@@ -73,7 +73,7 @@ const APIKeyGen = ({ className }: Props) => {
             <div className="flex items-center gap-x-4">
                 <div
                     className={cn(
-                        'flex-1 relative min-w-0 pr-12 gap-x-2 bg-secondary text-muted-foreground text-nowrap rounded-lg border text-sm ',
+                        'flex-1 relative min-w-0 px-4 gap-x-2 bg-secondary text-muted-foreground text-nowrap rounded-lg border text-sm ',
                         data?.developer_secret_key &&
                             'bg-primary/20 border-primary/80 text-primary-foreground'
                     )}
