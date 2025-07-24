@@ -12,10 +12,11 @@ import {
 } from '@/types'
 
 export type TFootstepHookMode =
-    | 'me'
-    | 'branch'
-    | 'user-organization'
-    | 'member-profile'
+    | 'me' // current auth user footstep on current branch
+    | 'me-branch' // current auth user all footstep from all branches
+    | 'branch' // all footsteps from different users in current auth users branch
+    | 'user-organization' // all footstep of specific user
+    | 'member-profile' // all footstep of a member ( member profile with user only )
 
 export const useFilteredPaginatedFootsteps = ({
     sort,
@@ -42,8 +43,9 @@ export const useFilteredPaginatedFootsteps = ({
         ],
         queryFn: async () => {
             let url: string = `me`
-
-            if (mode == 'branch') {
+            if (mode == 'me-branch') {
+                url = 'current/me/branch'
+            } else if (mode == 'branch') {
                 url = 'branch'
             } else if (mode == 'user-organization') {
                 url = `user-organization/${userOrgId}`
