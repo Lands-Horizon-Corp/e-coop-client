@@ -54,6 +54,7 @@ export type TFootstepTableProps = FootstepTableProps &
           }
         | { mode: 'me' }
         | { mode: 'branch' }
+        | { mode: 'me-branch' }
         | {
               mode: 'member-profile'
               memberProfileId: TEntityId
