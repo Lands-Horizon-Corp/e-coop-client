@@ -12,7 +12,12 @@ export type TBatchBalanceStatus =
     | 'balance shortage'
 
 export interface ITransactionBatchRequest
-    extends Omit<IBatchFundingRequest, 'transaction_batch_id'> {}
+    extends Omit<
+        IBatchFundingRequest,
+        'transaction_batch_id' | 'provided_by_user_id'
+    > {
+    provided_by_user_id?: TEntityId
+}
 
 export interface ITransactionBatch
     extends ITimeStamps,
