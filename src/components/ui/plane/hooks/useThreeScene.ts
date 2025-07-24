@@ -17,6 +17,7 @@ export const useThreeScene = () => {
     useEffect(() => {
         if (!mountRef.current) return
 
+        const localMountRef = mountRef.current // Store the ref value
         const width = window.innerWidth
         const height = window.innerHeight
         const offSet = -600
@@ -91,7 +92,7 @@ export const useThreeScene = () => {
         }
 
         // Add to DOM
-        mountRef.current.appendChild(renderer.domElement)
+        localMountRef.appendChild(renderer.domElement)
 
         // Handle resize
         const handleResize = () => {
@@ -129,8 +130,8 @@ export const useThreeScene = () => {
             if (animationRef.current) {
                 cancelAnimationFrame(animationRef.current)
             }
-            if (mountRef.current && renderer.domElement) {
-                mountRef.current.removeChild(renderer.domElement)
+            if (localMountRef && renderer.domElement) {
+                localMountRef.removeChild(renderer.domElement)
             }
             renderer.dispose()
         }
