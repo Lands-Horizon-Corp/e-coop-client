@@ -160,7 +160,7 @@ function RouteComponent() {
                         referrerPolicy="no-referrer"
                         className="underline underline-offset-4 text-teal-600"
                     >
-                        ecoop-suite.com
+                        ecoop-suite.netlify.app.com
                     </Link>
                 </p>
                 <div className="space-y-8 prose !max-w-none prose-a:text-teal-600 prose-a:underline-offset-4 prose-li:text-muted-foreground dark:prose-invert">
