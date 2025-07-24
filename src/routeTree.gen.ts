@@ -57,6 +57,7 @@ import { Route as OrgOrgnameBranchBranchnameIndexImport } from './routes/org/$or
 import { Route as OrgOrgnameBranchBranchnameDevDocumentationImport } from './routes/org/$orgname/branch.$branchname/dev/documentation'
 import { Route as OrgOrgnameBranchBranchnamecommonUsersFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/users-footsteps'
 import { Route as OrgOrgnameBranchBranchnamecommonMyFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/my-footsteps'
+import { Route as OrgOrgnameBranchBranchnamecommonMyAllFootstepsImport } from './routes/org/$orgname/branch.$branchname/(common)/my-all-footsteps'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanIndexImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/index'
 import { Route as OrgOrgnameBranchBranchnameemployeeApprovalsIndexImport } from './routes/org/$orgname/branch.$branchname/(employee)/approvals/index'
@@ -401,6 +402,13 @@ const OrgOrgnameBranchBranchnamecommonMyFootstepsRoute =
   OrgOrgnameBranchBranchnamecommonMyFootstepsImport.update({
     id: '/(common)/my-footsteps',
     path: '/my-footsteps',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+
+const OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute =
+  OrgOrgnameBranchBranchnamecommonMyAllFootstepsImport.update({
+    id: '/(common)/my-all-footsteps',
+    path: '/my-all-footsteps',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 
@@ -1056,6 +1064,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(common)/my-all-footsteps': {
+      id: '/org/$orgname/branch/$branchname/(common)/my-all-footsteps'
+      path: '/my-all-footsteps'
+      fullPath: '/org/$orgname/branch/$branchname/my-all-footsteps'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonMyAllFootstepsImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(common)/my-footsteps': {
       id: '/org/$orgname/branch/$branchname/(common)/my-footsteps'
       path: '/my-footsteps'
@@ -1525,6 +1540,7 @@ const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
 interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameIndexRoute: typeof OrgOrgnameBranchBranchnameIndexRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute: typeof OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute
   OrgOrgnameBranchBranchnamecommonMyFootstepsRoute: typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute: typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
   OrgOrgnameBranchBranchnameDevDocumentationRoute: typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
@@ -1578,6 +1594,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
     OrgOrgnameBranchBranchnameIndexRoute: OrgOrgnameBranchBranchnameIndexRoute,
     OrgOrgnameBranchBranchnamecommonDashboardRoute:
       OrgOrgnameBranchBranchnamecommonDashboardRoute,
+    OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute:
+      OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute,
     OrgOrgnameBranchBranchnamecommonMyFootstepsRoute:
       OrgOrgnameBranchBranchnamecommonMyFootstepsRoute,
     OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute:
@@ -1734,6 +1752,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute
   '/org/$orgname/branch/$branchname/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   '/org/$orgname/branch/$branchname/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
@@ -1822,6 +1841,7 @@ export interface FileRoutesByTo {
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute
   '/org/$orgname/branch/$branchname/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   '/org/$orgname/branch/$branchname/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
@@ -1916,6 +1936,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/(common)/my-all-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyAllFootstepsRoute
   '/org/$orgname/branch/$branchname/(common)/my-footsteps': typeof OrgOrgnameBranchBranchnamecommonMyFootstepsRoute
   '/org/$orgname/branch/$branchname/(common)/users-footsteps': typeof OrgOrgnameBranchBranchnamecommonUsersFootstepsRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
@@ -2010,6 +2031,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/my-all-footsteps'
     | '/org/$orgname/branch/$branchname/my-footsteps'
     | '/org/$orgname/branch/$branchname/users-footsteps'
     | '/org/$orgname/branch/$branchname/dev/documentation'
@@ -2097,6 +2119,7 @@ export interface FileRouteTypes {
     | '/onboarding/organization'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/my-all-footsteps'
     | '/org/$orgname/branch/$branchname/my-footsteps'
     | '/org/$orgname/branch/$branchname/users-footsteps'
     | '/org/$orgname/branch/$branchname/dev/documentation'
@@ -2189,6 +2212,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
+    | '/org/$orgname/branch/$branchname/(common)/my-all-footsteps'
     | '/org/$orgname/branch/$branchname/(common)/my-footsteps'
     | '/org/$orgname/branch/$branchname/(common)/users-footsteps'
     | '/org/$orgname/branch/$branchname/dev/documentation'
@@ -2487,6 +2511,7 @@ export const routeTree = rootRoute
       "children": [
         "/org/$orgname/branch/$branchname/",
         "/org/$orgname/branch/$branchname/(common)/dashboard",
+        "/org/$orgname/branch/$branchname/(common)/my-all-footsteps",
         "/org/$orgname/branch/$branchname/(common)/my-footsteps",
         "/org/$orgname/branch/$branchname/(common)/users-footsteps",
         "/org/$orgname/branch/$branchname/dev/documentation",
@@ -2541,6 +2566,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(common)/dashboard": {
       "filePath": "org/$orgname/branch.$branchname/(common)/dashboard.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(common)/my-all-footsteps": {
+      "filePath": "org/$orgname/branch.$branchname/(common)/my-all-footsteps.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(common)/my-footsteps": {
