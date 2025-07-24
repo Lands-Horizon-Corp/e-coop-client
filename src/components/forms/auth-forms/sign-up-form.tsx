@@ -4,6 +4,7 @@ import z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { toReadableDate } from '@/utils'
+import { Link } from '@tanstack/react-router'
 import { useForm, useWatch } from 'react-hook-form'
 
 import { PhoneInput } from '@/components/contact-input/contact-input'
@@ -263,22 +264,35 @@ const SignUpForm = ({
                                     checked={field.value}
                                     disabled={isLoading || readOnly}
                                     onCheckedChange={field.onChange}
-                                    className="order-0 after:absolute after:inset-0"
+                                    className="order-0 z-0 after:absolute after:inset-0"
                                 />
-                                <div className="grid gap-2">
+                                <div
+                                    className="grid gap-2 z-10"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
                                     <p className="text-xs text-muted-foreground">
-                                        I agree to the eCoop{' '}
-                                        <a className="font-medium underline">
-                                            terms of service
-                                        </a>
+                                        I agree to lands horizon - e coop suite{' '}
+                                        <Link
+                                            to={
+                                                '/policy/terms-and-condition' as string
+                                            }
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="underline underline-offset-4 text-teal-600"
+                                        >
+                                            terms and condition
+                                        </Link>
                                         ,{' '}
-                                        <a className="font-medium underline">
-                                            privacy policy
-                                        </a>
-                                        , and{' '}
-                                        <a className="font-medium underline">
-                                            notification settings
-                                        </a>
+                                        <Link
+                                            to={
+                                                '/policy/privacy-policy' as string
+                                            }
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="underline underline-offset-4 text-teal-600"
+                                        >
+                                            privacy policy and data privacy.
+                                        </Link>
                                     </p>
                                 </div>
                             </div>
