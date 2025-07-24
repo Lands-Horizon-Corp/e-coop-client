@@ -1,3 +1,4 @@
+import { cn } from '@/lib'
 import { useTheme } from '@/providers/theme-provider'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
@@ -10,6 +11,7 @@ import {
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Galaxy3D } from '@/components/ui/galaxy'
+import Plane from '@/components/ui/plane'
 
 import MissionVisionSection from './-landing-components/mission-vision'
 import OurServices from './-landing-components/our-services'
@@ -43,7 +45,12 @@ export function HeroSection() {
 
     return (
         <>
-            {theme === 'dark' && <Galaxy3D />}
+            <div className={cn(theme === 'dark' ? 'hidden' : 'block')}>
+                <Plane />
+            </div>
+            <div className={cn(theme === 'dark' ? 'block' : 'hidden')}>
+                <Galaxy3D />
+            </div>
 
             <div className="relative z-10 flex min-h-screen items-center justify-center px-4 ">
                 <div className="mx-auto max-w-4xl text-center">
