@@ -48,7 +48,7 @@ const QrCodeScanner = <TData, TErr = string>({
                             ...parsedQrContent,
                             data,
                         }
-                        onSuccessDecode?.(finalQrResult as IQrScanResult<TData>)
+                        onSuccessDecode?.(finalQrResult as TData)
                         return 'QRCode verified'
                     },
                     error: (err) => {

@@ -6,7 +6,11 @@ import { type TFilterObject } from '@/contexts/filter-context'
 import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PaginationState } from '@tanstack/react-table'
 
-import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
+import {
+    BadgeCheckFillIcon,
+    ChevronDownIcon,
+    ScanLineIcon,
+} from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -15,9 +19,11 @@ import { Button } from '@/components/ui/button'
 import { useFilteredPaginatedMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IMemberProfile, IPickerBaseProps } from '@/types'
 
+import { MemberQrScannerModal } from '../qrcode-scanner/scanners/member-qr-scanner'
 import { useShortcut } from '../use-shorcuts'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import GenericPicker from './generic-picker'
@@ -41,6 +47,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
         ref
     ) => {
         const queryClient = useQueryClient()
+        const qrScannerModal = useModalState()
         const [state, setState] = useInternalState(
             false,
             modalState?.open,
@@ -95,6 +102,16 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     listHeading={`Matched Results (${data.totalSize})`}
                     searchPlaceHolder="Search name or PB no."
                     isLoading={isPending || isLoading || isFetching}
+                    otherSearchInputChild={
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            className="size-fit p-2 text-muted-foreground "
+                            onClick={() => qrScannerModal.onOpenChange(true)}
+                        >
+                            <ScanLineIcon />
+                        </Button>
+                    }
                     onSelect={(member) => {
                         queryClient.setQueryData(['member', value], member)
                         onSelect?.(member)
@@ -157,6 +174,15 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         }
                     />
                 </GenericPicker>
+                <MemberQrScannerModal
+                    {...qrScannerModal}
+                    scannerProps={{
+                        onSelectMemberProfile: (memberProfile) => {
+                            onSelect?.(memberProfile)
+                            setState(false)
+                        },
+                    }}
+                />
                 <Button
                     ref={ref}
                     type="button"
