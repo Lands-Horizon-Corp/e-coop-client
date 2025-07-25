@@ -74,7 +74,7 @@ const NeonFooter = () => {
         { label: 'Cookie policy', to: '/cookie-policy' },
         {
             label: 'Data Protection Policy',
-            to: '/data-protection',
+            to: '/data-protection-policy',
         },
         {
             label: 'Risk Management Policy',

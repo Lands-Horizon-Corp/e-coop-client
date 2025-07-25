@@ -73,12 +73,8 @@ const UpdateOrganizationForm = ({
         }
     })
 
-    //const isDisabled = (field: Path<TEditOrganizationFormValues>) =>
-    //readOnly || disabledFields?.includes(field) || false
-
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
-    console.log(form.formState.errors, 'formErrors')
     useAlertBeforeClosing(isDirty)
 
     return (
