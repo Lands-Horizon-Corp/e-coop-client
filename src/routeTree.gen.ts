@@ -47,7 +47,7 @@ import { Route as landingPolicyPrivacyPolicyImport } from './routes/(landing)/po
 import { Route as landingPolicyKycPolicyImport } from './routes/(landing)/policy/kyc-policy'
 import { Route as landingPolicyFeeAndChargesPolicyImport } from './routes/(landing)/policy/fee-and-charges-policy'
 import { Route as landingPolicyDeveloperPolicyImport } from './routes/(landing)/policy/developer-policy'
-import { Route as landingPolicyDataProtectionImport } from './routes/(landing)/policy/data-protection'
+import { Route as landingPolicyDataProtectionPolicyImport } from './routes/(landing)/policy/data-protection-policy'
 import { Route as landingPolicyCookiePolicyImport } from './routes/(landing)/policy/cookie-policy'
 import { Route as landingPolicyComplaintHandlingAndDisputePolicyImport } from './routes/(landing)/policy/complaint-handling-and-dispute-policy'
 import { Route as landingPolicyCodeOfConductEthicsPolicyImport } from './routes/(landing)/policy/code-of-conduct-ethics-policy'
@@ -337,10 +337,10 @@ const landingPolicyDeveloperPolicyRoute =
     getParentRoute: () => landingPolicyRouteRoute,
   } as any)
 
-const landingPolicyDataProtectionRoute =
-  landingPolicyDataProtectionImport.update({
-    id: '/data-protection',
-    path: '/data-protection',
+const landingPolicyDataProtectionPolicyRoute =
+  landingPolicyDataProtectionPolicyImport.update({
+    id: '/data-protection-policy',
+    path: '/data-protection-policy',
     getParentRoute: () => landingPolicyRouteRoute,
   } as any)
 
@@ -938,11 +938,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingPolicyCookiePolicyImport
       parentRoute: typeof landingPolicyRouteImport
     }
-    '/(landing)/policy/data-protection': {
-      id: '/(landing)/policy/data-protection'
-      path: '/data-protection'
-      fullPath: '/policy/data-protection'
-      preLoaderRoute: typeof landingPolicyDataProtectionImport
+    '/(landing)/policy/data-protection-policy': {
+      id: '/(landing)/policy/data-protection-policy'
+      path: '/data-protection-policy'
+      fullPath: '/policy/data-protection-policy'
+      preLoaderRoute: typeof landingPolicyDataProtectionPolicyImport
       parentRoute: typeof landingPolicyRouteImport
     }
     '/(landing)/policy/developer-policy': {
@@ -1403,7 +1403,7 @@ interface landingPolicyRouteRouteChildren {
   landingPolicyCodeOfConductEthicsPolicyRoute: typeof landingPolicyCodeOfConductEthicsPolicyRoute
   landingPolicyComplaintHandlingAndDisputePolicyRoute: typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
   landingPolicyCookiePolicyRoute: typeof landingPolicyCookiePolicyRoute
-  landingPolicyDataProtectionRoute: typeof landingPolicyDataProtectionRoute
+  landingPolicyDataProtectionPolicyRoute: typeof landingPolicyDataProtectionPolicyRoute
   landingPolicyDeveloperPolicyRoute: typeof landingPolicyDeveloperPolicyRoute
   landingPolicyFeeAndChargesPolicyRoute: typeof landingPolicyFeeAndChargesPolicyRoute
   landingPolicyKycPolicyRoute: typeof landingPolicyKycPolicyRoute
@@ -1421,7 +1421,8 @@ const landingPolicyRouteRouteChildren: landingPolicyRouteRouteChildren = {
   landingPolicyComplaintHandlingAndDisputePolicyRoute:
     landingPolicyComplaintHandlingAndDisputePolicyRoute,
   landingPolicyCookiePolicyRoute: landingPolicyCookiePolicyRoute,
-  landingPolicyDataProtectionRoute: landingPolicyDataProtectionRoute,
+  landingPolicyDataProtectionPolicyRoute:
+    landingPolicyDataProtectionPolicyRoute,
   landingPolicyDeveloperPolicyRoute: landingPolicyDeveloperPolicyRoute,
   landingPolicyFeeAndChargesPolicyRoute: landingPolicyFeeAndChargesPolicyRoute,
   landingPolicyKycPolicyRoute: landingPolicyKycPolicyRoute,
@@ -1734,7 +1735,7 @@ export interface FileRoutesByFullPath {
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
   '/policy/cookie-policy': typeof landingPolicyCookiePolicyRoute
-  '/policy/data-protection': typeof landingPolicyDataProtectionRoute
+  '/policy/data-protection-policy': typeof landingPolicyDataProtectionPolicyRoute
   '/policy/developer-policy': typeof landingPolicyDeveloperPolicyRoute
   '/policy/fee-and-charges-policy': typeof landingPolicyFeeAndChargesPolicyRoute
   '/policy/kyc-policy': typeof landingPolicyKycPolicyRoute
@@ -1824,7 +1825,7 @@ export interface FileRoutesByTo {
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
   '/policy/cookie-policy': typeof landingPolicyCookiePolicyRoute
-  '/policy/data-protection': typeof landingPolicyDataProtectionRoute
+  '/policy/data-protection-policy': typeof landingPolicyDataProtectionPolicyRoute
   '/policy/developer-policy': typeof landingPolicyDeveloperPolicyRoute
   '/policy/fee-and-charges-policy': typeof landingPolicyFeeAndChargesPolicyRoute
   '/policy/kyc-policy': typeof landingPolicyKycPolicyRoute
@@ -1918,7 +1919,7 @@ export interface FileRoutesById {
   '/(landing)/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/(landing)/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
   '/(landing)/policy/cookie-policy': typeof landingPolicyCookiePolicyRoute
-  '/(landing)/policy/data-protection': typeof landingPolicyDataProtectionRoute
+  '/(landing)/policy/data-protection-policy': typeof landingPolicyDataProtectionPolicyRoute
   '/(landing)/policy/developer-policy': typeof landingPolicyDeveloperPolicyRoute
   '/(landing)/policy/fee-and-charges-policy': typeof landingPolicyFeeAndChargesPolicyRoute
   '/(landing)/policy/kyc-policy': typeof landingPolicyKycPolicyRoute
@@ -2013,7 +2014,7 @@ export interface FileRouteTypes {
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
     | '/policy/cookie-policy'
-    | '/policy/data-protection'
+    | '/policy/data-protection-policy'
     | '/policy/developer-policy'
     | '/policy/fee-and-charges-policy'
     | '/policy/kyc-policy'
@@ -2102,7 +2103,7 @@ export interface FileRouteTypes {
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
     | '/policy/cookie-policy'
-    | '/policy/data-protection'
+    | '/policy/data-protection-policy'
     | '/policy/developer-policy'
     | '/policy/fee-and-charges-policy'
     | '/policy/kyc-policy'
@@ -2194,7 +2195,7 @@ export interface FileRouteTypes {
     | '/(landing)/policy/code-of-conduct-ethics-policy'
     | '/(landing)/policy/complaint-handling-and-dispute-policy'
     | '/(landing)/policy/cookie-policy'
-    | '/(landing)/policy/data-protection'
+    | '/(landing)/policy/data-protection-policy'
     | '/(landing)/policy/developer-policy'
     | '/(landing)/policy/fee-and-charges-policy'
     | '/(landing)/policy/kyc-policy'
@@ -2344,7 +2345,7 @@ export const routeTree = rootRoute
         "/(landing)/policy/code-of-conduct-ethics-policy",
         "/(landing)/policy/complaint-handling-and-dispute-policy",
         "/(landing)/policy/cookie-policy",
-        "/(landing)/policy/data-protection",
+        "/(landing)/policy/data-protection-policy",
         "/(landing)/policy/developer-policy",
         "/(landing)/policy/fee-and-charges-policy",
         "/(landing)/policy/kyc-policy",
@@ -2445,8 +2446,8 @@ export const routeTree = rootRoute
       "filePath": "(landing)/policy/cookie-policy.tsx",
       "parent": "/(landing)/policy"
     },
-    "/(landing)/policy/data-protection": {
-      "filePath": "(landing)/policy/data-protection.tsx",
+    "/(landing)/policy/data-protection-policy": {
+      "filePath": "(landing)/policy/data-protection-policy.tsx",
       "parent": "/(landing)/policy"
     },
     "/(landing)/policy/developer-policy": {

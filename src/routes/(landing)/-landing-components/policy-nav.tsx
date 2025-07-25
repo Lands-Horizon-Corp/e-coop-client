@@ -10,7 +10,7 @@ const PolicyNav = ({ className }: PolicyNavLinkProps) => {
         { name: 'Privacy Policy', to: '/privacy-policy' },
         { name: 'Terms and Conditions', to: '/terms-and-condition' },
         { name: 'Cookie Policy', to: '/cookie-policy' },
-        { name: 'Data Protection Policy', to: '/data-protection' },
+        { name: 'Data Protection Policy', to: '/data-protection-policy' },
         { name: 'Risk Management Policy', to: '/risk-management-policy' },
         {
             name: 'Complaint and Dispute Policy',
