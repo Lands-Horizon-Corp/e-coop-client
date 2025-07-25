@@ -256,8 +256,7 @@ const Branch = ({ branch, organizationId, isUserCanJoin }: BranchProps) => {
         },
         onError: (error) => {
             toast.error('Failed to join organization. Please try again.')
-            console.error('Join organization error:', error)
-        },
+        }
     })
 
     const handleJoinClick = () => {

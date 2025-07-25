@@ -5,7 +5,8 @@ import { cn } from '@/lib'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
-import { CreateUpdateFormFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
+import { CreateUpdateBranchFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
+import UpdateOrganizationFormModal from '@/components/forms/onboarding-forms/update-organization-form'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     AddressCardIcon,
@@ -21,6 +22,7 @@ import {
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import PlainTextEditor from '@/components/plain-text-editor'
+import RawDescription from '@/components/raw-description'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -79,12 +81,12 @@ function RouteComponent() {
     }
 
     const createModal = useModalState()
+    const updateOrganization = useModalState()
 
     const isNoBranches = branches?.length === 0
-
     return (
         <div className="w-full">
-            <CreateUpdateFormFormModal
+            <CreateUpdateBranchFormModal
                 {...createModal}
                 formProps={{
                     organizationId: organization_id,
@@ -93,6 +95,13 @@ function RouteComponent() {
                     },
                     hiddenFields: ['is_main_branch'],
                 }}
+            />
+            <UpdateOrganizationFormModal
+                formProps={{
+                    organizationId: organization_id,
+                    defaultValues: organization,
+                }}
+                {...updateOrganization}
             />
             <div className="min-h-full w-full min-w-full rounded-none border-none bg-transparent py-5">
                 {isPendingOrganization ? (
@@ -125,9 +134,9 @@ function RouteComponent() {
                                 </span>
                                 {organization?.name}
                             </h1>
-                            <PlainTextEditor
+                            <RawDescription
                                 className="text-sm"
-                                content={organization?.description}
+                                content={organization?.description ?? ''}
                             />
                             <div className="flex items-center gap-x-2">
                                 <PushPinIcon className="text-red-400" />
@@ -142,14 +151,26 @@ function RouteComponent() {
                                 </p>
                             </div>
                         </div>
-                        <Button
-                            variant={'secondary'}
-                            disabled={isSeeding}
-                            onClick={() => createModal.onOpenChange(true)}
-                        >
-                            <PlusIcon className="mr-2" />
-                            Add Branch
-                        </Button>
+                        <div className="flex  items-start flex-col space-y-2">
+                            <Button
+                                variant={'secondary'}
+                                disabled={isSeeding}
+                                onClick={() => createModal.onOpenChange(true)}
+                            >
+                                <PlusIcon className="mr-2" />
+                                Add Branch
+                            </Button>
+                            <Button
+                                variant={'secondary'}
+                                onClick={() =>
+                                    updateOrganization.onOpenChange(true)
+                                }
+                                className="w-full"
+                            >
+                                <EditPencilIcon className="mr-2" />
+                                edit
+                            </Button>
+                        </div>
                     </div>
                 )}
                 <p className="flex items-center gap-x-1 py-2">
@@ -260,7 +281,7 @@ export const BranchBar = ({
 
     return (
         <>
-            <CreateUpdateFormFormModal
+            <CreateUpdateBranchFormModal
                 {...updateModal}
                 formProps={{
                     organizationId,
