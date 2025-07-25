@@ -41,14 +41,13 @@ const Card: React.FC<CardProps> = ({ icon, label, description }) => {
 }
 
 export function HeroSection() {
-    const { theme } = useTheme()
-
+    const { resolvedTheme } = useTheme()
     return (
         <>
-            <div className={cn(theme === 'dark' ? 'hidden' : 'block')}>
+            <div className={cn(resolvedTheme === 'dark' ? 'hidden' : 'block')}>
                 <Plane />
             </div>
-            <div className={cn(theme === 'dark' ? 'block' : 'hidden')}>
+            <div className={cn(resolvedTheme === 'dark' ? 'block' : 'hidden')}>
                 <Galaxy3D />
             </div>
 
