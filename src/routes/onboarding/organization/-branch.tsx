@@ -254,9 +254,9 @@ const Branch = ({ branch, organizationId, isUserCanJoin }: BranchProps) => {
             toast.success('You have successfully joined the organization')
             navigate({ to: `/onboarding` })
         },
-        onError: (error) => {
+        onError: () => {
             toast.error('Failed to join organization. Please try again.')
-        }
+        },
     })
 
     const handleJoinClick = () => {
