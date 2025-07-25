@@ -64,9 +64,9 @@ export interface IOrganizationRequest {
 
     cover_media_id?: TEntityId
 
-    subscription_plan_id: TEntityId
+    subscription_plan_id?: TEntityId
 
-    terms_and_onditions?: string
+    terms_and_conditions?: string
     privacy_policy?: string
     cookie_policy?: string
     refund_policy?: string
