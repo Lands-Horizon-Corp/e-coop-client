@@ -128,6 +128,7 @@ import {
     GoArrowRight as ArrowRightIcon,
     GoDotFill as DotBigIcon,
     GoKebabHorizontal as DotsHorizontalIcon,
+    GoHorizontalRule as HorizontalRuleIcon,
     GoSearch as MagnifyingGlassIcon,
     GoOrganization as OrganizationIcon,
 } from 'react-icons/go'
@@ -607,6 +608,7 @@ export {
     HeartBreakFillIcon,
     BriefCaseClockIcon,
     BorderedShieldIcon,
+    HorizontalRuleIcon,
     BsRocketTakeoffIcon,
     PlugConnectFillIcon,
     FaCalendarCheckIcon,
@@ -910,6 +912,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Open External Link': OpenExternalLinkIcon,
     'Flip Vertical Line': FlipVerticalLineIcon,
     'Bordered Shield Icon': BorderedShieldIcon,
+    'Horizontal Rule Icon': HorizontalRuleIcon,
     'Shield Exclamation': ShieldExclamationIcon,
     'Badge Question Fill': BadgeQuestionFillIcon,
     'Ri Community Fill Icon': RiCommunityFillIcon,
