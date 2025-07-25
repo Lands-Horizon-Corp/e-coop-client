@@ -19,6 +19,8 @@ interface Props extends IBaseProps {
     textEditorClassName?: string
     placeholderClassName?: string
     onChange: (content: string) => void
+    toolBarClassName?: string
+    isAllowedHorizontalRule?: boolean
 }
 
 export type THeadingLevel = 1 | 2 | 3 | 4
@@ -36,6 +38,8 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
             isHeadingDisabled = true,
             placeholder = 'Write something …',
             onChange,
+            toolBarClassName,
+            isAllowedHorizontalRule,
         },
         ref
     ) => {
@@ -96,10 +100,12 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
             >
                 {showToolbar && editor && (
                     <Toolbar
+                        className={toolBarClassName}
                         editor={editor}
                         activeHeading={activeHeading}
                         toggleHeading={toggleHeading}
                         isHeadingDisabled={isHeadingDisabled}
+                        isAllowedHorizontalRule={isAllowedHorizontalRule}
                     />
                 )}
                 <EditorContent editor={editor} disabled={disabled} />

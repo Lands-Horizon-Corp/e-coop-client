@@ -603,7 +603,7 @@ export const CreateUpdateBranchByOrgForm = ({
     )
 }
 
-export const CreateUpdateFormFormModal = ({
+export const CreateUpdateBranchFormModal = ({
     title = 'Create Branch',
     description = 'Fill out the form to add new branch',
     className,
@@ -630,4 +630,4 @@ export const CreateUpdateFormFormModal = ({
     )
 }
 
-export default CreateUpdateFormFormModal
+export default CreateUpdateBranchFormModal
