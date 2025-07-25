@@ -206,7 +206,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     business_contact_number: string
     civil_status: TCivilStatus
 
-    qr_code: IQrScanResult<string, 'member-profile-qr'>
+    qr_code: IQrScanResult<string, 'member-qr'>
 
     // occupationId?: TEntityId
 
