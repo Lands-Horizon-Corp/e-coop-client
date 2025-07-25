@@ -71,6 +71,8 @@ export const ICONS = [
     'Eye View',
     'Not Allowed',
     'Crown',
+    'Scan QR',
+    'Scan Line',
     'Code SandBox',
     'References',
     'Column',

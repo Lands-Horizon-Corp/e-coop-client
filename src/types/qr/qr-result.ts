@@ -5,7 +5,7 @@ export type TQrContentType =
     | 'unknown-qr'
     | 'invitation-code-qr'
     | 'user-qr'
-    | 'member-profile-qr'
+    | 'member-qr'
 
 // Raw JSON-parsed QR scan result
 export type IQrScanResult<
@@ -23,4 +23,4 @@ export interface IQrInvitationCodeDecodedResult
     extends IQrScanResult<IQRInvitationCode, 'invitation-code-qr'> {}
 
 export interface IQRMemberProfileDecodedResult
-    extends IQrScanResult<IQRMemberProfile, 'member-profile-qr'> {}
+    extends IQrScanResult<IQRMemberProfile, 'member-qr'> {}
