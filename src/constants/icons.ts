@@ -272,6 +272,7 @@ export const ICONS = [
     'Badge Question Fill',
     'Location Pin Outline',
     'Question Circle Fill',
+    'Horizontal Rule Icon',
     'Flip Horizontal Line',
     'Rotate 90 Degree Left',
     'Rotate 90 Degree Right',
