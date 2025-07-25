@@ -9,7 +9,7 @@ interface InfoCardProps {
 }
 
 const InfoCard = ({ icon, title, children }: InfoCardProps) => (
-    <div className="flex-1 min-w-[260px] max-w-md bg-gradient-to-b from-primary/10 to-transparent  rounded-xl p-5 flex flex-col items-center md:items-start text-center md:text-left">
+    <div className="flex-1 min-w-[260px] backdrop-blur-sm max-w-md bg-gradient-to-b from-primary/10 to-transparent  rounded-xl p-5 flex flex-col items-center md:items-start text-center md:text-left">
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary mb-3">
             {icon}
         </div>

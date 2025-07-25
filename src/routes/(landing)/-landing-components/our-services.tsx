@@ -32,7 +32,7 @@ const ServiceCard = ({
             opacity={0.1}
             className=" hover:shadow-xl border-0 hover:scale-[1.03] transition-all duration-300"
         >
-            <Card className=" dark:text-white h-full bg-transparent border-0 rounded-full text-black shadow-none">
+            <Card className=" dark:text-white h-full backdrop-blur-sm bg-transparent border-0 rounded-full text-black shadow-none">
                 <CardHeader className="flex items-center justify-center">
                     <div
                         className={`w-16 h-16 ${bgColor} border-[.5px] border-green-400 rounded-full flex items-center justify-center text-white`}
