@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { API_URL } from '@/constants'
 import { cn } from '@/lib'
 
+import Markdown from '@/components/ui/markdown'
+
 import { useGroupRoutes } from '@/hooks/api-hooks/dev-api-hooks/use-route.dev'
 import useDebounce from '@/hooks/use-debounce'
 
@@ -205,7 +207,6 @@ const RouteCard = ({
                                 <ArrowRightIcon className="size-4 text-gray-400 dark:text-gray-500 group-data-[state=open]:rotate-90 transition-transform duration-200" />
                             </div>
                         </AccordionTrigger>
-
                         <AccordionContent className="px-4 pb-4">
                             <div className="space-y-3 pt-2">
                                 {groupedRoute.routes.map((route, index) => (
@@ -237,7 +238,8 @@ const RouteCard = ({
                                             </div>
                                         )}
 
-                                        <div className="grid gap-3 md:grid-cols-2 mb-3">
+                                        {/* Request on top, Response underneath */}
+                                        <div className="space-y-6 mb-3">
                                             <div className="space-y-2">
                                                 <div className="flex items-center gap-2">
                                                     <PaperPlaneIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -245,13 +247,13 @@ const RouteCard = ({
                                                         Request Type
                                                     </h4>
                                                 </div>
-                                                <div className="p-2 bg-green-50 dark:bg-teal-900/20 rounded border border-green-100 dark:border-teal-800/50">
+                                                <div>
                                                     {route.request ? (
-                                                        <CopyWrapper>
-                                                            <code className="text-xs font-mono text-teal-800 dark:text-teal-300 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
-                                                                {route.request}
-                                                            </code>
-                                                        </CopyWrapper>
+                                                        <Markdown
+                                                            content={
+                                                                route.request
+                                                            }
+                                                        />
                                                     ) : (
                                                         <span className="text-xs text-muted-foreground italic">
                                                             No request body
@@ -266,13 +268,13 @@ const RouteCard = ({
                                                         Response Type
                                                     </h4>
                                                 </div>
-                                                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-100 dark:border-blue-800/50">
+                                                <div>
                                                     {route.response ? (
-                                                        <CopyWrapper>
-                                                            <code className="text-xs font-mono text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded">
-                                                                {route.response}
-                                                            </code>
-                                                        </CopyWrapper>
+                                                        <Markdown
+                                                            content={
+                                                                route.response
+                                                            }
+                                                        />
                                                     ) : (
                                                         <span className="text-xs text-muted-foreground italic">
                                                             No response body
