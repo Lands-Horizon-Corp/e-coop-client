@@ -4,12 +4,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { API_URL } from '@/constants'
 import { cn } from '@/lib'
 
-import Markdown from '@/components/ui/markdown'
+import { Markdown } from '@/components/ui/markdown'
 
 import { useGroupRoutes } from '@/hooks/api-hooks/dev-api-hooks/use-route.dev'
 import useDebounce from '@/hooks/use-debounce'
 
-import { IClassProps, IGroupedRoute } from '@/types'
+import { IAPIList, IClassProps, IGroupedRoute } from '@/types'
 
 import APIRequestMethodBadge, {
     REQUEST_METHOD,
@@ -32,8 +32,16 @@ import {
 } from '../ui/accordion'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
-import { Card, CardContent } from '../ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Input } from '../ui/input'
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from '../ui/sheet'
 import { Switch } from '../ui/switch'
 
 interface Props extends IClassProps {}
@@ -159,6 +167,7 @@ const APIRoutes = ({ className }: Props) => {
                         key={groupRoute.key}
                         showFullRoute={showFull}
                         groupedRoute={groupRoute}
+                        rawData={rawData}
                     />
                 ))}
             </div>
@@ -169,10 +178,14 @@ const APIRoutes = ({ className }: Props) => {
 const RouteCard = ({
     groupedRoute,
     showFullRoute,
+    rawData,
 }: {
     groupedRoute: IGroupedRoute
+    rawData?: IAPIList
     showFullRoute?: boolean
 }) => {
+    const [openSheetIndex, setOpenSheetIndex] = useState<number | null>(null)
+
     return (
         <Card className="w-full mx-auto bg-popover/70 shadow-lg border-0">
             <CardContent className="p-0">
@@ -229,8 +242,141 @@ const RouteCard = ({
                                                         : route.route}
                                                 </code>
                                             </CopyWrapper>
-                                        </div>
+                                            <Sheet
+                                                open={openSheetIndex === index}
+                                                onOpenChange={(open) =>
+                                                    setOpenSheetIndex(
+                                                        open ? index : null
+                                                    )
+                                                }
+                                            >
+                                                <SheetTrigger asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="ml-2"
+                                                        onClick={() =>
+                                                            setOpenSheetIndex(
+                                                                index
+                                                            )
+                                                        }
+                                                    >
+                                                        Details
+                                                    </Button>
+                                                </SheetTrigger>
+                                                <SheetContent
+                                                    side="right"
+                                                    className="min-w-[40vw] max-w-[90vw] h-full max-h-screen overflow-y-auto p-8 bg-gradient-to-br from-background via-card to-muted border-l shadow-xl flex flex-col gap-8"
+                                                >
+                                                    <SheetHeader>
+                                                        <SheetTitle>
+                                                            <span className="flex items-center gap-2">
+                                                                <APIRequestMethodBadge
+                                                                    method={
+                                                                        route.method as (typeof REQUEST_METHOD)[number]
+                                                                    }
+                                                                />
+                                                                <span className="font-mono text-lg font-semibold text-primary">
+                                                                    {showFullRoute
+                                                                        ? `${API_URL}${route.route}`
+                                                                        : route.route}
+                                                                </span>
+                                                            </span>
+                                                        </SheetTitle>
+                                                        <SheetClose asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="absolute top-2 right-2"
+                                                            >
+                                                                ×
+                                                            </Button>
+                                                        </SheetClose>
+                                                    </SheetHeader>
+                                                    <div className="space-y-6">
+                                                        {route.note && (
+                                                            <div className="flex items-start gap-2 rounded-lg bg-muted/40 px-4 py-2 text-muted-foreground">
+                                                                <MessagesIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                                                <p className="text-sm font-medium">
+                                                                    {route.note}
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                        <div className="space-y-6">
+                                                            <div className="space-y-2">
+                                                                <div className="flex items-center gap-2">
+                                                                    <PaperPlaneIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                                                    <h4 className="text-md font-semibold text-green-800 dark:text-green-300">
+                                                                        Request
+                                                                        Type
+                                                                    </h4>
+                                                                </div>
+                                                                <div>
+                                                                    {route.request ? (
+                                                                        <>
+                                                                            <Markdown
+                                                                                content={
+                                                                                    route.request
+                                                                                }
+                                                                            />
+                                                                            <RequestsList
+                                                                                rawData={
+                                                                                    rawData
+                                                                                }
+                                                                                route={
+                                                                                    route
+                                                                                }
+                                                                            />
+                                                                        </>
+                                                                    ) : (
+                                                                        <span className="text-xs text-muted-foreground italic">
+                                                                            No
+                                                                            request
+                                                                            body
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <div className="flex items-center gap-2">
+                                                                    <CurlyBracketIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                                                    <h4 className="text-md font-semibold text-blue-800 dark:text-blue-300">
+                                                                        Response
+                                                                        Type
+                                                                    </h4>
+                                                                </div>
+                                                                <div>
+                                                                    {route.response ? (
+                                                                        <>
+                                                                            <Markdown
+                                                                                content={
+                                                                                    route.response
+                                                                                }
+                                                                            />
 
+                                                                            <ResponsesList
+                                                                                rawData={
+                                                                                    rawData
+                                                                                }
+                                                                                route={
+                                                                                    route
+                                                                                }
+                                                                            />
+                                                                        </>
+                                                                    ) : (
+                                                                        <span className="text-xs text-muted-foreground italic">
+                                                                            No
+                                                                            response
+                                                                            body
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </SheetContent>
+                                            </Sheet>
+                                        </div>
                                         {route.note && (
                                             <div className="flex items-start gap-2 rounded-lg text-muted-foreground my-4">
                                                 <MessagesIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
@@ -239,7 +385,6 @@ const RouteCard = ({
                                                 </p>
                                             </div>
                                         )}
-
                                         {/* Request on top, Response underneath */}
                                         <div className="space-y-6 mb-3">
                                             <div className="space-y-2">
@@ -295,5 +440,111 @@ const RouteCard = ({
         </Card>
     )
 }
-
 export default APIRoutes
+
+export function ResponsesList({
+    rawData,
+    route,
+}: {
+    rawData?: IAPIList
+    route: IGroupedRoute['routes'][number]
+}) {
+    // Filter valid responses
+    const validResponses = (rawData?.responses ?? []).filter(
+        (response) => response.value && route.response?.includes(response.value)
+    )
+
+    // Toggle state for showing all connections
+    const [showAll, setShowAll] = useState(false)
+    // How many to show by default if not toggled
+    const DEFAULT_COUNT = 0
+
+    if (!validResponses.length) return null
+
+    const responsesToShow = showAll
+        ? validResponses
+        : validResponses.slice(0, DEFAULT_COUNT)
+
+    return (
+        <div className="flex flex-col gap-4 w-full">
+            <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold">
+                    Response Type connections
+                </h2>
+                {validResponses.length > DEFAULT_COUNT && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowAll((prev) => !prev)}
+                    >
+                        {showAll ? 'Hide' : 'Show all'}
+                    </Button>
+                )}
+            </div>
+            {responsesToShow.map((response, index) => (
+                <Card key={index} className="w-full">
+                    <CardHeader>
+                        <CardTitle className="mb-2 text-base font-semibold text-primary">
+                            {response.key}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="overflow-auto">
+                        <Markdown content={response.value} />
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+    )
+}
+
+export function RequestsList({
+    rawData,
+    route,
+}: {
+    rawData?: IAPIList
+    route: IGroupedRoute['routes'][number]
+}) {
+    const validRequests = (rawData?.requests ?? []).filter(
+        (request) => request.value && route.request?.includes(request.value)
+    )
+
+    const [showAll, setShowAll] = useState(false)
+    const DEFAULT_COUNT = 0
+
+    if (!validRequests.length) return null
+
+    const requestsToShow = showAll
+        ? validRequests
+        : validRequests.slice(0, DEFAULT_COUNT)
+
+    return (
+        <div className="flex flex-col gap-4 w-full">
+            <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold">
+                    Request Types connections
+                </h2>
+                {validRequests.length > DEFAULT_COUNT && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowAll((prev) => !prev)}
+                    >
+                        {showAll ? 'Hide' : 'Show all'}
+                    </Button>
+                )}
+            </div>
+            {requestsToShow.map((request, index) => (
+                <Card key={index} className="w-full">
+                    <CardHeader>
+                        <CardTitle className="text-base font-semibold text-primary">
+                            {request.key}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="overflow-auto">
+                        <Markdown content={request.value} />
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+    )
+}
