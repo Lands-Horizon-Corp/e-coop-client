@@ -36,7 +36,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Input } from '../ui/input'
 import {
     Sheet,
-    SheetClose,
     SheetContent,
     SheetHeader,
     SheetTitle,
@@ -266,7 +265,7 @@ const RouteCard = ({
                                                 </SheetTrigger>
                                                 <SheetContent
                                                     side="right"
-                                                    className="min-w-[40vw] max-w-[90vw] h-full max-h-screen overflow-y-auto p-8 bg-gradient-to-br from-background via-card to-muted border-l shadow-xl flex flex-col gap-8"
+                                                    className="min-w-[50vw] max-w-[90vw] h-full max-h-screen overflow-y-auto p-8 bg-gradient-to-br from-background via-card to-muted border-l shadow-xl flex flex-col gap-8"
                                                 >
                                                     <SheetHeader>
                                                         <SheetTitle>
@@ -276,22 +275,15 @@ const RouteCard = ({
                                                                         route.method as (typeof REQUEST_METHOD)[number]
                                                                     }
                                                                 />
-                                                                <span className="font-mono text-lg font-semibold text-primary">
-                                                                    {showFullRoute
-                                                                        ? `${API_URL}${route.route}`
-                                                                        : route.route}
-                                                                </span>
+                                                                <CopyWrapper>
+                                                                    <span className="text-md font-md">
+                                                                        {showFullRoute
+                                                                            ? `${API_URL}${route.route}`
+                                                                            : route.route}
+                                                                    </span>
+                                                                </CopyWrapper>
                                                             </span>
                                                         </SheetTitle>
-                                                        <SheetClose asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                className="absolute top-2 right-2"
-                                                            >
-                                                                ×
-                                                            </Button>
-                                                        </SheetClose>
                                                     </SheetHeader>
                                                     <div className="space-y-6">
                                                         {route.note && (
