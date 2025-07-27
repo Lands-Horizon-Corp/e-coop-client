@@ -5,18 +5,16 @@ import apiRouteService from '@/api-service/developer-services/api-route-service'
 import { serverRequestErrExtractor } from '@/helpers'
 import { withCatchAsync } from '@/utils'
 
-import { IAPIHook, IGroupedRoute, IQueryProps } from '@/types'
+import { IAPIHook, IAPIList, IQueryProps } from '@/types'
 
 export const useGroupRoutes = ({
     enabled,
     showMessage = true,
-}: IAPIHook<IGroupedRoute[], string> & IQueryProps<IGroupedRoute> = {}) => {
-    return useQuery<IGroupedRoute[], string>({
-        queryKey: ['loan-status', 'all'],
+}: IAPIHook<IAPIList, string> & IQueryProps<IAPIList> = {}) => {
+    return useQuery<IAPIList, string>({
+        queryKey: ['api-list', 'all'],
         queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                apiRouteService.allList()
-            )
+            const [error, result] = await withCatchAsync(apiRouteService.get())
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -26,7 +24,6 @@ export const useGroupRoutes = ({
 
             return result
         },
-        initialData: [],
         enabled,
         retry: 1,
     })

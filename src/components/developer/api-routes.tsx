@@ -68,19 +68,21 @@ const APIRoutes = ({ className }: Props) => {
     const [searchTerm, setSearchTerm] = useState('')
 
     const data = useMemo(() => {
-        return rawData.map((groupRoute) => ({
-            ...groupRoute,
-            routes: groupRoute.routes.map((route) => ({
-                ...route,
-                route: `/api${route.route}`,
-            })),
-        }))
+        return (
+            rawData?.grouped_routes.map((groupRoute) => ({
+                ...groupRoute,
+                routes: groupRoute.routes.map((route) => ({
+                    ...route,
+                    route: `/api${route.route}`,
+                })),
+            })) ?? []
+        )
     }, [rawData])
 
     const fuse = useMemo(
         () =>
             new Fuse<IGroupedRoute>(data, {
-                keys: ['key', 'routes.route', 'routes.method', 'routes.note'],
+                keys: ['key', 'routes.route'],
                 includeScore: true,
                 threshold: 0.2,
             }),

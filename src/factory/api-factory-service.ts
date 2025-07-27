@@ -159,3 +159,10 @@ export const createAPIExportableService = (
         },
     }
 }
+
+export const createAPIObjectService = <TData>(baseEndpoint: string) => ({
+    async get() {
+        const response = await APIService.get<TData>(baseEndpoint)
+        return response.data
+    },
+})
