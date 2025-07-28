@@ -91,14 +91,15 @@ function RouteComponent() {
                 <div className="space-y-2">
                     <p>Need a custom plan?</p>
                     <p className="text-muted-foreground">
-                        Talk to us and we&apos;l happy to discuss
-                        and setup something just for you.
+                        Talk to us and we&apos;l happy to discuss and setup
+                        something just for you.
                     </p>
                 </div>
                 <Button size="sm" className="rounded-full px-4" asChild>
                     <Link to="/contact">
                         {' '}
-                        Talk to us<PaperPlaneIcon className="ml-2" />
+                        Talk to us
+                        <PaperPlaneIcon className="ml-2" />
                     </Link>
                 </Button>
             </div>
