@@ -84,6 +84,7 @@ const AboutPage = () => {
                     <div className="grid grid-cols-3 py-8 gap-6">
                         {LANDS_TEAM.map((member) => (
                             <TeamMemberCard
+                                key={`${member.name}${member.position}`}
                                 teamMember={member}
                                 className="even:mt-8 odd:mb-8"
                             />
@@ -145,7 +146,9 @@ const TeamMemberCard = ({
                         <DotBigIcon className="inline text-primary" />{' '}
                         {position}
                     </p>
-                    <p className="text-muted-foreground text-xs hover:underline"><DotsHorizontalIcon className="ml-1 inline"/></p>
+                    <p className="text-muted-foreground text-xs hover:underline">
+                        <DotsHorizontalIcon className="ml-1 inline" />
+                    </p>
                 </div>
             </div>
             <div onClick={(e) => e.stopPropagation()}>
