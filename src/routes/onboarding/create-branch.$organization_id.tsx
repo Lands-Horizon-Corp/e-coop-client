@@ -100,6 +100,8 @@ function RouteComponent() {
                 formProps={{
                     organizationId: organization_id,
                     defaultValues: organization,
+                    coverMedia: organization?.cover_media,
+                    media: organization?.media,
                 }}
                 {...updateOrganization}
             />
