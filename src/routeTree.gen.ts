@@ -26,6 +26,7 @@ import { Route as AuthForgotPasswordImport } from './routes/auth/forgot-password
 import { Route as AccountSecurityImport } from './routes/account/security'
 import { Route as AccountQrImport } from './routes/account/qr'
 import { Route as AccountProfileImport } from './routes/account/profile'
+import { Route as AccountActivityLogsImport } from './routes/account/activity-logs'
 import { Route as landingTestImport } from './routes/(landing)/test'
 import { Route as landingFrequentlyAskedQuestionsImport } from './routes/(landing)/frequently-asked-questions'
 import { Route as landingDevelopersImport } from './routes/(landing)/developers'
@@ -34,6 +35,7 @@ import { Route as landingAboutImport } from './routes/(landing)/about'
 import { Route as OnboardingOrganizationRouteImport } from './routes/onboarding/organization/route'
 import { Route as landingPolicyRouteImport } from './routes/(landing)/policy/route'
 import { Route as OnboardingOrganizationIndexImport } from './routes/onboarding/organization/index'
+import { Route as landingSubscriptionPlansIndexImport } from './routes/(landing)/subscription-plans/index'
 import { Route as OnboardingOrganizationOrganizationidImport } from './routes/onboarding/organization/$organization_id'
 import { Route as OnboardingCreateBranchOrganizationidImport } from './routes/onboarding/create-branch.$organization_id'
 import { Route as AuthPasswordResetResetIdImport } from './routes/auth/password-reset.$resetId'
@@ -199,6 +201,12 @@ const AccountProfileRoute = AccountProfileImport.update({
   getParentRoute: () => AccountRouteRoute,
 } as any)
 
+const AccountActivityLogsRoute = AccountActivityLogsImport.update({
+  id: '/activity-logs',
+  path: '/activity-logs',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+
 const landingTestRoute = landingTestImport.update({
   id: '/test',
   path: '/test',
@@ -248,6 +256,13 @@ const OnboardingOrganizationIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => OnboardingOrganizationRouteRoute,
+  } as any)
+
+const landingSubscriptionPlansIndexRoute =
+  landingSubscriptionPlansIndexImport.update({
+    id: '/subscription-plans/',
+    path: '/subscription-plans/',
+    getParentRoute: () => landingRouteRoute,
   } as any)
 
 const OnboardingOrganizationOrganizationidRoute =
@@ -833,6 +848,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingTestImport
       parentRoute: typeof landingRouteImport
     }
+    '/account/activity-logs': {
+      id: '/account/activity-logs'
+      path: '/activity-logs'
+      fullPath: '/account/activity-logs'
+      preLoaderRoute: typeof AccountActivityLogsImport
+      parentRoute: typeof AccountRouteImport
+    }
     '/account/profile': {
       id: '/account/profile'
       path: '/profile'
@@ -1035,6 +1057,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding/organization/$organization_id'
       preLoaderRoute: typeof OnboardingOrganizationOrganizationidImport
       parentRoute: typeof OnboardingOrganizationRouteImport
+    }
+    '/(landing)/subscription-plans/': {
+      id: '/(landing)/subscription-plans/'
+      path: '/subscription-plans'
+      fullPath: '/subscription-plans'
+      preLoaderRoute: typeof landingSubscriptionPlansIndexImport
+      parentRoute: typeof landingRouteImport
     }
     '/onboarding/organization/': {
       id: '/onboarding/organization/'
@@ -1445,6 +1474,7 @@ interface landingRouteRouteChildren {
   landingFrequentlyAskedQuestionsRoute: typeof landingFrequentlyAskedQuestionsRoute
   landingTestRoute: typeof landingTestRoute
   landingIndexRoute: typeof landingIndexRoute
+  landingSubscriptionPlansIndexRoute: typeof landingSubscriptionPlansIndexRoute
 }
 
 const landingRouteRouteChildren: landingRouteRouteChildren = {
@@ -1455,6 +1485,7 @@ const landingRouteRouteChildren: landingRouteRouteChildren = {
   landingFrequentlyAskedQuestionsRoute: landingFrequentlyAskedQuestionsRoute,
   landingTestRoute: landingTestRoute,
   landingIndexRoute: landingIndexRoute,
+  landingSubscriptionPlansIndexRoute: landingSubscriptionPlansIndexRoute,
 }
 
 const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
@@ -1462,6 +1493,7 @@ const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
 )
 
 interface AccountRouteRouteChildren {
+  AccountActivityLogsRoute: typeof AccountActivityLogsRoute
   AccountProfileRoute: typeof AccountProfileRoute
   AccountQrRoute: typeof AccountQrRoute
   AccountSecurityRoute: typeof AccountSecurityRoute
@@ -1471,6 +1503,7 @@ interface AccountRouteRouteChildren {
 }
 
 const AccountRouteRouteChildren: AccountRouteRouteChildren = {
+  AccountActivityLogsRoute: AccountActivityLogsRoute,
   AccountProfileRoute: AccountProfileRoute,
   AccountQrRoute: AccountQrRoute,
   AccountSecurityRoute: AccountSecurityRoute,
@@ -1721,6 +1754,7 @@ export interface FileRoutesByFullPath {
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
+  '/account/activity-logs': typeof AccountActivityLogsRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/qr': typeof AccountQrRoute
   '/account/security': typeof AccountSecurityRoute
@@ -1749,6 +1783,7 @@ export interface FileRoutesByFullPath {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute
+  '/subscription-plans': typeof landingSubscriptionPlansIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
@@ -1810,6 +1845,7 @@ export interface FileRoutesByTo {
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
+  '/account/activity-logs': typeof AccountActivityLogsRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/qr': typeof AccountQrRoute
   '/account/security': typeof AccountSecurityRoute
@@ -1839,6 +1875,7 @@ export interface FileRoutesByTo {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute
+  '/subscription-plans': typeof landingSubscriptionPlansIndexRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
@@ -1904,6 +1941,7 @@ export interface FileRoutesById {
   '/(landing)/developers': typeof landingDevelopersRoute
   '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/(landing)/test': typeof landingTestRoute
+  '/account/activity-logs': typeof AccountActivityLogsRoute
   '/account/profile': typeof AccountProfileRoute
   '/account/qr': typeof AccountQrRoute
   '/account/security': typeof AccountSecurityRoute
@@ -1933,6 +1971,7 @@ export interface FileRoutesById {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute
+  '/(landing)/subscription-plans/': typeof landingSubscriptionPlansIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
@@ -2000,6 +2039,7 @@ export interface FileRouteTypes {
     | '/developers'
     | '/frequently-asked-questions'
     | '/test'
+    | '/account/activity-logs'
     | '/account/profile'
     | '/account/qr'
     | '/account/security'
@@ -2028,6 +2068,7 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
+    | '/subscription-plans'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
@@ -2088,6 +2129,7 @@ export interface FileRouteTypes {
     | '/developers'
     | '/frequently-asked-questions'
     | '/test'
+    | '/account/activity-logs'
     | '/account/profile'
     | '/account/qr'
     | '/account/security'
@@ -2117,6 +2159,7 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
+    | '/subscription-plans'
     | '/onboarding/organization'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/dashboard'
@@ -2180,6 +2223,7 @@ export interface FileRouteTypes {
     | '/(landing)/developers'
     | '/(landing)/frequently-asked-questions'
     | '/(landing)/test'
+    | '/account/activity-logs'
     | '/account/profile'
     | '/account/qr'
     | '/account/security'
@@ -2209,6 +2253,7 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
+    | '/(landing)/subscription-plans/'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
@@ -2305,12 +2350,14 @@ export const routeTree = rootRoute
         "/(landing)/developers",
         "/(landing)/frequently-asked-questions",
         "/(landing)/test",
-        "/(landing)/"
+        "/(landing)/",
+        "/(landing)/subscription-plans/"
       ]
     },
     "/account": {
       "filePath": "account/route.tsx",
       "children": [
+        "/account/activity-logs",
         "/account/profile",
         "/account/qr",
         "/account/security",
@@ -2383,6 +2430,10 @@ export const routeTree = rootRoute
     "/(landing)/test": {
       "filePath": "(landing)/test.tsx",
       "parent": "/(landing)"
+    },
+    "/account/activity-logs": {
+      "filePath": "account/activity-logs.tsx",
+      "parent": "/account"
     },
     "/account/profile": {
       "filePath": "account/profile.tsx",
@@ -2501,6 +2552,10 @@ export const routeTree = rootRoute
     "/onboarding/organization/$organization_id": {
       "filePath": "onboarding/organization/$organization_id.tsx",
       "parent": "/onboarding/organization"
+    },
+    "/(landing)/subscription-plans/": {
+      "filePath": "(landing)/subscription-plans/index.tsx",
+      "parent": "/(landing)"
     },
     "/onboarding/organization/": {
       "filePath": "onboarding/organization/index.tsx",
