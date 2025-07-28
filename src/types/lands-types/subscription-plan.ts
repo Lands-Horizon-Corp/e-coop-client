@@ -7,6 +7,11 @@ export interface ISubscriptionPlan extends ITimeStamps, IAuditable {
     description: string
 
     cost: number
+    monthly_price: number
+    yearly_price: number
+    discounted_monthly_price: number
+    discounted_yearly_price: number
+
     timespan: number
 
     max_branches: number
@@ -24,6 +29,11 @@ export interface ISubscriptionPlanRequest {
     description: string
 
     cost: number
+    monthly_price: number
+    yearly_price: number
+    discounted_monthly_price: number
+    discounted_yearly_price: number
+
     timespan: number
 
     max_branches: number

@@ -77,6 +77,7 @@ export const ICONS = [
     'Facebook',
     'Linkedin',
     'Code SandBox',
+    'Users 3 Fill',
     'References',
     'Column',
     'Column Outline',
