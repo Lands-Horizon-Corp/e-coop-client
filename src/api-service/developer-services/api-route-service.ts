@@ -1,8 +1,7 @@
-import { createAPICollectionService } from '@/factory/api-factory-service'
+import { createAPIObjectService } from '@/factory/api-factory-service'
 
-import { IGroupedRoute } from '@/types'
+import { IAPIList } from '@/types'
 
-const collectionServices =
-    createAPICollectionService<IGroupedRoute>('/api/routes')
+const collectionServices = createAPIObjectService<IAPIList>('/api/routes')
 
 export default { ...collectionServices }
