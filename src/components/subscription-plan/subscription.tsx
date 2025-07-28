@@ -1,5 +1,6 @@
 import { cn } from '@/lib'
 
+import { useSubscriptionPlans } from '@/hooks/api-hooks/use-subscription-plan'
 
 import { ISubscriptionPlan, TEntityId } from '@/types'
 
@@ -12,7 +13,6 @@ import {
     CardHeader,
     CardTitle,
 } from '../ui/card'
-import { useSubscriptionPlans } from '@/hooks/api-hooks/use-subscription-plan'
 
 interface SubscriptionProps {
     onChange?: (value: TEntityId) => void
