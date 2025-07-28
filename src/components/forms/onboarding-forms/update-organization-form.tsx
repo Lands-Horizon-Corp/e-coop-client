@@ -15,6 +15,7 @@ import {
     ReplaceIcon,
     VerifiedPatchIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import PlainTextEditor from '@/components/plain-text-editor'
 import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
@@ -29,7 +30,6 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import UserAvatar from '@/components/user-avatar'
 
 import { cn } from '@/lib/utils'
 
@@ -82,6 +82,8 @@ const UpdateOrganizationForm = ({
     const [selectedCoverMedia, setSelectedCoverMedia] = useState<string>(
         coverMedia?.url || ''
     )
+    console.log('selectedLogoMedia', selectedLogoMedia)
+    console.log('selectedCoverMedia', selectedCoverMedia)
 
     const form = useForm<TEditOrganizationFormValues>({
         resolver: zodResolver(EditOrganizationSchema),
@@ -182,14 +184,9 @@ const UpdateOrganizationForm = ({
                                             defaultImage={selectedLogoMedia}
                                             title="Choose Organization Logo"
                                         />
-
-                                        <UserAvatar
-                                            fallback={`-`}
-                                            fallbackClassName="!text-3xl"
+                                        <ImageDisplay
+                                            className="size-36 rounded-lg"
                                             src={selectedLogoMedia}
-                                            className={cn(
-                                                'size-36 !rounded-xl cursor-pointer'
-                                            )}
                                         />
                                         <ActionTooltip
                                             tooltipContent={
@@ -233,17 +230,17 @@ const UpdateOrganizationForm = ({
                                     <GradientBackground
                                         className="w-full"
                                         mediaUrl={
-                                            selectedLogoMedia || field.value
+                                            selectedCoverMedia || field.value
                                         }
                                     >
                                         <div className="flex min-h-32 cursor-pointer items-center justify-between gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                            <img
+                                            <ImageDisplay
                                                 style={{
                                                     opacity: hasNoImageSelected
                                                         ? 0.1
                                                         : 1,
                                                 }}
-                                                className={`size-24 rounded-lg`}
+                                                className="size-24 rounded-lg"
                                                 src={selectedLogoMedia}
                                             />
 
