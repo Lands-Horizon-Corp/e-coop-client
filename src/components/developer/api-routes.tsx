@@ -349,7 +349,6 @@ const RouteCard = ({
                                                     <div className="flex items-start gap-2 rounded-lg text-muted-foreground my-4">
                                                         <MessagesIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
                                                         <p className="text-sm max-w-4xl">
-                                                            {route.note}
                                                             {highlightMatch(
                                                                 route.note,
                                                                 searchedRoute ??
