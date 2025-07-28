@@ -32,9 +32,7 @@ export const OrganizationSchema = z.object({
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
 })
-export const EditOrganizationSchema = OrganizationSchema.omit({
-    cover_media_id: true,
-}).extend({
+export const EditOrganizationSchema = OrganizationSchema.extend({
     id: entityIdSchema.optional(),
     is_private: z.boolean().optional(),
     terms_and_conditions: z.string().optional(),
@@ -42,6 +40,8 @@ export const EditOrganizationSchema = OrganizationSchema.omit({
     cookie_policy: z.string().optional(),
     refund_policy: z.string().optional(),
     user_agreement: z.string().optional(),
+    media_id: z.string().optional(),
+    cover_media_id: z.string().optional(),
 })
 
 export type Organization = z.infer<typeof OrganizationSchema>
