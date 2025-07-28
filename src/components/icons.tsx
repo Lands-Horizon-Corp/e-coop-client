@@ -35,6 +35,7 @@ import {
     BsFileEarmarkFill as FileFillIcon,
     BsImage as Image2Icon,
     BsFileEarmarkImageFill as ImageFileFillIcon,
+    BsInstagram as InstagramIcon,
     BsFileEarmarkMusicFill as MusicFileFillIcon,
     BsFileEarmarkPdfFill as PDFFileFillIcon,
     BsFillQuestionCircleFill as QuestionCircleFillIcon,
@@ -203,6 +204,7 @@ import {
     IoShield as ShieldFillIcon,
     IoStorefront as StoreIcon,
     IoCallOutline as TelephoneIcon,
+    IoLogoLinkedin as LinkedInIcon
 } from 'react-icons/io5'
 import {
     LiaMapMarkedAltSolid as MapMarkedIcon,
@@ -463,6 +465,7 @@ export {
     HomeFillIcon,
     FacebookIcon,
     SettingsIcon,
+    LinkedInIcon,
     UserListIcon,
     MessagesIcon,
     FeedbackIcon,
@@ -485,6 +488,7 @@ export {
     BriefCaseIcon,
     ArrowDownIcon,
     CameraOffIcon,
+    InstagramIcon,
     DotMediumIcon,
     FootstepsIcon,
     UserClockIcon,
@@ -733,6 +737,7 @@ export const IconMap: Record<TIcon, IconType> = {
     Language: LanguageIcon,
     Accounts: AccountsIcon,
     Payments: PaymentsIcon,
+    Linkedin: LinkedInIcon,
     Internal: InternalIcon,
     Facebook: FacebookIcon,
     Settings: SettingsIcon,
@@ -777,6 +782,7 @@ export const IconMap: Record<TIcon, IconType> = {
     References: ReferencesIcon,
     Navigation: NavigationIcon,
     Fullscreen: FullscreenIcon,
+    Instagram: InstagramIcon,
     'Book Stack': BookStackIcon,
     'Code SandBox': CodeSandBox,
     'House Lock': HouseLockIcon,
