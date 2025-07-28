@@ -208,77 +208,73 @@ const RouteCard = ({
 
                         <AccordionContent className="px-4 pb-4">
                             <div className="space-y-3 pt-2">
-                                {groupedRoute.routes.map((route, index) => (
-                                    <div
-                                        key={`${route.route}-${index}`}
-                                        className="p-4 border bg-card rounded-lg transition-colors"
-                                    >
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <APIRequestMethodBadge
-                                                method={
-                                                    route.method as (typeof REQUEST_METHOD)[number]
+                                {groupedRoute.routes.map((route, index) => {
+                                    if (
+                                        searchedRoute &&
+                                        !route.route
+                                            .toLowerCase()
+                                            .includes(
+                                                searchedRoute.toLowerCase()
+                                            ) &&
+                                        !(
+                                            route.note &&
+                                            route.note
+                                                .toLowerCase()
+                                                .includes(
+                                                    searchedRoute.toLowerCase()
+                                                )
+                                        )
+                                    )
+                                        return null
+
+                                    const apiRoute = showFullRoute
+                                        ? `${API_URL}${route.route}`
+                                        : route.route
+                                    return (
+                                        <div
+                                            key={`${route.route}-${index}`}
+                                            className="flex items-center gap-x-2 py-3 border bg-card rounded-lg transition-colors"
+                                        >
+                                            <RouteDetailsSheet
+                                                route={route}
+                                                showFullRoute={!!showFullRoute}
+                                                rawData={rawData}
+                                                open={openSheetIndex === index}
+                                                onOpenChange={(open) =>
+                                                    setOpenSheetIndex(
+                                                        open ? index : null
+                                                    )
                                                 }
                                             />
-                                            <CopyWrapper className="w-full">
-                                                <code className="text-sm w-full font-mono text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 px-2 py-1 rounded border border-gray-200 dark:border-gray-700 flex-1">
-                                                    {showFullRoute
-                                                        ? `${API_URL}${route.route}`
-                                                        : route.route}
-                                                </code>
-                                            </CopyWrapper>
-                                        </div>
-
-                                        {route.note && (
-                                            <div className="flex items-start gap-2 rounded-lg text-muted-foreground my-4">
-                                                <MessagesIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                                                <p className="text-sm ">
-                                                    {route.note}
-                                                </p>
-                                            </div>
-                                        )}
-
-                                        <div className="grid gap-3 md:grid-cols-2 mb-3">
-                                            <div className="space-y-2">
-                                                <div className="flex items-center gap-2">
-                                                    <PaperPlaneIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
-                                                    <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                        Request Type
-                                                    </h4>
+                                            <div>
+                                                <div className="flex items-center gap-3 mb-3">
+                                                    <APIRequestMethodBadge
+                                                        method={
+                                                            route.method as (typeof REQUEST_METHOD)[number]
+                                                        }
+                                                    />
+                                                    <CopyWrapper className="w-full">
+                                                        <code className="text-sm w-full font-mono text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 px-2 py-1 rounded border border-gray-200 dark:border-gray-700 flex-1">
+                                                            {highlightMatch(
+                                                                apiRoute,
+                                                                searchedRoute ??
+                                                                    ''
+                                                            )}
+                                                        </code>
+                                                    </CopyWrapper>
                                                 </div>
-                                                <div className="p-2 bg-green-50 dark:bg-teal-900/20 rounded border border-green-100 dark:border-teal-800/50">
-                                                    {route.request ? (
-                                                        <CopyWrapper>
-                                                            <code className="text-xs font-mono text-teal-800 dark:text-teal-300 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
-                                                                {route.request}
-                                                            </code>
-                                                        </CopyWrapper>
-                                                    ) : (
-                                                        <span className="text-xs text-muted-foreground italic">
-                                                            No request body
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <div className="flex items-center gap-2">
-                                                    <CurlyBracketIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                                                    <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                        Response Type
-                                                    </h4>
-                                                </div>
-                                                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-100 dark:border-blue-800/50">
-                                                    {route.response ? (
-                                                        <CopyWrapper>
-                                                            <code className="text-xs font-mono text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded">
-                                                                {route.response}
-                                                            </code>
-                                                        </CopyWrapper>
-                                                    ) : (
-                                                        <span className="text-xs text-muted-foreground italic">
-                                                            No response body
-                                                        </span>
-                                                    )}
-                                                </div>
+                                                {route.note && (
+                                                    <div className="flex items-start gap-2 rounded-lg text-muted-foreground my-4">
+                                                        <MessagesIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                                        <p className="text-sm max-w-4xl">
+                                                            {highlightMatch(
+                                                                route.note,
+                                                                searchedRoute ??
+                                                                    ''
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

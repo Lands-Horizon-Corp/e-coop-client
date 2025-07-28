@@ -104,6 +104,7 @@ import {
     FaTreeCity as TreeCityIcon,
     FaUserLock as UserLockIcon,
     FaUserPlus as UserPlusIcon,
+    FaUserShield as UserShieldIcon,
 } from 'react-icons/fa6'
 import {
     FiCamera as CameraIcon,
@@ -195,6 +196,7 @@ import {
     IoLanguage as LanguageIcon,
     IoLayers as LayersIcon,
     IoLink as LinkIcon,
+    IoLogoLinkedin as LinkedInIcon,
     IoLocationSharp as LocationPinIcon,
     IoLocation as PinLocationIcon,
     IoPricetag as PriceTagIcon,
@@ -204,7 +206,6 @@ import {
     IoShield as ShieldFillIcon,
     IoStorefront as StoreIcon,
     IoCallOutline as TelephoneIcon,
-    IoLogoLinkedin as LinkedInIcon
 } from 'react-icons/io5'
 import {
     LiaMapMarkedAltSolid as MapMarkedIcon,
@@ -212,7 +213,6 @@ import {
     LiaUserClockSolid as UserClockIcon,
     LiaUserCogSolid as UserCogIcon,
     LiaUser as UserIcon,
-    LiaUserShieldSolid as UserShieldIcon,
     LiaUserTagSolid as UserTagIcon,
 } from 'react-icons/lia'
 import { IconBaseProps, IconType } from 'react-icons/lib'
@@ -289,6 +289,7 @@ import {
     PiSignatureLight as SignatureLightIcon,
     PiTextStrikethroughLight as TextStrikethroughLightIcon,
     PiUserList as UserListIcon,
+    PiUsersThreeFill as Users3FillIcon,
     PiUsersThree as Users3Icon,
     PiWarningCircleFill as WarningCircleIcon,
     PiWarningFill as WarningFillIcon,
@@ -528,6 +529,7 @@ export {
     CreditCardIcon,
     ChatBubbleIcon,
     UserShieldIcon,
+    Users3FillIcon,
     WeightScaleIcon,
     TargetArrowIcon,
     MoneyCheck2Icon,
@@ -830,6 +832,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Row Spacing': RowSpacingIcon,
     'Chat Bubbles': ChatBubbleIcon,
     Organization: OrganizationIcon,
+    'Users 3 Fill': Users3FillIcon,
     Notification: NotificationIcon,
     'Target Arrow': TargetArrowIcon,
     'Weight Scale': WeightScaleIcon,
