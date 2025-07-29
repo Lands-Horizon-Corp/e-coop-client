@@ -1,4 +1,3 @@
-import about_us from '@/assets/gifs/about-us.gif'
 import { LANDS_TEAM } from '@/constants'
 import { cn } from '@/lib'
 import { createFileRoute } from '@tanstack/react-router'
@@ -10,9 +9,9 @@ import {
     FacebookIcon,
     InstagramIcon,
     LinkedInIcon,
+    PeopleGroupIcon,
     PlusIcon,
 } from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
 import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
@@ -25,10 +24,7 @@ const AboutPage = () => {
         <PageContainer className="space-y-16 py-0 px-0 bg-background/70 font-inter">
             <div className="mt-3 flex lg:max-w-[1000px] px-8 sm:px-0 flex-col items-center justify-center space-y-8 md:mt-5 lg:mt-16 lg:space-y-12 xl:space-y-16">
                 <h1 className="flex text-center justify-center items-center text-[min(52px,6vw)] font-bold leading-tight ">
-                    <ImageDisplay
-                        src={about_us}
-                        className="block size-8 md:size-12 lg:size-16 rounded-none mr-2 !bg-transparent "
-                    />
+                    <PeopleGroupIcon className="inline mr-4 text-muted-foreground" />
                     About Lands Horizon Corp
                 </h1>
                 <p className="max-w-5xl text-center text-[min(18px,4.5vw)] font-medium text-muted-foreground">

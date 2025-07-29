@@ -35,7 +35,7 @@ import { Route as landingAboutImport } from './routes/(landing)/about'
 import { Route as OnboardingOrganizationRouteImport } from './routes/onboarding/organization/route'
 import { Route as landingPolicyRouteImport } from './routes/(landing)/policy/route'
 import { Route as OnboardingOrganizationIndexImport } from './routes/onboarding/organization/index'
-import { Route as landingSubscriptionPlansIndexImport } from './routes/(landing)/subscription-plans/index'
+import { Route as landingSubscriptionIndexImport } from './routes/(landing)/subscription/index'
 import { Route as OnboardingOrganizationOrganizationidImport } from './routes/onboarding/organization/$organization_id'
 import { Route as OnboardingCreateBranchOrganizationidImport } from './routes/onboarding/create-branch.$organization_id'
 import { Route as AuthPasswordResetResetIdImport } from './routes/auth/password-reset.$resetId'
@@ -258,12 +258,11 @@ const OnboardingOrganizationIndexRoute =
     getParentRoute: () => OnboardingOrganizationRouteRoute,
   } as any)
 
-const landingSubscriptionPlansIndexRoute =
-  landingSubscriptionPlansIndexImport.update({
-    id: '/subscription-plans/',
-    path: '/subscription-plans/',
-    getParentRoute: () => landingRouteRoute,
-  } as any)
+const landingSubscriptionIndexRoute = landingSubscriptionIndexImport.update({
+  id: '/subscription/',
+  path: '/subscription/',
+  getParentRoute: () => landingRouteRoute,
+} as any)
 
 const OnboardingOrganizationOrganizationidRoute =
   OnboardingOrganizationOrganizationidImport.update({
@@ -1058,11 +1057,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingOrganizationOrganizationidImport
       parentRoute: typeof OnboardingOrganizationRouteImport
     }
-    '/(landing)/subscription-plans/': {
-      id: '/(landing)/subscription-plans/'
-      path: '/subscription-plans'
-      fullPath: '/subscription-plans'
-      preLoaderRoute: typeof landingSubscriptionPlansIndexImport
+    '/(landing)/subscription/': {
+      id: '/(landing)/subscription/'
+      path: '/subscription'
+      fullPath: '/subscription'
+      preLoaderRoute: typeof landingSubscriptionIndexImport
       parentRoute: typeof landingRouteImport
     }
     '/onboarding/organization/': {
@@ -1474,7 +1473,7 @@ interface landingRouteRouteChildren {
   landingFrequentlyAskedQuestionsRoute: typeof landingFrequentlyAskedQuestionsRoute
   landingTestRoute: typeof landingTestRoute
   landingIndexRoute: typeof landingIndexRoute
-  landingSubscriptionPlansIndexRoute: typeof landingSubscriptionPlansIndexRoute
+  landingSubscriptionIndexRoute: typeof landingSubscriptionIndexRoute
 }
 
 const landingRouteRouteChildren: landingRouteRouteChildren = {
@@ -1485,7 +1484,7 @@ const landingRouteRouteChildren: landingRouteRouteChildren = {
   landingFrequentlyAskedQuestionsRoute: landingFrequentlyAskedQuestionsRoute,
   landingTestRoute: landingTestRoute,
   landingIndexRoute: landingIndexRoute,
-  landingSubscriptionPlansIndexRoute: landingSubscriptionPlansIndexRoute,
+  landingSubscriptionIndexRoute: landingSubscriptionIndexRoute,
 }
 
 const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
@@ -1783,7 +1782,7 @@ export interface FileRoutesByFullPath {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute
-  '/subscription-plans': typeof landingSubscriptionPlansIndexRoute
+  '/subscription': typeof landingSubscriptionIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
@@ -1875,7 +1874,7 @@ export interface FileRoutesByTo {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute
-  '/subscription-plans': typeof landingSubscriptionPlansIndexRoute
+  '/subscription': typeof landingSubscriptionIndexRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
@@ -1971,7 +1970,7 @@ export interface FileRoutesById {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganizationidRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganizationidRoute
-  '/(landing)/subscription-plans/': typeof landingSubscriptionPlansIndexRoute
+  '/(landing)/subscription/': typeof landingSubscriptionIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
@@ -2068,7 +2067,7 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
-    | '/subscription-plans'
+    | '/subscription'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
@@ -2159,7 +2158,7 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
-    | '/subscription-plans'
+    | '/subscription'
     | '/onboarding/organization'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/dashboard'
@@ -2253,7 +2252,7 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
-    | '/(landing)/subscription-plans/'
+    | '/(landing)/subscription/'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
@@ -2351,7 +2350,7 @@ export const routeTree = rootRoute
         "/(landing)/frequently-asked-questions",
         "/(landing)/test",
         "/(landing)/",
-        "/(landing)/subscription-plans/"
+        "/(landing)/subscription/"
       ]
     },
     "/account": {
@@ -2553,8 +2552,8 @@ export const routeTree = rootRoute
       "filePath": "onboarding/organization/$organization_id.tsx",
       "parent": "/onboarding/organization"
     },
-    "/(landing)/subscription-plans/": {
-      "filePath": "(landing)/subscription-plans/index.tsx",
+    "/(landing)/subscription/": {
+      "filePath": "(landing)/subscription/index.tsx",
       "parent": "/(landing)"
     },
     "/onboarding/organization/": {

@@ -25,7 +25,7 @@ import { IClassProps, ISubscriptionPlan } from '@/types'
 
 type PricingPlanMode = 'monthly' | 'yearly'
 
-export const Route = createFileRoute('/(landing)/subscription-plans/')({
+export const Route = createFileRoute('/(landing)/subscription/')({
     component: RouteComponent,
 })
 
