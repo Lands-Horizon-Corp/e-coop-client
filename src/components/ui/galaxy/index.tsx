@@ -17,7 +17,7 @@ export function Galaxy3D() {
 
     return (
         <div
-            className="fixed inset-0 -z-10 bg-gray-950"
+            className="fixed inset-0 -z-10 bg-background"
             onMouseMove={handleMouseMove}
         >
             <Canvas
