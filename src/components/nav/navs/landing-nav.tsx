@@ -28,8 +28,8 @@ const navLinks: NavLink[] = [
         path: '/frequently-asked-questions',
     },
     {
-        name: 'Pricing',
-        path: '/subscription-plans',
+        name: 'Subscription',
+        path: '/subscription',
     },
     {
         name: 'Contact',
