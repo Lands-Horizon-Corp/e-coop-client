@@ -10,7 +10,7 @@ import FootstepTableAction from '@/components/tables/footsteps-table/action'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(common)/my-footsteps'
+    '/org/$orgname/branch/$branchname/(common)/my-branch-footsteps'
 )({
     component: RouteComponent,
 })
@@ -23,26 +23,26 @@ function RouteComponent() {
 
     useSubscribe(`footstep.create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me'],
+            queryKey: ['footstep', 'resource-query', 'me-branch'],
         })
     })
 
     useSubscribe(`footstep.update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me'],
+            queryKey: ['footstep', 'resource-query', 'me-branch'],
         })
     })
 
     useSubscribe(`footstep.delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me'],
+            queryKey: ['footstep', 'resource-query', 'me-branch'],
         })
     })
 
     return (
         <PageContainer>
             <FootstepTable
-                mode="me"
+                mode="me-branch"
                 actionComponent={FootstepTableAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />

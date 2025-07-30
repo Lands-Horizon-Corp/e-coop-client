@@ -23,26 +23,26 @@ function RouteComponent() {
 
     useSubscribe(`footstep.create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me-branch'],
+            queryKey: ['footstep', 'resource-query', 'me'],
         })
     })
 
     useSubscribe(`footstep.update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me-branch'],
+            queryKey: ['footstep', 'resource-query', 'me'],
         })
     })
 
     useSubscribe(`footstep.delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me-branch'],
+            queryKey: ['footstep', 'resource-query', 'me'],
         })
     })
 
     return (
         <PageContainer>
             <FootstepTable
-                mode="me-branch"
+                mode="me"
                 actionComponent={FootstepTableAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />

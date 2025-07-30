@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import AccountSettingsSidebar from '@/components/account-settings/account-settings-sidebar'
-import AccountSettingsUserBanner from '@/components/account-settings/account-settings-user-banner'
+// import AccountSettingsUserBanner from '@/components/account-settings/account-settings-user-banner'
 import VerifyNotice from '@/components/account-settings/verify-notice'
 import AuthFooter from '@/components/footers/auth-footer'
 import OnboardingNav from '@/components/nav/navs/onboarding-nav'
@@ -20,7 +20,7 @@ function RouteComponent() {
                 <main className="flex w-full flex-1 items-center">
                     <div className="ecoop-scroll flex h-screen max-h-screen w-full flex-col items-center justify-center overflow-y-auto">
                         <div className="relative mt-24 flex min-h-[80vh] w-full max-w-5xl flex-1 flex-col space-y-4">
-                            <AccountSettingsUserBanner />
+                            {/* <AccountSettingsUserBanner /> */}
                             <div className="flex flex-1 gap-x-8">
                                 <AccountSettingsSidebar />
                                 <div className="flex min-h-full flex-1 flex-col items-center space-y-4 px-4">

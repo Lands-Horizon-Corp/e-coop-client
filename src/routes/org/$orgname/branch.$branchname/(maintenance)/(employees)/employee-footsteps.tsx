@@ -10,7 +10,7 @@ import FootstepTableAction from '@/components/tables/footsteps-table/action'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(common)/users-footsteps'
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
 )({
     component: RouteComponent,
 })
