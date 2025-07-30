@@ -12,11 +12,11 @@ import {
 } from '@/types'
 
 export type TFootstepHookMode =
-    | 'me' // current auth user footstep on current branch
-    | 'me-branch' // current auth user all footstep from all branches
+    | 'me' // current auth user all footstep
+    | 'member-profile' // all footstep of a member for current branch ( member profile with user only )
+    | 'me-branch' // current auth user all footstep from all branches of current org
     | 'branch' // all footsteps from different users in current auth users branch
     | 'user-organization' // all footstep of specific user
-    | 'member-profile' // all footstep of a member ( member profile with user only )
 
 export const useFilteredPaginatedFootsteps = ({
     sort,
