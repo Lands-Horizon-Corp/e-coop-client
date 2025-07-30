@@ -1,10 +1,17 @@
 import { IUserBase } from '../auth'
 import { IAuditable, ITimeStamps, TEntityId, TUserType } from '../common'
+import { IOrganization } from '../lands-types'
+import { IBranch } from './branch'
 import { IPaginatedResult } from './paginated-result'
 
 export interface IFootstep extends ITimeStamps, IAuditable {
     id: TEntityId
-    branch_id: TEntityId | null
+
+    organization_id?: TEntityId
+    organization?: IOrganization
+
+    branch_id?: TEntityId
+    branch?: IBranch
 
     user_type: TUserType
     user_id: TEntityId
