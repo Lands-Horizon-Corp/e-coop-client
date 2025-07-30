@@ -20,7 +20,7 @@ import {
 
 import { useJoinOrganization } from '@/hooks/api-hooks/use-user-organization'
 
-import { IBranch, IOrganization, TEntityId } from '@/types'
+import { IBranch, IOrganizationWithPolicies, TEntityId } from '@/types'
 
 type PolicyKey =
     | 'terms_and_conditions'
@@ -28,17 +28,10 @@ type PolicyKey =
     | 'refund_policy'
     | 'user_agreement'
 
-type OrganizationWithPolicies = IOrganization & {
-    privacy_policy: string
-    refund_policy: string
-    terms_and_conditions: string
-    user_agreement: string
-}
-
 type PolicyAcceptanceModalProps = IModalProps & {
     onAcceptAndProceed: (branchId: TEntityId, organizationId: TEntityId) => void
     onCancel: () => void
-    organization: OrganizationWithPolicies
+    organization: IOrganizationWithPolicies
     branch: IBranch
     branchId: TEntityId
     organizationId: TEntityId
@@ -279,7 +272,7 @@ const Branch = ({ branch, organizationId, isUserCanJoin }: BranchProps) => {
             <PolicyAcceptanceModal
                 open={isPolicyModalOpen}
                 branch={branch}
-                organization={branch?.organization as OrganizationWithPolicies}
+                organization={branch?.organization as IOrganizationWithPolicies}
                 branchId={branch.id}
                 organizationId={organizationId}
                 onCancel={() => setIsPolicyModalOpen(false)}
