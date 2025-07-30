@@ -14,6 +14,7 @@ import {
     ICreateOrganizationResponse,
     IOrganization,
     IOrganizationRequest,
+    IOrganizationWithPolicies,
     IQueryProps,
     TEntityId,
 } from '@/types'
@@ -38,7 +39,7 @@ export const useUpdateOrganization = createMutationHook<
 )
 
 export const useGetOrganizationById = (organizationId: TEntityId) => {
-    return useQuery<IOrganization>({
+    return useQuery<IOrganizationWithPolicies>({
         queryKey: ['organization', 'resource-query', organizationId],
         enabled: !!organizationId,
         queryFn: async () => {
@@ -52,7 +53,7 @@ export const useGetOrganizationById = (organizationId: TEntityId) => {
                 throw new Error(errorMessage)
             }
 
-            return result
+            return result as IOrganizationWithPolicies
         },
     })
 }

@@ -5,6 +5,7 @@ import {
     ICreateOrganizationResponse,
     IOrganization,
     IOrganizationRequest,
+    IOrganizationWithPolicies,
     TEntityId,
 } from '@/types'
 
@@ -26,6 +27,8 @@ export const getAllOrganizations = async () => {
 }
 
 export const getOrganizationById = async (id: TEntityId) => {
-    const response = await APIService.get<IOrganization>(`/organization/${id}`)
+    const response = await APIService.get<IOrganizationWithPolicies>(
+        `/organization/${id}`
+    )
     return response.data
 }
