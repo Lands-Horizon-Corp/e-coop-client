@@ -82,3 +82,10 @@ export interface ICreateOrganizationResponse {
     organization: IOrganization
     user_organization: IUserOrganization
 }
+
+export type IOrganizationWithPolicies = IOrganization & {
+    privacy_policy: string
+    refund_policy: string
+    terms_and_conditions: string
+    user_agreement: string
+}
