@@ -82,8 +82,6 @@ const UpdateOrganizationForm = ({
     const [selectedCoverMedia, setSelectedCoverMedia] = useState<string>(
         coverMedia?.url || ''
     )
-    console.log('selectedLogoMedia', selectedLogoMedia)
-    console.log('selectedCoverMedia', selectedCoverMedia)
 
     const form = useForm<TEditOrganizationFormValues>({
         resolver: zodResolver(EditOrganizationSchema),
