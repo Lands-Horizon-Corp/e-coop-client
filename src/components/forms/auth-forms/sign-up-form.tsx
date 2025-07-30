@@ -113,6 +113,15 @@ const SignUpForm = ({
                                         id={field.name}
                                         autoComplete="given-name"
                                         placeholder="First Name"
+                                        onKeyDown={(e) => {
+                                            const allowed = /^[a-zA-Z\s]$/
+                                            if (
+                                                e.key.length === 1 &&
+                                                !allowed.test(e.key)
+                                            ) {
+                                                e.preventDefault()
+                                            }
+                                        }}
                                     />
                                 )}
                             />
@@ -126,6 +135,15 @@ const SignUpForm = ({
                                         id={field.name}
                                         placeholder="Middle Name"
                                         autoComplete="additional-name"
+                                        onKeyDown={(e) => {
+                                            const allowed = /^[a-zA-Z\s]$/
+                                            if (
+                                                e.key.length === 1 &&
+                                                !allowed.test(e.key)
+                                            ) {
+                                                e.preventDefault()
+                                            }
+                                        }}
                                     />
                                 )}
                             />
@@ -139,6 +157,15 @@ const SignUpForm = ({
                                         id={field.name}
                                         placeholder="Last Name"
                                         autoComplete="family-name"
+                                        onKeyDown={(e) => {
+                                            const allowed = /^[a-zA-Z\s]$/
+                                            if (
+                                                e.key.length === 1 &&
+                                                !allowed.test(e.key)
+                                            ) {
+                                                e.preventDefault()
+                                            }
+                                        }}
                                     />
                                 )}
                             />
@@ -160,6 +187,7 @@ const SignUpForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="birthdate"
+                            label="Date of Birth *"
                             className="relative"
                             description="mm/dd/yyyy"
                             descriptionClassName="absolute top-0 right-0"
@@ -174,6 +202,7 @@ const SignUpForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="contact_number"
+                            label="Contact Number *"
                             render={({
                                 field,
                                 fieldState: { invalid, error },

@@ -14,6 +14,7 @@ interface CopyToClipboardProps extends IBaseProps {
     iconClassName?: string
     align?: 'left' | 'right'
     hideCopyIcon?: boolean
+    textToCopy?: string
     onCopy?: () => boolean | Promise<boolean>
 }
 
@@ -26,6 +27,7 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
     className,
     hideCopyIcon = false,
     align = 'left',
+    textToCopy,
     onCopy,
 }) => {
     const rootRef = useRef<HTMLDivElement>(null)
@@ -40,7 +42,7 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
         }
 
         if (!rootRef.current || disabled || copied) return
-        const text = rootRef.current.innerText
+        const text = textToCopy ?? rootRef.current.innerText
         try {
             await navigator.clipboard.writeText(text)
             setCopied(true)

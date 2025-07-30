@@ -33,7 +33,7 @@ interface Props {
 }
 
 const RowActionsGroup = ({ onDelete, onView, onEdit, otherActions }: Props) => {
-    if (!onDelete && !onView && !onEdit) return null
+    if (!onDelete && !onView && !onEdit && !otherActions) return null
 
     return (
         <DropdownMenu>

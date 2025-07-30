@@ -281,6 +281,14 @@ export const generateSidebarGroups = (
                     userType: ['employee', 'owner'],
                     shortDescription: 'Manage role template permissions',
                 },
+                {
+                    type: 'item',
+                    title: 'Footsteps',
+                    icon: FootstepsIcon,
+                    url: `${baseUrl}/employee-footsteps`,
+                    userType: ['owner', 'employee'],
+                    shortDescription: 'Track all employee footsteps',
+                },
             ],
         },
         {
@@ -487,23 +495,15 @@ export const generateSidebarGroups = (
             navItems: [
                 {
                     type: 'item',
-                    title: 'Users Footsteps',
+                    title: 'My Branch Footsteps',
                     icon: FootstepsIcon,
-                    url: `${baseUrl}/users-footsteps`,
-                    userType: ['owner', 'employee'],
-                    shortDescription: 'Track all users’ footsteps',
-                },
-                {
-                    type: 'item',
-                    title: 'My Footsteps',
-                    icon: FootstepsIcon,
-                    url: `${baseUrl}/my-footsteps`,
+                    url: `${baseUrl}/my-branch-footsteps`,
                     userType: ['employee', 'member', 'owner'],
                     shortDescription: 'Track your own footsteps',
                 },
                 {
                     type: 'item',
-                    title: 'My All Footsteps',
+                    title: 'All My Footsteps',
                     icon: FootstepsIcon,
                     url: `${baseUrl}/my-all-footsteps`,
                     userType: ['employee', 'member', 'owner'],

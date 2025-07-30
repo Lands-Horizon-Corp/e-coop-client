@@ -12,8 +12,19 @@ import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import ImageNameDisplay from '@/components/elements/image-name-display'
-import { DesktopTowerIcon, LocationPinIcon } from '@/components/icons'
+import FootstepDetail from '@/components/elements/sheet-displays/footstep-detail'
+import { DesktopTowerIcon, EyeIcon, LocationPinIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+} from '@/components/ui/sheet'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { TUserType } from '@/types'
 
@@ -37,6 +48,22 @@ export interface IFootstepTableColumnProps {
 const FootstepTableColumns = (
     _opts?: IFootstepTableColumnProps
 ): ColumnDef<IFootstep>[] => [
+    {
+        id: 'quick-action',
+        header: () => (
+            <div className={'flex w-fit items-center gap-x-1 px-2'}></div>
+        ),
+        cell: ({ row }) => (
+            <div className="flex w-fit items-center gap-x-1 px-0">
+                <ViewFootstepDetailCell footstep={row.original} />
+            </div>
+        ),
+        enableSorting: false,
+        enableResizing: false,
+        enableHiding: false,
+        size: 50,
+        minSize: 50,
+    },
     {
         id: 'user.username',
         accessorKey: 'user.username',
@@ -169,7 +196,9 @@ const FootstepTableColumns = (
         ),
         cell: ({ row }) => (
             <div>
-                <p>{row.original.description}</p>
+                <p className="break-words !text-xs text-foreground/80 !text-wrap">
+                    {row.original.description}
+                </p>
             </div>
         ),
         enableMultiSort: true,
@@ -273,5 +302,36 @@ const FootstepTableColumns = (
         minSize: 180,
     },
 ]
+
+const ViewFootstepDetailCell = ({ footstep }: { footstep: IFootstep }) => {
+    const footstepModal = useModalState()
+
+    return (
+        <div onClick={(e) => e.stopPropagation()}>
+            <Sheet {...footstepModal}>
+                <SheetHeader>
+                    <SheetTitle className="hidden" />
+                    <SheetDescription className="hidden" />
+                </SheetHeader>
+                <SheetContent
+                    side="right"
+                    className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                >
+                    <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
+                        <FootstepDetail footstep={footstep} />
+                    </div>
+                </SheetContent>
+            </Sheet>
+            <Button
+                size="icon"
+                variant="ghost"
+                className="size-fit p-2 text-muted-foreground"
+                onClick={() => footstepModal.onOpenChange(true)}
+            >
+                <EyeIcon strokeWidth={1.5} />
+            </Button>
+        </div>
+    )
+}
 
 export default FootstepTableColumns
