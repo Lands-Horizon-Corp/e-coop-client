@@ -171,7 +171,7 @@ export const MemberOverallInfoModal = ({
             {...props}
             titleClassName="hidden"
             descriptionClassName="hidden"
-            closeButtonClassName="hidden"
+            closeButtonClassName="top-1.5 right-1.5"
             className={cn('!max-w-[90vw] p-3', className)}
         >
             <MemberOverallInfo {...overallInfoProps} />

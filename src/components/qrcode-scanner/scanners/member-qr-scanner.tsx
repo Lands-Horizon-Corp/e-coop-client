@@ -116,7 +116,6 @@ export const MemberQrScannerModal = ({
 }) => {
     return (
         <Modal
-            hideCloseButton
             titleClassName="hidden"
             descriptionClassName="hidden"
             className={cn('size-fit', className)}
