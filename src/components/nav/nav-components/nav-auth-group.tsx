@@ -20,7 +20,7 @@ const NavAuthGroup = () => {
                 '/contact',
                 '/frequently-asked-questions',
                 '/developers',
-                '/subscription-plans',
+                '/subscription',
             ].includes(pathname) && <NavGetStarted />}
             <NavSignOut />
         </>
