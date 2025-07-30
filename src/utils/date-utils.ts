@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
 
 export const toReadableDateShort = (
     inputDate: Date | string | number,
@@ -30,4 +30,12 @@ export const toInputDateString = (
     ...args: Parameters<typeof toReadableDate>
 ) => {
     return toReadableDate(args[0], args[1] ?? 'yyyy-MM-dd')
+}
+
+export const dateAgo = (inputDate: Date | string | number) => {
+    if (!inputDate) return '...'
+
+    return formatDistanceToNow(inputDate, {
+        addSuffix: true,
+    })
 }

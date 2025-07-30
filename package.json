@@ -95,6 +95,7 @@
         "leaflet": "^1.9.4",
         "lodash-es": "^4.17.21",
         "lucide-react": "^0.462.0",
+        "motion": "^12.23.11",
         "nats.ws": "^1.30.3",
         "qrcode.react": "^4.2.0",
         "query-string": "^9.1.1",
