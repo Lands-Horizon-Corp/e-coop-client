@@ -13,8 +13,8 @@ import { isArray } from 'lodash-es'
 import PageContainer from '@/components/containers/page-container'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { CloseIcon, ReceiptIcon } from '@/components/icons'
+import MemberAccountingLedger from '@/components/member-infos/member-accounts-loans/member-accounting-ledger'
 import MemberPicker from '@/components/pickers/member-picker'
-import MemberAccountingLedgerTable from '@/components/tables/transaction-tables'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -24,6 +24,8 @@ import {
 } from '@/components/ui/resizable'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useShortcut } from '@/components/use-shorcuts'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { ITransactionEntryRequest } from '@/types'
 
@@ -95,6 +97,16 @@ function RouteComponent() {
         {
             disableTextInputs: true,
         }
+    )
+
+    useSubscribe(
+        `member_occupation_history.create.member_profile.${selectedMember?.id}`
+    )
+    useSubscribe(
+        `member_occupation_history.update.member_profile.${selectedMember?.id}`
+    )
+    useSubscribe(
+        `member_occupation_history.delete.member_profile.${selectedMember?.id}`
     )
 
     return (
@@ -251,11 +263,14 @@ function RouteComponent() {
                             </div>
                         </ResizablePanel>
                         <ResizableHandle withHandle />
-                        <ResizablePanel defaultSize={50} className="p-2">
+                        <ResizablePanel defaultSize={60} className="p-2">
                             <div className="w-full p-2">
-                                {isArray(MemberAccountSampleData) && (
-                                    <MemberAccountingLedgerTable data={[]} />
-                                )}
+                                {isArray(MemberAccountSampleData) &&
+                                    selectedMember && (
+                                        <MemberAccountingLedger
+                                            memberProfileId={selectedMember.id}
+                                        />
+                                    )}
                             </div>
                         </ResizablePanel>
                     </ResizablePanelGroup>

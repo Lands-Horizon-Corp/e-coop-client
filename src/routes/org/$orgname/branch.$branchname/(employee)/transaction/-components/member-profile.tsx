@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { useImagePreview } from '@/store/image-preview-store'
 
@@ -45,8 +46,26 @@ const MemberProfileTransactionView = ({
     const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
 
+    const handleMedia = (media: IMedia | undefined) => {
+        if (media) {
+            onOpen({
+                Images: [media],
+            })
+        }
+        toast.warning('No media available for preview.')
+    }
+
+    const handleImageClick = (media: IMedia | undefined, type: string) => {
+        if (type === 'profile') {
+            handleMedia(media)
+        }
+        if (type === 'signature') {
+            handleMedia(media)
+        }
+    }
+
     return (
-        <div className="w-full space-y-2 rounded-xl dark:bg-sidebar/20">
+        <div className="w-full space-y-2 min-h-64 rounded-xl dark:bg-sidebar/20">
             <MemberOverallInfoModal
                 {...infoModal}
                 overallInfoProps={{
@@ -71,12 +90,7 @@ const MemberProfileTransactionView = ({
                             className=" aspect-square size-[6.5rem] rounded-xl duration-150 ease-in-out hover:scale-105"
                             src={memberInfo.media?.download_url}
                             onClick={() => {
-                                onOpen({
-                                    Images: [
-                                        memberInfo.media as IMedia,
-                                        memberInfo.signature_media as IMedia,
-                                    ],
-                                })
+                                handleImageClick(memberInfo.media, 'profile')
                             }}
                             fallback={memberInfo.first_name.charAt(0) ?? '-'}
                         />
@@ -107,14 +121,12 @@ const MemberProfileTransactionView = ({
                                     <Button
                                         variant={'ghost'}
                                         size="icon"
-                                        onClick={() =>
-                                            onOpen({
-                                                Images: [
-                                                    memberInfo.signature_media as IMedia,
-                                                    memberInfo.media as IMedia,
-                                                ],
-                                            })
-                                        }
+                                        onClick={() => {
+                                            handleImageClick(
+                                                memberInfo.signature_media,
+                                                'signature'
+                                            )
+                                        }}
                                     >
                                         <SignatureLightIcon size={25} />
                                     </Button>
@@ -203,6 +215,9 @@ const MemberProfileTransactionView = ({
                     </Button>
                 </div>
             </GradientBackground>
+            <Button className="w-full" size="sm">
+                Create Transaction
+            </Button>
         </div>
     )
 }
