@@ -71,23 +71,23 @@ export const useCurrentTimesheet = ({
     })
 }
 
-export type TTimesheetHookMode = 'all' | 'me' | 'user-organization'
+export type TTimesheetHookMode = 'all' | 'me' | 'employee'
 
 export const useFilteredPaginatedTimesheets = ({
     sort,
     mode,
-    user_org_id,
+    userOrganizationId,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: {
     mode?: TTimesheetHookMode
-} & { user_org_id?: TEntityId } & IFilterPaginatedHookProps) => {
+} & { userOrganizationId?: TEntityId } & IFilterPaginatedHookProps) => {
     return useQuery<IPaginatedTimesheet, string>({
         queryKey: [
             'timesheet',
             'resource-query',
             mode,
-            user_org_id,
+            userOrganizationId,
             filterPayload,
             pagination,
             sort,
@@ -97,8 +97,8 @@ export const useFilteredPaginatedTimesheets = ({
 
             if (mode === 'me') {
                 url = 'me/search'
-            } else if (mode === 'user-organization') {
-                url = `user-organization/${user_org_id}/search`
+            } else if (mode === 'employee') {
+                url = `employee/${userOrganizationId}/search`
             }
 
             const [error, result] = await withCatchAsync(
