@@ -30,7 +30,7 @@ export const useFormHelper = <T extends FieldValues>({
 
     useEffect(() => {
         if (resetOnDefaultChange && defaultValues) {
-            if (form.formState.isDirty) {
+            if (form.formState.isDirty && !form.formState.isSubmitting) {
                 onOpen({
                     title: 'Data Changed',
                     description:

@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { formatNumber } from '@/utils'
 
@@ -37,9 +39,10 @@ const EndedTransactionBatchKanban = (_props: Props) => {
     } = useAuthUserWithOrgBranch()
     const { data, isPending, refetch } = useTransactionBatchEndApprovals()
 
-    useSubscribe(`transaction_batch.update.branch.${branch_id}`, () =>
+    useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
         refetch()
-    )
+        toast.info('Updated transaction batch')
+    })
 
     return (
         <KanbanContainer className="w-[360px]">
@@ -93,6 +96,7 @@ const TransactionBatchCard = ({
                     batchId: transBatch.id,
                     defaultStep: 0,
                     defaultValues: transBatch,
+                    resetOnDefaultChange: true,
                 }}
             />
             <div className="flex items-center justify-between">

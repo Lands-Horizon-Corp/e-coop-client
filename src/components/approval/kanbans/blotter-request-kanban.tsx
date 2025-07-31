@@ -34,7 +34,9 @@ const BlotterRequestKanban = (_props: Props) => {
     const { data, isPending, refetch } =
         useTransactionBatchBlotterViewRequests()
 
+    useSubscribe(`transaction_batch.create.branch.${branch_id}`, refetch)
     useSubscribe(`transaction_batch.update.branch.${branch_id}`, refetch)
+    useSubscribe(`transaction_batch.delete.branch.${branch_id}`, refetch)
 
     return (
         <KanbanContainer className="w-[360px]">

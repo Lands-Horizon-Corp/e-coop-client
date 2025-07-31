@@ -38,6 +38,7 @@ import {
     useTransBatchUpdateSignApproval,
     useTransactionBatch,
 } from '@/hooks/api-hooks/use-transaction-batch'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import {
     IClassProps,
@@ -190,6 +191,7 @@ const TransactionBatchSignCreateUpdateForm = ({
     defaultStep = 0,
     onError,
     onSuccess,
+    resetOnDefaultChange,
 }: ITransactionBatchSignFormProps) => {
     const [step, setStep] = useState(defaultStep)
 
@@ -204,7 +206,10 @@ const TransactionBatchSignCreateUpdateForm = ({
 
     const { error, isPending, mutate, reset } = useTransBatchUpdateSignApproval(
         {
-            onSuccess,
+            onSuccess: (data) => {
+                form.reset(data)
+                onSuccess?.(data)
+            },
             onError,
         }
     )
@@ -234,6 +239,12 @@ const TransactionBatchSignCreateUpdateForm = ({
 
     const onSubmit = form.handleSubmit((formData) => {
         mutate({ id: batchId, data: formData })
+    })
+
+    useFormHelper({
+        form,
+        defaultValues,
+        resetOnDefaultChange: resetOnDefaultChange,
     })
 
     const isDisabled = (field: Path<TBatchSignFormValues>) =>
