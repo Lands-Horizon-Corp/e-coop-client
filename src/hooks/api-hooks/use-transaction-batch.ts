@@ -128,26 +128,44 @@ export const useTransactionBatchEndCurrentBatch = createMutationHook<
     'Transaction Batch Ended'
 )
 
+export type TTransactionBatchHookMode = 'all' | 'me' | 'employee'
+
 export const useFilteredPaginatedTransactionBatch = ({
     sort,
+    mode,
     enabled,
     filterPayload,
     showMessage = true,
+    userOrganizationId,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<ITransactionBatchPaginated, string> &
-    IQueryProps = {}) => {
+    IQueryProps & {
+        mode?: TTransactionBatchHookMode
+        userOrganizationId?: TEntityId
+    }) => {
     return useQuery<ITransactionBatchPaginated, string>({
         queryKey: [
             'transaction-batch',
             'resource-query',
+            mode,
+            userOrganizationId,
             filterPayload,
             pagination,
             sort,
         ],
         queryFn: async () => {
+            let url: string = `search`
+
+            if (mode === 'me') {
+                url = 'me/search'
+            } else if (mode === 'employee') {
+                url = `employee/${userOrganizationId}/search`
+            }
+
             const [error, result] = await withCatchAsync(
                 TransactionBatchService.search({
                     pagination,
+                    targetUrl: url,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),
                 })

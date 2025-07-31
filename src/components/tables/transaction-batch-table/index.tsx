@@ -20,13 +20,16 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 
-import { useFilteredPaginatedTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
+import {
+    TTransactionBatchHookMode,
+    useFilteredPaginatedTransactionBatch,
+} from '@/hooks/api-hooks/use-transaction-batch'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { ITransactionBatch, TableProps } from '@/types'
+import { ITransactionBatch, TEntityId, TableProps } from '@/types'
 
 import TransactionBatchTableColumns, {
     ITransactionBatchTableColumnProps,
@@ -46,15 +49,30 @@ export interface TransactionBatchTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
+    mode: TTransactionBatchHookMode
 }
 
+export type TTransactionBatchTableProps = TransactionBatchTableProps &
+    (
+        | {
+              mode: 'employee'
+              userOrganizationId: TEntityId
+          }
+        | { mode: 'me' }
+        | { mode: 'all' }
+    )
+
 const TransactionBatchTable = ({
+    mode,
     className,
     toolbarProps,
     defaultFilter,
+    userOrganizationId,
     onSelectData,
     actionComponent,
-}: TransactionBatchTableProps) => {
+}: TTransactionBatchTableProps & {
+    userOrganizationId?: TEntityId
+}) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -94,7 +112,9 @@ const TransactionBatchTable = ({
         data: { data, totalPage, pageSize, totalSize },
         refetch,
     } = useFilteredPaginatedTransactionBatch({
+        mode,
         pagination,
+        userOrganizationId,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
