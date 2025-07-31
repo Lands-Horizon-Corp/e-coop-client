@@ -65,6 +65,7 @@
         "@tanstack/react-table": "^8.20.5",
         "@tanstack/react-virtual": "^3.10.9",
         "@tanstack/router-zod-adapter": "^1.81.5",
+        "@tanstack/zod-adapter": "^1.130.9",
         "@tiptap/extension-placeholder": "^2.11.7",
         "@tiptap/pm": "^2.10.3",
         "@tiptap/react": "^2.10.3",
