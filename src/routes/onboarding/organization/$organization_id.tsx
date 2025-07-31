@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -26,33 +24,6 @@ function RouteComponent() {
 
     const { data: organization, isPending: isPendingOrganization } =
         useGetOrganizationById(organization_id)
-
-    const initialTermsState = useMemo(() => {
-        if (!organization) return []
-
-        return [
-            {
-                name: 'Terms And Condition',
-                value: 'terms_and_conditions',
-                content: organization.terms_and_conditions,
-            },
-            {
-                name: 'Privacy Policy',
-                value: 'privacy_policy',
-                content: organization.privacy_policy,
-            },
-            {
-                name: 'Refund Policy',
-                value: 'refund_policy',
-                content: organization.refund_policy,
-            },
-            {
-                name: 'User Agreement',
-                value: 'user_agreement',
-                content: organization.user_agreement,
-            },
-        ]
-    }, [organization])
 
     const {
         data: joinableBranches,
