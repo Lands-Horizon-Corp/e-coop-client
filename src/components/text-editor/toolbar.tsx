@@ -33,7 +33,7 @@ type ToolbarProps = {
 type ToolbarItem = {
     id: string
     tooltipContent: string
-    icon?: React.ElementType
+    icon?: React.ComponentType<{ className?: string }>
     command: (editor: Editor) => () => void
     isActiveCheck?: string
     type: 'toggle' | 'button'
