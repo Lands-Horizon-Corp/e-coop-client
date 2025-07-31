@@ -30,7 +30,10 @@ const JointMemberProfileListModal = ({
             <div className="grid grid-cols-1 gap-3 overflow-y-auto lg:grid-cols-2">
                 {jointAccounts.map((jointAccounts) => {
                     return (
-                        <JointAccountCardView jointAccounts={jointAccounts} />
+                        <JointAccountCardView
+                            key={jointAccounts.id}
+                            jointAccounts={jointAccounts}
+                        />
                     )
                 })}
             </div>

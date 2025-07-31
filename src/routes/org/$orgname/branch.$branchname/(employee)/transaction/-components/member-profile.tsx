@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useImagePreview } from '@/store/image-preview-store'
+
 import CopyWrapper from '@/components/elements/copy-wrapper'
 import HoveruserInfo from '@/components/elements/hover-elements/hover-user-info'
 import ImageNameDisplay from '@/components/elements/image-name-display'
@@ -8,18 +10,27 @@ import {
     BadgeCheckIcon,
     IdCardIcon,
     PhoneIcon,
+    SignatureLightIcon,
     UserIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { MemberOverallInfoModal } from '@/components/member-infos/view-member-info'
 import { Button } from '@/components/ui/button'
 import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
 } from '@/components/ui/hover-card'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { IMemberProfile } from '@/types'
+import { useModalState } from '@/hooks/use-modal-state'
+
+import { IMedia, IMemberProfile } from '@/types'
 
 import JointMemberProfileListModal from './joint-member-profile-list-modal'
 
@@ -31,9 +42,17 @@ const MemberProfileTransactionView = ({
     memberInfo,
 }: MemberProfileTransactionViewProps) => {
     const [openJointList, setOpenJointList] = useState(false)
+    const infoModal = useModalState(false)
+    const { onOpen } = useImagePreview()
 
     return (
         <div className="w-full space-y-2 rounded-xl dark:bg-sidebar/20">
+            <MemberOverallInfoModal
+                {...infoModal}
+                overallInfoProps={{
+                    memberProfileId: memberInfo.id,
+                }}
+            />
             {memberInfo?.member_joint_accounts && (
                 <JointMemberProfileListModal
                     onOpenChange={setOpenJointList}
@@ -44,24 +63,64 @@ const MemberProfileTransactionView = ({
             <GradientBackground
                 gradientOnly
                 opacity={0}
-                className="flex w-full justify-between space-x-5 border-[0.5px] bg-sidebar/20 p-5"
+                className="flex w-full  justify-between space-x-5 border-[0.5px]  overflow-y-auto overflow-auto bg-sidebar/20 p-5"
             >
-                <PreviewMediaWrapper media={memberInfo.media}>
-                    <ImageDisplay
-                        className="size-20 rounded-xl duration-150 ease-in-out hover:scale-105"
-                        src={memberInfo.media?.download_url}
-                        fallback={memberInfo.first_name.charAt(0) ?? '-'}
-                    />
-                </PreviewMediaWrapper>
-                <div className="grow">
+                <div className="flex items-center gap-y-2 flex-col">
+                    <PreviewMediaWrapper media={memberInfo.media}>
+                        <ImageDisplay
+                            className=" aspect-square size-[6.5rem] rounded-xl duration-150 ease-in-out hover:scale-105"
+                            src={memberInfo.media?.download_url}
+                            onClick={() => {
+                                onOpen({
+                                    Images: [
+                                        memberInfo.media as IMedia,
+                                        memberInfo.signature_media as IMedia,
+                                    ],
+                                })
+                            }}
+                            fallback={memberInfo.first_name.charAt(0) ?? '-'}
+                        />
+                    </PreviewMediaWrapper>
+                    <Button
+                        variant={'secondary'}
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => infoModal.onOpenChange(true)}
+                    >
+                        {' '}
+                        Member&apos;s Info
+                    </Button>
+                </div>
+                <div className="grow space-y-3 min-w-[700px]">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-x-2">
-                            <h2 className="truncate font-bold">
-                                {memberInfo.full_name}
-                            </h2>
-                            {memberInfo.status === 'verified' && (
-                                <BadgeCheckIcon className="text-primary" />
-                            )}
+                        <div className="w-full flex items-center gap-x-2 justify-between">
+                            <div className="flex w-fit items-center gap-x-2">
+                                <h2 className="truncate font-bold">
+                                    {memberInfo.full_name}
+                                </h2>
+                                {memberInfo.status === 'verified' && (
+                                    <BadgeCheckIcon className="text-primary" />
+                                )}
+                            </div>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant={'ghost'}
+                                        size="icon"
+                                        onClick={() =>
+                                            onOpen({
+                                                Images: [
+                                                    memberInfo.signature_media as IMedia,
+                                                    memberInfo.media as IMedia,
+                                                ],
+                                            })
+                                        }
+                                    >
+                                        <SignatureLightIcon size={25} />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>View Signature</TooltipContent>
+                            </Tooltip>
                         </div>
                         {memberInfo.user && (
                             <HoverCard>
@@ -135,15 +194,15 @@ const MemberProfileTransactionView = ({
                             </div>
                         </div>
                     </div>
+                    <Button
+                        className="w-full"
+                        variant={'secondary'}
+                        onClick={() => setOpenJointList(true)}
+                    >
+                        View profiles of allowed people for transactions
+                    </Button>
                 </div>
             </GradientBackground>
-            <Button
-                className="w-full"
-                variant={'secondary'}
-                onClick={() => setOpenJointList(true)}
-            >
-                View profiles of allowed people for transactions
-            </Button>
         </div>
     )
 }

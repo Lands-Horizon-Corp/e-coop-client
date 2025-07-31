@@ -144,6 +144,7 @@ function RouteComponent() {
                                         className={cn(
                                             'pr-9 text-lg font-semibold placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40'
                                         )}
+                                        onChange={() => {}}
                                         id="OR number"
                                         placeholder="Enter the OR Number"
                                         autoComplete="off"
