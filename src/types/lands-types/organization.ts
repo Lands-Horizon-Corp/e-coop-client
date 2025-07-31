@@ -88,4 +88,5 @@ export type IOrganizationWithPolicies = IOrganization & {
     refund_policy: string
     terms_and_conditions: string
     user_agreement: string
+    cookie_policy: string
 }
