@@ -18,9 +18,10 @@ interface Props extends IBaseProps {
     isHeadingDisabled?: boolean
     textEditorClassName?: string
     placeholderClassName?: string
-    onChange: (content: string) => void
+    onChange?: (content: string) => void
     toolBarClassName?: string
     isAllowedHorizontalRule?: boolean
+    editable?: boolean
 }
 
 export type THeadingLevel = 1 | 2 | 3 | 4
@@ -40,6 +41,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
             onChange,
             toolBarClassName,
             isAllowedHorizontalRule,
+            editable = true,
         },
         ref
     ) => {
@@ -48,19 +50,14 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
 
         const editor = useEditor({
             extensions: [
-                StarterKit.configure({
-                    bulletList: {
-                        keepMarks: false,
-                        keepAttributes: false,
-                    },
-                }),
+                StarterKit,
                 Placeholder.configure({
                     placeholder,
                     emptyNodeClass: placeholderClassName,
                 }),
             ],
             content: content,
-            editable: !disabled,
+            editable: editable,
             editorProps: {
                 attributes: {
                     spellcheck: spellCheck ? 'true' : 'false',
@@ -71,7 +68,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
                 },
             },
             onUpdate({ editor }) {
-                onChange(editor.getHTML())
+                onChange?.(editor.getHTML())
             },
         })
 

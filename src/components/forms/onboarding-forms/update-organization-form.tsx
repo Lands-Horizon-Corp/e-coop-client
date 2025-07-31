@@ -30,6 +30,7 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { cn } from '@/lib/utils'
 
@@ -395,117 +396,145 @@ const UpdateOrganizationForm = ({
                             This Policies will only apply to this organization.
                         </p>
                     </div>
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Terms and Conditions"
-                        name="terms_and_conditions"
-                        className="col-span-4"
-                        render={({ field }) => {
-                            const { ref: _ref, ...rest } = field
-                            return (
-                                <FormControl>
-                                    <TextEditor
-                                        {...rest}
-                                        isHeadingDisabled={false}
-                                        toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
-                                        content={field.value || ''}
-                                        className="w-full "
-                                        textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
-                                        placeholder="Write your terms and conditions..."
-                                    />
-                                </FormControl>
-                            )
-                        }}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Privacy Policy"
-                        name="privacy_policy"
-                        className="col-span-4"
-                        render={({ field }) => {
-                            const { ref: _ref, ...rest } = field
-                            return (
-                                <FormControl>
-                                    <TextEditor
-                                        {...rest}
-                                        isHeadingDisabled={false}
-                                        toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
-                                        content={field.value || ''}
-                                        className="w-full "
-                                        textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
-                                        placeholder="Write your privacy policy..."
-                                    />
-                                </FormControl>
-                            )
-                        }}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Cookie Policy"
-                        name="cookie_policy"
-                        className="col-span-4"
-                        render={({ field }) => {
-                            const { ref: _ref, ...rest } = field
-                            return (
-                                <FormControl>
-                                    <TextEditor
-                                        {...rest}
-                                        isHeadingDisabled={false}
-                                        toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
-                                        content={field.value || ''}
-                                        className="w-full"
-                                        textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
-                                        placeholder="Write your cookie policy..."
-                                    />
-                                </FormControl>
-                            )
-                        }}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Refund Policy"
-                        name="refund_policy"
-                        className="col-span-4"
-                        render={({ field }) => {
-                            const { ref: _ref, ...rest } = field
-                            return (
-                                <FormControl>
-                                    <TextEditor
-                                        {...rest}
-                                        isHeadingDisabled={false}
-                                        toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
-                                        content={field.value || ''}
-                                        className="w-full "
-                                        textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
-                                        placeholder="Write your refund policy..."
-                                    />
-                                </FormControl>
-                            )
-                        }}
-                    />
+                    <Tabs defaultValue="privacy_policy" className="w-full">
+                        <TabsList className="bg-transparent flex flex-wrap justify-start gap-2">
+                            {[
+                                'privacy_policy',
+                                'cookie_policy',
+                                'refund_policy',
+                                'terms_and_conditions',
+                                'user_agreement',
+                            ].map((policyType) => (
+                                <TabsTrigger
+                                    key={policyType}
+                                    value={policyType}
+                                    className="capitalize"
+                                >
+                                    {policyType.replace(/_/g, ' ')}
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+                        <TabsContent value="terms_and_conditions">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="terms_and_conditions"
+                                render={({ field }) => {
+                                    const { ref: _ref, ...rest } = field
+                                    return (
+                                        <FormControl>
+                                            <TextEditor
+                                                {...rest}
+                                                isHeadingDisabled={false}
+                                                toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
+                                                content={field.value || ''}
+                                                className="w-full "
+                                                textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
+                                                placeholder="Write your terms and conditions..."
+                                                isAllowedHorizontalRule
+                                            />
+                                        </FormControl>
+                                    )
+                                }}
+                            />
+                        </TabsContent>
+                        <TabsContent value="privacy_policy">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="privacy_policy"
+                                className="col-span-4"
+                                render={({ field }) => {
+                                    const { ref: _ref, ...rest } = field
+                                    return (
+                                        <FormControl>
+                                            <TextEditor
+                                                {...rest}
+                                                isHeadingDisabled={false}
+                                                toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
+                                                content={field.value || ''}
+                                                className="w-full "
+                                                textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
+                                                placeholder="Write your privacy policy..."
+                                                isAllowedHorizontalRule
+                                            />
+                                        </FormControl>
+                                    )
+                                }}
+                            />
+                        </TabsContent>
+                        <TabsContent value="refund_policy">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="refund_policy"
+                                className="col-span-4"
+                                render={({ field }) => {
+                                    const { ref: _ref, ...rest } = field
+                                    return (
+                                        <FormControl>
+                                            <TextEditor
+                                                {...rest}
+                                                isHeadingDisabled={false}
+                                                toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
+                                                content={field.value || ''}
+                                                className="w-full "
+                                                textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
+                                                placeholder="Write your refund policy..."
+                                                isAllowedHorizontalRule
+                                            />
+                                        </FormControl>
+                                    )
+                                }}
+                            />
+                        </TabsContent>
+                        <TabsContent value="cookie_policy">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="cookie_policy"
+                                className="col-span-4"
+                                render={({ field }) => {
+                                    const { ref: _ref, ...rest } = field
+                                    return (
+                                        <FormControl>
+                                            <TextEditor
+                                                {...rest}
+                                                isHeadingDisabled={false}
+                                                toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
+                                                content={field.value || ''}
+                                                className="w-full"
+                                                textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
+                                                placeholder="Write your cookie policy..."
+                                                isAllowedHorizontalRule
+                                            />
+                                        </FormControl>
+                                    )
+                                }}
+                            />
+                        </TabsContent>
+                        <TabsContent value="user_agreement">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="user_agreement"
+                                className="col-span-4"
+                                render={({ field }) => {
+                                    const { ref: _ref, ...rest } = field
+                                    return (
+                                        <FormControl>
+                                            <TextEditor
+                                                {...rest}
+                                                isHeadingDisabled={false}
+                                                toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
+                                                content={field.value || ''}
+                                                className="w-full "
+                                                textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
+                                                placeholder="Write your user agreement..."
+                                                isAllowedHorizontalRule
+                                            />
+                                        </FormControl>
+                                    )
+                                }}
+                            />
+                        </TabsContent>
+                    </Tabs>
                     <div className="space-y-2">
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="User Agreement"
-                            name="user_agreement"
-                            className="col-span-4"
-                            render={({ field }) => {
-                                const { ref: _ref, ...rest } = field
-                                return (
-                                    <FormControl>
-                                        <TextEditor
-                                            {...rest}
-                                            isHeadingDisabled={false}
-                                            toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
-                                            content={field.value || ''}
-                                            className="w-full "
-                                            textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
-                                            placeholder="Write your user agreement..."
-                                        />
-                                    </FormControl>
-                                )
-                            }}
-                        />
                         <FormErrorMessage errorMessage={error} />
                         <div className="flex items-center justify-end gap-x-2">
                             <Button

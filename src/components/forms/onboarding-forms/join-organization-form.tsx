@@ -18,6 +18,7 @@ import {
 import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import PlainTextEditor from '@/components/plain-text-editor'
+import OrganizationPolicies from '@/components/policies'
 import { QrCodeScannerModal } from '@/components/qrcode-scanner'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
@@ -27,6 +28,8 @@ import { Input } from '@/components/ui/input'
 import { useInvitationCodeByCode } from '@/hooks/api-hooks/use-invitation-code'
 import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
 import { useModalState } from '@/hooks/use-modal-state'
+
+import { IOrganizationWithPolicies } from '@/types'
 
 const JoinBranchWithCodeFormModal = ({
     title,
@@ -40,7 +43,7 @@ const JoinBranchWithCodeFormModal = ({
     const queryClient = useQueryClient()
     const [val, setVal] = useState<string | undefined>(defaultCode)
     const [code, setCode] = useState<string | undefined>(defaultCode)
-
+    const [isAllChecked, setIsAllChecked] = useState(false)
     const scanModal = useModalState()
 
     const {
@@ -222,7 +225,8 @@ const JoinBranchWithCodeFormModal = ({
                                                     size="sm"
                                                     disabled={
                                                         isLoading ||
-                                                        IsLoadingJoining
+                                                        IsLoadingJoining ||
+                                                        !isAllChecked
                                                     }
                                                     onClick={() =>
                                                         handleSubmit()
@@ -245,6 +249,18 @@ const JoinBranchWithCodeFormModal = ({
                             >
                                 <XIcon className="size-4" />
                             </Button>
+                        </div>
+                        <div className="my-5">
+                            <OrganizationPolicies
+                                classNamePolicyItem="z-50"
+                                organization={
+                                    data.organization as IOrganizationWithPolicies
+                                }
+                                onPolicyChange={(isAllChecked) => {
+                                    setIsAllChecked(isAllChecked)
+                                }}
+                                isIncludeIAccept={true}
+                            />
                         </div>
                     </GradientBackground>
                 )}
