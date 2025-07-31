@@ -1,27 +1,34 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import z from 'zod'
 
 import { useAuthStore } from '@/store/user-auth-store'
-import {
-    createLazyFileRoute,
-    useRouter,
-    useSearch,
-} from '@tanstack/react-router'
+import { useRouter, useSearch } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
 
 import SignInForm from '@/components/forms/auth-forms/sign-in-form'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import GuestGuard from '@/components/wrappers/guest-guard'
 
+import { emailSchema } from '@/validations/common'
+
 import { IAuthContext } from '@/types'
 
 import AuthPageWrapper from './-components/auth-page-wrapper'
 
-export const Route = createLazyFileRoute('/auth/sign-in')({
+const signInSearchSchema = z.object({
+    key: emailSchema.optional(),
+})
+
+export const Route = createFileRoute('/auth/sign-in')({
+    validateSearch: zodValidator(signInSearchSchema),
     component: SignInPage,
 })
 
 function SignInPage() {
     const router = useRouter()
+    const { cbUrl } = useSearch({ from: '/auth' })
     const queryClient = useQueryClient()
 
     const { authStatus, currentAuth, setCurrentAuth } = useAuthStore()
@@ -32,9 +39,14 @@ function SignInPage() {
         (userData: IAuthContext) => {
             setCurrentAuth(userData)
             queryClient.setQueryData(['current-user'], userData)
-            router.navigate({ to: '/onboarding' })
+
+            if (cbUrl?.startsWith('/org') && !userData.user_organization) {
+                router.navigate({ to: '/onboarding', search: { cbUrl } })
+            }
+
+            router.navigate({ to: cbUrl as string })
         },
-        [queryClient, router, setCurrentAuth]
+        [cbUrl, queryClient, router, setCurrentAuth]
     )
 
     return (

@@ -22,6 +22,7 @@ import { Route as AccountIndexImport } from './routes/account/index'
 import { Route as landingIndexImport } from './routes/(landing)/index'
 import { Route as OrgOrgnameImport } from './routes/org/$orgname'
 import { Route as OnboardingSetupOrgImport } from './routes/onboarding/setup-org'
+import { Route as AuthSignInImport } from './routes/auth/sign-in'
 import { Route as AuthForgotPasswordImport } from './routes/auth/forgot-password'
 import { Route as AccountSecurityImport } from './routes/account/security'
 import { Route as AccountQrImport } from './routes/account/qr'
@@ -102,13 +103,13 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesMa
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/permission-management'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/general-ledger-definition'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/financial-statement'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/cash-count'
 import { Route as OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(timesheets)/timesheet.user.$id/route'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-profile.$memberId.$settings/index'
 
 // Create Virtual Routes
 
 const AuthSignUpLazyImport = createFileRoute('/auth/sign-up')()
-const AuthSignInLazyImport = createFileRoute('/auth/sign-in')()
 
 // Create/Update Routes
 
@@ -159,12 +160,6 @@ const AuthSignUpLazyRoute = AuthSignUpLazyImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any).lazy(() => import('./routes/auth/sign-up.lazy').then((d) => d.Route))
 
-const AuthSignInLazyRoute = AuthSignInLazyImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
-  getParentRoute: () => AuthRouteRoute,
-} as any).lazy(() => import('./routes/auth/sign-in.lazy').then((d) => d.Route))
-
 const OrgOrgnameRoute = OrgOrgnameImport.update({
   id: '/org/$orgname',
   path: '/org/$orgname',
@@ -175,6 +170,12 @@ const OnboardingSetupOrgRoute = OnboardingSetupOrgImport.update({
   id: '/setup-org',
   path: '/setup-org',
   getParentRoute: () => OnboardingRouteRoute,
+} as any)
+
+const AuthSignInRoute = AuthSignInImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
@@ -750,6 +751,15 @@ const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatement
     } as any,
   )
 
+const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountImport.update(
+    {
+      id: '/(employee)/transaction/maintenance/cash-count',
+      path: '/transaction/maintenance/cash-count',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+
 const OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteRoute =
   OrgOrgnameBranchBranchnamecommontimesheetsTimesheetUserIdRouteImport.update({
     id: '/(common)/(timesheets)/timesheet/user/$id',
@@ -882,6 +892,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordImport
       parentRoute: typeof AuthRouteImport
     }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInImport
+      parentRoute: typeof AuthRouteImport
+    }
     '/onboarding/setup-org': {
       id: '/onboarding/setup-org'
       path: '/setup-org'
@@ -895,13 +912,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/org/$orgname'
       preLoaderRoute: typeof OrgOrgnameImport
       parentRoute: typeof rootRoute
-    }
-    '/auth/sign-in': {
-      id: '/auth/sign-in'
-      path: '/sign-in'
-      fullPath: '/auth/sign-in'
-      preLoaderRoute: typeof AuthSignInLazyImport
-      parentRoute: typeof AuthRouteImport
     }
     '/auth/sign-up': {
       id: '/auth/sign-up'
@@ -1288,6 +1298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count'
+      path: '/transaction/maintenance/cash-count'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement': {
       id: '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement'
       path: '/transaction/maintenance/financial-statement'
@@ -1517,14 +1534,14 @@ const AccountRouteRouteWithChildren = AccountRouteRoute._addFileChildren(
 
 interface AuthRouteRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
-  AuthSignInLazyRoute: typeof AuthSignInLazyRoute
+  AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpLazyRoute: typeof AuthSignUpLazyRoute
   AuthPasswordResetResetIdRoute: typeof AuthPasswordResetResetIdRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
-  AuthSignInLazyRoute: AuthSignInLazyRoute,
+  AuthSignInRoute: AuthSignInRoute,
   AuthSignUpLazyRoute: AuthSignUpLazyRoute,
   AuthPasswordResetResetIdRoute: AuthPasswordResetResetIdRoute,
 }
@@ -1601,6 +1618,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   OrgOrgnameBranchBranchnameemployeeLoanIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -1683,6 +1701,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute,
     OrgOrgnameBranchBranchnameemployeeLoanIndexRoute:
       OrgOrgnameBranchBranchnameemployeeLoanIndexRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute:
@@ -1758,9 +1778,9 @@ export interface FileRoutesByFullPath {
   '/account/qr': typeof AccountQrRoute
   '/account/security': typeof AccountSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
   '/onboarding/setup-org': typeof OnboardingSetupOrgRoute
   '/org/$orgname': typeof OrgOrgnameRouteWithChildren
-  '/auth/sign-in': typeof AuthSignInLazyRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/account/': typeof AccountIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
@@ -1815,6 +1835,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -1849,9 +1870,9 @@ export interface FileRoutesByTo {
   '/account/qr': typeof AccountQrRoute
   '/account/security': typeof AccountSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
   '/onboarding/setup-org': typeof OnboardingSetupOrgRoute
   '/org/$orgname': typeof OrgOrgnameRouteWithChildren
-  '/auth/sign-in': typeof AuthSignInLazyRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/': typeof landingIndexRoute
   '/account': typeof AccountIndexRoute
@@ -1906,6 +1927,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -1945,9 +1967,9 @@ export interface FileRoutesById {
   '/account/qr': typeof AccountQrRoute
   '/account/security': typeof AccountSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
   '/onboarding/setup-org': typeof OnboardingSetupOrgRoute
   '/org/$orgname': typeof OrgOrgnameRouteWithChildren
-  '/auth/sign-in': typeof AuthSignInLazyRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/(landing)/': typeof landingIndexRoute
   '/account/': typeof AccountIndexRoute
@@ -2003,6 +2025,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/(employee)/approvals/': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/(employee)/loan/': typeof OrgOrgnameBranchBranchnameemployeeLoanIndexRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
@@ -2043,9 +2066,9 @@ export interface FileRouteTypes {
     | '/account/qr'
     | '/account/security'
     | '/auth/forgot-password'
+    | '/auth/sign-in'
     | '/onboarding/setup-org'
     | '/org/$orgname'
-    | '/auth/sign-in'
     | '/auth/sign-up'
     | '/account/'
     | '/onboarding/'
@@ -2100,6 +2123,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/loan'
+    | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
@@ -2133,9 +2157,9 @@ export interface FileRouteTypes {
     | '/account/qr'
     | '/account/security'
     | '/auth/forgot-password'
+    | '/auth/sign-in'
     | '/onboarding/setup-org'
     | '/org/$orgname'
-    | '/auth/sign-in'
     | '/auth/sign-up'
     | '/'
     | '/account'
@@ -2190,6 +2214,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/loan'
+    | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
@@ -2227,9 +2252,9 @@ export interface FileRouteTypes {
     | '/account/qr'
     | '/account/security'
     | '/auth/forgot-password'
+    | '/auth/sign-in'
     | '/onboarding/setup-org'
     | '/org/$orgname'
-    | '/auth/sign-in'
     | '/auth/sign-up'
     | '/(landing)/'
     | '/account/'
@@ -2285,6 +2310,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/(employee)/approvals/'
     | '/org/$orgname/branch/$branchname/(employee)/loan/'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management'
@@ -2450,6 +2476,10 @@ export const routeTree = rootRoute
       "filePath": "auth/forgot-password.tsx",
       "parent": "/auth"
     },
+    "/auth/sign-in": {
+      "filePath": "auth/sign-in.tsx",
+      "parent": "/auth"
+    },
     "/onboarding/setup-org": {
       "filePath": "onboarding/setup-org.tsx",
       "parent": "/onboarding"
@@ -2459,10 +2489,6 @@ export const routeTree = rootRoute
       "children": [
         "/org/$orgname/branch/$branchname"
       ]
-    },
-    "/auth/sign-in": {
-      "filePath": "auth/sign-in.lazy.tsx",
-      "parent": "/auth"
     },
     "/auth/sign-up": {
       "filePath": "auth/sign-up.lazy.tsx",
@@ -2594,6 +2620,7 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template",
         "/org/$orgname/branch/$branchname/(employee)/approvals/",
         "/org/$orgname/branch/$branchname/(employee)/loan/",
+        "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count",
         "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement",
         "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management",
@@ -2733,6 +2760,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(employee)/loan/": {
       "filePath": "org/$orgname/branch.$branchname/(employee)/loan/index.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/maintenance/cash-count.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement": {
