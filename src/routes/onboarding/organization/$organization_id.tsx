@@ -6,13 +6,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { BranchIcon, PhoneIcon, PushPinIcon } from '@/components/icons'
 import PlainTextEditor from '@/components/plain-text-editor'
+import OrganizationPolicies from '@/components/policies'
 import SafeImage from '@/components/safe-image'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { useGetOrganizationById } from '@/hooks/api-hooks/use-organization'
@@ -31,7 +26,6 @@ function RouteComponent() {
 
     const { data: organization, isPending: isPendingOrganization } =
         useGetOrganizationById(organization_id)
-    console.log('organization', organization)
 
     const initialTermsState = useMemo(() => {
         if (!organization) return []
@@ -59,8 +53,6 @@ function RouteComponent() {
             },
         ]
     }, [organization])
-
-    console.log('initialTermsState', initialTermsState)
 
     const {
         data: joinableBranches,
@@ -196,70 +188,9 @@ function RouteComponent() {
                     </>
                 )}
             </>
-            <div className="mt-5 w-full flex justify-center items-center">
-                <div>
-                    <p className="w-fit flex flex-row text-sm text-muted-foreground">
-                        <span className="mr-1">
-                            &copy; {new Date().getFullYear()}
-                        </span>
-                        <span className="font-semibold">
-                            {organization?.name}
-                        </span>
-                        <span className="mr-1">. All rights reserved.</span>
-
-                        <div className="flex w-fit">
-                            {initialTermsState.map((term) => (
-                                <PolicyViewer
-                                    key={term.value}
-                                    policyType={term.value as PolicyKey}
-                                    policyName={term.name}
-                                    policyContent={term.content}
-                                />
-                            ))}
-                        </div>
-                    </p>
-                </div>
-            </div>
+            {organization && (
+                <OrganizationPolicies organization={organization} />
+            )}
         </div>
-    )
-}
-
-type PolicyKey =
-    | 'terms_and_conditions'
-    | 'privacy_policy'
-    | 'refund_policy'
-    | 'user_agreement'
-
-const PolicyViewer = ({
-    policyType,
-    policyName,
-    policyContent,
-}: {
-    policyType: PolicyKey
-    policyName: string
-    policyContent: string
-}) => {
-    return (
-        <Popover key={policyType}>
-            <div className="flex items-center gap-x-2">
-                <PopoverTrigger className=" mr-1 text-primary/70 hover:underline">
-                    {policyName} {policyType !== 'user_agreement' ? ' | ' : ''}
-                </PopoverTrigger>
-            </div>
-            <PopoverContent className="h-full w-full p-4">
-                <span className="font-semibold text-primary mb-2 block">
-                    {policyName}
-                </span>
-                <ScrollArea className=" text-sm overflow-y-auto pr-2">
-                    <div className="p-1">
-                        {policyContent ? (
-                            <PlainTextEditor content={policyContent} />
-                        ) : (
-                            <p>No content available for {policyName}.</p>
-                        )}
-                    </div>
-                </ScrollArea>
-            </PopoverContent>
-        </Popover>
     )
 }

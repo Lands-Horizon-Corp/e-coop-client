@@ -1,32 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
-import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { useNavigate } from '@tanstack/react-router'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import PlainTextEditor from '@/components/plain-text-editor'
-import RawDescription from '@/components/raw-description'
+import OrganizationPolicies from '@/components/policies'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover'
 
 import { useJoinOrganization } from '@/hooks/api-hooks/use-user-organization'
 
 import { IBranch, IOrganizationWithPolicies, TEntityId } from '@/types'
-
-type PolicyKey =
-    | 'terms_and_conditions'
-    | 'privacy_policy'
-    | 'refund_policy'
-    | 'user_agreement'
 
 type PolicyAcceptanceModalProps = IModalProps & {
     onAcceptAndProceed: (branchId: TEntityId, organizationId: TEntityId) => void
@@ -35,82 +22,6 @@ type PolicyAcceptanceModalProps = IModalProps & {
     branch: IBranch
     branchId: TEntityId
     organizationId: TEntityId
-}
-
-const PolicyViewer = ({
-    policyType,
-    policyName,
-    policyContent,
-    onAcceptPolicy,
-    isChecked,
-}: {
-    policyType: PolicyKey
-    policyName: string
-    policyContent: string
-    onAcceptPolicy: (policyValue: string) => void
-    isChecked: boolean
-}) => {
-    const [open, setOpen] = useState(false)
-
-    const handleAcceptClick = () => {
-        onAcceptPolicy(policyType)
-        setOpen(false)
-    }
-
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <div className="flex items-center gap-x-2">
-                <span className="text-xs text-muted-foreground">
-                    I accept the{' '}
-                </span>
-                <PopoverTrigger
-                    className="text-sm text-primary/70 hover:underline"
-                    disabled={isChecked}
-                >
-                    {policyName}
-                </PopoverTrigger>
-                <Checkbox
-                    checked={isChecked}
-                    onCheckedChange={() => {
-                        onAcceptPolicy(policyType)
-                    }}
-                    className="h-4 w-4"
-                />
-            </div>
-            <PopoverContent className="w-96 p-4">
-                <span className="font-semibold text-primary mb-2 block">
-                    {policyName}
-                </span>
-                <ScrollArea className="max-h-64 text-sm overflow-y-auto pr-2">
-                    <div className="p-1">
-                        {policyContent ? (
-                            <RawDescription content={policyContent} />
-                        ) : (
-                            <p>No content available for {policyName}.</p>
-                        )}
-                    </div>
-                </ScrollArea>
-                <div className="w-full flex justify-end gap-x-2 mt-4">
-                    <Button
-                        variant={'ghost'}
-                        size={'sm'}
-                        onClick={() => setOpen(false)}
-                    >
-                        Close
-                    </Button>
-                    {!isChecked && (
-                        <Button
-                            size={'sm'}
-                            variant={'secondary'}
-                            onClick={handleAcceptClick}
-                        >
-                            Accept
-                        </Button>
-                    )}
-                </div>
-            </PopoverContent>
-        </Popover>
-    )
 }
 
 const PolicyAcceptanceModal = ({
@@ -122,54 +33,7 @@ const PolicyAcceptanceModal = ({
     organizationId,
     ...rest
 }: PolicyAcceptanceModalProps) => {
-    const initialTermsState = [
-        {
-            name: 'Terms And Condition',
-            value: 'terms_and_conditions',
-            isChecked: false,
-            content: organization.terms_and_conditions,
-        },
-        {
-            name: 'Privacy Policy',
-            value: 'privacy_policy',
-            isChecked: false,
-            content: organization.privacy_policy,
-        },
-        {
-            name: 'Refund Policy',
-            value: 'refund_policy',
-            isChecked: false,
-            content: organization.refund_policy,
-        },
-        {
-            name: 'User Agreement',
-            value: 'user_agreement',
-            isChecked: false,
-            content: organization.user_agreement,
-        },
-    ]
-
-    const [termsAndConditions, setTermsAndConditions] =
-        useState(initialTermsState)
-
-    useEffect(() => {
-        if (rest.open) {
-            setTermsAndConditions(initialTermsState)
-        }
-    }, [rest.open])
-
-    const handlePolicyAcceptance = (policyValue: string) => {
-        setTermsAndConditions((prev) =>
-            prev.map((term) =>
-                term.value === policyValue
-                    ? { ...term, isChecked: !term.isChecked }
-                    : term
-            )
-        )
-    }
-
-    const isAllChecked = termsAndConditions.every((term) => term.isChecked)
-
+    const [isAllChecked, setIsAllChecked] = useState(false)
     const handleProceed = () => {
         if (!isAllChecked) {
             toast.error('Please accept all policies before proceeding.')
@@ -199,18 +63,13 @@ const PolicyAcceptanceModal = ({
                 <p className=" text-xs text-muted-foreground mb-4">
                     To proceed, please read and accept the following policies:
                 </p>
-                <div className="w-full grid grid-cols-1 gap-y-3">
-                    {termsAndConditions.map((term) => (
-                        <PolicyViewer
-                            key={term.value}
-                            policyType={term.value as PolicyKey}
-                            policyName={term.name}
-                            policyContent={term.content}
-                            onAcceptPolicy={handlePolicyAcceptance}
-                            isChecked={term.isChecked}
-                        />
-                    ))}
-                </div>
+                <OrganizationPolicies
+                    organization={organization}
+                    onPolicyChange={(isAllChecked) => {
+                        setIsAllChecked(isAllChecked)
+                    }}
+                    isIncludeIAccept
+                />
                 <div className="flex justify-end col-span-2 gap-x-2 mt-6">
                     <Button
                         size={'sm'}
