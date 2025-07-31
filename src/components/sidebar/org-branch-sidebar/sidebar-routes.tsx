@@ -283,7 +283,7 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
-                    title: 'Footsteps',
+                    title: 'Employee Footsteps',
                     icon: FootstepsIcon,
                     url: `${baseUrl}/employee-footsteps`,
                     userType: ['owner', 'employee'],
