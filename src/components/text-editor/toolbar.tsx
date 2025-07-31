@@ -33,7 +33,7 @@ type ToolbarProps = {
 type ToolbarItem = {
     id: string
     tooltipContent: string
-    icon?: React.ElementType
+    icon?: React.ComponentType<{ className?: string }>
     command: (editor: Editor) => () => void
     isActiveCheck?: string
     type: 'toggle' | 'button'
@@ -102,7 +102,7 @@ const Toolbar = ({
             command: (editor) => () =>
                 editor.chain().focus().toggleBulletList().run(),
             isActiveCheck: 'bulletList',
-            type: 'toggle',
+            type: 'button',
             ariaLabel: 'Toggle bullet list',
             onPressedChange: (editor) => () =>
                 editor.chain().focus().toggleBulletList().run(),
@@ -114,7 +114,7 @@ const Toolbar = ({
             command: (editor) => () =>
                 editor.chain().focus().toggleOrderedList().run(),
             isActiveCheck: 'orderedList',
-            type: 'toggle',
+            type: 'button',
             ariaLabel: 'Toggle ordered list',
         },
         {
