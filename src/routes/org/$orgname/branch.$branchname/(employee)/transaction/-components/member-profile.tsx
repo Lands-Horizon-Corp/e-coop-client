@@ -84,11 +84,11 @@ const MemberProfileTransactionView = ({
                     <Button
                         variant={'secondary'}
                         size="sm"
-                        className="text-xs"
+                        className="text-xs w-full"
                         onClick={() => infoModal.onOpenChange(true)}
                     >
                         {' '}
-                        Member&apos;s Info
+                        View Profile
                     </Button>
                 </div>
                 <div className="grow space-y-3 min-w-[700px]">
