@@ -6,7 +6,8 @@ import {
 import APIService from './api-service'
 
 export const getHeartbeat = async () => {
-    const response = await APIService.get<HeartbeatResponse>('/heartbeat')
+    const response =
+        await APIService.get<HeartbeatResponse>('/heartbeat/status')
     return response.data
 }
 
@@ -19,5 +20,5 @@ export const sendHeartbeatOffline = async () => {
 }
 
 export const sendHeartbeatStatus = async (status: HeartbeatStatusChange) => {
-    await APIService.post<HeartbeatStatusChange>('/heartbeat', status)
+    await APIService.post<HeartbeatStatusChange>('/heartbeat/status', status)
 }

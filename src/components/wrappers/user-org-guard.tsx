@@ -7,7 +7,7 @@ import { Navigate } from '@tanstack/react-router'
 import {
     useSendHeartbeatOffline,
     useSendHeartbeatOnline,
-} from '@/hooks/api-hooks/user-heeatbeeat'
+} from '@/hooks/api-hooks/use-heartbeat'
 
 import { IChildProps } from '@/types'
 
@@ -27,7 +27,6 @@ const UserOrgGuard = ({ children }: Props) => {
 
         // Send online heartbeat on mount and every 5s
         const sendHeartbeat = () => sendOnline.mutate()
-        const heartbeatInterval = setInterval(sendHeartbeat, 5000)
         sendHeartbeat()
 
         // Mark offline on tab close
@@ -35,10 +34,9 @@ const UserOrgGuard = ({ children }: Props) => {
         window.addEventListener('beforeunload', handleUnload)
 
         return () => {
-            clearInterval(heartbeatInterval)
             window.removeEventListener('beforeunload', handleUnload)
         }
-    }, [sendOnline, sendOffline, user_organization])
+    }, [user_organization])
 
     if (!user_organization) {
         toast.warning('Please select what org and branch to operate.')

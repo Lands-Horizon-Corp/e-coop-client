@@ -2,11 +2,11 @@ import { ITimesheet } from '.'
 import { IUserOrganizationResponse } from '../lands-types'
 
 export interface HeartbeatResponse {
-    user_organizations: IUserOrganizationResponse
-    online_user_organizations: IUserOrganizationResponse
-    commuting_user_organizations: IUserOrganizationResponse
-    busy_user_organizations: IUserOrganizationResponse
-    vacation_user_organizations: IUserOrganizationResponse
+    user_organizations: IUserOrganizationResponse[]
+    online_user_organizations: IUserOrganizationResponse[]
+    commuting_user_organizations: IUserOrganizationResponse[]
+    busy_user_organizations: IUserOrganizationResponse[]
+    vacation_user_organizations: IUserOrganizationResponse[]
     online_users_count: number
     online_members: number
     total_members: number

@@ -39,7 +39,6 @@ export const useSendHeartbeatOnline = () => {
     return useMutation({
         mutationFn: sendHeartbeatOnline,
         onSuccess: () => {
-            toast.success('Status set to online')
             queryClient.invalidateQueries({ queryKey: ['heartbeat', 'status'] })
         },
         onError: (error) => {
@@ -53,7 +52,6 @@ export const useSendHeartbeatOffline = () => {
     return useMutation({
         mutationFn: sendHeartbeatOffline,
         onSuccess: () => {
-            toast.success('Status set to offline')
             queryClient.invalidateQueries({ queryKey: ['heartbeat', 'status'] })
         },
         onError: (error) => {
