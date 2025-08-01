@@ -53,10 +53,11 @@ const TransactionBatchNavButton = (_props: Props) => {
         `transaction_batch.update.${transactionBatch?.id}`,
         (transactionBatch) => {
             if (transactionBatch.is_closed) {
-                toast.info('Your transaction batch has been ended.')
+                toast.info('Your current transaction batch has been ended.')
                 return reset()
             }
 
+            toast.info('Your current transaction batch has been updated.')
             reset()
             setData(transactionBatch)
         }

@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { formatNumber } from '@/utils'
 
@@ -38,6 +40,12 @@ const EndedTransactionBatchKanban = (_props: Props) => {
     const { data, isRefetching, refetch } = useTransactionBatchEndApprovals()
 
     useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
+        toast.info('Ended Kanban Transaction Batch - update : Triggered')
+        refetch()
+    })
+
+    useSubscribe(`transaction_batch.delete.branch.${branch_id}`, () => {
+        toast.info('Ended Kanban Transaction Batch - deleted : Triggered')
         refetch()
     })
 

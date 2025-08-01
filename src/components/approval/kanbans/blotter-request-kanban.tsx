@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { formatNumber } from '@/utils'
@@ -35,12 +37,17 @@ const BlotterRequestKanban = (_props: Props) => {
         useTransactionBatchBlotterViewRequests()
 
     useSubscribe(`transaction_batch.create.branch.${branch_id}`, () => {
+        toast.info('Request View Kanban Transaction Batch - create : Triggered')
         refetch()
     })
+
     useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
+        toast.info('Request View Kanban Transaction Batch - update : Triggered')
         refetch()
     })
+
     useSubscribe(`transaction_batch.delete.branch.${branch_id}`, () => {
+        toast.info('Request View Kanban Transaction Batch - delete : Triggered')
         refetch()
     })
 
