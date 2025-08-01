@@ -35,15 +35,12 @@ const BlotterRequestKanban = (_props: Props) => {
         useTransactionBatchBlotterViewRequests()
 
     useSubscribe(`transaction_batch.create.branch.${branch_id}`, () => {
-        alert('someone created')
         refetch()
     })
     useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
-        alert('someone updated/ended/requestedview,signed')
         refetch()
     })
     useSubscribe(`transaction_batch.delete.branch.${branch_id}`, () => {
-        alert('someone deleted')
         refetch()
     })
 

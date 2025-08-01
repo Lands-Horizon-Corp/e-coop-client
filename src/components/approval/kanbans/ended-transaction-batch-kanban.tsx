@@ -1,5 +1,3 @@
-import { toast } from 'sonner'
-
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { formatNumber } from '@/utils'
 
@@ -41,7 +39,6 @@ const EndedTransactionBatchKanban = (_props: Props) => {
 
     useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
         refetch()
-        toast.info('Updated transaction batch')
     })
 
     return (
