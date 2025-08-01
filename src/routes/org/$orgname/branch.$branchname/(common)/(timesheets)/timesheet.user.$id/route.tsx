@@ -34,8 +34,8 @@ function RouteComponent() {
     return (
         <PageContainer>
             <TimesheetTable
-                userId={id}
-                mode="user-organization"
+                mode="employee"
+                userOrganizationId={id}
                 actionComponent={TimesheetTableAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
