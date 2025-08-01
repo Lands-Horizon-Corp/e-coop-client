@@ -47,7 +47,6 @@ const KanbanTitle = ({
                 <div
                     className={cn(
                         'flex items-center gap-x-2',
-                        isLoading && 'hidden',
                         totalItems === undefined &&
                             currentItems == undefined &&
                             'hidden'
