@@ -13,11 +13,6 @@ export const batchSignSchema = z.object({
     certified_by_name: z.coerce.string().optional(),
     certified_by_position: z.coerce.string().optional(),
 
-    checked_by_signature_media_id: entityIdSchema.optional(),
-    checked_by_signature_media: z.any(),
-    checked_by_name: z.coerce.string().optional(),
-    checked_by_position: z.coerce.string().optional(),
-
     approved_by_signature_media_id: entityIdSchema.optional(),
     approved_by_signature_media: z.any(),
     approved_by_name: z.coerce.string().optional(),

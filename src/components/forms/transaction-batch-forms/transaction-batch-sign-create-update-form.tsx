@@ -86,9 +86,9 @@ const Steps: Step[] = [
         longDescription:
             'This person reviews the batch for any discrepancies or errors, ensuring that all entries are accurate and complete.',
         fields: [
-            'checked_by_name',
-            'checked_by_position',
-            'checked_by_signature_media_id',
+            'check_by_name',
+            'check_by_position',
+            'check_by_signature_media_id',
         ],
     },
     {
