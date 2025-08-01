@@ -72,6 +72,7 @@ import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport 
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-management'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employee-footsteps'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionsImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transactions'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-entry'
@@ -505,6 +506,13 @@ const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute =
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsImport.update({
     id: '/(maintenance)/(employees)/employee-footsteps',
     path: '/employee-footsteps',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+
+const OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionTransactionsImport.update({
+    id: '/(employee)/transaction/transactions',
+    path: '/transaction/transactions',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 
@@ -1221,6 +1229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
+      path: '/transaction/transactions'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/transactions'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
       path: '/employee-footsteps'
@@ -1607,6 +1622,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute
   OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
@@ -1679,6 +1695,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute:
       OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute:
@@ -1824,6 +1842,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
@@ -1916,6 +1935,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
@@ -2014,6 +2034,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentEntryRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
@@ -2112,6 +2133,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/payment-entry'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
+    | '/org/$orgname/branch/$branchname/transaction/transactions'
     | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/permission-management'
     | '/org/$orgname/branch/$branchname/permission-template'
@@ -2203,6 +2225,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/payment-entry'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
+    | '/org/$orgname/branch/$branchname/transaction/transactions'
     | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/permission-management'
     | '/org/$orgname/branch/$branchname/permission-template'
@@ -2299,6 +2322,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
@@ -2609,6 +2633,7 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-entry",
         "/org/$orgname/branch/$branchname/(employee)/transaction/payment-type",
         "/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch",
+        "/org/$orgname/branch/$branchname/(employee)/transaction/transactions",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template",
@@ -2716,6 +2741,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch": {
       "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(employee)/transaction/transactions": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/transactions.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps": {
