@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { formatNumber } from '@/utils'
@@ -31,19 +33,33 @@ const BlotterRequestKanban = (_props: Props) => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
-    const { data, isPending, refetch } =
+    const { data, isRefetching, refetch } =
         useTransactionBatchBlotterViewRequests()
 
-    useSubscribe(`transaction_batch.update.branch.${branch_id}`, refetch)
+    useSubscribe(`transaction_batch.create.branch.${branch_id}`, () => {
+        toast.info('Request View Kanban Transaction Batch - create : Triggered')
+        refetch()
+    })
+
+    useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
+        toast.info('Request View Kanban Transaction Batch - update : Triggered')
+        refetch()
+    })
+
+    useSubscribe(`transaction_batch.delete.branch.${branch_id}`, () => {
+        toast.info('Request View Kanban Transaction Batch - delete : Triggered')
+        refetch()
+    })
 
     return (
         <KanbanContainer className="w-[360px]">
             <div className="flex items-center">
                 <LayersSharpDotIcon className="mr-2 size-4 text-orange-400" />
                 <KanbanTitle
-                    isLoading={isPending}
+                    isLoading={isRefetching}
                     totalItems={data.length}
                     title="Blotter View Request"
+                    onRefresh={() => refetch()}
                 />
             </div>
             <Separator />

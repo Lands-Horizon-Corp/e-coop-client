@@ -38,6 +38,7 @@ import {
     useTransBatchUpdateSignApproval,
     useTransactionBatch,
 } from '@/hooks/api-hooks/use-transaction-batch'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import {
     IClassProps,
@@ -85,9 +86,9 @@ const Steps: Step[] = [
         longDescription:
             'This person reviews the batch for any discrepancies or errors, ensuring that all entries are accurate and complete.',
         fields: [
-            'checked_by_name',
-            'checked_by_position',
-            'checked_by_signature_media_id',
+            'check_by_name',
+            'check_by_position',
+            'check_by_signature_media_id',
         ],
     },
     {
@@ -110,17 +111,6 @@ const Steps: Step[] = [
             'verified_by_name',
             'verified_by_position',
             'verified_by_signature_media_id',
-        ],
-    },
-    {
-        title: 'Check By',
-        description: 'Person who performed the final check.',
-        longDescription:
-            'This person performs a final check of the batch to ensure that everything is in order before it is submitted for posting.',
-        fields: [
-            'check_by_name',
-            'check_by_position',
-            'check_by_signature_media_id',
         ],
     },
     {
@@ -190,6 +180,7 @@ const TransactionBatchSignCreateUpdateForm = ({
     defaultStep = 0,
     onError,
     onSuccess,
+    resetOnDefaultChange,
 }: ITransactionBatchSignFormProps) => {
     const [step, setStep] = useState(defaultStep)
 
@@ -204,7 +195,10 @@ const TransactionBatchSignCreateUpdateForm = ({
 
     const { error, isPending, mutate, reset } = useTransBatchUpdateSignApproval(
         {
-            onSuccess,
+            onSuccess: (data) => {
+                form.reset(data)
+                onSuccess?.(data)
+            },
             onError,
         }
     )
@@ -234,6 +228,12 @@ const TransactionBatchSignCreateUpdateForm = ({
 
     const onSubmit = form.handleSubmit((formData) => {
         mutate({ id: batchId, data: formData })
+    })
+
+    useFormHelper({
+        form,
+        defaultValues,
+        resetOnDefaultChange: resetOnDefaultChange,
     })
 
     const isDisabled = (field: Path<TBatchSignFormValues>) =>
@@ -280,7 +280,7 @@ const TransactionBatchSignCreateUpdateForm = ({
                                             >
                                                 {title}{' '}
                                                 {!!form.getValues(
-                                                    Steps[i].fields[1]
+                                                    Steps[i].fields[0]
                                                 ) && (
                                                     <CheckFillIcon className="inline ml-1 text-primary" />
                                                 )}

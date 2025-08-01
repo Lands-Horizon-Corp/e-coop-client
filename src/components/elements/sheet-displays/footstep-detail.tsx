@@ -107,9 +107,13 @@ export default function FootstepDetail({ footstep }: Props) {
                             IP Address
                         </p>
                         <p className="text-xs">
-                            {footstep.ip_address?.trim()
-                                ? footstep.ip_address
-                                : '...'}
+                            {footstep.ip_address?.trim() ? (
+                                footstep.ip_address
+                            ) : (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </p>
                     </div>
 
@@ -118,18 +122,26 @@ export default function FootstepDetail({ footstep }: Props) {
                             User Agent
                         </p>
                         <p className="text-xs break-words">
-                            {footstep.user_agent?.trim()
-                                ? footstep.user_agent
-                                : '...'}
+                            {footstep.user_agent?.trim() ? (
+                                footstep.user_agent
+                            ) : (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </p>
                     </div>
 
                     <div className="flex items-center w-full justify-between">
                         <p className="text-muted-foreground text-xs">Referer</p>
                         <p className="text-sm break-words">
-                            {footstep.referer?.trim()
-                                ? footstep.referer
-                                : '...'}
+                            {footstep.referer?.trim() ? (
+                                footstep.referer
+                            ) : (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </p>
                     </div>
 
@@ -138,9 +150,13 @@ export default function FootstepDetail({ footstep }: Props) {
                             Language
                         </p>
                         <p className="text-sm break-words">
-                            {footstep.accept_language?.trim()
-                                ? footstep.accept_language
-                                : '...'}
+                            {footstep.accept_language?.trim() ? (
+                                footstep.accept_language
+                            ) : (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </p>
                     </div>
 
@@ -149,9 +165,13 @@ export default function FootstepDetail({ footstep }: Props) {
                             Location
                         </p>
                         <p className="text-sm break-words">
-                            {footstep.location?.trim()
-                                ? footstep.location
-                                : '...'}
+                            {footstep.location?.trim() ? (
+                                footstep.location
+                            ) : (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </p>
                     </div>
 

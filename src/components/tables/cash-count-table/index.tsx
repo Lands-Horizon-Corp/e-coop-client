@@ -1,13 +1,8 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import {
-    deleteMany,
-    exportAll,
-    exportSelected,
-} from '@/api-service/transaction-batch-service'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/lib'
+import { ColumnDef } from '@tanstack/react-table'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -20,67 +15,47 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 
-import {
-    TTransactionBatchHookMode,
-    useFilteredPaginatedTransactionBatch,
-} from '@/hooks/api-hooks/use-transaction-batch'
+import { useFilteredPaginatedCashCount } from '@/hooks/api-hooks/use-cash-count'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { ITransactionBatch, TEntityId, TableProps } from '@/types'
+import { ICashCount, TableProps } from '@/types'
 
-import TransactionBatchTableColumns, {
-    ITransactionBatchTableColumnProps,
-    batchGlobalSearchTargets,
+import CashCountTableColumns, {
+    ICashCountTableColumnProps,
+    cashCountGlobalSearchTargets,
 } from './columns'
 
-export interface TransactionBatchTableProps
-    extends TableProps<ITransactionBatch>,
-        ITransactionBatchTableColumnProps {
+export interface CashCountTableProps
+    extends TableProps<ICashCount>,
+        ICashCountTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<ITransactionBatch>,
+        IDataTableToolbarProps<ICashCount>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
-    mode: TTransactionBatchHookMode
 }
 
-export type TTransactionBatchTableProps = TransactionBatchTableProps &
-    (
-        | {
-              mode: 'employee'
-              userOrganizationId: TEntityId
-          }
-        | { mode: 'me' }
-        | { mode: 'all' }
-    )
-
-const TransactionBatchTable = ({
-    mode,
+const CashCountTable = ({
     className,
     toolbarProps,
     defaultFilter,
-    userOrganizationId,
     onSelectData,
     actionComponent,
-}: TTransactionBatchTableProps & {
-    userOrganizationId?: TEntityId
-}) => {
-    const queryClient = useQueryClient()
+}: CashCountTableProps) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            TransactionBatchTableColumns({
+            CashCountTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -96,8 +71,8 @@ const TransactionBatchTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<ITransactionBatch>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+    } = useDataTableState<ICashCount>({
+        defaultColumnOrder: columns.map((c: ColumnDef<ICashCount>) => c.id!),
         onSelectData,
     })
 
@@ -111,10 +86,8 @@ const TransactionBatchTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedTransactionBatch({
-        mode,
+    } = useFilteredPaginatedCashCount({
         pagination,
-        userOrganizationId,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
@@ -163,36 +136,14 @@ const TransactionBatchTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: batchGlobalSearchTargets,
+                        targets: cashCountGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: [
-                                    'transaction-batch',
-                                    'resource-query',
-                                ],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
-                    }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        exportAll: exportAll,
-                        exportCurrentPage: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
-                        exportSelected: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
-                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -213,4 +164,4 @@ const TransactionBatchTable = ({
     )
 }
 
-export default TransactionBatchTable
+export default CashCountTable

@@ -1,8 +1,8 @@
-import { ReactNode } from 'react'
+import { ReactNode, useRef } from 'react'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 import { useAuthStore } from '@/store/user-auth-store'
-import { Navigate, useRouter } from '@tanstack/react-router'
+import { Navigate, useLocation, useRouter } from '@tanstack/react-router'
 
 import {
     ArrowRightIcon,
@@ -25,7 +25,17 @@ interface Props extends IBaseProps {
 
 const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     const router = useRouter()
+    const { pathname } = useLocation()
     const { currentAuth, authStatus } = useAuthStore()
+
+    // Replace the useMemo with useRef
+    const originalPathnameRef = useRef<string | null>(null)
+
+    if (originalPathnameRef.current === null && !pathname.startsWith('/auth')) {
+        originalPathnameRef.current = pathname
+    }
+
+    const callbackUrl = originalPathnameRef.current || '/onboarding'
 
     if (pageType === 'AUTHENTICATED') {
         if (authStatus === 'loading')
@@ -85,7 +95,14 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
             )
 
         if (!currentAuth.user)
-            return <Navigate to={'/auth/sign-in' as string} />
+            return (
+                <Navigate
+                    to={'/auth/sign-in' as string}
+                    search={{
+                        cbUrl: callbackUrl,
+                    }}
+                />
+            )
 
         if (currentAuth.user.type === 'ban') {
             return (

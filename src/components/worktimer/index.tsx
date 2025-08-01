@@ -60,7 +60,7 @@ const WorkTimer = ({ className }: Props) => {
                     <LiveWorkTimeDurationDisplay
                         timeIn={timesheet.time_in}
                         onTick={({ hours, minutes }) => {
-                            if (hours === 0 && minutes >= 5 && !canTimeOut)
+                            if ((minutes >= 5 || hours > 0) && !canTimeOut)
                                 setCanTimeOut(true)
                         }}
                     />

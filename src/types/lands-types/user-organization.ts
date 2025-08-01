@@ -8,7 +8,9 @@ import { IOrganization } from './organization'
 export type TUserOrganizationApplicationStatus =
     (typeof USER_ORG_APPLICATION_STATUS)[number]
 
-export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
+export interface IUserOrganization<TUser = IUserBase>
+    extends IBaseEntityMeta,
+        IUserOrganizationSettings {
     id: TEntityId
 
     organization_id: TEntityId
@@ -31,15 +33,6 @@ export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
     permission_name: string
     permission_description: string
     permissions: TPermission[]
-
-    //     DeveloperSecretKey     string        `json:"developer_secret_key"` // available only to this user org
-    //     UserSettingDescription string `json:"user_setting_description"`
-    //     UserSettingStartOR int64 `json:"user_setting_start_or"`
-    //     UserSettingEndOR   int64 `json:"user_setting_end_or"`
-    //     UserSettingUsedOR  int64 `json:"user_setting_used_or"`
-    //     UserSettingStartVoucher int64 `json:"user_setting_start_voucher"`
-    //     UserSettingEndVoucher   int64 `json:"user_setting_end_voucher"`
-    //     UserSettingUsedVoucher  int64 `json:"user_setting_used_voucher"`
 }
 
 export interface IUserOrganizationResponse {
@@ -65,6 +58,22 @@ export interface IUserOrganizationPermissionRequest {
     permission_description: string
     permissions: TPermission[]
 }
+
+export interface IUserOrganizationSettings {
+    user_setting_description: string
+    user_setting_start_or: number
+    user_setting_end_or: number
+    user_setting_used_or: number
+    user_setting_start_voucher: number
+    user_setting_end_voucher: number
+    user_setting_used_voucher: number
+    allow_withdraw_negative_balance: boolean
+    allow_withdraw_exact_balance: boolean
+    maintaining_balance: boolean
+}
+
+export interface IUserOrganizationSettingsRequest
+    extends IUserOrganizationSettings {}
 
 export interface IUserOrganizationPaginated<TUser = IUserBase>
     extends IPaginatedResult<IUserOrganization<TUser>> {}

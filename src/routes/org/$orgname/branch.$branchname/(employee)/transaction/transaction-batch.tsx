@@ -47,6 +47,7 @@ function RouteComponent() {
     return (
         <PageContainer>
             <TransactionBatchTable
+                mode="all"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),

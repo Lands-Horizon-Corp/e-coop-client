@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { useTransactionBatchStore } from '@/store/transaction-batch-store'
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 // import { useAuthUser } from '@/store/user-auth-store'
@@ -39,10 +41,34 @@ const TransactionBatchNavButton = (_props: Props) => {
     })
 
     useSubscribe<TTransactionBatchFullorMin>(
-        `transaction_batch.update.${transactionBatch?.id}`,
+        `transaction_batch.create.${transactionBatch?.id}`,
         (transactionBatch) => {
+            toast.info('Your current transaction batch has been created.')
             reset()
             setData(transactionBatch)
+        }
+    )
+
+    useSubscribe<TTransactionBatchFullorMin>(
+        `transaction_batch.update.${transactionBatch?.id}`,
+        (transactionBatch) => {
+            if (transactionBatch.is_closed) {
+                toast.info('Your current transaction batch has been ended.')
+                return reset()
+            }
+
+            toast.info('Your current transaction batch has been updated.')
+            reset()
+            setData(transactionBatch)
+        }
+    )
+
+    useSubscribe<TTransactionBatchFullorMin>(
+        `transaction_batch.delete.${transactionBatch?.id}`,
+        () => {
+            reset()
+
+            toast.info('Your current transaction batch has been deleted.')
         }
     )
 

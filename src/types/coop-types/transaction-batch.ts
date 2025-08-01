@@ -64,7 +64,7 @@ export interface ITransactionBatch
 
     description?: string
     can_view: boolean
-    request_view?: string // date / timestamp
+    request_view?: boolean
     is_closed: boolean
 
     ended_at?: string

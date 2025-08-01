@@ -24,16 +24,16 @@ const navLinks: NavLink[] = [
         path: '/about',
     },
     {
-        name: 'FAQ',
-        path: '/frequently-asked-questions',
+        name: 'Contact',
+        path: '/contact',
     },
     {
         name: 'Subscription',
         path: '/subscription',
     },
     {
-        name: 'Contact',
-        path: '/contact',
+        name: 'FAQ',
+        path: '/frequently-asked-questions',
     },
     {
         name: 'Developers',

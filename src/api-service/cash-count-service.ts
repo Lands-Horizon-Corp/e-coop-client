@@ -1,4 +1,8 @@
 import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
+import {
     ICashCount,
     ICashCountBatchRequest,
 } from '@/types/coop-types/cash-count'
@@ -16,4 +20,17 @@ export const updateBatchCashCount = async (data: ICashCountBatchRequest) => {
         data
     )
     return response.data
+}
+
+const CrudServices = createAPICrudService<ICashCount, void>('/cash-count')
+const CollectionServices = createAPICollectionService<ICashCount>('/cash-count')
+
+export const { getById } = CrudServices
+export const { search } = CollectionServices
+
+export default {
+    getCurrentBatchCashCounts,
+    updateBatchCashCount,
+    getById,
+    search,
 }
