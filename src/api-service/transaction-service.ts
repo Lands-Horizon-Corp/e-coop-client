@@ -1,9 +1,9 @@
 import qs from 'query-string'
 
-import {
-    createAPICollectionService,
-    createAPICrudService,
-} from '@/factory/api-factory-service'
+// import {
+//     createAPICollectionService,
+//     createAPICrudService,
+// } from '@/factory/api-factory-service'
 import {
     ITransaction,
     ITransactionPaginated,
@@ -70,10 +70,10 @@ export const getMemberAccountingLedger = async (memberProfileId: TEntityId) => {
     return response.data
 }
 
-const CollectionServices =
-    createAPICollectionService<ITransaction>('/transaction')
+// const CollectionServices =
+//     createAPICollectionService<ITransaction>('/transaction')
 
-export const { create, getById, updateById, deleteById, deleteMany } =
-    CrudServices
-export const { allList, search } = CollectionServices
-export default { ...CrudServices, ...CollectionServices }
+// export const { create, getById, updateById, deleteById, deleteMany } =
+//     CrudServices
+// export const { allList, search } = CollectionServices
+// export default { ...CrudServices, ...CollectionServices }
