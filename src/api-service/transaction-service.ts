@@ -1,6 +1,10 @@
 import qs from 'query-string'
 
 import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
+import {
     ITransaction,
     ITransactionPaginated,
 } from '@/types/coop-types/transaction'
@@ -65,3 +69,11 @@ export const getMemberAccountingLedger = async (memberProfileId: TEntityId) => {
     const response = await APIService.get<IMemberAccountingLedger>(url)
     return response.data
 }
+
+const CollectionServices =
+    createAPICollectionService<ITransaction>('/transaction')
+
+export const { create, getById, updateById, deleteById, deleteMany } =
+    CrudServices
+export const { allList, search } = CollectionServices
+export default { ...CrudServices, ...CollectionServices }
