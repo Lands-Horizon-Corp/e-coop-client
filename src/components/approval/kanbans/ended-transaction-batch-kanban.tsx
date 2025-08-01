@@ -35,7 +35,7 @@ const EndedTransactionBatchKanban = (_props: Props) => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
-    const { data, isPending, refetch } = useTransactionBatchEndApprovals()
+    const { data, isRefetching, refetch } = useTransactionBatchEndApprovals()
 
     useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
         refetch()
@@ -46,9 +46,10 @@ const EndedTransactionBatchKanban = (_props: Props) => {
             <div className="flex items-center">
                 <LayersSharpDotIcon className="mr-2 size-4 text-primary" />
                 <KanbanTitle
-                    isLoading={isPending}
-                    totalItems={data.length}
                     title="Ended Batch"
+                    totalItems={data.length}
+                    isLoading={isRefetching}
+                    onRefresh={() => refetch()}
                 />
             </div>
             <Separator />

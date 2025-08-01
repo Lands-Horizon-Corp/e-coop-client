@@ -31,7 +31,7 @@ const BlotterRequestKanban = (_props: Props) => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
-    const { data, isPending, refetch } =
+    const { data, isRefetching, refetch } =
         useTransactionBatchBlotterViewRequests()
 
     useSubscribe(`transaction_batch.create.branch.${branch_id}`, () => {
@@ -49,9 +49,10 @@ const BlotterRequestKanban = (_props: Props) => {
             <div className="flex items-center">
                 <LayersSharpDotIcon className="mr-2 size-4 text-orange-400" />
                 <KanbanTitle
-                    isLoading={isPending}
+                    isLoading={isRefetching}
                     totalItems={data.length}
                     title="Blotter View Request"
+                    onRefresh={() => refetch()}
                 />
             </div>
             <Separator />

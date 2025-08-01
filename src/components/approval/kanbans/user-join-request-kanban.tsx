@@ -39,7 +39,7 @@ const UserJoinRequestKanban = (_props: Props) => {
         },
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
-    const { data, isPending } = useUserOrgJoinRequests()
+    const { data, isRefetching, refetch } = useUserOrgJoinRequests()
 
     useSubscribe<IUserOrganization>(
         `user_organization.create.branch.${branch_id}`,
@@ -81,9 +81,10 @@ const UserJoinRequestKanban = (_props: Props) => {
             <div className="flex items-center">
                 <UserListIcon className="mr-2 size-4" />
                 <KanbanTitle
-                    isLoading={isPending}
                     totalItems={data.length}
                     title="User Join Requests"
+                    isLoading={isRefetching}
+                    onRefresh={() => refetch()}
                 />
             </div>
             <Separator />
