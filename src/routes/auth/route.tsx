@@ -11,6 +11,7 @@ import { zodValidator } from '@tanstack/zod-adapter'
 import AuthFooter from '@/components/footers/auth-footer'
 import AuthNav from '@/components/nav/navs/auth-nav'
 import GuestGuard from '@/components/wrappers/guest-guard'
+
 import { emailSchema } from '@/validations/common'
 
 const authSearchSchema = z.object({
