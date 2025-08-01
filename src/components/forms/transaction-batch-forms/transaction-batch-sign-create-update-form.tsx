@@ -114,17 +114,6 @@ const Steps: Step[] = [
         ],
     },
     {
-        title: 'Check By',
-        description: 'Person who performed the final check.',
-        longDescription:
-            'This person performs a final check of the batch to ensure that everything is in order before it is submitted for posting.',
-        fields: [
-            'check_by_name',
-            'check_by_position',
-            'check_by_signature_media_id',
-        ],
-    },
-    {
         title: 'Acknowledge By',
         description: 'Person who acknowledged the batch closure.',
         longDescription:
