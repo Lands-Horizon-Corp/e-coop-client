@@ -1,22 +1,20 @@
 import qs from 'query-string'
 
-import { IGeneralLedgerPaginated, TEntityId } from '@/types'
+import {
+    EntryType,
+    IGeneralLedger,
+    IGeneralLedgerPaginated,
+    TEntityId,
+} from '@/types'
 
 import APIService from '../api-service'
 
-// Accept entry type as a string union type
-export type EntryType =
-    | ''
-    | 'check-entry'
-    | 'online-entry'
-    | 'cash-entry'
-    | 'payment-entry'
-    | 'withdraw-entry'
-    | 'deposit-entry'
-    | 'journal-entry'
-    | 'adjustment-entry'
-    | 'journal-voucher'
-    | 'check-voucher'
+export const getGeneralLedgerByID = async (id: TEntityId) => {
+    const response = await APIService.get<IGeneralLedger>(
+        `/general-ledger/${id}`
+    )
+    return response.data
+}
 
 // 1. BRANCH
 export const getPaginatedBranchGeneralLedger = async (
@@ -239,17 +237,6 @@ export const getPaginatedAccountGeneralLedger = async (
     )
     const response = await APIService.get<IGeneralLedgerPaginated>(url)
     return response.data
-}
-
-export default {
-    getPaginatedBranchGeneralLedger,
-    getPaginatedCurrentGeneralLedger,
-    getPaginatedEmployeeGeneralLedger,
-    getPaginatedMemberGeneralLedger,
-    getPaginatedMemberAccountGeneralLedger,
-    getPaginatedTransactionBatchGeneralLedger,
-    getPaginatedTransactionGeneralLedger,
-    getPaginatedAccountGeneralLedger,
 }
 
 /*

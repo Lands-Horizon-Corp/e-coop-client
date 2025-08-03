@@ -1,26 +1,41 @@
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import {
-    EntryType,
-    getPaginatedAccountGeneralLedger,
-    getPaginatedBranchGeneralLedger,
-    getPaginatedCurrentGeneralLedger,
-    getPaginatedEmployeeGeneralLedger,
-    getPaginatedMemberAccountGeneralLedger,
-    getPaginatedMemberGeneralLedger,
-    getPaginatedTransactionBatchGeneralLedger,
-    getPaginatedTransactionGeneralLedger,
-} from '@/api-service/ledger-services/general-ledger-service'
+import { GeneralLedgerService } from '@/api-service/ledger-services'
 import { serverRequestErrExtractor } from '@/helpers'
 import { toBase64, withCatchAsync } from '@/utils'
 
 import {
+    EntryType,
     IAPIFilteredPaginatedHook,
+    IGeneralLedger,
     IGeneralLedgerPaginated,
     IQueryProps,
     TEntityId,
 } from '@/types'
+
+export const useGeneralLedgerByID = (
+    id: TEntityId,
+    { enabled = true }: IQueryProps = {}
+) => {
+    return useQuery<IGeneralLedger, string>({
+        queryKey: ['general-ledger ', id],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                GeneralLedgerService.getGeneralLedgerByID(id)
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage)
+                throw errorMessage
+            }
+            return result
+        },
+        enabled,
+        retry: 1,
+    })
+}
 
 // 1. Branch
 export const useFilteredPaginatedBranchGeneralLedger = ({
@@ -45,7 +60,7 @@ export const useFilteredPaginatedBranchGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedBranchGeneralLedger(
+                GeneralLedgerService.getPaginatedBranchGeneralLedger(
                     {
                         pagination,
                         sort: sort && toBase64(sort),
@@ -100,7 +115,7 @@ export const useFilteredPaginatedEmployeeGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedEmployeeGeneralLedger(
+                GeneralLedgerService.getPaginatedEmployeeGeneralLedger(
                     userOrganizationId,
                     {
                         pagination,
@@ -156,7 +171,7 @@ export const useFilteredPaginatedMemberGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedMemberGeneralLedger(
+                GeneralLedgerService.getPaginatedMemberGeneralLedger(
                     memberProfileId,
                     {
                         pagination,
@@ -215,7 +230,7 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedMemberAccountGeneralLedger(
+                GeneralLedgerService.getPaginatedMemberAccountGeneralLedger(
                     memberProfileId,
                     accountId,
                     {
@@ -269,7 +284,7 @@ export const useFilteredPaginatedCurrentGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedCurrentGeneralLedger(
+                GeneralLedgerService.getPaginatedCurrentGeneralLedger(
                     {
                         pagination,
                         sort: sort && toBase64(sort),
@@ -324,7 +339,7 @@ export const useFilteredPaginatedTransactionBatchGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedTransactionBatchGeneralLedger(
+                GeneralLedgerService.getPaginatedTransactionBatchGeneralLedger(
                     transactionBatchId,
                     {
                         pagination,
@@ -380,7 +395,7 @@ export const useFilteredPaginatedTransactionGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedTransactionGeneralLedger(
+                GeneralLedgerService.getPaginatedTransactionGeneralLedger(
                     transactionId,
                     {
                         pagination,
@@ -436,7 +451,7 @@ export const useFilteredPaginatedAccountGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                getPaginatedAccountGeneralLedger(
+                GeneralLedgerService.getPaginatedAccountGeneralLedger(
                     accountId,
                     {
                         pagination,
