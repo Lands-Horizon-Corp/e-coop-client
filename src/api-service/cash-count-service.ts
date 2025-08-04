@@ -10,7 +10,7 @@ import {
 import APIService from './api-service'
 
 export const getCurrentBatchCashCounts = async () => {
-    const response = await APIService.get<ICashCount[]>('/cash-count')
+    const response = await APIService.get<ICashCount[]>('/api/v1/cash-count')
     return response.data
 }
 
