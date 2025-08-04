@@ -52,8 +52,11 @@ export const exportSelected = async (url: string, ids: TEntityId[]) => {
     return downloadFile(finalUrl, 'selected_footsteps_export.csv')
 }
 
-const CrudServices = createAPICrudService<IFootstep, unknown>('/footstep')
-const CollectionServices = createAPICollectionService<IFootstep>('/footstep')
+const CrudServices = createAPICrudService<IFootstep, unknown>(
+    '/api/v1/footstep'
+)
+const CollectionServices =
+    createAPICollectionService<IFootstep>('/api/v1/footstep')
 
 export const { getById, updateById, deleteById, deleteMany } = CrudServices
 export const { allList, search } = CollectionServices

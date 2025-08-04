@@ -9,8 +9,8 @@ import { IBank, IBankRequest, TEntityId } from '@/types'
 
 import { downloadFile } from '../helpers'
 
-const CrudServices = createAPICrudService<IBank, IBankRequest>('/bank')
-const CollectionServices = createAPICollectionService<IBank>('/bank')
+const CrudServices = createAPICrudService<IBank, IBankRequest>('/api/v1/bank')
+const CollectionServices = createAPICollectionService<IBank>('/api/v1/bank')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

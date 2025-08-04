@@ -29,8 +29,9 @@ const { deleteMany, deleteById, getById } = createAPICrudService<
     void
 >('/api/v1/transaction')
 
-const CollectionServices =
-    createAPICollectionService<ITransaction>('/v1/transaction')
+const CollectionServices = createAPICollectionService<ITransaction>(
+    '/api/v1/transaction'
+)
 
 export const { search } = CollectionServices
 export default {
