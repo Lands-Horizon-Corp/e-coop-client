@@ -33,7 +33,7 @@ const UserNav = ({
                 className
             )}
         >
-            <NavContainer className="pointer-events-auto">
+            <NavContainer className="pointer-events-auto min-w-[10%]">
                 <AppSidebarToggle />
                 <PageBreadCrumb
                     homeUrl={homeUrl}

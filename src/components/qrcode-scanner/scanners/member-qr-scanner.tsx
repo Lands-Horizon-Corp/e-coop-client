@@ -25,10 +25,12 @@ import MemberProfileQrResultCard from '../qr-elements/member-profile-qr-result-c
 
 interface MemberQrScannerProps extends IBaseProps {
     onSelectMemberProfile: (memberProfile: IMemberProfile) => void
+    onResultFound?: (memberProfile: IMemberProfile) => void
 }
 
 const MemberQrScanner = ({
     className,
+    onResultFound,
     onSelectMemberProfile,
 }: MemberQrScannerProps) => {
     const [decodedMemberProfile, setDecodedMemberProfile] = useState<
@@ -40,6 +42,7 @@ const MemberQrScanner = ({
     const { data, isPending, error } = useMemberProfile({
         profileId: focusedId as TEntityId,
         enabled: focusedId !== undefined && focusedId !== null,
+        onSuccess: (data) => onResultFound?.(data),
     })
 
     useSimpleShortcut(['Enter'], () => {

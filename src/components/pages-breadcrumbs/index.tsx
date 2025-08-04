@@ -81,8 +81,8 @@ const PageBreadCrumb = ({ className, homeUrl }: Props) => {
     }, [pathName, homeUrl])
 
     return (
-        <Breadcrumb className={cn('capitalize', className)}>
-            <BreadcrumbList className="text-xs">
+        <Breadcrumb className={cn('capitalize min-w-0 max-w-full', className)}>
+            <BreadcrumbList className="text-xs min-w-0 max-w-full flex items-center flex-nowrap ecoop-scroll overflow-x-auto">
                 <PageNavigator />
                 {homeUrl && (
                     <>
@@ -160,14 +160,14 @@ const PageBreadCrumb = ({ className, homeUrl }: Props) => {
                                 {i !== paths.lastPart.length - 1 ? (
                                     <BreadcrumbLink
                                         asChild
-                                        className="text-inherit"
+                                        className="text-inherit text-nowrap"
                                     >
                                         <Link to={path.urlPath}>
                                             {path.name}
                                         </Link>
                                     </BreadcrumbLink>
                                 ) : (
-                                    <BreadcrumbPage className="cursor-default">
+                                    <BreadcrumbPage className="cursor-default text-nowrap">
                                         {path.name}
                                     </BreadcrumbPage>
                                 )}

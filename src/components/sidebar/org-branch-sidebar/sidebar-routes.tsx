@@ -159,6 +159,14 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
+                    icon: LayersIcon,
+                    title: 'Transactions',
+                    url: `${baseUrl}/transaction/transactions`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'View transactions',
+                },
+                {
+                    type: 'item',
                     icon: OnlinePaymentIcon,
                     title: 'Online Entry',
                     url: `${baseUrl}/transaction/online-entry`,

@@ -10,7 +10,7 @@ export type TUserOrganizationApplicationStatus =
 
 export interface IUserOrganization<TUser = IUserBase>
     extends IBaseEntityMeta,
-        IUserOrganizationSettings {
+        Omit<IUserOrganizationSettings, 'user_type' | 'description'> {
     id: TEntityId
 
     organization_id: TEntityId
@@ -60,6 +60,9 @@ export interface IUserOrganizationPermissionRequest {
 }
 
 export interface IUserOrganizationSettings {
+    user_type: TUserType
+    description: string
+
     user_setting_description: string
     user_setting_start_or: number
     user_setting_end_or: number

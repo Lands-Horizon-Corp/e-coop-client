@@ -7,6 +7,7 @@ import {
     IUserOrganization,
     IUserOrganizationPaginated,
     IUserOrganizationPermissionRequest,
+    IUserOrganizationSettingsRequest,
     TEntityId,
 } from '@/types'
 
@@ -99,4 +100,44 @@ export const updateUserOrganizationPermission = async (
         IUserOrganization
     >(`/user-organization/${userOrgId}/permission`, data)
     return response.data
+}
+
+export const updateUserOrganizationSettings = async ({
+    id,
+    url,
+    data,
+}: {
+    id?: TEntityId
+    url?: string
+    data: IUserOrganizationSettingsRequest
+}) => {
+    const response = await APIService.put<
+        IUserOrganizationSettingsRequest,
+        IUserOrganization
+    >(
+        url ??
+            (id
+                ? `/user-organization/settings/${id}`
+                : `/user-organization/settings/current`),
+        data
+    )
+    return response.data
+}
+
+export const getUserOrganizationById = async (id: TEntityId) => {
+    const response = await APIService.get<IUserOrganization>(
+        `/user-organization/${id}`
+    )
+    return response.data
+}
+
+export default {
+    deleteEmployee,
+    getAllEmployees,
+    getPaginatedUserOrg,
+    deleteManyEmployees,
+    getPaginatedEmployees,
+    getUserOrganizationById,
+    updateUserOrganizationSettings,
+    updateUserOrganizationPermission,
 }

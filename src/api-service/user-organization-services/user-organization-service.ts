@@ -1,3 +1,5 @@
+import { createAPICrudService } from '@/factory/api-factory-service'
+
 import { IUserOrganization, TEntityId } from '@/types'
 
 import APIService from '../api-service'
@@ -94,3 +96,7 @@ export const rejectJoinRequest = async (userOrganizationId: TEntityId) => {
     )
     return response.data
 }
+
+export const { getById } = createAPICrudService<IUserOrganization, void>(
+    '/user-organization'
+)
