@@ -6,19 +6,23 @@ import {
 import APIService from './api-service'
 
 export const getHeartbeat = async () => {
-    const response =
-        await APIService.get<HeartbeatResponse>('/heartbeat/status')
+    const response = await APIService.get<HeartbeatResponse>(
+        '/api/v1/heartbeat/status'
+    )
     return response.data
 }
 
 export const sendHeartbeatOnline = async () => {
-    await APIService.post('/heartbeat/online')
+    await APIService.post('/api/v1/heartbeat/online')
 }
 
 export const sendHeartbeatOffline = async () => {
-    await APIService.post('/heartbeat/offline')
+    await APIService.post('/api/v1/heartbeat/offline')
 }
 
 export const sendHeartbeatStatus = async (status: HeartbeatStatusChange) => {
-    await APIService.post<HeartbeatStatusChange>('/heartbeat/status', status)
+    await APIService.post<HeartbeatStatusChange>(
+        '/api/v1/heartbeat/status',
+        status
+    )
 }

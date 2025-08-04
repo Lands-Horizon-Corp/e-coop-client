@@ -45,7 +45,7 @@ export const useFilteredBatchFunding = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                BatchFundingService.getPaginatedBatchOnlineEntry({
+                BatchFundingService.getPaginatedBatchFunding({
                     pagination,
                     transactionBatchId,
                     sort: sort && toBase64(sort),

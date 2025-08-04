@@ -12,7 +12,7 @@ import {
 const OrganizationCrudServices = createAPICrudService<
     ICreateOrganizationResponse,
     IOrganizationRequest
->('/organization')
+>('/api/v1/organization')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     OrganizationCrudServices
@@ -22,13 +22,14 @@ export const OrganizationService = {
 }
 
 export const getAllOrganizations = async () => {
-    const response = await APIService.get<IOrganization[]>(`/organization`)
+    const response =
+        await APIService.get<IOrganization[]>(`/api/v1/organization`)
     return response.data
 }
 
 export const getOrganizationById = async (id: TEntityId) => {
     const response = await APIService.get<IOrganizationWithPolicies>(
-        `/organization/${id}`
+        `/api/v1/organization/${id}`
     )
     return response.data
 }

@@ -16,7 +16,6 @@ import {
     LayersIcon,
     MaintenanceIcon,
     MoneyCheckIcon,
-    OnlinePaymentIcon,
     PlusIcon,
     PriceTagIcon,
     QrCodeIcon,
@@ -159,11 +158,11 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
-                    icon: OnlinePaymentIcon,
-                    title: 'Online Entry',
-                    url: `${baseUrl}/transaction/online-entry`,
+                    icon: LayersIcon,
+                    title: 'Transactions',
+                    url: `${baseUrl}/transaction/transactions`,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'View online entries',
+                    shortDescription: 'View transactions',
                 },
                 {
                     type: 'item',

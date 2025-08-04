@@ -83,6 +83,8 @@ export const ICONS = [
     'Column Outline',
     'People Group',
     'Running',
+    'Paint Brush',
+    'Devices',
     'Exclude',
     'Receipt',
     'Printer',

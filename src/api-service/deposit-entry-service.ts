@@ -18,7 +18,7 @@ export const getPaginatedBatchDepositEntry = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/deposit-entry/transaction-batch/${transactionBatchId}/search`,
+            url: `/api/v1/deposit-entry/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort,
                 filter: filters,

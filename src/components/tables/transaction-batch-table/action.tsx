@@ -1,4 +1,5 @@
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useAuthUser } from '@/store/user-auth-store'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import { ClockIcon, EyeIcon } from '@/components/icons'
@@ -34,6 +35,10 @@ const TransactionBatchTableAction = ({
 
     const quickViewModal = useModalState()
     const viewHistoryModal = useModalState()
+
+    const {
+        currentAuth: { user },
+    } = useAuthUser()
 
     const { isPending: isDeletingBatch, mutate: deleteBatch } =
         useDeleteTransactionBatch({
@@ -76,6 +81,10 @@ const TransactionBatchTableAction = ({
                     <>
                         <DropdownMenuItem
                             onClick={() => quickViewModal.onOpenChange(true)}
+                            disabled={
+                                user?.id === batch.employee_user_id &&
+                                batch.can_view === false
+                            }
                         >
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
                             View Quick Summary

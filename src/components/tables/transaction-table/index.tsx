@@ -14,24 +14,27 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 
-import { useFilteredBatchCheckEntry } from '@/hooks/api-hooks/use-check-entry'
+import {
+    TPaginatedTransactionHookMode,
+    useFilteredPaginatedTransaction,
+} from '@/hooks/api-hooks/use-transaction'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { ICheckEntry, TableProps } from '@/types'
+import { ITransaction, TEntityId, TableProps } from '@/types'
 
-import BatchCheckEntryTableColumns, {
-    ICheckEntryTableColumnProps,
-    checkEntryGlobalSearchTargets,
+import TransactionTableColumns, {
+    ITransactionTableColumnProps,
+    transactionGlobalSearchTargets,
 } from './columns'
 
-export interface BatchCheckEntryTableProps
-    extends TableProps<ICheckEntry>,
-        ICheckEntryTableColumnProps {
+export interface TransactionTableProps
+    extends TableProps<ITransaction>,
+        ITransactionTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<ICheckEntry>,
+        IDataTableToolbarProps<ITransaction>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -40,27 +43,58 @@ export interface BatchCheckEntryTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
-    transactionBatchId: string
+    mode: TPaginatedTransactionHookMode
 }
 
-const BatchCheckEntryTable = ({
+export type TTransactionProps = TransactionTableProps &
+    (
+        | {
+              mode: 'current-branch'
+          }
+        | {
+              mode: 'current-user'
+          }
+        | {
+              mode: 'member-profile'
+              memberProfileId: TEntityId
+          }
+        | {
+              mode: 'employee'
+              userId: TEntityId
+          }
+        | {
+              mode: 'transaction-batch'
+              transactionBatchId: TEntityId
+          }
+    )
+
+const TransactionTable = ({
+    mode,
     className,
     toolbarProps,
     defaultFilter,
+    memberProfileId,
+    userId,
+    transactionBatchId,
+    onRowClick,
     onSelectData,
     actionComponent,
-    transactionBatchId,
-}: BatchCheckEntryTableProps) => {
+}: TTransactionProps & {
+    memberProfileId?: TEntityId
+    userId?: TEntityId
+    transactionBatchId?: TEntityId
+}) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            BatchCheckEntryTableColumns({
+            TransactionTableColumns({
+                hideSelect: mode === 'current-user',
                 actionComponent,
             }),
-        [actionComponent]
+        [actionComponent, mode]
     )
 
     const {
@@ -71,9 +105,9 @@ const BatchCheckEntryTable = ({
         setIsScrollable,
         columnVisibility,
         setColumnVisibility,
-        // rowSelectionState,
+        rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<ICheckEntry>({
+    } = useDataTableState<ITransaction>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -83,17 +117,27 @@ const BatchCheckEntryTable = ({
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
 
+    const transactionQuery = useFilteredPaginatedTransaction({
+        mode,
+        pagination,
+        memberProfileId,
+        userId,
+        transactionBatchId,
+        sort: sortingState,
+        filterPayload: filterState.finalFilterPayload,
+    })
+
     const {
         isPending,
         isRefetching,
-        data: { data, totalPage, pageSize, totalSize },
+        data: { data, totalPage, pageSize, totalSize } = {
+            data: [],
+            totalPage: 1,
+            pageSize: 10,
+            totalSize: 0,
+        },
         refetch,
-    } = useFilteredBatchCheckEntry({
-        pagination,
-        sort: sortingState,
-        filterPayload: filterState.finalFilterPayload,
-        transactionBatchId,
-    })
+    } = transactionQuery
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
@@ -107,7 +151,7 @@ const BatchCheckEntryTable = ({
             sorting: tableSorting,
             pagination,
             columnOrder,
-            // rowSelection: rowSelectionState.rowSelection,
+            rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
         rowCount: pageSize,
@@ -139,7 +183,7 @@ const BatchCheckEntryTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: checkEntryGlobalSearchTargets,
+                        targets: transactionGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -158,6 +202,7 @@ const BatchCheckEntryTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
                 />
@@ -167,4 +212,4 @@ const BatchCheckEntryTable = ({
     )
 }
 
-export default BatchCheckEntryTable
+export default TransactionTable

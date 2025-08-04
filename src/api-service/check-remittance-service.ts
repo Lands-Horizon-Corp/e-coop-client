@@ -8,7 +8,7 @@ export const createTransactionBatchCheckRemittance = async (
     const response = await APIService.post<
         ICheckRemittanceRequest,
         ICheckRemittance
-    >(`/check-remittance`, data)
+    >(`/api/v1/check-remittance`, data)
     return response.data
 }
 
@@ -19,16 +19,17 @@ export const updateTransactionBatchCheckRemittance = async (
     const response = await APIService.put<
         ICheckRemittanceRequest,
         ICheckRemittance
-    >(`/check-remittance/${id}`, data)
+    >(`/api/v1/check-remittance/${id}`, data)
     return response.data
 }
 
 export const currentTransactionBatchCheckRemittances = async () => {
-    const response =
-        await APIService.get<ICheckRemittance[]>(`/check-remittance`)
+    const response = await APIService.get<ICheckRemittance[]>(
+        `/api/v1/check-remittance`
+    )
     return response.data
 }
 
 export const deleteTransactionBatchCheckRemittance = async (id: TEntityId) => {
-    await APIService.delete(`/check-remittance/${id}`)
+    await APIService.delete(`/api/v1/check-remittance/${id}`)
 }

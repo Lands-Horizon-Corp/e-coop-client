@@ -11,9 +11,9 @@ import {
 const CrudServices = createAPICrudService<
     IAutomaticLoanDeduction,
     IAutomaticLoanDeductionRequest
->('/automatic-loan-deduction')
+>('/api/v1/automatic-loan-deduction')
 const CollectionServices = createAPICollectionService<IAutomaticLoanDeduction>(
-    '/automatic-loan-deduction'
+    '/api/v1/automatic-loan-deduction'
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =

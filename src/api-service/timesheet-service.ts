@@ -10,18 +10,20 @@ import {
 import APIService from './api-service'
 
 export const getTimesheetById = async (id: TEntityId) => {
-    const response = await APIService.get<ITimesheet>(`/timesheet/${id}`)
+    const response = await APIService.get<ITimesheet>(`/api/v1/timesheet/${id}`)
     return response.data
 }
 
 export const getCurrentTimesheet = async () => {
-    const response = await APIService.get<ITimesheet>('/timesheet/current')
+    const response = await APIService.get<ITimesheet>(
+        '/api/v1/timesheet/current'
+    )
     return response.data
 }
 
 export const timeInOut = async (data: ITimesheetInOutRequest) => {
     const response = await APIService.post<ITimesheetInOutRequest, ITimesheet>(
-        '/timesheet/time-in-and-out',
+        '/api/v1/timesheet/time-in-and-out',
         data
     )
     return response.data
@@ -40,7 +42,7 @@ export const getPaginatedTimesheets = async ({
 }) => {
     const finalUrl = qs.stringifyUrl(
         {
-            url: `/timesheet/${url}`,
+            url: `/api/v1/timesheet/${url}`,
             query: {
                 sort,
                 filter: filters,

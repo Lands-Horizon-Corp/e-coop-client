@@ -12,6 +12,7 @@ import {
     FootstepsIcon,
     HeartBreakFillIcon,
     QrCodeIcon,
+    ReceiptIcon,
     UserClockFillIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -25,6 +26,7 @@ import { useDeleteMemberProfile } from '@/hooks/api-hooks/member/use-member-prof
 import { useModalState } from '@/hooks/use-modal-state'
 
 import FootstepTable from '../../footsteps-table'
+import TransactionTable from '../../transaction-table'
 import { IMemberProfileTableActionComponentProp } from './columns'
 
 interface IMemberProfileTableActionProps
@@ -44,6 +46,7 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
     const closeModal = useModalState(false)
     const historyModal = useModalState(false)
     const footstepModal = useModalState(false)
+    const transactionModal = useModalState(false)
 
     const { mutate: deleteProfile, isPending: isDeleting } =
         useDeleteMemberProfile()
@@ -99,6 +102,20 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                                 className="min-h-[90vh] min-w-0 max-h-[90vh]"
                             />
                         </Modal>
+
+                        <Modal
+                            {...transactionModal}
+                            className="max-w-[95vw]"
+                            title="Transactions"
+                            description={`You are viewing ${member.full_name}'s transactions`}
+                        >
+                            <TransactionTable
+                                mode="member-profile"
+                                onRowClick={() => {}}
+                                memberProfileId={member.id}
+                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                            />
+                        </Modal>
                     </>
                 )}
             </div>
@@ -134,6 +151,12 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                                 strokeWidth={1.5}
                             />
                             Member History
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => transactionModal.onOpenChange(true)}
+                        >
+                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
+                            View Transactions
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             disabled={!member.user_id}

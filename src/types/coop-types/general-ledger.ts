@@ -8,6 +8,19 @@ import { IMemberJointAccount } from './member/member-joint-account'
 import { IMemberProfile } from './member/member-profile'
 import { IPaginatedResult } from './paginated-result'
 
+export type TEntryType =
+    | ''
+    | 'check-entry'
+    | 'online-entry'
+    | 'cash-entry'
+    | 'payment-entry'
+    | 'withdraw-entry'
+    | 'deposit-entry'
+    | 'journal-entry'
+    | 'adjustment-entry'
+    | 'journal-voucher'
+    | 'check-voucher'
+
 export type TGeneralLedgerSource = (typeof GENERAL_LEDGER_SOURCES)[number]
 
 export interface IGeneralLedger extends IBaseEntityMeta {

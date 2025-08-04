@@ -46,6 +46,12 @@ export const useCurrentTransactionBatch = ({
                 if (showMessage) toast.error(errorMessage)
                 throw errorMessage
             }
+            if (!result) {
+                const message = 'No current transaction batch found.'
+                onError?.(message, null)
+                if (showMessage) toast.error(message)
+                throw message
+            }
 
             onSuccess?.(result)
             return result

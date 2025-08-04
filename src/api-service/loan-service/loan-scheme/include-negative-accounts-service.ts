@@ -11,9 +11,9 @@ import {
 const CrudServices = createAPICrudService<
     IIncludeNegativeAccount,
     IIncludeNegativeAccountRequest
->('/include-negative-accounts')
+>('/api/v1/include-negative-accounts')
 const CollectionServices = createAPICollectionService<IIncludeNegativeAccount>(
-    '/include-negative-accounts'
+    '/api/v1/include-negative-accounts'
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =

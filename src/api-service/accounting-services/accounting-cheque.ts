@@ -11,7 +11,7 @@ import {
 import APIService from '../api-service'
 
 export default class ChequeService {
-    private static readonly BASE_ENDPOINT = '/cheque'
+    private static readonly BASE_ENDPOINT = '/api/v1/cheque'
 
     private static async makeRequest<T>(
         apiCall: () => Promise<{ data: T }>

@@ -13,9 +13,16 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
 import { useHeartbeat } from '@/hooks/api-hooks/use-heartbeat'
+import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
+import { ScanQrIcon } from '../icons'
+import Modal from '../modals/modal'
+import MemberQuickSearch from './member-quick-search'
+
 const Heartbeat = () => {
+    const modalState = useModalState()
+
     const { data, isLoading, error, refetch } = useHeartbeat()
     const {
         currentAuth: {
@@ -192,6 +199,17 @@ const Heartbeat = () => {
                                         <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
                                         System Online
                                     </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() =>
+                                            modalState.onOpenChange(true)
+                                        }
+                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                    >
+                                        <ScanQrIcon />
+                                        Quick Search Member
+                                    </Button>
                                 </div>
                             </div>
                         </CardContent>
@@ -202,6 +220,16 @@ const Heartbeat = () => {
                         Click the "Online" button to see the beautiful member
                         list with avatars, status indicators, and role badges.
                     </div>
+
+                    {/* Modals */}
+                    <Modal
+                        {...modalState}
+                        className="size-fit"
+                        titleClassName="hidden"
+                        descriptionClassName="hidden"
+                    >
+                        <MemberQuickSearch />
+                    </Modal>
                 </>
             )}
         </div>

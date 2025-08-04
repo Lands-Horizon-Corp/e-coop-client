@@ -2,13 +2,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { BranchService } from '@/api-service/branch-services'
-import * as UserOrganizationService from '@/api-service/user-organization-service'
+import UserOrganizationService from '@/api-service/user-organization-service'
 import { UserOrganization } from '@/api-service/user-organization-services'
 import { isArray, serverRequestErrExtractor } from '@/helpers'
 import { groupBy, toBase64, withCatchAsync } from '@/utils'
 
 import {
     IAPIFilteredPaginatedHook,
+    IAPIHook,
     IBranch,
     IEmployee,
     IMember,
@@ -21,6 +22,7 @@ import {
     IUserOrganization,
     IUserOrganizationPaginated,
     IUserOrganizationPermissionRequest,
+    IUserOrganizationSettingsRequest,
     TEntityId,
 } from '@/types'
 
@@ -341,3 +343,51 @@ export const useUpdateUserOrganizationPermission = createMutationHook<
     'Permission updated',
     (args) => updateMutationInvalidationFn('user-organization', args)
 )
+
+export const useUpdateUserOrganizationSettings = createMutationHook<
+    IUserOrganization,
+    string,
+    { id?: TEntityId; url?: string; data: IUserOrganizationSettingsRequest }
+>(
+    (args) => UserOrganizationService.updateUserOrganizationSettings(args),
+    'Settings updated',
+    (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['employee', 'resource-query'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['user-organization', args.resultData.id],
+        })
+        updateMutationInvalidationFn('user-organization', args)
+    }
+)
+
+export const useUserOrganiaztion = ({
+    id,
+    showMessage = false,
+    onSuccess,
+    onError,
+    ...props
+}: { id: TEntityId } & IAPIHook<IUserOrganization> &
+    IQueryProps<IUserOrganization>) => {
+    return useQuery<IUserOrganization, string>({
+        queryKey: ['user-organization', id],
+        queryFn: async () => {
+            const [error, data] = await withCatchAsync(
+                UserOrganizationService.getUserOrganizationById(id)
+            )
+
+            if (error) {
+                const message = serverRequestErrExtractor({ error })
+
+                if (showMessage) toast.error(message)
+                onError?.(message, error)
+                throw message
+            }
+
+            onSuccess?.(data)
+            return data
+        },
+        ...props,
+    })
+}

@@ -6,10 +6,10 @@ import {
 } from '../factory/api-factory-service'
 
 const CrudServices = createAPICrudService<ITagTemplate, ITagTemplateRequest>(
-    `tag-template`
+    `/api/v1/tag-template`
 )
 const CollectionServices =
-    createAPICollectionService<ITagTemplate>(`tag-template`)
+    createAPICollectionService<ITagTemplate>(`/api/v1/tag-template`)
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

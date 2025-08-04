@@ -26,7 +26,7 @@ export const getMemberCenterHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-center-history/member-profile/${profileId}/search`,
+            url: `/api/v1/member-center-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -54,7 +54,7 @@ export const getMemberClassificationHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-classification-history/member-profile/${profileId}/search`,
+            url: `/api/v1/member-classification-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -83,7 +83,7 @@ export const getMemberTypeHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-type-history/member-profile/${profileId}/search`,
+            url: `/api/v1/member-type-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -111,7 +111,7 @@ export const getMemberGenderHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-gender-history/member-profile/${profileId}/search`,
+            url: `/api/v1/member-gender-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -139,7 +139,7 @@ export const getMemberGroupHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-group-history/member-profile/${profileId}/search`,
+            url: `/api/v1/member-group-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -167,7 +167,7 @@ export const getMemberOccupationHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-occupation-history/member-profile/${profileId}/search`,
+            url: `/api/v1/member-occupation-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,
@@ -196,7 +196,7 @@ export const getMemberMutualFundsHistoryById = async ({
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-mutual-funds-history/member-profile/${profileId}/search`,
+            url: `/api/v1/member-mutual-funds-history/member-profile/${profileId}/search`,
             query: {
                 sort,
                 filter: filters,

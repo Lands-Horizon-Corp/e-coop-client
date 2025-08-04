@@ -9,7 +9,7 @@ import APIService from '../api-service'
 
 export const getAllFinancialStatementDefinition = async () => {
     const response = await APIService.get<IFinancialStatementDefinition[]>(
-        `/financial-statement-definition`
+        `/api/v1/financial-statement-definition`
     )
     return response.data
 }
@@ -18,7 +18,7 @@ export const getFinancialStatementDefinitionById = async (
     financialStatementDefinitionId: TEntityId
 ): Promise<IFinancialStatementDefinition> => {
     const response = await APIService.get<IFinancialStatementDefinition>(
-        `/financial-statement-definition/${financialStatementDefinitionId}`
+        `/api/v1/financial-statement-definition/${financialStatementDefinitionId}`
     )
     return response.data
 }
@@ -29,7 +29,7 @@ export const createFinancialStatementDefinition = async (
     const response = await APIService.post<
         IFinancialStatementDefinitionRequest,
         IFinancialStatementDefinition
-    >(`/financial-statement-definition`, payload)
+    >(`/api/v1/financial-statement-definition`, payload)
     return response.data
 }
 
@@ -40,7 +40,10 @@ export const updateFinancialStatementDefinition = async (
     const response = await APIService.put<
         IFinancialStatementDefinitionRequest,
         IFinancialStatementDefinition
-    >(`/financial-statement-definition/${financialStatementDefinitionId}`, data)
+    >(
+        `/api/v1/financial-statement-definition/${financialStatementDefinitionId}`,
+        data
+    )
     return response.data
 }
 
@@ -48,7 +51,7 @@ export const deleteFinancialStatementDefinition = async (
     financialStatementDefinitionId: TEntityId
 ): Promise<void> => {
     const response = await APIService.delete<void>(
-        `/financial-statement-definition/${financialStatementDefinitionId}`
+        `/api/v1/financial-statement-definition/${financialStatementDefinitionId}`
     )
     return response.data
 }
@@ -61,7 +64,7 @@ export const connectAccountToFinancialStatementDefinition = async (
         { financialStatementDefinitionId: TEntityId; accountId: TEntityId },
         IFinancialStatementDefinition
     >(
-        `/financial-statement-definition/${financialStatementDefinitionId}/account/${accountId}/connect`
+        `/api/v1/financial-statement-definition/${financialStatementDefinitionId}/account/${accountId}/connect`
     )
     return response.data
 }
@@ -74,7 +77,9 @@ export const financialStatementUpdateIndex = async (
             APIService.put<
                 { FinancialStatementDefinitionId: TEntityId; index: number },
                 IFinancialStatementDefinition
-            >(`/financial-statement-definition/${item.id}/index/${item.index}`)
+            >(
+                `/api/v1/financial-statement-definition/${item.id}/index/${item.index}`
+            )
         )
     )
     return response[0].data

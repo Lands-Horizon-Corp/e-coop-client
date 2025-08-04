@@ -2,12 +2,14 @@
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
+import { UserOrgSettingsFormModal } from '@/components/forms/settings-forms/user-org-settings-form'
 import { UserOrgPermissionUpdateFormModal } from '@/components/forms/user-org-permission-update-form'
 import {
     BriefCaseClockIcon,
     FootstepsIcon,
     GearIcon,
     LayersIcon,
+    ReceiptIcon,
     UserShieldIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -20,6 +22,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 import FootstepTable from '../footsteps-table'
 import TimesheetTable from '../timesheet-table'
 import TransactionBatchTable from '../transaction-batch-table'
+import TransactionBatchTableAction from '../transaction-batch-table/action'
+import TransactionTable from '../transaction-table'
 import { IEmployeesTableActionComponentProp } from './columns'
 
 const EmployeesAction = ({
@@ -27,10 +31,12 @@ const EmployeesAction = ({
     onDeleteSuccess,
 }: IEmployeesTableActionComponentProp & { onDeleteSuccess?: () => void }) => {
     const employee = row.original
-    const permissionModal = useModalState()
     const footstepModal = useModalState()
     const timesheetModal = useModalState()
+    const permissionModal = useModalState()
     const transactionBatchModal = useModalState()
+    const transactionsModal = useModalState()
+    const userSettingsModal = useModalState()
 
     const { onOpen } = useConfirmModalStore()
     const { isPending: isDeleting, mutate: deleteEmployee } = useDeleteEmployee(
@@ -42,6 +48,13 @@ const EmployeesAction = ({
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
+                <UserOrgSettingsFormModal
+                    {...userSettingsModal}
+                    formProps={{
+                        mode: 'specific',
+                        defaultValues: employee,
+                    }}
+                />
                 <UserOrgPermissionUpdateFormModal
                     {...permissionModal}
                     formProps={{
@@ -95,8 +108,25 @@ const EmployeesAction = ({
                 >
                     <TransactionBatchTable
                         mode="employee"
+                        actionComponent={(props) => (
+                            <TransactionBatchTableAction {...props} />
+                        )}
                         onRowClick={() => {}}
                         userOrganizationId={employee.id}
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    />
+                </Modal>
+
+                <Modal
+                    {...transactionsModal}
+                    className="max-w-[95vw]"
+                    title="Transactions"
+                    description={`You are viewing ${employee.user.full_name}'s transactions`}
+                >
+                    <TransactionTable
+                        mode="employee"
+                        onRowClick={() => {}}
+                        userId={employee.user_id}
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
@@ -125,6 +155,7 @@ const EmployeesAction = ({
                             />
                             Edit permission
                         </DropdownMenuItem>
+
                         <DropdownMenuItem
                             onClick={() =>
                                 transactionBatchModal.onOpenChange(true)
@@ -132,6 +163,13 @@ const EmployeesAction = ({
                         >
                             <LayersIcon className="mr-2" strokeWidth={1.5} />
                             View Transaction Batch
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => transactionsModal.onOpenChange(true)}
+                        >
+                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
+                            View Transactions
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
@@ -143,14 +181,16 @@ const EmployeesAction = ({
                             />
                             View Timesheets
                         </DropdownMenuItem>
+
                         <DropdownMenuItem
                             onClick={() => footstepModal.onOpenChange(true)}
                         >
                             <FootstepsIcon className="mr-2" strokeWidth={1.5} />
                             View Footsteps
                         </DropdownMenuItem>
+
                         <DropdownMenuItem
-                        // onClick={() => footstepModal.onOpenChange(true)}
+                            onClick={() => userSettingsModal.onOpenChange(true)}
                         >
                             <GearIcon className="mr-2" strokeWidth={1.5} />
                             Settings

@@ -14,7 +14,7 @@ export const getDisbursementTransactionById = async (
     id: TEntityId
 ): Promise<IDisbursementTransaction> => {
     const response = await APIService.get<IDisbursementTransaction>(
-        `/disbursement-transactions/${id}`
+        `/api/v1/disbursement-transactions/${id}`
     )
     return response.data
 }
@@ -25,7 +25,7 @@ export const createDisbursementTransaction = async (
     const response = await APIService.post<
         IDisbursementTransactionRequest,
         IDisbursementTransaction
-    >('/disbursement-transactions', data)
+    >('/api/v1/disbursement-transactions', data)
     return response.data
 }
 
@@ -36,21 +36,21 @@ export const updateDisbursementTransaction = async (
     const response = await APIService.put<
         IDisbursementTransactionRequest,
         IDisbursementTransaction
-    >(`/disbursement-transactions/${id}`, data)
+    >(`/api/v1/disbursement-transactions/${id}`, data)
     return response.data
 }
 
 export const deleteDisbursementTransaction = async (
     id: TEntityId
 ): Promise<void> => {
-    await APIService.delete<void>(`/disbursement-transactions/${id}`)
+    await APIService.delete<void>(`/api/v1/disbursement-transactions/${id}`)
 }
 
 export const deleteManyDisbursementTransactions = async (
     ids: TEntityId[]
 ): Promise<void> => {
     // Assuming a bulk delete endpoint, if not needed, remove this function
-    const endpoint = `/disbursement-transactions/bulk-delete`
+    const endpoint = `/api/v1/disbursement-transactions/bulk-delete`
     await APIService.delete<void>(endpoint, { ids })
 }
 
@@ -58,7 +58,7 @@ export const getAllDisbursementTransactions = async (): Promise<
     IDisbursementTransaction[]
 > => {
     const response = await APIService.get<IDisbursementTransaction[]>(
-        '/disbursement-transactions'
+        '/api/v1/disbursement-transactions'
     )
     return response.data
 }
@@ -74,7 +74,7 @@ export const getPaginatedDisbursementTransactions = async ({
 } = {}): Promise<IDisbursementTransactionPaginated> => {
     const url = qs.stringifyUrl(
         {
-            url: `/disbursement-transactions`,
+            url: `/api/v1/disbursement-transactions`,
             query: {
                 sort,
                 filter: filters,

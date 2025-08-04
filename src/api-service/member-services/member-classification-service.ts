@@ -15,9 +15,9 @@ import {
 const CrudServices = createAPICrudService<
     IMemberClassification,
     IMemberClassificationRequest
->(`/member-classification`)
+>(`/api/v1/member-classification`)
 const CollectionServices = createAPICollectionService<IMemberClassification>(
-    `/member-classification`
+    `/api/v1/member-classification`
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =
@@ -25,7 +25,7 @@ export const { create, getById, updateById, deleteById, deleteMany } =
 export const { allList, search } = CollectionServices
 
 export const exportAllMemberClassifications = async (): Promise<void> => {
-    const url = `/member-classification/export`
+    const url = `/api/v1/member-classification/export`
     await downloadFileService(url, 'all_member_classifications_export.csv')
 }
 
@@ -34,7 +34,7 @@ export const exportFilteredMemberClassifications = async (
 ): Promise<void> => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-classification/export-search`,
+            url: `/api/v1/member-classification/export-search`,
             query: { filters },
         },
         { skipNull: true }
@@ -50,7 +50,7 @@ export const exportSelectedMemberClassifications = async (
     }
 
     const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-    const url = `/member-classification/export-selected?${query}`
+    const url = `/api/v1/member-classification/export-selected?${query}`
 
     await downloadFileService(url, 'selected_member_classifications_export.csv')
 }

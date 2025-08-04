@@ -15,11 +15,11 @@ import {
 const CrudServices = createAPICrudService<
     IMemberEducationalAttainment,
     IMemberEducationalAttainmentRequest
->(`/member-educational-attainment`)
+>(`/api/v1/member-educational-attainment`)
 
 const CollectionServices =
     createAPICollectionService<IMemberEducationalAttainment>(
-        `/member-educational-attainment`
+        `/api/v1/member-educational-attainment`
     )
 
 export const { create, getById, updateById, deleteById, deleteMany } =
@@ -27,7 +27,7 @@ export const { create, getById, updateById, deleteById, deleteMany } =
 export const { allList, search } = CollectionServices
 
 export const exportAll = async () => {
-    const url = `/member-educational-attainment/export`
+    const url = `/api/v1/member-educational-attainment/export`
     return downloadFileService(
         url,
         'all_member_educational_attainments_export.csv'
@@ -37,7 +37,7 @@ export const exportAll = async () => {
 export const exportAllFiltered = async (filters?: string) => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-educational-attainment/export-search`,
+            url: `/api/v1/member-educational-attainment/export-search`,
             query: { filters },
         },
         { skipNull: true }
@@ -55,7 +55,7 @@ export const exportSelected = async (ids: TEntityId[]) => {
         )
     }
     const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-    const url = `/member-educational-attainment/export-selected?${query}`
+    const url = `/api/v1/member-educational-attainment/export-selected?${query}`
     return downloadFileService(
         url,
         'selected_member_educational_attainments_export.csv'

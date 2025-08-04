@@ -8,9 +8,10 @@ import {
 const CrudServices = createAPICrudService<
     ISubscriptionPlan,
     ISubscriptionPlanRequest
->(`/subscription-plan`)
-const CollectionServices =
-    createAPICollectionService<ISubscriptionPlan>(`/subscription-plan`)
+>(`/api/v1/subscription-plan`)
+const CollectionServices = createAPICollectionService<ISubscriptionPlan>(
+    `/api/v1/subscription-plan`
+)
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

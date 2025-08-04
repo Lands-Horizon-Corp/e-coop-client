@@ -1,24 +1,27 @@
+import { createAPICrudService } from '@/factory/api-factory-service'
+
 import { IUserOrganization, TEntityId } from '@/types'
 
 import APIService from '../api-service'
 
 export const getUserOrganizationUserId = async (userId: TEntityId) => {
     const response = await APIService.get<IUserOrganization[]>(
-        `/user-organization/user/${userId}`
+        `/api/v1/user-organization/user/${userId}`
     )
     return response.data
 }
 
 export const getCurrentUserOrganizations = async () => {
     const response = await APIService.get<IUserOrganization[]>(
-        `/user-organization/current`
+        `/api/v1/user-organization/current`
     )
     return response.data
 }
 
 export const getAllUserOrganizations = async () => {
-    const response =
-        await APIService.get<IUserOrganization[]>(`/user-organization`)
+    const response = await APIService.get<IUserOrganization[]>(
+        `/api/v1/user-organization`
+    )
     return response.data
 }
 
@@ -30,7 +33,7 @@ export const joinOrganization = async (
         IUserOrganization,
         IUserOrganization
     >(
-        `/user-organization/organization/${organizationId}/branch/${branchId}/join`
+        `/api/v1/user-organization/organization/${organizationId}/branch/${branchId}/join`
     )
     return response.data
 }
@@ -38,7 +41,7 @@ export const joinWithInvitationCode = async (code: string) => {
     const response = await APIService.post<
         IUserOrganization,
         IUserOrganization
-    >(`/user-organization/invitation-code/${code}/join`)
+    >(`/api/v1/user-organization/invitation-code/${code}/join`)
     return response.data
 }
 
@@ -48,7 +51,7 @@ export const canJoinOrganizationMember = async (
 ): Promise<boolean> => {
     try {
         const response = await APIService.get(
-            `/user-organization/organization/${organizationId}/branch/${branchId}/can-join-employee`
+            `/api/v1/user-organization/organization/${organizationId}/branch/${branchId}/can-join-employee`
         )
         return response.status === 200
     } catch {
@@ -58,7 +61,7 @@ export const canJoinOrganizationMember = async (
 
 export const seedOrganization = async (organizationId: TEntityId) => {
     const response = await APIService.post(
-        `/user-organization/${organizationId}/seed`
+        `/api/v1/user-organization/${organizationId}/seed`
     )
     return response.status === 200
 }
@@ -66,7 +69,7 @@ export const seedOrganization = async (organizationId: TEntityId) => {
 export const switchOrganization = async (userOrganizationId: TEntityId) => {
     try {
         const response = await APIService.get(
-            `/user-organization/${userOrganizationId}/switch`
+            `/api/v1/user-organization/${userOrganizationId}/switch`
         )
         return response.status === 200
     } catch {
@@ -76,21 +79,25 @@ export const switchOrganization = async (userOrganizationId: TEntityId) => {
 
 export const getAllJoinRequests = async () => {
     const response = await APIService.get<IUserOrganization[]>(
-        '/user-organization/join-request'
+        '/api/v1/user-organization/join-request'
     )
     return response.data
 }
 
 export const acceptJoinRequest = async (userOrganizationId: TEntityId) => {
     const response = await APIService.post<void, IUserOrganization>(
-        `/user-organization/${userOrganizationId}/accept`
+        `/api/v1/user-organization/${userOrganizationId}/accept`
     )
     return response.data
 }
 
 export const rejectJoinRequest = async (userOrganizationId: TEntityId) => {
     const response = await APIService.delete<IUserOrganization>(
-        `/user-organization/${userOrganizationId}/reject`
+        `/api/v1/user-organization/${userOrganizationId}/reject`
     )
     return response.data
 }
+
+export const { getById } = createAPICrudService<IUserOrganization, void>(
+    '/api/v1/user-organization'
+)

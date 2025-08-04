@@ -1,10 +1,10 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
-import AccountSettingsSidebar from '@/components/account-settings/account-settings-sidebar'
-// import AccountSettingsUserBanner from '@/components/account-settings/account-settings-user-banner'
-import VerifyNotice from '@/components/account-settings/verify-notice'
 import AuthFooter from '@/components/footers/auth-footer'
 import OnboardingNav from '@/components/nav/navs/onboarding-nav'
+import AccountSettingsSidebar from '@/components/settings/account-settings/account-settings-sidebar'
+// import AccountSettingsUserBanner from '@/components/account-settings/account-settings-user-banner'
+import VerifyNotice from '@/components/settings/account-settings/verify-notice'
 import AuthGuard from '@/components/wrappers/auth-guard'
 
 // ACCOUNT SETTINGS NOT TIED TO COOP

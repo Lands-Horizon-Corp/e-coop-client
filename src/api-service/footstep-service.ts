@@ -10,7 +10,7 @@ import { IFootstep, TEntityId } from '@/types'
 import { downloadFile } from '../helpers'
 
 export const exportAll = async (url: string) => {
-    return downloadFile(`/footstep/${url}`, 'all_footsteps_export.csv')
+    return downloadFile(`/api/v1/footstep/${url}`, 'all_footsteps_export.csv')
 }
 
 export const exportAllFiltered = async (props: {
@@ -23,7 +23,7 @@ export const exportAllFiltered = async (props: {
 
     const finalUrl = qs.stringifyUrl(
         {
-            url: `/footstep/${url}`,
+            url: `/api/v1/footstep/${url}`,
             query: {
                 sort,
                 filter: filters,
@@ -43,7 +43,7 @@ export const exportSelected = async (url: string, ids: TEntityId[]) => {
 
     const finalUrl = qs.stringifyUrl(
         {
-            url: `/footstep/${url}/export-selected?`,
+            url: `/api/v1/footstep/${url}/export-selected?`,
             query: { ids },
         },
         { skipNull: true }

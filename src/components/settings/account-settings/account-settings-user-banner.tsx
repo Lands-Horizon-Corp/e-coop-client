@@ -1,6 +1,6 @@
 import { useAuthUser } from '@/store/user-auth-store'
 
-import ImageDisplay from '../image-display'
+import ImageDisplay from '@/components/image-display'
 
 const AccountSettingsUserBanner = () => {
     const {

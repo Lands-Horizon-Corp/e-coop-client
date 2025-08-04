@@ -11,20 +11,21 @@ import { IMemberOccupation, IMemberOccupationRequest, TEntityId } from '@/types'
 const CrudServices = createAPICrudService<
     IMemberOccupation,
     IMemberOccupationRequest
->(`/member-occupation`)
+>(`/api/v1/member-occupation`)
 
-const CollectionServices =
-    createAPICollectionService<IMemberOccupation>(`/member-occupation`)
+const CollectionServices = createAPICollectionService<IMemberOccupation>(
+    `/api/v1/member-occupation`
+)
 
 export const exportAll = async () => {
-    const url = `/member-occupation/export`
+    const url = `/api/v1/member-occupation/export`
     await downloadFileService(url, 'all_member_occupations_export.csv')
 }
 
 export const exportAllFiltered = async (filters?: string) => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-occupation/export-search`,
+            url: `/api/v1/member-occupation/export-search`,
             query: { filters },
         },
         { skipNull: true }
@@ -37,7 +38,7 @@ export const exportSelected = async (ids: TEntityId[]) => {
         throw new Error('No member occupation IDs provided for export.')
     }
     const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-    const url = `/member-occupation/export-selected?${query}`
+    const url = `/api/v1/member-occupation/export-selected?${query}`
     await downloadFileService(url, 'selected_member_occupations_export.csv')
 }
 
