@@ -13,8 +13,9 @@ const CrudServices = createAPICrudService<IAccountTag, IAccounTagRequest>(
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices
 
-const CollectionServices =
-    createAPICollectionService<IAccountTag>('/api/v1/account-tag')
+const CollectionServices = createAPICollectionService<IAccountTag>(
+    '/api/v1/account-tag'
+)
 
 export const { search, allList } = CollectionServices
 

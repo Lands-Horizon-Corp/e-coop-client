@@ -10,10 +10,13 @@ import { ICheckEntry, ICheckEntryPaginated, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
-const CrudService = createAPICrudService<ICheckEntry, void>('/api/v1/check-entry')
+const CrudService = createAPICrudService<ICheckEntry, void>(
+    '/api/v1/check-entry'
+)
 
-const CollectionService =
-    createAPICollectionService<ICheckEntry>('/api/v1/check-entry')
+const CollectionService = createAPICollectionService<ICheckEntry>(
+    '/api/v1/check-entry'
+)
 
 const ExportService = createAPIExportableService('/api/v1/check-entry', {
     base: '/api/v1/check-entry',

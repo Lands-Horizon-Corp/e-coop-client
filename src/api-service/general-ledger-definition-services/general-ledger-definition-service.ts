@@ -77,7 +77,9 @@ export const generalLedgerUpdateIndex = async (
             APIService.put<
                 { generalLedgerDefinitionId: TEntityId; index: number },
                 IGeneralLedgerDefinition
-            >(`/api/v1/general-ledger-definition/${item.id}/index/${item.index}`)
+            >(
+                `/api/v1/general-ledger-definition/${item.id}/index/${item.index}`
+            )
         )
     )
     return response[0].data

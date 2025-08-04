@@ -24,7 +24,7 @@ export const getAllTransactionBatchFund = async (id: TEntityId) => {
     return response.data
 }
 
-export const getPaginatedBatchOnlineEntry = async ({
+export const getPaginatedBatchFunding = async ({
     sort,
     filters,
     pagination,

@@ -18,8 +18,9 @@ export const verifyInvitationCode = async (code: string) => {
 
 // GET /invitation-code/
 export const getAllInvitationCode = async () => {
-    const response =
-        await APIService.get<IInvitationCodePaginated[]>(`/api/v1/invitation-code`)
+    const response = await APIService.get<IInvitationCodePaginated[]>(
+        `/api/v1/invitation-code`
+    )
     return response.data
 }
 

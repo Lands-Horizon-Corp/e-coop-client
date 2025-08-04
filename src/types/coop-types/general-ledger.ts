@@ -8,7 +8,7 @@ import { IMemberJointAccount } from './member/member-joint-account'
 import { IMemberProfile } from './member/member-profile'
 import { IPaginatedResult } from './paginated-result'
 
-export type EntryType =
+export type TEntryType =
     | ''
     | 'check-entry'
     | 'online-entry'

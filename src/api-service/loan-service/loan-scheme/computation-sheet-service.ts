@@ -9,8 +9,9 @@ const CrudServices = createAPICrudService<
     IComputationSheet,
     IComputationSheetRequest
 >('/api/v1/computation-sheet')
-const CollectionServices =
-    createAPICollectionService<IComputationSheet>('/api/v1/computation-sheet')
+const CollectionServices = createAPICollectionService<IComputationSheet>(
+    '/api/v1/computation-sheet'
+)
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

@@ -11,8 +11,9 @@ import { IMemberCenter, IMemberCenterRequest, TEntityId } from '@/types'
 const CrudServices = createAPICrudService<IMemberCenter, IMemberCenterRequest>(
     `/api/v1/member-center`
 )
-const CollectionServices =
-    createAPICollectionService<IMemberCenter>(`/api/v1/member-center`)
+const CollectionServices = createAPICollectionService<IMemberCenter>(
+    `/api/v1/member-center`
+)
 
 export const exportAllMemberCenters = async () => {
     const url = `/api/v1/member-center/export`

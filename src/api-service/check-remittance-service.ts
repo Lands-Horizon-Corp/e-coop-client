@@ -24,8 +24,9 @@ export const updateTransactionBatchCheckRemittance = async (
 }
 
 export const currentTransactionBatchCheckRemittances = async () => {
-    const response =
-        await APIService.get<ICheckRemittance[]>(`/api/v1/check-remittance`)
+    const response = await APIService.get<ICheckRemittance[]>(
+        `/api/v1/check-remittance`
+    )
     return response.data
 }
 

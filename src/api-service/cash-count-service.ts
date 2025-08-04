@@ -22,8 +22,11 @@ export const updateBatchCashCount = async (data: ICashCountBatchRequest) => {
     return response.data
 }
 
-const CrudServices = createAPICrudService<ICashCount, void>('/api/v1/cash-count')
-const CollectionServices = createAPICollectionService<ICashCount>('/api/v1/cash-count')
+const CrudServices = createAPICrudService<ICashCount, void>(
+    '/api/v1/cash-count'
+)
+const CollectionServices =
+    createAPICollectionService<ICashCount>('/api/v1/cash-count')
 
 export const { getById } = CrudServices
 export const { search } = CollectionServices

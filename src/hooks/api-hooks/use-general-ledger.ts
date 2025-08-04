@@ -12,6 +12,7 @@ import {
     IMemberGeneralLedgerTotal,
     IQueryProps,
     TEntityId,
+    TEntryType,
 } from '@/types'
 
 export const useMemberAccountGeneralLedgerTotal = ({
@@ -63,6 +64,7 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
     sort,
     enabled,
     accountId,
+    entryType,
     filterPayload,
     memberProfileId,
     showMessage = true,
@@ -71,6 +73,7 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
 }: {
     memberProfileId: TEntityId
     accountId: TEntityId
+    entryType: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated, string> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
@@ -87,12 +90,15 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
         ],
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
-                GeneralLedgerService.getMemberAccountGeneralLedger({
+                GeneralLedgerService.getPaginatedMemberAccountGeneralLedger({
                     memberProfileId,
                     accountId,
-                    pagination,
-                    sort: sort && toBase64(sort),
-                    filters: filterPayload && toBase64(filterPayload),
+                    params: {
+                        pagination,
+                        sort: sort && toBase64(sort),
+                        filter: filterPayload && toBase64(filterPayload),
+                    },
+                    EntryType: '',
                 })
             )
 

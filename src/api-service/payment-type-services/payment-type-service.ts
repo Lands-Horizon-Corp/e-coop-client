@@ -14,13 +14,16 @@ import APIService from '../api-service'
 
 // GET /payment-type/:id
 export const getPaymentTypeById = async (id: TEntityId) => {
-    const response = await APIService.get<IPaymentType>(`/api/v1/payment-type/${id}`)
+    const response = await APIService.get<IPaymentType>(
+        `/api/v1/payment-type/${id}`
+    )
     return response.data
 }
 
 // GET /payment-type/
 export const getAllPaymentTypes = async () => {
-    const response = await APIService.get<IPaymentType[]>(`/api/v1/payment-type`)
+    const response =
+        await APIService.get<IPaymentType[]>(`/api/v1/payment-type`)
     return response.data
 }
 

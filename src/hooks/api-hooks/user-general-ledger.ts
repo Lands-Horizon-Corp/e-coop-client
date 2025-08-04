@@ -6,12 +6,12 @@ import { serverRequestErrExtractor } from '@/helpers'
 import { toBase64, withCatchAsync } from '@/utils'
 
 import {
-    EntryType,
     IAPIFilteredPaginatedHook,
     IGeneralLedger,
     IGeneralLedgerPaginated,
     IQueryProps,
     TEntityId,
+    TEntryType,
 } from '@/types'
 
 export const useGeneralLedgerByID = (
@@ -42,18 +42,18 @@ export const useFilteredPaginatedBranchGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
         queryKey: [
             'branch-general-ledger',
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -66,7 +66,7 @@ export const useFilteredPaginatedBranchGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {
@@ -95,20 +95,20 @@ export const useFilteredPaginatedEmployeeGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
     userOrganizationId: TEntityId
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
         queryKey: [
             'employee-general-ledger',
             userOrganizationId,
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -122,7 +122,7 @@ export const useFilteredPaginatedEmployeeGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {
@@ -151,20 +151,20 @@ export const useFilteredPaginatedMemberGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
     memberProfileId: TEntityId
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
         queryKey: [
             'member-general-ledger',
             memberProfileId,
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -178,7 +178,7 @@ export const useFilteredPaginatedMemberGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {
@@ -208,14 +208,14 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
     memberProfileId: TEntityId
     accountId: TEntityId
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
@@ -223,7 +223,7 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
             'member-account-general-ledger',
             memberProfileId,
             accountId,
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -238,7 +238,7 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {
@@ -266,18 +266,18 @@ export const useFilteredPaginatedCurrentGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
         queryKey: [
             'current-general-ledger',
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -290,7 +290,7 @@ export const useFilteredPaginatedCurrentGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {
@@ -319,20 +319,20 @@ export const useFilteredPaginatedTransactionBatchGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
     transactionBatchId: TEntityId
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
         queryKey: [
             'transaction-batch-general-ledger',
             transactionBatchId,
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -346,7 +346,7 @@ export const useFilteredPaginatedTransactionBatchGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {
@@ -375,20 +375,20 @@ export const useFilteredPaginatedTransactionGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
     transactionId: TEntityId
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
         queryKey: [
             'transaction-general-ledger',
             transactionId,
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -402,7 +402,7 @@ export const useFilteredPaginatedTransactionGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {
@@ -431,20 +431,20 @@ export const useFilteredPaginatedAccountGeneralLedger = ({
     sort,
     filterPayload,
     pagination = { pageSize: 10, pageIndex: 0 },
-    entryType = '',
+    TEntryType = '',
     showMessage = true,
     enabled,
     ...other
 }: {
     accountId: TEntityId
-    entryType?: EntryType
+    TEntryType?: TEntryType
 } & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated> &
     IQueryProps) => {
     return useQuery<IGeneralLedgerPaginated, string>({
         queryKey: [
             'account-general-ledger',
             accountId,
-            entryType,
+            TEntryType,
             filterPayload,
             pagination,
             sort,
@@ -458,7 +458,7 @@ export const useFilteredPaginatedAccountGeneralLedger = ({
                         sort: sort && toBase64(sort),
                         filters: filterPayload && toBase64(filterPayload),
                     },
-                    entryType
+                    TEntryType
                 )
             )
             if (error) {

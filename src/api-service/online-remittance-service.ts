@@ -13,8 +13,9 @@ export const createTransactionBatchOnlineRemittance = async (
 }
 
 export const currentTransactionBatchOnlineRemittances = async () => {
-    const response =
-        await APIService.get<IOnlineRemitance[]>(`/api/v1/online-remittance`)
+    const response = await APIService.get<IOnlineRemitance[]>(
+        `/api/v1/online-remittance`
+    )
     return response.data
 }
 

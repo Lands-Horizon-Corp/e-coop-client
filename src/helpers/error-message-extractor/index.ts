@@ -27,6 +27,7 @@ export const extractErrorMessage = ({
             }
         }
     }
+
     return showUnknownErrorMessage
         ? ((error as Error)?.message ?? 'An unknown error occured')
         : 'An unknown error occured'

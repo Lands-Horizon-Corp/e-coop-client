@@ -40,7 +40,10 @@ export const updateFinancialStatementDefinition = async (
     const response = await APIService.put<
         IFinancialStatementDefinitionRequest,
         IFinancialStatementDefinition
-    >(`/api/v1/financial-statement-definition/${financialStatementDefinitionId}`, data)
+    >(
+        `/api/v1/financial-statement-definition/${financialStatementDefinitionId}`,
+        data
+    )
     return response.data
 }
 
@@ -74,7 +77,9 @@ export const financialStatementUpdateIndex = async (
             APIService.put<
                 { FinancialStatementDefinitionId: TEntityId; index: number },
                 IFinancialStatementDefinition
-            >(`/api/v1/financial-statement-definition/${item.id}/index/${item.index}`)
+            >(
+                `/api/v1/financial-statement-definition/${item.id}/index/${item.index}`
+            )
         )
     )
     return response[0].data

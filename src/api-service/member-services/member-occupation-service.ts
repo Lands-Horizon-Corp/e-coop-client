@@ -13,8 +13,9 @@ const CrudServices = createAPICrudService<
     IMemberOccupationRequest
 >(`/api/v1/member-occupation`)
 
-const CollectionServices =
-    createAPICollectionService<IMemberOccupation>(`/api/v1/member-occupation`)
+const CollectionServices = createAPICollectionService<IMemberOccupation>(
+    `/api/v1/member-occupation`
+)
 
 export const exportAll = async () => {
     const url = `/api/v1/member-occupation/export`

@@ -90,7 +90,10 @@ export const getPaginatedUserOrg = async <
 
 export const deleteManyEmployees = async (ids: TEntityId[]) => {
     const payload = { ids }
-    await APIService.delete<void>('/api/v1/user-organization/bulk-delete', payload)
+    await APIService.delete<void>(
+        '/api/v1/user-organization/bulk-delete',
+        payload
+    )
 }
 
 export const updateUserOrganizationPermission = async (

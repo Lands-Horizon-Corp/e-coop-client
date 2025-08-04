@@ -17,20 +17,21 @@ import {
 
 import APIService from './api-service'
 
-const CollectionServices =
-    createAPICollectionService<ITransactionBatch>('transaction-batch')
+const CollectionServices = createAPICollectionService<ITransactionBatch>(
+    '/api/v1/transaction-batch'
+)
 
 const CrudServices = createAPICrudService<
     ITransactionBatch | ITransactionBatchMinimal,
     ITransactionBatchRequest
 >('transaction-batch')
 
-const ExportServices = createAPIExportableService('transaction-batch')
+const ExportServices = createAPIExportableService('/api/v1/transaction-batch')
 
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
         ITransactionBatchMinimal | ITransactionBatch
-    >('/v1/transaction-batch/current')
+    >('/api/v1/transaction-batch/current')
     return response.data
 }
 export const requestTransactionBatchBlotterView = async (id: TEntityId) => {

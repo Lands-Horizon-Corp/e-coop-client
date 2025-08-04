@@ -1,10 +1,11 @@
 import qs from 'query-string'
 
 import {
-    EntryType,
     IGeneralLedger,
     IGeneralLedgerPaginated,
+    IMemberGeneralLedgerTotal,
     TEntityId,
+    TEntryType,
 } from '@/types'
 
 import APIService from '../api-service'
@@ -23,12 +24,12 @@ export const getPaginatedBranchGeneralLedger = async (
         filters?: string
         pagination?: { pageIndex: number; pageSize: number }
     },
-    entryType: EntryType = ''
+    TEntryType: TEntryType = ''
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/branch/${entryType}/search`
+            url: TEntryType
+                ? `/api/v1/general-ledger/branch/${TEntryType}/search`
                 : `/api/v1/general-ledger/branch/search`,
             query: {
                 sort: params.sort,
@@ -50,12 +51,12 @@ export const getPaginatedCurrentGeneralLedger = async (
         filters?: string
         pagination?: { pageIndex: number; pageSize: number }
     },
-    entryType: EntryType = ''
+    TEntryType: TEntryType = ''
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/current/${entryType}/search`
+            url: TEntryType
+                ? `/api/v1/general-ledger/current/${TEntryType}/search`
                 : `/api/v1/general-ledger/current/search`,
             query: {
                 sort: params.sort,
@@ -78,12 +79,12 @@ export const getPaginatedEmployeeGeneralLedger = async (
         filters?: string
         pagination?: { pageIndex: number; pageSize: number }
     },
-    entryType: EntryType = ''
+    TEntryType: TEntryType = ''
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/employee/${userOrganizationId}/${entryType}/search`
+            url: TEntryType
+                ? `/api/v1/general-ledger/employee/${userOrganizationId}/${TEntryType}/search`
                 : `/api/v1/general-ledger/employee/${userOrganizationId}/search`,
             query: {
                 sort: params.sort,
@@ -106,12 +107,12 @@ export const getPaginatedMemberGeneralLedger = async (
         filters?: string
         pagination?: { pageIndex: number; pageSize: number }
     },
-    entryType: EntryType = ''
+    TEntryType: TEntryType = ''
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/member-profile/${memberProfileId}/${entryType}/search`
+            url: TEntryType
+                ? `/api/v1/general-ledger/member-profile/${memberProfileId}/${TEntryType}/search`
                 : `/api/v1/general-ledger/member-profile/${memberProfileId}/search`,
             query: {
                 sort: params.sort,
@@ -127,24 +128,29 @@ export const getPaginatedMemberGeneralLedger = async (
 }
 
 // 5. MEMBER ACCOUNT
-export const getPaginatedMemberAccountGeneralLedger = async (
-    memberProfileId: TEntityId,
-    accountId: TEntityId,
+export const getPaginatedMemberAccountGeneralLedger = async ({
+    EntryType,
+    accountId,
+    memberProfileId,
+    params,
+}: {
+    memberProfileId: TEntityId
+    accountId: TEntityId
     params: {
         sort?: string
-        filters?: string
+        filter?: string
         pagination?: { pageIndex: number; pageSize: number }
-    },
-    entryType: EntryType = ''
-) => {
+    }
+    EntryType: TEntryType
+}) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/member-profile/${memberProfileId}/account/${accountId}/${entryType}/search`
+            url: EntryType
+                ? `/api/v1/general-ledger/member-profile/${memberProfileId}/account/${accountId}/${EntryType}/search`
                 : `/api/v1/general-ledger/member-profile/${memberProfileId}/account/${accountId}/search`,
             query: {
                 sort: params.sort,
-                filter: params.filters,
+                filter: params.filter,
                 pageIndex: params.pagination?.pageIndex,
                 pageSize: params.pagination?.pageSize,
             },
@@ -163,12 +169,12 @@ export const getPaginatedTransactionBatchGeneralLedger = async (
         filters?: string
         pagination?: { pageIndex: number; pageSize: number }
     },
-    entryType: EntryType = ''
+    TEntryType: TEntryType = ''
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/transaction-batch/${transactionBatchId}/${entryType}/search`
+            url: TEntryType
+                ? `/api/v1/general-ledger/transaction-batch/${transactionBatchId}/${TEntryType}/search`
                 : `/api/v1/general-ledger/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort: params.sort,
@@ -191,12 +197,12 @@ export const getPaginatedTransactionGeneralLedger = async (
         filters?: string
         pagination?: { pageIndex: number; pageSize: number }
     },
-    entryType: EntryType = ''
+    TEntryType: TEntryType = ''
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/transaction/${transactionId}/${entryType}/search`
+            url: TEntryType
+                ? `/api/v1/general-ledger/transaction/${transactionId}/${TEntryType}/search`
                 : `/api/v1/general-ledger/transaction/${transactionId}/search`,
             query: {
                 sort: params.sort,
@@ -219,12 +225,12 @@ export const getPaginatedAccountGeneralLedger = async (
         filters?: string
         pagination?: { pageIndex: number; pageSize: number }
     },
-    entryType: EntryType = ''
+    TEntryType: TEntryType = ''
 ) => {
     const url = qs.stringifyUrl(
         {
-            url: entryType
-                ? `/api/v1/general-ledger/account/${accountId}/${entryType}/search`
+            url: TEntryType
+                ? `/api/v1/general-ledger/account/${accountId}/${TEntryType}/search`
                 : `/api/v1/general-ledger/account/${accountId}/search`,
             query: {
                 sort: params.sort,
@@ -242,5 +248,59 @@ export const getPaginatedAccountGeneralLedger = async (
 /*
 Example usage:
     await getPaginatedEmployeeGeneralLedger(employeeId, { filters: 'base64', pagination: { pageIndex: 2, pageSize: 50 } }, 'payment-entry')
-
 */
+
+// GET Total of Member Account General Ledger
+export const getMemberAccountGeneralLedgerTotal = async (
+    memberProfileId: TEntityId,
+    accountId: TEntityId
+) => {
+    const response = await APIService.get<IMemberGeneralLedgerTotal>(
+        `/general-ledger/member-profile/${memberProfileId}/account/${accountId}/total`
+    )
+    return response.data
+}
+
+export const getPaginatedGeneralLedger = async ({
+    sort,
+    filters,
+    pagination,
+    accountId,
+}: {
+    accountId: TEntityId
+} & {
+    sort?: string
+    filters?: string
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `/general-ledger/account/${accountId}/search`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IGeneralLedgerPaginated>(url)
+    return response.data
+}
+
+export default {
+    getGeneralLedgerByID,
+    getPaginatedBranchGeneralLedger,
+    getPaginatedCurrentGeneralLedger,
+    getPaginatedEmployeeGeneralLedger,
+    getPaginatedMemberGeneralLedger,
+
+    getPaginatedMemberAccountGeneralLedger,
+    getMemberAccountGeneralLedgerTotal,
+
+    getPaginatedTransactionBatchGeneralLedger,
+    getPaginatedTransactionGeneralLedger,
+    getPaginatedAccountGeneralLedger,
+}

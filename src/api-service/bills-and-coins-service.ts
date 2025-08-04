@@ -8,8 +8,9 @@ import {
 const CrudServices = createAPICrudService<IBillsAndCoin, IBillsAndCoinRequest>(
     `/api/v1/bills-and-coins`
 )
-const CollectionServices =
-    createAPICollectionService<IBillsAndCoin>(`/api/v1/bills-and-coins`)
+const CollectionServices = createAPICollectionService<IBillsAndCoin>(
+    `/api/v1/bills-and-coins`
+)
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

@@ -22,7 +22,8 @@ export const OrganizationService = {
 }
 
 export const getAllOrganizations = async () => {
-    const response = await APIService.get<IOrganization[]>(`/api/v1/organization`)
+    const response =
+        await APIService.get<IOrganization[]>(`/api/v1/organization`)
     return response.data
 }
 

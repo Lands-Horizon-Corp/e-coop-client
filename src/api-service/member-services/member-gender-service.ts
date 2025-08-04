@@ -12,8 +12,9 @@ const CrudServices = createAPICrudService<IMemberGender, IMemberGenderRequest>(
     `/api/v1/member-gender`
 )
 
-const CollectionServices =
-    createAPICollectionService<IMemberGender>(`/api/v1/member-gender`)
+const CollectionServices = createAPICollectionService<IMemberGender>(
+    `/api/v1/member-gender`
+)
 
 export const exportAll = async () => {
     const url = `/api/v1/member-gender/export`
