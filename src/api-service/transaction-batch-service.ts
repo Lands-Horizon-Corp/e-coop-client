@@ -24,7 +24,7 @@ const CollectionServices = createAPICollectionService<ITransactionBatch>(
 const CrudServices = createAPICrudService<
     ITransactionBatch | ITransactionBatchMinimal,
     ITransactionBatchRequest
->('transaction-batch')
+>('/api/v1/transaction-batch')
 
 const ExportServices = createAPIExportableService('/api/v1/transaction-batch')
 
