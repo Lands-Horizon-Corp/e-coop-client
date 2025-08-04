@@ -10,13 +10,13 @@ import { ICheckEntry, ICheckEntryPaginated, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
-const CrudService = createAPICrudService<ICheckEntry, void>('/check-entry')
+const CrudService = createAPICrudService<ICheckEntry, void>('/api/v1/check-entry')
 
 const CollectionService =
-    createAPICollectionService<ICheckEntry>('/check-entry')
+    createAPICollectionService<ICheckEntry>('/api/v1/check-entry')
 
-const ExportService = createAPIExportableService('/check-entry', {
-    base: 'online_entry',
+const ExportService = createAPIExportableService('/api/v1/check-entry', {
+    base: '/api/v1/check-entry',
 })
 
 export const getPaginatedBatchCheckEntry = async ({
@@ -33,7 +33,7 @@ export const getPaginatedBatchCheckEntry = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/check-entry/transaction-batch/${transactionBatchId}/search`,
+            url: `/api/v1/check-entry/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort,
                 filter: filters,

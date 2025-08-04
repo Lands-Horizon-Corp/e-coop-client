@@ -6,9 +6,9 @@ import {
 } from '../factory/api-factory-service'
 
 const CrudServices = createAPICrudService<ICollateral, ICollateralRequest>(
-    `collateral`
+    `/api/v1/collateral`
 )
-const CollectionServices = createAPICollectionService<ICollateral>(`collateral`)
+const CollectionServices = createAPICollectionService<ICollateral>(`/api/v1/collateral`)
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

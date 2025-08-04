@@ -7,14 +7,14 @@ import {
 import { IAccounTagRequest, IAccountTag } from '@/types'
 
 const CrudServices = createAPICrudService<IAccountTag, IAccounTagRequest>(
-    '/account-tag'
+    '/api/v1/account-tag'
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices
 
 const CollectionServices =
-    createAPICollectionService<IAccountTag>('/account-tag')
+    createAPICollectionService<IAccountTag>('/api/v1/account-tag')
 
 export const { search, allList } = CollectionServices
 

@@ -14,13 +14,13 @@ import APIService from '../api-service'
 
 // GET /payment-type/:id
 export const getPaymentTypeById = async (id: TEntityId) => {
-    const response = await APIService.get<IPaymentType>(`/payment-type/${id}`)
+    const response = await APIService.get<IPaymentType>(`/api/v1/payment-type/${id}`)
     return response.data
 }
 
 // GET /payment-type/
 export const getAllPaymentTypes = async () => {
-    const response = await APIService.get<IPaymentType[]>(`/payment-type`)
+    const response = await APIService.get<IPaymentType[]>(`/api/v1/payment-type`)
     return response.data
 }
 
@@ -34,7 +34,7 @@ export const getPaginatedPaymentTypes = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/payment-type`,
+            url: `/api/v1/payment-type`,
             query: {
                 sort,
                 filters,
@@ -54,7 +54,7 @@ export const createPaymentType = async (
     paymentTypeData: IPaymentTypeRequest
 ) => {
     const response = await APIService.post<IPaymentTypeRequest, IPaymentType>(
-        `/payment-type`,
+        `/api/v1/payment-type`,
         paymentTypeData
     )
     return response.data
@@ -66,7 +66,7 @@ export const updatePaymentType = async (
     data: IPaymentTypeRequest
 ) => {
     const response = await APIService.put<IPaymentTypeRequest, IPaymentType>(
-        `/payment-type/${paymentTypeId}`,
+        `/api/v1/payment-type/${paymentTypeId}`,
         data
     )
     return response.data
@@ -75,13 +75,13 @@ export const updatePaymentType = async (
 // DELETE /payment-type/:payment_type_id
 export const deletePaymentType = async (paymentTypeId: TEntityId) => {
     const response = await APIService.delete<void>(
-        `/payment-type/${paymentTypeId}`
+        `/api/v1/payment-type/${paymentTypeId}`
     )
     return response.data
 }
 
 // DELETE /payment-type/bulk-delete
 export const deleteManyPaymentTypes = async (ids: TEntityId[]) => {
-    const endpoint = `/payment-type/bulk-delete`
+    const endpoint = `/api/v1/payment-type/bulk-delete`
     await APIService.delete<void>(endpoint, { ids })
 }

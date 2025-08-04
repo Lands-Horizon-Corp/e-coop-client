@@ -11,7 +11,7 @@ const CrudService = createAPICrudService<
 >('permission-template')
 
 const CollectionService = createAPICollectionService<IPermissionTemplate>(
-    'permission-template'
+    '/api/v1/permission-template'
 )
 
 export const { create, deleteById, getById, updateById, deleteMany } =

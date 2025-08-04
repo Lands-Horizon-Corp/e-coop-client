@@ -4,7 +4,7 @@ import { IMedia, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
-const BASE_ENDPOINT = '/media'
+const BASE_ENDPOINT = '/api/v1/media'
 
 export const uploadMedia = async (
     file: File,

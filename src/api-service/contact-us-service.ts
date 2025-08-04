@@ -4,7 +4,7 @@ import { IContactUs, IContactUsRequest, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
-const BASE_ENDPOINT = '/contact'
+const BASE_ENDPOINT = '/api/v1/contact'
 
 export const getAllContactUs = async () => {
     const response = await APIService.get<IContactUs[]>(BASE_ENDPOINT)

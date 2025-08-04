@@ -6,10 +6,10 @@ import {
 import { ILoanStatus, ILoanStatusRequest } from '@/types'
 
 const CrudServices = createAPICrudService<ILoanStatus, ILoanStatusRequest>(
-    '/loan-status'
+    '/api/v1/loan-status'
 )
 const CollectionServices =
-    createAPICollectionService<ILoanStatus>('/loan-status')
+    createAPICollectionService<ILoanStatus>('/api/v1/loan-status')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

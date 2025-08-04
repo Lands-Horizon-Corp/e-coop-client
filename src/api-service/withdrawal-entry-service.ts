@@ -18,7 +18,7 @@ export const getPaginatedBatchWithdrawalEntry = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/withdrawal-entry/transaction-batch/${transactionBatchId}/search`,
+            url: `/api/v1/withdrawal-entry/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort,
                 filter: filters,

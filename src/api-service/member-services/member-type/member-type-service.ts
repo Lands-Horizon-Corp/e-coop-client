@@ -9,14 +9,14 @@ import { downloadFileService } from '@/helpers'
 import { IMemberType, IMemberTypeRequest, TEntityId } from '@/types'
 
 const CrudServices = createAPICrudService<IMemberType, IMemberTypeRequest>(
-    '/member-type'
+    '/api/v1/member-type'
 )
 
 const CollectionServices =
-    createAPICollectionService<IMemberType>(`/member-type`)
+    createAPICollectionService<IMemberType>(`/api/v1/member-type`)
 
 export const exportAll = async (): Promise<void> => {
-    const url = `/member-type/export`
+    const url = `/api/v1/member-type/export`
     await downloadFileService(url, 'all_member_types_export.csv')
 }
 
@@ -27,7 +27,7 @@ export const exportSelected = async (ids: TEntityId[]): Promise<void> => {
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-type/export-selected`,
+            url: `/api/v1/member-type/export-selected`,
             query: { ids },
         },
         { skipNull: true }

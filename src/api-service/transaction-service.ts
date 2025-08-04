@@ -11,13 +11,13 @@ import { IMemberAccountingLedger, TEntityId } from '@/types'
 import APIService from './api-service'
 
 export const getAllTransactions = async (): Promise<ITransaction[]> => {
-    const response = await APIService.get<ITransaction[]>('/transaction')
+    const response = await APIService.get<ITransaction[]>('/api/v1/transaction')
     return response.data
 }
 
 export const getMemberAccountingLedger = async (memberProfileId: TEntityId) => {
     const url = qs.stringifyUrl({
-        url: `transaction/member-profile/${memberProfileId}`,
+        url: `/api/v1/transaction/member-profile/${memberProfileId}`,
     })
 
     const response = await APIService.get<IMemberAccountingLedger>(url)
@@ -27,10 +27,10 @@ export const getMemberAccountingLedger = async (memberProfileId: TEntityId) => {
 const { deleteMany, deleteById, getById } = createAPICrudService<
     ITransaction,
     void
->('/transaction')
+>('/api/v1/transaction')
 
 const CollectionServices =
-    createAPICollectionService<ITransaction>('/transaction')
+    createAPICollectionService<ITransaction>('/v1/transaction')
 
 export const { search } = CollectionServices
 export default {

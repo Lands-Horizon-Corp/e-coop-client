@@ -10,7 +10,7 @@ import APIService from '../api-service'
 export const getAllFinancialStatementAccountsGrouping = async () => {
     const response = await APIService.get<
         IFinancialStatementAccountsGrouping[]
-    >(`/financial-statement-grouping`)
+    >(`/api/v1/financial-statement-grouping`)
     return response.data
 }
 
@@ -22,7 +22,7 @@ export const updateFinancialStatementAccountsGrouping = async (
         IFinancialStatementAccountsGroupingRequest,
         IFinancialStatementAccountsGrouping
     >(
-        `/financial-statement-grouping/${financialStatementAccountsGroupingId}`,
+        `/api/v1/financial-statement-grouping/${financialStatementAccountsGroupingId}`,
         data
     )
     return response.data

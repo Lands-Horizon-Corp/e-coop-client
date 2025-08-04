@@ -15,7 +15,7 @@ import APIService from '../api-service'
 // GET /account-classification/:id
 export const getAccountClassificationById = async (id: TEntityId) => {
     const response = await APIService.get<IAccountClassification>(
-        `/account-classification/${id}`
+        `/api/v1/account-classification/${id}`
     )
     return response.data
 }
@@ -23,7 +23,7 @@ export const getAccountClassificationById = async (id: TEntityId) => {
 // GET /account-classification/
 export const getAllAccountClassifications = async () => {
     const response = await APIService.get<IAccountClassification[]>(
-        `/account-classification`
+        `/api/v1/account-classification`
     )
     return response.data
 }
@@ -38,7 +38,7 @@ export const getPaginatedAccountClassifications = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/account-classification`,
+            url: `/api/v1/account-classification`,
             query: {
                 sort,
                 filters,
@@ -60,7 +60,7 @@ export const createAccountClassification = async (
     const response = await APIService.post<
         IAccountClassificationRequest,
         IAccountClassification
-    >(`/account-classification`, accountClassificationData)
+    >(`/api/v1/account-classification`, accountClassificationData)
     return response.data
 }
 
@@ -72,7 +72,7 @@ export const updateAccountClassification = async (
     const response = await APIService.put<
         IAccountClassificationRequest,
         IAccountClassification
-    >(`/account-classification/${accountClassificationId}`, data)
+    >(`/api/v1/account-classification/${accountClassificationId}`, data)
     return response.data
 }
 
@@ -81,13 +81,13 @@ export const deleteAccountClassification = async (
     accountClassificationId: TEntityId
 ) => {
     const response = await APIService.delete<void>(
-        `/account-classification/${accountClassificationId}`
+        `/api/v1/account-classification/${accountClassificationId}`
     )
     return response.data
 }
 
 // DELETE /account-classification/bulk-delete
 export const deleteManyAccountClassifications = async (ids: TEntityId[]) => {
-    const endpoint = `/account-classification/bulk-delete`
+    const endpoint = `/api/v1/account-classification/bulk-delete`
     await APIService.delete<void>(endpoint, { ids })
 }

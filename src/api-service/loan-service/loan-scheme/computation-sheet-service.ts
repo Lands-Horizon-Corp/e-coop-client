@@ -8,9 +8,9 @@ import { IComputationSheet, IComputationSheetRequest } from '@/types'
 const CrudServices = createAPICrudService<
     IComputationSheet,
     IComputationSheetRequest
->('/computation-sheet')
+>('/api/v1/computation-sheet')
 const CollectionServices =
-    createAPICollectionService<IComputationSheet>('/computation-sheet')
+    createAPICollectionService<IComputationSheet>('/api/v1/computation-sheet')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

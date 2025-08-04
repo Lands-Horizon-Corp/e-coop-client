@@ -7,18 +7,18 @@ export const createBranchByOrgId = async (
     organizationId: TEntityId
 ) => {
     const response = await APIService.post<IBranchRequest, IBranch>(
-        `/branch/organization/${organizationId}`,
+        `/api/v1/branch/organization/${organizationId}`,
         branchData
     )
     return response.data
 }
 
 export const getAllBranches = async () => {
-    const response = await APIService.get<IBranch[]>(`/branch`)
+    const response = await APIService.get<IBranch[]>(`/api/v1/branch`)
     return response.data
 }
 export const deleteBranch = async (branchId: TEntityId) => {
-    const response = await APIService.delete(`/branch/${branchId}`)
+    const response = await APIService.delete(`/api/v1/branch/${branchId}`)
     return response.data
 }
 export const updateBranch = async (
@@ -26,14 +26,14 @@ export const updateBranch = async (
     branchData: IBranchRequest
 ) => {
     const response = await APIService.put<IBranchRequest, IBranch>(
-        `/branch/${branchId}`,
+        `/api/v1/branch/${branchId}`,
         branchData
     )
     return response.data
 }
 
 export const getBranchesById = async (id: TEntityId) => {
-    const response = await APIService.get<IBranch>(`/branch/${id}`)
+    const response = await APIService.get<IBranch>(`/api/v1/branch/${id}`)
     return response.data
 }
 
@@ -41,7 +41,7 @@ export const getBranchesByOrganizationId = async (
     organizationId: TEntityId
 ) => {
     const response = await APIService.get<IBranch[]>(
-        `/branch/organization/${organizationId}`
+        `/api/v1/branch/organization/${organizationId}`
     )
     return response.data
 }
@@ -53,6 +53,6 @@ export const postBranchByOrganizationId = async (
     const response = await APIService.post<
         IUserOrganization,
         IUserOrganization
-    >(`/branch/user-organization/${userOrganizationId}`)
+    >(`/api/v1/branch/user-organization/${userOrganizationId}`)
     return response.data
 }

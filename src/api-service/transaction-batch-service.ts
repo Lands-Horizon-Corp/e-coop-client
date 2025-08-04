@@ -30,12 +30,12 @@ const ExportServices = createAPIExportableService('transaction-batch')
 export const currentTransactionBatch = async () => {
     const response = await APIService.get<
         ITransactionBatchMinimal | ITransactionBatch
-    >('/transaction-batch/current')
+    >('/v1/transaction-batch/current')
     return response.data
 }
 export const requestTransactionBatchBlotterView = async (id: TEntityId) => {
     const response = await APIService.put<void, ITransactionBatchMinimal>(
-        `/transaction-batch/${id}/view-request`
+        `/api/v1/transaction-batch/${id}/view-request`
     )
     return response.data
 }
@@ -47,7 +47,7 @@ export const setDepositInBank = async (
     const response = await APIService.put<
         ITransactionBatchDepositInBankRequest,
         ITransactionBatchMinimal | ITransactionBatch
-    >(`/transaction-batch/${id}/deposit-in-bank`, data)
+    >(`/api/v1/transaction-batch/${id}/deposit-in-bank`, data)
     return response.data
 }
 
@@ -55,27 +55,27 @@ export const endCurrentBatch = async (data: ITransactionBatchEndRequest) => {
     const response = await APIService.put<
         ITransactionBatchEndRequest,
         TTransactionBatchFullorMin
-    >(`/transaction-batch/end`, data)
+    >(`/api/v1/transaction-batch/end`, data)
     return response.data
 }
 
 export const getAllTransactionBatchViewRequest = async () => {
     const response = await APIService.get<ITransactionBatch[]>(
-        '/transaction-batch/view-request'
+        '/api/v1/transaction-batch/view-request'
     )
     return response.data
 }
 
 export const allowBlotterView = async (id: TEntityId) => {
     const response = await APIService.put<void, ITransactionBatch>(
-        `/transaction-batch/${id}/view-accept`
+        `/api/v1/transaction-batch/${id}/view-accept`
     )
     return response.data
 }
 
 export const getAllEndedBatchViewRequest = async () => {
     const response = await APIService.get<ITransactionBatch[]>(
-        '/transaction-batch/ended-batch'
+        '/api/v1/transaction-batch/ended-batch'
     )
     return response.data
 }
@@ -87,7 +87,7 @@ export const updateEndedBatchApprovals = async (
     const response = await APIService.put<
         ITransactionBatchSignatures,
         ITransactionBatch
-    >(`/transaction-batch/${id}/signature`, data)
+    >(`/api/v1/transaction-batch/${id}/signature`, data)
     return response.data
 }
 

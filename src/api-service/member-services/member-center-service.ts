@@ -9,13 +9,13 @@ import { downloadFileService } from '@/helpers'
 import { IMemberCenter, IMemberCenterRequest, TEntityId } from '@/types'
 
 const CrudServices = createAPICrudService<IMemberCenter, IMemberCenterRequest>(
-    `/member-center`
+    `/api/v1/member-center`
 )
 const CollectionServices =
-    createAPICollectionService<IMemberCenter>(`/member-center`)
+    createAPICollectionService<IMemberCenter>(`/api/v1/member-center`)
 
 export const exportAllMemberCenters = async () => {
-    const url = `/member-center/export`
+    const url = `/api/v1/member-center/export`
     await downloadFileService(url, 'all_member_center_export.csv')
 }
 
@@ -26,7 +26,7 @@ export const exportSelectedMemberCenters = async (ids: TEntityId[]) => {
 
     const url = qs.stringifyUrl(
         {
-            url: `/member-center/export-selected`,
+            url: `/api/v1/member-center/export-selected`,
             query: { ids },
         },
         { skipNull: true }

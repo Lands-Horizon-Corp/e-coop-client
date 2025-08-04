@@ -10,13 +10,13 @@ import { IOnlineEntry, IOnlineEntryPaginated, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
-const CrudService = createAPICrudService<IOnlineEntry, void>('/online-entry')
+const CrudService = createAPICrudService<IOnlineEntry, void>('/api/v1/online-entry')
 
 const CollectionService =
-    createAPICollectionService<IOnlineEntry>('/online-entry')
+    createAPICollectionService<IOnlineEntry>('/api/v1/online-entry')
 
-const ExportService = createAPIExportableService('/online-entry', {
-    base: 'online_entry',
+const ExportService = createAPIExportableService('/api/v1/online-entry', {
+    base: '/api/v1/online_entry',
 })
 
 export const getPaginatedBatchOnlineEntry = async ({
@@ -33,7 +33,7 @@ export const getPaginatedBatchOnlineEntry = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/online-entry/transaction-batch/${transactionBatchId}/search`,
+            url: `/api/v1/online-entry/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort,
                 filter: filters,

@@ -11,7 +11,7 @@ import APIService from '../api-service'
 
 export const getGeneralLedgerByID = async (id: TEntityId) => {
     const response = await APIService.get<IGeneralLedger>(
-        `/general-ledger/${id}`
+        `/api/v1/general-ledger/${id}`
     )
     return response.data
 }
@@ -28,8 +28,8 @@ export const getPaginatedBranchGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/branch/${entryType}/search`
-                : `/general-ledger/branch/search`,
+                ? `/api/v1/general-ledger/branch/${entryType}/search`
+                : `/api/v1/general-ledger/branch/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,
@@ -55,8 +55,8 @@ export const getPaginatedCurrentGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/current/${entryType}/search`
-                : `/general-ledger/current/search`,
+                ? `/api/v1/general-ledger/current/${entryType}/search`
+                : `/api/v1/general-ledger/current/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,
@@ -83,8 +83,8 @@ export const getPaginatedEmployeeGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/employee/${userOrganizationId}/${entryType}/search`
-                : `/general-ledger/employee/${userOrganizationId}/search`,
+                ? `/api/v1/general-ledger/employee/${userOrganizationId}/${entryType}/search`
+                : `/api/v1/general-ledger/employee/${userOrganizationId}/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,
@@ -111,8 +111,8 @@ export const getPaginatedMemberGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/member-profile/${memberProfileId}/${entryType}/search`
-                : `/general-ledger/member-profile/${memberProfileId}/search`,
+                ? `/api/v1/general-ledger/member-profile/${memberProfileId}/${entryType}/search`
+                : `/api/v1/general-ledger/member-profile/${memberProfileId}/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,
@@ -140,8 +140,8 @@ export const getPaginatedMemberAccountGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/member-profile/${memberProfileId}/account/${accountId}/${entryType}/search`
-                : `/general-ledger/member-profile/${memberProfileId}/account/${accountId}/search`,
+                ? `/api/v1/general-ledger/member-profile/${memberProfileId}/account/${accountId}/${entryType}/search`
+                : `/api/v1/general-ledger/member-profile/${memberProfileId}/account/${accountId}/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,
@@ -168,8 +168,8 @@ export const getPaginatedTransactionBatchGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/transaction-batch/${transactionBatchId}/${entryType}/search`
-                : `/general-ledger/transaction-batch/${transactionBatchId}/search`,
+                ? `/api/v1/general-ledger/transaction-batch/${transactionBatchId}/${entryType}/search`
+                : `/api/v1/general-ledger/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,
@@ -196,8 +196,8 @@ export const getPaginatedTransactionGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/transaction/${transactionId}/${entryType}/search`
-                : `/general-ledger/transaction/${transactionId}/search`,
+                ? `/api/v1/general-ledger/transaction/${transactionId}/${entryType}/search`
+                : `/api/v1/general-ledger/transaction/${transactionId}/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,
@@ -224,8 +224,8 @@ export const getPaginatedAccountGeneralLedger = async (
     const url = qs.stringifyUrl(
         {
             url: entryType
-                ? `/general-ledger/account/${accountId}/${entryType}/search`
-                : `/general-ledger/account/${accountId}/search`,
+                ? `/api/v1/general-ledger/account/${accountId}/${entryType}/search`
+                : `/api/v1/general-ledger/account/${accountId}/search`,
             query: {
                 sort: params.sort,
                 filter: params.filters,

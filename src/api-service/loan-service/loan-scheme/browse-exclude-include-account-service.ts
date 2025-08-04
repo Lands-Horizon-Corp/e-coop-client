@@ -11,10 +11,10 @@ import {
 const CrudServices = createAPICrudService<
     IBrowseExcludeIncludeAccounts,
     IBrowseExcludeIncludeAccountsRequest
->('/browse-exclude-include-accounts')
+>('/api/v1/browse-exclude-include-accounts')
 const CollectionServices =
     createAPICollectionService<IBrowseExcludeIncludeAccounts>(
-        '/browse-exclude-include-accounts'
+        '/api/v1/browse-exclude-include-accounts'
     )
 
 export const { create, getById, updateById, deleteById, deleteMany } =

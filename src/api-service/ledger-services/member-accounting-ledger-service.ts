@@ -10,7 +10,7 @@ import APIService from '../api-service'
 
 export const getMemberAccountingLedgerTotal = async (id: TEntityId) => {
     const response = await APIService.get<IMemberAccountingLedgerTotal>(
-        `/member-accounting-ledger/member-profile/${id}/total`
+        `/api/v1/member-accounting-ledger/member-profile/${id}/total`
     )
     return response.data
 }
@@ -28,7 +28,7 @@ export const getMemberAccountingLedger = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-accounting-ledger/member-profile/${memberProfileId}/search`,
+            url: `/api/v1/member-accounting-ledger/member-profile/${memberProfileId}/search`,
             query: {
                 sort,
                 filter: filters,

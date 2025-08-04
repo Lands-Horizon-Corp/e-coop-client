@@ -11,7 +11,7 @@ import APIService from './api-service'
 
 export const createBatchFund = async (data: IBatchFundingRequest) => {
     const response = await APIService.post<IBatchFundingRequest, IBatchFunding>(
-        '/batch-funding',
+        '/api/v1/batch-funding',
         data
     )
     return response.data
@@ -19,7 +19,7 @@ export const createBatchFund = async (data: IBatchFundingRequest) => {
 
 export const getAllTransactionBatchFund = async (id: TEntityId) => {
     const response = await APIService.get<IBatchFunding[]>(
-        `/batch-funding/transaction-batch/${id}`
+        `/api/v1/batch-funding/transaction-batch/${id}`
     )
     return response.data
 }
@@ -38,7 +38,7 @@ export const getPaginatedBatchOnlineEntry = async ({
 }) => {
     const url = qs.stringifyUrl(
         {
-            url: `/batch-funding/transaction-batch/${transactionBatchId}/search`,
+            url: `/api/v1/batch-funding/transaction-batch/${transactionBatchId}/search`,
             query: {
                 sort,
                 filter: filters,

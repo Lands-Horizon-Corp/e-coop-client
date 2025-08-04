@@ -9,21 +9,21 @@ import { downloadFileService } from '@/helpers'
 import { IMemberGroup, IMemberGroupRequest, TEntityId } from '@/types'
 
 const CrudServices = createAPICrudService<IMemberGroup, IMemberGroupRequest>(
-    `/member-group`
+    `/api/v1/member-group`
 )
 
 const CollectionServices =
     createAPICollectionService<IMemberGroup>(`/member-group`)
 
 export const exportAll = async () => {
-    const url = `/member-group/export`
+    const url = `/api/v1/member-group/export`
     return downloadFileService(url, 'all_group_export.csv')
 }
 
 export const exportAllFiltered = async (filters?: string) => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-group/export-search`,
+            url: `/api/v1/member-group/export-search`,
             query: { filters },
         },
         { skipNull: true }
@@ -38,12 +38,12 @@ export const exportSelected = async (ids: TEntityId[]) => {
         )
     }
     const query = ids.map((id) => `ids=${encodeURIComponent(id)}`).join('&')
-    const url = `/member-group/export-selected?${query}`
+    const url = `/api/v1/member-group/export-selected?${query}`
     return downloadFileService(url, 'selected_member_group_export.csv')
 }
 
 export const exportCurrentPage = async (page: number) => {
-    const url = `/member-group/export-current-page/${page}`
+    const url = `/api/v1/member-group/export-current-page/${page}`
     await downloadFileService(
         url,
         `current_page_member_group_${page}_export.xlsx`

@@ -9,21 +9,21 @@ import { downloadFileService } from '@/helpers'
 import { IMemberGender, IMemberGenderRequest, TEntityId } from '@/types'
 
 const CrudServices = createAPICrudService<IMemberGender, IMemberGenderRequest>(
-    `/member-gender`
+    `/api/v1/member-gender`
 )
 
 const CollectionServices =
-    createAPICollectionService<IMemberGender>(`/member-gender`)
+    createAPICollectionService<IMemberGender>(`/api/v1/member-gender`)
 
 export const exportAll = async () => {
-    const url = `/member-gender/export`
+    const url = `/api/v1/member-gender/export`
     await downloadFileService(url, 'all_genders_export.xlsx')
 }
 
 export const exportAllFiltered = async (filters?: string) => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-gender/export-search`,
+            url: `/api/v1/member-gender/export-search`,
             query: { filters },
         },
         { skipNull: true }
@@ -37,7 +37,7 @@ export const exportAllFiltered = async (filters?: string) => {
 export const exportSelected = async (ids: TEntityId[]) => {
     const url = qs.stringifyUrl(
         {
-            url: `/member-gender/export-selected`,
+            url: `/api/v1/member-gender/export-selected`,
             query: { ids },
         },
         { skipNull: true }

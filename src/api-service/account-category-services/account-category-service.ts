@@ -15,15 +15,16 @@ import APIService from '../api-service'
 // GET /account-category/:id
 export const getAccountCategoryById = async (id: TEntityId) => {
     const response = await APIService.get<IAccountCategory>(
-        `/account-category/${id}`
+        `/api/v1/account-category/${id}`
     )
     return response.data
 }
 
 // GET /account-category/
 export const getAllAccountCategories = async () => {
-    const response =
-        await APIService.get<IAccountCategory[]>(`/account-category`)
+    const response = await APIService.get<IAccountCategory[]>(
+        `/api/v1/account-category`
+    )
     return response.data
 }
 
@@ -37,7 +38,7 @@ export const getPaginatedAccountCategories = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/account-category/search`,
+            url: `/api/v1/account-category/search`,
             query: {
                 sort,
                 filters,
@@ -59,7 +60,7 @@ export const createAccountCategory = async (
     const response = await APIService.post<
         IAccountCategoryRequest,
         IAccountCategory
-    >(`/account-category`, accountCategoryData)
+    >(`/api/v1/account-category`, accountCategoryData)
     return response.data
 }
 
@@ -71,20 +72,20 @@ export const updateAccountCategory = async (
     const response = await APIService.put<
         IAccountCategoryRequest,
         IAccountCategory
-    >(`/account-category/${accountCategoryId}`, data)
+    >(`/api/v1/account-category/${accountCategoryId}`, data)
     return response.data
 }
 
 // DELETE /account-category/:account_category_id
 export const deleteAccountCategory = async (accountCategoryId: TEntityId) => {
     const response = await APIService.delete<void>(
-        `/account-category/${accountCategoryId}`
+        `/api/v1/account-category/${accountCategoryId}`
     )
     return response.data
 }
 
 // DELETE /account-category/bulk-delete
 export const deleteManyAccountCategories = async (ids: TEntityId[]) => {
-    const endpoint = `/account-category/bulk-delete`
+    const endpoint = `/api/v1/account-category/bulk-delete`
     await APIService.delete<void>(endpoint, { ids })
 }
