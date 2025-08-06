@@ -12,13 +12,15 @@ export interface IDisbursement extends IBaseEntityMeta {
 }
 
 export interface IDisbursementRequest {
-    organization_id: TEntityId
-    branch_id: TEntityId
+    id?: TEntityId
+
+    organization_id?: TEntityId
+    branch_id?: TEntityId
 
     name: string
     icon?: string
     description?: string
 }
 
-export interface IDisbursementPaginatedResource
+export interface IDisbursementPaginated
     extends IPaginatedResult<IDisbursement> {}

@@ -66,6 +66,7 @@ import {
 import {
     FaMoneyBill as BillIcon,
     FaBookOpen as BookOpenIcon,
+    FaBook as BookThickIcon,
     FaCreditCard as CreditCardIcon,
     FaFileCsv as CsvIcon,
     FaRegEye as EyeIcon,
@@ -500,6 +501,7 @@ export {
     FootstepsIcon,
     UserClockIcon,
     DashboardIcon,
+    BookThickIcon,
     IoIosCodeIcon,
     HouseLockIcon,
     WoodSignsIcon,
@@ -810,6 +812,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'User Clock': UserClockIcon,
     'Wood Signs': WoodSignsIcon,
     'User Group': UserGroupIcon,
+    'Book Thick': BookThickIcon,
     'Arrow Up Long': ArrowUpLong,
     Unavailable: UnavailableIcon,
     Maintenance: MaintenanceIcon,

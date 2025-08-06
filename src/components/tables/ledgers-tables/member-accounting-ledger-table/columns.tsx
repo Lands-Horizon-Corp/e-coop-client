@@ -76,7 +76,7 @@ const MemberAccountingLedgerTableColumns =
                 </DataTableColumnHeader>
             ),
             cell: ({ row: { original } }) => (
-                <span>{original.account_id || '-'}</span>
+                <span>{original.account?.name || '-'}</span>
             ),
             enableMultiSort: true,
             enableSorting: true,

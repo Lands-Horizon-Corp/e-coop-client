@@ -1,85 +1,23 @@
 import qs from 'query-string'
 
-import {
-    IDisbursementTransaction,
-    IDisbursementTransactionPaginated,
-    IDisbursementTransactionRequest,
-} from '@/types/coop-types/disbursement-transaction'
-
-import { TEntityId } from '@/types'
+import { IDisbursementTransactionPaginated, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
-export const getDisbursementTransactionById = async (
-    id: TEntityId
-): Promise<IDisbursementTransaction> => {
-    const response = await APIService.get<IDisbursementTransaction>(
-        `/api/v1/disbursement-transactions/${id}`
-    )
-    return response.data
-}
-
-export const createDisbursementTransaction = async (
-    data: IDisbursementTransactionRequest
-): Promise<IDisbursementTransaction> => {
-    const response = await APIService.post<
-        IDisbursementTransactionRequest,
-        IDisbursementTransaction
-    >('/api/v1/disbursement-transactions', data)
-    return response.data
-}
-
-export const updateDisbursementTransaction = async (
-    id: TEntityId,
-    data: IDisbursementTransactionRequest
-): Promise<IDisbursementTransaction> => {
-    const response = await APIService.put<
-        IDisbursementTransactionRequest,
-        IDisbursementTransaction
-    >(`/api/v1/disbursement-transactions/${id}`, data)
-    return response.data
-}
-
-export const deleteDisbursementTransaction = async (
-    id: TEntityId
-): Promise<void> => {
-    await APIService.delete<void>(`/api/v1/disbursement-transactions/${id}`)
-}
-
-export const deleteManyDisbursementTransactions = async (
-    ids: TEntityId[]
-): Promise<void> => {
-    // Assuming a bulk delete endpoint, if not needed, remove this function
-    const endpoint = `/api/v1/disbursement-transactions/bulk-delete`
-    await APIService.delete<void>(endpoint, { ids })
-}
-
-export const getAllDisbursementTransactions = async (): Promise<
-    IDisbursementTransaction[]
-> => {
-    const response = await APIService.get<IDisbursementTransaction[]>(
-        '/api/v1/disbursement-transactions'
-    )
-    return response.data
-}
-
-export const getPaginatedDisbursementTransactions = async ({
-    sort,
-    filters,
-    pagination,
-}: {
+// GET Paginated Disbursement Transactions - Branch
+export const getPaginatedBranchDisbursementTransaction = async (params: {
     sort?: string
-    filters?: string
+    filter?: string
     pagination?: { pageIndex: number; pageSize: number }
-} = {}): Promise<IDisbursementTransactionPaginated> => {
+}) => {
     const url = qs.stringifyUrl(
         {
-            url: `/api/v1/disbursement-transactions`,
+            url: '/api/v1/disbursement-transaction/branch/search',
             query: {
-                sort,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
+                sort: params.sort,
+                filter: params.filter,
+                pageIndex: params.pagination?.pageIndex,
+                pageSize: params.pagination?.pageSize,
             },
         },
         { skipNull: true }
@@ -87,4 +25,86 @@ export const getPaginatedDisbursementTransactions = async ({
     const response =
         await APIService.get<IDisbursementTransactionPaginated>(url)
     return response.data
+}
+
+// GET Paginated Disbursement Transactions - Current User
+export const getPaginatedCurrentDisbursementTransaction = async (params: {
+    sort?: string
+    filter?: string
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: '/api/v1/disbursement-transaction/current/search',
+            query: {
+                sort: params.sort,
+                filter: params.filter,
+                pageIndex: params.pagination?.pageIndex,
+                pageSize: params.pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+    const response =
+        await APIService.get<IDisbursementTransactionPaginated>(url)
+    return response.data
+}
+
+// GET Paginated Disbursement Transactions - Employee
+export const getPaginatedEmployeeDisbursementTransaction = async (
+    userOrganizationId: TEntityId,
+    params: {
+        sort?: string
+        filter?: string
+        pagination?: { pageIndex: number; pageSize: number }
+    }
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `/api/v1/disbursement-transaction/employee/${userOrganizationId}/search`,
+            query: {
+                sort: params.sort,
+                filter: params.filter,
+                pageIndex: params.pagination?.pageIndex,
+                pageSize: params.pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+    const response =
+        await APIService.get<IDisbursementTransactionPaginated>(url)
+    return response.data
+}
+
+// GET Paginated Disbursement Transactions - Transaction Batch
+export const getPaginatedTransactionBatchDisbursementTransaction = async (
+    transactionBatchId: TEntityId,
+    params: {
+        sort?: string
+        filter?: string
+        pagination?: { pageIndex: number; pageSize: number }
+    }
+) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `/api/v1/disbursement-transaction/transaction-batch/${transactionBatchId}/search`,
+            query: {
+                sort: params.sort,
+                filter: params.filter,
+                pageIndex: params.pagination?.pageIndex,
+                pageSize: params.pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+    const response =
+        await APIService.get<IDisbursementTransactionPaginated>(url)
+    return response.data
+}
+
+export default {
+    getPaginatedBranchDisbursementTransaction,
+    getPaginatedCurrentDisbursementTransaction,
+    getPaginatedEmployeeDisbursementTransaction,
+    getPaginatedTransactionBatchDisbursementTransaction,
 }

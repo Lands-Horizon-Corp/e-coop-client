@@ -80,6 +80,8 @@ export * from './withdrawal-entry'
 export * from './transaction-entry'
 
 export * from './loan-types'
+export * from './disbursement'
+export * from './disbursement-transaction'
 
 /* Ledgers */
 export * from './general-ledger'

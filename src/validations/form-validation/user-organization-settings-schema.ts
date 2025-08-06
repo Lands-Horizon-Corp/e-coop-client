@@ -20,6 +20,9 @@ export const userOrganizationSettingsSchema = z.object({
     user_setting_used_voucher: z
         .number()
         .min(0, 'Used voucher must be non-negative'),
+    user_setting_number_padding: z
+        .number()
+        .min(0, 'Number padding must be non-negative'),
     allow_withdraw_negative_balance: z.boolean(),
     allow_withdraw_exact_balance: z.boolean(),
     maintaining_balance: z.boolean(),

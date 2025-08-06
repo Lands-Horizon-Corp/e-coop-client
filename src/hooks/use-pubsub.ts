@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { NATS_CLIENT } from '@/constants'
 import logger from '@/helpers/loggers/logger'
 import { INatsConnectOpts, useNatsStore } from '@/store/nats-pubsub-store'
 import { StringCodec, Subscription } from 'nats.ws'
@@ -32,7 +33,7 @@ export const useSubscribe = <T = unknown>(
 
         let sub: Subscription
         const subHandler = async () => {
-            sub = connection.subscribe(subject)
+            sub = connection.subscribe(`${NATS_CLIENT}${subject}`)
 
             if (sub) {
                 logger.log('👂: Subscribed to ', subject)
