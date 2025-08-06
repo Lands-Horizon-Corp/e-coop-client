@@ -184,6 +184,5 @@ export const amount = z.preprocess(
         .number({
             invalid_type_error: 'Amount must be a number',
         })
-        .min(0.01, 'Amount must be greater than zero')
-        .max(1000000, 'Amount cannot exceed 1,000,000')
+        .max(500000000, 'Amount cannot exceed Five Million (500,000,000)')
 )

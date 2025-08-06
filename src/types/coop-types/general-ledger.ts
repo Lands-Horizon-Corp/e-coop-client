@@ -1,12 +1,17 @@
 import { GENERAL_LEDGER_SOURCES } from '@/constants'
 
-import { IEmployee } from '../auth'
-import { IBaseEntityMeta } from '../common'
+import { IUserBase } from '../auth'
+import { IBaseEntityMeta, TEntityId } from '../common'
 import { IAccount } from './accounts/account'
-import { TTypeOfPaymentType } from './common'
+import { IBank } from './bank'
+import { IMedia } from './media'
 import { IMemberJointAccount } from './member/member-joint-account'
 import { IMemberProfile } from './member/member-profile'
 import { IPaginatedResult } from './paginated-result'
+import { IPaymentType } from './payment-type'
+import { ITransaction } from './transaction'
+import { ITransactionBatch } from './transaction-batch'
+import { TPaymentSource } from './transaction/payment'
 
 export type TEntryType =
     | ''
@@ -24,35 +29,103 @@ export type TEntryType =
 export type TGeneralLedgerSource = (typeof GENERAL_LEDGER_SOURCES)[number]
 
 export interface IGeneralLedger extends IBaseEntityMeta {
-    account_id?: string
-    account?: IAccount
+    account_id: TEntityId
+    account: IAccount | null
 
-    transaction_id?: string
-    transaction_batch_id?: string
+    transaction_id: TEntityId
+    transaction: ITransaction | null
 
-    employee_user_id?: string
-    employee_user?: IEmployee
+    transaction_batch_id: TEntityId
+    transaction_batch: ITransactionBatch | null
 
-    member_profile_id?: string
-    member_profile?: IMemberProfile
+    employee_user_id: TEntityId
+    employee_user: IUserBase | null
 
-    member_joint_account_id?: string
-    member_joint_account?: IMemberJointAccount
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile | null
 
-    transaction_reference_number?: string
-    reference_number?: string
-    payment_type_id?: string
+    member_joint_account_id: TEntityId
+    member_joint_account: IMemberJointAccount | null
 
-    source?: TGeneralLedgerSource
-    journal_voucher_id?: string
-    adjustment_entry_id?: string
-    type_of_payment_type?: TTypeOfPaymentType
+    payment_type_id: TEntityId
+    payment_type: IPaymentType | null
 
-    type?: string
+    signature_media_id: TEntityId
+    signature_media: IMedia | null
 
-    credit?: number
-    debit?: number
-    balance?: number
+    bank_id: TEntityId
+    bank: IBank | null
+
+    proof_of_payment_media_id: TEntityId | null
+    proof_of_payment_media: IMedia | null
+
+    transaction_reference_number: string
+    reference_number: string
+
+    source: TPaymentSource
+    journal_voucher_id: TEntityId
+    adjustment_entry_id: TEntityId
+
+    // adjustment_entry:  | null
+
+    type_of_payment_type: string
+    credit: number
+    debit: number
+    balance: number
+
+    entry_date: TEntityId
+    bank_reference_number: string
+    description: string
+}
+
+export interface IGeneralLedgerResponse extends IBaseEntityMeta {
+    account_id: TEntityId
+    account: IAccount | null
+
+    transaction_id: TEntityId
+    transaction: ITransaction | null
+
+    transaction_batch_id: TEntityId
+    transaction_batch: ITransactionBatch | null
+
+    employee_user_id: TEntityId
+    employee_user: IUserBase | null
+
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile | null
+
+    member_joint_account_id: TEntityId
+    member_joint_account: IMemberJointAccount | null
+
+    payment_type_id: TEntityId
+    payment_type: IPaymentType | null
+
+    signature_media_id: TEntityId
+    signature_media: IMedia | null
+
+    bank_id: TEntityId
+    bank: IBank | null
+
+    proof_of_payment_media_id: TEntityId | null
+    proof_of_payment_media: IMedia | null
+
+    transaction_reference_number: string
+    reference_number: string
+
+    source: TPaymentSource
+    journal_voucher_id: TEntityId
+    adjustment_entry_id: TEntityId
+
+    // adjustment_entry:  | null
+
+    type_of_payment_type: string
+    credit: number
+    debit: number
+    balance: number
+
+    entry_date: TEntityId
+    bank_reference_number: string
+    description: string
 }
 
 export interface IMemberGeneralLedgerTotal {
@@ -62,4 +135,4 @@ export interface IMemberGeneralLedgerTotal {
 }
 
 export interface IGeneralLedgerPaginated
-    extends IPaginatedResult<IGeneralLedger> {}
+    extends IPaginatedResult<IGeneralLedgerResponse> {}

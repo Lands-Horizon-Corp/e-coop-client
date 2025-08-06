@@ -1,24 +1,21 @@
 import { create } from 'zustand'
 
-import { IAccountsRequest, IMemberProfile, IPaymentsEntry } from '@/types'
+import { IAccountsRequest, IMemberProfile } from '@/types'
 
 // Payments Data
 export interface PaymentsDataStore {
     selectedMember: IMemberProfile | null
     ORNumber: string
-    selectedPayments: IPaymentsEntry[]
     selectedAccounts: IAccountsRequest | null
     focusTypePayment: string | null
 
     setSelectedMember: (member: IMemberProfile | null) => void
     setORNumber: (orNumber: string) => void
-    setSelectedPayments: (payments: IPaymentsEntry[]) => void
     setSelectedAccounts: (accounts: IAccountsRequest | null) => void
-    deletePaymentByIndex: (index: number) => void
     setFocusTypePayment: (payment: string) => void
 }
 
-export const usePaymentsDataStore = create<PaymentsDataStore>((set, get) => ({
+export const usePaymentsDataStore = create<PaymentsDataStore>((set) => ({
     selectedMember: null,
     selectedAccounts: null,
     ORNumber: '',
@@ -27,15 +24,9 @@ export const usePaymentsDataStore = create<PaymentsDataStore>((set, get) => ({
 
     setSelectedMember: (member) => set({ selectedMember: member }),
     setORNumber: (orNumber) => set({ ORNumber: orNumber }),
-    setSelectedPayments: (payments) => {
-        set({ selectedPayments: payments })
-    },
+
     setSelectedAccounts: (accounts: IAccountsRequest | null) =>
         set({ selectedAccounts: accounts }),
-    deletePaymentByIndex: (index: number) => {
-        const current = get().selectedPayments
-        set({ selectedPayments: current.filter((_, i) => i !== index) })
-    },
     setFocusTypePayment: (payment) => set({ focusTypePayment: payment }),
 }))
 

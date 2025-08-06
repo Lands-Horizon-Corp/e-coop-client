@@ -10,11 +10,20 @@ import { IMemberJointAccount } from '@/types'
 
 interface JoinAccountCardViewProps {
     jointAccounts: IMemberJointAccount
+    className?: string
+    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
-const JointAccountCardView = ({ jointAccounts }: JoinAccountCardViewProps) => {
+const JointAccountCardView = ({
+    jointAccounts,
+    className,
+    onClick,
+}: JoinAccountCardViewProps) => {
     return (
-        <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
+        <div
+            className={`flex flex-col gap-y-1 rounded-xl border bg-background p-4 ${className}`}
+            onClick={onClick}
+        >
             <div className="flex justify-between">
                 <div className="flex items-center gap-x-2">
                     <Users3Icon className="inline size-6 text-muted-foreground" />

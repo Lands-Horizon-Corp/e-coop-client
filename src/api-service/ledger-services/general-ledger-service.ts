@@ -300,6 +300,35 @@ export const getPaginatedGeneralLedger = async ({
     return response.data
 }
 
+export const getPaginatedGeneralLedgerTransaction = async ({
+    sort,
+    filters,
+    pagination,
+    transactionId,
+}: {
+    transactionId: TEntityId
+} & {
+    sort?: string
+    filters?: string
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `/api/v1/general-ledger/transaction/${transactionId}/search`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response = await APIService.get<IGeneralLedgerPaginated>(url)
+    return response.data
+}
+
 export default {
     getGeneralLedgerByID,
     getPaginatedBranchGeneralLedger,
@@ -314,4 +343,5 @@ export default {
     getPaginatedTransactionBatchGeneralLedger,
     getPaginatedTransactionGeneralLedger,
     getPaginatedAccountGeneralLedger,
+    getPaginatedGeneralLedgerTransaction,
 }

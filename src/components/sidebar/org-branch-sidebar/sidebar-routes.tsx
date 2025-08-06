@@ -88,8 +88,8 @@ export const generateSidebarGroups = (
                 {
                     type: 'item',
                     icon: HandCoinsIcon,
-                    title: 'Fund Movement',
-                    url: `${baseUrl}/transaction/fund-movement`,
+                    title: 'Transaction',
+                    url: `${baseUrl}/transaction`,
                     userType: ['employee', 'owner'],
                     shortDescription: 'Manage fund transfers and movements',
                 },

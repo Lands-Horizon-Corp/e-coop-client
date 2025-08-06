@@ -8,11 +8,9 @@ export * from './accounts/accounting-ledger'
 export * from './cheque'
 
 /* for trnsaction */
-export * from './transactions/check-clearing'
-export * from './transactions/payments-entry'
-export * from './transactions/generate-or-number'
-export * from './transactions/transaction-payment-types'
+export * from './transaction/payment'
 export * from './transaction-tag'
+export * from './transaction/transaction'
 
 /* Member Related Types */
 export * from './member/member-asset'
@@ -67,8 +65,6 @@ export * from './paginated-result'
 export * from './online-remittance'
 export * from './transaction-batch'
 export * from '../qr/qr-crypto-type'
-
-export * from './transaction'
 
 /* Entries */
 export * from './cash-entry'

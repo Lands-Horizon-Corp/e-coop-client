@@ -2,16 +2,10 @@ import { useMemo } from 'react'
 
 import { PaymentsDataStore } from '@/store/transaction/payments-entry-store'
 
-import { IPaymentsEntry } from '@/types'
-
 import { useShortcut } from './use-shorcuts'
 
-type usePaymentsShortcutsTypes = Pick<
-    PaymentsDataStore,
-    'setSelectedMember' | 'selectedPayments'
-> & {
+type usePaymentsShortcutsTypes = PaymentsDataStore & {
     hadSelectedPayments: boolean
-    handleSubmitPayment: (payments: IPaymentsEntry[]) => void
     handleOpenCreateModal: (type: 'payment' | 'deposit' | 'withdraw') => void
     isPendingCreatePayments: boolean
     isPendingCheckClearing: boolean
@@ -20,8 +14,6 @@ type usePaymentsShortcutsTypes = Pick<
 const usePaymentsShortcuts = ({
     hadSelectedPayments,
     setSelectedMember,
-    handleSubmitPayment,
-    selectedPayments,
     handleOpenCreateModal,
     isPendingCheckClearing,
 }: usePaymentsShortcutsTypes) => {
@@ -42,14 +34,8 @@ const usePaymentsShortcuts = ({
                 isPendingCheckClearing
             )
                 return
-            handleSubmitPayment(selectedPayments)
         },
-        [
-            handleSubmitPayment,
-            selectedPayments,
-            hadSelectedPayments,
-            isPendingCheckClearing,
-        ]
+        [hadSelectedPayments, isPendingCheckClearing]
     )
 
     const handleF1 = useMemo(

@@ -62,6 +62,7 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
                 <>
                     <Signature
                         hideDownload
+                        className=" border-0 bg-transparent p-0"
                         onSignatureChange={(signature) => setFile(signature)}
                     />
                 </>
