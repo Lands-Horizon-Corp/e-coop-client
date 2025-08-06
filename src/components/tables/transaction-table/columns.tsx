@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
 
-import { ITransaction } from '@/types/coop-types/transaction'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -13,13 +12,15 @@ import { PushPinSlashIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
+import { ITransactionResponse } from '@/types'
+
 import { createUpdateColumns } from '../common-columns'
 
-export const transactionGlobalSearchTargets: IGlobalSearchTargets<ITransaction>[] =
+export const transactionGlobalSearchTargets: IGlobalSearchTargets<ITransactionResponse>[] =
     [
         { field: 'reference_number', displayText: 'Reference Number' },
         {
-            field: 'transaction_reference_number',
+            field: 'reference_number',
             displayText: 'Transaction Reference',
         },
         { field: 'source', displayText: 'Source' },
@@ -28,7 +29,7 @@ export const transactionGlobalSearchTargets: IGlobalSearchTargets<ITransaction>[
     ]
 
 export interface ITransactionTableActionComponentProp {
-    row: Row<ITransaction>
+    row: Row<ITransactionResponse>
 }
 
 export interface ITransactionTableColumnProps {
@@ -38,15 +39,15 @@ export interface ITransactionTableColumnProps {
 
 const TransactionTableColumns = (
     opts?: ITransactionTableColumnProps
-): ColumnDef<ITransaction>[] => {
-    const columns: ColumnDef<ITransaction>[] = [
+): ColumnDef<ITransactionResponse>[] => {
+    const columns: ColumnDef<ITransactionResponse>[] = [
         {
             id: 'reference_number',
             accessorKey: 'reference_number',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Reference Number">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransaction>
+                        <TextFilter<ITransactionResponse>
                             displayText="Reference Number"
                             field="reference_number"
                         />
@@ -70,27 +71,23 @@ const TransactionTableColumns = (
             minSize: 160,
         },
         {
-            id: 'transaction_reference_number',
-            accessorKey: 'transaction_reference_number',
+            id: 'reference_number',
+            accessorKey: 'reference_number',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Transaction Ref">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransaction>
+                        <TextFilter<ITransactionResponse>
                             displayText="Transaction Reference Number"
-                            field="transaction_reference_number"
+                            field="reference_number"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { transaction_reference_number },
+                    original: { reference_number },
                 },
-            }) => (
-                <span className="font-mono text-sm">
-                    {transaction_reference_number}
-                </span>
-            ),
+            }) => <span className="font-mono text-sm">{reference_number}</span>,
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,
@@ -104,7 +101,7 @@ const TransactionTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Source">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransaction>
+                        <TextFilter<ITransactionResponse>
                             displayText="Source"
                             field="source"
                         />
@@ -133,7 +130,7 @@ const TransactionTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Amount">
                     <ColumnActions {...props}>
-                        <NumberFilter<ITransaction>
+                        <NumberFilter<ITransactionResponse>
                             displayText="Amount"
                             field="amount"
                         />
@@ -162,7 +159,7 @@ const TransactionTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransaction>
+                        <TextFilter<ITransactionResponse>
                             displayText="Description"
                             field="description"
                         />
@@ -187,7 +184,7 @@ const TransactionTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Batch ID">
                     <ColumnActions {...props}>
-                        <TextFilter<ITransaction>
+                        <TextFilter<ITransactionResponse>
                             displayText="Transaction Batch ID"
                             field="transaction_batch_id"
                         />
@@ -211,7 +208,7 @@ const TransactionTableColumns = (
             minSize: 140,
         },
 
-        ...createUpdateColumns<ITransaction>(),
+        ...createUpdateColumns<ITransactionResponse>(),
     ]
 
     if (!opts?.hideSelect) {

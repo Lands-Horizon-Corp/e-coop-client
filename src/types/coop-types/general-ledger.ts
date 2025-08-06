@@ -1,5 +1,6 @@
 import { GENERAL_LEDGER_SOURCES } from '@/constants'
 
+import { ITransactionResponse } from '.'
 import { IUserBase } from '../auth'
 import { IBaseEntityMeta, TEntityId } from '../common'
 import { IAccount } from './accounts/account'
@@ -9,9 +10,7 @@ import { IMemberJointAccount } from './member/member-joint-account'
 import { IMemberProfile } from './member/member-profile'
 import { IPaginatedResult } from './paginated-result'
 import { IPaymentType } from './payment-type'
-import { ITransaction } from './transaction'
 import { ITransactionBatch } from './transaction-batch'
-import { TPaymentSource } from './transaction/payment'
 
 export type TEntryType =
     | ''
@@ -33,7 +32,7 @@ export interface IGeneralLedger extends IBaseEntityMeta {
     account: IAccount | null
 
     transaction_id: TEntityId
-    transaction: ITransaction | null
+    transaction: ITransactionResponse | null
 
     transaction_batch_id: TEntityId
     transaction_batch: ITransactionBatch | null
@@ -62,7 +61,7 @@ export interface IGeneralLedger extends IBaseEntityMeta {
     transaction_reference_number: string
     reference_number: string
 
-    source: TPaymentSource
+    source: TGeneralLedgerSource
     journal_voucher_id: TEntityId
     adjustment_entry_id: TEntityId
 
@@ -83,7 +82,7 @@ export interface IGeneralLedgerResponse extends IBaseEntityMeta {
     account: IAccount | null
 
     transaction_id: TEntityId
-    transaction: ITransaction | null
+    transaction: ITransactionResponse | null
 
     transaction_batch_id: TEntityId
     transaction_batch: ITransactionBatch | null
@@ -112,7 +111,7 @@ export interface IGeneralLedgerResponse extends IBaseEntityMeta {
     transaction_reference_number: string
     reference_number: string
 
-    source: TPaymentSource
+    source: TGeneralLedgerSource
     journal_voucher_id: TEntityId
     adjustment_entry_id: TEntityId
 

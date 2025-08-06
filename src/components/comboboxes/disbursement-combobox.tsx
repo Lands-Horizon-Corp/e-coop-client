@@ -148,20 +148,10 @@ const DisbursementCombobox = ({
                                             }}
                                         >
                                             <div className="flex items-center gap-2 min-w-0 flex-1">
-                                                <div className="flex h-5 w-5 items-center justify-center rounded-full border bg-muted flex-shrink-0">
-                                                    {option.icon ? (
-                                                        <span className="text-sm">
-                                                            {option.icon}
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-xs font-medium text-muted-foreground">
-                                                            {option.name
-                                                                ?.charAt(0)
-                                                                ?.toUpperCase() ||
-                                                                'D'}
-                                                        </span>
-                                                    )}
-                                                </div>
+                                                <RenderIcon
+                                                    icon={option.icon as TIcon}
+                                                    className="shrink-0"
+                                                />
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="truncate font-medium">
                                                         {option.name}

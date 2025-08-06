@@ -275,11 +275,11 @@ const GeneralLedgerTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { type },
+                    original: { source },
                 },
             }) => (
                 <Badge variant="secondary" className="text-xs">
-                    {type || '-'}
+                    {source || '-'}
                 </Badge>
             ),
             enableMultiSort: true,

@@ -174,20 +174,23 @@ const NeonFooter = () => {
                             </Link>
                         ))}
                     </div>
-                    <div className="flex flex-col gap-3 text-sm">
+                    <div className="flex flex-col gap-3  text-sm">
                         <h3 className="font-semibold dark:text-white text-black mb-2">
                             Contacts
                         </h3>
                         {contacts.map((item, index) => (
-                            <span
+                            <p
                                 key={index}
-                                className="text-accent-foreground flex items-center cursor-pointer"
+                                className=" text-wrap min-w-5 text-accent-foreground flex items-center cursor-pointer"
                             >
                                 <span className="flex items-center p-1.5">
                                     {item.icon}
                                 </span>
-                                <span> {item.text}</span>
-                            </span>
+                                <p className="border break-all inline-block !text-wrap ">
+                                    {' '}
+                                    {item.text}
+                                </p>
+                            </p>
                         ))}
                     </div>
                     <div className="flex flex-col gap-3 text-sm">
