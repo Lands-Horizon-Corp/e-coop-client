@@ -257,7 +257,7 @@ export const getMemberAccountGeneralLedgerTotal = async (
     accountId: TEntityId
 ) => {
     const response = await APIService.get<IMemberGeneralLedgerTotal>(
-        `/general-ledger/member-profile/${memberProfileId}/account/${accountId}/total`
+        `api/v1/general-ledger/member-profile/${memberProfileId}/account/${accountId}/total`
     )
     return response.data
 }
