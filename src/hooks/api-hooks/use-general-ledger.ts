@@ -160,58 +160,6 @@ export const useFilteredPaginatedMemberAccountGeneralLedger = ({
     })
 }
 
-export const useFilteredPaginatedGeneralLedgerBasedonAccount = ({
-    sort,
-    enabled,
-    accountId,
-    filterPayload,
-    showMessage = true,
-    pagination = { pageSize: 10, pageIndex: 1 },
-    ...other
-}: {
-    accountId: TEntityId
-} & IAPIFilteredPaginatedHook<IGeneralLedgerPaginated, string> &
-    IQueryProps) => {
-    return useQuery<IGeneralLedgerPaginated, string>({
-        queryKey: [
-            'general-ledger-based-on-account',
-            accountId,
-            'resource-query',
-            filterPayload,
-            pagination,
-            sort,
-        ],
-        queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                GeneralLedgerService.getPaginatedGeneralLedger({
-                    accountId,
-                    pagination,
-                    sort: sort && toBase64(sort),
-                    filters: filterPayload && toBase64(filterPayload),
-                })
-            )
-
-            if (error) {
-                const errorMessage = serverRequestErrExtractor({ error })
-                if (showMessage) toast.error(errorMessage)
-                throw errorMessage
-            }
-
-            return result
-        },
-        initialData: {
-            data: [],
-            pages: [],
-            totalSize: 0,
-            totalPage: 1,
-            ...pagination,
-        },
-        enabled,
-        retry: 1,
-        ...other,
-    })
-}
-
 export type TGeneralLedgerMode =
     | 'branch'
     | 'current'

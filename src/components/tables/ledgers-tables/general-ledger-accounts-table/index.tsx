@@ -14,13 +14,13 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 
-import { useFilteredPaginatedGeneralLedgerBasedonAccount } from '@/hooks/api-hooks/use-general-ledger'
+import { useFilteredPaginatedGeneralLedger } from '@/hooks/api-hooks/use-general-ledger'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { TEntityId, TableProps } from '@/types'
+import { IGeneralLedgerResponse, TEntityId, TableProps } from '@/types'
 import { IGeneralLedger } from '@/types'
 
 import GeneralLedgerTableColumns, {
@@ -74,7 +74,7 @@ const GeneralLedgerAccountTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IGeneralLedger>({
+    } = useDataTableState<IGeneralLedgerResponse>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -89,11 +89,12 @@ const GeneralLedgerAccountTable = ({
         isRefetching,
         data: { data, totalPage, pageSize, totalSize },
         refetch,
-    } = useFilteredPaginatedGeneralLedgerBasedonAccount({
+    } = useFilteredPaginatedGeneralLedger({
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
         accountId: accountId,
+        mode: 'member-account',
     })
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)

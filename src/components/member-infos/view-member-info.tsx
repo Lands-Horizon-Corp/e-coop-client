@@ -35,6 +35,7 @@ import RecruitedMembers from './recruited-members'
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
     defaultMemberProfile?: IMemberProfile
+    className?: string
 }
 
 const memberInfoTabs: {
@@ -94,7 +95,10 @@ const memberInfoTabs: {
     },
 ]
 
-const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
+const MemberOverallInfo = ({
+    memberProfileId,
+    className,
+}: MemberOverallInfoProps) => {
     const queryClient = useQueryClient()
 
     const { data: memberProfile } = useMemberProfile({
@@ -112,7 +116,12 @@ const MemberOverallInfo = ({ memberProfileId }: MemberOverallInfoProps) => {
     )
 
     return (
-        <div className="min-h-[80vh] min-w-[80vw] space-y-4 pt-4">
+        <div
+            className={cn(
+                'min-h-[80vh] min-w-[80vw] ${className} space-y-4 pt-4',
+                className
+            )}
+        >
             {memberProfile && (
                 <>
                     <MemberInfoBanner memberProfile={memberProfile} />

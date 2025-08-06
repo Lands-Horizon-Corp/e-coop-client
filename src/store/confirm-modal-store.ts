@@ -21,6 +21,8 @@ interface IConfirmModalOnOpenData extends Partial<ISharedConfirmModalProperty> {
     onClose?: () => void
     onCancel?: () => void
     onConfirm?: () => void
+    footerClassName?: string
+    hideSeparator?: boolean
 }
 
 interface IConfirmModalStore extends ISharedConfirmModalProperty {

@@ -1,3 +1,4 @@
+import { cn } from '@/lib'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import Modal from '@/components/modals/modal'
@@ -16,8 +17,13 @@ const ConfirmModal = () => {
             description={modalData?.description}
         >
             {modalData?.content}
-            <Separator className="bg-muted/70" />
-            <div className="flex justify-end gap-x-2">
+            {modalData?.hideSeparator ? null : <Separator className="my-4" />}
+            <div
+                className={cn(
+                    `flex justify-end gap-x-2`,
+                    modalData?.footerClassName
+                )}
+            >
                 <Button
                     onClick={onCancel}
                     variant={'ghost'}

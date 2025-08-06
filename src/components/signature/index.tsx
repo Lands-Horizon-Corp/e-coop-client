@@ -224,21 +224,17 @@ const Signature = ({
                 className
             )}
         >
-            <div
-                className={cn(
-                    'flex h-14 min-h-[50px] w-full justify-between gap-2 py-2'
-                )}
-            >
+            <div className={cn('flex h-14 min-h-[50px] w-full')}>
                 <div
                     className={cn(
-                        'flex',
+                        'flex  w-full justify-between items-center',
                         isFullScreenMode ? 'space-x-2' : 'space-x-1'
                     )}
                 >
                     <Button
                         variant={'outline'}
                         className={cn(
-                            'text-xs',
+                            'text-xs w-full',
                             isCurrentMode(SignatureModes.DRAW)
                         )}
                         onClick={() =>
@@ -251,7 +247,7 @@ const Signature = ({
                     <Button
                         variant={'outline'}
                         className={cn(
-                            'text-xs',
+                            'text-xs w-full',
                             isCurrentMode(SignatureModes.CAPTURE)
                         )}
                         onClick={() =>
@@ -266,7 +262,7 @@ const Signature = ({
                     <Button
                         variant={'outline'}
                         className={cn(
-                            'text-xs',
+                            'text-xs w-full',
                             isCurrentMode(SignatureModes.UPLOAD)
                         )}
                         onClick={() =>

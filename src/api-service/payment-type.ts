@@ -6,14 +6,15 @@ import {
 import { IPaymentType, IPaymentTypeRequest } from '@/types'
 
 const CrudServices = createAPICrudService<IPaymentType, IPaymentTypeRequest>(
-    '/payment-type'
+    '/api/v1/payment-type'
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices
 
-const CollectionServices =
-    createAPICollectionService<IPaymentType>('/payment-type')
+const CollectionServices = createAPICollectionService<IPaymentType>(
+    '/api/v1/payment-type'
+)
 
 export const { search, allList } = CollectionServices
 
