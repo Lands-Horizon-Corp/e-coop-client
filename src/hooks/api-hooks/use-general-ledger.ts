@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import GeneralLedgerService from '@/api-service/ledger-services/general-ledger-service'
-import memberAccountingLedgerService from '@/api-service/ledger-services/member-accounting-ledger-service'
 import { serverRequestErrExtractor } from '@/helpers'
 import { toBase64, withCatchAsync } from '@/utils'
 
