@@ -64,6 +64,7 @@ const UserOrgSettingsForm = ({
             user_setting_start_voucher: 0,
             user_setting_end_voucher: 0,
             user_setting_used_voucher: 0,
+            user_setting_number_padding: 0,
             allow_withdraw_negative_balance: false,
             allow_withdraw_exact_balance: false,
             maintaining_balance: false,
@@ -240,6 +241,25 @@ const UserOrgSettingsForm = ({
                                         type="number"
                                         min="0"
                                         placeholder="Used Voucher"
+                                        disabled={isDisabled(field.name)}
+                                        onChange={(e) =>
+                                            field.onChange(
+                                                Number(e.target.value)
+                                            )
+                                        }
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="user_setting_number_padding"
+                                label="Number Padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        type="number"
+                                        min="0"
+                                        placeholder="Number Padding"
                                         disabled={isDisabled(field.name)}
                                         onChange={(e) =>
                                             field.onChange(

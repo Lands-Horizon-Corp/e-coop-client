@@ -70,6 +70,8 @@ export interface IUserOrganizationSettings {
     user_setting_start_voucher: number
     user_setting_end_voucher: number
     user_setting_used_voucher: number
+    user_setting_number_padding: number
+
     allow_withdraw_negative_balance: boolean
     allow_withdraw_exact_balance: boolean
     maintaining_balance: boolean
