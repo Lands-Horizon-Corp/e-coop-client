@@ -27,19 +27,10 @@ export interface IDisbursementTransaction extends ITimeStamps, IAuditable {
 }
 
 export interface IDisbursementTransactionRequest {
-    id?: TEntityId
-
-    organization_id?: TEntityId
-    branch_id?: TEntityId
-
     disbursement_id?: TEntityId
-    transaction_batch_id?: TEntityId
-
-    employee_user_id?: TEntityId
-
-    transaction_reference_number?: string
-    reference_number?: string
-
+    description: string
+    is_reference_number_checked: boolean
+    reference_number: string
     amount: number
 }
 

@@ -1,8 +1,20 @@
 import qs from 'query-string'
 
-import { IDisbursementTransactionPaginated, TEntityId } from '@/types'
+import { createAPICrudService } from '@/factory/api-factory-service'
+
+import {
+    IDisbursementTransaction,
+    IDisbursementTransactionPaginated,
+    IDisbursementTransactionRequest,
+    TEntityId,
+} from '@/types'
 
 import APIService from './api-service'
+
+const { create } = createAPICrudService<
+    IDisbursementTransaction,
+    IDisbursementTransactionRequest
+>('/api/v1/disbursement-transaction')
 
 // GET Paginated Disbursement Transactions - Branch
 export const getPaginatedBranchDisbursementTransaction = async (params: {
@@ -103,6 +115,7 @@ export const getPaginatedTransactionBatchDisbursementTransaction = async (
 }
 
 export default {
+    create,
     getPaginatedBranchDisbursementTransaction,
     getPaginatedCurrentDisbursementTransaction,
     getPaginatedEmployeeDisbursementTransaction,
