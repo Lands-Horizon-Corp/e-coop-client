@@ -23,7 +23,7 @@ import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { ITransaction, TEntityId, TableProps } from '@/types'
+import { ITransactionResponse, TEntityId, TableProps } from '@/types'
 
 import TransactionTableColumns, {
     ITransactionTableColumnProps,
@@ -31,10 +31,10 @@ import TransactionTableColumns, {
 } from './columns'
 
 export interface TransactionTableProps
-    extends TableProps<ITransaction>,
+    extends TableProps<ITransactionResponse>,
         ITransactionTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<ITransaction>,
+        IDataTableToolbarProps<ITransactionResponse>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -107,7 +107,7 @@ const TransactionTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<ITransaction>({
+    } = useDataTableState<ITransactionResponse>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
