@@ -4,6 +4,8 @@ import { create } from 'zustand'
 
 export interface INatsConnectOpts {
     wsUrl?: string
+    user?: string
+    pass?: string
     onConnect?: () => void
     onError?: (err: unknown) => void
     onClosed?: (err?: unknown) => void
@@ -18,7 +20,13 @@ interface INatsState {
 export const useNatsStore = create<INatsState>((set, get) => ({
     connection: null,
 
-    connect: async ({ wsUrl = WS_URL, onConnect, onError, onClosed } = {}) => {
+    connect: async ({
+        wsUrl = WS_URL,
+        onConnect,
+        onError,
+        onClosed,
+        ...other
+    } = {}) => {
         const { connection } = get()
         if (connection) {
             console.warn('📡: already connected, reusing.')
@@ -27,7 +35,10 @@ export const useNatsStore = create<INatsState>((set, get) => ({
         }
 
         try {
-            const conn = await connect({ servers: wsUrl })
+            const conn = await connect({
+                servers: wsUrl,
+                ...other,
+            })
             set({ connection: conn })
 
             conn.closed().then((err) => {

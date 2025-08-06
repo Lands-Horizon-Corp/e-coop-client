@@ -2,12 +2,12 @@ import { cn } from '@/lib'
 
 import BatchBatchFundingTable from '@/components/tables/transaction-batch-history-tables/batch-batch-funding-table'
 
-import { TransBatchHistoryTabsContentProps } from '.'
+import { ITransBatchHistoryTabsContentProps } from '.'
 
 const BatchFundingHistory = ({
     transactionBatchId,
     className,
-}: TransBatchHistoryTabsContentProps) => {
+}: ITransBatchHistoryTabsContentProps) => {
     return (
         <div
             className={cn(

@@ -3,6 +3,7 @@ import qs from 'query-string'
 import {
     IGeneralLedger,
     IGeneralLedgerPaginated,
+    IMemberAccountingLedgerTotal,
     IMemberGeneralLedgerTotal,
     TEntityId,
     TEntryType,
@@ -261,6 +262,15 @@ export const getMemberAccountGeneralLedgerTotal = async (
     return response.data
 }
 
+export const getMemberAccountingLedgerTotal = async (id: TEntityId) => {
+    const response = await APIService.get<IMemberAccountingLedgerTotal>(
+        `/api/v1/member-accounting-ledger/member-profile/${id}/total`
+    )
+    return response.data
+}
+
+// ALL
+
 export const getPaginatedGeneralLedger = async ({
     sort,
     filters,
@@ -299,6 +309,7 @@ export default {
 
     getPaginatedMemberAccountGeneralLedger,
     getMemberAccountGeneralLedgerTotal,
+    getMemberAccountingLedgerTotal,
 
     getPaginatedTransactionBatchGeneralLedger,
     getPaginatedTransactionGeneralLedger,

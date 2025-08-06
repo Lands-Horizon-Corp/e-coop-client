@@ -75,6 +75,7 @@ export const ICONS = [
     'Scan Line',
     'Instagram',
     'Facebook',
+    'Book Thick',
     'Linkedin',
     'Code SandBox',
     'Users 3 Fill',

@@ -14,7 +14,7 @@ const pathSchema = z.object({
 })
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id'
+    '/org/$orgname/branch/$branchname/(me)/(timesheets)/timesheet/user/$id'
 )({
     component: RouteComponent,
     validateSearch: zodSearchValidator(pathSchema),

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
+import { useAuthUser } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
@@ -10,33 +10,30 @@ import TimesheetTableAction from '@/components/tables/timesheet-table/action'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheets'
+    '/org/$orgname/branch/$branchname/(me)/(timesheets)/my-timesheet'
 )({
     component: RouteComponent,
 })
 
 function RouteComponent() {
     const {
-        currentAuth: {
-            user_organization: { branch_id },
-        },
-    } = useAuthUserWithOrgBranch()
-
+        currentAuth: { user },
+    } = useAuthUser()
     const queryClient = useQueryClient()
 
-    useSubscribe(`timesheet.create.branch.${branch_id}`, () => {
+    useSubscribe(`timesheet.create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'all'],
+            queryKey: ['timesheet', 'resource-query', 'me'],
         })
     })
 
-    useSubscribe(`timesheet.update.branch.${branch_id}`, () => {
+    useSubscribe(`timesheet.update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'all'],
+            queryKey: ['timesheet', 'resource-query', 'me'],
         })
     })
 
-    useSubscribe(`timesheet.delete.branch.${branch_id}`, () => {
+    useSubscribe(`timesheet.delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['timesheet', 'resource-query', 'me'],
         })
@@ -45,7 +42,7 @@ function RouteComponent() {
     return (
         <PageContainer>
             <TimesheetTable
-                mode="all"
+                mode="me"
                 actionComponent={TimesheetTableAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
