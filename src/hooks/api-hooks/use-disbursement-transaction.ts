@@ -2,15 +2,31 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import DisbursementTransactionService from '@/api-service/disbursement-transaction-service'
+import {
+    createMutationHook,
+    createMutationInvalidateFn,
+} from '@/factory/api-hook-factory'
 import { serverRequestErrExtractor } from '@/helpers'
 import { toBase64, withCatchAsync } from '@/utils'
 
 import {
     IAPIFilteredPaginatedHook,
+    IDisbursementTransaction,
     IDisbursementTransactionPaginated,
+    IDisbursementTransactionRequest,
     IQueryProps,
     TEntityId,
 } from '@/types'
+
+export const useCreateDisbursement = createMutationHook<
+    IDisbursementTransaction,
+    string,
+    IDisbursementTransactionRequest
+>(
+    (data) => DisbursementTransactionService.create(data),
+    'Disbursement created',
+    (args) => createMutationInvalidateFn('disbursement-transaction', args)
+)
 
 export type TDisbursementTransactionMode =
     | 'branch'
