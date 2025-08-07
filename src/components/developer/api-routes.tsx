@@ -34,6 +34,7 @@ import {
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
+import { Checkbox } from '../ui/checkbox'
 import { Input } from '../ui/input'
 import { Separator } from '../ui/separator'
 import {
@@ -374,6 +375,17 @@ const APIRoutes = ({ className }: Props) => {
     const { data: rawData, isPending, isFetching, refetch } = useGroupRoutes()
     const [showFull, setShowFull] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
+    const [selectedMethods, setSelectedMethods] = useState<string[]>([])
+
+    const methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+
+    const handleMethodToggle = (method: string) => {
+        setSelectedMethods((prev) =>
+            prev.includes(method)
+                ? prev.filter((m) => m !== method)
+                : [...prev, method]
+        )
+    }
 
     const data = useMemo(
         () =>
@@ -398,9 +410,27 @@ const APIRoutes = ({ className }: Props) => {
     )
 
     const filteredGroupRoutes = useMemo(() => {
-        if (!searchTerm.trim()) return data
-        return fuse.search(searchTerm).map((r) => r.item)
-    }, [searchTerm, fuse, data])
+        let filtered = data
+
+        // Filter by search term
+        if (searchTerm.trim()) {
+            filtered = fuse.search(searchTerm).map((r) => r.item)
+        }
+
+        // Filter by selected methods
+        if (selectedMethods.length > 0) {
+            filtered = filtered
+                .map((group) => ({
+                    ...group,
+                    routes: group.routes.filter((route) =>
+                        selectedMethods.includes(route.method.toUpperCase())
+                    ),
+                }))
+                .filter((group) => group.routes.length > 0)
+        }
+
+        return filtered
+    }, [searchTerm, fuse, data, selectedMethods])
 
     return (
         <div className={cn('w-full p-4 space-y-4', className)}>
@@ -435,6 +465,40 @@ const APIRoutes = ({ className }: Props) => {
                     </Button>
                 </div>
             </div>
+
+            {/* Method Filter Checkboxes */}
+            <div className="flex flex-wrap items-center gap-4 p-4 bg-muted/30 rounded-lg">
+                <span className="text-sm font-medium text-muted-foreground">
+                    Filter by method:
+                </span>
+                {methods.map((method) => (
+                    <div key={method} className="flex items-center space-x-2">
+                        <Checkbox
+                            id={method}
+                            checked={selectedMethods.includes(method)}
+                            onCheckedChange={() => handleMethodToggle(method)}
+                        />
+                        <label htmlFor={method} className="cursor-pointer">
+                            <APIRequestMethodBadge
+                                method={
+                                    method as (typeof REQUEST_METHOD)[number]
+                                }
+                            />
+                        </label>
+                    </div>
+                ))}
+                {selectedMethods.length > 0 && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedMethods([])}
+                        className="ml-2"
+                    >
+                        Clear all
+                    </Button>
+                )}
+            </div>
+
             <SearchInput onSearchChange={setSearchTerm} />
             {isPending && <LoadingSpinner className="mx-auto" />}
             {!data.length && (
@@ -444,9 +508,9 @@ const APIRoutes = ({ className }: Props) => {
             )}
             {!filteredGroupRoutes.length && (
                 <p className="text-xs text-center text-muted-foreground">
-                    {searchTerm.length <= 0
+                    {searchTerm.length <= 0 && selectedMethods.length <= 0
                         ? 'No Routes'
-                        : `No Route matches your search '${searchTerm}'`}
+                        : `No routes match your filters`}
                 </p>
             )}
 
