@@ -8,7 +8,6 @@ import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/mem
 import {
     BillIcon,
     BookOpenIcon,
-    BookStackIcon,
     BookThickIcon,
     EyeIcon,
     FootstepsIcon,
@@ -17,7 +16,6 @@ import {
     MoneyCheckIcon,
     QrCodeIcon,
     ReceiptIcon,
-    SettingsIcon,
     UserClockFillIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -107,9 +105,10 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                         >
                             <GeneralLedgerTable
                                 mode="member"
-                                TEntryType={selectedEntryType}
                                 memberProfileId={member.id}
-                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                                TEntryType={selectedEntryType}
+                                excludeColumnIds={['balance']}
+                                className="min-h-[75vh] min-w-0 max-h-[75vh]"
                             />
                         </Modal>
 
@@ -313,54 +312,6 @@ const MemberProfileTableAction: FC<IMemberProfileTableActionProps> = ({
                                             strokeWidth={1.5}
                                         />
                                         Deposit Entry
-                                    </DropdownMenuItem>
-
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('journal-entry')
-                                        }
-                                    >
-                                        <BookStackIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Journal Entry
-                                    </DropdownMenuItem>
-
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('adjustment-entry')
-                                        }
-                                    >
-                                        <SettingsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Adjustment Entry
-                                    </DropdownMenuItem>
-
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('journal-voucher')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Journal Voucher
-                                    </DropdownMenuItem>
-
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('check-voucher')
-                                        }
-                                    >
-                                        <MoneyCheckIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Check Voucher
                                     </DropdownMenuItem>
                                 </DropdownMenuSubContent>
                             </DropdownMenuPortal>

@@ -6,12 +6,10 @@ import { formatNumber } from '@/utils'
 
 import {
     BillIcon,
-    BookStackIcon,
     BookThickIcon,
     HandCoinsIcon,
     MoneyCheckIcon,
     RefreshIcon,
-    SettingsIcon,
 } from '@/components/icons'
 import Modal from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -122,7 +120,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                     closeButtonClassName="md:hidden"
                     className={cn('!max-w-[90vw] p-2')}
                 >
-                    <div className="min-h-[80vh] min-w-[80vw] space-y-4 pt-4">
+                    <div className="min-h-[80vh] min-w-[80vw] space-y-4 p-2">
                         <div className="space-y-2">
                             <h3 className="text-lg font-semibold">
                                 Account: {focused.account?.name}
@@ -221,54 +219,6 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                         />
                                         Deposit Entry
                                     </TabsTrigger>
-
-                                    <TabsTrigger
-                                        value="journal-entry"
-                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
-                                    >
-                                        <BookStackIcon
-                                            className="-ms-0.5 me-1.5 opacity-60"
-                                            size={16}
-                                            aria-hidden="true"
-                                        />
-                                        Journal Entry
-                                    </TabsTrigger>
-
-                                    <TabsTrigger
-                                        value="adjustment-entry"
-                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
-                                    >
-                                        <SettingsIcon
-                                            className="-ms-0.5 me-1.5 opacity-60"
-                                            size={16}
-                                            aria-hidden="true"
-                                        />
-                                        Adjustment Entry
-                                    </TabsTrigger>
-
-                                    <TabsTrigger
-                                        value="journal-voucher"
-                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
-                                    >
-                                        <BillIcon
-                                            className="-ms-0.5 me-1.5 opacity-60"
-                                            size={16}
-                                            aria-hidden="true"
-                                        />
-                                        Journal Voucher
-                                    </TabsTrigger>
-
-                                    <TabsTrigger
-                                        value="check-voucher"
-                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
-                                    >
-                                        <MoneyCheckIcon
-                                            className="-ms-0.5 me-1.5 opacity-60"
-                                            size={16}
-                                            aria-hidden="true"
-                                        />
-                                        Check Voucher
-                                    </TabsTrigger>
                                 </TabsList>
                                 <ScrollBar orientation="horizontal" />
                             </ScrollArea>
@@ -331,46 +281,6 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <GeneralLedgerTable
                                     mode="member-account"
                                     TEntryType="deposit-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
-                                />
-                            </TabsContent>
-
-                            <TabsContent value="journal-entry" asChild>
-                                <GeneralLedgerTable
-                                    mode="member-account"
-                                    TEntryType="journal-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
-                                />
-                            </TabsContent>
-
-                            <TabsContent value="adjustment-entry" asChild>
-                                <GeneralLedgerTable
-                                    mode="member-account"
-                                    TEntryType="adjustment-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
-                                />
-                            </TabsContent>
-
-                            <TabsContent value="journal-voucher" asChild>
-                                <GeneralLedgerTable
-                                    mode="member-account"
-                                    TEntryType="journal-voucher"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
-                                />
-                            </TabsContent>
-
-                            <TabsContent value="check-voucher" asChild>
-                                <GeneralLedgerTable
-                                    mode="member-account"
-                                    TEntryType="check-voucher"
                                     memberProfileId={focused.memberProfileId}
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"

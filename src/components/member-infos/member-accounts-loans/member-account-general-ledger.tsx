@@ -102,6 +102,7 @@ const MemberAccountGeneralLedger = ({
                 mode="member-account"
                 accountId={other.accountId}
                 memberProfileId={other.memberProfileId}
+                excludeColumnIds={['account']}
                 className={cn('bg-background p-2 rounded-xl', className)}
             />
         </div>

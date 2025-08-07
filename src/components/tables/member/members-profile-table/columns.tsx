@@ -9,7 +9,6 @@ import GeneralStatusBadge from '@/components/badges/general-status-badge'
 import YesNoBadge from '@/components/badges/yes-no-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-// import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
@@ -207,7 +206,8 @@ const MemberProfileTableColumns = (
             }) => <div onClick={(e) => e.stopPropagation()}>{suffix}</div>,
             enableMultiSort: true,
             enableResizing: true,
-            minSize: 150,
+            size: 110,
+            minSize: 110,
         },
         {
             id: 'passbook',
@@ -228,12 +228,18 @@ const MemberProfileTableColumns = (
                     original: { passbook },
                 },
             }) => (
-                <div onClick={(e) => e.stopPropagation()} className="uppercase">
-                    <CopyWrapper>
-                        <span className="rounded-lg bg-popover px-2 py-1 text-primary/70">
-                            {passbook}
+                <div onClick={(e) => e.stopPropagation()}>
+                    {passbook ? (
+                        <CopyWrapper>
+                            <span className="rounded-lg bg-popover px-2 py-1 text-primary/70">
+                                {passbook}
+                            </span>
+                        </CopyWrapper>
+                    ) : (
+                        <span className="text-xs text-muted-foreground/70 italic">
+                            no passbook
                         </span>
-                    </CopyWrapper>
+                    )}
                 </div>
             ),
             enableMultiSort: true,
@@ -290,8 +296,8 @@ const MemberProfileTableColumns = (
             }) => <div>{member_gender?.name}</div>,
             enableMultiSort: true,
             enableResizing: true,
-            size: 200,
-            minSize: 150,
+            size: 120,
+            minSize: 120,
         },
         {
             id: 'member_type',
@@ -314,7 +320,7 @@ const MemberProfileTableColumns = (
             }) => <span>{member_type?.name ?? ''}</span>,
             enableMultiSort: true,
             enableResizing: true,
-            size: 200,
+            size: 150,
             minSize: 150,
         },
 
@@ -350,7 +356,7 @@ const MemberProfileTableColumns = (
             }) => <GeneralStatusBadge generalStatus={status} />,
             enableMultiSort: true,
             enableResizing: true,
-            size: 200,
+            size: 150,
             minSize: 150,
         },
         {
@@ -383,7 +389,7 @@ const MemberProfileTableColumns = (
             }) => <CivilStatusBadge civilStatus={civil_status} />,
             enableMultiSort: true,
             enableResizing: true,
-            size: 200,
+            size: 150,
             minSize: 150,
         },
         {
@@ -407,8 +413,8 @@ const MemberProfileTableColumns = (
             }) => <span>{member_group?.name ?? ''}</span>,
             enableMultiSort: true,
             enableResizing: true,
-            size: 200,
-            minSize: 150,
+            size: 180,
+            minSize: 180,
         },
         {
             id: 'member_center',
@@ -431,8 +437,8 @@ const MemberProfileTableColumns = (
             }) => <span>{member_center?.name ?? ''}</span>,
             enableMultiSort: true,
             enableResizing: true,
-            size: 200,
-            minSize: 150,
+            size: 180,
+            minSize: 180,
         },
         {
             id: 'QR',

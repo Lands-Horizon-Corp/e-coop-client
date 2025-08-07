@@ -17,7 +17,7 @@ export const toReadableDate = (
 export const toReadableDateTime = (
     ...args: Parameters<typeof toReadableDate>
 ) => {
-    return toReadableDate(args[0], args[1] ?? "MMM dd yyyy 'at' hh:mm a")
+    return toReadableDate(args[0], args[1] ?? "MMM dd yyyy 'at' h:mm a")
 }
 
 export const toDateTimeFormatFile = (

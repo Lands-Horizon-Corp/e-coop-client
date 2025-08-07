@@ -15,6 +15,7 @@ function RouteComponent() {
             <GeneralLedgerTable
                 mode="current"
                 TEntryType="adjustment-entry"
+                excludeColumnIds={['balance']}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>

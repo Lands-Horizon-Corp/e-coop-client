@@ -47,7 +47,6 @@ const DataTableOptionsMenu = <T,>({
             >
                 {scrollOption && (
                     <>
-                        <DropdownMenuSeparator />
                         <DataTableScrollOption {...scrollOption} />
                     </>
                 )}

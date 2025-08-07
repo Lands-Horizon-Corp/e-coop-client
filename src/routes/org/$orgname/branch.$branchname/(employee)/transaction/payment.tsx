@@ -243,9 +243,13 @@ function RouteComponent() {
                         queryClient.invalidateQueries({
                             queryKey: ['get-transaction-by-id', transactionId],
                         })
-                        
+
                         queryClient.invalidateQueries({
-                            queryKey: ['general-ledger','resource-query', transactionId],
+                            queryKey: [
+                                'general-ledger',
+                                'resource-query',
+                                transactionId,
+                            ],
                         })
 
                         setTransactionFormSuccess(transaction)

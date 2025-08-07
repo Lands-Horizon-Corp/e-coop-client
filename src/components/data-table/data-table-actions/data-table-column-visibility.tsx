@@ -55,7 +55,6 @@ const DatatableColumnVisibility = <TData,>({
                     <DropdownMenuLabel className="flex items-center justify-between">
                         Toggle columns <ColumnOutlineIcon />
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem
                         disabled={hiddenColumnsLength <= 0}
                         onClick={onShowAllColumns}
