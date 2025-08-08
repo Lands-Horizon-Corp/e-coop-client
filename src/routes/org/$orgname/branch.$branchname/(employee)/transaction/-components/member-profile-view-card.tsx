@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { toast } from 'sonner'
 
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useImagePreview } from '@/store/image-preview-store'
 
 import CopyWrapper from '@/components/elements/copy-wrapper'
@@ -8,12 +10,14 @@ import ImageNameDisplay from '@/components/elements/image-name-display'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     BadgeCheckIcon,
+    HandShakeHeartIcon,
     IdCardIcon,
     PhoneIcon,
     SignatureLightIcon,
     UserIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import SectionTitle from '@/components/member-infos/section-title'
 import MemberOverallInfo, {
     MemberOverallInfoModal,
 } from '@/components/member-infos/view-member-info'
@@ -34,17 +38,31 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IMedia, IMemberProfile } from '@/types'
+import { IMedia, IMemberJointAccount, IMemberProfile, TEntityId } from '@/types'
+
+import JointMemberProfileListModal from './joint-member-profile-list-modal'
 
 type MemberProfileTransactionViewProps = {
-    memberInfo: IMemberProfile
+    memberInfo: IMemberProfile | null
+    onSelectMember: () => void
+    onSelectedJointMember?: (jointMemberId: TEntityId | undefined) => void
+    hasTransaction?: boolean
 }
 
 const MemberProfileTransactionView = ({
     memberInfo,
+    onSelectMember,
+    onSelectedJointMember,
+    hasTransaction
 }: MemberProfileTransactionViewProps) => {
     const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
+    const { onOpen: onOpenConfirmModal } = useConfirmModalStore()
+
+    const [selectedJointMember, setSelectedJointMember] =
+        useState<IMemberJointAccount | null>(null)
+
+    onSelectedJointMember?.(selectedJointMember?.id)
 
     const handleMedia = (media: IMedia | undefined) => {
         if (media) {
@@ -65,6 +83,8 @@ const MemberProfileTransactionView = ({
         }
     }
 
+    if(!memberInfo) return null
+
     return (
         <>
             <MemberOverallInfoModal
@@ -79,32 +99,36 @@ const MemberProfileTransactionView = ({
                 className="w-full ecoop-scroll overflow-x-auto  h-fit flex-col space-y-2 border-[0.5px] min-w-[300px] overscroll-contain bg-sidebar/20 p-5"
             >
                 <div className="flex w-full  space-x-5 items-center h-fit ">
-                    <div className="flex items-center h-fit gap-y-2 flex-col min-w-[6vw] max-w-[5vw]">
-                        <PreviewMediaWrapper media={memberInfo.media}>
-                            <ImageDisplay
-                                className=" aspect-square size-fit rounded-xl duration-150 ease-in-out hover:scale-105"
-                                src={memberInfo.media?.download_url}
-                                onClick={() => {
-                                    handleImageClick(
-                                        memberInfo.media,
-                                        'profile'
-                                    )
-                                }}
-                                fallback={
-                                    memberInfo.first_name.charAt(0) ?? '-'
-                                }
-                            />
-                        </PreviewMediaWrapper>
+                    <div className="flex items-center h-fit gap-y-1 flex-col min-w-[6vw] max-w-[5vw]">
+                        <div className="flex-shrink-0">
+                            <PreviewMediaWrapper media={memberInfo.media}>
+                                <ImageDisplay
+                                    className="size-20"
+                                    src={memberInfo.media?.download_url}
+                                    fallback={
+                                        memberInfo.first_name.charAt(0) ?? '-'
+                                    }
+                                />
+                            </PreviewMediaWrapper>
+                        </div>
                         <Drawer>
-                            <DrawerTrigger asChild className="border">
+                            <DrawerTrigger asChild className="">
                                 <Button
                                     variant={'secondary'}
                                     size="sm"
-                                    className="text-xs w-full min-w-24"
+                                    className="text-xs w-full h-7 min-w-24"
                                 >
                                     View Profile
                                 </Button>
                             </DrawerTrigger>
+                            <Button
+                                size="sm"
+                                className="w-full h-7 min-w-24"
+                                disabled={hasTransaction}
+                                onClick={onSelectMember}
+                            >
+                                select
+                            </Button>
                             <DrawerContent className="h-full w-full">
                                 <MemberOverallInfo
                                     className="overflow-y-auto px-5"
@@ -113,7 +137,7 @@ const MemberProfileTransactionView = ({
                             </DrawerContent>
                         </Drawer>
                     </div>
-                    <div className="space-y-3 h-full min-w-fit flex flex-col justify-start w-full">
+                    <div className="h-full min-w-fit flex flex-col justify-start w-full">
                         <div className="flex items-center justify-between">
                             <div className="w-full flex items-center gap-x-2 justify-between">
                                 <div className="flex w-fit items-center gap-x-2">
@@ -168,6 +192,16 @@ const MemberProfileTransactionView = ({
                                 </HoverCard>
                             )}
                         </div>
+                        <div className="text-xs pb-2">
+                            <h3 className="mb-1 font-medium text-muted-foreground">
+                                Member Profile ID
+                            </h3>
+                            <div className="flex items-center gap-2">
+                                <span className="truncate font-mono">
+                                    <CopyWrapper>{memberInfo.id}</CopyWrapper>
+                                </span>
+                            </div>
+                        </div>
                         <Separator />
                         <div className="flex  justify-between space-x-5 pr-5 pt-2 text-xs">
                             <div>
@@ -209,21 +243,27 @@ const MemberProfileTransactionView = ({
                                     </span>
                                 </div>
                             </div>
-                            <div className="text-end">
-                                <h3 className="mb-1 font-medium text-muted-foreground">
-                                    Member Profile ID
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <span className="truncate font-mono">
-                                        <CopyWrapper>
-                                            {memberInfo.id}
-                                        </CopyWrapper>
-                                    </span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
+                <JointMemberProfileListModal
+                    triggerProps={{
+                        disabled: hasTransaction,
+                    }}
+                    title={
+                        <SectionTitle
+                            title="Joint Accounts"
+                            subTitle="Co-owners of this account that have the access and share  financial responsibility of this account (Select a one joint member )"
+                            Icon={HandShakeHeartIcon}
+                        />
+                    }
+                    onSelect={(jointMember) => {
+                        setSelectedJointMember(jointMember || null)
+                    }}
+                    value={selectedJointMember?.id}
+                    selectedMemberJointId={selectedJointMember?.id}
+                    memberJointProfile={memberInfo.member_joint_accounts ?? []}
+                />
             </GradientBackground>
         </>
     )

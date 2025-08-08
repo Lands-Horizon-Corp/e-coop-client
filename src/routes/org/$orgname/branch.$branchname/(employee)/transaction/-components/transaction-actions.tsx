@@ -4,18 +4,25 @@ import { GradientBackground } from '@/components/gradient-background/gradient-ba
 import { MoneyIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
-type actionItemsProps = {
+interface actionItemsProps {
     onClick?: () => void
     label?: string
     icon?: React.ReactNode
+    buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
-const ActionTransactionItem = ({ onClick, label, icon }: actionItemsProps) => {
+const ActionTransactionItem = ({
+    onClick,
+    label,
+    icon,
+    buttonProps,
+}: actionItemsProps) => {
     return (
         <GradientBackground gradientOnly className="w-full rounded-xl">
             <Button
                 variant={'outline'}
                 className="relative h-14 w-full overflow-hidden rounded-xl !border-primary/20 hover:bg-primary/10"
+                {...buttonProps}
                 onClick={onClick}
             >
                 <span className="mr-2">{icon}</span>
@@ -42,8 +49,9 @@ type TransactionActionsProps = {
     widthdrawLabel?: string
     depositLabel?: string
     paymentLabel?: string
-    disbursementOnClick?: () => void
-    disbursementLabel?: string
+    PaymentButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
+    DepositButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
+    withdrawButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const TransactionActions = ({
@@ -53,8 +61,9 @@ const TransactionActions = ({
     widthdrawLabel = 'Withdraw',
     depositLabel = 'Deposit',
     paymentLabel = 'Add Transaction',
-    disbursementLabel = 'Disbursement',
-    disbursementOnClick,
+    PaymentButtonProps,
+    DepositButtonProps,
+    withdrawButtonProps,
 }: TransactionActionsProps) => {
     return (
         <div className="flex w-full flex-col justify-evenly space-y-2 py-2 lg:flex-row lg:space-x-2 lg:space-y-0">
@@ -62,21 +71,19 @@ const TransactionActions = ({
                 onClick={paymentOnClick}
                 label={paymentLabel}
                 icon={<MoneyIcon />}
+                buttonProps={PaymentButtonProps}
             />
             <ActionTransactionItem
                 onClick={depositOnClick}
                 label={depositLabel}
                 icon={<MoneyIcon />}
+                buttonProps={DepositButtonProps}
             />
             <ActionTransactionItem
                 onClick={withdrawOnClick}
                 label={widthdrawLabel}
                 icon={<MoneyIcon />}
-            />
-            <ActionTransactionItem
-                onClick={disbursementOnClick}
-                label={disbursementLabel}
-                icon={<MoneyIcon />}
+                buttonProps={withdrawButtonProps}
             />
         </div>
     )

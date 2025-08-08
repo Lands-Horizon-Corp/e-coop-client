@@ -1,6 +1,6 @@
 import { TEntityId } from '@/types'
 
-export const PaymentSource = [
+export const IPaymentSource = [
     'withdraw',
     'deposit',
     'journal',
@@ -10,19 +10,19 @@ export const PaymentSource = [
     'voucher',
 ] as const
 
-export type TPaymentSource = (typeof PaymentSource)[number]
+export type TPaymentSource = (typeof IPaymentSource)[number]
 
 export interface IPaymentRequest {
     amount: number
 
-    bank_id?: TEntityId | null
-    account_id?: TEntityId | null
-    payment_type_id?: TEntityId | null
-    signature_media_id?: TEntityId | null
-    proof_of_payment_media_id?: TEntityId | null
+    bank_id?: TEntityId
+    account_id: TEntityId
+    payment_type_id?: TEntityId
+    signature_media_id?: TEntityId
+    proof_of_payment_media_id?: TEntityId
 
     bank_reference_number?: string
-    entry_date?: string | null
+    entry_date?: string
 
     /** Validation: max=255 */
     description?: string
@@ -31,18 +31,20 @@ export interface IPaymentRequest {
 export interface IPaymentQuickRequest {
     amount: number
 
-    signature_media_id?: TEntityId | null
-    proof_of_payment_media_id?: TEntityId | null
-    bank_id?: TEntityId | null
+    signature_media_id?: TEntityId
+    proof_of_payment_media_id?: TEntityId
+    bank_id?: TEntityId
     bank_reference_number?: string
-    entry_date?: string | null
-    account_id: TEntityId | null
-    payment_type_id: TEntityId | null
+    entry_date?: string
+    account_id?: TEntityId
+    payment_type_id?: TEntityId
 
     /** Validation: max=255 */
     description?: string
-    member_profile_id?: TEntityId | null
-    member_joint_account_id?: TEntityId | null
+    member_profile_id?: TEntityId
+    member_joint_account_id?: TEntityId
     reference_number: string
-    or_auto_generated: boolean
+    or_auto_generated?: boolean
 }
+
+

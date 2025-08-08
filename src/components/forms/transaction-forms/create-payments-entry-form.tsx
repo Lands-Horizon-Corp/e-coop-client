@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/lib'
@@ -25,7 +27,10 @@ import {
 } from '@/validations/transactions/transaction-entry-schema'
 
 import { useGetAllpaymentTypes } from '@/hooks/api-hooks/use-payment-type'
-import { useCreatePaymentTransaction } from '@/hooks/api-hooks/use-transaction'
+import {
+    useCreatePaymentTransaction,
+    useCreateTransactionWithPayment,
+} from '@/hooks/api-hooks/use-transaction'
 
 import {
     IClassProps,
@@ -33,8 +38,8 @@ import {
     IGeneralLedger,
     IMedia,
     IPaymentRequest,
-    ITransactionResponse,
     TEntityId,
+    TPaymentSource,
 } from '@/types'
 
 import AmountField from '../../../routes/org/$orgname/branch.$branchname/(employee)/transaction/-components/amount-field'
@@ -48,15 +53,25 @@ interface TransactionEntryFormProps
             string,
             TransactionEntryFormValues
         > {
-    transactionId: TEntityId
-    transaction?: ITransactionResponse
+    referenceNumber?: string
+    memberProfileId?: TEntityId
+    memberJointId?: TEntityId
+    isReferenceNumberCheck?: boolean
+    description?: string
+    transactionId?: TEntityId
+    onSuccessPayment: (transaction: IGeneralLedger) => void
 }
 
 const PaymentsEntryForm = ({
     defaultValues,
-    transactionId,
-    transaction,
     onSuccess,
+    referenceNumber,
+    memberJointId,
+    memberProfileId,
+    isReferenceNumberCheck = false,
+    description = '',
+    transactionId,
+    onSuccessPayment,
 }: TransactionEntryFormProps) => {
     const form = useForm<TransactionEntryFormValues>({
         resolver: zodResolver(TransactionEntrySchema),
@@ -66,26 +81,45 @@ const PaymentsEntryForm = ({
     })
 
     const {
-        mutate: creatTransactionPayment,
-        isPending,
-        error,
-    } = useCreatePaymentTransaction({ onSuccess })
+        mutate: createPaymentWithTransaction,
+        isPending: isPendingCreatePaymentWithTransaction,
+        error: createPaymentWithTransactionError,
+    } = useCreateTransactionWithPayment({ onSuccess })
+
+    const {
+        mutate: createPayment,
+        isPending: isPendingCreatePayment,
+        error: createPaymentError,
+    } = useCreatePaymentTransaction({ onSuccess: onSuccessPayment })
+
     const { data: paymentType } = useGetAllpaymentTypes()
 
     const handleSubmit = form.handleSubmit(
         (data: TransactionEntryFormValues) => {
-            if (transactionId)
-                creatTransactionPayment({
+            if (transactionId) {
+                createPayment({
                     data: {
                         ...data,
                         entry_date: new Date(
                             data.entry_date ?? new Date()
                         ).toISOString(),
-                        bank_id:
-                            data.bank_id === undefined ? null : data.bank_id,
                     },
                     transactionId: transactionId,
                 })
+            } else {
+                const transactionPayload = {
+                    reference_number: referenceNumber,
+                    member_profile_id: memberProfileId,
+                    member_joint_account_id: memberJointId,
+                    is_reference_number_checked: isReferenceNumberCheck,
+                    source: 'payment' as TPaymentSource,
+                    description: description,
+                }
+                createPaymentWithTransaction({
+                    data: data as IPaymentRequest,
+                    transactionPayload,
+                })
+            }
         }
     )
 
@@ -96,10 +130,16 @@ const PaymentsEntryForm = ({
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit}>
-                <FormErrorMessage errorMessage={error} />
+                <FormErrorMessage
+                    errorMessage={
+                        createPaymentWithTransactionError
+                            ? createPaymentWithTransactionError
+                            : createPaymentError
+                    }
+                />
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                     <ReferenceNumber
-                        value={transaction?.reference_number}
+                        value={referenceNumber}
                         disabled
                         className="col-span-2 w-full"
                     />
@@ -236,14 +276,14 @@ const PaymentsEntryForm = ({
                     <FormFieldWrapper
                         control={form.control}
                         name="description"
-                        label="Description"
+                        label="Note"
                         className="h-[85%]"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
                                 id={field.name}
                                 className="h-full"
-                                placeholder="a short description..."
+                                placeholder="what is this payment for?"
                                 autoComplete="off"
                             />
                         )}
@@ -290,10 +330,18 @@ const PaymentsEntryForm = ({
                     <Button
                         size="sm"
                         type="submit"
-                        disabled={isPending}
+                        disabled={
+                            isPendingCreatePaymentWithTransaction ||
+                            isPendingCreatePayment
+                        }
                         className="w-full self-end px-8 sm:w-fit"
                     >
-                        {isPending ? <LoadingSpinner /> : 'pay'}
+                        {isPendingCreatePaymentWithTransaction ||
+                        isPendingCreatePayment ? (
+                            <LoadingSpinner />
+                        ) : (
+                            'pay'
+                        )}
                     </Button>
                 </div>
             </form>

@@ -11,11 +11,10 @@ import {
 } from '@/types'
 
 export interface ITransactionRequest {
-    member_joint_account_id?: TEntityId
-    transaction_batch_id?: TEntityId
     signature_media_id?: TEntityId
-    employee_user_id?: TEntityId
+    
     member_profile_id?: TEntityId
+    member_joint_account_id?: TEntityId
 
     is_reference_number_checked?: boolean
     reference_number?: string
