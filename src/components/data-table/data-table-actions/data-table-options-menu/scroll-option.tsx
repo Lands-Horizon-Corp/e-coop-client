@@ -4,7 +4,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
-    DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 
 export interface IDataTableScrollableOptionProps {
@@ -21,7 +20,6 @@ const DataTableScrollOption = ({
             <DropdownMenuLabel className="flex items-center justify-between">
                 Table Sizing <RowSpacingIcon className="inline" />
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
                 value={isScrollable ? 'true' : 'false'}
                 onValueChange={(newVal) =>

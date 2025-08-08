@@ -106,7 +106,8 @@ const EmployeesAction = ({
                         mode="employee"
                         TEntryType={selectedEntryType}
                         userOrganizationId={employee.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        excludeColumnIds={['balance']}
+                        className="min-h-[75vh] min-w-0 max-h-[75vh]"
                     />
                 </Modal>
 

@@ -56,7 +56,7 @@ type TransactionSearch = {
 }
 
 export const Route = createFileRoute(
-    '/org/$orgname/branch/$branchname/(employee)/transaction/'
+    '/org/$orgname/branch/$branchname/(employee)/transaction/payment'
 )({
     validateSearch: (search: Record<string, unknown>): TransactionSearch => {
         return {
@@ -243,6 +243,15 @@ function RouteComponent() {
                         queryClient.invalidateQueries({
                             queryKey: ['get-transaction-by-id', transactionId],
                         })
+
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                'general-ledger',
+                                'resource-query',
+                                transactionId,
+                            ],
+                        })
+
                         setTransactionFormSuccess(transaction)
                         setOnOpenToast(true)
                     },

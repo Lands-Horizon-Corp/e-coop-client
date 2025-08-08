@@ -29,7 +29,7 @@ import MemberAccountingLedgerTableColumns, {
 export interface MemberAccountingLedgerTableProps
     extends TableProps<IMemberAccountingLedger>,
         IMemberAccountingLedgerTableColumnProps {
-    memberProfileId: TEntityId
+    memberProfileId?: TEntityId
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberAccountingLedger>,
         | 'table'
@@ -82,10 +82,11 @@ const MemberAccountingLedgerTable = ({
         data: { data, totalPage, pageSize, totalSize },
         refetch,
     } = useFilteredPaginatedMemberAccountingLedger({
-        memberProfileId,
+        memberProfileId: memberProfileId as TEntityId,
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
+        enabled: memberProfileId !== undefined,
     })
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)

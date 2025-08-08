@@ -54,8 +54,8 @@ const TransactionSchema = z.object({
     reference_number: z.string().min(1, 'Reference number is required'),
     is_reference_number_checked: z.boolean().optional(),
     description: descriptionSchema
-        .min(10, 'Min 10 character description')
         .max(255, 'Max 255 character description')
+        .optional()
         .transform(descriptionTransformerSanitizer),
     source: z.enum(PaymentSource, {
         required_error: 'Source is required',

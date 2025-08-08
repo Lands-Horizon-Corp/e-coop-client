@@ -83,10 +83,10 @@ const GeneralLedgerTableColumns = (
             id: 'reference_number',
             accessorKey: 'reference_number',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Reference Number">
+                <DataTableColumnHeader {...props} title="Reference No.">
                     <ColumnActions {...props}>
                         <TextFilter<IGeneralLedger>
-                            displayText="Reference Number"
+                            displayText="Reference No."
                             field="reference_number"
                         />
                     </ColumnActions>
@@ -110,37 +110,9 @@ const GeneralLedgerTableColumns = (
             size: 180,
             minSize: 160,
         },
-        {
-            id: 'transaction_reference_number',
-            accessorKey: 'transaction_reference_number',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Transaction Ref">
-                    <ColumnActions {...props}>
-                        <TextFilter<IGeneralLedger>
-                            displayText="Transaction Reference"
-                            field="transaction_reference_number"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { transaction_reference_number },
-                },
-            }) => (
-                <CopyWrapper>
-                    <span className="font-mono text-sm">
-                        {transaction_reference_number || '-'}
-                    </span>
-                </CopyWrapper>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 250,
-            minSize: 250,
-        },
+        ...createUpdateColumns<IGeneralLedger>().filter(
+            (col) => col.id === 'created_at'
+        ),
         {
             id: 'account',
             accessorKey: 'account',
@@ -161,8 +133,8 @@ const GeneralLedgerTableColumns = (
             }) => (
                 <div className="space-y-1">
                     <p className="font-medium">{account?.name || '-'}</p>
-                    <p className="text-xs text-muted-foreground font-mono">
-                        {account?.alternative_code || '-'}
+                    <p className="text-xs text-muted-foreground/70 font-mono">
+                        {account?.alternative_code || ''}
                     </p>
                 </div>
             ),
@@ -170,8 +142,8 @@ const GeneralLedgerTableColumns = (
             enableSorting: true,
             enableResizing: true,
             enableHiding: false,
-            size: 180,
-            minSize: 140,
+            size: 120,
+            minSize: 125,
         },
         {
             id: 'credit',
@@ -199,8 +171,7 @@ const GeneralLedgerTableColumns = (
             enableSorting: true,
             enableResizing: true,
             enableHiding: false,
-            size: 120,
-            minSize: 100,
+            minSize: 102,
         },
         {
             id: 'debit',
@@ -228,8 +199,8 @@ const GeneralLedgerTableColumns = (
             enableSorting: true,
             enableResizing: true,
             enableHiding: false,
-            size: 120,
-            minSize: 100,
+            size: 98,
+            minSize: 98,
         },
         {
             id: 'balance',
@@ -278,7 +249,7 @@ const GeneralLedgerTableColumns = (
                     original: { source },
                 },
             }) => (
-                <Badge variant="secondary" className="text-xs">
+                <Badge variant="secondary" className="text-xs px-1.5">
                     {source || '-'}
                 </Badge>
             ),
@@ -411,7 +382,10 @@ const GeneralLedgerTableColumns = (
             size: 160,
             minSize: 120,
         },
-        ...createUpdateColumns<IGeneralLedger>(),
+
+        ...createUpdateColumns<IGeneralLedger>().filter(
+            (col) => col.id === 'updated_at'
+        ),
     ]
 }
 

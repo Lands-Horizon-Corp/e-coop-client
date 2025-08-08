@@ -28,7 +28,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
     const { id } = useParams({
-        from: '/org/$orgname/branch/$branchname/(common)/(timesheets)/timesheet/user/$id',
+        from: '/org/$orgname/branch/$branchname/(me)/(timesheets)/timesheet/user/$id',
     })
 
     return (

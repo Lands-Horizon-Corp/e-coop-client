@@ -81,9 +81,11 @@ export type TGeneralLedgerTableProps = GeneralLedgerTableProps &
 const GeneralLedgerTable = ({
     mode,
     className,
+    TEntryType,
     toolbarProps,
     defaultFilter,
-    TEntryType,
+    excludeColumnIds,
+    defaultColumnSort,
     onRowClick = () => {},
     onSelectData,
     actionComponent,
@@ -99,26 +101,22 @@ const GeneralLedgerTable = ({
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
-    const columns = useMemo(
-        () =>
-            GeneralLedgerTableColumns({
-                actionComponent,
-            }),
-        [actionComponent]
-    )
+    const columns = useMemo(() => {
+        const allColumns = GeneralLedgerTableColumns({
+            actionComponent,
+        })
 
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<IGeneralLedger>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+        if (excludeColumnIds && excludeColumnIds.length > 0) {
+            return allColumns.filter(
+                (column) => !excludeColumnIds.includes(column.id as string)
+            )
+        }
+
+        return allColumns
+    }, [actionComponent, excludeColumnIds])
+
+    const tableState = useDataTableState<IGeneralLedger>({
+        defaultColumnOrder: defaultColumnSort || columns.map((c) => c.id!),
         onSelectData,
     })
 
@@ -145,7 +143,8 @@ const GeneralLedgerTable = ({
         transactionId: modeProps.transactionId,
     })
 
-    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+    const handleRowSelectionChange =
+        tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
@@ -156,9 +155,9 @@ const GeneralLedgerTable = ({
         state: {
             sorting: tableSorting,
             pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
+            columnOrder: tableState.columnOrder,
+            rowSelection: tableState.rowSelectionState.rowSelection,
+            columnVisibility: tableState.columnVisibility,
         },
         rowCount: pageSize,
         manualSorting: true,
@@ -167,13 +166,13 @@ const GeneralLedgerTable = ({
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
+        getRowId: tableState.getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
+        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
 
@@ -183,7 +182,7 @@ const GeneralLedgerTable = ({
                 className={cn(
                     'flex h-full flex-col gap-y-2',
                     className,
-                    !isScrollable && 'h-fit !max-h-none'
+                    !tableState.isScrollable && 'h-fit !max-h-none'
                 )}
             >
                 <DataTableToolbar
@@ -196,7 +195,10 @@ const GeneralLedgerTable = ({
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    scrollableProps={{
+                        isScrollable: tableState.isScrollable,
+                        setIsScrollable: tableState.setIsScrollable,
+                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -209,8 +211,8 @@ const GeneralLedgerTable = ({
                     isStickyFooter
                     className="mb-2"
                     onRowClick={onRowClick}
-                    isScrollable={isScrollable}
-                    setColumnOrder={setColumnOrder}
+                    isScrollable={tableState.isScrollable}
+                    setColumnOrder={tableState.setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

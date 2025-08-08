@@ -6,12 +6,10 @@ import { IconType } from 'react-icons/lib'
 import {
     BillIcon,
     BookOpenIcon,
-    BookStackIcon,
     HandCoinsIcon,
     HandDropCoinsIcon,
     MoneyCheckIcon,
     MoneyStackIcon,
-    SettingsIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import DisbursementTransactionTable from '@/components/tables/disbursement-transaction-table'
@@ -194,86 +192,6 @@ const HistoryTabs: {
                 <GeneralLedgerTable
                     mode="transaction-batch"
                     TEntryType="deposit-entry"
-                    transactionBatchId={transactionBatchId}
-                    className="grow"
-                />
-            </div>
-        ),
-    },
-    {
-        value: 'journal-entry',
-        title: 'Journal Entry',
-        Icon: BookStackIcon,
-        Component: ({ transactionBatchId, className }) => (
-            <div
-                className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
-                    className
-                )}
-            >
-                <GeneralLedgerTable
-                    mode="transaction-batch"
-                    TEntryType="journal-entry"
-                    transactionBatchId={transactionBatchId}
-                    className="grow"
-                />
-            </div>
-        ),
-    },
-    {
-        value: 'adjustment-entry',
-        title: 'Adjustment Entry',
-        Icon: SettingsIcon,
-        Component: ({ transactionBatchId, className }) => (
-            <div
-                className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
-                    className
-                )}
-            >
-                <GeneralLedgerTable
-                    mode="transaction-batch"
-                    TEntryType="adjustment-entry"
-                    transactionBatchId={transactionBatchId}
-                    className="grow"
-                />
-            </div>
-        ),
-    },
-    {
-        value: 'journal-voucher',
-        title: 'Journal Voucher',
-        Icon: BillIcon,
-        Component: ({ transactionBatchId, className }) => (
-            <div
-                className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
-                    className
-                )}
-            >
-                <GeneralLedgerTable
-                    mode="transaction-batch"
-                    TEntryType="journal-voucher"
-                    transactionBatchId={transactionBatchId}
-                    className="grow"
-                />
-            </div>
-        ),
-    },
-    {
-        value: 'check-voucher',
-        title: 'Check Voucher',
-        Icon: MoneyCheckIcon,
-        Component: ({ transactionBatchId, className }) => (
-            <div
-                className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
-                    className
-                )}
-            >
-                <GeneralLedgerTable
-                    mode="transaction-batch"
-                    TEntryType="check-voucher"
                     transactionBatchId={transactionBatchId}
                     className="grow"
                 />
