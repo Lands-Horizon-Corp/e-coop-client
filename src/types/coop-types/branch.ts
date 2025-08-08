@@ -9,35 +9,8 @@ export enum branchTypeEnum {
     BankingBranch = 'banking branch',
 }
 
-export interface IBranchRequest {
-    id?: TEntityId
-
-    media_id: string | null
-
-    type: branchTypeEnum
-    name: string
-    email: string
-
-    description: string
-    country_code: string
-    contact_number: string
-
-    address: string
-    province: string
-    city: string
-    region: string
-    barangay: string
-    postal_code: string
-
-    latitude?: number
-    longitude?: number
-
-    is_main_branch: boolean
-    is_admin_verified?: boolean
-}
-
 // Resource
-export interface IBranch extends ITimeStamps, IAuditable {
+export interface IBranch extends ITimeStamps, IAuditable, IBranchSettings {
     id: TEntityId
 
     organization_id: TEntityId
@@ -67,4 +40,76 @@ export interface IBranch extends ITimeStamps, IAuditable {
     is_main_branch: boolean
 }
 
+export interface IBranchRequest {
+    id?: TEntityId
+
+    media_id: string | null
+
+    type: branchTypeEnum
+    name: string
+    email: string
+
+    description: string
+    country_code: string
+    contact_number: string
+
+    address: string
+    province: string
+    city: string
+    region: string
+    barangay: string
+    postal_code: string
+
+    latitude?: number
+    longitude?: number
+
+    is_main_branch: boolean
+    is_admin_verified?: boolean
+}
+
 export interface IBranchPaginated extends IPaginatedResult<IBranch> {}
+
+export interface IBranchSettings {
+    /** Validation: min=0 */
+    branch_setting_withdraw_or_start: number
+    /** Validation: min=0 */
+    branch_setting_withdraw_or_current: number
+    /** Validation: min=0 */
+    branch_setting_withdraw_or_end: number
+    /** Validation: min=0 */
+    branch_setting_withdraw_or_iteration: number
+    branch_setting_withdraw_or_unique: boolean
+    branch_setting_withdraw_use_date_or: boolean
+    /** Validation: min=0 */
+    branch_setting_deposit_or_start: number
+    /** Validation: min=0 */
+    branch_setting_deposit_or_current: number
+    /** Validation: min=0 */
+    branch_setting_deposit_or_end: number
+    /** Validation: min=0 */
+    branch_setting_deposit_or_iteration: number
+    branch_setting_deposit_or_unique: boolean
+    branch_setting_deposit_use_date_or: boolean
+    /** Validation: min=0 */
+    branch_setting_loan_or_start: number
+    /** Validation: min=0 */
+    branch_setting_loan_or_current: number
+    /** Validation: min=0 */
+    branch_setting_loan_or_end: number
+    /** Validation: min=0 */
+    branch_setting_loan_or_iteration: number
+    branch_setting_loan_or_unique: boolean
+    branch_setting_loan_use_date_or: boolean
+    /** Validation: min=0 */
+    branch_setting_check_voucher_or_start: number
+    /** Validation: min=0 */
+    branch_setting_check_voucher_or_current: number
+    /** Validation: min=0 */
+    branch_setting_check_voucher_or_end: number
+    /** Validation: min=0 */
+    branch_setting_check_voucher_or_iteration: number
+    branch_setting_check_voucher_or_unique: boolean
+    branch_setting_check_voucher_use_date_or: boolean
+}
+
+export interface IBranchSettingsRequest extends IBranchSettings {}

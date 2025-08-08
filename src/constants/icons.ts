@@ -227,6 +227,7 @@ export const ICONS = [
     'Chevron Right',
     'Camera Select',
     'Sidebar Right',
+    'Building Gear',
     'Hand Withdraw',
     'Arrow Chevron Down',
     'GiMoney Stack',

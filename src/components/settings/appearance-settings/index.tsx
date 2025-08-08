@@ -69,7 +69,7 @@ const AppearanceSettings = ({ className }: Props) => {
                         )}
                     >
                         <div className="bg-stone-800 size-fit text-stone-200 p-4 rounded-full flex items-center justify-center">
-                            <SunMoonIcon className="size-8" />
+                            <MoonIcon className="size-8" />
                         </div>
                     </div>
                     <p>Dark</p>

@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
-import { userOrganizationSettingsSchema } from '@/validations/form-validation/user-organization-settings-schema'
+import { userOrganizationSettingsSchema } from '@/validations/form-validation/settings/user-organization-settings-schema'
 
 import { useUpdateUserOrganizationSettings } from '@/hooks/api-hooks/use-user-organization'
 

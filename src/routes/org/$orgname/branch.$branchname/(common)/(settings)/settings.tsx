@@ -5,8 +5,9 @@ import { useAuthUserWithOrg } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import { GearIcon, PaintBrushIcon } from '@/components/icons'
+import { BuildingGearIcon, GearIcon, PaintBrushIcon } from '@/components/icons'
 import AppearanceSettings from '@/components/settings/appearance-settings'
+import BranchSettings from '@/components/settings/branch-settings'
 import UserOrganizationSettings from '@/components/settings/user-org-settings'
 import { Button } from '@/components/ui/button'
 
@@ -16,7 +17,7 @@ export const Route = createFileRoute(
     component: RouteComponent,
 })
 
-type TSettingPage = 'appearance' | 'my-settings'
+type TSettingPage = 'appearance' | 'my-settings' | 'branch-settings'
 
 function RouteComponent() {
     const {
@@ -51,11 +52,26 @@ function RouteComponent() {
                 >
                     <GearIcon className="inline mr-2" /> My Settings
                 </Button>
+                <Button
+                    onClick={() => setPage('branch-settings')}
+                    className={cn(
+                        'text-muted-foreground w-full justify-start',
+                        page === 'branch-settings' && 'text-primary'
+                    )}
+                    variant="ghost"
+                    size="sm"
+                >
+                    <BuildingGearIcon className="inline mr-2" /> Branch Settings
+                </Button>
             </div>
             {page === 'appearance' && <AppearanceSettings />}
             {page === 'my-settings' &&
                 ['employee', 'admin', 'owner'].includes(user_type) && (
                     <UserOrganizationSettings />
+                )}
+            {page === 'branch-settings' &&
+                ['employee', 'admin', 'owner'].includes(user_type) && (
+                    <BranchSettings />
                 )}
         </PageContainer>
     )
