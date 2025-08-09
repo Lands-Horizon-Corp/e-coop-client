@@ -172,7 +172,7 @@ export const useCreatePaymentTransaction = createMutationHook<
             payload.transactionId
         ),
     'Payment Transaction Created',
-    (args) => createMutationInvalidateFn(ENTITY_KEY, args)
+    (args) => createMutationInvalidateFn('general-ledger', args)
 )
 
 export const usecreateQuickTransactionPayment = createMutationHook<
@@ -189,7 +189,36 @@ export const usecreateQuickTransactionPayment = createMutationHook<
             mode: payload.mode,
         }),
     'Quick Transaction Payment Created',
-    (args) => createMutationInvalidateFn(ENTITY_KEY, args)
+    (args) => createMutationInvalidateFn('general-ledger', args)
+)
+
+export const useCreateTransactionWithPayment = createMutationHook<
+    IGeneralLedger,
+    string,
+    {
+        data: IPaymentRequest
+        transactionPayload: ITransactionRequest
+    }
+>(
+    async (payload) => {
+        const [error, result] = await withCatchAsync(
+            TransactionService.create(payload.transactionPayload)
+        )
+        if (error) {
+            const errorMessage = serverRequestErrExtractor({ error })
+            toast.error(errorMessage)
+            throw errorMessage
+        }
+        if (!result || !result.id) {
+            toast.error('Transaction creation failed')
+        }
+        return (
+            result &&
+            TransactionService.createPaymentTransaction(payload.data, result.id)
+        )
+    },
+    'Transaction Payment Created',
+    (args) => createMutationInvalidateFn('general-ledger', args)
 )
 
 export const useFilteredCurrentPaginatedTransaction = ({

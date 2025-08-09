@@ -56,6 +56,16 @@ const createQuickTransactionPayment = async ({
     >(`/api/v1/transaction/${mode}`, data)
     return response.data
 }
+const createTransactionPayment = async (
+    transactionId: string,
+    data: IPaymentRequest
+) => {
+    const response = await APIService.post<IPaymentRequest, IGeneralLedger>(
+        `/api/v1/transaction/${transactionId}/payment`,
+        data
+    )
+    return response.data
+}
 
 const updateReferenceNumber = async (
     transactionId: string,
@@ -109,4 +119,5 @@ export const TransactionService = {
     createQuickTransactionPayment,
     updateReferenceNumber,
     getPaginatedCurrentTransaction,
+    createTransactionPayment,
 }

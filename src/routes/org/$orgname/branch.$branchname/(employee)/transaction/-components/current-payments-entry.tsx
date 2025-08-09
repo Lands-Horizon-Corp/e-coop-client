@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { useFilteredPaginatedGeneralLedger } from '@/hooks/api-hooks/use-general-ledger'
@@ -45,6 +46,8 @@ type PaymentsEntryItemProps = {
     className?: string
     badge?: itemgBadgeTypeProps
     copyText?: string
+    labelClassName?: string
+    valueClassName?: string
 }
 
 const NoCurrentPayment = () => {
@@ -73,40 +76,54 @@ const NoCurrentPayment = () => {
 
 NoCurrentPayment.displayName = 'NoCurrentPayment'
 
-const PaymentsEntryItem = ({
+export const PaymentsEntryItem = ({
     icon,
     label,
     value,
     className,
     badge,
     copyText,
+    labelClassName,
+    valueClassName,
 }: PaymentsEntryItemProps) => {
     return (
-        <>
-            <div className={cn('my-1 flex w-full flex-grow', className)}>
-                <div className="flex gap-x-2">
-                    <span className="text-muted-foreground">{icon}</span>
-                    <p className="text-sm text-muted-foreground">{label}</p>
-                </div>
-                <div className="grow gap-x-2 text-end text-sm text-accent-foreground">
-                    {value}
-                    {badge && (
-                        <Badge
-                            className={cn('', badge.className)}
-                            variant={badge.type || 'default'}
-                        >
-                            {badge.text}
-                        </Badge>
+        <div className={cn('my-1 flex w-full flex-grow', className)}>
+            <div className="flex gap-x-2">
+                <span className="text-muted-foreground">{icon}</span>
+                <p
+                    className={cn(
+                        'text-sm text-muted-foreground',
+                        labelClassName
                     )}
-                    {copyText && (
-                        <CopyTextButton
-                            className="ml-2"
-                            textContent={value ?? ''}
-                        />
-                    )}
-                </div>
+                >
+                    {label}
+                </p>
             </div>
-        </>
+            <div className="grow gap-x-2 text-end text-sm text-accent-foreground">
+                <span
+                    className={cn(
+                        'text-sm text-muted-foreground',
+                        valueClassName
+                    )}
+                >
+                    {value}
+                </span>
+                {badge && (
+                    <Badge
+                        className={cn('', badge.className)}
+                        variant={badge.type || 'default'}
+                    >
+                        {badge.text}
+                    </Badge>
+                )}
+                {copyText && (
+                    <CopyTextButton
+                        className="ml-2"
+                        textContent={value ?? ''}
+                    />
+                )}
+            </div>
+        </div>
     )
 }
 
@@ -144,7 +161,7 @@ const CurrentPaymentsEntryList = ({
 }: CurrentPaymentsEntryListProps) => {
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
-        pageSize: 5,
+        pageSize: 50,
     })
 
     const { finalFilterPayload } = useFilterState({
@@ -173,9 +190,8 @@ const CurrentPaymentsEntryList = ({
     const hasPayments =
         generalLedgerBasedTransaction &&
         generalLedgerBasedTransaction.data.length > 0
-
     return (
-        <div className="min-h-42 max-h-[50vh] flex flex-col gap-y-2 shadow-md">
+        <div className="h-full flex flex-col gap-y-2 shadow-md">
             <div className="flex items-center gap-x-2">
                 <div className="to-indigo-background/10 flex-grow rounded-xl border-[0.1px] border-primary/30 bg-gradient-to-br from-primary/10 p-2">
                     <div className="flex items-center justify-between gap-x-2">
@@ -191,137 +207,107 @@ const CurrentPaymentsEntryList = ({
                     </div>
                 </div>
             </div>
-            <div
-                className="h-screen overflow-auto ecoop-scroll space-y-2"
-                aria-live="polite"
-            >
-                {hasPayments ? (
-                    generalLedgerBasedTransaction.data.map((payment, idx) => (
-                        <Card key={idx} className="!bg-background/90 p-2">
-                            <CardContent className={cn('w-full p-0 pr-1')}>
-                                <div className="flex w-full items-center gap-x-2">
-                                    <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                        <ReceiptTextIcon className="size-5" />
-                                    </div>
-                                    <div className="w-full">
-                                        <div className="b flex w-full items-center gap-x-2">
-                                            <p className="grow">
-                                                <span className="inline-flex items-center gap-x-2 text-sm font-semibold">
-                                                    {payment.account?.name}
-                                                    {/* <TrashIcon
-                                                        size={16}
-                                                        onClick={() => {
-                                                            onOpen({
-                                                                title: 'Remove Transaction',
-                                                                description: `Are you sure you want to delete this ${payment.account?.description} transaction?`,
-                                                                onConfirm:
-                                                                    () => {
-                                                                        deletePaymentByIndex(
-                                                                            idx
-                                                                        )
-                                                                    },
-                                                                confirmString:
-                                                                    'delete',
-                                                            })
-                                                        }}
-                                                        className="cursor-pointer"
-                                                    /> */}
-                                                </span>
-                                            </p>
-                                            <p className="text-primary">
-                                                ₱{' '}
-                                                {/* Using credit or debit for the amount */}
-                                                {commaSeparators(
-                                                    (
-                                                        payment.credit ||
-                                                        payment.debit ||
-                                                        0
-                                                    ).toString()
-                                                )}
-                                            </p>
-                                        </div>
-                                        <Accordion
-                                            type="single"
-                                            collapsible
-                                            className="w-full "
-                                        >
-                                            <AccordionItem
-                                                value="item-1"
-                                                className={cn('border-0')}
-                                            >
-                                                <AccordionTrigger
-                                                    className={cn(
-                                                        'py-0 text-xs'
-                                                    )}
+            <ScrollArea className="flex h-[60vh] max-h-[60vh] overflow-x-auto">
+                <div className="space-y-1.5">
+                    {hasPayments ? (
+                        generalLedgerBasedTransaction.data.map(
+                            (payment, idx) => (
+                                <Card
+                                    key={idx}
+                                    className="!bg-background/90 p-2"
+                                >
+                                    <CardContent
+                                        className={cn('w-full p-0 pr-1')}
+                                    >
+                                        <div className="flex w-full items-center gap-x-2">
+                                            <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                                <ReceiptTextIcon className="size-5" />
+                                            </div>
+                                            <div className="w-full">
+                                                <div className="b flex w-full items-center gap-x-2">
+                                                    <p className="grow">
+                                                        <span className="inline-flex items-center gap-x-2 text-sm font-semibold">
+                                                            {
+                                                                payment.account
+                                                                    ?.name
+                                                            }
+                                                        </span>
+                                                    </p>
+                                                    <p className="text-primary">
+                                                        ₱{' '}
+                                                        {commaSeparators(
+                                                            (
+                                                                payment.credit ||
+                                                                payment.debit ||
+                                                                0
+                                                            ).toString()
+                                                        )}
+                                                    </p>
+                                                </div>
+                                                <Accordion
+                                                    type="single"
+                                                    collapsible
+                                                    className="w-full "
                                                 >
-                                                    view details
-                                                </AccordionTrigger>
-                                                <AccordionContent className="py-2">
-                                                    <PaymentsEntryItem
-                                                        label="OR number"
-                                                        copyText={
-                                                            payment.reference_number
-                                                        }
-                                                        icon={<ReceiptIcon />}
-                                                        value={
-                                                            payment.reference_number
-                                                        }
-                                                    />
-                                                    <PaymentsEntryItem
-                                                        label="Payment type"
-                                                        icon={
-                                                            <FileTextIcon className="size-4 text-muted-foreground" />
-                                                        }
-                                                        value={
-                                                            payment.type_of_payment_type
-                                                        }
-                                                    />
-                                                    <PaymentsEntryItem
-                                                        label="Description"
-                                                        icon={
-                                                            <FileTextIcon className="size-4 text-muted-foreground" />
-                                                        }
-                                                        value={
-                                                            payment.description
-                                                        }
-                                                        className="italic"
-                                                    />
-                                                    {/* {payment.account && (
-                                                    <PaymentsEntryItem
-                                                        label="Print"
-                                                        icon={
-                                                            <PrinterIcon className="size-4" />
-                                                        }
-                                                        badge={{
-                                                            text: 'yes',
-                                                            type: 'outline',
-                                                            className:
-                                                                'py-0 bg-transparent text-primary border-primary',
-                                                        }}
-                                                    />
-                                                )} */}
-                                                    {/* {payment.notes && (
-                                                    <PaymentsEntryItem
-                                                        label="Notes"
-                                                        icon={
-                                                            <StickyNoteIcon className="size-4 text-muted-foreground" />
-                                                        }
-                                                        value={payment.notes}
-                                                        className="italic"
-                                                    />
-                                                )} */}
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        </Accordion>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))
-                ) : (
-                    <NoCurrentPayment />
-                )}
-            </div>
+                                                    <AccordionItem
+                                                        value="item-1"
+                                                        className={cn(
+                                                            'border-0'
+                                                        )}
+                                                    >
+                                                        <AccordionTrigger
+                                                            className={cn(
+                                                                'py-0 text-xs'
+                                                            )}
+                                                        >
+                                                            view details
+                                                        </AccordionTrigger>
+                                                        <AccordionContent className="py-2">
+                                                            <PaymentsEntryItem
+                                                                label="OR number"
+                                                                copyText={
+                                                                    payment.reference_number
+                                                                }
+                                                                icon={
+                                                                    <ReceiptIcon />
+                                                                }
+                                                                value={
+                                                                    payment.reference_number
+                                                                }
+                                                            />
+                                                            <PaymentsEntryItem
+                                                                label="Payment type"
+                                                                icon={
+                                                                    <FileTextIcon className="size-4 text-muted-foreground" />
+                                                                }
+                                                                value={
+                                                                    payment.type_of_payment_type
+                                                                }
+                                                            />
+                                                            <PaymentsEntryItem
+                                                                label="Description"
+                                                                icon={
+                                                                    <FileTextIcon className="size-4 text-muted-foreground" />
+                                                                }
+                                                                value={
+                                                                    payment.description
+                                                                }
+                                                                className="italic"
+                                                            />
+                                                        </AccordionContent>
+                                                    </AccordionItem>
+                                                </Accordion>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            )
+                        )
+                    ) : (
+                        <NoCurrentPayment />
+                    )}
+                </div>
+            </ScrollArea>
             <MiniPaginationBar
                 pagination={{
                     pageIndex: pagination.pageIndex,
