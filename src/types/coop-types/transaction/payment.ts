@@ -1,17 +1,5 @@
 import { TEntityId } from '@/types'
 
-export const IPaymentSource = [
-    'withdraw',
-    'deposit',
-    'journal',
-    'payment',
-    'adjustment',
-    'check',
-    'voucher',
-] as const
-
-export type TPaymentSource = (typeof IPaymentSource)[number]
-
 export interface IPaymentRequest {
     amount: number
 
@@ -46,5 +34,3 @@ export interface IPaymentQuickRequest {
     reference_number: string
     or_auto_generated?: boolean
 }
-
-

@@ -4,19 +4,17 @@ import { z } from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { cn } from '@/lib'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import {
     usePaymentsDataStore,
     usePaymentsModalStore,
 } from '@/store/transaction/payments-entry-store'
-import { PopoverTrigger } from '@radix-ui/react-popover'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 
 import PageContainer from '@/components/containers/page-container'
 import { DisbursementTransactionCreateFormModal } from '@/components/forms/disbursement-transaction-create-form'
-import { DotsVerticalIcon, MoneyIcon, XIcon } from '@/components/icons'
+import { MoneyIcon, XIcon } from '@/components/icons'
 import MemberAccountingLedger from '@/components/member-infos/member-accounts-loans/member-accounting-ledger'
 import MemberPicker from '@/components/pickers/member-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -24,13 +22,11 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Label } from '@/components/ui/label'
-import { Popover, PopoverContent } from '@/components/ui/popover'
 import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { useShortcut } from '@/components/use-shorcuts'
 
@@ -44,18 +40,16 @@ import { IGeneralLedger, IMemberJointAccount, TEntityId } from '@/types'
 import TransactionPaymentEntryModal from '../../../../../../components/forms/transaction-forms/create-payments-entry-form'
 import QuickTransactionEntryModal from '../../../../../../components/forms/transaction-forms/quick-create-payment-transaction-form'
 import CurrentPaymentsEntry from './-components/current-payments-entry'
+import TransactionCardList from './-components/current-transaction'
 import MemberProfileTransactionView from './-components/member-profile-view-card'
 import NoMemberSelectedView from './-components/no-member-selected-view'
 import PaymentSuccessModal from './-components/payment-succes-modal'
 import ReferenceNumber from './-components/reference-number-field'
 import TransactionActions from './-components/transaction-actions'
-import { Drawer } from '@/components/ui/drawer'
-import TransactionCardList from './-components/current-transaction'
 
 const updateTransactionOR = z.object({
     reference_number: z.string().min(1, 'Reference number is required'),
     description: z.string().max(250, 'Description is required'),
-    or_auto_generated: z.boolean().default(false),
 })
 
 type FormValues = z.infer<typeof updateTransactionOR>
@@ -135,6 +129,7 @@ function RouteComponent() {
     const description = transaction?.description || ''
 
     const onSubmit = form.handleSubmit((values: FormValues) => {
+        console.log('onSubmit', values)
         if (transaction) {
             updateReferenceNumber({
                 transactionId: transaction.id,
@@ -239,11 +234,11 @@ function RouteComponent() {
         })
     }
     const hasSelectedMember = !!selectedMember
-    const hasNoTransactionId = !transactionId
     const hasSelectedTransactionId = !!transactionId
 
     const referenceNotEqual = form.watch('reference_number') !== referenceNumber
     const descriptionNotEqual = form.watch('description') !== description
+    console.log(form.formState.errors)
 
     const quickPaymentTitle = (
         <div className="flex items-center">
@@ -253,7 +248,7 @@ function RouteComponent() {
     )
 
     return (
-        <PageContainer className="flex max-h-fit h-[100vh] items-center w-full">
+        <PageContainer className="flex h-[90vh] items-center w-full !overflow-y-hidden">
             <div className="hidden">
                 <MemberPicker
                     modalState={{
@@ -286,7 +281,6 @@ function RouteComponent() {
                     transactionId: transactionId,
                     onSuccessPayment(transaction) {
                         setOpenPaymentsEntryModal(false)
-
                         queryClient.invalidateQueries({
                             queryKey: [
                                 'member-accounting-ledger',
@@ -297,6 +291,11 @@ function RouteComponent() {
                         queryClient.invalidateQueries({
                             queryKey: ['get-transaction-by-id', transactionId],
                         })
+
+                        queryClient.invalidateQueries({
+                            queryKey: ['current-transaction-list'],
+                        })
+
                         setSelectedMember(transaction.member_profile)
                         handleOnSuccessPaymentCallBack(transaction)
                         handleSetTransactionId(transactionId)
@@ -309,9 +308,15 @@ function RouteComponent() {
                                 'resource-query',
                             ],
                         })
+
                         queryClient.invalidateQueries({
                             queryKey: ['get-transaction-by-id', transactionId],
                         })
+
+                        queryClient.invalidateQueries({
+                            queryKey: ['current-transaction-list'],
+                        })
+
                         setSelectedMember(transaction.member_profile)
                         handleSetTransactionId(transaction.transaction_id)
                         handleOnSuccessPaymentCallBack(transaction)
@@ -354,21 +359,23 @@ function RouteComponent() {
                 open={openDisbursementEntryModal}
                 onOpenChange={setOpenDisbursementEntryModal}
                 formProps={{
-                    // disbursementId: transaction?.disbursement_id,
                     onSuccess() {
                         setOpenDisbursementEntryModal(false)
                         setSelectedMember(null)
                     },
                 }}
             />
-            <div className="flex w-full h-full">
-                <ResizablePanelGroup direction="vertical" className="grow">
+            <div className="flex h-full w-full over-flow-y-auto ">
+                <ResizablePanelGroup
+                    direction="vertical"
+                    className="grow px-5 flex !overflow-y-auto"
+                >
                     <ResizablePanel
-                        defaultSize={50}
-                        maxSize={50}
-                        className="p-2"
+                        defaultSize={45}
+                        maxSize={45}
+                        className="p-2 !h-fit !overflow-y-auto ecoop-scroll"
                     >
-                        <div className="flex w-full min-w-[30vw] flex-col gap-y-2">
+                        <div className="flex w-full flex-col gap-y-2">
                             <NoMemberSelectedView
                                 onClick={(e) => {
                                     e.preventDefault()
@@ -383,13 +390,11 @@ function RouteComponent() {
                                     setOpenMemberPicker(true)
                                 }}
                                 hasTransaction={hasSelectedTransactionId}
-                                // onSelectedJointMember={handleSelectedJointMember}
                             />
                             <Form {...form}>
                                 <form onSubmit={onSubmit} className="min-h-fit">
-                                    <div className="flex  items-center h-[75px] px-2 w-full">
+                                    <div className="flex  items-center h-fit space-x-2 w-full">
                                         <FormFieldWrapper
-                                            className=" h-full "
                                             control={form.control}
                                             name="reference_number"
                                             labelClassName="text-xs font-medium text-muted-foreground"
@@ -443,86 +448,74 @@ function RouteComponent() {
                                                 </div>
                                             )}
                                         />
-                                        <Popover>
-                                            <PopoverTrigger
-                                                disabled={hasNoTransactionId}
-                                                className="flex flex-col justify-end h-full"
-                                            >
-                                                <DotsVerticalIcon
-                                                    size={20}
-                                                    className={cn(
-                                                        'h-1/2 hover:bg-secondary  rounded-sm ml-1 cursor-pointer',
-                                                        hasNoTransactionId &&
-                                                            'opacity-50 pointer-events-none'
-                                                    )}
-                                                />
-                                            </PopoverTrigger>
-                                            <PopoverContent className="flex w-full space-x-2">
-                                                <FormFieldWrapper
-                                                    control={form.control}
-                                                    name="description"
-                                                    className="grow "
-                                                    label="Description"
-                                                    labelClassName="text-xs font-medium text-muted-foreground"
-                                                    render={({ field }) => (
-                                                        <div className="flex space-x-2 ">
-                                                            <Textarea
-                                                                {...field}
-                                                                id={field.name}
-                                                                value={
-                                                                    field.value ||
-                                                                    description ||
-                                                                    ''
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            name="description"
+                                            className="grow h-full translate-y-1"
+                                            label="Description"
+                                            labelClassName="text-xs font-medium text-muted-foreground"
+                                            render={({ field }) => (
+                                                <div className="flex space-x-2 ">
+                                                    <Textarea
+                                                        {...field}
+                                                        id={field.name}
+                                                        disabled={
+                                                            !hasSelectedTransactionId
+                                                        }
+                                                        value={
+                                                            field.value ||
+                                                            description ||
+                                                            ''
+                                                        }
+                                                        autoComplete="off"
+                                                        className="grow h-10 min-h-10 resize-none"
+                                                        placeholder="Description"
+                                                    />
+                                                    {hasSelectedTransactionId && (
+                                                        <div className="flex space-x-1">
+                                                            <Button
+                                                                variant="destructive"
+                                                                className=""
+                                                                disabled={
+                                                                    !referenceNotEqual &&
+                                                                    !descriptionNotEqual
                                                                 }
-                                                                autoComplete="off"
-                                                                className="grow h-10 min-h-10 resize-none"
-                                                                placeholder="Description"
-                                                            />
-                                                            <div className="flex space-x-1">
+                                                                size="icon"
+                                                                onClick={() =>
+                                                                    handleResetForm()
+                                                                }
+                                                            >
+                                                                <XIcon className="" />
+                                                            </Button>
+                                                            {(referenceNotEqual ||
+                                                                descriptionNotEqual) && (
                                                                 <Button
-                                                                    variant="destructive"
+                                                                    variant="secondary"
                                                                     className=""
+                                                                    type="submit"
                                                                     disabled={
-                                                                        !referenceNotEqual &&
-                                                                        !descriptionNotEqual
-                                                                    }
-                                                                    size="icon"
-                                                                    onClick={() =>
-                                                                        handleResetForm()
+                                                                        isLoadingUpdateReferenceNumber
                                                                     }
                                                                 >
-                                                                    <XIcon className="" />
+                                                                    {isLoadingUpdateReferenceNumber ? (
+                                                                        <LoadingSpinner className="animate-spin" />
+                                                                    ) : (
+                                                                        'save'
+                                                                    )}
                                                                 </Button>
-                                                                {(referenceNotEqual ||
-                                                                    descriptionNotEqual) && (
-                                                                    <Button
-                                                                        variant="secondary"
-                                                                        className=""
-                                                                        type="submit"
-                                                                        disabled={
-                                                                            isLoadingUpdateReferenceNumber
-                                                                        }
-                                                                    >
-                                                                        {isLoadingUpdateReferenceNumber ? (
-                                                                            <LoadingSpinner className="animate-spin" />
-                                                                        ) : (
-                                                                            'save'
-                                                                        )}
-                                                                    </Button>
-                                                                )}
-                                                            </div>
+                                                            )}
                                                         </div>
                                                     )}
-                                                />
-                                            </PopoverContent>
-                                        </Popover>
+                                                </div>
+                                            )}
+                                        />
                                     </div>
                                 </form>
                             </Form>
                         </div>
                     </ResizablePanel>
                     <ResizableHandle withHandle />
-                    <ResizablePanel defaultSize={50} className="p-2">
+                    <ResizablePanel className="p-2 h-full !overflow-y-auto ecoop-scroll">
                         <div className="w-full p-2">
                             {selectedMember && (
                                 <MemberAccountingLedger
@@ -532,8 +525,8 @@ function RouteComponent() {
                         </div>
                     </ResizablePanel>
                 </ResizablePanelGroup>
-                <ScrollArea className="ecoop-scroll w-[70%] overflow-auto py-2">
-                   <TransactionCardList />
+                <div className="ecoop-scroll w-[40%] py-2">
+                    <TransactionCardList fullPath={Route.fullPath} />
                     <TransactionActions
                         paymentLabel="Add Payment"
                         paymentOnClick={() => {
@@ -582,7 +575,7 @@ function RouteComponent() {
                         totalAmount={transaction?.amount}
                         transactionId={transactionId}
                     />
-                </ScrollArea>
+                </div>
             </div>
         </PageContainer>
     )

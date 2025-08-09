@@ -1,5 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/lib'
@@ -39,7 +37,7 @@ import {
     IMedia,
     IPaymentRequest,
     TEntityId,
-    TPaymentSource,
+    TGeneralLedgerSource,
 } from '@/types'
 
 import AmountField from '../../../routes/org/$orgname/branch.$branchname/(employee)/transaction/-components/amount-field'
@@ -112,7 +110,7 @@ const PaymentsEntryForm = ({
                     member_profile_id: memberProfileId,
                     member_joint_account_id: memberJointId,
                     is_reference_number_checked: isReferenceNumberCheck,
-                    source: 'payment' as TPaymentSource,
+                    source: 'payment' as TGeneralLedgerSource,
                     description: description,
                 }
                 createPaymentWithTransaction({
@@ -131,6 +129,7 @@ const PaymentsEntryForm = ({
         <Form {...form}>
             <form onSubmit={handleSubmit}>
                 <FormErrorMessage
+                    className="mb-2"
                     errorMessage={
                         createPaymentWithTransactionError
                             ? createPaymentWithTransactionError

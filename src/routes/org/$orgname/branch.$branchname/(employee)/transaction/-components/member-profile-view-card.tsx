@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useImagePreview } from '@/store/image-preview-store'
 
 import CopyWrapper from '@/components/elements/copy-wrapper'
@@ -53,11 +52,10 @@ const MemberProfileTransactionView = ({
     memberInfo,
     onSelectMember,
     onSelectedJointMember,
-    hasTransaction
+    hasTransaction,
 }: MemberProfileTransactionViewProps) => {
     const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
-    const { onOpen: onOpenConfirmModal } = useConfirmModalStore()
 
     const [selectedJointMember, setSelectedJointMember] =
         useState<IMemberJointAccount | null>(null)
@@ -83,7 +81,7 @@ const MemberProfileTransactionView = ({
         }
     }
 
-    if(!memberInfo) return null
+    if (!memberInfo) return null
 
     return (
         <>

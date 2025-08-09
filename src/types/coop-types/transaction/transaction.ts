@@ -7,26 +7,30 @@ import {
     ITransactionBatch,
     IUserBase,
     TEntityId,
-    TPaymentSource,
+    TGeneralLedgerSource,
 } from '@/types'
+
+import { IAccount } from '../accounts/account'
 
 export interface ITransactionRequest {
     signature_media_id?: TEntityId
-    
+
     member_profile_id?: TEntityId
     member_joint_account_id?: TEntityId
 
     is_reference_number_checked?: boolean
     reference_number?: string
-    source?: TPaymentSource
+    source?: TGeneralLedgerSource
     description?: string
 }
 
 export interface ITransactionResponse extends IBaseEntityMeta {
     amount: number
-    source: TPaymentSource
+    source: TGeneralLedgerSource
     description: string
 
+    acccount_id: TEntityId
+    account: IAccount
     signature_media_id: TEntityId
     signature_media: IMedia | null
 
