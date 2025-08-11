@@ -18,7 +18,6 @@ export const TransactionEntrySchema = z.object({
     payment_type_id: TEntityId.min(1, 'Payment type is required'),
 
     description: descriptionSchema
-        .max(255, 'Max 255 character description')
         .transform(descriptionTransformerSanitizer)
         .optional(),
     //for viewing
