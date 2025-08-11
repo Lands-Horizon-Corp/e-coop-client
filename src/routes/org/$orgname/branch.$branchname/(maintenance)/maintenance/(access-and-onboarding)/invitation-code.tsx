@@ -7,7 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { InivationCodeFormModal } from '@/components/forms/inivitation-code-create-update.form'
 import InvitationCodeTable from '@/components/tables/invitation-code-table'
-import InvitationCodeAction from '@/components/tables/invitation-code-table/action'
+import InvitationCodeAction from '@/components/tables/invitation-code-table/row-action-context'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 

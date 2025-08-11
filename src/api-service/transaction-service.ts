@@ -22,9 +22,7 @@ const TransactionCrudServices = createAPICrudService<
 >('/api/v1/transaction')
 
 const TransactionSearchServices =
-    createAPICollectionService<ITransactionResponse>(
-        '/api/v1/transaction/search'
-    )
+    createAPICollectionService<ITransactionResponse>('/api/v1/transaction')
 
 const createPaymentTransaction = async (
     data: IPaymentRequest,

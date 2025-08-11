@@ -29,6 +29,7 @@ import memberOccupationColumns, {
     IMemberOccupationTableColumnProps,
     memberOccupationGlobalSearchTargets,
 } from './columns'
+import { MemberOccupationRowContext } from './row-action-context'
 
 export interface MemberOccupationTableProps
     extends TableProps<IMemberOccupation>,
@@ -50,7 +51,12 @@ const MemberOccupationTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = MemberOccupationRowContext,
 }: MemberOccupationTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -184,7 +190,12 @@ const MemberOccupationTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

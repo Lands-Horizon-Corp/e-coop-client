@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import TimesheetTable from '@/components/tables/timesheet-table'
-import TimesheetTableAction from '@/components/tables/timesheet-table/action'
+import TimesheetTableAction from '@/components/tables/timesheet-table/row-action-context'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 

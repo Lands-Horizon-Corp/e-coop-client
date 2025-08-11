@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import FootstepTable from '@/components/tables/footsteps-table'
-import FootstepTableAction from '@/components/tables/footsteps-table/action'
+import FootstepTableAction from '@/components/tables/footsteps-table/row-action-context'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 

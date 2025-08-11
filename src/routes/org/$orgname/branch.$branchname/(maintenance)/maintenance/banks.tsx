@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { BankCreateUpdateFormModal } from '@/components/forms/bank-create-update-form'
 import BankTable from '@/components/tables/bank-table'
-import BankAction from '@/components/tables/bank-table/action'
+import BankAction from '@/components/tables/bank-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

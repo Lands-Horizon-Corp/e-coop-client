@@ -32,6 +32,7 @@ import CheckEntryTableColumns, {
     ICheckEntryTableColumnProps,
     checkEntryGlobalSearchTargets,
 } from './columns'
+import { CheckEntryRowContext } from './row-action-context'
 
 export interface CheckEntryTableProps
     extends TableProps<ICheckEntry>,
@@ -53,7 +54,12 @@ const CheckEntryTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = CheckEntryRowContext,
 }: CheckEntryTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -181,7 +187,12 @@ const CheckEntryTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

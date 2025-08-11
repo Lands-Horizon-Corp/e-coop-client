@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import CheckEntryTable from '@/components/tables/check-entry-table'
-import CheckEntryTableAction from '@/components/tables/check-entry-table/action'
+import CheckEntryTableAction from '@/components/tables/check-entry-table/row-action-context'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/check-entry'

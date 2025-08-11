@@ -27,7 +27,7 @@ export interface IMemberAccountingLedgerTableActionComponentProp {
 export interface IMemberAccountingLedgerTableColumnProps {
     actionComponent?: (
         props: IMemberAccountingLedgerTableActionComponentProp
-    ) => {}
+    ) => void
 }
 
 const MemberAccountingLedgerColumns =

@@ -34,6 +34,7 @@ import MemberTypeReferenceTableColumns, {
     IMemberTypeReferenceTableColumnProps,
     memberTypeReferenceGlobalSearchTargets,
 } from './columns'
+import { MemberTypeReferenceRowContext } from './row-action-context'
 
 export interface MemberTypeReferenceTableProps
     extends TableProps<IMemberTypeReference>,
@@ -67,7 +68,12 @@ const MemberTypeReferenceTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = MemberTypeReferenceRowContext,
 }: TMemberTypeReferenceTableProps & { memberTypeId?: TEntityId }) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -189,7 +195,12 @@ const MemberTypeReferenceTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

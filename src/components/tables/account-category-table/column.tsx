@@ -11,7 +11,7 @@ import { PushPinSlashIcon } from '@/components/icons'
 import RawDescription from '@/components/raw-description'
 import { Checkbox } from '@/components/ui/checkbox'
 
-import AccountCategoryAction from './action'
+import AccountCategoryAction from './row-action-context'
 
 export const AccountCategoryGlobalSearchTargets: IGlobalSearchTargets<IAccountCategory>[] =
     [

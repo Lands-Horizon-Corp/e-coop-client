@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import CashCountTable from '@/components/tables/cash-count-table'
-import CashCountTableAction from '@/components/tables/cash-count-table/action'
+import CashCountTableAction from '@/components/tables/cash-count-table/row-action-context'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 

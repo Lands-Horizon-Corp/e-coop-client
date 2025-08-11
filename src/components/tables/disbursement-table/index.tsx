@@ -29,6 +29,7 @@ import DisbursementTableColumns, {
     IDisbursementTableColumnProps,
     disbursementGlobalSearchTargets,
 } from './columns'
+import { DisbursementRowContext } from './row-action-context'
 
 export interface DisbursementTableProps
     extends TableProps<IDisbursement>,
@@ -50,7 +51,12 @@ const DisbursementTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = DisbursementRowContext,
 }: DisbursementTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -173,7 +179,12 @@ const DisbursementTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

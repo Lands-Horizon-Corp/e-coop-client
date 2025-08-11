@@ -29,6 +29,7 @@ import HolidayTableColumns, {
     IHolidayTableColumnProps,
     holidayGlobalSearchTargets,
 } from './columns'
+import { HolidayRowContext } from './row-action-context'
 
 interface HolidayTableProps
     extends TableProps<IHoliday>,
@@ -50,7 +51,12 @@ const HolidaysTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = HolidayRowContext,
 }: HolidayTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -178,7 +184,12 @@ const HolidaysTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

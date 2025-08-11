@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { AccountCreateUpdateFormModal } from '@/components/forms/accounting-forms/account-create-update-form'
 import AccountsTable from '@/components/tables/account-table'
-import AccountTableAction from '@/components/tables/account-table/action'
+import AccountTableAction from '@/components/tables/account-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 

@@ -77,6 +77,7 @@ export * from './transaction-entry'
 
 export * from './loan-types'
 export * from './disbursement'
+export * from './account-category'
 export * from './disbursement-transaction'
 
 /* Ledgers */

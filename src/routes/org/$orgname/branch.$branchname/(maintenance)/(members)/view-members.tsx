@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { MemberProfileQuickCreateFormModal } from '@/components/forms/member-forms/member-profile-quick-create-form'
 import MemberProfileTable from '@/components/tables/member/members-profile-table'
-import MemberProfileTableEmployeeAction from '@/components/tables/member/members-profile-table/action'
+import MemberProfileTableEmployeeAction from '@/components/tables/member/members-profile-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

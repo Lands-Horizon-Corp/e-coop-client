@@ -28,6 +28,7 @@ import LoanPurposeTableColumns, {
     ILoanPurposeTableColumnProps,
     loanPurposeGlobalSearchTargets,
 } from './columns'
+import { LoanPurposeRowContext } from './row-action-context'
 
 export interface LoanPurposeTableProps
     extends TableProps<ILoanPurpose>,
@@ -49,7 +50,12 @@ const LoanPurposeTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = LoanPurposeRowContext,
 }: LoanPurposeTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -172,7 +178,12 @@ const LoanPurposeTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

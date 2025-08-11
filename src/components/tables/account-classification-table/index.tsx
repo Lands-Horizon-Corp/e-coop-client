@@ -31,6 +31,7 @@ import AccountClassificationTableColumns, {
     AccountClassificationGlobalSearchTargets,
     IAccountClassificationTableColumnProps,
 } from './column'
+import { AccountClassificationRowContext } from './row-action-context'
 
 export interface AccountClassificationTableProps
     extends TableProps<IAccountClassification>,
@@ -52,7 +53,12 @@ const AccountClassificationTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = AccountClassificationRowContext,
 }: AccountClassificationTableProps) => {
     const queryClient = useQueryClient()
     const {
@@ -198,7 +204,12 @@ const AccountClassificationTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

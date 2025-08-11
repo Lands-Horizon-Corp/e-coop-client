@@ -29,13 +29,19 @@ import memberClassificationColumns, {
     IMemberClassificationTableColumnProps,
     memberClassificationGlobalSearchTargets,
 } from './columns'
+import { MemberClassificationRowContext } from './row-action-context'
 
 const MemberClassificationTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = MemberClassificationRowContext,
 }: TableProps<IMemberClassification> &
     IMemberClassificationTableColumnProps & {
         toolbarProps?: Omit<
@@ -186,7 +192,12 @@ const MemberClassificationTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

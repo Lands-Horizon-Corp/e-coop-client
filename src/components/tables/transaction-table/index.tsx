@@ -15,7 +15,7 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 
 import {
-    TPaginatedTransactionHookMode,
+    TTransactionMode,
     useFilteredPaginatedTransaction,
 } from '@/hooks/api-hooks/use-transaction'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
@@ -29,6 +29,7 @@ import TransactionTableColumns, {
     ITransactionTableColumnProps,
     transactionGlobalSearchTargets,
 } from './columns'
+import { TransactionRowContext } from './row-action-context'
 
 export interface TransactionTableProps
     extends TableProps<ITransactionResponse>,
@@ -43,7 +44,7 @@ export interface TransactionTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
-    mode: TPaginatedTransactionHookMode
+    mode: TTransactionMode
 }
 
 export type TTransactionProps = TransactionTableProps &
@@ -77,8 +78,12 @@ const TransactionTable = ({
     userId,
     transactionBatchId,
     onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
+    RowContextComponent = TransactionRowContext,
 }: TTransactionProps & {
     memberProfileId?: TEntityId
     userId?: TEntityId
@@ -203,7 +208,11 @@ const TransactionTable = ({
                     isStickyFooter
                     className="mb-2"
                     onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

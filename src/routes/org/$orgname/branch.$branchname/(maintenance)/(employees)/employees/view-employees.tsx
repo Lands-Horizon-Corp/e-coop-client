@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import EmployeesTable from '@/components/tables/employees-table'
-import EmployeesAction from '@/components/tables/employees-table/action'
+import EmployeesAction from '@/components/tables/employees-table/row-action-context'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees'

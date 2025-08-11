@@ -4,7 +4,7 @@ import { cn } from '@/lib'
 
 import { AutomaticLoanDeductionCreateUpdateFormModal } from '@/components/forms/loan/automatic-loan-deduction-entry-create-update-form'
 import AutomaticLoanDeductionTable from '@/components/tables/loan-tables/automatic-loan-deductions-table'
-import AutomaticLoanDeductionAction from '@/components/tables/loan-tables/automatic-loan-deductions-table/action'
+import AutomaticLoanDeductionAction from '@/components/tables/loan-tables/automatic-loan-deductions-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 

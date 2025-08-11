@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { TagTemplateCreateUpdateFormModal } from '@/components/forms/tag-template-create-update-form'
 import TagTemplateTable from '@/components/tables/tag-template-table'
-import TagTemplateAction from '@/components/tables/tag-template-table/action'
+import TagTemplateAction from '@/components/tables/tag-template-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

@@ -29,6 +29,7 @@ import GeneralLedgerTableColumns, {
     IGeneralLedgerTableColumnProps,
     generalLedgerGlobalSearchTargets,
 } from './columns'
+import { GeneralLedgerRowContext } from './row-action-context'
 
 export interface GeneralLedgerTableProps
     extends TableProps<IGeneralLedger>,
@@ -87,8 +88,12 @@ const GeneralLedgerTable = ({
     excludeColumnIds,
     defaultColumnSort,
     onRowClick = () => {},
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
+    RowContextComponent = GeneralLedgerRowContext,
     ...modeProps
 }: TGeneralLedgerTableProps & {
     userOrganizationId?: TEntityId
@@ -211,7 +216,11 @@ const GeneralLedgerTable = ({
                     isStickyFooter
                     className="mb-2"
                     onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={tableState.isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={tableState.setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

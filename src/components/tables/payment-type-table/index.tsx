@@ -29,6 +29,7 @@ import {
     PaymentTypeGlobalSearchTargets,
     PaymentTypeTableColumns,
 } from './column'
+import { PaymentTypeRowContext } from './row-action-context'
 
 export interface PaymentTypeTableProps
     extends TableProps<IPaymentType>,
@@ -50,7 +51,12 @@ export const PaymentTypeTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = PaymentTypeRowContext,
 }: PaymentTypeTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -182,7 +188,12 @@ export const PaymentTypeTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

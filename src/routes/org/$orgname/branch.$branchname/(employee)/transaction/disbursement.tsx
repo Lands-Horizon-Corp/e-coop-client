@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { DisbursementCreateUpdateFormModal } from '@/components/forms/disbursement-create-update-form'
 import DisbursementTable from '@/components/tables/disbursement-table'
-import DisbursementTableAction from '@/components/tables/disbursement-table/action'
+import DisbursementTableAction from '@/components/tables/disbursement-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
