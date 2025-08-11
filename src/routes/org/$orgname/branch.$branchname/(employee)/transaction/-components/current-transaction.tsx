@@ -10,13 +10,16 @@ import { PaginationState } from '@tanstack/react-table'
 import { FileText } from 'lucide-react'
 
 import { LedgerSourceBadge } from '@/components/badges/ledger-source-badge'
+import { HistoryIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useShortcut } from '@/components/use-shorcuts'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useFilteredCurrentPaginatedTransaction } from '@/hooks/api-hooks/use-transaction'
@@ -346,6 +349,15 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
         setOnOpen(false)
     }
 
+    useShortcut(
+        'h',
+        () => {
+            setOnOpen(true)
+        },
+        {
+            disableTextInputs: true,
+        }
+    )
     if (isLoadingCurrentTransaction) {
         return (
             <div className="space-y-4">
@@ -360,9 +372,19 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
         !CurrentTransaction || CurrentTransaction.data.length === 0
 
     return (
-        <div>
+        <div className="flex w-full flex-row items-center justify-between ">
             <Sheet open={onOpen} onOpenChange={setOnOpen}>
-                <SheetTrigger>History</SheetTrigger>
+                <SheetTrigger asChild className="">
+                    <Button
+                        variant="ghost"
+                        className=""
+                        size="sm"
+                        onClick={() => setOnOpen(true)}
+                    >
+                        <HistoryIcon className="mr-2" />
+                        History
+                    </Button>
+                </SheetTrigger>
                 <SheetContent className=" min-w-full max-w-[500px] md:min-w-[600px]">
                     <div className="overflow-y-auto ecoop-scroll">
                         <ScrollArea>
@@ -414,6 +436,9 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
                     </div>
                 </SheetContent>
             </Sheet>
+            <p className="text-[min(10px,1rem)] text-muted-foreground/50 text-end">
+                F1 - payment | F2 - deposit | F3 - withdraw | Esc - reset
+            </p>
         </div>
     )
 }

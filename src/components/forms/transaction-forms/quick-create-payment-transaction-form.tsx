@@ -26,7 +26,7 @@ import {
 } from '@/validations/transactions/payment-transaction-entry-schema'
 
 import { useGetAllpaymentTypes } from '@/hooks/api-hooks/use-payment-type'
-import { usecreateQuickTransactionPayment } from '@/hooks/api-hooks/use-transaction'
+import { useCreateQuickTransactionPayment } from '@/hooks/api-hooks/use-transaction'
 
 import {
     IClassProps,
@@ -66,45 +66,19 @@ const QuickPaymentEntryForm = ({
         mutate: creatTransactionDeposit,
         isPending,
         error,
-    } = usecreateQuickTransactionPayment({ onSuccess })
+    } = useCreateQuickTransactionPayment({ onSuccess })
 
     const { data: paymentTypes } = useGetAllpaymentTypes()
 
     const handleSubmit = form.handleSubmit(
-        async (data: QuickPaymentTransactionFormValues) => {
-            const {
-                account_id,
-                amount,
-                payment_type_id,
-                description,
-                member_profile_id,
-                member_joint_account_id,
-                entry_date,
-                or_auto_generated,
-                bank_id,
-                proof_of_payment_media_id,
-                reference_number,
-                bank_reference_number,
-            } = data
-
+        (data: QuickPaymentTransactionFormValues) => {
             if (focusTypePayment) {
-                await creatTransactionDeposit({
+                creatTransactionDeposit({
                     data: {
-                        amount,
-                        signature_media_id: data.signature.id,
-                        proof_of_payment_media_id,
-                        bank_id,
-                        bank_reference_number,
-                        entry_date: entry_date
-                            ? new Date(entry_date).toISOString()
+                        ...data,
+                        entry_date: data.entry_date
+                            ? new Date(data.entry_date).toISOString()
                             : undefined,
-                        account_id,
-                        payment_type_id,
-                        description,
-                        member_profile_id,
-                        member_joint_account_id,
-                        reference_number,
-                        or_auto_generated,
                     },
                     mode: focusTypePayment,
                 })

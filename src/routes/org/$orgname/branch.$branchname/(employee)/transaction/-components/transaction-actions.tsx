@@ -1,7 +1,11 @@
 import { payment_bg } from '@/assets/transactions'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { MoneyIcon } from '@/components/icons'
+import {
+    OutlinePaymentIcon,
+    PiHandDepositIcon,
+    PiHandWithdrawIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 interface actionItemsProps {
@@ -70,19 +74,19 @@ const TransactionActions = ({
             <ActionTransactionItem
                 onClick={paymentOnClick}
                 label={paymentLabel}
-                icon={<MoneyIcon />}
+                icon={<OutlinePaymentIcon />}
                 buttonProps={PaymentButtonProps}
             />
             <ActionTransactionItem
                 onClick={depositOnClick}
                 label={depositLabel}
-                icon={<MoneyIcon />}
+                icon={<PiHandDepositIcon />}
                 buttonProps={DepositButtonProps}
             />
             <ActionTransactionItem
                 onClick={withdrawOnClick}
                 label={widthdrawLabel}
-                icon={<MoneyIcon />}
+                icon={<PiHandWithdrawIcon />}
                 buttonProps={withdrawButtonProps}
             />
         </div>

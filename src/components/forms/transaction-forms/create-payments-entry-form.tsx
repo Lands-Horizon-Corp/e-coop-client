@@ -58,6 +58,7 @@ interface TransactionEntryFormProps
     description?: string
     transactionId?: TEntityId
     onSuccessPayment: (transaction: IGeneralLedger) => void
+    selectedAccountId?: TEntityId | null
 }
 
 const PaymentsEntryForm = ({
@@ -94,13 +95,15 @@ const PaymentsEntryForm = ({
 
     const handleSubmit = form.handleSubmit(
         (data: TransactionEntryFormValues) => {
+            const entryDate = data.entry_date
+                ? new Date(data.entry_date).toISOString()
+                : undefined
+
             if (transactionId) {
                 createPayment({
                     data: {
                         ...data,
-                        entry_date: new Date(
-                            data.entry_date ?? new Date()
-                        ).toISOString(),
+                        entry_date: entryDate,
                     },
                     transactionId: transactionId,
                 })
@@ -112,9 +115,10 @@ const PaymentsEntryForm = ({
                     is_reference_number_checked: isReferenceNumberCheck,
                     source: 'payment' as TGeneralLedgerSource,
                     description: description,
+                    entry_date: entryDate,
                 }
                 createPaymentWithTransaction({
-                    data: data as IPaymentRequest,
+                    data: { ...data, entry_date: entryDate },
                     transactionPayload,
                 })
             }
@@ -289,7 +293,7 @@ const PaymentsEntryForm = ({
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="signature"
+                        name="signature_media_id"
                         label="Signature"
                         render={({ field }) => {
                             const value = form.watch('signature')

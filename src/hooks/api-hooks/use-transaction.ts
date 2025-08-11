@@ -175,7 +175,7 @@ export const useCreatePaymentTransaction = createMutationHook<
     (args) => createMutationInvalidateFn('general-ledger', args)
 )
 
-export const usecreateQuickTransactionPayment = createMutationHook<
+export const useCreateQuickTransactionPayment = createMutationHook<
     IGeneralLedger,
     string,
     {

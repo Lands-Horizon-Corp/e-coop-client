@@ -231,6 +231,7 @@ import {
     LuCrown as CrownIcon,
     LuFileX as FileXIcon,
     LuHardDriveUpload as HardDriveUploadIcon,
+    LuHistory as HistoryIcon,
     LuImage as ImageIcon,
     LuListOrdered as ListOrderedIcon,
     LuExternalLink as OpenExternalLinkIcon,
@@ -258,6 +259,7 @@ import {
     MdFamilyRestroom as FamilyIcon,
     MdOutlineQueryStats as FinanceReportsIcon,
     MdOutlineScreenshotMonitor as MonitorIcon,
+    MdOutlinePayments as OutlinePaymentIcon,
     MdOutlinePayments as PaymentsIcon,
     MdOutlineLocalPhone as PhoneOutlineIcon,
     MdOutlineRotate90DegreesCcw as Rotate90DegreeLeftIcon,
@@ -287,6 +289,8 @@ import {
     PiNotepadDuotone as NoteIcon,
     PiContactlessPaymentDuotone as OnlinePaymentIcon,
     PiParkDuotone as ParkIcon,
+    PiHandDeposit as PiHandDepositIcon,
+    PiHandWithdraw as PiHandWithdrawIcon,
     PiPlugsConnectedFill as PlugConnectFillIcon,
     PiPlus as PlusIcon,
     PiPushPin as PushPinIcon,
@@ -309,6 +313,7 @@ import {
     RiListCheck3 as TransactionListIcon,
 } from 'react-icons/ri'
 import {
+    RxDotFilled as DotMediumIcon,
     RxDotsVertical as DotsVerticalIcon,
     RxDragHandleDots2 as DragHandleIcon,
     RxEyeNone as EyeNoneIcon,
@@ -318,7 +323,6 @@ import {
     RxRowSpacing as RowSpacingIcon,
     RxFontItalic as ToolbarItalicIcon,
 } from 'react-icons/rx'
-import { RxDotFilled as DotMediumIcon } from 'react-icons/rx'
 import {
     SiBookstack as BookStackIcon,
     SiGitbook as SigiBookIcon,
@@ -457,6 +461,7 @@ export {
     ArrowUpLong,
     YoutubeIcon,
     GiClockIcon,
+    HistoryIcon,
     ScanLineIcon,
     UserPlusIcon,
     CollapseIcon,
@@ -611,6 +616,8 @@ export {
     ArrowChevronRight,
     HandDropCoinsIcon,
     ColumnOutlineIcon,
+    PiHandDepositIcon,
+    OutlinePaymentIcon,
     DotsHorizontalIcon,
     FinanceReportsIcon,
     LayersSharpDotIcon,
@@ -631,6 +638,7 @@ export {
     BriefCaseClockIcon,
     BorderedShieldIcon,
     HorizontalRuleIcon,
+    PiHandWithdrawIcon,
     BsRocketTakeoffIcon,
     PlugConnectFillIcon,
     FaCalendarCheckIcon,
@@ -956,6 +964,10 @@ export const IconMap: Record<TIcon, IconType> = {
     'Rotate 90 Degree Right': Rotate90DegreeRightIcon,
     'Badge Exclamation Fill': BadgeExclamationFillIcon,
     'Text Strikethrough Light': TextStrikethroughLightIcon,
+    'Lu History Icon': HistoryIcon,
+    'Outline Payment': OutlinePaymentIcon,
+    'Pi Hand Deposit': PiHandDepositIcon,
+    'Pi Hand Withdraw': PiHandWithdrawIcon,
 }
 
 export const RenderIcon = ({

@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/lib'
 import {
@@ -49,12 +51,19 @@ const MemberAccountingLedgerTable = ({
     memberProfileId,
     onRowClick,
     onSelectData,
+    actionComponent,
 }: MemberAccountingLedgerTableProps) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
-    const columns = MemberAccountingLedgerTableColumns()
+    const columns = useMemo(
+        () =>
+            MemberAccountingLedgerTableColumns({
+                actionComponent,
+            }),
+        [actionComponent]
+    )
 
     const {
         getRowIdFn,
