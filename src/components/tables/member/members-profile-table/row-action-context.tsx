@@ -9,6 +9,7 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { MemberProfileCloseFormModal } from '@/components/forms/member-forms/member-profile-close-form'
 import {
     BillIcon,
+    BookIcon,
     BookOpenIcon,
     BookStackIcon,
     BookThickIcon,
@@ -49,6 +50,7 @@ import { IMemberProfile, TEntryType } from '@/types'
 
 import FootstepTable from '../../footsteps-table'
 import GeneralLedgerTable from '../../ledgers-tables/general-ledger-table'
+import MemberAccountingLedgerTable from '../../ledgers-tables/member-accounting-ledger-table'
 import TransactionTable from '../../transaction-table'
 import { IMemberProfileTableActionComponentProp } from './columns'
 
@@ -71,6 +73,7 @@ const useMemberProfileActions = ({
     const footstepModal = useModalState(false)
     const transactionModal = useModalState(false)
     const ledgerTableModal = useModalState()
+    const accountingLedgerModal = useModalState()
 
     const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
 
@@ -141,6 +144,7 @@ const useMemberProfileActions = ({
         footstepModal,
         transactionModal,
         ledgerTableModal,
+        accountingLedgerModal,
         selectedEntryType,
         isDeleting,
         handleEdit,
@@ -170,6 +174,7 @@ export const MemberProfileAction = ({
         transactionModal,
         ledgerTableModal,
         selectedEntryType,
+        accountingLedgerModal,
         isDeleting,
         handleEdit,
         handleDelete,
@@ -258,6 +263,18 @@ export const MemberProfileAction = ({
                                 className="min-h-[90vh] min-w-0 max-h-[90vh]"
                             />
                         </Modal>
+
+                        <Modal
+                            {...accountingLedgerModal}
+                            title={`${member.first_name}'s Accounting Ledger`}
+                            className="max-w-[95vw]"
+                        >
+                            <MemberAccountingLedgerTable
+                                mode="member"
+                                memberProfileId={member.id}
+                                className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                            />
+                        </Modal>
                     </>
                 )}
             </div>
@@ -303,6 +320,15 @@ export const MemberProfileAction = ({
                         >
                             <FootstepsIcon className="mr-2" strokeWidth={1.5} />
                             See Footstep
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() =>
+                                accountingLedgerModal.onOpenChange(true)
+                            }
+                        >
+                            <BookIcon className="mr-2" strokeWidth={1.5} />
+                            View Accounting Ledger
                         </DropdownMenuItem>
 
                         <DropdownMenuSub>
@@ -490,6 +516,7 @@ export const MemberProfileRowContext = ({
         transactionModal,
         ledgerTableModal,
         selectedEntryType,
+        accountingLedgerModal,
         isDeleting,
         handleEdit,
         handleDelete,
@@ -513,6 +540,18 @@ export const MemberProfileRowContext = ({
                             memberProfileId={member.id}
                             TEntryType={selectedEntryType}
                             excludeColumnIds={['balance']}
+                            className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                        />
+                    </Modal>
+
+                    <Modal
+                        {...accountingLedgerModal}
+                        title={`${member.first_name}'s Accounting Ledger`}
+                        className="max-w-[95vw]"
+                    >
+                        <MemberAccountingLedgerTable
+                            mode="member"
+                            memberProfileId={member.id}
                             className="min-h-[75vh] min-w-0 max-h-[75vh]"
                         />
                     </Modal>
@@ -620,6 +659,15 @@ export const MemberProfileRowContext = ({
                         >
                             <FootstepsIcon className="mr-2" strokeWidth={1.5} />
                             See Footstep
+                        </ContextMenuItem>
+
+                        <ContextMenuItem
+                            onClick={() =>
+                                accountingLedgerModal.onOpenChange(true)
+                            }
+                        >
+                            <BookIcon className="mr-2" strokeWidth={1.5} />
+                            View Accounting Ledger
                         </ContextMenuItem>
 
                         <ContextMenuSub>

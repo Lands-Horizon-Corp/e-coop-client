@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/lib'
 import {
@@ -12,7 +14,10 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 
-import { useFilteredPaginatedMemberAccountingLedger } from '@/hooks/api-hooks/member/use-member-accounting-ledger'
+import {
+    type TMemberAccountingLedgerMode,
+    useFilteredPaginatedMemberAccountingLedger,
+} from '@/hooks/api-hooks/member/use-member-accounting-ledger'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
@@ -29,7 +34,6 @@ import MemberAccountingLedgerTableColumns, {
 export interface MemberAccountingLedgerTableProps
     extends TableProps<IMemberAccountingLedger>,
         IMemberAccountingLedgerTableColumnProps {
-    memberProfileId?: TEntityId
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberAccountingLedger>,
         | 'table'
@@ -40,33 +44,46 @@ export interface MemberAccountingLedgerTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
+    mode: TMemberAccountingLedgerMode
 }
 
+export type TMemberAccountingLedgerTableProps =
+    MemberAccountingLedgerTableProps &
+        (
+            | { mode: 'branch' }
+            | {
+                  mode: 'member'
+                  memberProfileId: TEntityId
+              }
+        )
+
 const MemberAccountingLedgerTable = ({
+    mode,
     className,
     toolbarProps,
     defaultFilter,
-    memberProfileId,
     onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
-}: MemberAccountingLedgerTableProps) => {
+    RowContextComponent,
+    ...modeProps
+}: TMemberAccountingLedgerTableProps & {
+    memberProfileId?: TEntityId
+}) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
 
-    const columns = MemberAccountingLedgerTableColumns()
+    const columns = useMemo(
+        () => MemberAccountingLedgerTableColumns(),
+        // actionComponent,
+        // ), [actionComponent])
+        []
+    )
 
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<IMemberAccountingLedger>({
+    const tableState = useDataTableState<IMemberAccountingLedger>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -82,14 +99,16 @@ const MemberAccountingLedgerTable = ({
         data: { data, totalPage, pageSize, totalSize },
         refetch,
     } = useFilteredPaginatedMemberAccountingLedger({
-        memberProfileId: memberProfileId as TEntityId,
+        mode,
+        memberProfileId: modeProps.memberProfileId,
         pagination,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
-        enabled: memberProfileId !== undefined,
+        enabled: mode === 'branch' || modeProps.memberProfileId !== undefined,
     })
 
-    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+    const handleRowSelectionChange =
+        tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
@@ -100,9 +119,9 @@ const MemberAccountingLedgerTable = ({
         state: {
             sorting: tableSorting,
             pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
+            columnOrder: tableState.columnOrder,
+            rowSelection: tableState.rowSelectionState.rowSelection,
+            columnVisibility: tableState.columnVisibility,
         },
         rowCount: pageSize,
         manualSorting: true,
@@ -111,13 +130,13 @@ const MemberAccountingLedgerTable = ({
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
+        getRowId: tableState.getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
+        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
 
@@ -127,7 +146,7 @@ const MemberAccountingLedgerTable = ({
                 className={cn(
                     'flex h-full flex-col gap-y-2',
                     className,
-                    !isScrollable && 'h-fit !max-h-none'
+                    !tableState.isScrollable && 'h-fit !max-h-none'
                 )}
             >
                 <DataTableToolbar
@@ -140,7 +159,10 @@ const MemberAccountingLedgerTable = ({
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    scrollableProps={{
+                        isScrollable: tableState.isScrollable,
+                        setIsScrollable: tableState.setIsScrollable,
+                    }}
                     exportActionProps={{
                         pagination,
                         isLoading: isPending,
@@ -158,10 +180,15 @@ const MemberAccountingLedgerTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
-                    rowClassName="cursor-pointer"
                     onRowClick={onRowClick}
-                    isScrollable={isScrollable}
-                    setColumnOrder={setColumnOrder}
+                    onDoubleClick={onDoubleClick}
+                    isScrollable={tableState.isScrollable}
+                    RowContextComponent={
+                        RowContextComponent
+                            ? (props) => <RowContextComponent {...props} />
+                            : undefined
+                    }
+                    setColumnOrder={tableState.setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

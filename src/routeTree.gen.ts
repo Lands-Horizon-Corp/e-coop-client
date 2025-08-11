@@ -83,6 +83,7 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralImpo
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-accounting-ledger'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-management'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employee-footsteps'
@@ -610,6 +611,15 @@ const OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute =
     path: '/view-members',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+
+const OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute =
+  OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerImport.update(
+    {
+      id: '/(maintenance)/(members)/member-accounting-ledger',
+      path: '/member-accounting-ledger',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 
 const OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute =
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateImport.update(
@@ -1547,6 +1557,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
+      path: '/member-accounting-ledger'
+      fullPath: '/org/$orgname/branch/$branchname/member-accounting-ledger'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
       path: '/view-members'
@@ -2019,6 +2036,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+  OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -2133,6 +2151,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute:
       OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute,
+    OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute:
+      OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
@@ -2314,6 +2334,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -2432,6 +2453,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -2556,6 +2578,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -2680,6 +2703,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/permission-management'
     | '/org/$orgname/branch/$branchname/permission-template'
+    | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
@@ -2797,6 +2821,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/permission-management'
     | '/org/$orgname/branch/$branchname/permission-template'
+    | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
@@ -2919,6 +2944,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
@@ -3255,6 +3281,7 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-management",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks",
         "/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins",
@@ -3436,6 +3463,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/member-accounting-ledger.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members": {

@@ -48,37 +48,72 @@ export const useMemberAccountingLedgerTotal = ({
     })
 }
 
+export type TMemberAccountingLedgerMode = 'member' | 'branch'
+
+export type TMemberAccountingLedgerHookProps = {
+    mode: TMemberAccountingLedgerMode
+    memberProfileId?: TEntityId
+} & IAPIFilteredPaginatedHook<IMemberAccountingLedgerPaginated> &
+    IQueryProps
+
 export const useFilteredPaginatedMemberAccountingLedger = ({
-    sort,
-    enabled,
-    filterPayload,
+    mode,
     memberProfileId,
-    showMessage = true,
+    sort,
+    filterPayload,
     pagination = { pageSize: 10, pageIndex: 1 },
+    showMessage = true,
+    enabled,
     ...other
-}: { memberProfileId: TEntityId } & IAPIFilteredPaginatedHook<
-    IMemberAccountingLedgerPaginated,
-    string
-> &
-    IQueryProps) => {
+}: TMemberAccountingLedgerHookProps) => {
+    const queryKey = [
+        'member-accounting-ledger',
+        'resource-query',
+        mode,
+        memberProfileId,
+        filterPayload,
+        pagination,
+        sort,
+    ].filter(Boolean)
+
     return useQuery<IMemberAccountingLedgerPaginated, string>({
-        queryKey: [
-            'member-accounting-ledger',
-            memberProfileId,
-            'resource-query',
-            filterPayload,
-            pagination,
-            sort,
-        ],
+        queryKey,
         queryFn: async () => {
-            const [error, result] = await withCatchAsync(
-                memberAccountingLedgerService.getMemberAccountingLedger({
-                    memberProfileId,
-                    pagination,
-                    sort: sort && toBase64(sort),
-                    filters: filterPayload && toBase64(filterPayload),
-                })
-            )
+            const params = {
+                pagination,
+                sort: sort && toBase64(sort),
+                filters: filterPayload && toBase64(filterPayload),
+            }
+
+            let serviceCall: Promise<IMemberAccountingLedgerPaginated>
+
+            switch (mode) {
+                case 'member':
+                    if (!memberProfileId)
+                        throw new Error(
+                            'memberProfileId is required for member mode'
+                        )
+                    serviceCall =
+                        memberAccountingLedgerService.getMemberAccountingLedger(
+                            {
+                                memberProfileId,
+                                ...params,
+                            }
+                        )
+                    break
+
+                case 'branch':
+                    serviceCall =
+                        memberAccountingLedgerService.getBranchAccountingLedger(
+                            params
+                        )
+                    break
+
+                default:
+                    throw new Error(`Unsupported mode: ${mode}`)
+            }
+
+            const [error, result] = await withCatchAsync(serviceCall)
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
