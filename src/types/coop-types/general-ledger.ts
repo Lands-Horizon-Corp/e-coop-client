@@ -125,7 +125,7 @@ export interface IGeneralLedgerResponse extends IBaseEntityMeta {
     entry_date: TEntityId
     bank_reference_number: string
     description: string
-    print_number: number
+    print_number?: number
 }
 
 export interface IMemberGeneralLedgerTotal {
