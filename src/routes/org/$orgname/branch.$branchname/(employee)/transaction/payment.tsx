@@ -553,6 +553,7 @@ function RouteComponent() {
                                     setSelectedAccountId(
                                         data.original.account_id
                                     )
+                                    setFocusTypePayment('payment')
                                 }}
                                 actionComponent={(props) => {
                                     return (
