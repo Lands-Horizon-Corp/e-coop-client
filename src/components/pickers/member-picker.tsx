@@ -17,6 +17,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
 import { useFilteredPaginatedMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
 import { useModalState } from '@/hooks/use-modal-state'
@@ -24,7 +25,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IMemberProfile, IPickerBaseProps } from '@/types'
 
 import { MemberQrScannerModal } from '../qrcode-scanner/scanners/member-qr-scanner'
-import { useShortcut } from '../use-shorcuts'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import GenericPicker from './generic-picker'
 

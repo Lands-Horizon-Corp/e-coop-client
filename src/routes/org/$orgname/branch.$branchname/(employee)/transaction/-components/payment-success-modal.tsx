@@ -2,22 +2,24 @@ import { usePaymentsDataStore } from '@/store/transaction/payments-entry-store'
 import { toReadableDate } from '@/utils'
 
 import CopyTextButton from '@/components/copy-text-button'
-import { CheckFillIcon } from '@/components/icons'
+import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
 import { usePrintGeneralLedgerTransaction } from '@/hooks/api-hooks/use-transaction'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 
 import { IGeneralLedger, TEntityId } from '@/types'
 
 interface PaymentSuccessModalProps extends IModalProps {
     transaction: IGeneralLedger | null
+    onClose?: () => void
 }
 
 const PaymentSuccessModal = ({
     transaction,
-    onOpenChange,
-    ...others
+    onClose,
+    ...props
 }: PaymentSuccessModalProps) => {
     const { mutate: printGeneralLedgerTransaction } =
         usePrintGeneralLedgerTransaction()
@@ -32,31 +34,40 @@ const PaymentSuccessModal = ({
         printGeneralLedgerTransaction(generalLedgerId)
     }
 
-    if (!transaction) {
-        return null
-    }
+    useShortcut(
+        'enter',
+        () => {
+            if (!transaction) return
+            handlePrintGeneralLedgerTransaction(transaction.id)
+            onClose?.()
+        },
+        { disableTextInputs: true, disableActiveButton: true }
+    )
+
     const paymentType =
         focusTypePayment === 'withdraw' ? 'Withdrawal' : focusTypePayment
 
+    if (!transaction) {
+        return null
+    }
+
     return (
         <Modal
-            {...others}
+            {...props}
             footer={
                 <div className="flex items-center justify-end w-full space-x-2">
-                    <Button
-                        onClick={() => onOpenChange?.(false)}
-                        variant={'ghost'}
-                    >
+                    <Button onClick={() => onClose?.()} variant={'ghost'}>
                         close
+                        <DoorExitFillIcon size={20} className="ml-2" />
                     </Button>
                     <Button
                         onClick={() => {
                             handlePrintGeneralLedgerTransaction(transaction.id)
-                            onOpenChange?.(false)
+                            onClose?.()
                         }}
-                        className=""
                     >
                         Print
+                        <span className="text-lg ml-2">↵</span>
                     </Button>
                 </div>
             }

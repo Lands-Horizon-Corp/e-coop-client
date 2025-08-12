@@ -27,9 +27,9 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useShortcut } from '@/components/use-shorcuts'
 
 import { useGetAllFinancialStatementAccountsGroupings } from '@/hooks/api-hooks/financial-statement-definition/use-financial-statement-accounts-grouping'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 
 import { FinancialStatementTypeEnum } from '@/types'
 import '@/types'

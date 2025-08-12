@@ -34,6 +34,10 @@ export const useShortcut = (
                     (!event.target.type || event.target.type === 'text')) ||
                 (event.target as HTMLElement).isContentEditable
 
+            const isButtonActive =
+                options.disableActiveButton &&
+                document.activeElement instanceof HTMLButtonElement
+
             const modifierMap: Record<string, boolean> = {
                 Control: event.ctrlKey,
                 Alt: event.altKey,
@@ -43,7 +47,7 @@ export const useShortcut = (
 
             if (event.repeat) return
 
-            if (options.disableTextInputs && isTextInput)
+            if ((options.disableTextInputs && isTextInput) || isButtonActive)
                 return event.stopPropagation()
 
             const pressedKey = event.key.toLowerCase()
@@ -79,7 +83,12 @@ export const useShortcut = (
                 return callbackRef.current(event)
             }
         },
-        [keyCombo, shortcut, options.disableTextInputs]
+        [
+            keyCombo,
+            shortcut,
+            options.disableTextInputs,
+            options.disableActiveButton,
+        ]
     )
 
     useEffect(() => {

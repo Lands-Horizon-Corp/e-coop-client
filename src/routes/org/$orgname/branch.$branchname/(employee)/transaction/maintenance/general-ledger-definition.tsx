@@ -23,9 +23,9 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useShortcut } from '@/components/use-shorcuts'
 
 import { useGetAllGeneralLedgerAccountsGroupings } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-accounts-grouping'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 
 import { GeneralLedgerTypeEnum } from '@/types'
 

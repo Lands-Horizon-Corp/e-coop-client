@@ -187,6 +187,8 @@ const CurrentPaymentsEntryList = ({
         mode: 'transaction',
     })
 
+    console.log(generalLedgerBasedTransaction)
+
     if (isLoading) {
         return <PaymentsEntryListSkeleton />
     }
@@ -293,6 +295,12 @@ const CurrentPaymentsEntryList = ({
                                                             value={
                                                                 payment.type_of_payment_type
                                                             }
+                                                        />
+                                                        <PaymentsEntryItem
+                                                            label="print number"
+                                                            value={String(
+                                                                payment.print_number
+                                                            )}
                                                         />
                                                         <PaymentsEntryItem
                                                             label="note"

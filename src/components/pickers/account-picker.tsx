@@ -12,11 +12,11 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
 import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 import useFilterState from '@/hooks/use-filter-state'
 
 import { IPickerBaseProps, TEntityId } from '@/types'
 
-import { useShortcut } from '../use-shorcuts'
 import GenericPicker from './generic-picker'
 
 interface Props extends IPickerBaseProps<IAccount> {
