@@ -85,17 +85,7 @@ const MemberAccountingLedgerTable = ({
         [actionComponent]
     )
 
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<IMemberAccountingLedger>({
+    const tableState = useDataTableState<IMemberAccountingLedger>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
