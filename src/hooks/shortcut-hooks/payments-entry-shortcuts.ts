@@ -8,8 +8,10 @@ type usePaymentsShortcutsTypes = {
     openSuccessModal: boolean
     hasSelectedTransactionId: boolean
     setOpenPaymentWithTransactionModal: (open: boolean) => void
+    setOpenMemberPicker: (open: boolean) => void
     setFocusTypePayment: (type: 'payment' | 'deposit' | 'withdraw') => void
     handleResetAll: () => void
+    setSelectedMember: () => void
 }
 
 export const useTransactionShortcuts = ({
@@ -20,6 +22,8 @@ export const useTransactionShortcuts = ({
     setOpenPaymentWithTransactionModal,
     setFocusTypePayment,
     handleResetAll,
+    setOpenMemberPicker,
+    setSelectedMember,
 }: usePaymentsShortcutsTypes) => {
     const handleF1 = useCallback(
         (e: KeyboardEvent) => {
@@ -76,10 +80,42 @@ export const useTransactionShortcuts = ({
         handleResetAll,
     ])
 
+    const handleSelectMember = useCallback(() => {
+        if (
+            hasSelectedTransactionId ||
+            openSuccessModal ||
+            openPaymentWithTransactionModal ||
+            hasSelectedMember
+        )
+            return
+        setOpenMemberPicker(true)
+    }, [
+        hasSelectedMember,
+        openSuccessModal,
+        openPaymentWithTransactionModal,
+        hasSelectedTransactionId,
+    ])
+
+    const handleUnselectMember = useCallback(() => {
+        if (openSuccessModal || openPaymentWithTransactionModal) return
+        setSelectedMember()
+    }, [openSuccessModal, openPaymentWithTransactionModal])
+
     useShortcut('F1', handleF1, { disableTextInputs: true })
     useShortcut('F2', handleF2, { disableTextInputs: true })
     useShortcut('F3', handleF3, { disableTextInputs: true })
+
+    useShortcut('enter', handleSelectMember, {
+        disableTextInputs: true,
+        disableActiveButton: true,
+    })
+
     useShortcut('Escape', handleEscape, {
+        disableActiveButton: true,
+        disableTextInputs: true,
+    })
+
+    useShortcut('control+d', handleUnselectMember, {
         disableActiveButton: true,
         disableTextInputs: true,
     })

@@ -189,16 +189,6 @@ function RouteComponent() {
         form.reset()
     }
 
-    useTransactionShortcuts({
-        hasSelectedMember: !!selectedMember,
-        openPaymentWithTransactionModal,
-        openSuccessModal,
-        hasSelectedTransactionId: !!transactionId,
-        setOpenPaymentWithTransactionModal,
-        setFocusTypePayment,
-        handleResetAll,
-    })
-
     const handleOnSuccessPaymentCallBack = (transaction: IGeneralLedger) => {
         setTransactionFormSuccess(transaction)
         setOnOpenSuccessModal(true)
@@ -231,6 +221,19 @@ function RouteComponent() {
         </div>
     )
 
+    useTransactionShortcuts({
+        hasSelectedMember: hasSelectedMember,
+        openPaymentWithTransactionModal,
+        openSuccessModal,
+        hasSelectedTransactionId: hasSelectedTransactionId,
+        setOpenPaymentWithTransactionModal,
+        setFocusTypePayment,
+        handleResetAll,
+        setOpenMemberPicker,
+        setSelectedMember: () => {
+            setSelectedMember(null)
+        },
+    })
     return (
         <PageContainer className="flex h-[90vh] items-center w-full !overflow-y-hidden">
             <PaymentSuccessModal
@@ -238,6 +241,7 @@ function RouteComponent() {
                 onOpenChange={setOnOpenSuccessModal}
                 transaction={transactionFormSuccess}
                 onClose={handleCloseSuccessModal}
+                isOpen={openSuccessModal}
             />
             <NoTransactionBatchWarningModal />
             <div className="hidden">
@@ -350,6 +354,7 @@ function RouteComponent() {
                         form.setValue('reference_number', userSettingOR)
                         setOpenPaymentWithTransactionModal(false)
                         setSelectedMember(transaction.member_profile)
+                        setSelectedAccountId(undefined)
                         handleSetTransactionId(transaction.transaction_id)
                         handleOnSuccessPaymentCallBack(transaction)
                     },

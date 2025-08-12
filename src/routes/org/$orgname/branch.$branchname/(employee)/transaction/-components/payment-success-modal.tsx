@@ -1,7 +1,6 @@
 import { usePaymentsDataStore } from '@/store/transaction/payments-entry-store'
 import { toReadableDate } from '@/utils'
 
-import CopyTextButton from '@/components/copy-text-button'
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -14,11 +13,13 @@ import { IGeneralLedger, TEntityId } from '@/types'
 interface PaymentSuccessModalProps extends IModalProps {
     transaction: IGeneralLedger | null
     onClose?: () => void
+    isOpen?: boolean
 }
 
 const PaymentSuccessModal = ({
     transaction,
     onClose,
+    isOpen,
     ...props
 }: PaymentSuccessModalProps) => {
     const { mutate: printGeneralLedgerTransaction } =
@@ -37,11 +38,11 @@ const PaymentSuccessModal = ({
     useShortcut(
         'enter',
         () => {
-            if (!transaction) return
+            if (!transaction || !isOpen) return
             handlePrintGeneralLedgerTransaction(transaction.id)
             onClose?.()
         },
-        { disableTextInputs: true, disableActiveButton: true }
+        { disableTextInputs: true }
     )
 
     const paymentType =
@@ -56,7 +57,12 @@ const PaymentSuccessModal = ({
             {...props}
             footer={
                 <div className="flex items-center justify-end w-full space-x-2">
-                    <Button onClick={() => onClose?.()} variant={'ghost'}>
+                    <Button
+                        onClick={() => onClose?.()}
+                        tabIndex={-1}
+                        type="submit"
+                        variant={'ghost'}
+                    >
                         close
                         <DoorExitFillIcon size={20} className="ml-2" />
                     </Button>
@@ -93,10 +99,7 @@ const PaymentSuccessModal = ({
                         {toReadableDate(transaction.created_at)}
                     </p>
                     <p className="text-muted-foreground text-sm border flex items-center p-1 rounded-sm bg-secondary">
-                        Id: {transaction.id}
-                        <span className="ml-2">
-                            <CopyTextButton textContent={transaction.id} />
-                        </span>
+                        ID: {transaction.id}
                     </p>
                 </div>
             </div>
