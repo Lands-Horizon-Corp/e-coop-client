@@ -13,6 +13,8 @@ import {
     ITransactionPaginated,
     ITransactionRequest,
     ITransactionResponse,
+    TEntityId,
+    TPaymentMode,
 } from '@/types'
 
 import APIService from './api-service'
@@ -42,12 +44,29 @@ const getCurrentPaymentTransaction = async () => {
     return response.data
 }
 
+const createPaymentwithTransaction = async ({
+    data,
+    mode,
+    transactionId,
+}: {
+    data: IPaymentRequest
+    mode: TPaymentMode
+    transactionId?: TEntityId
+}) => {
+    const response = await APIService.post<IPaymentRequest, IGeneralLedger>(
+        `/api/v1/transaction/${transactionId}/${mode}`,
+        data
+    )
+    return response.data
+}
+
 const createQuickTransactionPayment = async ({
     data,
     mode,
 }: {
     data: IPaymentQuickRequest
-    mode: string
+    mode: TPaymentMode
+    transactionId?: TEntityId
 }) => {
     const response = await APIService.post<
         IPaymentQuickRequest,
@@ -55,6 +74,7 @@ const createQuickTransactionPayment = async ({
     >(`/api/v1/transaction/${mode}`, data)
     return response.data
 }
+
 const createTransactionPayment = async (
     transactionId: string,
     data: IPaymentRequest
@@ -127,4 +147,5 @@ export const TransactionService = {
     getPaginatedCurrentTransaction,
     createTransactionPayment,
     printGeneralLedgerTransaction,
+    createPaymentwithTransaction,
 }

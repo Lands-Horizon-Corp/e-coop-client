@@ -15,48 +15,61 @@ import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
+import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
 import { Separator } from '@/components/ui/separator'
 import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
 import {
-    QuickPaymentTransactionFormValues,
-    QuickTransactionPaymentSchema,
+    PaymentWithTransactionFormValues,
+    PaymentWithTransactionSchema,
 } from '@/validations/transactions/payment-transaction-entry-schema'
 
 import { useGetAllpaymentTypes } from '@/hooks/api-hooks/use-payment-type'
-import { useCreateQuickTransactionPayment } from '@/hooks/api-hooks/use-transaction'
+import { useCreatePaymentWithTransaction } from '@/hooks/api-hooks/use-transaction'
 
 import {
     IClassProps,
     IForm,
     IGeneralLedger,
     IMedia,
-    IPaymentQuickRequest,
-    ITransactionResponse,
+    IPaymentRequest,
+    ITransactionRequest,
+    TEntityId,
+    TGeneralLedgerSource,
 } from '@/types'
 
 import AmountField from '../../../routes/org/$orgname/branch.$branchname/(employee)/transaction/-components/amount-field'
 
-interface QuickPaymentEntryFormProps
+interface PaymentWithTransactionFormProps
     extends IClassProps,
         IForm<
-            Partial<IPaymentQuickRequest>,
+            Partial<IPaymentRequest>,
             IGeneralLedger,
             string,
-            QuickPaymentTransactionFormValues
+            PaymentWithTransactionFormValues
         > {
-    transaction?: ITransactionResponse
+    transactionId?: TEntityId
+    referenceNumber?: string
+    memberProfileId?: TEntityId
+    memberJointId?: TEntityId
+    isReferenceNumberCheck?: boolean
+    description?: string
 }
 
-const QuickPaymentEntryForm = ({
+const PaymentWithTransactionForm = ({
     defaultValues,
     onSuccess,
-}: QuickPaymentEntryFormProps) => {
+    referenceNumber,
+    transactionId,
+    memberProfileId,
+    memberJointId,
+    description,
+}: PaymentWithTransactionFormProps) => {
     const { focusTypePayment } = usePaymentsDataStore()
-    const form = useForm<QuickPaymentTransactionFormValues>({
-        resolver: zodResolver(QuickTransactionPaymentSchema),
+    const form = useForm<PaymentWithTransactionFormValues>({
+        resolver: zodResolver(PaymentWithTransactionSchema),
         defaultValues: {
             ...defaultValues,
         },
@@ -66,23 +79,41 @@ const QuickPaymentEntryForm = ({
         mutate: creatTransactionDeposit,
         isPending,
         error,
-    } = useCreateQuickTransactionPayment({ onSuccess })
+    } = useCreatePaymentWithTransaction({ onSuccess })
 
     const { data: paymentTypes } = useGetAllpaymentTypes()
 
     const handleSubmit = form.handleSubmit(
-        (data: QuickPaymentTransactionFormValues) => {
-            if (focusTypePayment) {
-                creatTransactionDeposit({
-                    data: {
-                        ...data,
-                        entry_date: data.entry_date
-                            ? new Date(data.entry_date).toISOString()
-                            : undefined,
-                    },
-                    mode: focusTypePayment,
-                })
+        (data: PaymentWithTransactionFormValues) => {
+            const entryDate = data.entry_date
+                ? new Date(data.entry_date).toISOString()
+                : undefined
+
+            const source: TGeneralLedgerSource =
+                focusTypePayment === 'payment'
+                    ? 'payment'
+                    : focusTypePayment === 'withdraw'
+                      ? 'withdraw'
+                      : 'deposit'
+
+            const transactionpayPayload: ITransactionRequest = {
+                ...data,
+                reference_number: referenceNumber,
+                member_profile_id: memberProfileId,
+                member_joint_account_id: memberJointId,
+                source: source,
+                description: description ?? '',
             }
+
+            creatTransactionDeposit({
+                data: {
+                    ...data,
+                    entry_date: entryDate,
+                },
+                mode: focusTypePayment,
+                transactionId,
+                transactionPayload: transactionpayPayload,
+            })
         }
     )
 
@@ -90,13 +121,19 @@ const QuickPaymentEntryForm = ({
         (type) => type.id === form.watch('payment_type_id')
     )?.type
 
+    const isOnlinePayment = ['bank', 'online', 'check'].includes(
+        paymentTypeType?.toLowerCase() ?? ''
+    )
+    console.log(form.getValues())
+    console.log(form.formState.errors)
+
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit} className="flex space-x-2">
                 <div className="flex w-full flex-col space-y-2">
                     <div className="grid grid-cols-1 w-full lg:grid-cols-2 gap-x-2 gap-y-2">
                         <ReferenceNumber
-                            value={defaultValues?.reference_number}
+                            value={referenceNumber ?? ''}
                             disabled
                             className="col-span-2 w-full"
                         />
@@ -140,20 +177,29 @@ const QuickPaymentEntryForm = ({
                                     {...field}
                                     value={field.value ?? undefined}
                                     placeholder="Select a payment type"
-                                    onChange={(selectedPaymentType) =>
+                                    onChange={(selectedPaymentType) => {
                                         field.onChange(selectedPaymentType.id)
-                                    }
+                                        if (isOnlinePayment) {
+                                            form.setValue(
+                                                'entry_date',
+                                                new Date().toISOString(),
+                                                {
+                                                    shouldValidate: true,
+                                                }
+                                            )
+                                        }
+                                    }}
                                 />
                             )}
                         />
-                        {['bank', 'online'].includes(
-                            paymentTypeType?.toLowerCase() ?? ''
-                        ) && (
+
+                        {isOnlinePayment && (
                             <>
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="bank_id"
                                     label="Bank"
+                                    className="col-span-2"
                                     render={({ field }) => (
                                         <BankCombobox
                                             {...field}
@@ -175,7 +221,22 @@ const QuickPaymentEntryForm = ({
                                     render={({ field }) => (
                                         <InputDate
                                             {...field}
+                                            placeholder="Bank Date"
+                                            className="block"
                                             value={field.value ?? ''}
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="bank_reference_number"
+                                    label="Bank Reference Number"
+                                    render={({ field }) => (
+                                        <Input
+                                            {...field}
+                                            value={field.value ?? undefined}
+                                            placeholder="add a bank reference number"
+                                            onChange={field.onChange}
                                         />
                                     )}
                                 />
@@ -187,7 +248,6 @@ const QuickPaymentEntryForm = ({
                                         const value = form.watch(
                                             'proof_of_payment_media'
                                         )
-
                                         return (
                                             <ImageField
                                                 {...field}
@@ -199,14 +259,23 @@ const QuickPaymentEntryForm = ({
                                                         : value
                                                 }
                                                 onChange={(newImage) => {
-                                                    if (newImage)
+                                                    if (newImage) {
                                                         field.onChange(
                                                             newImage.id
                                                         )
-                                                    else
+                                                        form.setValue(
+                                                            'proof_of_payment_media',
+                                                            newImage as IMedia
+                                                        )
+                                                    } else {
                                                         field.onChange(
                                                             undefined
                                                         )
+                                                        form.setValue(
+                                                            'proof_of_payment_media',
+                                                            undefined
+                                                        )
+                                                    }
                                                 }}
                                             />
                                         )
@@ -231,7 +300,7 @@ const QuickPaymentEntryForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="signature"
+                            name="signature_media_id"
                             label="Signature"
                             className=""
                             render={({ field }) => {
@@ -247,16 +316,19 @@ const QuickPaymentEntryForm = ({
                                                 : value
                                         }
                                         onChange={(newImage) => {
-                                            if (newImage)
+                                            if (newImage) {
+                                                field.onChange(newImage.id)
                                                 form.setValue(
                                                     'signature',
-                                                    newImage
+                                                    newImage as IMedia
                                                 )
-                                            else
+                                            } else {
+                                                field.onChange(undefined)
                                                 form.setValue(
                                                     'signature',
                                                     undefined
                                                 )
+                                            }
                                         }}
                                     />
                                 )
@@ -294,14 +366,14 @@ const QuickPaymentEntryForm = ({
     )
 }
 
-const QuickPaymentEntryModal = ({
+const PaymentWithTransactionModal = ({
     title = '',
     description = '',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps: Omit<QuickPaymentEntryFormProps, 'className'>
+    formProps: Omit<PaymentWithTransactionFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -310,7 +382,7 @@ const QuickPaymentEntryModal = ({
             description={description}
             {...props}
         >
-            <QuickPaymentEntryForm
+            <PaymentWithTransactionForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -321,4 +393,4 @@ const QuickPaymentEntryModal = ({
     )
 }
 
-export default QuickPaymentEntryModal
+export default PaymentWithTransactionModal

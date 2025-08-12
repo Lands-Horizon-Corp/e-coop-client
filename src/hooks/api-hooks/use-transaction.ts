@@ -23,6 +23,7 @@ import {
     ITransactionRequest,
     ITransactionResponse,
     TEntityId,
+    TPaymentMode,
 } from '@/types'
 
 export type TTransactionMode =
@@ -237,7 +238,7 @@ export const useCreateQuickTransactionPayment = createMutationHook<
     string,
     {
         data: IPaymentQuickRequest
-        mode: string
+        mode: TPaymentMode
     }
 >(
     (payload) =>
@@ -249,30 +250,43 @@ export const useCreateQuickTransactionPayment = createMutationHook<
     (args) => createMutationInvalidateFn('general-ledger', args)
 )
 
-export const useCreateTransactionWithPayment = createMutationHook<
+export const useCreatePaymentWithTransaction = createMutationHook<
     IGeneralLedger,
     string,
     {
         data: IPaymentRequest
         transactionPayload: ITransactionRequest
+        mode: TPaymentMode
+        transactionId?: TEntityId
     }
 >(
     async (payload) => {
-        const [error, result] = await withCatchAsync(
-            TransactionService.create(payload.transactionPayload)
-        )
-        if (error) {
-            const errorMessage = serverRequestErrExtractor({ error })
-            toast.error(errorMessage)
-            throw errorMessage
+        if (payload.transactionId) {
+            return await TransactionService.createPaymentwithTransaction({
+                data: payload.data,
+                transactionId: payload.transactionId,
+                mode: payload.mode,
+            })
+        } else {
+            console.log('payload', payload)
+            const [error, result] = await withCatchAsync(
+                TransactionService.create(payload.transactionPayload)
+            )
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage)
+                throw errorMessage
+            }
+            if (!result || !result.id) {
+                toast.error('Transaction creation failed')
+                throw new Error('Transaction creation failed')
+            }
+            return await TransactionService.createPaymentwithTransaction({
+                data: payload.data,
+                transactionId: result.id,
+                mode: payload.mode,
+            })
         }
-        if (!result || !result.id) {
-            toast.error('Transaction creation failed')
-        }
-        return (
-            result &&
-            TransactionService.createPaymentTransaction(payload.data, result.id)
-        )
     },
     'Transaction Payment Created',
     (args) => createMutationInvalidateFn('general-ledger', args)

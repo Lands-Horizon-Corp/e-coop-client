@@ -1,3 +1,7 @@
+import { usePaymentsDataStore } from '@/store/transaction/payments-entry-store'
+import { toReadableDate } from '@/utils'
+
+import CopyTextButton from '@/components/copy-text-button'
 import { CheckFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -8,17 +12,17 @@ import { IGeneralLedger, TEntityId } from '@/types'
 
 interface PaymentSuccessModalProps extends IModalProps {
     transaction: IGeneralLedger | null
-    newTransaction?: () => void
 }
 
 const PaymentSuccessModal = ({
     transaction,
-    newTransaction,
     onOpenChange,
     ...others
 }: PaymentSuccessModalProps) => {
     const { mutate: printGeneralLedgerTransaction } =
         usePrintGeneralLedgerTransaction()
+
+    const { focusTypePayment } = usePaymentsDataStore()
 
     const memberName = transaction?.member_profile?.full_name
 
@@ -31,6 +35,8 @@ const PaymentSuccessModal = ({
     if (!transaction) {
         return null
     }
+    const paymentType =
+        focusTypePayment === 'withdraw' ? 'Withdrawal' : focusTypePayment
 
     return (
         <Modal
@@ -38,7 +44,7 @@ const PaymentSuccessModal = ({
             footer={
                 <div className="flex items-center justify-end w-full space-x-2">
                     <Button
-                        onClick={() => newTransaction?.()}
+                        onClick={() => onOpenChange?.(false)}
                         variant={'ghost'}
                     >
                         close
@@ -61,12 +67,24 @@ const PaymentSuccessModal = ({
                         <CheckFillIcon size={25} className=" text-primary" />
                     </span>
                     <p className="font-bold text-2xl text-white">
-                        Payment Successful!
+                        {paymentType.charAt(0).toUpperCase() +
+                            paymentType.slice(1)}{' '}
+                        {focusTypePayment === 'payment' ? '' : 'payment'}{' '}
+                        Successful!
                     </p>
-                    <p>
-                        Successfully added payment to{' '}
+                    <p className="text-muted-foreground text-sm">
+                        Successfully added {paymentType} to{' '}
                         <span className=" font-extrabold italic">
                             {memberName}
+                        </span>
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                        {toReadableDate(transaction.created_at)}
+                    </p>
+                    <p className="text-muted-foreground text-sm border flex items-center p-1 rounded-sm bg-secondary">
+                        Id: {transaction.id}
+                        <span className="ml-2">
+                            <CopyTextButton textContent={transaction.id} />
                         </span>
                     </p>
                 </div>

@@ -179,10 +179,10 @@ const TransactionDetailsCard: React.FC<TransactionDetailsCardProps> = ({
                             showValue={false}
                         />
                         <div className="flex-1">
-                            <p className="font-semibold dark:text-white text-gray-700 text-sm">
+                            {/* <p className="font-semibold dark:text-white text-gray-700 text-sm">
                                 {transaction.source.charAt(0).toUpperCase() +
                                     transaction.source.slice(1)}
-                            </p>
+                            </p> */}
                             <p className="text-xs text-gray-400">
                                 {description}
                             </p>
@@ -314,11 +314,12 @@ const TransactionCardListItem = ({
 }
 
 const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
+    const navigate = useNavigate()
+    const [onOpen, setOnOpen] = useState(false)
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 10,
     })
-    const [onOpen, setOnOpen] = useState(false)
     const { finalFilterPayload } = useFilterState({
         defaultFilterMode: 'OR',
         onFilterChange: () =>
@@ -336,8 +337,6 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
         filterPayload: finalFilterPayload,
         pagination,
     })
-
-    const navigate = useNavigate()
 
     const handleNavigate = (transactionId: TEntityId, fullPath: string) => {
         navigate({
@@ -370,6 +369,8 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
 
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
+
+    console.log('CurrentTransaction:', CurrentTransaction)
 
     return (
         <div className="flex w-full flex-row items-center justify-between ">
