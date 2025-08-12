@@ -548,8 +548,10 @@ function RouteComponent() {
                     <ResizablePanel className="p-2 h-full !overflow-y-auto ecoop-scroll">
                         <div className="w-full p-2">
                             <MemberAccountingLedgerTable
+                                mode="member"
                                 memberProfileId={
-                                    selectedMember?.id ?? undefined
+                                    (selectedMember?.id ??
+                                        undefined) as TEntityId
                                 }
                                 onRowClick={(data) => {
                                     setOpenPaymentsEntryModal(true)
