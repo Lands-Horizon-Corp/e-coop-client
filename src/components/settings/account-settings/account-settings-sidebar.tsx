@@ -103,10 +103,8 @@ const AccountSettingsSidebar = (prop: Props) => {
 
     const isMobile = useIsMobile()
 
-    const {
-        resetAuth,
-        currentAuth: { user_organization },
-    } = useAuthUser()
+    const { resetAuth } = useAuthUser()
+
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: handleSignout, isPending: isSigningOut } = useSignOut({
@@ -115,24 +113,6 @@ const AccountSettingsSidebar = (prop: Props) => {
             router.navigate({ to: '/auth/sign-in' as string })
         },
     })
-
-    const handleBack = () => {
-        if (user_organization)
-            router.navigate({
-                to: `/org/${user_organization.organization.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(
-                        /^-+|-+$/g,
-                        ''
-                    )}/branch/${user_organization.branch.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '')}`,
-            })
-
-        router.history.back()
-    }
 
     if (isMobile)
         return (
@@ -269,11 +249,11 @@ const AccountSettingsSidebar = (prop: Props) => {
                     )}
                 </p>
                 <p
-                    onClick={handleBack}
+                    onClick={() => router.history.back()}
                     className="cursor-pointer text-sm text-muted-foreground duration-200 ease-in hover:text-foreground"
                 >
-                    <ArrowLeftIcon className="inline mr-2" />
                     Back
+                    <ArrowLeftIcon className="inline ml-2" />
                 </p>
             </div>
             <Separator />
