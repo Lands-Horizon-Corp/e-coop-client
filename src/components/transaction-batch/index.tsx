@@ -22,6 +22,7 @@ import DepositInBankCard from './deposit-in-bank/deposit-in-bank-card'
 import BatchCheckRemitance from './remittance/check-remittance'
 import BatchOnlineRemitance from './remittance/online-remittance'
 import TransactionBatchCashCount from './transaction-batch-cash-count'
+import TransactionBatchDisbursementTransaction from './transaction-batch-disbursements'
 import BeginningBalanceCard from './transaction-batch-funding-card'
 import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
 
@@ -129,6 +130,12 @@ const TransactionBatch = ({
                     <BatchOnlineRemitance
                         transactionBatchId={transactionBatch?.id}
                         onOnlineRemittanceUpdate={() =>
+                            invalidateTransactionBatch()
+                        }
+                    />
+                    <TransactionBatchDisbursementTransaction
+                        transactionBatchId={transactionBatch?.id}
+                        onDisbursementUpdate={() =>
                             invalidateTransactionBatch()
                         }
                     />

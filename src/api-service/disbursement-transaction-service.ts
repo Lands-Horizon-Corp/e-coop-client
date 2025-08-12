@@ -1,20 +1,22 @@
-import qs from 'query-string'
-
-import { createAPICrudService } from '@/factory/api-factory-service'
+import {
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
 
 import {
     IDisbursementTransaction,
-    IDisbursementTransactionPaginated,
     IDisbursementTransactionRequest,
     TEntityId,
 } from '@/types'
-
-import APIService from './api-service'
 
 const { create } = createAPICrudService<
     IDisbursementTransaction,
     IDisbursementTransactionRequest
 >('/api/v1/disbursement-transaction')
+
+const { search } = createAPICollectionService<IDisbursementTransaction>(
+    '/api/v1/disbursement-transaction'
+)
 
 // GET Paginated Disbursement Transactions - Branch
 export const getPaginatedBranchDisbursementTransaction = async (params: {
@@ -22,21 +24,12 @@ export const getPaginatedBranchDisbursementTransaction = async (params: {
     filter?: string
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const url = qs.stringifyUrl(
-        {
-            url: '/api/v1/disbursement-transaction/branch/search',
-            query: {
-                sort: params.sort,
-                filter: params.filter,
-                pageIndex: params.pagination?.pageIndex,
-                pageSize: params.pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-    const response =
-        await APIService.get<IDisbursementTransactionPaginated>(url)
-    return response.data
+    return search({
+        targetUrl: 'branch/search',
+        sort: params.sort,
+        filters: params.filter,
+        pagination: params.pagination,
+    })
 }
 
 // GET Paginated Disbursement Transactions - Current User
@@ -45,21 +38,12 @@ export const getPaginatedCurrentDisbursementTransaction = async (params: {
     filter?: string
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    const url = qs.stringifyUrl(
-        {
-            url: '/api/v1/disbursement-transaction/current/search',
-            query: {
-                sort: params.sort,
-                filter: params.filter,
-                pageIndex: params.pagination?.pageIndex,
-                pageSize: params.pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-    const response =
-        await APIService.get<IDisbursementTransactionPaginated>(url)
-    return response.data
+    return search({
+        targetUrl: 'current/search',
+        sort: params.sort,
+        filters: params.filter,
+        pagination: params.pagination,
+    })
 }
 
 // GET Paginated Disbursement Transactions - Employee
@@ -71,21 +55,12 @@ export const getPaginatedEmployeeDisbursementTransaction = async (
         pagination?: { pageIndex: number; pageSize: number }
     }
 ) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `/api/v1/disbursement-transaction/employee/${userOrganizationId}/search`,
-            query: {
-                sort: params.sort,
-                filter: params.filter,
-                pageIndex: params.pagination?.pageIndex,
-                pageSize: params.pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-    const response =
-        await APIService.get<IDisbursementTransactionPaginated>(url)
-    return response.data
+    return search({
+        targetUrl: `employee/${userOrganizationId}/search`,
+        sort: params.sort,
+        filters: params.filter,
+        pagination: params.pagination,
+    })
 }
 
 // GET Paginated Disbursement Transactions - Transaction Batch
@@ -97,25 +72,17 @@ export const getPaginatedTransactionBatchDisbursementTransaction = async (
         pagination?: { pageIndex: number; pageSize: number }
     }
 ) => {
-    const url = qs.stringifyUrl(
-        {
-            url: `/api/v1/disbursement-transaction/transaction-batch/${transactionBatchId}/search`,
-            query: {
-                sort: params.sort,
-                filter: params.filter,
-                pageIndex: params.pagination?.pageIndex,
-                pageSize: params.pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-    const response =
-        await APIService.get<IDisbursementTransactionPaginated>(url)
-    return response.data
+    return search({
+        targetUrl: `transaction-batch/${transactionBatchId}/search`,
+        sort: params.sort,
+        filters: params.filter,
+        pagination: params.pagination,
+    })
 }
 
 export default {
     create,
+    search,
     getPaginatedBranchDisbursementTransaction,
     getPaginatedCurrentDisbursementTransaction,
     getPaginatedEmployeeDisbursementTransaction,

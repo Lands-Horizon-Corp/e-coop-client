@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils'
 
 import { disbursementTransactionSchema } from '@/validations/form-validation/disbursement-transaction-schema'
 
-import { useCreateDisbursement } from '@/hooks/api-hooks/use-disbursement-transaction'
+import { useCreateDisbursementTransaction } from '@/hooks/api-hooks/use-disbursement-transaction'
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
@@ -58,7 +58,6 @@ const DisbursementTransactionCreateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             disbursement_id: '',
-            description: '',
             is_reference_number_checked: false,
             reference_number: '',
             amount: 0,
@@ -66,7 +65,10 @@ const DisbursementTransactionCreateForm = ({
         },
     })
 
-    const createMutation = useCreateDisbursement({ onSuccess, onError })
+    const createMutation = useCreateDisbursementTransaction({
+        onSuccess,
+        onError,
+    })
 
     const onSubmit = form.handleSubmit((formData) => {
         createMutation.mutate(formData)

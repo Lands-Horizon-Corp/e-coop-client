@@ -18,7 +18,7 @@ import {
     TEntityId,
 } from '@/types'
 
-export const useCreateDisbursement = createMutationHook<
+export const useCreateDisbursementTransaction = createMutationHook<
     IDisbursementTransaction,
     string,
     IDisbursementTransactionRequest
