@@ -2,28 +2,59 @@ import { CheckFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
-import { IGeneralLedger } from '@/types'
+import { usePrintGeneralLedgerTransaction } from '@/hooks/api-hooks/use-transaction'
+
+import { IGeneralLedger, TEntityId } from '@/types'
 
 interface PaymentSuccessModalProps extends IModalProps {
     transaction: IGeneralLedger | null
     newTransaction?: () => void
-    currentMember?: () => void
 }
 
 const PaymentSuccessModal = ({
     transaction,
     newTransaction,
-    currentMember,
+    onOpenChange,
     ...others
 }: PaymentSuccessModalProps) => {
+    const { mutate: printGeneralLedgerTransaction } =
+        usePrintGeneralLedgerTransaction()
+
+    const memberName = transaction?.member_profile?.full_name
+
+    const handlePrintGeneralLedgerTransaction = (
+        generalLedgerId: TEntityId
+    ) => {
+        printGeneralLedgerTransaction(generalLedgerId)
+    }
+
     if (!transaction) {
         return null
     }
 
-    const memberName = transaction?.member_profile?.full_name
-
     return (
-        <Modal {...others}>
+        <Modal
+            {...others}
+            footer={
+                <div className="flex items-center justify-end w-full space-x-2">
+                    <Button
+                        onClick={() => newTransaction?.()}
+                        variant={'ghost'}
+                    >
+                        close
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            handlePrintGeneralLedgerTransaction(transaction.id)
+                            onOpenChange?.(false)
+                        }}
+                        className=""
+                    >
+                        Print
+                    </Button>
+                </div>
+            }
+        >
             <div className="flex items-center justify-center w-full h-full">
                 <div className="flex flex-col items-center justify-center gap-2">
                     <span className="size-16 bg-primary/20 flex items-center justify-center rounded-full">
@@ -38,20 +69,6 @@ const PaymentSuccessModal = ({
                             {memberName}
                         </span>
                     </p>
-                    <div className="mt-5 flex flex-col items-center justify-center w-full space-y-2">
-                        <Button
-                            onClick={() => newTransaction?.()}
-                            variant={'outline'}
-                        >
-                            New Transaction
-                        </Button>
-                        <Button
-                            onClick={() => currentMember?.()}
-                            className="w-full"
-                        >
-                            Pay Again (use this current member)
-                        </Button>
-                    </div>
                 </div>
             </div>
         </Modal>

@@ -7,6 +7,7 @@ import {
 
 import {
     IGeneralLedger,
+    IGeneralLedgerResponse,
     IPaymentQuickRequest,
     IPaymentRequest,
     ITransactionPaginated,
@@ -107,6 +108,13 @@ export const getPaginatedCurrentTransaction = async ({
     return response.data
 }
 
+const printGeneralLedgerTransaction = async (generalLedgerId: string) => {
+    const response = await APIService.post<unknown, IGeneralLedgerResponse>(
+        `/api/v1/transaction/general-ledger/${generalLedgerId}/print`
+    )
+    return response.data
+}
+
 export const { create, getById, updateById } = TransactionCrudServices
 
 export const { allList: searchTransactions } = TransactionSearchServices
@@ -120,4 +128,5 @@ export const TransactionService = {
     updateReferenceNumber,
     getPaginatedCurrentTransaction,
     createTransactionPayment,
+    printGeneralLedgerTransaction,
 }
