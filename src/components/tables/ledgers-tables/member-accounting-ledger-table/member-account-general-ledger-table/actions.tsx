@@ -56,7 +56,6 @@ const MemberAccountGeneralLedgerAction = ({
                                 Member Account General Ledger Entries
                             </p>
                         </div>
-
                         <Tabs
                             defaultValue="general-ledger"
                             className="mt-2 flex-1 flex-col"

@@ -2,37 +2,40 @@ import { useCallback } from 'react'
 
 import { useShortcut } from './use-shorcuts'
 
-type usePaymentsShortcutsTypes = {
+type PaymentType = 'payment' | 'deposit' | 'withdraw'
+
+type UsePaymentsShortcutsTypes = {
     hasSelectedMember: boolean
     openPaymentWithTransactionModal: boolean
     openSuccessModal: boolean
     hasSelectedTransactionId: boolean
     setOpenPaymentWithTransactionModal: (open: boolean) => void
     setOpenMemberPicker: (open: boolean) => void
-    setFocusTypePayment: (type: 'payment' | 'deposit' | 'withdraw') => void
+    setFocusTypePayment: (type: PaymentType) => void
     handleResetAll: () => void
     setSelectedMember: () => void
+    isMediaOpen: boolean
 }
 
-export const useTransactionShortcuts = ({
-    hasSelectedMember,
-    openPaymentWithTransactionModal,
-    openSuccessModal,
-    hasSelectedTransactionId,
-    setOpenPaymentWithTransactionModal,
-    setFocusTypePayment,
-    handleResetAll,
-    setOpenMemberPicker,
-    setSelectedMember,
-}: usePaymentsShortcutsTypes) => {
-    const handleF1 = useCallback(
-        (e: KeyboardEvent) => {
-            e.preventDefault()
-            e.stopPropagation()
-            if (hasSelectedMember) {
-                setOpenPaymentWithTransactionModal(true)
-                setFocusTypePayment('payment')
-            }
+export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
+    const {
+        hasSelectedMember,
+        openPaymentWithTransactionModal,
+        openSuccessModal,
+        hasSelectedTransactionId,
+        setOpenPaymentWithTransactionModal,
+        setFocusTypePayment,
+        handleResetAll,
+        setOpenMemberPicker,
+        setSelectedMember,
+        isMediaOpen,
+    } = props
+
+    const canOpenPaymentModal = useCallback(
+        (type: PaymentType) => {
+            if (!hasSelectedMember) return
+            setOpenPaymentWithTransactionModal(true)
+            setFocusTypePayment(type)
         },
         [
             hasSelectedMember,
@@ -41,31 +44,7 @@ export const useTransactionShortcuts = ({
         ]
     )
 
-    // New handler for 'F2': Opens the deposit modal.
-    const handleF2 = useCallback(() => {
-        if (hasSelectedMember) {
-            setOpenPaymentWithTransactionModal(true)
-            setFocusTypePayment('deposit')
-        }
-    }, [
-        hasSelectedMember,
-        setOpenPaymentWithTransactionModal,
-        setFocusTypePayment,
-    ])
-
-    // New handler for 'F3': Opens the withdraw modal.
-    const handleF3 = useCallback(() => {
-        if (hasSelectedMember) {
-            setOpenPaymentWithTransactionModal(true)
-            setFocusTypePayment('withdraw')
-        }
-    }, [
-        hasSelectedMember,
-        setOpenPaymentWithTransactionModal,
-        setFocusTypePayment,
-    ])
-
-    const handleEscape = useCallback(() => {
+    const canResetAll = useCallback(() => {
         if (
             hasSelectedTransactionId &&
             !openSuccessModal &&
@@ -74,49 +53,60 @@ export const useTransactionShortcuts = ({
             handleResetAll()
         }
     }, [
-        openPaymentWithTransactionModal,
-        openSuccessModal,
         hasSelectedTransactionId,
+        openSuccessModal,
+        openPaymentWithTransactionModal,
         handleResetAll,
     ])
 
-    const handleSelectMember = useCallback(() => {
+    const canSelectMember = useCallback(() => {
         if (
-            hasSelectedTransactionId ||
-            openSuccessModal ||
-            openPaymentWithTransactionModal ||
-            hasSelectedMember
-        )
-            return
-        setOpenMemberPicker(true)
+            !hasSelectedTransactionId &&
+            !openSuccessModal &&
+            !openPaymentWithTransactionModal &&
+            !hasSelectedMember &&
+            !isMediaOpen
+        ) {
+            setOpenMemberPicker(true)
+        }
     }, [
-        hasSelectedMember,
+        hasSelectedTransactionId,
         openSuccessModal,
         openPaymentWithTransactionModal,
-        hasSelectedTransactionId,
+        hasSelectedMember,
+        isMediaOpen,
+        setOpenMemberPicker,
     ])
 
-    const handleUnselectMember = useCallback(() => {
-        if (openSuccessModal || openPaymentWithTransactionModal) return
-        setSelectedMember()
-    }, [openSuccessModal, openPaymentWithTransactionModal])
+    const canUnselectMember = useCallback(() => {
+        if (!openSuccessModal && !openPaymentWithTransactionModal) {
+            setSelectedMember()
+        }
+    }, [openSuccessModal, openPaymentWithTransactionModal, setSelectedMember])
 
-    useShortcut('F1', handleF1, { disableTextInputs: true })
-    useShortcut('F2', handleF2, { disableTextInputs: true })
-    useShortcut('F3', handleF3, { disableTextInputs: true })
-
-    useShortcut('enter', handleSelectMember, {
+    useShortcut('F1', (e) => {
+        e.preventDefault()
+        canOpenPaymentModal('payment')
+    })
+    useShortcut('F2', () => canOpenPaymentModal('deposit'))
+    useShortcut('F3', (e) => {
+        e.preventDefault()
+        canOpenPaymentModal('withdraw')
+    })
+    useShortcut('enter', canSelectMember, {
         disableTextInputs: true,
         disableActiveButton: true,
     })
-
-    useShortcut('Escape', handleEscape, {
+    useShortcut('Escape', canResetAll, {
         disableActiveButton: true,
         disableTextInputs: true,
     })
-
-    useShortcut('control+d', handleUnselectMember, {
-        disableActiveButton: true,
-        disableTextInputs: true,
-    })
+    useShortcut(
+        'control+d',
+        (e) => {
+            e.preventDefault()
+            canUnselectMember()
+        },
+        { disableActiveButton: true, disableTextInputs: true }
+    )
 }

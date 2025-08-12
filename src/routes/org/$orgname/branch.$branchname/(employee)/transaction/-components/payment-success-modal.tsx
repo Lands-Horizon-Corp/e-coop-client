@@ -1,4 +1,4 @@
-import { usePaymentsDataStore } from '@/store/transaction/payments-entry-store'
+import { useTransactionStore } from '@/store/transaction/payments-entry-store'
 import { toReadableDate } from '@/utils'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
@@ -25,7 +25,7 @@ const PaymentSuccessModal = ({
     const { mutate: printGeneralLedgerTransaction } =
         usePrintGeneralLedgerTransaction()
 
-    const { focusTypePayment } = usePaymentsDataStore()
+    const { focusTypePayment } = useTransactionStore()
 
     const memberName = transaction?.member_profile?.full_name
 
