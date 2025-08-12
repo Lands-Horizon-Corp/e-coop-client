@@ -1,7 +1,5 @@
-import { useState } from 'react'
-
 import { cn } from '@/lib'
-import { IAccount } from '@/types/coop-types/accounts/account'
+import { useTransactionStore } from '@/store/transaction/transaction-store'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import {
@@ -15,7 +13,7 @@ import Modal from '@/components/modals/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { IMemberAccountingLedger, TEntityId } from '@/types'
+import { IMemberAccountingLedger } from '@/types'
 
 import GeneralLedgerTable from '../../general-ledger-table'
 
@@ -26,21 +24,15 @@ interface IMemberAccountGeneralLedgerActionProps {
 const MemberAccountGeneralLedgerAction = ({
     memberAccountLedger,
 }: IMemberAccountGeneralLedgerActionProps) => {
-    const [focused, setFocused] = useState<
-        | {
-              memberProfileId: TEntityId
-              accountId: TEntityId
-              account?: IAccount
-          }
-        | undefined
-    >()
+    const { focusedLedger, setFocusedLedger } = useTransactionStore()
+
     return (
         <div onClick={(e) => e.stopPropagation()}>
-            {focused !== undefined && (
+            {focusedLedger !== undefined && (
                 <Modal
-                    open={focused !== undefined}
+                    open={focusedLedger !== undefined}
                     onOpenChange={(state) => {
-                        if (!state) setFocused(undefined)
+                        if (!state) setFocusedLedger(undefined)
                     }}
                     titleClassName="hidden"
                     descriptionClassName="hidden"
@@ -50,7 +42,7 @@ const MemberAccountGeneralLedgerAction = ({
                     <div className="min-h-[80vh] min-w-[80vw] space-y-4 p-2">
                         <div className="space-y-2">
                             <h3 className="text-lg font-semibold">
-                                Account: {focused.account?.name}
+                                Account: {focusedLedger.account?.name}
                             </h3>
                             <p className="text-sm text-muted-foreground">
                                 Member Account General Ledger Entries
@@ -150,15 +142,19 @@ const MemberAccountGeneralLedgerAction = ({
                             </ScrollArea>
 
                             <TabsContent value="general-ledger" asChild>
-                                <MemberAccountGeneralLedger {...focused} />
+                                <MemberAccountGeneralLedger
+                                    {...focusedLedger}
+                                />
                             </TabsContent>
 
                             <TabsContent value="check-entry" asChild>
                                 <GeneralLedgerTable
                                     mode="member-account"
                                     TEntryType="check-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
+                                    memberProfileId={
+                                        focusedLedger.memberProfileId
+                                    }
+                                    accountId={focusedLedger.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
@@ -167,8 +163,10 @@ const MemberAccountGeneralLedgerAction = ({
                                 <GeneralLedgerTable
                                     mode="member-account"
                                     TEntryType="online-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
+                                    memberProfileId={
+                                        focusedLedger.memberProfileId
+                                    }
+                                    accountId={focusedLedger.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
@@ -177,8 +175,10 @@ const MemberAccountGeneralLedgerAction = ({
                                 <GeneralLedgerTable
                                     mode="member-account"
                                     TEntryType="cash-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
+                                    memberProfileId={
+                                        focusedLedger.memberProfileId
+                                    }
+                                    accountId={focusedLedger.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
@@ -187,8 +187,10 @@ const MemberAccountGeneralLedgerAction = ({
                                 <GeneralLedgerTable
                                     mode="member-account"
                                     TEntryType="payment-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
+                                    memberProfileId={
+                                        focusedLedger.memberProfileId
+                                    }
+                                    accountId={focusedLedger.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
@@ -197,8 +199,10 @@ const MemberAccountGeneralLedgerAction = ({
                                 <GeneralLedgerTable
                                     mode="member-account"
                                     TEntryType="withdraw-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
+                                    memberProfileId={
+                                        focusedLedger.memberProfileId
+                                    }
+                                    accountId={focusedLedger.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
@@ -207,8 +211,10 @@ const MemberAccountGeneralLedgerAction = ({
                                 <GeneralLedgerTable
                                     mode="member-account"
                                     TEntryType="deposit-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
+                                    memberProfileId={
+                                        focusedLedger.memberProfileId
+                                    }
+                                    accountId={focusedLedger.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
@@ -221,7 +227,7 @@ const MemberAccountGeneralLedgerAction = ({
                     text: 'View General Ledger',
                     isAllowed: true,
                     onClick: () => {
-                        setFocused({
+                        setFocusedLedger({
                             memberProfileId:
                                 memberAccountLedger?.member_profile_id,
                             accountId: memberAccountLedger?.account_id,

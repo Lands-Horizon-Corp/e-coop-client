@@ -1,5 +1,5 @@
 import { useTransactionBatchStore } from '@/store/transaction-batch-store'
-import { useTransactionStore } from '@/store/transaction/payments-entry-store'
+import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'

@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
+import { IAccount } from '@/types/coop-types/accounts/account'
 import { create } from 'zustand'
 
 import {
@@ -21,6 +22,13 @@ export interface TransactionPropsStore {
     openSuccessModal: boolean
     transactionFormSuccess: IGeneralLedger | null
     openPaymentWithTransactionModal: boolean
+    focusedLedger:
+        | {
+              memberProfileId: TEntityId
+              accountId: TEntityId
+              account?: IAccount
+          }
+        | undefined
 
     setOpenMemberPicker: Dispatch<SetStateAction<boolean>>
     setFocusTypePayment: (payment: TPaymentMode) => void
@@ -34,6 +42,15 @@ export interface TransactionPropsStore {
     setOpenPaymentWithTransactionModal: (open: boolean) => void
 
     handleResetAll: () => void
+    setFocusedLedger: (
+        focused:
+            | {
+                  memberProfileId: TEntityId
+                  accountId: TEntityId
+                  account?: IAccount
+              }
+            | undefined
+    ) => void
 }
 
 export const useTransactionStore = create<TransactionPropsStore>(
@@ -48,6 +65,7 @@ export const useTransactionStore = create<TransactionPropsStore>(
         openSuccessModal: false,
         transactionFormSuccess: null,
         openPaymentWithTransactionModal: false,
+        focusedLedger: undefined,
 
         setSelectedAccountId: (accountId) =>
             set({ selectedAccountId: accountId }),
@@ -89,5 +107,6 @@ export const useTransactionStore = create<TransactionPropsStore>(
                 transactionFormSuccess: null,
                 openPaymentWithTransactionModal: false,
             })),
+        setFocusedLedger: (focused) => set({ focusedLedger: focused }),
     })
 )

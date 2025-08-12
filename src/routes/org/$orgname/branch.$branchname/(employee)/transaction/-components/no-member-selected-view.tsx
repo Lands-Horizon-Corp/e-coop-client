@@ -32,8 +32,10 @@ const NoMemberSelectedView = ({
                     size={'sm'}
                     variant={'secondary'}
                     onClick={onClick}
+                    className=""
                 >
-                    <span className="text-xs">Select Member</span>
+                    Select Member{' '}
+                    <span className="text-lg ml-2 translate-y-[2px]">↵</span>
                 </Button>
             </div>
         </div>

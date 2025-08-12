@@ -15,6 +15,7 @@ type UsePaymentsShortcutsTypes = {
     handleResetAll: () => void
     setSelectedMember: () => void
     isMediaOpen: boolean
+    hasFocusedGeneralLedger: boolean
 }
 
 export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
@@ -29,6 +30,7 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
         setOpenMemberPicker,
         setSelectedMember,
         isMediaOpen,
+        hasFocusedGeneralLedger,
     } = props
 
     const canOpenPaymentModal = useCallback(
@@ -47,28 +49,32 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
     const canResetAll = useCallback(() => {
         if (
             hasSelectedTransactionId &&
-            !openSuccessModal &&
-            !openPaymentWithTransactionModal
-        ) {
-            handleResetAll()
-        }
+            openSuccessModal &&
+            openPaymentWithTransactionModal &&
+            isMediaOpen &&
+            hasFocusedGeneralLedger
+        )
+            return
+        handleResetAll()
     }, [
         hasSelectedTransactionId,
         openSuccessModal,
         openPaymentWithTransactionModal,
         handleResetAll,
+        isMediaOpen,
+        hasFocusedGeneralLedger,
     ])
 
     const canSelectMember = useCallback(() => {
         if (
-            !hasSelectedTransactionId &&
-            !openSuccessModal &&
-            !openPaymentWithTransactionModal &&
-            !hasSelectedMember &&
-            !isMediaOpen
-        ) {
-            setOpenMemberPicker(true)
-        }
+            hasSelectedTransactionId ||
+            openSuccessModal ||
+            openPaymentWithTransactionModal ||
+            hasSelectedMember ||
+            isMediaOpen
+        )
+            return
+        setOpenMemberPicker(true)
     }, [
         hasSelectedTransactionId,
         openSuccessModal,
@@ -79,10 +85,21 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
     ])
 
     const canUnselectMember = useCallback(() => {
-        if (!openSuccessModal && !openPaymentWithTransactionModal) {
-            setSelectedMember()
-        }
-    }, [openSuccessModal, openPaymentWithTransactionModal, setSelectedMember])
+        if (
+            openSuccessModal ||
+            openPaymentWithTransactionModal ||
+            isMediaOpen ||
+            hasSelectedTransactionId
+        )
+            return
+        setSelectedMember()
+    }, [
+        openSuccessModal,
+        openPaymentWithTransactionModal,
+        setSelectedMember,
+        hasSelectedTransactionId,
+        isMediaOpen,
+    ])
 
     useShortcut('F1', (e) => {
         e.preventDefault()
@@ -102,7 +119,7 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
         disableTextInputs: true,
     })
     useShortcut(
-        'control+d',
+        'd',
         (e) => {
             e.preventDefault()
             canUnselectMember()

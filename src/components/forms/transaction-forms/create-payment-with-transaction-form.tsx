@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/lib'
 import ReferenceNumber from '@/routes/org/$orgname/branch.$branchname/(employee)/transaction/-components/reference-number-field'
-import { useTransactionStore } from '@/store/transaction/payments-entry-store'
+import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useForm } from 'react-hook-form'
 
 import BankCombobox from '@/components/comboboxes/bank-combobox'

@@ -1,4 +1,4 @@
-import { useTransactionStore } from '@/store/transaction/payments-entry-store'
+import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { toReadableDate } from '@/utils'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
@@ -73,7 +73,9 @@ const PaymentSuccessModal = ({
                         }}
                     >
                         Print
-                        <span className="text-lg ml-2">↵</span>
+                        <span className="text-lg ml-2 translate-y-[2px]">
+                            ↵
+                        </span>
                     </Button>
                 </div>
             }
