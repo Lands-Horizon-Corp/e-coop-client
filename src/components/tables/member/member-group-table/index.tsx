@@ -28,6 +28,7 @@ import MemberGroupTableColumns, {
     IMemberGroupTableColumnProps,
     groupGlobalSearchTargets,
 } from './columns'
+import { MemberGroupRowContext } from './row-action-context'
 
 export interface MemberGroupTableProps
     extends TableProps<IMemberGroup>,
@@ -49,7 +50,12 @@ const MemberGroupTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = MemberGroupRowContext,
 }: MemberGroupTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -183,7 +189,12 @@ const MemberGroupTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

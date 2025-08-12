@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import TransactionTable from '@/components/tables/transaction-table'
-import TransactionTableAction from '@/components/tables/transaction-table/action'
+import TransactionTableAction from '@/components/tables/transaction-table/row-action-context'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 

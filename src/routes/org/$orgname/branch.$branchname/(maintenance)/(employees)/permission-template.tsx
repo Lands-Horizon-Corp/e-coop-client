@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { PermissionTemplateCreateUpdateFormModal } from '@/components/forms/permission-template-create-update-form'
 import PermissionTemplateTable from '@/components/tables/permission-template-table'
-import PermissionTemplateTableAction from '@/components/tables/permission-template-table/action'
+import PermissionTemplateTableAction from '@/components/tables/permission-template-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

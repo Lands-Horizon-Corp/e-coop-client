@@ -7,7 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { AccountCategoryFormModal } from '@/components/forms/account-category-forms/account-category-create-update-form'
 import AccountCategoryTable from '@/components/tables/account-category-table'
-import AccountCategoryAction from '@/components/tables/account-category-table/action'
+import AccountCategoryAction from '@/components/tables/account-category-table/row-action-context'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'

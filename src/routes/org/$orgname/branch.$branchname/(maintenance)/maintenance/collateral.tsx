@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { CollateralCreateUpdateFormModal } from '@/components/forms/collateral-create-update-form'
 import CollateralTable from '@/components/tables/collateral-table'
-import CollateralAction from '@/components/tables/collateral-table/action'
+import CollateralAction from '@/components/tables/collateral-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

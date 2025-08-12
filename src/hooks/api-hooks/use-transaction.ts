@@ -24,12 +24,22 @@ import {
     TEntityId,
 } from '@/types'
 
-export type TPaginatedTransactionHookMode =
-    | 'current-branch' // /transaction/branch/search
-    | 'current-user' // /transaction/current/search
-    | 'member-profile' // /transaction/member-profile/:member_profile_id/search
-    | 'employee' // /transaction/employee/:employee_id/search
-    | 'transaction-batch' // /transaction/transaction-batch/:transaction_batch_id/search
+export type TTransactionMode =
+    | 'current-branch'
+    | 'current-user'
+    | 'member-profile'
+    | 'employee'
+    | 'transaction-batch'
+
+export type TTransactionHookProps = {
+    mode: TTransactionMode
+
+    // Optional parameters based on mode
+    userId?: TEntityId
+    memberProfileId?: TEntityId
+    transactionBatchId?: TEntityId
+} & IAPIFilteredPaginatedHook<ITransactionPaginated, string> &
+    IQueryProps
 
 const ENTITY_KEY = 'transaction'
 
@@ -43,43 +53,88 @@ export const useFilteredPaginatedTransaction = ({
     filterPayload,
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
-}: IAPIFilteredPaginatedHook<ITransactionPaginated, string> &
-    IQueryProps & {
-        mode?: TPaginatedTransactionHookMode
+    ...other
+}: TTransactionHookProps) => {
+    const queryKey = [
+        'transaction-tag',
+        'resource-query',
+        mode,
+        memberProfileId,
+        userId,
+        transactionBatchId,
+        filterPayload,
+        pagination,
+        sort,
+    ].filter(Boolean)
 
-        userId?: TEntityId
-        memberProfileId?: TEntityId
-        transactionBatchId?: TEntityId
-    }) => {
     return useQuery<ITransactionPaginated, string>({
-        queryKey: [
-            'transaction-tag',
-            'resource-query',
-            mode,
-            memberProfileId,
-            userId,
-            filterPayload,
-            pagination,
-            sort,
-        ],
+        queryKey,
         queryFn: async () => {
-            let url = 'branch/search'
+            const params = {
+                pagination,
+                sort: sort && toBase64(sort),
+                filters: filterPayload && toBase64(filterPayload),
+            }
 
-            if (mode === 'current-user') url = `current/search`
-            else if (mode === 'member-profile')
-                url = `member-profile/${transactionBatchId}/search`
-            else if (mode === 'employee') url = `employee/${userId}/search`
-            else if (mode === 'transaction-batch')
-                url = `transaction-batch/${transactionBatchId}/search`
+            let serviceCall: Promise<ITransactionPaginated>
+            let targetUrl: string
 
-            const [error, result] = await withCatchAsync(
-                TransactionService.search({
-                    targetUrl: url,
-                    pagination,
-                    sort: sort && toBase64(sort),
-                    filters: filterPayload && toBase64(filterPayload),
-                })
-            )
+            switch (mode) {
+                case 'current-branch':
+                    targetUrl = 'branch/search'
+                    serviceCall = TransactionService.search({
+                        targetUrl,
+                        ...params,
+                    })
+                    break
+
+                case 'current-user':
+                    targetUrl = 'current/search'
+                    serviceCall = TransactionService.search({
+                        targetUrl,
+                        ...params,
+                    })
+                    break
+
+                case 'member-profile':
+                    if (!memberProfileId)
+                        throw new Error(
+                            'memberProfileId is required for member-profile mode'
+                        )
+                    targetUrl = `member-profile/${memberProfileId}/search`
+                    serviceCall = TransactionService.search({
+                        targetUrl,
+                        ...params,
+                    })
+                    break
+
+                case 'employee':
+                    if (!userId)
+                        throw new Error('userId is required for employee mode')
+                    targetUrl = `employee/${userId}/search`
+                    serviceCall = TransactionService.search({
+                        targetUrl,
+                        ...params,
+                    })
+                    break
+
+                case 'transaction-batch':
+                    if (!transactionBatchId)
+                        throw new Error(
+                            'transactionBatchId is required for transaction-batch mode'
+                        )
+                    targetUrl = `transaction-batch/${transactionBatchId}/search`
+                    serviceCall = TransactionService.search({
+                        targetUrl,
+                        ...params,
+                    })
+                    break
+
+                default:
+                    throw new Error(`Unsupported mode: ${mode}`)
+            }
+
+            const [error, result] = await withCatchAsync(serviceCall)
 
             if (error) {
                 const errorMessage = serverRequestErrExtractor({ error })
@@ -98,6 +153,7 @@ export const useFilteredPaginatedTransaction = ({
         },
         enabled,
         retry: 1,
+        ...other,
     })
 }
 
@@ -266,6 +322,7 @@ export const useFilteredCurrentPaginatedTransaction = ({
         ...other,
     })
 }
+
 export const useUpdateReferenceNumber = createMutationHook<
     ITransactionResponse,
     string,

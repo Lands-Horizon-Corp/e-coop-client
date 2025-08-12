@@ -29,6 +29,7 @@ import TimesheetTableColumns, {
     ITimesheetTableColumnProps,
     timesheetGlobalSearchTargets,
 } from './columns'
+import { TimesheetRowContext } from './row-action-context'
 
 export interface TimesheetTableProps
     extends TableProps<ITimesheet>,
@@ -63,8 +64,12 @@ const TimesheetTable = ({
     defaultFilter,
     userOrganizationId,
     onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
+    RowContextComponent = TimesheetRowContext,
 }: TTimesheetProps & {
     userOrganizationId?: TEntityId
 }) => {
@@ -185,7 +190,11 @@ const TimesheetTable = ({
                     isStickyFooter
                     className="mb-2"
                     onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

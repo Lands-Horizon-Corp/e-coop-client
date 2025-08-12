@@ -35,6 +35,7 @@ import TransactionBatchTableColumns, {
     ITransactionBatchTableColumnProps,
     batchGlobalSearchTargets,
 } from './columns'
+import { TransactionBatchRowContext } from './row-action-context'
 
 export interface TransactionBatchTableProps
     extends TableProps<ITransactionBatch>,
@@ -69,7 +70,12 @@ const TransactionBatchTable = ({
     defaultFilter,
     userOrganizationId,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = TransactionBatchRowContext,
 }: TTransactionBatchTableProps & {
     userOrganizationId?: TEntityId
 }) => {
@@ -204,7 +210,12 @@ const TransactionBatchTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

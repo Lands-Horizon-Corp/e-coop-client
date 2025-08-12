@@ -291,6 +291,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                 </Modal>
             )}
             <MemberAccountingLedgerTable
+                mode="member"
                 memberProfileId={memberProfileId}
                 onRowClick={(data) =>
                     setFocused({

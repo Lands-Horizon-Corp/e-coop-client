@@ -290,6 +290,14 @@ export const generateSidebarGroups = (
                     shortDescription: 'Browse all cooperative members',
                 },
                 {
+                    title: 'Member Accounting Ledger',
+                    url: `${baseUrl}/member-accounting-ledger`,
+                    type: 'item',
+                    icon: UserListIcon,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Browse overall member accounting ledger',
+                },
+                {
                     title: 'Member Settings',
                     url: `${baseUrl}/members`,
                     icon: MaintenanceIcon,

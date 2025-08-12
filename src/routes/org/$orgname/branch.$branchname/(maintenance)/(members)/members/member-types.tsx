@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { MemberTypeCreateUpdateFormModal } from '@/components/forms/member-forms/member-type-create-update-form'
 import MemberTypeTable from '@/components/tables/member/member-type-table'
-import MemberTypeTableAction from '@/components/tables/member/member-type-table/action'
+import MemberTypeTableAction from '@/components/tables/member/member-type-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

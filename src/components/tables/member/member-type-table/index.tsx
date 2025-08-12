@@ -32,6 +32,7 @@ import MemberTypeTableColumns, {
     IMemberTypeTableColumnProps,
     memberTypeGlobalSearchTargets,
 } from './columns'
+import { MemberTypeRowContext } from './row-action-context'
 
 export interface MemberTypeTableProps
     extends TableProps<IMemberType>,
@@ -53,7 +54,12 @@ const MemberTypeTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = MemberTypeRowContext,
 }: MemberTypeTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -181,7 +187,12 @@ const MemberTypeTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

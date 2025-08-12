@@ -22,7 +22,7 @@ import { IMemberType } from '@/types'
 
 import { createUpdateColumns } from '../../common-columns'
 import MemberTypeReferenceTable from './member-type-references-table'
-import MemberTypeReferenceAction from './member-type-references-table/action'
+import MemberTypeReferenceAction from './member-type-references-table/row-action-context'
 
 export const memberTypeGlobalSearchTargets: IGlobalSearchTargets<IMemberType>[] =
     [

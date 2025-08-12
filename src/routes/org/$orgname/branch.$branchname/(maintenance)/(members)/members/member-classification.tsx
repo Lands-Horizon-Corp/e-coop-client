@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { MemberClassificationCreateUpdateFormModal } from '@/components/forms/member-forms/member-classification-create-update-form'
 import MemberClassificationTable from '@/components/tables/member/member-classification-table'
-import MemberClassificationTableAction from '@/components/tables/member/member-classification-table/action'
+import MemberClassificationTableAction from '@/components/tables/member/member-classification-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { HolidayCreateUpdateFormModal } from '@/components/forms/holiday-create-update-form'
 import HolidaysTable from '@/components/tables/holidays-table'
-import HolidayTableAction from '@/components/tables/holidays-table/action'
+import HolidayTableAction from '@/components/tables/holidays-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

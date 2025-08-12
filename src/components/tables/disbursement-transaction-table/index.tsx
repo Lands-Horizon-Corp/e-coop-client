@@ -29,6 +29,7 @@ import DisbursementTransactionTableColumns, {
     IDisbursementTransactionTableColumnProps,
     disbursementTransactionGlobalSearchTargets,
 } from './columns'
+import { DisbursementTransactionRowContext } from './row-action-context'
 
 export interface DisbursementTransactionTableProps
     extends TableProps<IDisbursementTransaction>,
@@ -66,9 +67,13 @@ const DisbursementTransactionTable = ({
     className,
     toolbarProps,
     defaultFilter,
-    onRowClick = () => {},
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
+    RowContextComponent = DisbursementTransactionRowContext,
     ...modeProps
 }: TDisbursementTransactionTableProps & {
     userOrganizationId?: TEntityId
@@ -184,7 +189,11 @@ const DisbursementTransactionTable = ({
                     isStickyFooter
                     className="mb-2"
                     onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { BillsAndCoinCreateUpdateFormModal } from '@/components/forms/bills-and-coin-create-update-form'
 import BillsAndCoinsTable from '@/components/tables/bills-and-coins-table'
-import BillsAndCoinsAction from '@/components/tables/bills-and-coins-table/action'
+import BillsAndCoinsAction from '@/components/tables/bills-and-coins-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'

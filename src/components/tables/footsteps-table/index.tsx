@@ -29,6 +29,7 @@ import FootstepTableColumns, {
     IFootstepTableColumnProps,
     footstepGlobalSearchTargets,
 } from './columns'
+import { FootstepRowContext } from './row-action-context'
 
 export interface FootstepTableProps
     extends TableProps<IFootstep>,
@@ -69,8 +70,12 @@ const FootstepTable = ({
     defaultFilter,
     memberProfileId,
     onRowClick = () => {},
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
+    RowContextComponent = FootstepRowContext,
 }: TFootstepTableProps & {
     userOrgId?: TEntityId
     memberProfileId?: TEntityId
@@ -185,7 +190,11 @@ const FootstepTable = ({
                     isStickyFooter
                     className="mb-2"
                     onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

@@ -28,6 +28,7 @@ import membersColumns, {
     IMemberProfilesTableColumnProps,
     memberGlobalSearchTargets,
 } from './columns'
+import { MemberProfileRowContext } from './row-action-context'
 
 export interface MemberProfileTableProps
     extends TableProps<IMemberProfile>,
@@ -49,8 +50,12 @@ const MemberProfileTable = ({
     toolbarProps,
     defaultFilter,
     onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
+    RowContextComponent = MemberProfileRowContext,
 }: MemberProfileTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -190,7 +195,11 @@ const MemberProfileTable = ({
                     isStickyHeader
                     isStickyFooter
                     onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                     className={cn('mb-2', isScrollable && 'flex-1')}
                 />

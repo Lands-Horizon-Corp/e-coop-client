@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { PaymentTypeFormModal } from '@/components/forms/payment-type-forms/payment-type-create-update-form'
 import { PaymentTypeTable } from '@/components/tables/payment-type-table'
-import PaymentTypeAction from '@/components/tables/payment-type-table/action'
+import PaymentTypeAction from '@/components/tables/payment-type-table/row-action-context'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
