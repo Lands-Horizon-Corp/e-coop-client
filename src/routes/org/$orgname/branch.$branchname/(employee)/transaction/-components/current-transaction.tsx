@@ -334,7 +334,6 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
         filterPayload: finalFilterPayload,
         pagination,
     })
-    console.log(CurrentTransaction)
     const handleNavigate = (transactionId: TEntityId, fullPath: string) => {
         navigate({
             to: fullPath,

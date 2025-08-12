@@ -187,8 +187,6 @@ const CurrentPaymentsEntryList = ({
         mode: 'transaction',
     })
 
-    console.log(generalLedgerBasedTransaction)
-
     if (isLoading) {
         return <PaymentsEntryListSkeleton />
     }
