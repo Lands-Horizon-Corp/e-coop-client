@@ -15,6 +15,7 @@ import {
     IAPIFilteredPaginatedHook,
     IAPIHook,
     IGeneralLedger,
+    IGeneralLedgerResponse,
     IPaymentQuickRequest,
     IPaymentRequest,
     IQueryProps,
@@ -340,4 +341,14 @@ export const useUpdateReferenceNumber = createMutationHook<
         ),
     'Reference Number Updated',
     (args) => updateMutationInvalidationFn('get-transaction-by-id', args)
+)
+
+export const usePrintGeneralLedgerTransaction = createMutationHook<
+    IGeneralLedgerResponse,
+    string,
+    TEntityId
+>(
+    (payload) => TransactionService.printGeneralLedgerTransaction(payload),
+    'General Ledger Transaction Printed',
+    (args) => createMutationInvalidateFn('general-ledger', args)
 )

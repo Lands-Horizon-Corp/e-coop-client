@@ -3,7 +3,7 @@ import { memo, useState } from 'react'
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { commaSeparators } from '@/helpers'
 import { cn } from '@/lib'
-import { dateAgo } from '@/utils'
+import { dateAgo, toReadableDate } from '@/utils'
 import { PaginationState } from '@tanstack/react-table'
 
 import { LedgerSourceBadge } from '@/components/badges/ledger-source-badge'
@@ -20,6 +20,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
@@ -304,9 +305,11 @@ const CurrentPaymentsEntryList = ({
                                                             'bank',
                                                             'check',
                                                         ].includes(
-                                                            payment.source
+                                                            payment.payment_type
+                                                                ?.type ?? ''
                                                         ) && (
                                                             <>
+                                                                <Separator className="my-2" />
                                                                 <PaymentsEntryItem
                                                                     label="Bank Details"
                                                                     className="font-bold"
@@ -327,14 +330,34 @@ const CurrentPaymentsEntryList = ({
                                                                 />
                                                                 <PaymentsEntryItem
                                                                     label="entry date"
-                                                                    value={
+                                                                    value={toReadableDate(
                                                                         payment.entry_date
-                                                                    }
+                                                                    )}
                                                                 />
+                                                                <PaymentsEntryItem
+                                                                    label="Proof of Payment"
+                                                                    className="font-bold"
+                                                                />
+                                                                <PreviewMediaWrapper
+                                                                    media={
+                                                                        payment.proof_of_payment_media ||
+                                                                        undefined
+                                                                    }
+                                                                >
+                                                                    <ImageDisplay
+                                                                        className="size-20 w-full rounded-xl"
+                                                                        src={
+                                                                            payment
+                                                                                .proof_of_payment_media
+                                                                                ?.download_url
+                                                                        }
+                                                                    />
+                                                                </PreviewMediaWrapper>
+                                                                <Separator className="my-5" />
                                                             </>
                                                         )}
                                                         <PaymentsEntryItem
-                                                            label="signature"
+                                                            label="Signature"
                                                             className="font-bold"
                                                         />
                                                         <div>

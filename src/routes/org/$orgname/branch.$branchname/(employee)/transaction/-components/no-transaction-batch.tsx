@@ -1,6 +1,7 @@
 import { useTransactionBatchStore } from '@/store/transaction-batch-store'
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { toReadableDate } from '@/utils'
+import { Link } from '@tanstack/react-router'
 
 import { TransactionBatchCreateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-create-form'
 import Modal from '@/components/modals/modal'
@@ -11,7 +12,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { ITransactionBatchMinimal } from '@/types'
 import { IEmployee } from '@/types'
 
-const NoBatchWarningModal = () => {
+const NoTransactionBatchWarningModal = () => {
     const {
         currentAuth: { user, user_organization },
     } = useAuthUserWithOrgBranch<IEmployee>()
@@ -40,7 +41,6 @@ const NoBatchWarningModal = () => {
                 }}
             />
             <Modal
-                className="max-w-3xl"
                 title="No Transaction Batch Found"
                 description="Please create a new transaction batch to proceed."
                 titleClassName="text-center text-2xl font-bold"
@@ -56,6 +56,16 @@ const NoBatchWarningModal = () => {
                         >
                             Start Batch
                         </Button>
+                        <Link
+                            to={
+                                '/org/$orgname/branch/$branchname/dashboard' as string
+                            }
+                            className="w-full"
+                        >
+                            <Button className="w-full" variant={'secondary'}>
+                                Return to Dashboard
+                            </Button>
+                        </Link>
                     </>
                 }
             ></Modal>
@@ -63,4 +73,4 @@ const NoBatchWarningModal = () => {
     )
 }
 
-export default NoBatchWarningModal
+export default NoTransactionBatchWarningModal
