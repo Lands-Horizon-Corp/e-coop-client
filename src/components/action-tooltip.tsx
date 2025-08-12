@@ -6,6 +6,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 export interface IActionTooltipProps {
     tooltipContent: string | ReactNode
@@ -26,9 +27,12 @@ const ActionTooltip = ({
         <TooltipProvider>
             <Tooltip delayDuration={delayDuration}>
                 <TooltipTrigger asChild>{children}</TooltipTrigger>
-                <TooltipContent side={side} align={align}>
-                    <p>{tooltipContent}</p>
-                </TooltipContent>
+
+                <TooltipPortal>
+                    <TooltipContent side={side} align={align}>
+                        <p>{tooltipContent}</p>
+                    </TooltipContent>
+                </TooltipPortal>
             </Tooltip>
         </TooltipProvider>
     )

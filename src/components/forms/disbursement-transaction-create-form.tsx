@@ -31,6 +31,8 @@ import {
     IForm,
 } from '@/types'
 
+import InfoTooltip from '../elements/info-tooltip'
+
 type TDisbursementTransactionFormValues = z.infer<
     typeof disbursementTransactionSchema
 >
@@ -97,7 +99,15 @@ const DisbursementTransactionCreateForm = ({
                         <FormFieldWrapper
                             control={form.control}
                             name="disbursement_id"
-                            label="Disbursement Type"
+                            label={
+                                <span>
+                                    Disbursement Type *
+                                    <InfoTooltip
+                                        content="Type of disbursement is required for creating a disbursement transaction"
+                                        className="ml-1"
+                                    />
+                                </span>
+                            }
                             render={({ field }) => (
                                 <DisbursementCombobox
                                     value={field.value}
@@ -158,7 +168,8 @@ const DisbursementTransactionCreateForm = ({
                                         htmlFor={field.name}
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >
-                                        Reference number has been verified
+                                        Reference number has been verified{' '}
+                                        <InfoTooltip content="Always verify reference number of disbursement" />
                                     </Label>
                                 </div>
                             )}

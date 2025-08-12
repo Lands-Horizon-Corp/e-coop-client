@@ -30,6 +30,7 @@ export const ICONS = [
     'Hash',
     'Back',
     'Next',
+    'Info',
     'Globe',
     'Ghost',
     'Money',
