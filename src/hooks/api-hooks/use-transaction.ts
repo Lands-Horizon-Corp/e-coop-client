@@ -268,7 +268,6 @@ export const useCreatePaymentWithTransaction = createMutationHook<
                 mode: payload.mode,
             })
         } else {
-            console.log('payload', payload)
             const [error, result] = await withCatchAsync(
                 TransactionService.create(payload.transactionPayload)
             )

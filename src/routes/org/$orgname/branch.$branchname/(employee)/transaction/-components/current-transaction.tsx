@@ -370,8 +370,6 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
 
-    console.log('CurrentTransaction:', CurrentTransaction)
-
     return (
         <div className="flex w-full flex-row items-center justify-between ">
             <Sheet open={onOpen} onOpenChange={setOnOpen}>

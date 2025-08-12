@@ -124,8 +124,6 @@ const PaymentWithTransactionForm = ({
     const isOnlinePayment = ['bank', 'online', 'check'].includes(
         paymentTypeType?.toLowerCase() ?? ''
     )
-    console.log(form.getValues())
-    console.log(form.formState.errors)
 
     return (
         <Form {...form}>
