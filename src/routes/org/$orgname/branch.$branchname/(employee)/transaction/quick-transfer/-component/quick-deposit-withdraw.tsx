@@ -1,3 +1,4 @@
+import { cn } from '@/lib'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
 import { QuickTransferTransactionForm } from '@/components/forms/transaction-forms/quick-transaction-form'
@@ -38,14 +39,35 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
     return (
         <>
             <NoTransactionBatchWarningModal />
-            <div className="flex justify-start w-full px-5">
-                <SectionTitle
-                    title={` Quick Transfer ${mode?.charAt(0).toUpperCase()}${mode?.slice(1)}`}
-                    Icon={
-                        mode === 'deposit' ? HandDepositIcon : HandWithdrawIcon
-                    }
-                />
+            <div className="flex w-full flex-col space-y-2">
+                <div className="flex justify-start w-full px-5">
+                    <SectionTitle
+                        title={` Quick Transfer ${mode?.charAt(0).toUpperCase()}${mode?.slice(1)}`}
+                        Icon={
+                            mode === 'deposit'
+                                ? HandDepositIcon
+                                : HandWithdrawIcon
+                        }
+                    />
+                </div>
+                <div
+                    className={cn(
+                        'm-5 w-16 h-2 rounded-xl',
+                        mode == 'withdraw' ? 'bg-red-400' : 'bg-blue-400'
+                    )}
+                >
+                    {' '}
+                </div>
+                <div
+                    className={cn(
+                        'm-5 w-16 h-2 rounded-xl blur-md',
+                        mode == 'withdraw' ? 'bg-red-400' : 'bg-blue-400'
+                    )}
+                >
+                    {' '}
+                </div>
             </div>
+
             <ResizablePanelGroup direction="horizontal" className="">
                 <ResizablePanel
                     defaultSize={40}
