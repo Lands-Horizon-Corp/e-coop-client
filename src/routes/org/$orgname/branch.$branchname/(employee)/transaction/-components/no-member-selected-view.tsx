@@ -9,7 +9,7 @@ type NoMemberSelectedViewProps = {
 const NoMemberSelectedView = ({
     onClick,
     disabledSelectTrigger,
-    isDisplay,
+    isDisplay = true,
 }: NoMemberSelectedViewProps) => {
     if (!isDisplay) return null
 
