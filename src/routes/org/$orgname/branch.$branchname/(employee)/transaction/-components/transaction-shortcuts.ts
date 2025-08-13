@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { useShortcut } from './use-shorcuts'
+import { useShortcut } from '../../../../../../../hooks/shortcut-hooks/use-shorcuts'
 
 type PaymentType = 'payment' | 'deposit' | 'withdraw'
 

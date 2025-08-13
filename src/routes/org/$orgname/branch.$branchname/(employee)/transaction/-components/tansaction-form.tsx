@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { useTransactionShortcuts } from '@/routes/org/$orgname/branch.$branchname/(employee)/transaction/-components/transaction-shortcuts'
 import { useImagePreview } from '@/store/image-preview-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useForm } from 'react-hook-form'
@@ -21,7 +22,6 @@ import {
     useGetTransactionById,
     useUpdateReferenceNumber,
 } from '@/hooks/api-hooks/use-transaction'
-import { useTransactionShortcuts } from '@/hooks/shortcut-hooks/payments-entry-shortcuts'
 import { useGetUserSettings } from '@/hooks/use-get-use-settings'
 
 import { IGeneralLedger, TEntityId } from '@/types'
