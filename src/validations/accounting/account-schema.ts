@@ -16,11 +16,7 @@ import {
 import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '../common'
+import { descriptionTransformerSanitizer, entityIdSchema } from '../common'
 
 export enum AccountExclusiveSettingTypeEnum {
     None = 'None',
@@ -37,8 +33,9 @@ export const IAccountRequestSchema = z.object({
     member_type_id: entityIdSchema.optional(),
 
     name: z.string().min(1, 'Name is required'),
-    description: descriptionSchema
-        .max(250, 'Description is required')
+    description: z
+        .string()
+        .max(250, 'Maximum is 250')
         .optional()
         .transform(descriptionTransformerSanitizer),
 
@@ -135,12 +132,10 @@ export const IAccountRequestSchema = z.object({
         .min(0)
         .optional(),
 
-    financial_statement_type: z
-        .nativeEnum(FinancialStatementTypeEnum)
-        .optional(),
-    general_ledger_type: z.nativeEnum(GeneralLedgerTypeEnum).optional(),
+    financial_statement_type: z.nativeEnum(FinancialStatementTypeEnum),
+    general_ledger_type: z.nativeEnum(GeneralLedgerTypeEnum),
 
-    alternative_code: z.string().optional(),
+    alternative_code: z.string().optional().default(''),
 
     fines_grace_period_amortization: z.number().int().min(0).optional(),
     additional_grace_period: z.number().int().min(0).optional(),
@@ -178,4 +173,19 @@ export const IAccountRequestSchema = z.object({
     total_row: z.number().int().optional(),
 
     general_ledger_grouping_exclude_account: z.boolean().optional(),
+
+    icon: z.string().default(''),
+    show_in_general_ledger_source_withdraw: z.boolean().default(true),
+    show_in_general_ledger_source_deposit: z.boolean().default(true),
+    show_in_general_ledger_source_journal: z.boolean().default(true),
+    show_in_general_ledger_source_payment: z.boolean().default(true),
+    show_in_general_ledger_source_adjustment: z.boolean().default(true),
+    show_in_general_ledger_source_journal_voucher: z.boolean().default(true),
+    show_in_general_ledger_source_check_voucher: z.boolean().default(true),
+
+    compassion_fund: z.boolean().default(false), // this is damayan in OLD coop
+    compassion_fund_amount: z.coerce
+        .number()
+        .min(0, 'Negative amount is not allowed')
+        .default(0), // this is damayan in OLD coop
 })

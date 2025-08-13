@@ -11,6 +11,7 @@ export const PaymentWithTransactionSchema = z.object({
     bank_reference_number: z.string().optional(),
     entry_date: z.string().optional(),
     account_id: TEntityId.optional(),
+    account: z.any().optional(),
     payment_type_id: TEntityId.optional(),
 
     description: z.string().max(255).optional(),

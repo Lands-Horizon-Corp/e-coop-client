@@ -26,11 +26,13 @@ import { Path, useForm } from 'react-hook-form'
 
 import AccountCategoryComboBox from '@/components/comboboxes/account-category-combobox'
 import AccountClassificationComboBox from '@/components/comboboxes/account-classification-combobox'
+import IconCombobox from '@/components/comboboxes/icon-combobox'
 import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     ExcludeIcon,
     FaCalendarCheckIcon,
+    HandCoinsIcon,
     InternalIcon,
     LoadingSpinnerIcon,
     MoneyBagIcon,
@@ -64,7 +66,7 @@ import {
 } from '@/hooks/api-hooks/use-account'
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
-import { IClassProps, IForm, TEntityId } from '@/types'
+import { IClassProps, IForm, TEntityId, TIcon } from '@/types'
 
 type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
@@ -95,6 +97,16 @@ const AccountCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             // type: AccountTypeEnum.Deposit,
+            show_in_general_ledger_source_withdraw: true,
+            show_in_general_ledger_source_deposit: true,
+            show_in_general_ledger_source_journal: true,
+            show_in_general_ledger_source_payment: true,
+            show_in_general_ledger_source_adjustment: true,
+            show_in_general_ledger_source_journal_voucher: true,
+            show_in_general_ledger_source_check_voucher: true,
+            compassion_fund: false,
+            compassion_fund_amount: 0,
+            icon: 'Money Bag',
             ...defaultValues,
         },
     })
@@ -134,6 +146,8 @@ const AccountCreateUpdateForm = ({
     const errorMessage = createAccountError || updateAccountError
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    const isCompassionFundEnabled = form.watch('compassion_fund')
 
     useAlertBeforeClosing(isDirty)
 
@@ -248,6 +262,19 @@ const AccountCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
+                            name="icon"
+                            label="Icon"
+                            disabled={isLoading}
+                            render={({ field }) => (
+                                <IconCombobox
+                                    {...field}
+                                    placeholder="Select Icon"
+                                    value={field.value as TIcon}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
                             name="account_category_id"
                             label="Account Category"
                             disabled={isLoading}
@@ -267,7 +294,7 @@ const AccountCreateUpdateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            label="Account Description *"
+                            label="Account Description"
                             name="description"
                             className="col-span-4"
                             render={({ field }) => {
@@ -1143,7 +1170,7 @@ const AccountCreateUpdateForm = ({
                             <legend className="text-primary">Other</legend>
                             <FormFieldWrapper
                                 control={form.control}
-                                label="General Ledger Type"
+                                label="General Ledger Type *"
                                 name="general_ledger_type"
                                 className="col-span-4"
                                 render={({ field }) => (
@@ -1182,7 +1209,7 @@ const AccountCreateUpdateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Financial Statement Type"
+                                label="Financial Statement Type *"
                                 name="financial_statement_type"
                                 className="col-span-4"
                                 render={({ field }) => (
@@ -1321,6 +1348,8 @@ const AccountCreateUpdateForm = ({
                                     }}
                                 />
                             </div>
+
+                            {/* --- Lumpsum Computation Type Field --- */}
                             <FormFieldWrapper
                                 control={form.control}
                                 name="lumpsum_computation_type"
@@ -1384,189 +1413,525 @@ const AccountCreateUpdateForm = ({
                                     </GradientBackground>
                                 )}
                             />
+
+                            {/* --- Other Deduction Entry Field --- */}
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="other_deduction_entry"
+                                label="Other Deduction Entry"
+                                className="col-span-2"
+                                render={({ field }) => (
+                                    <GradientBackground
+                                        gradientOnly
+                                        className="p-5"
+                                    >
+                                        <RadioGroup
+                                            value={field.value}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            onValueChange={field.onChange}
+                                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                        >
+                                            {Object.values(
+                                                OtherDeductionEntryEnum
+                                            ).map((type) => (
+                                                <div
+                                                    key={type}
+                                                    className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                >
+                                                    <RadioGroupItem
+                                                        value={type}
+                                                        id={`other-deduction-${type}`}
+                                                        className="order-1 after:absolute after:inset-0"
+                                                    />
+                                                    <div className="flex grow items-center gap-3">
+                                                        <div className="grid gap-2">
+                                                            <Label
+                                                                htmlFor={`other-deduction-${type}`}
+                                                            >
+                                                                {type}
+                                                            </Label>
+                                                            <p
+                                                                id={`other-deduction-${type}-description`}
+                                                                className="text-xs text-muted-foreground"
+                                                            >
+                                                                {type ===
+                                                                    OtherDeductionEntryEnum.None &&
+                                                                    'No additional deductions will be applied.'}
+                                                                {type ===
+                                                                    OtherDeductionEntryEnum.HealthCare &&
+                                                                    'Allows for healthcare-related deductions.'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </RadioGroup>
+                                    </GradientBackground>
+                                )}
+                            />
+
+                            {/* --- Interest Saving Type Diminishing Straight Field --- */}
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="interest_saving_type_diminishing_straight"
+                                label="Interest Saving Type (Diminishing/Straight)"
+                                className="col-span-2"
+                                render={({ field }) => (
+                                    <GradientBackground
+                                        gradientOnly
+                                        className="p-5"
+                                    >
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                        >
+                                            {Object.values(
+                                                InterestSavingTypeDiminishingStraightEnum
+                                            ).map((type) => (
+                                                <div
+                                                    key={type}
+                                                    className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                >
+                                                    <RadioGroupItem
+                                                        value={type}
+                                                        id={`interest-saving-type-${type}`}
+                                                        className="order-1 after:absolute after:inset-0"
+                                                    />
+                                                    <div className="flex grow items-center gap-3">
+                                                        <div className="grid gap-2">
+                                                            <Label
+                                                                htmlFor={`interest-saving-type-${type}`}
+                                                            >
+                                                                {type}
+                                                            </Label>
+                                                            <p
+                                                                id={`interest-saving-type-${type}-description`}
+                                                                className="text-xs text-muted-foreground"
+                                                            >
+                                                                {type ===
+                                                                    InterestSavingTypeDiminishingStraightEnum.Spread &&
+                                                                    'Interest savings are spread across payments.'}
+                                                                {type ===
+                                                                    InterestSavingTypeDiminishingStraightEnum.FirstPayment &&
+                                                                    'Interest savings are applied to the first payment.'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </RadioGroup>
+                                    </GradientBackground>
+                                )}
+                            />
+
+                            {/* --- Other Information Of An Account Field --- */}
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="other_information_of_an_account"
+                                label="Other Account Information / Classification"
+                                className="col-span-2"
+                                render={({ field }) => (
+                                    <GradientBackground
+                                        gradientOnly
+                                        opacity={0.03}
+                                        className="p-5"
+                                    >
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                        >
+                                            {Object.values(
+                                                OtherInformationOfAnAccountEnum
+                                            ).map((type) => (
+                                                <div
+                                                    key={type}
+                                                    className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                >
+                                                    <RadioGroupItem
+                                                        value={type}
+                                                        id={`other-info-${type}`}
+                                                        className="order-1 after:absolute after:inset-0"
+                                                    />
+                                                    <div className="flex grow items-center gap-3">
+                                                        <div className="grid gap-2">
+                                                            <Label
+                                                                htmlFor={`other-info-${type}`}
+                                                            >
+                                                                {type}
+                                                            </Label>
+                                                            <p
+                                                                id={`other-info-${type}-description`}
+                                                                className="text-xs text-muted-foreground"
+                                                            >
+                                                                {type ===
+                                                                    OtherInformationOfAnAccountEnum.None &&
+                                                                    'No other specific information is assigned.'}
+                                                                {type ===
+                                                                    OtherInformationOfAnAccountEnum.Jewelry &&
+                                                                    'This account is related to jewelry.'}
+                                                                {type ===
+                                                                    OtherInformationOfAnAccountEnum.Grocery &&
+                                                                    'This account is related to groceries.'}
+                                                                {type ===
+                                                                    OtherInformationOfAnAccountEnum.Restructured &&
+                                                                    'This account has been restructured.'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </RadioGroup>
+                                    </GradientBackground>
+                                )}
+                            />
                         </fieldset>
-                        {/* --- Other Deduction Entry Field --- */}
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="other_deduction_entry"
-                            label="Other Deduction Entry"
-                            className="col-span-2"
-                            render={({ field }) => (
-                                <GradientBackground
-                                    gradientOnly
-                                    className="p-5"
-                                >
-                                    <RadioGroup
-                                        value={field.value}
-                                        disabled={
-                                            isDisabled(field.name) || isLoading
-                                        }
-                                        onValueChange={field.onChange}
-                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                    >
-                                        {Object.values(
-                                            OtherDeductionEntryEnum
-                                        ).map((type) => (
-                                            <div
-                                                key={type}
-                                                className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
-                                            >
-                                                <RadioGroupItem
-                                                    value={type}
-                                                    id={`other-deduction-${type}`}
+
+                        <div className="space-y-2">
+                            <h4 className="text-sm font-medium text-muted-foreground">
+                                Compassion Fund (Damayan)
+                            </h4>
+                            <div className="grid w-full grid-cols-1 gap-x-2 gap-y-2">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="compassion_fund"
+                                    render={({ field }) => (
+                                        <GradientBackground gradientOnly>
+                                            <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                                <Checkbox
+                                                    id={field.name}
+                                                    checked={field.value}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
                                                     className="order-1 after:absolute after:inset-0"
                                                 />
                                                 <div className="flex grow items-center gap-3">
+                                                    <div className="size-fit rounded-full bg-secondary p-2">
+                                                        <MoneyBagIcon className="size-4" />
+                                                    </div>
                                                     <div className="grid gap-2">
                                                         <Label
-                                                            htmlFor={`other-deduction-${type}`}
+                                                            htmlFor={field.name}
                                                         >
-                                                            {type}
+                                                            Enable Compassion
+                                                            Fund
                                                         </Label>
-                                                        <p
-                                                            id={`other-deduction-${type}-description`}
-                                                            className="text-xs text-muted-foreground"
-                                                        >
-                                                            {type ===
-                                                                OtherDeductionEntryEnum.None &&
-                                                                'No additional deductions will be applied.'}
-                                                            {type ===
-                                                                OtherDeductionEntryEnum.HealthCare &&
-                                                                'Allows for healthcare-related deductions.'}
+                                                        <p className="text-xs text-muted-foreground">
+                                                            Enable compassion
+                                                            fund (damayan) for
+                                                            this account
                                                         </p>
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </RadioGroup>
+                                        </GradientBackground>
+                                    )}
+                                />
+
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="compassion_fund_amount"
+                                    label="Compassion Fund Amount"
+                                    render={({ field }) => (
+                                        <Input
+                                            {...field}
+                                            type="number"
+                                            min="0"
+                                            step="0.01"
+                                            value={field.value ?? ''}
+                                            onChange={(e) =>
+                                                field.onChange(
+                                                    e.target.value === ''
+                                                        ? 0
+                                                        : parseFloat(
+                                                              e.target.value
+                                                          )
+                                                )
+                                            }
+                                            placeholder="Enter compassion fund amount"
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading ||
+                                                !isCompassionFundEnabled
+                                            }
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/* General Ledger Source Visibility Settings */}
+                <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-muted-foreground">
+                        General Ledger Source Visibility
+                    </h4>
+                    <div className="grid w-full grid-cols-1 gap-x-2 gap-y-2 md:grid-cols-2 lg:grid-cols-3">
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="show_in_general_ledger_source_withdraw"
+                            render={({ field }) => (
+                                <GradientBackground gradientOnly>
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                        <Checkbox
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <HandCoinsIcon className="size-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Show in Withdraw
+                                                </Label>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Show this account in
+                                                    withdraw transactions
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </GradientBackground>
                             )}
                         />
 
-                        {/* --- Interest Saving Type Diminishing Straight Field --- */}
                         <FormFieldWrapper
                             control={form.control}
-                            name="interest_saving_type_diminishing_straight"
-                            label="Interest Saving Type (Diminishing/Straight)"
-                            className="col-span-2"
+                            name="show_in_general_ledger_source_deposit"
                             render={({ field }) => (
-                                <GradientBackground
-                                    gradientOnly
-                                    className="p-5"
-                                >
-                                    <RadioGroup
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                                        disabled={
-                                            isDisabled(field.name) || isLoading
-                                        }
-                                    >
-                                        {Object.values(
-                                            InterestSavingTypeDiminishingStraightEnum
-                                        ).map((type) => (
-                                            <div
-                                                key={type}
-                                                className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
-                                            >
-                                                <RadioGroupItem
-                                                    value={type}
-                                                    id={`interest-saving-type-${type}`}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                />
-                                                <div className="flex grow items-center gap-3">
-                                                    <div className="grid gap-2">
-                                                        <Label
-                                                            htmlFor={`interest-saving-type-${type}`}
-                                                        >
-                                                            {type}
-                                                        </Label>
-                                                        <p
-                                                            id={`interest-saving-type-${type}-description`}
-                                                            className="text-xs text-muted-foreground"
-                                                        >
-                                                            {type ===
-                                                                InterestSavingTypeDiminishingStraightEnum.Spread &&
-                                                                'Interest savings are spread across payments.'}
-                                                            {type ===
-                                                                InterestSavingTypeDiminishingStraightEnum.FirstPayment &&
-                                                                'Interest savings are applied to the first payment.'}
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                <GradientBackground gradientOnly>
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                        <Checkbox
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <MoneyIcon className="size-4" />
                                             </div>
-                                        ))}
-                                    </RadioGroup>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Show in Deposit
+                                                </Label>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Show this account in deposit
+                                                    transactions
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </GradientBackground>
                             )}
                         />
 
-                        {/* --- Other Information Of An Account Field --- */}
                         <FormFieldWrapper
                             control={form.control}
-                            name="other_information_of_an_account"
-                            label="Other Account Information / Classification"
-                            className="col-span-2"
+                            name="show_in_general_ledger_source_journal"
                             render={({ field }) => (
-                                <GradientBackground
-                                    gradientOnly
-                                    opacity={0.03}
-                                    className="p-5"
-                                >
-                                    <RadioGroup
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                                        disabled={
-                                            isDisabled(field.name) || isLoading
-                                        }
-                                    >
-                                        {Object.values(
-                                            OtherInformationOfAnAccountEnum
-                                        ).map((type) => (
-                                            <div
-                                                key={type}
-                                                className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
-                                            >
-                                                <RadioGroupItem
-                                                    value={type}
-                                                    id={`other-info-${type}`}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                />
-                                                <div className="flex grow items-center gap-3">
-                                                    <div className="grid gap-2">
-                                                        <Label
-                                                            htmlFor={`other-info-${type}`}
-                                                        >
-                                                            {type}
-                                                        </Label>
-                                                        <p
-                                                            id={`other-info-${type}-description`}
-                                                            className="text-xs text-muted-foreground"
-                                                        >
-                                                            {type ===
-                                                                OtherInformationOfAnAccountEnum.None &&
-                                                                'No other specific information is assigned.'}
-                                                            {type ===
-                                                                OtherInformationOfAnAccountEnum.Jewelry &&
-                                                                'This account is related to jewelry.'}
-                                                            {type ===
-                                                                OtherInformationOfAnAccountEnum.Grocery &&
-                                                                'This account is related to groceries.'}
-                                                            {type ===
-                                                                OtherInformationOfAnAccountEnum.Restructured &&
-                                                                'This account has been restructured.'}
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                <GradientBackground gradientOnly>
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                        <Checkbox
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <InternalIcon className="size-4" />
                                             </div>
-                                        ))}
-                                    </RadioGroup>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Show in Journal
+                                                </Label>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Show this account in journal
+                                                    entries
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </GradientBackground>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="show_in_general_ledger_source_payment"
+                            render={({ field }) => (
+                                <GradientBackground gradientOnly>
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                        <Checkbox
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <MoneyBagIcon className="size-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Show in Payment
+                                                </Label>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Show this account in payment
+                                                    transactions
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </GradientBackground>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="show_in_general_ledger_source_adjustment"
+                            render={({ field }) => (
+                                <GradientBackground gradientOnly>
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                        <Checkbox
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <ExcludeIcon className="size-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Show in Adjustment
+                                                </Label>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Show this account in
+                                                    adjustment entries
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </GradientBackground>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="show_in_general_ledger_source_journal_voucher"
+                            render={({ field }) => (
+                                <GradientBackground gradientOnly>
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                        <Checkbox
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <InternalIcon className="size-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Show in Journal Voucher
+                                                </Label>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Show this account in journal
+                                                    vouchers
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </GradientBackground>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="show_in_general_ledger_source_check_voucher"
+                            render={({ field }) => (
+                                <GradientBackground gradientOnly>
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                        <Checkbox
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            className="order-1 after:absolute after:inset-0"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <FaCalendarCheckIcon className="size-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Show in Check Voucher
+                                                </Label>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Show this account in check
+                                                    vouchers
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </GradientBackground>
                             )}
                         />
                     </div>
                 </div>
+
                 {!readOnly && (
                     <div className="space-y-2">
                         <div className="flex items-center justify-end gap-x-2">

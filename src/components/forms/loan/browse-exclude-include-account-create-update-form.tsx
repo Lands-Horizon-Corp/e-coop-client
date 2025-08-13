@@ -104,9 +104,13 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
-                                onSelect={(account) =>
+                                value={form.getValues('fines_account')}
+                                onSelect={(account) => {
                                     field.onChange(account.id)
-                                }
+                                    form.setValue('fines_account', account, {
+                                        shouldDirty: true,
+                                    })
+                                }}
                                 disabled={isDisabled('fines_account_id')}
                             />
                         )}
@@ -119,9 +123,13 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
-                                onSelect={(account) =>
+                                value={form.getValues('comaker_account')}
+                                onSelect={(account) => {
                                     field.onChange(account.id)
-                                }
+                                    form.setValue('comaker_account', account, {
+                                        shouldDirty: true,
+                                    })
+                                }}
                                 disabled={isDisabled('comaker_account_id')}
                             />
                         )}
@@ -134,9 +142,13 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
-                                onSelect={(account) =>
+                                value={form.getValues('interest_account')}
+                                onSelect={(account) => {
                                     field.onChange(account.id)
-                                }
+                                    form.setValue('interest_account', account, {
+                                        shouldDirty: true,
+                                    })
+                                }}
                                 disabled={isDisabled('interest_account_id')}
                             />
                         )}
@@ -149,9 +161,17 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
-                                onSelect={(account) =>
+                                value={form.getValues('deliquent_account')}
+                                onSelect={(account) => {
                                     field.onChange(account.id)
-                                }
+                                    form.setValue(
+                                        'deliquent_account',
+                                        account,
+                                        {
+                                            shouldDirty: true,
+                                        }
+                                    )
+                                }}
                                 disabled={isDisabled('deliquent_account_id')}
                             />
                         )}
@@ -164,9 +184,19 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
-                                onSelect={(account) =>
+                                value={form.getValues(
+                                    'include_existing_loan_account'
+                                )}
+                                onSelect={(account) => {
                                     field.onChange(account.id)
-                                }
+                                    form.setValue(
+                                        'include_existing_loan_account',
+                                        account,
+                                        {
+                                            shouldDirty: true,
+                                        }
+                                    )
+                                }}
                                 disabled={isDisabled(
                                     'include_existing_loan_account_id'
                                 )}

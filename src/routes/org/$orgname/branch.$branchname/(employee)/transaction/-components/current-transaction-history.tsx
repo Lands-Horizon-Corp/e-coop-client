@@ -331,8 +331,6 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
         setOnOpen(false)
     }
 
-    console.log(CurrentTransaction)
-
     useShortcut(
         'h',
         () => {

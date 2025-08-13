@@ -1,10 +1,11 @@
 import { useModalState } from '@/hooks/use-modal-state'
 
 export interface IPickerBaseProps<T = unknown> {
+    value?: T
+    onSelect?: (selected: T) => void
+
     disabled?: boolean
     placeholder?: string
     triggerClassName?: string
-    selectedData?: T
-    onSelect?: (selected: T) => void
     modalState?: ReturnType<typeof useModalState>
 }

@@ -99,8 +99,12 @@ const IncludeNegativeAccountCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
+                                value={form.getValues('account')}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
+                                    form.setValue('account', account, {
+                                        shouldDirty: true,
+                                    })
                                 }}
                             />
                         )}

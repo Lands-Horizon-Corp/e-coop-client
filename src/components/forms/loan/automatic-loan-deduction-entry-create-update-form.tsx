@@ -147,12 +147,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="account_id"
-                                    label="Account"
+                                    label="Account DESYU"
                                     render={({ field }) => (
                                         <AccountPicker
                                             {...field}
+                                            value={form.getValues('account')}
                                             onSelect={(account) => {
                                                 field.onChange(account.id)
+                                                form.setValue(
+                                                    'account',
+                                                    account,
+                                                    { shouldDirty: true }
+                                                )
                                             }}
                                         />
                                     )}
@@ -164,8 +170,16 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     render={({ field }) => (
                                         <AccountPicker
                                             {...field}
+                                            value={form.getValues(
+                                                'link_account'
+                                            )}
                                             onSelect={(account) => {
                                                 field.onChange(account.id)
+                                                form.setValue(
+                                                    'link_account',
+                                                    account,
+                                                    { shouldDirty: true }
+                                                )
                                             }}
                                         />
                                     )}

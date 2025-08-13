@@ -76,7 +76,6 @@ const TransactionBatchCreateForm = ({
         defaultValues: {
             name: '',
             amount: 0,
-            description: '',
             provided_by_user_id: '',
             ...defaultValues,
         },

@@ -28,7 +28,6 @@ import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import GenericPicker from './generic-picker'
 
 interface Props extends IPickerBaseProps<IMemberProfile> {
-    value?: IMemberProfile
     defaultFilter?: TFilterObject
     allowShorcutCommand?: boolean
 }

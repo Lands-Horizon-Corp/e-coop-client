@@ -13,6 +13,7 @@ export const includeNegativeAccountSchema = z
 
         computation_sheet_id: entityIdSchema,
         account_id: entityIdSchema,
+        account: z.any(),
 
         description: descriptionSchema
             .optional()

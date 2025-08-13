@@ -157,10 +157,14 @@ const PaymentWithTransactionForm = ({
                             className="col-span-2"
                             render={({ field }) => (
                                 <AccountPicker
+                                    mode={focusTypePayment}
+                                    value={form.getValues('account')}
                                     onSelect={(account) => {
                                         field.onChange(account.id)
+                                        form.setValue('account', account, {
+                                            shouldDirty: true,
+                                        })
                                     }}
-                                    value={field.value ?? undefined}
                                     placeholder="Select an account"
                                 />
                             )}

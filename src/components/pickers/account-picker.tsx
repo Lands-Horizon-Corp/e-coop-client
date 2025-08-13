@@ -3,35 +3,40 @@ import { useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { IAccount } from '@/types/coop-types/accounts/account'
-import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PaginationState } from '@tanstack/react-table'
 
-import { ChevronDownIcon } from '@/components/icons'
+import { ChevronDownIcon, RenderIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
+import {
+    TPaginatedAccountHookMode,
+    useFilteredPaginatedAccount,
+} from '@/hooks/api-hooks/use-account'
 import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 import useFilterState from '@/hooks/use-filter-state'
 
-import { IPickerBaseProps, TEntityId } from '@/types'
+import { IPickerBaseProps, TIcon } from '@/types'
 
+import { AccountTypeBadge } from '../badges/account-type-badge'
+import { FinancialStatementTypeBadge } from '../badges/financial-statement-type-badge'
+import { GeneralLedgerTypeBadge } from '../badges/general-ledger-type-badge'
 import GenericPicker from './generic-picker'
 
 interface Props extends IPickerBaseProps<IAccount> {
-    value?: TEntityId
     allowShorcutCommand?: boolean
     modalOnly?: boolean
     open?: boolean
     defaultOpen?: boolean
     onOpenChange?(open: boolean): void
+    mode?: TPaginatedAccountHookMode
 }
 
 const AccountPicker = ({
+    mode,
     value,
     disabled,
-    selectedData,
     allowShorcutCommand = false,
     placeholder,
     onSelect,
@@ -58,21 +63,19 @@ const AccountPicker = ({
 
     const { data, isPending, isLoading, isFetching } =
         useFilteredPaginatedAccount({
-            filterPayload: finalFilterPayload,
+            mode,
             pagination,
             enabled: !disabled,
             showMessage: false,
+            filterPayload: finalFilterPayload,
         })
-
-    const selectedAccount =
-        selectedData ?? data.data.find((account) => account.id === value)
 
     useShortcut(
         'Enter',
         (event) => {
             event?.preventDefault()
             if (
-                !selectedAccount &&
+                !value &&
                 !disabled &&
                 !isPending &&
                 !isLoading &&
@@ -119,13 +122,37 @@ const AccountPicker = ({
                 renderItem={(Account) => (
                     <div className="flex w-full items-center justify-between py-1">
                         <div className="flex items-center gap-x-2">
+                            {Account.icon && Account.icon.length > 0 && (
+                                <span className="bg-muted rounded-full p-0.5">
+                                    <RenderIcon icon={Account.icon as TIcon} />
+                                </span>
+                            )}
                             <span className="text-ellipsis text-foreground/80">
                                 {Account.name}
+                                <br />
+                                <span>{Account.description}</span>
                             </span>
                         </div>
 
-                        <p className="mr-2 font-mono text-xs italic text-foreground/40">
-                            <span>#{abbreviateUUID(Account.id)}</span>
+                        <p className="mr-2 flex gap-x-2 items-center font-mono text-xs italic text-foreground/40">
+                            {Account.type && (
+                                <AccountTypeBadge
+                                    type={Account.type}
+                                    description="(Type)"
+                                />
+                            )}
+                            {Account.general_ledger_type && (
+                                <GeneralLedgerTypeBadge
+                                    type={Account.general_ledger_type}
+                                    description="(GL)"
+                                />
+                            )}
+                            {Account.financial_statement_type && (
+                                <FinancialStatementTypeBadge
+                                    type={Account.financial_statement_type}
+                                    description=" (FS)"
+                                />
+                            )}
                         </p>
                     </div>
                 )}
@@ -154,25 +181,48 @@ const AccountPicker = ({
                     onClick={() => setState((prev) => !prev)}
                     className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
                 >
-                    <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
+                    <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
                             <div>{isFetching ? <LoadingSpinner /> : ''}</div>
-                            {!selectedAccount ? (
+                            {value?.icon && value.icon.length > 0 && (
+                                <span className="bg-muted rounded-full p-0.5">
+                                    <RenderIcon icon={value.icon as TIcon} />
+                                </span>
+                            )}
+                            {!value ? (
                                 <span className="text-foreground/70">
-                                    {value || placeholder || 'Select Account'}
+                                    {placeholder || 'Select Account'}
                                 </span>
                             ) : (
-                                <span>{selectedAccount.name}</span>
+                                <span>
+                                    <span>{value.name}</span>
+                                    <br />
+                                    <span>{value.description}</span>
+                                </span>
                             )}
                         </span>
                         {allowShorcutCommand && (
                             <span className="mr-2 text-sm">⌘ ↵ </span>
                         )}
-                        <span className="mr-1 font-mono text-sm text-foreground/30">
-                            #
-                            {selectedAccount?.id
-                                ? abbreviateUUID(selectedAccount.id)
-                                : '?'}
+                        <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
+                            {value?.type && (
+                                <AccountTypeBadge
+                                    type={value.type}
+                                    description="(Type)"
+                                />
+                            )}
+                            {value?.general_ledger_type && (
+                                <GeneralLedgerTypeBadge
+                                    type={value.general_ledger_type}
+                                    description="(GL)"
+                                />
+                            )}
+                            {value?.financial_statement_type && (
+                                <FinancialStatementTypeBadge
+                                    type={value.financial_statement_type}
+                                    description=" (FS)"
+                                />
+                            )}
                         </span>
                     </span>
                     <ChevronDownIcon />

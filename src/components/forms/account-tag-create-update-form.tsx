@@ -49,6 +49,7 @@ import {
 
 const AccountTagSchema = z.object({
     account_id: z.string().min(1, 'Account is required'),
+    account: z.any().optional(),
     name: z.string().min(1, 'Name is required').max(50, 'Name is too long'),
     description: descriptionSchema
         .optional()
@@ -156,9 +157,12 @@ const AccountTagCreateUpdateForm = ({
                             <AccountPicker
                                 onSelect={(account) => {
                                     field.onChange(account.id)
+                                    form.setValue('account', account, {
+                                        shouldDirty: true,
+                                    })
                                 }}
-                                value={field.value}
                                 placeholder="Select an account"
+                                value={form.getValues('account')}
                                 disabled={isDisabled(field.name)}
                             />
                         )}

@@ -10,6 +10,7 @@ export const automaticLoanDeductionSchema = z.object({
     id: entityIdSchema.optional(),
 
     account_id: entityIdSchema,
+    account: z.any().optional(), // pang display lang to dont worry
     computation_sheet_id: entityIdSchema,
 
     name: z.string().min(1, { message: 'Name is required' }),
@@ -28,6 +29,7 @@ export const automaticLoanDeductionSchema = z.object({
     anum: z.coerce.number().int().min(1),
 
     link_account_id: entityIdSchema.optional(),
+    link_account: z.any().optional(),
 
     add_on: z.boolean().default(false),
     ao_rest: z.boolean().default(false),

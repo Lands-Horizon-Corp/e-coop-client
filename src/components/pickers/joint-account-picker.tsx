@@ -15,12 +15,11 @@ import { useFilteredPaginatedAccount } from '@/hooks/api-hooks/use-account'
 import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 import useFilterState from '@/hooks/use-filter-state'
 
-import { IPickerBaseProps, TEntityId } from '@/types'
+import { IPickerBaseProps } from '@/types'
 
 import GenericPicker from './generic-picker'
 
 interface Props extends IPickerBaseProps<IAccount> {
-    value?: TEntityId
     allowShorcutCommand?: boolean
     modalOnly?: boolean
     open?: boolean
@@ -28,10 +27,9 @@ interface Props extends IPickerBaseProps<IAccount> {
     onOpenChange?(open: boolean): void
 }
 
-const AccountPicker = ({
+const JointAccountPicker = ({
     value,
     disabled,
-    selectedData,
     allowShorcutCommand = false,
     placeholder,
     onSelect,
@@ -64,15 +62,12 @@ const AccountPicker = ({
             showMessage: false,
         })
 
-    const selectedAccount =
-        selectedData ?? data.data.find((account) => account.id === value)
-
     useShortcut(
         'Enter',
         (event) => {
             event?.preventDefault()
             if (
-                !selectedAccount &&
+                !value &&
                 !disabled &&
                 !isPending &&
                 !isLoading &&
@@ -157,22 +152,19 @@ const AccountPicker = ({
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
                             <div>{isFetching ? <LoadingSpinner /> : ''}</div>
-                            {!selectedAccount ? (
+                            {!value ? (
                                 <span className="text-foreground/70">
-                                    {value || placeholder || 'Select Account'}
+                                    {placeholder || 'Select Account'}
                                 </span>
                             ) : (
-                                <span>{selectedAccount.name}</span>
+                                <span>{value.name}</span>
                             )}
                         </span>
                         {allowShorcutCommand && (
                             <span className="mr-2 text-sm">⌘ ↵ </span>
                         )}
                         <span className="mr-1 font-mono text-sm text-foreground/30">
-                            #
-                            {selectedAccount?.id
-                                ? abbreviateUUID(selectedAccount.id)
-                                : '?'}
+                            #{value?.id ? abbreviateUUID(value.id) : '?'}
                         </span>
                     </span>
                     <ChevronDownIcon />
@@ -182,4 +174,4 @@ const AccountPicker = ({
     )
 }
 
-export default AccountPicker
+export default JointAccountPicker

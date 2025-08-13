@@ -11,6 +11,7 @@ export const memberTypeReferenceSchema = z.object({
 
     description: descriptionSchema.transform(descriptionTransformerSanitizer),
     account_id: entityIdSchema,
+    account: z.any(),
     member_type_id: entityIdSchema,
 
     interest_rate: z.coerce.number().min(0, 'Interest rate is required'),

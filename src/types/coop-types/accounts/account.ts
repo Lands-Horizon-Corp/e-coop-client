@@ -183,6 +183,18 @@ export interface IAccount extends IAuditable, ITimeStamps {
     total_row?: number
 
     general_ledger_grouping_exclude_account?: boolean
+
+    icon: string
+    show_in_general_ledger_source_withdraw: boolean
+    show_in_general_ledger_source_deposit: boolean
+    show_in_general_ledger_source_journal: boolean
+    show_in_general_ledger_source_payment: boolean
+    show_in_general_ledger_source_adjustment: boolean
+    show_in_general_ledger_source_journal_voucher: boolean
+    show_in_general_ledger_source_check_voucher: boolean
+
+    compassion_fund: boolean // this is damayan in OLD coop
+    compassion_fund_amount: number // this is damayan in OLD coop
 }
 
 export interface IAccountRequest {
@@ -262,6 +274,18 @@ export interface IAccountRequest {
     total_row?: number
 
     general_ledger_grouping_exclude_account?: boolean
+
+    icon: string
+    show_in_general_ledger_source_withdraw: boolean
+    show_in_general_ledger_source_deposit: boolean
+    show_in_general_ledger_source_journal: boolean
+    show_in_general_ledger_source_payment: boolean
+    show_in_general_ledger_source_adjustment: boolean
+    show_in_general_ledger_source_journal_voucher: boolean
+    show_in_general_ledger_source_check_voucher: boolean
+
+    compassion_fund: boolean // this is damayan in OLD coop
+    compassion_fund_amount: number // this is damayan in OLD coop
 }
 
 export interface IAccountPaginated extends IPaginatedResult<IAccount> {}

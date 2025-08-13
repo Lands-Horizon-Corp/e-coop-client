@@ -1,15 +1,14 @@
 import qs from 'query-string'
 
+import { createAPICollectionService } from '@/factory/api-factory-service'
 import { downloadFile } from '@/helpers'
-import {
-    IAccount,
-    IAccountPaginated,
-    IAccountRequest,
-} from '@/types/coop-types/accounts/account'
+import { IAccount, IAccountRequest } from '@/types/coop-types/accounts/account'
 
 import { TEntityId, UpdateIndexRequest } from '@/types'
 
 import APIService from '../api-service'
+
+const { search } = createAPICollectionService<IAccount>('/api/v1/account')
 
 export const getAccountById = async (id: TEntityId) => {
     const response = await APIService.get<IAccount>(`/api/v1/account/${id}`)
@@ -18,33 +17,6 @@ export const getAccountById = async (id: TEntityId) => {
 
 export const getAllAccounts = async () => {
     const response = await APIService.get<IAccount[]>(`/api/v1/account`)
-    return response.data
-}
-
-export const getPaginatedAccount = async ({
-    sort,
-    filters,
-    pagination,
-}: {
-    mode: 'all' | 'pendings'
-    sort?: string
-    filters?: string
-    pagination?: { pageIndex: number; pageSize: number }
-}) => {
-    const finalUrl = qs.stringifyUrl(
-        {
-            url: `/api/v1/account/search`,
-            query: {
-                sort,
-                filter: filters,
-                pageIndex: pagination?.pageIndex,
-                pageSize: pagination?.pageSize,
-            },
-        },
-        { skipNull: true }
-    )
-
-    const response = await APIService.get<IAccountPaginated>(finalUrl)
     return response.data
 }
 
@@ -120,3 +92,5 @@ export const deleteGLAccounts = async (
     )
     return response.data
 }
+
+export { search }
