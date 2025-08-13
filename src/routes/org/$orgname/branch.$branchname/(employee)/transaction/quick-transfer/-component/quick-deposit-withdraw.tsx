@@ -1,6 +1,6 @@
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
-import { QuickTransferTransactionForm } from '@/components/forms/transaction-forms/create-payments-entry-form'
+import { QuickTransferTransactionForm } from '@/components/forms/transaction-forms/quick-transaction-form'
 import { HandDepositIcon, HandWithdrawIcon } from '@/components/icons'
 import SectionTitle from '@/components/member-infos/section-title'
 import MemberAccountingLedgerTable from '@/components/tables/ledgers-tables/member-accounting-ledger-table'
@@ -11,6 +11,9 @@ import {
     ResizablePanelGroup,
 } from '@/components/ui/resizable'
 
+import { useAccountById } from '@/hooks/api-hooks/use-account'
+import { useGetUserSettings } from '@/hooks/use-get-use-settings'
+
 import { TEntityId, TPaymentMode } from '@/types'
 
 import MemberProfileTransactionView from '../../-components/member-profile-view-card'
@@ -18,12 +21,19 @@ import NoTransactionBatchWarningModal from '../../-components/no-transaction-bat
 import CurrentTransactionWithdrawHistory from './current-deposit-withdraw-transaction-history'
 
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
+    const { selectedMember, setOpenMemberPicker, setSelectedAccount } =
+        useDepositWithdrawStore()
     const {
-        selectedMember,
-        setOpenMemberPicker,
-        setSelectedAccount,
-        selectedAccount,
-    } = useDepositWithdrawStore()
+        settings_accounting_deposit_default_value_id,
+        settings_accounting_withdraw_default_value_id,
+    } = useGetUserSettings()
+
+    const accountDefaultValue =
+        mode === 'deposit'
+            ? settings_accounting_deposit_default_value_id
+            : settings_accounting_withdraw_default_value_id
+
+    const { data: account } = useAccountById(accountDefaultValue ?? '')
 
     return (
         <>
@@ -43,8 +53,9 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     className="!min-w-1/3 w-1/3 !overflow-x-auto p-5 ecoop-scroll"
                 >
                     <QuickTransferTransactionForm
+                        account={account}
                         defaultValues={{
-                            account_id: selectedAccount?.id ?? '',
+                            account_id: accountDefaultValue ?? undefined,
                         }}
                         mode={mode}
                     />

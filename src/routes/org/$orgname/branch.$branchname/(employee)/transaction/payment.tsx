@@ -61,6 +61,7 @@ function RouteComponent() {
         setSelectedAccountId,
         setTransactionFormSuccess,
         setOpenPaymentWithTransactionModal,
+        setSelectedAccount,
     } = useTransactionStore()
 
     const { data: transaction } = useGetTransactionById({
@@ -162,6 +163,7 @@ function RouteComponent() {
                                     setSelectedAccountId(
                                         data.original.account_id
                                     )
+                                    setSelectedAccount(data.original.account)
                                     setFocusTypePayment('payment')
                                 }}
                                 actionComponent={(props) => {

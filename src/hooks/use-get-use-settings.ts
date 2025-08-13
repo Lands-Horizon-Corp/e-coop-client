@@ -14,5 +14,6 @@ export const useGetUserSettings = () => {
         userSettingOR: userSettingOR
             .toString()
             .padStart(user_setting_number_padding, '0'),
+        ...user.user_organization,
     }
 }

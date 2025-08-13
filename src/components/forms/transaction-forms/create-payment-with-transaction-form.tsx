@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { cn } from '@/lib'
 import ReferenceNumber from '@/routes/org/$orgname/branch.$branchname/(employee)/transaction/-components/reference-number-field'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
+import { IAccount } from '@/types/coop-types/accounts/account'
 import { useForm } from 'react-hook-form'
 
 import BankCombobox from '@/components/comboboxes/bank-combobox'
@@ -56,6 +57,7 @@ interface PaymentWithTransactionFormProps
     memberJointId?: TEntityId
     isReferenceNumberCheck?: boolean
     description?: string
+    account?: IAccount
 }
 
 const PaymentWithTransactionForm = ({
@@ -66,12 +68,15 @@ const PaymentWithTransactionForm = ({
     memberProfileId,
     memberJointId,
     description,
+    account,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment } = useTransactionStore()
+
     const form = useForm<PaymentWithTransactionFormValues>({
         resolver: zodResolver(PaymentWithTransactionSchema),
         defaultValues: {
             ...defaultValues,
+            account: account,
         },
     })
 

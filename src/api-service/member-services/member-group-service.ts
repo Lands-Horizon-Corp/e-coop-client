@@ -13,7 +13,7 @@ const CrudServices = createAPICrudService<IMemberGroup, IMemberGroupRequest>(
 )
 
 const CollectionServices =
-    createAPICollectionService<IMemberGroup>(`/member-group`)
+    createAPICollectionService<IMemberGroup>(`/api/v1/member-group`)
 
 export const exportAll = async () => {
     const url = `/api/v1/member-group/export`

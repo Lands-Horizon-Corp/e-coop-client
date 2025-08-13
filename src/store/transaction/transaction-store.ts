@@ -29,6 +29,7 @@ export interface TransactionPropsStore {
               account?: IAccount
           }
         | undefined
+    selectedAccount?: IAccount
 
     setOpenMemberPicker: Dispatch<SetStateAction<boolean>>
     setFocusTypePayment: (payment: TPaymentMode) => void
@@ -40,6 +41,7 @@ export interface TransactionPropsStore {
     setOpenSuccessModal: (open: boolean) => void
     setTransactionFormSuccess: (transaction: IGeneralLedger | null) => void
     setOpenPaymentWithTransactionModal: (open: boolean) => void
+    setSelectedAccount: (accountId?: IAccount) => void
 
     handleResetAll: () => void
     setFocusedLedger: (
@@ -66,6 +68,7 @@ export const useTransactionStore = create<TransactionPropsStore>(
         transactionFormSuccess: null,
         openPaymentWithTransactionModal: false,
         focusedLedger: undefined,
+        selectedAccount: undefined,
 
         setSelectedAccountId: (accountId) =>
             set({ selectedAccountId: accountId }),
@@ -108,5 +111,9 @@ export const useTransactionStore = create<TransactionPropsStore>(
                 openPaymentWithTransactionModal: false,
             })),
         setFocusedLedger: (focused) => set({ focusedLedger: focused }),
+        setSelectedAccount: (account) =>
+            set({
+                selectedAccount: account,
+            }),
     })
 )

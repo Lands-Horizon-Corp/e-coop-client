@@ -6,6 +6,7 @@ import JointMemberProfileListModal from '@/routes/org/$orgname/branch.$branchnam
 import { useTransactionShortcuts } from '@/routes/org/$orgname/branch.$branchname/(employee)/transaction/quick-transfer/-component/quick-transaction-shortcuts'
 import { useImagePreview } from '@/store/image-preview-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
+import { IAccount } from '@/types/coop-types/accounts/account'
 import { useForm } from 'react-hook-form'
 
 import BankCombobox from '@/components/comboboxes/bank-combobox'
@@ -56,12 +57,14 @@ interface TransactionEntryFormProps
             QuickWithdrawSchemaFormValues
         > {
     mode: TPaymentMode
+    account?: IAccount
 }
 
 export const QuickTransferTransactionForm = ({
     defaultValues,
     onSuccess,
     mode,
+    account,
 }: TransactionEntryFormProps) => {
     const { userSettingOR } = useGetUserSettings()
     const queryClient = useQueryClient()
@@ -81,6 +84,7 @@ export const QuickTransferTransactionForm = ({
         defaultValues: {
             ...defaultValues,
             account_id: selectedAccount?.id,
+            account: account,
         },
     })
 
