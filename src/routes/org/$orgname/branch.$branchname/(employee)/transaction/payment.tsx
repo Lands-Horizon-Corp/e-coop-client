@@ -19,7 +19,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 import { TEntityId } from '@/types'
 
 import CurrentPaymentsEntry from './-components/current-payments-entry'
-import TransactionCardList from './-components/current-transaction'
+import TransactionCardList from './-components/current-transaction-history'
 import MemberProfileTransactionView from './-components/member-profile-view-card'
 import NoMemberSelectedView from './-components/no-member-selected-view'
 import NoTransactionBatchWarningModal from './-components/no-transaction-batch'
