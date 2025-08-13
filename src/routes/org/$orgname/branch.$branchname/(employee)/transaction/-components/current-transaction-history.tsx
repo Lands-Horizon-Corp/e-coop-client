@@ -379,7 +379,7 @@ export const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
                 </SheetTrigger>
                 <SheetContent className=" min-w-full max-w-[500px] md:min-w-[600px]">
                     <div className="overflow-y-auto ecoop-scroll">
-                        <h1 className="text-lg font-bold border mb-2">
+                        <h1 className="text-lg font-bold mb-2">
                             Transaction History
                             <RefreshButton
                                 className="bg-transparent size-7"

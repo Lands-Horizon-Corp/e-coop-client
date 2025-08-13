@@ -173,7 +173,7 @@ function RouteComponent() {
                                         />
                                     )
                                 }}
-                                className="w-full"
+                                className="w-full min-h-[40vh] h-full"
                             />
                         </div>
                     </ResizablePanel>
