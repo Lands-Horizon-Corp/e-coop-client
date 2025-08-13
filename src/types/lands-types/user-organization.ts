@@ -3,6 +3,8 @@ import { USER_ORG_APPLICATION_STATUS } from '@/constants'
 import { IUserBase } from '../auth/user'
 import { IBaseEntityMeta, TEntityId, TUserType } from '../common'
 import { IBranch, IPaginatedResult, TPermission } from '../coop-types'
+import { IAccount } from '../coop-types/accounts/account'
+import { IPaymentType } from '../coop-types/payment-type'
 import { IOrganization } from './organization'
 
 export type TUserOrganizationApplicationStatus =
@@ -77,9 +79,16 @@ export interface IUserOrganizationSettings {
     maintaining_balance: boolean
 
     settings_accounting_payment_default_value_id?: TEntityId | null
+    settings_accounting_payment_default_value?: IAccount
+
     settings_accounting_deposit_default_value_id?: TEntityId | null
+    settings_accounting_deposit_default_value?: IAccount
+
     settings_accounting_withdraw_default_value_id?: TEntityId | null
+    settings_accounting_withdraw_default_value?: IAccount
+
     settings_payment_type_default_value_id?: TEntityId | null
+    settings_payment_type_default_value?: IPaymentType
 }
 
 export interface IUserOrganizationSettingsRequest
