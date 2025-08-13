@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import PageContainer from '@/components/containers/page-container'
 import { LoanPurposeCreateUpdateFormModal } from '@/components/forms/loan/loan-purpose-create-update-form'
 import LoanPurposeTable from '@/components/tables/loan-tables/loan-purpose-table'
-import LoanPurposeTableAction from '@/components/tables/loan-tables/loan-purpose-table/action'
+import LoanPurposeTableAction from '@/components/tables/loan-tables/loan-purpose-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 

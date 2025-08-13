@@ -7,7 +7,6 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useSignature } from '@/store/signature-store'
 import { format } from 'date-fns'
 import { FileWithPath } from 'react-dropzone'
-import { MdOutlineFileDownload } from 'react-icons/md'
 import SignaturePad from 'react-signature-canvas'
 import Webcam from 'react-webcam'
 
@@ -20,6 +19,7 @@ import {
 
 import {
     CameraIcon,
+    DownloadIcon,
     DrawIcon,
     FullscreenExitIcon,
     FullscreenIcon,
@@ -224,21 +224,17 @@ const Signature = ({
                 className
             )}
         >
-            <div
-                className={cn(
-                    'flex h-14 min-h-[50px] w-full justify-between gap-2 py-2'
-                )}
-            >
+            <div className={cn('flex h-14 min-h-[50px] w-full')}>
                 <div
                     className={cn(
-                        'flex',
+                        'flex  w-full justify-between items-center',
                         isFullScreenMode ? 'space-x-2' : 'space-x-1'
                     )}
                 >
                     <Button
                         variant={'outline'}
                         className={cn(
-                            'text-xs',
+                            'text-xs w-full',
                             isCurrentMode(SignatureModes.DRAW)
                         )}
                         onClick={() =>
@@ -251,7 +247,7 @@ const Signature = ({
                     <Button
                         variant={'outline'}
                         className={cn(
-                            'text-xs',
+                            'text-xs w-full',
                             isCurrentMode(SignatureModes.CAPTURE)
                         )}
                         onClick={() =>
@@ -266,7 +262,7 @@ const Signature = ({
                     <Button
                         variant={'outline'}
                         className={cn(
-                            'text-xs',
+                            'text-xs w-full',
                             isCurrentMode(SignatureModes.UPLOAD)
                         )}
                         onClick={() =>
@@ -422,7 +418,7 @@ const Signature = ({
                         size={'sm'}
                         onClick={handleDownloadDrawSignature}
                     >
-                        <MdOutlineFileDownload className="mr-2 size-4" />
+                        <DownloadIcon className="mr-2 size-4" />
                         download
                     </Button>
                 )}

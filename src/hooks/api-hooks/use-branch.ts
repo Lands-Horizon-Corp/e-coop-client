@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { BranchService } from '@/api-service/branch-services'
+import BranchService from '@/api-service/branch-service'
 import { serverRequestErrExtractor } from '@/helpers'
 import { withCatchAsync } from '@/utils'
 

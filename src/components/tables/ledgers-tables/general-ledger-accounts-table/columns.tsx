@@ -8,9 +8,9 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
 
-import { IGeneralLedger } from '@/types'
+import { IGeneralLedger, IGeneralLedgerResponse } from '@/types'
 
-export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedger>[] =
+export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedgerResponse>[] =
     [
         { field: 'reference_number', displayText: 'Reference Number' },
         {
@@ -25,7 +25,7 @@ export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedg
     ]
 
 export interface IGeneralLedgerTableActionComponentProp {
-    row: Row<IGeneralLedger>
+    row: Row<IGeneralLedgerResponse>
 }
 
 export interface IGeneralLedgerTableColumnProps {
@@ -36,7 +36,7 @@ export interface IGeneralLedgerTableColumnProps {
 
 const GeneralLedgerTableColumns = (
     opts?: IGeneralLedgerTableColumnProps
-): ColumnDef<IGeneralLedger>[] => [
+): ColumnDef<IGeneralLedgerResponse>[] => [
     {
         id: 'select',
         header: ({ table, column }) => (

@@ -1,38 +1,106 @@
 import qs from 'query-string'
 
 import {
-    ITransaction,
-    ITransactionPaginated,
-} from '@/types/coop-types/transaction'
+    createAPICollectionService,
+    createAPICrudService,
+} from '@/factory/api-factory-service'
 
-import { IMemberAccountingLedger, TEntityId } from '@/types'
+import {
+    IGeneralLedger,
+    IGeneralLedgerResponse,
+    IPaymentQuickRequest,
+    IPaymentRequest,
+    ITransactionPaginated,
+    ITransactionRequest,
+    ITransactionResponse,
+    TEntityId,
+    TPaymentMode,
+} from '@/types'
 
 import APIService from './api-service'
 
-export const getTransactionById = async (
-    id: TEntityId
-): Promise<ITransaction> => {
-    const response = await APIService.get<ITransaction>(`/transaction/${id}`)
+const TransactionCrudServices = createAPICrudService<
+    ITransactionResponse,
+    ITransactionRequest
+>('/api/v1/transaction')
+
+const TransactionSearchServices =
+    createAPICollectionService<ITransactionResponse>('/api/v1/transaction')
+
+const createPaymentTransaction = async (
+    data: IPaymentRequest,
+    transactionId: string
+) => {
+    const response = await APIService.post<IPaymentRequest, IGeneralLedger>(
+        `/api/v1/transaction/${transactionId}/payment`,
+        data
+    )
+    return response.data
+}
+const getCurrentPaymentTransaction = async () => {
+    const response = await APIService.get<ITransactionResponse[]>(
+        `/api/v1/transaction/current`
+    )
     return response.data
 }
 
-export const deleteTransaction = async (id: TEntityId): Promise<void> => {
-    await APIService.delete<void>(`/transaction/${id}`)
-}
-
-export const deleteManyTransactions = async (
-    ids: TEntityId[]
-): Promise<void> => {
-    const endpoint = `/transaction/bulk-delete`
-    await APIService.delete<void>(endpoint, { ids })
-}
-
-export const getAllTransactions = async (): Promise<ITransaction[]> => {
-    const response = await APIService.get<ITransaction[]>('/transaction')
+const createPaymentwithTransaction = async ({
+    data,
+    mode,
+    transactionId,
+}: {
+    data: IPaymentRequest
+    mode: TPaymentMode
+    transactionId?: TEntityId
+}) => {
+    const response = await APIService.post<IPaymentRequest, IGeneralLedger>(
+        `/api/v1/transaction/${transactionId}/${mode}`,
+        data
+    )
     return response.data
 }
 
-export const getPaginatedTransactions = async ({
+const createQuickTransactionPayment = async ({
+    data,
+    mode,
+}: {
+    data: IPaymentQuickRequest
+    mode: TPaymentMode
+    transactionId?: TEntityId
+}) => {
+    const response = await APIService.post<
+        IPaymentQuickRequest,
+        IGeneralLedger
+    >(`/api/v1/transaction/${mode}`, data)
+    return response.data
+}
+
+const createTransactionPayment = async (
+    transactionId: string,
+    data: IPaymentRequest
+) => {
+    const response = await APIService.post<IPaymentRequest, IGeneralLedger>(
+        `/api/v1/transaction/${transactionId}/payment`,
+        data
+    )
+    return response.data
+}
+
+const updateReferenceNumber = async (
+    transactionId: string,
+    reference_number: string,
+    description: string
+) => {
+    const response = await APIService.put<
+        { reference_number: string; description: string },
+        ITransactionResponse
+    >(`/api/v1/transaction/${transactionId}`, {
+        reference_number,
+        description,
+    })
+    return response.data
+}
+export const getPaginatedCurrentTransaction = async ({
     sort,
     filters,
     pagination,
@@ -40,28 +108,44 @@ export const getPaginatedTransactions = async ({
     sort?: string
     filters?: string
     pagination?: { pageIndex: number; pageSize: number }
-} = {}): Promise<ITransactionPaginated> => {
+}) => {
     const url = qs.stringifyUrl(
         {
-            url: `/transaction`,
+            url: `api/v1/transaction/current/search`,
             query: {
                 sort,
                 filter: filters,
-                pageIndex: pagination?.pageIndex,
                 pageSize: pagination?.pageSize,
+                pageIndex: pagination?.pageIndex,
             },
         },
         { skipNull: true }
     )
+
     const response = await APIService.get<ITransactionPaginated>(url)
     return response.data
 }
 
-export const getMemberAccountingLedger = async (memberProfileId: TEntityId) => {
-    const url = qs.stringifyUrl({
-        url: `transaction/member-profile/${memberProfileId}`,
-    })
-
-    const response = await APIService.get<IMemberAccountingLedger>(url)
+const printGeneralLedgerTransaction = async (generalLedgerId: string) => {
+    const response = await APIService.post<unknown, IGeneralLedgerResponse>(
+        `/api/v1/transaction/general-ledger/${generalLedgerId}/print`
+    )
     return response.data
+}
+
+export const { create, getById, updateById } = TransactionCrudServices
+
+export const { allList: searchTransactions } = TransactionSearchServices
+
+export const TransactionService = {
+    ...TransactionCrudServices,
+    ...TransactionSearchServices,
+    createPaymentTransaction,
+    getCurrentPaymentTransaction,
+    createQuickTransactionPayment,
+    updateReferenceNumber,
+    getPaginatedCurrentTransaction,
+    createTransactionPayment,
+    printGeneralLedgerTransaction,
+    createPaymentwithTransaction,
 }

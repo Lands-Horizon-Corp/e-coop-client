@@ -9,7 +9,7 @@ import APIService from '../api-service'
 
 export const getAllGeneralLedgerAccountsGrouping = async () => {
     const response = await APIService.get<IGeneralLedgerAccountsGrouping[]>(
-        `/general-ledger-accounts-grouping`
+        `/api/v1/general-ledger-accounts-grouping`
     )
     return response.data
 }
@@ -22,7 +22,7 @@ export const updateGeneralLedgerAccountsGrouping = async (
         IGeneralLedgerAccountsGroupingRequest,
         IGeneralLedgerAccountsGrouping
     >(
-        `/general-ledger-accounts-grouping/${generalLedgerAccountsGroupingId}`,
+        `/api/v1/general-ledger-accounts-grouping/${generalLedgerAccountsGroupingId}`,
         data
     )
     return response.data

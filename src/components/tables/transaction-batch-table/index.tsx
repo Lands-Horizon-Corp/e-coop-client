@@ -20,18 +20,22 @@ import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 
-import { useFilteredPaginatedTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
+import {
+    TTransactionBatchHookMode,
+    useFilteredPaginatedTransactionBatch,
+} from '@/hooks/api-hooks/use-transaction-batch'
 import { useDataTableSorting } from '@/hooks/data-table-hooks/use-datatable-sorting'
 import useDataTableState from '@/hooks/data-table-hooks/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { ITransactionBatch, TableProps } from '@/types'
+import { ITransactionBatch, TEntityId, TableProps } from '@/types'
 
 import TransactionBatchTableColumns, {
     ITransactionBatchTableColumnProps,
     batchGlobalSearchTargets,
 } from './columns'
+import { TransactionBatchRowContext } from './row-action-context'
 
 export interface TransactionBatchTableProps
     extends TableProps<ITransactionBatch>,
@@ -46,15 +50,35 @@ export interface TransactionBatchTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
+    mode: TTransactionBatchHookMode
 }
 
+export type TTransactionBatchTableProps = TransactionBatchTableProps &
+    (
+        | {
+              mode: 'employee'
+              userOrganizationId: TEntityId
+          }
+        | { mode: 'me' }
+        | { mode: 'all' }
+    )
+
 const TransactionBatchTable = ({
+    mode,
     className,
     toolbarProps,
     defaultFilter,
+    userOrganizationId,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
-}: TransactionBatchTableProps) => {
+    RowContextComponent = TransactionBatchRowContext,
+}: TTransactionBatchTableProps & {
+    userOrganizationId?: TEntityId
+}) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -94,7 +118,9 @@ const TransactionBatchTable = ({
         data: { data, totalPage, pageSize, totalSize },
         refetch,
     } = useFilteredPaginatedTransactionBatch({
+        mode,
         pagination,
+        userOrganizationId,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
@@ -184,7 +210,12 @@ const TransactionBatchTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

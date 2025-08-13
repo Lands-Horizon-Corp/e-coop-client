@@ -4,7 +4,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
-    DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 
 import { TFilterLogic } from '../../../../contexts/filter-context'
@@ -24,7 +23,6 @@ const DataTableFilterLogicOption = ({
                 Filter Logic
                 <FunnelIcon />
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
                 value={filterLogic}
                 onValueChange={(selected) =>

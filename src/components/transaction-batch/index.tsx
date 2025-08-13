@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/lib'
+import { useAuthUserWithOrg } from '@/store/user-auth-store'
 import { toReadableDate } from '@/utils'
 
 import { TransactionBatchEndFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-end-form'
@@ -21,6 +22,7 @@ import DepositInBankCard from './deposit-in-bank/deposit-in-bank-card'
 import BatchCheckRemitance from './remittance/check-remittance'
 import BatchOnlineRemitance from './remittance/online-remittance'
 import TransactionBatchCashCount from './transaction-batch-cash-count'
+import TransactionBatchDisbursementTransaction from './transaction-batch-disbursements'
 import BeginningBalanceCard from './transaction-batch-funding-card'
 import { TransactionBatchHistoriesModal } from './transaction-batch-histories'
 
@@ -37,6 +39,9 @@ const TransactionBatch = ({
     const queryClient = useQueryClient()
     const historyModal = useModalState()
     const endModal = useModalState()
+    const {
+        currentAuth: { user, user_organization },
+    } = useAuthUserWithOrg()
 
     const invalidateTransactionBatch = () => {
         queryClient.invalidateQueries({
@@ -67,6 +72,10 @@ const TransactionBatch = ({
                 {...endModal}
                 formProps={{
                     onSuccess: onBatchEnded,
+                    defaultValues: {
+                        employee_by_name: user.full_name,
+                        employee_by_position: user_organization.permission_name,
+                    },
                 }}
             />
             <div className="flex items-center justify-between">
@@ -76,7 +85,7 @@ const TransactionBatch = ({
                         <p>Transaction Batch</p>
                         <p className="text-xs text-muted-foreground dark:text-muted-foreground/40">
                             {toReadableDate(
-                                new Date(),
+                                transactionBatch?.created_at,
                                 "MMM, dd yyyy 'at' h:mm a "
                             )}
                         </p>
@@ -121,6 +130,12 @@ const TransactionBatch = ({
                     <BatchOnlineRemitance
                         transactionBatchId={transactionBatch?.id}
                         onOnlineRemittanceUpdate={() =>
+                            invalidateTransactionBatch()
+                        }
+                    />
+                    <TransactionBatchDisbursementTransaction
+                        transactionBatchId={transactionBatch?.id}
+                        onDisbursementUpdate={() =>
                             invalidateTransactionBatch()
                         }
                     />

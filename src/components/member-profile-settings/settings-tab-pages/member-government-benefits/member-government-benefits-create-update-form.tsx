@@ -19,7 +19,11 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 import {
     useCreateMemberGovernmentBenefit,
@@ -48,7 +52,9 @@ export const memberGovernmentBenefitSchema = z.object({
         .string()
         .date()
         .transform((val) => new Date(val).toISOString()),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     front_media_id: entityIdSchema.optional(),
     front_media: z.any(),
     back_media_id: entityIdSchema.optional(),

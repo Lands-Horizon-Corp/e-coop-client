@@ -1,7 +1,6 @@
 import { formatNumber } from '@/utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { LedgerSourceBadge } from '@/components/badges/ledger-source-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
@@ -204,9 +203,9 @@ const MemberAccountGeneralLedgerTableColumns = (
         ),
         cell: ({
             row: {
-                original: { type },
+                original: { payment_type },
             },
-        }) => <span>{type ?? '-'}</span>,
+        }) => <span>{payment_type?.name ?? '-'}</span>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -300,17 +299,7 @@ const MemberAccountGeneralLedgerTableColumns = (
             row: {
                 original: { source },
             },
-        }) => (
-            <span>
-                {source && (
-                    <LedgerSourceBadge
-                        size={'sm'}
-                        variant={source}
-                        source={source}
-                    />
-                )}
-            </span>
-        ),
+        }) => <span>{source}</span>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,

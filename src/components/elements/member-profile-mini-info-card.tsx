@@ -114,7 +114,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                         </HoverCardTrigger>
                                         <HoverCardContent>
                                             <HoveruserInfo
-                                                userId={memberProfile.user_id}
+                                                userId={memberProfile.user.id}
                                                 defaultValue={
                                                     memberProfile.user
                                                 }

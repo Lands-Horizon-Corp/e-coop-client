@@ -7,12 +7,13 @@ import {
 import { ILoanPurpose, ILoanPurposeRequest } from '@/types'
 
 const CrudServices = createAPICrudService<ILoanPurpose, ILoanPurposeRequest>(
-    'loan-transaction'
+    '/api/v1/loan-transaction'
 )
-const CollectionServices =
-    createAPICollectionService<ILoanPurpose>('loan-transaction')
+const CollectionServices = createAPICollectionService<ILoanPurpose>(
+    '/api/v1/loan-transaction'
+)
 
-const ExportServices = createAPIExportableService('loan-transaction')
+const ExportServices = createAPIExportableService('/api/v1/loan-transaction')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

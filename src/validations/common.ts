@@ -11,6 +11,7 @@ import {
     USER_TYPE,
 } from '@/constants'
 import { sanitizeNumberInput } from '@/helpers'
+import { sanitizeHtml } from '@/utils/sanitizer'
 
 export const entityIdSchema = z.coerce.string().uuid('Invalid')
 
@@ -147,6 +148,18 @@ export const TEntityId = z.string()
 // )
 //
 
+export const descriptionTransformerSanitizer = <T>(val: T) => {
+    if (typeof val === 'string') {
+        return sanitizeHtml(val)
+    }
+
+    return val
+}
+
+export const descriptionSchema = z.coerce
+    .string()
+    .min(1, 'Description is required')
+
 export const amount = z.preprocess(
     (val) => {
         if (typeof val === 'string') {
@@ -171,6 +184,5 @@ export const amount = z.preprocess(
         .number({
             invalid_type_error: 'Amount must be a number',
         })
-        .min(0.01, 'Amount must be greater than zero')
-        .max(1000000, 'Amount cannot exceed 1,000,000')
+        .max(500000000, 'Amount cannot exceed Five Million (500,000,000)')
 )

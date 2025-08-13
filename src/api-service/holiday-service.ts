@@ -5,8 +5,11 @@ import {
 
 import { IHoliday, IHolidayRequest } from '@/types'
 
-const CrudServices = createAPICrudService<IHoliday, IHolidayRequest>('/holiday')
-const CollectionServices = createAPICollectionService<IHoliday>('/holiday')
+const CrudServices = createAPICrudService<IHoliday, IHolidayRequest>(
+    '/api/v1/holiday'
+)
+const CollectionServices =
+    createAPICollectionService<IHoliday>('/api/v1/holiday')
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

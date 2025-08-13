@@ -24,6 +24,7 @@ import {
     IMemberContactReference,
     IMemberContactReferenceRequest,
 } from './member-contact-reference'
+import { IMemberDepartment } from './member-department'
 import { IMemberDescriptionRequest } from './member-description'
 import { IMemberEducationalAttainment } from './member-educational-attainment'
 import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
@@ -146,8 +147,8 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     organization_id: TEntityId
     organization: IOrganization
 
-    user_id: TEntityId
-    user: IUserBase
+    user_id?: TEntityId
+    user?: IUserBase
 
     media_id?: TEntityId
     media?: IMedia
@@ -179,6 +180,9 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_verified_by_employee_user_id: TEntityId
     member_verified_by_employee_user: IUserBase
 
+    member_department_id?: TEntityId
+    member_department?: IMemberDepartment
+
     recruited_by_member_profile_id: TEntityId
     recruited_by_member_profile: IMemberProfile
 
@@ -206,7 +210,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     business_contact_number: string
     civil_status: TCivilStatus
 
-    qr_code: IQrScanResult<string, 'member-profile-qr'>
+    qr_code: IQrScanResult<string, 'member-qr'>
 
     // occupationId?: TEntityId
 

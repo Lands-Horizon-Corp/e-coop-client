@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
+import { descriptionSchema, descriptionTransformerSanitizer } from '../common'
+
 export const GeneralLedgerTypeEnumSchema = z.enum([
     GeneralLedgerTypeEnum.Assets,
     GeneralLedgerTypeEnum.LiabilitiesEquityAndReserves,
@@ -11,7 +13,9 @@ export const GeneralLedgerTypeEnumSchema = z.enum([
 
 export const GeneralLedgerDefinitionSchema = z.object({
     name: z.string().min(1, 'The name is Required!'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     index: z.coerce.number().optional(),
     name_in_total: z.string().optional(),
     is_posting: z.boolean().optional(),

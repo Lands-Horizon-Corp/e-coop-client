@@ -29,6 +29,7 @@ import TimesheetTableColumns, {
     ITimesheetTableColumnProps,
     timesheetGlobalSearchTargets,
 } from './columns'
+import { TimesheetRowContext } from './row-action-context'
 
 export interface TimesheetTableProps
     extends TableProps<ITimesheet>,
@@ -49,8 +50,8 @@ export interface TimesheetTableProps
 export type TTimesheetProps = TimesheetTableProps &
     (
         | {
-              mode: 'user-organization'
-              userId: TEntityId
+              mode: 'employee'
+              userOrganizationId: TEntityId
           }
         | { mode: 'me' }
         | { mode: 'all' }
@@ -58,15 +59,19 @@ export type TTimesheetProps = TimesheetTableProps &
 
 const TimesheetTable = ({
     mode,
-    userId,
     className,
-    onRowClick,
     toolbarProps,
     defaultFilter,
+    userOrganizationId,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
+    RowContextComponent = TimesheetRowContext,
 }: TTimesheetProps & {
-    userId?: TEntityId
+    userOrganizationId?: TEntityId
 }) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
@@ -104,7 +109,7 @@ const TimesheetTable = ({
     const timesheetQuery = useFilteredPaginatedTimesheets({
         mode,
         pagination,
-        user_org_id: userId,
+        userOrganizationId,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
@@ -184,14 +189,12 @@ const TimesheetTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
-                    onRowClick={
-                        onRowClick
-                            ? onRowClick
-                            : mode === 'me'
-                              ? () => {}
-                              : onRowClick
-                    }
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

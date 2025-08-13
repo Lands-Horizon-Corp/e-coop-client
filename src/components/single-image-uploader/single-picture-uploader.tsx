@@ -41,9 +41,9 @@ export const ImageDropPicker = ({
     const [newImage, setNewImage] = useState<string | null>(null)
     const [croppedImage, setCroppedImage] = useState<string | null>(null)
 
-    const openPickedImage = !!croppedImage && !reAdjust
+    const openPickedImage = !reAdjust && (!!newImage || !!croppedImage)
 
-    const shouldOpenCropper = newImage && (!croppedImage || reAdjust)
+    const shouldOpenCropper = reAdjust
 
     const shouldOpenImagePicker = newImage === null
 
@@ -86,7 +86,10 @@ export const ImageDropPicker = ({
             )}
             {shouldOpenImagePicker && (
                 <SingleImageUploadOption
-                    onPhotoChoose={(base64Image) => setNewImage(base64Image)}
+                    onPhotoChoose={(base64Image) => {
+                        setNewImage(base64Image)
+                        setCroppedImage(base64Image)
+                    }}
                 />
             )}
             {shouldOpenCropper ? (
@@ -107,7 +110,7 @@ export const ImageDropPicker = ({
                 />
             ) : null}
 
-            <div className="flex justify-end gap-2">
+            <div className={cn('flex justify-end gap-2', reAdjust && 'hidden')}>
                 <Button
                     variant="secondary"
                     disabled={!newImage && !defaultImage}

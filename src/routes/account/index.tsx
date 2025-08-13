@@ -1,8 +1,8 @@
 import { useAuthUser } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
-import AccountProfilePicture from '@/components/account-settings/account-profile-picture'
 import AccountGeneralForm from '@/components/forms/user-account-settings-forms/account-general-form'
+import AccountProfilePicture from '@/components/settings/account-settings/account-profile-picture'
 import { Label } from '@/components/ui/label'
 
 import { useSubscribe } from '@/hooks/use-pubsub'

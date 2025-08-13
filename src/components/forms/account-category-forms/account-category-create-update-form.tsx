@@ -22,15 +22,23 @@ import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
 import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
+import {
     useCreateAccountCategory,
     useUpdateAccountCategory,
 } from '@/hooks/api-hooks/use-account-category'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 const AccountCategorySchema = z.object({
     name: z.string().min(1, 'Category name is required'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
 
 type AccountCategoryFormValues = z.infer<typeof AccountCategorySchema>
@@ -114,6 +122,10 @@ const AccountCategoryCreateUpdateForm = ({
 
     const isAccountCategoryOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

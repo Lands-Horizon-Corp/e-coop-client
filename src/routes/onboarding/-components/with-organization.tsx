@@ -14,6 +14,7 @@ import {
     PlusIcon,
 } from '@/components/icons'
 import PlainTextEditor from '@/components/plain-text-editor'
+import OrganizationPolicies from '@/components/policies'
 import { StatusBadge } from '@/components/status-badge'
 import {
     Accordion,
@@ -27,7 +28,11 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { useSwitchOrganization } from '@/hooks/api-hooks/use-user-organization'
 
-import { IOrgUserOrganizationGroup, IUserOrganization } from '@/types'
+import {
+    IOrgUserOrganizationGroup,
+    IOrganizationWithPolicies,
+    IUserOrganization,
+} from '@/types'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: IOrgUserOrganizationGroup[]
@@ -106,7 +111,8 @@ const WithOrganization = ({
                 >
                     {organizationsWithBranches.map((org) => {
                         const mediaUrl = org.media?.url ?? orgBannerList[0]
-
+                        const isUserIsOwner =
+                            org.user_organizations[0]?.user_type === 'owner'
                         return (
                             <AccordionItem
                                 key={org.id}
@@ -122,25 +128,29 @@ const WithOrganization = ({
                                             <PlainTextEditor
                                                 content={org.description}
                                             />
-                                            {org?.id &&
-                                                org.created_by_id ===
-                                                    user.id && (
-                                                    <span
-                                                        onClick={() => {
-                                                            navigate({
-                                                                to: '/onboarding/create-branch/$organization_id',
-                                                                params: {
-                                                                    organization_id:
-                                                                        org.id,
-                                                                },
-                                                            })
-                                                        }}
-                                                        className="mt-2 flex w-fit items-center gap-x-2 rounded-lg border border-border bg-secondary/40 p-2 px-4 text-sm text-foreground duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:text-primary-foreground hover:dark:bg-primary/90 hover:dark:text-primary-foreground"
-                                                    >
-                                                        <GearIcon /> Manage
-                                                        Branch
-                                                    </span>
-                                                )}
+                                            {isUserIsOwner && (
+                                                <>
+                                                    {org?.id &&
+                                                        org.created_by_id ===
+                                                            user.id && (
+                                                            <span
+                                                                onClick={() => {
+                                                                    navigate({
+                                                                        to: '/onboarding/create-branch/$organization_id',
+                                                                        params: {
+                                                                            organization_id:
+                                                                                org.id,
+                                                                        },
+                                                                    })
+                                                                }}
+                                                                className="mt-2 flex w-fit items-center gap-x-2 rounded-lg border border-border bg-secondary/40 p-2 px-4 text-sm text-foreground duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:text-primary-foreground hover:dark:bg-primary/90 hover:dark:text-primary-foreground"
+                                                            >
+                                                                <GearIcon />{' '}
+                                                                Manage Branch
+                                                            </span>
+                                                        )}
+                                                </>
+                                            )}
                                         </div>
                                     </AccordionTrigger>
                                 </GradientBackground>
@@ -166,92 +176,88 @@ const WithOrganization = ({
                                                         ?.url ??
                                                     orgBannerList[0]
                                                 return (
-                                                    <div
+                                                    <ListOfBranches
                                                         key={
                                                             userOrg.branch
                                                                 ?.id ?? i
                                                         }
-                                                    >
-                                                        <GradientBackground
-                                                            gradientOnly
-                                                        >
-                                                            <div className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                                                <Avatar className="size-16">
-                                                                    <AvatarImage
-                                                                        src={
-                                                                            mediaUrl
-                                                                        }
-                                                                    />
-                                                                </Avatar>
-                                                                <div className="flex grow flex-col">
-                                                                    <h1>
-                                                                        {
-                                                                            userOrg
-                                                                                .branch
-                                                                                ?.name
-                                                                        }
-                                                                    </h1>
-                                                                    {userOrg
-                                                                        .branch
-                                                                        ?.description && (
-                                                                        <PlainTextEditor
-                                                                            className="text-xs"
-                                                                            content={
-                                                                                userOrg
-                                                                                    .branch
-                                                                                    ?.description ??
-                                                                                ''
-                                                                            }
-                                                                        />
-                                                                    )}
-                                                                    <span className="flex items-center gap-y-2 text-xs">
-                                                                        {' '}
-                                                                        <PinLocationIcon className="mr-2 text-destructive/60" />
-                                                                        {
-                                                                            userOrg
-                                                                                .branch
-                                                                                ?.address
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                                <StatusBadge
-                                                                    status={
-                                                                        userOrg.application_status
-                                                                    }
-                                                                />
-                                                                <Button
-                                                                    disabled={
-                                                                        userOrg.application_status ===
-                                                                        'pending'
-                                                                    }
-                                                                    onClick={async () => {
-                                                                        handleVisit(
-                                                                            userOrg
-                                                                        )
-                                                                    }}
-                                                                    size={'sm'}
-                                                                    variant={
-                                                                        'secondary'
-                                                                    }
-                                                                >
-                                                                    visit as{' '}
-                                                                    {
-                                                                        userOrg.user_type
-                                                                    }
-                                                                </Button>
-                                                            </div>
-                                                        </GradientBackground>
-                                                    </div>
+                                                        userOrg={userOrg}
+                                                        mediaUrl={mediaUrl}
+                                                        branchKey={
+                                                            userOrg.branch
+                                                                ?.id ?? ''
+                                                        }
+                                                        onClick={() =>
+                                                            handleVisit(userOrg)
+                                                        }
+                                                    />
                                                 )
                                             }
                                         )}
                                     </div>
+
+                                    {org && (
+                                        <OrganizationPolicies
+                                            organization={
+                                                org.user_organizations[0]
+                                                    .organization as IOrganizationWithPolicies
+                                            }
+                                        />
+                                    )}
                                 </AccordionContent>
                             </AccordionItem>
                         )
                     })}
                 </Accordion>
             </ScrollArea>
+        </div>
+    )
+}
+
+type ListOfBranchesProps = {
+    userOrg: IUserOrganization
+    branchKey: string
+    mediaUrl?: string
+    onClick?: () => void
+}
+
+const ListOfBranches = ({
+    userOrg,
+    onClick,
+    mediaUrl,
+}: ListOfBranchesProps) => {
+    return (
+        <div key={userOrg.branch?.id ?? ''}>
+            <GradientBackground gradientOnly>
+                <div className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
+                    <Avatar className="size-16">
+                        <AvatarImage src={mediaUrl} />
+                    </Avatar>
+                    <div className="flex grow flex-col">
+                        <h1>{userOrg.branch?.name}</h1>
+                        {userOrg.branch?.description && (
+                            <PlainTextEditor
+                                className="text-xs"
+                                content={userOrg.branch?.description ?? ''}
+                            />
+                        )}
+                        <span className="flex items-center gap-y-2 text-xs">
+                            {' '}
+                            <PinLocationIcon className="mr-2 text-destructive/60" />
+                            {userOrg.branch?.address}
+                        </span>
+                    </div>
+                    <StatusBadge status={userOrg.application_status} />
+                    <Button
+                        disabled={userOrg.application_status === 'pending'}
+                        onClick={onClick}
+                        size={'sm'}
+                        variant={'secondary'}
+                    >
+                        visit as {userOrg.user_type}
+                    </Button>
+                </div>
+            </GradientBackground>
         </div>
     )
 }

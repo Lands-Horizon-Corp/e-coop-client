@@ -14,7 +14,13 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
 import { useUpdateGeneralLedgerAccountsGrouping } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-accounts-grouping'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IClassProps,
@@ -35,7 +41,9 @@ import {
 
 const glGroupingSchema = z.object({
     name: z.string().min(1, 'Name is required'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     debit: z.enum(['positive', 'negative'], {
         required_error: 'Debit is required',
     }),
@@ -99,6 +107,10 @@ const GLAccountsGroupingUpdateForm = ({
 
     const isDisabled = (field: Path<TGLGroupingFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

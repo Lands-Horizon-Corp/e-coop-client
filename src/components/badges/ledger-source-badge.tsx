@@ -83,6 +83,7 @@ interface LedgerSourceBadgeProps
     source: TGeneralLedgerSource
     className?: string
     showIcon?: boolean
+    showValue?: boolean
 }
 
 export function LedgerSourceBadge({
@@ -90,6 +91,7 @@ export function LedgerSourceBadge({
     className,
     showIcon = true,
     size = 'md',
+    showValue = true,
     ...props
 }: LedgerSourceBadgeProps) {
     const getSourceIcon = (source: TGeneralLedgerSource) => {
@@ -122,7 +124,7 @@ export function LedgerSourceBadge({
             {showIcon && IconComponent && (
                 <IconComponent className={iconSizeVariants({ size })} />
             )}
-            <span className="truncate capitalize">{source}</span>
+            {showValue && <span className="truncate capitalize">{source}</span>}
         </div>
     )
 }

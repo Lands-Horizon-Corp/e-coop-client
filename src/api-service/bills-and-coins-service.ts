@@ -6,10 +6,11 @@ import {
 } from '../factory/api-factory-service'
 
 const CrudServices = createAPICrudService<IBillsAndCoin, IBillsAndCoinRequest>(
-    `bills-and-coins`
+    `/api/v1/bills-and-coins`
 )
-const CollectionServices =
-    createAPICollectionService<IBillsAndCoin>(`bills-and-coins`)
+const CollectionServices = createAPICollectionService<IBillsAndCoin>(
+    `/api/v1/bills-and-coins`
+)
 
 export const { create, getById, updateById, deleteById, deleteMany } =
     CrudServices

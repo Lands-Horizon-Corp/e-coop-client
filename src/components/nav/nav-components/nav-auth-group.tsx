@@ -14,7 +14,14 @@ const NavAuthGroup = () => {
         <>
             {pathname !== '/auth/sign-up' && <NavSignUp />}
             {pathname !== '/auth/sign-in' && <NavSignIn />}
-            {pathname === '/' && <NavGetStarted />}
+            {[
+                '/',
+                '/about',
+                '/contact',
+                '/frequently-asked-questions',
+                '/developers',
+                '/subscription',
+            ].includes(pathname) && <NavGetStarted />}
             <NavSignOut />
         </>
     )

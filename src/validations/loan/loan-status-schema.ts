@@ -1,6 +1,10 @@
 import z from 'zod'
 
-import { entityIdSchema } from '../common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '../common'
 
 export const loanStatusSchema = z.object({
     id: entityIdSchema.optional(),
@@ -10,5 +14,5 @@ export const loanStatusSchema = z.object({
     name: z.string().min(1, 'Loan status name is required'),
     icon: z.string(),
     color: z.string(),
-    description: z.string(),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
 })

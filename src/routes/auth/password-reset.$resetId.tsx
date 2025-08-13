@@ -3,10 +3,9 @@ import z from 'zod'
 
 import AuthPageWrapper from '@/routes/auth/-components/auth-page-wrapper'
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
-import { GoArrowLeft } from 'react-icons/go'
 
 import ResetPasswordForm from '@/components/forms/auth-forms/reset-password-form'
-import { KeyIcon } from '@/components/icons'
+import { ArrowLeftIcon, KeyIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import GuestGuard from '@/components/wrappers/guest-guard'
@@ -81,7 +80,7 @@ function PasswordResetPage() {
                                     })
                                 }}
                             >
-                                <GoArrowLeft className="mr-2" /> Back to Login
+                                <ArrowLeftIcon className="mr-2" /> Back to Login
                             </Button>
                         </div>
                     )}

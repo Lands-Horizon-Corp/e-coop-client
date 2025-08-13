@@ -108,7 +108,7 @@ const BatchCashCount = ({
             <form onSubmit={onSubmit} className="space-y-1">
                 <fieldset
                     disabled={isPending || other.readOnly}
-                    className="grid gap-x-6 gap-y-4 rounded-xl bg-secondary dark:bg-popover sm:gap-y-3"
+                    className="grid gap-x-6 gap-y-4 rounded-xl overflow-clip bg-secondary dark:bg-popover sm:gap-y-3"
                 >
                     <FormFieldWrapper
                         name="cash_counts"

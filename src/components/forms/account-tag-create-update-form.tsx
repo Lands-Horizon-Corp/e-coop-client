@@ -5,22 +5,37 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { TAG_CATEGORY } from '@/constants'
 import { Path, useForm } from 'react-hook-form'
 
+import IconCombobox from '@/components/comboboxes/icon-combobox'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import AccountPicker from '@/components/pickers/account-picker'
+import InputColor from '@/components/pickers/color-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
 import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
+import {
     useCreateAccountTag,
     useUpdateAccountTag,
 } from '@/hooks/api-hooks/use-account-tag'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IAccounTagRequest,
@@ -32,15 +47,13 @@ import {
     TTagCategory,
 } from '@/types'
 
-import IconCombobox from '../comboboxes/icon-combobox'
-import AccountPicker from '../pickers/account-picker'
-import InputColor from '../pickers/color-picker'
-import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select'
-
 const AccountTagSchema = z.object({
     account_id: z.string().min(1, 'Account is required'),
+    account: z.any().optional(),
     name: z.string().min(1, 'Name is required').max(50, 'Name is too long'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     category: z
         .string()
         .min(1, 'Category is required') as z.ZodType<TTagCategory>,
@@ -108,6 +121,10 @@ const AccountTagCreateUpdateForm = ({
     const isAccountTagChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
 
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
+
     return (
         <Form {...form}>
             <form
@@ -140,9 +157,12 @@ const AccountTagCreateUpdateForm = ({
                             <AccountPicker
                                 onSelect={(account) => {
                                     field.onChange(account.id)
+                                    form.setValue('account', account, {
+                                        shouldDirty: true,
+                                    })
                                 }}
-                                value={field.value}
                                 placeholder="Select an account"
+                                value={form.getValues('account')}
                                 disabled={isDisabled(field.name)}
                             />
                         )}

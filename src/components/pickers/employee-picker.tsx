@@ -10,11 +10,11 @@ import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import { Button } from '@/components/ui/button'
 
 import { useFilteredPaginatedEmployees } from '@/hooks/api-hooks/use-employee'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 import useFilterState from '@/hooks/use-filter-state'
 
 import { IUserBase, IUserOrganization } from '@/types'
 
-import { useShortcut } from '../use-shorcuts'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import GenericPicker from './generic-picker'
 

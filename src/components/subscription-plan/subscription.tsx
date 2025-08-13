@@ -1,6 +1,6 @@
 import { cn } from '@/lib'
 
-import { useSubscriptionPlan } from '@/hooks/subscription-plan/use-subscription-plan'
+import { useSubscriptionPlans } from '@/hooks/api-hooks/use-subscription-plan'
 
 import { ISubscriptionPlan, TEntityId } from '@/types'
 
@@ -26,7 +26,7 @@ const SubscriptionPlanPicker = ({
     onSelect,
     value,
 }: SubscriptionProps) => {
-    const { data } = useSubscriptionPlan()
+    const { data } = useSubscriptionPlans()
 
     const isSelected = (id: TEntityId) => id === value
 

@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import TransactionBatchTable from '@/components/tables/transaction-batch-table'
-import TransactionBatchTableAction from '@/components/tables/transaction-batch-table/action'
+import TransactionBatchTableAction from '@/components/tables/transaction-batch-table/row-action-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -47,6 +47,7 @@ function RouteComponent() {
     return (
         <PageContainer>
             <TransactionBatchTable
+                mode="all"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),

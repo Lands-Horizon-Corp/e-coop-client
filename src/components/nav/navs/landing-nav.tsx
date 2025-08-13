@@ -1,7 +1,7 @@
 import { cn } from '@/lib'
 import { Link, ReactNode, useLocation } from '@tanstack/react-router'
-import { TbExternalLink } from 'react-icons/tb'
 
+import { CurlyBracketIcon } from '@/components/icons'
 import NavAuthGroup from '@/components/nav/nav-components/nav-auth-group'
 import NavEcoopLogo from '@/components/nav/nav-components/nav-ecoop-logo'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
@@ -28,9 +28,17 @@ const navLinks: NavLink[] = [
         path: '/contact',
     },
     {
+        name: 'Subscription',
+        path: '/subscription',
+    },
+    {
+        name: 'FAQ',
+        path: '/frequently-asked-questions',
+    },
+    {
         name: 'Developers',
-        path: import.meta.env.VITE_CLIENT_DOCUMENT_URL,
-        icon: <TbExternalLink />,
+        path: '/developers',
+        icon: <CurlyBracketIcon />,
     },
 ]
 
@@ -48,7 +56,10 @@ const LandingNav = () => {
                     const isExternalLink = link.path?.charAt(0) !== '/'
 
                     return (
-                        <div key={index} className="relative flex space-x-1">
+                        <div
+                            key={index}
+                            className="relative flex space-x-1 w-fit"
+                        >
                             {isExternalLink ? (
                                 <a
                                     href={link.path}
@@ -78,9 +89,14 @@ const LandingNav = () => {
                                     </div>
                                 </Link>
                             )}
-                            {isCurrentTab && (
-                                <div className="absolute -bottom-2 hidden h-[5px] w-[20px] rounded-full bg-green-500 sm:block"></div>
-                            )}
+                            {/* {isCurrentTab && ( */}
+                            <div
+                                className={cn(
+                                    'absolute opacity-0 duration-500 -bottom-2 hidden h-[5px] w-0 !ml-0 rounded-full bg-green-500 sm:block',
+                                    isCurrentTab && 'opacity-100 w-[20px]'
+                                )}
+                            ></div>
+                            {/* )} */}
                         </div>
                     )
                 })}

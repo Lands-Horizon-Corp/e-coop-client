@@ -8,6 +8,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+import CopyWrapper from '@/components/elements/copy-wrapper'
 import ImageNameDisplay from '@/components/elements/image-name-display'
 import ImageDisplay from '@/components/image-display'
 import { createUpdateColumns } from '@/components/tables/common-columns'
@@ -77,6 +78,46 @@ const BatchFundingTableColumns = (
         enableHiding: false,
         size: 120,
         minSize: 100,
+    },
+    {
+        id: 'transaction_batch',
+        accessorKey: 'transaction_batch.batch_name',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Transaction Batch">
+                <ColumnActions {...props}>
+                    <TextFilter<IBatchFunding>
+                        displayText="Transaction Batch"
+                        field="transaction_batch.batch_name"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { transaction_batch },
+            },
+        }) => (
+            <div className="relative">
+                {transaction_batch !== undefined ? (
+                    <>
+                        <p>{transaction_batch.batch_name || 'No name'}</p>
+                        <CopyWrapper>
+                            <span className="text-xs text-muted-foreground">
+                                {transaction_batch.id}
+                            </span>
+                        </CopyWrapper>
+                    </>
+                ) : (
+                    <span className="text-muted-foreground">-</span>
+                )}
+            </div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: true,
+        size: 250,
+        minSize: 250,
     },
     {
         id: 'provided_by_user',

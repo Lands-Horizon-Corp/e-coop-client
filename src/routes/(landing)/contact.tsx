@@ -8,11 +8,11 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 
 import { PhoneInput } from '@/components/contact-input/contact-input'
+import CopyWrapper from '@/components/elements/copy-wrapper'
 import {
     EmailIcon,
     FacebookIcon,
     LoadingCircleIcon,
-    MessageOutlineIcon,
     TelephoneIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -33,6 +33,8 @@ import { cn } from '@/lib/utils'
 import { useCreateContactUs } from '@/hooks/api-hooks/use-contact-us'
 import UseCooldown from '@/hooks/use-cooldown'
 import { useLocationInfo } from '@/hooks/use-location-info'
+
+import LinkTag from './policy/-components/link-tag'
 
 type TContact = z.infer<typeof contactFormSchema>
 
@@ -79,7 +81,7 @@ const ContactPage = () => {
     const showFieldError = Object.values(form.formState.errors)[0]?.message
 
     return (
-        <div className="flex justify-center px-6 py-5 font-inter sm:px-8 lg:px-[60px] lg:py-10 xl:px-[124px]">
+        <div className="flex justify-center bg-background/70 px-6 py-5 font-inter sm:px-8 lg:px-[60px] lg:py-10 xl:px-[124px]">
             <div className="mt-3 flex max-w-[1300px] flex-col items-center justify-center space-y-4 md:mt-5 lg:mt-16 lg:space-y-7 xl:space-y-10">
                 <h1 className="max-w-[1100px] text-center text-[min(64px,5.5vw)] font-bold">
                     Contact our Team
@@ -260,23 +262,28 @@ const ContactPage = () => {
                                 </p>
                             </div>
                             <div className="flex space-x-2">
-                                <MessageOutlineIcon className="self-center" />
-                                <Link className="text-sm font-semibold" to="/">
-                                    start a live chat
-                                </Link>
-                            </div>
-                            <div className="flex space-x-2">
                                 <EmailIcon className="self-center" />
                                 <Link className="text-sm font-semibold" to="/">
                                     shoot us an email
                                 </Link>
                             </div>
+                            <CopyWrapper>
+                                <LinkTag
+                                    name="lands.horizon.corp@gmail.com"
+                                    className="text-sm font-semibold"
+                                />
+                            </CopyWrapper>
                             <div className="flex space-x-2">
                                 <FacebookIcon className="self-center" />
                                 <Link className="text-sm font-semibold" to="/">
                                     Message us on Facebook
                                 </Link>
                             </div>
+                            <LinkTag
+                                name="Lands Horizon Corporation"
+                                className="text-sm font-semibold"
+                                href="https://www.facebook.com/profile.php?id=61578596159950"
+                            />
                         </div>
                         <div className="space-y-2">
                             <div>
@@ -293,7 +300,7 @@ const ContactPage = () => {
                                     className="text-sm font-semibold underline"
                                     to="/"
                                 >
-                                    +630916171081
+                                    +63 991 617 1081
                                 </Link>
                             </div>
                         </div>
@@ -307,8 +314,9 @@ const ContactPage = () => {
                                 </p>
                             </div>
                             <div className="flex space-x-2">
-                                <p className="text-sm font-semibold underline">
-                                    Bagong Street, Norway VC 3066
+                                <p className="text-sm font-semibold underline min-w-[200px] w-[150px]">
+                                    SAN JOSE DEL MONTE, BULACAN, REGION III
+                                    (CENTRAL LUZON), 3023, THE PHILIPPINES.
                                 </p>
                             </div>
                         </div>

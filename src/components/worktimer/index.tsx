@@ -26,6 +26,7 @@ const WorkTimer = ({ className }: Props) => {
     const { onOpenSecurityAction } = useActionSecurityStore()
     const [showTimeInOut, setShowTimeInOut] = useState(false)
     const { data: timesheet, isPending } = useCurrentTimesheet()
+    const [canTimeOut, setCanTimeOut] = useState(false)
 
     return (
         <div
@@ -56,7 +57,13 @@ const WorkTimer = ({ className }: Props) => {
                             src={ARTWORK_TIMED_IN}
                         />
                     )}
-                    <LiveWorkTimeDurationDisplay timeIn={timesheet.time_in} />
+                    <LiveWorkTimeDurationDisplay
+                        timeIn={timesheet.time_in}
+                        onTick={({ hours, minutes }) => {
+                            if ((minutes >= 5 || hours > 0) && !canTimeOut)
+                                setCanTimeOut(true)
+                        }}
+                    />
                     <p className="text-center text-sm font-light text-muted-foreground">
                         Timed in at{' '}
                         <span className="text-foreground">
@@ -78,12 +85,19 @@ const WorkTimer = ({ className }: Props) => {
                     </p>
                 </div>
             )}
+            {!canTimeOut && timesheet && (
+                <p className="text-center text-xs text-rose-500 py-0.5 px-2 rounded-sm bg-destructive/10 w-fit mx-auto">
+                    time out not allowed within 5 mins after time in
+                </p>
+            )}
             {showTimeInOut ? (
                 <TimeInOut
                     timesheet={timesheet}
                     onCancel={() => setShowTimeInOut(false)}
                     onSuccess={(data) => {
                         setShowTimeInOut(false)
+                        setCanTimeOut(false)
+
                         if (data.time_out) {
                             return queryClient.invalidateQueries({
                                 exact: true,
@@ -100,6 +114,7 @@ const WorkTimer = ({ className }: Props) => {
             ) : (
                 <Button
                     className="gap-x-2"
+                    disabled={timesheet && !canTimeOut}
                     onClick={() =>
                         onOpenSecurityAction({
                             title: 'Time In / Time Out',

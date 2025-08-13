@@ -10,7 +10,7 @@ import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/h
 import { PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
 
-import AccountClassificationAction from './action'
+import AccountClassificationAction from './row-action-context'
 
 export const AccountClassificationGlobalSearchTargets: IGlobalSearchTargets<IAccountClassification>[] =
     [

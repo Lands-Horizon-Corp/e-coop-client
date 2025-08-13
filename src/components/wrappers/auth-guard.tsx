@@ -1,8 +1,9 @@
-import { ReactNode } from 'react'
+import { ReactNode, useRef } from 'react'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 import { useAuthStore } from '@/store/user-auth-store'
-import { Navigate, useRouter } from '@tanstack/react-router'
+import { Navigate, useLocation, useRouter } from '@tanstack/react-router'
+import { AxiosError } from 'axios'
 
 import {
     ArrowRightIcon,
@@ -12,6 +13,9 @@ import {
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
+
+import { useAuthContext } from '@/hooks/api-hooks/use-auth'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IBaseProps, IUserBase, TPageType } from '@/types'
 
@@ -25,7 +29,60 @@ interface Props extends IBaseProps {
 
 const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     const router = useRouter()
-    const { currentAuth, authStatus } = useAuthStore()
+    const { pathname } = useLocation()
+    const {
+        currentAuth,
+        authStatus,
+        updateCurrentAuth,
+        setAuthStatus,
+        resetAuth,
+    } = useAuthStore()
+
+    const { refetch } = useAuthContext({
+        onSuccess(data) {
+            updateCurrentAuth(data)
+            setAuthStatus('authorized')
+        },
+
+        onError(_error, rawError) {
+            if (rawError instanceof AxiosError && rawError.status === 401) {
+                resetAuth()
+                setAuthStatus('unauthorized')
+                return null
+            }
+
+            if (rawError instanceof AxiosError && rawError.status === 500) {
+                setAuthStatus('error')
+                return null
+            }
+
+            setAuthStatus('error')
+        },
+        refetchOnWindowFocus: false,
+    })
+
+    useSubscribe(
+        `user_organization.update.${currentAuth.user_organization?.id}`,
+        refetch
+    )
+
+    useSubscribe(
+        `branch.update.${currentAuth.user_organization?.branch_id}`,
+        refetch
+    )
+
+    useSubscribe(
+        `organization.update.${currentAuth.user_organization?.organization_id}`,
+        refetch
+    )
+
+    const originalPathnameRef = useRef<string | null>(null)
+
+    if (originalPathnameRef.current === null && !pathname.startsWith('/auth')) {
+        originalPathnameRef.current = pathname
+    }
+
+    const callbackUrl = originalPathnameRef.current || '/onboarding'
 
     if (pageType === 'AUTHENTICATED') {
         if (authStatus === 'loading')
@@ -85,7 +142,14 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
             )
 
         if (!currentAuth.user)
-            return <Navigate to={'/auth/sign-in' as string} />
+            return (
+                <Navigate
+                    to={'/auth/sign-in' as string}
+                    search={{
+                        cbUrl: callbackUrl,
+                    }}
+                />
+            )
 
         if (currentAuth.user.type === 'ban') {
             return (

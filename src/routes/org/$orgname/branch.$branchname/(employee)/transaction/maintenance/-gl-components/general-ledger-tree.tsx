@@ -338,7 +338,7 @@ const GeneralLedgerTreeViewer = ({
         (generalLedgerDefinitions?.length ?? 0) > 0
 
     return (
-        <div className="w-full rounded-lg p-4 shadow-md">
+        <div className="w-full rounded-lg p-4">
             {selectedAccounts?.id && (
                 <GeneralLedgerAccountsModal
                     open={openGeneralLedgerAccountTableModal}

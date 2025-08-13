@@ -15,7 +15,7 @@ import APIService from '../api-service'
  * Service class to handle CRUD operations for Computation Types.
  */
 export default class ComputationTypeService {
-    private static readonly BASE_ENDPOINT = '/computation-type'
+    private static readonly BASE_ENDPOINT = '/api/v1/computation-type'
 
     /**
      * Centralized request handling for better error management.

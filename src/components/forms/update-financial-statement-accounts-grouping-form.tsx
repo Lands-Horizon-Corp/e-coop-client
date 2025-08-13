@@ -23,7 +23,13 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validations/common'
+
 import { useUpdateFinancialStatementAccountsGrouping } from '@/hooks/api-hooks/financial-statement-definition/use-financial-statement-accounts-grouping'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IClassProps,
@@ -35,7 +41,9 @@ import {
 
 const financialStatementGroupingSchema = z.object({
     name: z.string().min(1, 'Name is required'),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     debit: z.enum(['positive', 'negative'], {
         required_error: 'Debit is required',
     }),
@@ -107,6 +115,10 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
 
     const isDisabled = (field: Path<TFinancialStatementGroupingFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

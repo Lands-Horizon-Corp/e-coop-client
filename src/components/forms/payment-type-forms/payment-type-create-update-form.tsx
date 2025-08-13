@@ -28,10 +28,13 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { cn } from '@/lib/utils'
 
+import { descriptionTransformerSanitizer } from '@/validations/common'
+
 import {
     useCreatePaymentType,
     useUpdatePaymentType,
 } from '@/hooks/api-hooks/use-payment-type'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -40,7 +43,8 @@ const PaymentTypeSchema = z.object({
     description: z
         .string()
         .max(100, 'Description must contain at most 50 character(s)')
-        .optional(),
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     number_of_days: z
         .number()
         .int()
@@ -127,6 +131,10 @@ const PaymentTypeCreateUpdateForm = ({
 
     const isPaymentTypeOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

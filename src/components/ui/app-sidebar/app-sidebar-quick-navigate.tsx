@@ -27,7 +27,7 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
-            if (e.key === 'j' && (e.metaKey || e.ctrlKey)) {
+            if (e.key === 'q' && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault()
                 setOpen((open) => !open)
             }
@@ -48,7 +48,7 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                 Quick Navigate
                 <MagnifyingGlassIcon className="inline text-muted-foreground/60 duration-500 ease-out group-hover/quick-search:text-foreground" />
                 <CommandShortcut className="rounded-md bg-secondary p-1">
-                    <span className="text-xs">⌘</span>J
+                    <span className="text-xs">⌘</span>Q
                 </CommandShortcut>
             </Button>
             <CommandDialog

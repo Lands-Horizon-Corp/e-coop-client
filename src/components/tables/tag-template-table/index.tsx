@@ -29,6 +29,7 @@ import TagTemplateTableColumns, {
     ITagTemplateTableColumnProps,
     tagTemplateGlobalSearchTargets,
 } from './columns'
+import { TagTemplateRowContext } from './row-action-context'
 
 export interface TagTemplateTableProps
     extends TableProps<ITagTemplate>,
@@ -50,7 +51,12 @@ const TagTemplateTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = TagTemplateRowContext,
 }: TagTemplateTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -167,7 +173,12 @@ const TagTemplateTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

@@ -10,9 +10,12 @@ export interface IOperationCallbacks<
     onError?: (error: string, rawError?: TRawError) => void
 }
 
-export interface IFilterPaginatedHookProps {
+export interface IFilteredSortedHookProps {
     sort?: TSortingState
     filterPayload?: Record<string, unknown>
+}
+
+export interface IFilterPaginatedHookProps extends IFilteredSortedHookProps {
     pagination?: { pageIndex: number; pageSize: number }
 }
 
@@ -35,6 +38,11 @@ export interface IAPIFilteredPaginatedHook<TData = unknown, TError = unknown>
     extends IQueryProps<TData>,
         IOperationCallbacks<TData, TError>,
         IFilterPaginatedHookProps {}
+
+export interface IAPIFilteredHook<TData = unknown, TError = unknown>
+    extends IQueryProps<TData>,
+        IOperationCallbacks<TData, TError>,
+        IFilteredSortedHookProps {}
 
 export interface IInvalidateFnArgs<TData = unknown, TVariables = unknown> {
     queryClient: QueryClient

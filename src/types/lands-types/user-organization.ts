@@ -3,12 +3,16 @@ import { USER_ORG_APPLICATION_STATUS } from '@/constants'
 import { IUserBase } from '../auth/user'
 import { IBaseEntityMeta, TEntityId, TUserType } from '../common'
 import { IBranch, IPaginatedResult, TPermission } from '../coop-types'
+import { IAccount } from '../coop-types/accounts/account'
+import { IPaymentType } from '../coop-types/payment-type'
 import { IOrganization } from './organization'
 
 export type TUserOrganizationApplicationStatus =
     (typeof USER_ORG_APPLICATION_STATUS)[number]
 
-export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
+export interface IUserOrganization<TUser = IUserBase>
+    extends IBaseEntityMeta,
+        Omit<IUserOrganizationSettings, 'user_type' | 'description'> {
     id: TEntityId
 
     organization_id: TEntityId
@@ -31,15 +35,6 @@ export interface IUserOrganization<TUser = IUserBase> extends IBaseEntityMeta {
     permission_name: string
     permission_description: string
     permissions: TPermission[]
-
-    //     DeveloperSecretKey     string        `json:"developer_secret_key"` // available only to this user org
-    //     UserSettingDescription string `json:"user_setting_description"`
-    //     UserSettingStartOR int64 `json:"user_setting_start_or"`
-    //     UserSettingEndOR   int64 `json:"user_setting_end_or"`
-    //     UserSettingUsedOR  int64 `json:"user_setting_used_or"`
-    //     UserSettingStartVoucher int64 `json:"user_setting_start_voucher"`
-    //     UserSettingEndVoucher   int64 `json:"user_setting_end_voucher"`
-    //     UserSettingUsedVoucher  int64 `json:"user_setting_used_voucher"`
 }
 
 export interface IUserOrganizationResponse {
@@ -65,6 +60,39 @@ export interface IUserOrganizationPermissionRequest {
     permission_description: string
     permissions: TPermission[]
 }
+
+export interface IUserOrganizationSettings {
+    user_type: TUserType
+    description: string
+
+    user_setting_description: string
+    user_setting_start_or: number
+    user_setting_end_or: number
+    user_setting_used_or: number
+    user_setting_start_voucher: number
+    user_setting_end_voucher: number
+    user_setting_used_voucher: number
+    user_setting_number_padding: number
+
+    allow_withdraw_negative_balance: boolean
+    allow_withdraw_exact_balance: boolean
+    maintaining_balance: boolean
+
+    settings_accounting_payment_default_value_id?: TEntityId | null
+    settings_accounting_payment_default_value?: IAccount
+
+    settings_accounting_deposit_default_value_id?: TEntityId | null
+    settings_accounting_deposit_default_value?: IAccount
+
+    settings_accounting_withdraw_default_value_id?: TEntityId | null
+    settings_accounting_withdraw_default_value?: IAccount
+
+    settings_payment_type_default_value_id?: TEntityId | null
+    settings_payment_type_default_value?: IPaymentType
+}
+
+export interface IUserOrganizationSettingsRequest
+    extends IUserOrganizationSettings {}
 
 export interface IUserOrganizationPaginated<TUser = IUserBase>
     extends IPaginatedResult<IUserOrganization<TUser>> {}

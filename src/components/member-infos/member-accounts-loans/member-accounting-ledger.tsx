@@ -4,11 +4,20 @@ import { cn } from '@/lib'
 import { IAccount } from '@/types/coop-types/accounts/account'
 import { formatNumber } from '@/utils'
 
-import { RefreshIcon } from '@/components/icons'
+import {
+    BillIcon,
+    BookThickIcon,
+    HandCoinsIcon,
+    MoneyCheckIcon,
+    RefreshIcon,
+} from '@/components/icons'
 import Modal from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import GeneralLedgerTable from '@/components/tables/ledgers-tables/general-ledger-table'
 import MemberAccountingLedgerTable from '@/components/tables/ledgers-tables/member-accounting-ledger-table'
 import { Button } from '@/components/ui/button'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { useMemberAccountingLedgerTotal } from '@/hooks/api-hooks/member/use-member-accounting-ledger'
 
@@ -111,10 +120,178 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                     closeButtonClassName="md:hidden"
                     className={cn('!max-w-[90vw] p-2')}
                 >
-                    <MemberAccountGeneralLedger {...focused} />
+                    <div className="min-h-[80vh] min-w-[80vw] space-y-4 p-2">
+                        <div className="space-y-2">
+                            <h3 className="text-lg font-semibold">
+                                Account: {focused.account?.name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                                Member Account General Ledger Entries
+                            </p>
+                        </div>
+
+                        <Tabs
+                            defaultValue="general-ledger"
+                            className="mt-2 flex-1 flex-col"
+                        >
+                            <ScrollArea>
+                                <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
+                                    <TabsTrigger
+                                        value="general-ledger"
+                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    >
+                                        <BookThickIcon
+                                            className="-ms-0.5 me-1.5 opacity-60"
+                                            size={16}
+                                            aria-hidden="true"
+                                        />
+                                        General Ledger
+                                    </TabsTrigger>
+
+                                    <TabsTrigger
+                                        value="check-entry"
+                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    >
+                                        <MoneyCheckIcon
+                                            className="-ms-0.5 me-1.5 opacity-60"
+                                            size={16}
+                                            aria-hidden="true"
+                                        />
+                                        Check Entry
+                                    </TabsTrigger>
+
+                                    <TabsTrigger
+                                        value="online-entry"
+                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    >
+                                        <BillIcon
+                                            className="-ms-0.5 me-1.5 opacity-60"
+                                            size={16}
+                                            aria-hidden="true"
+                                        />
+                                        Online Entry
+                                    </TabsTrigger>
+
+                                    <TabsTrigger
+                                        value="cash-entry"
+                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    >
+                                        <HandCoinsIcon
+                                            className="-ms-0.5 me-1.5 opacity-60"
+                                            size={16}
+                                            aria-hidden="true"
+                                        />
+                                        Cash Entry
+                                    </TabsTrigger>
+
+                                    <TabsTrigger
+                                        value="payment-entry"
+                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    >
+                                        <BillIcon
+                                            className="-ms-0.5 me-1.5 opacity-60"
+                                            size={16}
+                                            aria-hidden="true"
+                                        />
+                                        Payment Entry
+                                    </TabsTrigger>
+
+                                    <TabsTrigger
+                                        value="withdraw-entry"
+                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    >
+                                        <HandCoinsIcon
+                                            className="-ms-0.5 me-1.5 opacity-60"
+                                            size={16}
+                                            aria-hidden="true"
+                                        />
+                                        Withdraw Entry
+                                    </TabsTrigger>
+
+                                    <TabsTrigger
+                                        value="deposit-entry"
+                                        className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    >
+                                        <HandCoinsIcon
+                                            className="-ms-0.5 me-1.5 opacity-60"
+                                            size={16}
+                                            aria-hidden="true"
+                                        />
+                                        Deposit Entry
+                                    </TabsTrigger>
+                                </TabsList>
+                                <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
+
+                            <TabsContent value="general-ledger" asChild>
+                                <MemberAccountGeneralLedger {...focused} />
+                            </TabsContent>
+
+                            <TabsContent value="check-entry" asChild>
+                                <GeneralLedgerTable
+                                    mode="member-account"
+                                    TEntryType="check-entry"
+                                    memberProfileId={focused.memberProfileId}
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                />
+                            </TabsContent>
+
+                            <TabsContent value="online-entry" asChild>
+                                <GeneralLedgerTable
+                                    mode="member-account"
+                                    TEntryType="online-entry"
+                                    memberProfileId={focused.memberProfileId}
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                />
+                            </TabsContent>
+
+                            <TabsContent value="cash-entry" asChild>
+                                <GeneralLedgerTable
+                                    mode="member-account"
+                                    TEntryType="cash-entry"
+                                    memberProfileId={focused.memberProfileId}
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                />
+                            </TabsContent>
+
+                            <TabsContent value="payment-entry" asChild>
+                                <GeneralLedgerTable
+                                    mode="member-account"
+                                    TEntryType="payment-entry"
+                                    memberProfileId={focused.memberProfileId}
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                />
+                            </TabsContent>
+
+                            <TabsContent value="withdraw-entry" asChild>
+                                <GeneralLedgerTable
+                                    mode="member-account"
+                                    TEntryType="withdraw-entry"
+                                    memberProfileId={focused.memberProfileId}
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                />
+                            </TabsContent>
+
+                            <TabsContent value="deposit-entry" asChild>
+                                <GeneralLedgerTable
+                                    mode="member-account"
+                                    TEntryType="deposit-entry"
+                                    memberProfileId={focused.memberProfileId}
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                />
+                            </TabsContent>
+                        </Tabs>
+                    </div>
                 </Modal>
             )}
             <MemberAccountingLedgerTable
+                mode="member"
                 memberProfileId={memberProfileId}
                 onRowClick={(data) =>
                     setFocused({

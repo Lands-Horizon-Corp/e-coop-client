@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 export const TOrganizationMigrationStatus = z.enum([
     'pending',
@@ -22,9 +26,22 @@ export const OrganizationSchema = z.object({
             message: 'Invalid email',
         }),
     contact_number: z.string().optional(),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
+})
+export const EditOrganizationSchema = OrganizationSchema.extend({
+    id: entityIdSchema.optional(),
+    is_private: z.boolean().optional(),
+    terms_and_conditions: z.string().optional(),
+    privacy_policy: z.string().optional(),
+    cookie_policy: z.string().optional(),
+    refund_policy: z.string().optional(),
+    user_agreement: z.string().optional(),
+    media_id: z.string().optional(),
+    cover_media_id: z.string().optional(),
 })
 
 export type Organization = z.infer<typeof OrganizationSchema>

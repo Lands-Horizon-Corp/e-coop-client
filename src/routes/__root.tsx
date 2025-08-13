@@ -1,3 +1,4 @@
+import { NATS_PASS, NATS_USER } from '@/constants'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
 import { useAuthStore } from '@/store/user-auth-store'
@@ -48,7 +49,7 @@ function RootLayout() {
         refetchOnWindowFocus: false,
     })
 
-    useNatsConnect()
+    useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
 
     return (
         <div className="relative">

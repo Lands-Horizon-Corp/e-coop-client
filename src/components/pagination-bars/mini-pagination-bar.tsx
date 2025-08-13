@@ -36,7 +36,7 @@ const MiniPaginationBar = ({
     }
 
     const handlePrevious = () => {
-        if (pagination.pageIndex > 1) {
+        if (pagination.pageIndex > 0) {
             onPrev({
                 ...pagination,
                 pageIndex: pagination.pageIndex - 1,

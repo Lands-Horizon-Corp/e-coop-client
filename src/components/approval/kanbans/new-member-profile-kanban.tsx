@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
@@ -40,9 +41,11 @@ const NewMemberProfileKanban = (_props: Props) => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
-    const { data, isPending } = useAllPendingMemberProfiles()
+    const { data, isRefetching, refetch } = useAllPendingMemberProfiles()
 
     useSubscribe(`member_profile.update.branch.${branch_id}`, () => {
+        toast.info('Member profile Kanban - update : Triggered')
+
         queryClient.invalidateQueries({
             queryKey: ['member-profile', 'all', 'pending'],
         })
@@ -56,9 +59,10 @@ const NewMemberProfileKanban = (_props: Props) => {
             <div className="flex items-center">
                 <UserListIcon className="mr-2 size-4" />
                 <KanbanTitle
-                    isLoading={isPending}
                     totalItems={data.length}
                     title="New Member Profile Approvals"
+                    isLoading={isRefetching}
+                    onRefresh={() => refetch()}
                 />
             </div>
             <Separator />

@@ -2,7 +2,13 @@ import { type VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 
-import { BriefCaseIcon, CrownIcon, NotAllowedIcon, UserIcon } from '../icons'
+import {
+    BriefCaseIcon,
+    CrownIcon,
+    NotAllowedIcon,
+    QuestionIcon,
+    UserIcon,
+} from '../icons'
 
 export type TUserType = 'ban' | 'owner' | 'employee' | 'member'
 
@@ -89,8 +95,10 @@ export function UserTypeBadge({
             )}
             {...props}
         >
-            {showIcon && IconComponent && (
+            {showIcon && IconComponent ? (
                 <IconComponent className={iconSizeVariants({ size })} />
+            ) : (
+                <QuestionIcon className={iconSizeVariants({ size })} />
             )}
             <span className="truncate capitalize">
                 {userType in userTypeIcons ? userType : 'unknown'}

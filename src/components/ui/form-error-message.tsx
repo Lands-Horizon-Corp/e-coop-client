@@ -1,8 +1,8 @@
-import { MdError } from 'react-icons/md'
-
 import { cn } from '@/lib/utils'
 
 import { IClassProps } from '@/types'
+
+import { ErrorExclamationIcon } from '../icons'
 
 interface Props extends IClassProps {
     errorMessage?: string | null
@@ -18,7 +18,7 @@ const FormErrorMessage = ({ className, errorMessage }: Props) => {
                 className
             )}
         >
-            <MdError className="my-1 size-4" />
+            <ErrorExclamationIcon className="my-1 size-4" />
             <p className="w-full">{errorMessage}</p>
         </span>
     )

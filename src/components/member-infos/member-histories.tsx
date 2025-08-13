@@ -17,10 +17,12 @@ import {
     UserGroupIcon,
     // BankIco,
     UserIcon,
+    Users3LineIcon,
 } from '../icons'
 import Modal, { IModalProps } from '../modals/modal'
 import MemberCenterHistoryTable from '../tables/member/members-profile-table/member-histories/center-history'
 import MemberClassificationHistoryTable from '../tables/member/members-profile-table/member-histories/classification-history'
+import MemberDepartmentHistoryTable from '../tables/member/members-profile-table/member-histories/department-history'
 import MemberGenderHistoryTable from '../tables/member/members-profile-table/member-histories/gender-history'
 import MemberGroupHistoryTable from '../tables/member/members-profile-table/member-histories/group-history'
 import MemberTypeHistoryTable from '../tables/member/members-profile-table/member-histories/member-type-history'
@@ -124,6 +126,37 @@ const historyTabs: {
                         Member Classification history of this member
                     </p>
                     <MemberClassificationHistoryTable
+                        className="grow"
+                        profileId={profileId}
+                    />
+                </div>
+            )
+        },
+    },
+    {
+        value: 'member-department-history',
+        title: 'Member Department',
+        Icon: Users3LineIcon,
+        Component: ({ profileId }) => {
+            const queryClient = useQueryClient()
+            useSubscribe(
+                `member_department_history.create.member_profile.${profileId}`,
+                () =>
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            'member-department-history',
+                            'resource-query',
+                            profileId,
+                        ],
+                    })
+            )
+
+            return (
+                <div className="flex min-h-[90%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4">
+                    <p className="text-sm">
+                        Member Department history of this member
+                    </p>
+                    <MemberDepartmentHistoryTable
                         className="grow"
                         profileId={profileId}
                     />

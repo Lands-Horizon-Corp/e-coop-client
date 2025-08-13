@@ -1,117 +1,163 @@
-import bg_element_4 from '@/assets/images/landing-page/bg_element_4.webp'
-import bg_element_5 from '@/assets/images/landing-page/bg_element_5.webp'
-import home_image_1 from '@/assets/images/landing-page/home-image-1.webp'
-import home_image_2 from '@/assets/images/landing-page/home-image-2.webp'
+import { cn } from '@/lib'
+import { useTheme } from '@/providers/theme-provider'
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { ArrowRight } from 'lucide-react'
 
+import {
+    ArrowChevronRight,
+    BorderedShieldIcon,
+    GiClockIcon,
+    RiCommunityFillIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { Galaxy3D } from '@/components/ui/galaxy'
+import Plane from '@/components/ui/plane'
 
-import { cn } from '@/lib/utils'
+import MissionVisionSection from './-landing-components/mission-vision'
+import OurServices from './-landing-components/our-services'
 
-const LandingPage = () => {
+interface CardProps {
+    icon: React.ReactNode
+    label: string
+    description: string
+}
+
+const Card: React.FC<CardProps> = ({ icon, label, description }) => {
     return (
-        <div className="flex h-fit justify-center px-6 font-inter sm:px-8 lg:px-[60px] xl:px-[124px]">
-            <div className="h-fit w-full max-w-[1240px]">
-                <h1 className="w-[80%] pt-2 text-[min(64px,5.5vw)] font-black capitalize md:pt-20 lg:leading-[4.8rem]">
-                    Empowering Communities Through Cooperative Ownership
-                </h1>
-                <div className="flex w-full">
-                    <div className="grow" />
-                    <div>
-                        <p className="w-full flex-none text-justify text-[min(25px,3.0vw)] font-semibold text-[#5A5A5A] dark:text-[#cccccc] md:w-[468px]">
-                            Cooperatives embody the power of community, where
-                            shared ownership and mutual aid transform economic
-                            challenges into opportunities for progress and
-                            empowerment.
-                        </p>
-                        <div className="flex w-full items-center justify-center py-5">
+        <div className="flex flex-col items-center bg-transparent p-8 min-w-[260px] max-w-[320px] transition-transform duration-300 hover:scale-105">
+            <div className="mb-5 flex items-center justify-center rounded-full p-5 shadow-inner transition-shadow duration-300 group-hover:shadow-primary/70 hover:shadow-primary/70">
+                <span className="transition-shadow duration-300 group-hover:drop-shadow-[0_0_16px_theme(colors.primary.DEFAULT)] hover:drop-shadow-[0_0_16px_theme(colors.primary.DEFAULT)]">
+                    {icon}
+                </span>
+            </div>
+            <h3 className="text-2xl font-bold mb-2 text-foreground text-center tracking-tight">
+                {label}
+            </h3>
+            <p className="text-base text-muted-foreground text-center leading-relaxed">
+                {description}
+            </p>
+        </div>
+    )
+}
+
+export function HeroSection() {
+    const { resolvedTheme } = useTheme()
+    return (
+        <>
+            <div className={cn(resolvedTheme === 'dark' ? 'hidden' : 'block')}>
+                <Plane />
+            </div>
+            <div className={cn(resolvedTheme === 'dark' ? 'block' : 'hidden')}>
+                <Galaxy3D />
+            </div>
+
+            <div className="relative z-10 flex min-h-screen items-center justify-center px-4 ">
+                <div className="mx-auto max-w-4xl text-center">
+                    {/* Main heading */}
+                    <h1 className="mb-6 text-4xl font-bold leading-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+                        Empowering Communities
+                        <br />
+                        <span className="bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
+                            Through Cooperative
+                        </span>
+                        <br />
+                        Ownership
+                    </h1>
+
+                    {/* Subtitle */}
+                    <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground sm:text-xl md:text-2xl">
+                        Cooperatives embody the power of community, where shared
+                        ownership and mutual aid transform economic challenges
+                        into opportunities for progress and empowerment.
+                    </p>
+
+                    {/* CTA Button */}
+                    <div className="mb-12">
+                        <Button
+                            size="lg"
+                            className="bg-primary px-8 py-4 text-lg font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
+                            asChild
+                        >
                             <Link to="/auth/sign-up">
-                                <Button
-                                    className={cn(
-                                        'h-10 rounded-full bg-green-500 text-[min(18px,2.5vw)] hover:bg-green-500 dark:text-white xl:h-14 xl:px-5'
-                                    )}
-                                >
-                                    Let's get Started
-                                </Button>
+                                {"Let's get Started"}
+                                <ArrowRight className="ml-2 h-5 w-5" />
                             </Link>
-                        </div>
+                        </Button>
                     </div>
-                </div>
-                <img
-                    src={home_image_1}
-                    className="h-auto w-[350px] pt-5 md:w-[500px] xl:w-[951px] xl:-translate-y-20"
-                    alt="iamge-1"
-                ></img>
-                <div className="relative space-y-2 lg:space-y-10">
-                    <img
-                        src={bg_element_4}
-                        className="absolute -top-12 -z-40 h-auto w-[985px] 2xl:left-0"
-                        alt="background"
-                    />
-                    <div className="">
-                        <p className="text-[min(25px,3.5vw)] font-bold">
-                            Mission
-                        </p>
-                        <p className="mt-3 text-[min(25px,3.0vw)] font-normal dark:text-[#cccccc] lg:w-[80%] lg:leading-10">
-                            We offer top-tier financial products and related
-                            services to all sectors of society, supporting their
-                            sustainable growth.
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-[min(25px,3.5vw)] font-bold">
-                            Vision
-                        </p>
-                        <p className="mt-3 text-[min(25px,3.0vw)] font-normal dark:text-[#cccccc] lg:w-[80%] lg:leading-10">
-                            A premier multi-purpose cooperative in Luzon
-                            dedicated to serving both its members and the
-                            community.
-                        </p>
-                    </div>
-                </div>
-                <div className="relative mt-20 w-full">
-                    <img
-                        src={bg_element_5}
-                        className="absolute -top-20 right-0 -z-40 h-auto w-[178px]"
-                        alt="background"
-                    />
-                    <h3 className="text-[min(25px,3.5vw)] font-bold lg:h-16">
-                        A Glimpse of Visions and Successes Realized
-                    </h3>
-                    <div className="h-fit w-full space-y-5 self-center">
-                        <img
-                            src={home_image_2}
-                            className="-top-20 right-0 -z-40 m-auto mt-5 h-auto w-[75%] text-center 2xl:left-0"
-                            alt="background"
+
+                    {/* Feature highlights */}
+                    <div className="flex w-full items-center gap-4 py-10 justify-center">
+                        <Card
+                            icon={
+                                <BorderedShieldIcon
+                                    size={40}
+                                    className="text-primary"
+                                />
+                            }
+                            label="Security & Transparency"
+                            description="All transactions are protected with advanced security and fully transparent for member trust."
                         />
-                        <div>
-                            <p className="mt-10 text-justify indent-8 text-[min(23px,2.5vw)] dark:text-[#cccccc] xl:leading-[41px]">
-                                Cooperatives originated in the early 19th
-                                century, with the first established by the
-                                Rochdale Pioneers in 1844 to help working-class
-                                communities combat economic challenges. Over
-                                time, cooperatives expanded across sectors like
-                                agriculture, housing, and credit, providing
-                                marginalized individuals with resources and
-                                opportunities. Today, cooperatives empower
-                                millions worldwide, promoting shared ownership
-                                and mutual support.
-                            </p>
+                        <div className="flex items-center">
+                            <ArrowChevronRight
+                                size={20}
+                                className="text-primary/50 opacity-30"
+                            />
+                            <ArrowChevronRight
+                                size={20}
+                                className="text-primary"
+                            />
+                            <ArrowChevronRight
+                                size={20}
+                                className="text-primary/50 opacity-30"
+                            />
                         </div>
-                        <div className="flex h-[130px] w-full items-center justify-center">
-                            <Link to="/about">
-                                <Button
-                                    className={cn(
-                                        'h-10 rounded-full bg-green-500 text-[min(18px,2.5vw)] hover:bg-green-500 xl:h-14 xl:px-5'
-                                    )}
-                                >
-                                    Read more about us
-                                </Button>
-                            </Link>
+                        <Card
+                            icon={
+                                <GiClockIcon
+                                    size={40}
+                                    className="text-primary"
+                                />
+                            }
+                            label="Convenience & Automation"
+                            description="Easily manage accounts, loans, and payments anytime with automated digital tools."
+                        />
+                        <div className="flex items-center">
+                            <ArrowChevronRight
+                                size={20}
+                                className="text-primary/50 opacity-30"
+                            />
+                            <ArrowChevronRight
+                                size={20}
+                                className="text-primary"
+                            />
+                            <ArrowChevronRight
+                                size={20}
+                                className="text-primary/50 opacity-30"
+                            />
                         </div>
+                        <Card
+                            icon={
+                                <RiCommunityFillIcon
+                                    size={40}
+                                    className="text-primary"
+                                />
+                            }
+                            label="Empowerment & Growth"
+                            description="Access financial services and insights designed to help cooperatives and their members prosper."
+                        />
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+const LandingPage = () => {
+    return (
+        <div>
+            <HeroSection />
+            <MissionVisionSection />
+            <OurServices />
         </div>
     )
 }

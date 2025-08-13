@@ -11,7 +11,7 @@ import {
 
 import APIService from './api-service'
 
-const BASE_ENDPOINT = '/feedback'
+const BASE_ENDPOINT = '/api/v1/feedback'
 
 export const getFeedbackById = async (id: TEntityId) => {
     const url = qs.stringifyUrl({

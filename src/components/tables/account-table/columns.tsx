@@ -24,10 +24,13 @@ import {
     FaCheckIcon,
     FaTimesIcon,
     PushPinSlashIcon,
+    RenderIcon,
 } from '@/components/icons'
 import RawDescription from '@/components/raw-description'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
+
+import { TIcon } from '@/types'
 
 export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccount>[] = [
     { field: 'accountCode', displayText: 'Account Code' },
@@ -183,10 +186,15 @@ const AccountsTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { name },
+                    original: { name, icon },
                 },
             }) => (
-                <div className="font-medium text-gray-600 dark:text-gray-400">
+                <div className="font-medium flex items-center text-gray-600 dark:text-gray-400">
+                    {icon && icon.length > 0 && (
+                        <span className="mr-2">
+                            <RenderIcon icon={icon as TIcon} />
+                        </span>
+                    )}
                     {name}
                 </div>
             ),

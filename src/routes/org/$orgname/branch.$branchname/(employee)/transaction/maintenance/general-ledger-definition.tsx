@@ -23,9 +23,9 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useShortcut } from '@/components/use-shorcuts'
 
 import { useGetAllGeneralLedgerAccountsGroupings } from '@/hooks/api-hooks/general-ledger-definitions/use-general-ledger-accounts-grouping'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 
 import { GeneralLedgerTypeEnum } from '@/types'
 
@@ -188,7 +188,7 @@ function RouteComponent() {
                             <AccordionItem
                                 key={grouping.id}
                                 value={grouping.id}
-                                className="w-full bg-sidebar/50 p-5 rounded-xl"
+                                className="bg-gray-200 shadow-md w-full bg-sidebar/50 p-5 rounded-xl"
                             >
                                 <AccordionTrigger
                                     onClick={() =>
@@ -249,7 +249,7 @@ function RouteComponent() {
                                         </div>
                                     </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="w-full">
+                                <AccordionContent className="w-full shadow-none">
                                     {hasGeneralLedgerGropings && (
                                         <GeneralLedgerTreeViewer
                                             refetch={refetch}

@@ -15,9 +15,14 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
-import { entityIdSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validations/common'
 
 import { useCreateBank, useUpdateBank } from '@/hooks/api-hooks/use-bank'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import {
     IBank,
@@ -35,7 +40,9 @@ const bankSchema = z.object({
     name: z.string().min(1, 'Bank name is required'),
     media_id: entityIdSchema.optional(),
     media: z.any(),
-    description: z.string(),
+    description: descriptionSchema
+        .min(10, 'Min 10 character description')
+        .transform(descriptionTransformerSanitizer),
 })
 
 type TBankFormValues = z.infer<typeof bankSchema>
@@ -81,6 +88,10 @@ const BankCreateUpdateForm = ({
 
     const isDisabled = (field: Path<TBankFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

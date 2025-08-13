@@ -45,6 +45,7 @@ import {
     useUpdateBranch,
 } from '@/hooks/api-hooks/use-branch'
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import {
@@ -164,6 +165,10 @@ export const CreateUpdateBranchByOrgForm = ({
     const createDisabled = isPedingCreateBranch || isUploadingPhoto
 
     const combinedError = error
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <div className="mt-10">
@@ -598,7 +603,7 @@ export const CreateUpdateBranchByOrgForm = ({
     )
 }
 
-export const CreateUpdateFormFormModal = ({
+export const CreateUpdateBranchFormModal = ({
     title = 'Create Branch',
     description = 'Fill out the form to add new branch',
     className,
@@ -625,4 +630,4 @@ export const CreateUpdateFormFormModal = ({
     )
 }
 
-export default CreateUpdateFormFormModal
+export default CreateUpdateBranchFormModal

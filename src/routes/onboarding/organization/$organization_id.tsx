@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { BranchIcon, PhoneIcon, PushPinIcon } from '@/components/icons'
 import PlainTextEditor from '@/components/plain-text-editor'
+import OrganizationPolicies from '@/components/policies'
 import SafeImage from '@/components/safe-image'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -21,7 +22,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
     const { organization_id } = Route.useParams()
 
-    const { data: organizationData, isPending: isPendingOrganization } =
+    const { data: organization, isPending: isPendingOrganization } =
         useGetOrganizationById(organization_id)
 
     const {
@@ -32,7 +33,7 @@ function RouteComponent() {
 
     const fallBackImage = orgBannerList[0]
 
-    const mediaUrl = organizationData?.media?.url ?? fallBackImage
+    const mediaUrl = organization?.media?.url ?? fallBackImage
 
     const isNoBranches = joinableBranches?.length === 0
 
@@ -67,24 +68,24 @@ function RouteComponent() {
                                 <SafeImage className="size-16" src={mediaUrl} />
                                 <div className="grow">
                                     <p className="touch-pan-up text-start text-2xl font-bold">
-                                        {organizationData?.name}
+                                        {organization?.name}
                                     </p>
                                     <PlainTextEditor
                                         className="overflow max-h-10 min-w-96 max-w-[30rem] overflow-y-hidden"
-                                        content={organizationData?.description}
+                                        content={organization?.description}
                                     />
                                 </div>
                             </div>
                             <div className="flex items-center gap-x-2">
                                 <PushPinIcon className="text-red-400" />
                                 <p className="text-xs">
-                                    {organizationData?.address}
+                                    {organization?.address}
                                 </p>
                             </div>
                             <div className="flex items-center gap-x-2">
                                 <PhoneIcon className="text-blue-400" />
                                 <p className="text-xs">
-                                    {organizationData?.contact_number}
+                                    {organization?.contact_number}
                                 </p>
                             </div>
                         </div>
@@ -158,6 +159,9 @@ function RouteComponent() {
                     </>
                 )}
             </>
+            {organization && (
+                <OrganizationPolicies organization={organization} />
+            )}
         </div>
     )
 }

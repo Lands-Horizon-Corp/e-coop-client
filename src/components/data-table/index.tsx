@@ -11,9 +11,10 @@ import {
 } from '@dnd-kit/core'
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers'
 import { arrayMove } from '@dnd-kit/sortable'
+import { ReactNode } from '@tanstack/react-router'
 import { Row, Table as TableInstance } from '@tanstack/react-table'
 
-import { IClassProps } from '@/types'
+import { IChildProps, IClassProps } from '@/types'
 
 import { Table } from '../ui/table'
 import DataTableBody from './data-table-body'
@@ -27,8 +28,18 @@ interface ITableProps<TData> extends IClassProps {
     isStaticWidth?: boolean
     isStickyHeader?: boolean
     isStickyFooter?: boolean
-    onRowClick?: (row: Row<TData>) => void
+    onRowClick?: (
+        row: Row<TData>,
+        e: React.MouseEvent<HTMLTableRowElement, MouseEvent>
+    ) => void
+    onDoubleClick?: (
+        row: Row<TData>,
+        e: React.MouseEvent<HTMLTableRowElement, MouseEvent>
+    ) => void
     setColumnOrder?: React.Dispatch<React.SetStateAction<string[]>>
+    RowContextComponent?: (
+        rowProps: { row: Row<TData> } & IChildProps
+    ) => ReactNode
 }
 
 const DataTable = <TData,>({
@@ -39,10 +50,10 @@ const DataTable = <TData,>({
     isStickyHeader,
     isStickyFooter,
     isStaticWidth = false,
+    onDoubleClick,
     setColumnOrder,
-    onRowClick = (row) => {
-        row.toggleSelected()
-    },
+    onRowClick,
+    RowContextComponent,
 }: ITableProps<TData>) => {
     const handleDragEnd = (event: DragEndEvent) => {
         if (!setColumnOrder) return
@@ -92,9 +103,11 @@ const DataTable = <TData,>({
                     headerGroups={table.getHeaderGroups()}
                 />
                 <DataTableBody
-                    rowClassName={rowClassName}
                     onRowClick={onRowClick}
+                    rowClassName={rowClassName}
+                    onDoubleClick={onDoubleClick}
                     rows={table.getRowModel().rows}
+                    RowContextComponent={RowContextComponent}
                     colCount={table.getVisibleLeafColumns().length}
                 />
                 <DataTableFooter

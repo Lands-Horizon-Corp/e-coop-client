@@ -1,5 +1,4 @@
 import useActionSecurityStore from '@/store/action-security-store'
-import { toReadableDate } from '@/utils'
 
 import { EyeNoneIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -34,16 +33,8 @@ const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
                             <EyeNoneIcon className="size-12 text-muted-foreground/40" />
                             <p>Blotter View Request Pending</p>
                             <p className="text-center text-sm text-muted-foreground/80">
-                                Requested access on{' '}
-                                <span className="rounded-sm bg-accent p-0.5 px-1 text-accent-foreground">
-                                    {toReadableDate(
-                                        transactionBatch.request_view,
-                                        "MM-dd-yyyy 'at' hh:mm a"
-                                    )}
-                                </span>
-                                . <br />
-                                Please wait for the authorized person to approve
-                                your request.
+                                You have requested blotter view, please wait for
+                                the authorized person to approve your request.
                             </p>
                         </>
                     ) : (

@@ -2,16 +2,17 @@ import React from 'react'
 
 import { cn } from '@/lib'
 
+import { MagnifyingGlassIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     Command,
     CommandEmpty,
     CommandGroup,
-    CommandInput,
     CommandItem,
     CommandList,
 } from '@/components/ui/command'
+import { Input } from '@/components/ui/input'
 
 import { useInternalState } from '@/hooks/use-internal-state'
 
@@ -23,8 +24,11 @@ interface GenericPickerProps<T extends { id: TEntityId }> extends IModalProps {
     listHeading?: string
     commandClassName?: string
     searchPlaceHolder?: string
+
     customCommands?: React.ReactNode
     customSearchComponent?: React.ReactNode
+    otherSearchInputChild?: React.ReactNode
+
     onSelect?: (item: T) => void
     onSearchChange: (val: string) => void
     renderItem: (item: T) => React.ReactNode
@@ -40,6 +44,7 @@ const GenericPicker = <T extends { id: TEntityId }>({
     customCommands,
     commandClassName,
     searchPlaceHolder,
+    otherSearchInputChild,
     customSearchComponent,
     onSelect,
     renderItem,
@@ -73,10 +78,21 @@ const GenericPicker = <T extends { id: TEntityId }>({
                 {customSearchComponent ? (
                     customSearchComponent
                 ) : (
-                    <CommandInput
-                        onValueChange={onSearchChange}
-                        placeholder={searchPlaceHolder ?? 'Search anything...'}
-                    />
+                    // <CommandInput
+                    //     onValueChange={onSearchChange}
+                    //     placeholder={searchPlaceHolder ?? 'Search anything...'}
+                    // />
+                    <div className="relative flex items-center border-b px-3">
+                        <MagnifyingGlassIcon className="mr-2 size-4 shrink-0 opacity-50" />
+                        <Input
+                            onChange={(e) => onSearchChange(e.target.value)}
+                            placeholder={
+                                searchPlaceHolder ?? 'Search anything...'
+                            }
+                            className="flex h-11 w-full focus-visible:ring-0 px-0 border-0 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                        {otherSearchInputChild}
+                    </div>
                 )}
                 <CommandList className="ecoop-scroll max-h-[300px] min-h-[400px] px-1">
                     <CommandEmpty className="text-sm text-foreground/50">

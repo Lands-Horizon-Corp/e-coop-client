@@ -5,7 +5,7 @@ import { formatNumber } from '@/utils'
 import AccountMiniCard from '@/components/elements/account-mini-card'
 import { RefreshIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import MemberAccountGeneralLedgerTable from '@/components/tables/ledgers-tables/member-accounting-ledger-table/member-account-general-ledger-table'
+import GeneralLedgerTable from '@/components/tables/ledgers-tables/general-ledger-table'
 import { Button } from '@/components/ui/button'
 
 import { useMemberAccountGeneralLedgerTotal } from '@/hooks/api-hooks/use-general-ledger'
@@ -98,8 +98,11 @@ const MemberAccountGeneralLedger = ({
                 />
                 <MemberAccountLedgerTotal {...other} />
             </div>
-            <MemberAccountGeneralLedgerTable
-                {...other}
+            <GeneralLedgerTable
+                mode="member-account"
+                accountId={other.accountId}
+                memberProfileId={other.memberProfileId}
+                excludeColumnIds={['account']}
                 className={cn('bg-background p-2 rounded-xl', className)}
             />
         </div>

@@ -12,7 +12,7 @@ export const updateUserSettingsGeneral = async (
     data: IUserSettingsGeneralRequest
 ) => {
     const res = await APIService.put<IUserSettingsGeneralRequest, IUserBase>(
-        `/profile/general`,
+        `/api/v1/profile/general`,
         data
     )
     return res.data
@@ -22,7 +22,7 @@ export const updateUserSettingsProfile = async (
     data: IUserSettingsProfileRequest
 ) => {
     const res = await APIService.put<IUserSettingsProfileRequest, IUserBase>(
-        `/profile/profile`,
+        `/api/v1/profile/profile`,
         data
     )
     return res.data
@@ -32,7 +32,7 @@ export const updateUserSettingsSecurity = async (
     data: IUserSettingsSecurityRequest
 ) => {
     const res = await APIService.put<IUserSettingsSecurityRequest, IUserBase>(
-        `/profile/password`,
+        `/api/v1/profile/password`,
         data
     )
     return res.data
@@ -44,6 +44,6 @@ export const updateUserSettingsPhoto = async (
     const res = await APIService.put<
         IUserSettingsPhotoUpdateRequest,
         IUserBase
-    >(`/profile/profile-picture`, data)
+    >(`/api/v1/profile/profile-picture`, data)
     return res.data
 }

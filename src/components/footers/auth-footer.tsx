@@ -5,7 +5,7 @@ const AuthFooter = () => {
         <footer className="flex items-center justify-center gap-x-1 py-4 text-sm backdrop-blur-sm">
             <EcoopLogo className="size-6" />
             <p className="text-foreground/40">
-                e-Coop @ All Rights Reserved 2024
+                Copyright © 2025-2026 lands horizon. All rights reserved.
             </p>
         </footer>
     )

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
-import { FiEye, FiEyeOff } from 'react-icons/fi'
-
 import { Input, InputProps } from '@/components/ui/input'
 
 import { cn } from '@/lib/utils'
+
+import { EyeIcon, EyeOffIcon } from '../icons'
 
 interface Props extends Omit<InputProps, 'type'> {
     defaultVisibility?: boolean
@@ -17,7 +17,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
     ) => {
         const [visible, setVisible] = useState(defaultVisibility)
 
-        const VisibilityIcon = visible ? FiEye : FiEyeOff
+        const VisibilityIcon = visible ? EyeIcon : EyeOffIcon
 
         return (
             <div className={cn('relative w-full', className)}>

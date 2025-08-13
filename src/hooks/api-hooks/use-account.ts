@@ -74,16 +74,25 @@ export const useAccount = ({
     })
 }
 
+export type TPaginatedAccountHookMode =
+    | 'withdraw'
+    | 'deposit'
+    | 'journal'
+    | 'payment'
+    | 'adjustment'
+    | 'journal-voucher'
+    | 'check-voucher'
+
 export const useFilteredPaginatedAccount = ({
     sort,
     enabled,
     initialData,
-    mode = 'all',
+    mode,
     filterPayload,
     showMessage = true,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: IAPIFilteredPaginatedHook<IAccount, string> &
-    IQueryProps<IAccountPaginated> & { mode?: 'all' | 'pendings' }) => {
+    IQueryProps<IAccountPaginated> & { mode?: TPaginatedAccountHookMode }) => {
     return useQuery<IAccountPaginated, string>({
         queryKey: [
             'account',
@@ -94,9 +103,11 @@ export const useFilteredPaginatedAccount = ({
             sort,
         ],
         queryFn: async () => {
+            const targetUrl = mode ? `${mode}/search` : 'search'
+
             const [error, result] = await withCatchAsync(
-                AccountServices.getPaginatedAccount({
-                    mode,
+                AccountServices.search({
+                    targetUrl,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

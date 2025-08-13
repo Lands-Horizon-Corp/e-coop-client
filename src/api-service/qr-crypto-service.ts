@@ -1,12 +1,10 @@
 import APIService from './api-service'
 
-const BASE_ENDPOINT = '/qr'
-
-export async function decryptQrData<TResponseData = unknown>(
+export const decryptQrData = async <TResponseData = unknown>(
     encryptedData: string
-) {
+) => {
     const response = await APIService.get<TResponseData>(
-        `${BASE_ENDPOINT}/${encryptedData}`
+        `/api/v1/qr-code/${encryptedData}`
     )
     return response.data
 }

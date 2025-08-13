@@ -2,16 +2,12 @@ import { IMedia, IUserBase, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
-const BASE_ENDPOINT = '/user'
-
 export const getUserById = async (userId: TEntityId) => {
-    const res = await APIService.get<IUserBase>(`/user/${userId}`)
+    const res = await APIService.get<IUserBase>(`/api/v1/user/${userId}`)
     return res.data
 }
 
 export const getUserMedias = async (userId: TEntityId) => {
-    const res = await APIService.get<IMedia[]>(
-        `${BASE_ENDPOINT}/${userId}/medias`
-    )
+    const res = await APIService.get<IMedia[]>(`/api/v1/${userId}/medias`)
     return res.data
 }

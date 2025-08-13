@@ -1,5 +1,6 @@
 import { IUserBase } from '../auth'
 import { IBaseEntityMeta, TEntityId } from '../common'
+import { IPaginatedResult } from './paginated-result'
 
 export interface ICashCount extends IBaseEntityMeta {
     id: TEntityId
@@ -39,3 +40,5 @@ export interface ICashCountBatchRequest {
     cash_count_total?: number
     grand_total?: number
 }
+
+export interface ICashCountPaginated extends IPaginatedResult<ICashCount> {}

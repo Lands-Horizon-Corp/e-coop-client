@@ -1,4 +1,4 @@
-import { toReadableDate } from '@/utils'
+import { dateAgo, toReadableDateTime } from '@/utils'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { ITimeStamps } from '@/types'
@@ -28,12 +28,22 @@ export const createUpdateColumns = <
                 row: {
                     original: { created_at },
                 },
-            }) => <div>{created_at ? toReadableDate(created_at) : ''}</div>,
+            }) => (
+                <div>
+                    <p>{created_at ? toReadableDateTime(created_at) : ''} </p>
+                    {created_at ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {dateAgo(created_at)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            ),
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,
-            size: 180,
-            minSize: 180,
+            minSize: 200,
         },
         {
             id: 'updated_at',
@@ -52,12 +62,22 @@ export const createUpdateColumns = <
                 row: {
                     original: { updated_at },
                 },
-            }) => <div>{updated_at ? toReadableDate(updated_at) : ''}</div>,
+            }) => (
+                <div>
+                    <p>{updated_at ? toReadableDateTime(updated_at) : ''} </p>
+                    {updated_at ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {dateAgo(updated_at)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            ),
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,
-            size: 180,
-            minSize: 180,
+            minSize: 200,
         },
     ]
 }

@@ -64,9 +64,9 @@ export interface IOrganizationRequest {
 
     cover_media_id?: TEntityId
 
-    subscription_plan_id: TEntityId
+    subscription_plan_id?: TEntityId
 
-    terms_and_onditions?: string
+    terms_and_conditions?: string
     privacy_policy?: string
     cookie_policy?: string
     refund_policy?: string
@@ -81,4 +81,12 @@ export interface IOrganizationPaginated
 export interface ICreateOrganizationResponse {
     organization: IOrganization
     user_organization: IUserOrganization
+}
+
+export type IOrganizationWithPolicies = IOrganization & {
+    privacy_policy: string
+    refund_policy: string
+    terms_and_conditions: string
+    user_agreement: string
+    cookie_policy: string
 }

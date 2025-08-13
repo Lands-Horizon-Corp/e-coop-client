@@ -19,12 +19,18 @@ import { Separator } from '@/components/ui/separator'
 
 import { cn } from '@/lib/utils'
 
-import { stringDateSchema, userAccountTypeSchema } from '@/validations/common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    stringDateSchema,
+    userAccountTypeSchema,
+} from '@/validations/common'
 
 import {
     useCreateInvitationCode,
     useUpdateInvitationCode,
 } from '@/hooks/api-hooks/use-invitation-code'
+import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import {
@@ -50,11 +56,13 @@ const InviationCodeSchema = z.object({
     expiration_date: stringDateSchema,
     current_use: z.coerce.number().min(0, 'Current use cannot be negative'),
     max_use: z.coerce.number().min(0, 'Current use cannot be negative'),
-    description: z.string(),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
     user_type: userAccountTypeSchema,
 
     permission_name: z.string(),
-    permission_description: z.string(),
+    permission_description: descriptionSchema.transform(
+        descriptionTransformerSanitizer
+    ),
     permissions: z.array(z.string()),
 })
 
@@ -145,6 +153,10 @@ const InvitationCodeCreateUpdateForm = ({
 
     const isInvitationOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+
+    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+
+    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>

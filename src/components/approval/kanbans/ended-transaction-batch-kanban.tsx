@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { formatNumber } from '@/utils'
 
@@ -35,20 +37,27 @@ const EndedTransactionBatchKanban = (_props: Props) => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
-    const { data, isPending, refetch } = useTransactionBatchEndApprovals()
+    const { data, isRefetching, refetch } = useTransactionBatchEndApprovals()
 
-    useSubscribe(`transaction_batch.update.branch.${branch_id}`, () =>
+    useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
+        toast.info('Ended Kanban Transaction Batch - update : Triggered')
         refetch()
-    )
+    })
+
+    useSubscribe(`transaction_batch.delete.branch.${branch_id}`, () => {
+        toast.info('Ended Kanban Transaction Batch - deleted : Triggered')
+        refetch()
+    })
 
     return (
         <KanbanContainer className="w-[360px]">
             <div className="flex items-center">
                 <LayersSharpDotIcon className="mr-2 size-4 text-primary" />
                 <KanbanTitle
-                    isLoading={isPending}
-                    totalItems={data.length}
                     title="Ended Batch"
+                    totalItems={data.length}
+                    isLoading={isRefetching}
+                    onRefresh={() => refetch()}
                 />
             </div>
             <Separator />
@@ -93,6 +102,7 @@ const TransactionBatchCard = ({
                     batchId: transBatch.id,
                     defaultStep: 0,
                     defaultValues: transBatch,
+                    resetOnDefaultChange: true,
                 }}
             />
             <div className="flex items-center justify-between">

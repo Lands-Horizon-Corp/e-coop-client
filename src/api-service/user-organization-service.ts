@@ -7,19 +7,22 @@ import {
     IUserOrganization,
     IUserOrganizationPaginated,
     IUserOrganizationPermissionRequest,
+    IUserOrganizationSettingsRequest,
     TEntityId,
 } from '@/types'
 
 import APIService from './api-service'
 
 export const deleteEmployee = async (id: TEntityId) => {
-    const response = await APIService.delete<void>(`/user-organization/${id}`)
+    const response = await APIService.delete<void>(
+        `/api/v1/user-organization/${id}`
+    )
     return response.data
 }
 
 export const getAllEmployees = async () => {
     const response = await APIService.get<IUserOrganization<IEmployee>[]>(
-        '/user-organization/employee'
+        '/api/v1/user-organization/employee'
     )
     return response.data
 }
@@ -33,7 +36,7 @@ export const getPaginatedEmployees = async (props?: {
 
     const url = qs.stringifyUrl(
         {
-            url: `/user-organization/employee/search`,
+            url: `/api/v1/user-organization/employee/search`,
             query: {
                 sort,
                 filter: filters,
@@ -62,10 +65,10 @@ export const getPaginatedUserOrg = async <
     filters?: string
     pagination?: { pageIndex: number; pageSize: number }
 }) => {
-    let url = `/user-organization/search`
+    let url = `/api/v1/user-organization/search`
 
     if (mode === 'none-member-profile')
-        url = '/user-organization/none-member-profle/search'
+        url = '/api/v1/user-organization/none-member-profle/search'
 
     const finalUrl = qs.stringifyUrl(
         {
@@ -87,7 +90,10 @@ export const getPaginatedUserOrg = async <
 
 export const deleteManyEmployees = async (ids: TEntityId[]) => {
     const payload = { ids }
-    await APIService.delete<void>('user-organization/bulk-delete', payload)
+    await APIService.delete<void>(
+        '/api/v1/user-organization/bulk-delete',
+        payload
+    )
 }
 
 export const updateUserOrganizationPermission = async (
@@ -97,6 +103,46 @@ export const updateUserOrganizationPermission = async (
     const response = await APIService.put<
         IUserOrganizationPermissionRequest,
         IUserOrganization
-    >(`/user-organization/${userOrgId}/permission`, data)
+    >(`/api/v1/user-organization/${userOrgId}/permission`, data)
     return response.data
+}
+
+export const updateUserOrganizationSettings = async ({
+    id,
+    url,
+    data,
+}: {
+    id?: TEntityId
+    url?: string
+    data: IUserOrganizationSettingsRequest
+}) => {
+    const response = await APIService.put<
+        IUserOrganizationSettingsRequest,
+        IUserOrganization
+    >(
+        url ??
+            (id
+                ? `/api/v1/user-organization/settings/${id}`
+                : `/api/v1/user-organization/settings/current`),
+        data
+    )
+    return response.data
+}
+
+export const getUserOrganizationById = async (id: TEntityId) => {
+    const response = await APIService.get<IUserOrganization>(
+        `/api/v1/user-organization/${id}`
+    )
+    return response.data
+}
+
+export default {
+    deleteEmployee,
+    getAllEmployees,
+    getPaginatedUserOrg,
+    deleteManyEmployees,
+    getPaginatedEmployees,
+    getUserOrganizationById,
+    updateUserOrganizationSettings,
+    updateUserOrganizationPermission,
 }

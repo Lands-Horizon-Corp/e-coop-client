@@ -26,6 +26,7 @@ import BatchFundingTableColumns, {
     IBatchFundingTableColumnProps,
     batchFundingGlobalSearchTargets,
 } from './columns'
+import { BatchFundingRowContext } from './row-action-context'
 
 export interface BatchFundingTableProps
     extends TableProps<IBatchFunding>,
@@ -48,7 +49,12 @@ const BatchBatchFundingTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = BatchFundingRowContext,
     transactionBatchId,
 }: BatchFundingTableProps) => {
     const { pagination, setPagination } = usePagination()
@@ -158,7 +164,12 @@ const BatchBatchFundingTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

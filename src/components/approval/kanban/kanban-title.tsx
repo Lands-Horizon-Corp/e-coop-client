@@ -1,6 +1,8 @@
 import { cn } from '@/lib'
 
+import { RefreshIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 
 import { IClassProps } from '@/types'
 
@@ -9,6 +11,7 @@ interface Props extends IClassProps {
     totalItems?: number
     currentItems?: number
     isLoading?: boolean
+    onRefresh?: () => void
 }
 
 const KanbanTitle = ({
@@ -17,6 +20,7 @@ const KanbanTitle = ({
     isLoading,
     totalItems,
     currentItems,
+    onRefresh,
 }: Props) => {
     return (
         <div
@@ -26,26 +30,39 @@ const KanbanTitle = ({
             )}
         >
             <p>{title}</p>
-            <div
-                className={cn(
-                    'flex items-center gap-x-2',
-                    isLoading && 'hidden',
-                    totalItems === undefined &&
-                        currentItems == undefined &&
-                        'hidden'
+            <div className="flex justify-end gap-x-2 items-center">
+                {isLoading ? (
+                    <LoadingSpinner className="text-muted-foreground" />
+                ) : (
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => onRefresh?.()}
+                        disabled={isLoading}
+                        className="size-fit text-muted-foreground p-1"
+                    >
+                        <RefreshIcon className="size-3" />
+                    </Button>
                 )}
-            >
-                {currentItems !== undefined && (
-                    <p className="text-sm">{currentItems}</p>
-                )}
-                {totalItems !== undefined && currentItems !== undefined && (
-                    <p className="text-sm text-muted-foreground">/</p>
-                )}
-                {totalItems !== undefined && (
-                    <p className="font-semibold">{totalItems}</p>
-                )}
+                <div
+                    className={cn(
+                        'flex items-center gap-x-2',
+                        totalItems === undefined &&
+                            currentItems == undefined &&
+                            'hidden'
+                    )}
+                >
+                    {currentItems !== undefined && (
+                        <p className="text-sm">{currentItems}</p>
+                    )}
+                    {totalItems !== undefined && currentItems !== undefined && (
+                        <p className="text-sm text-muted-foreground">/</p>
+                    )}
+                    {totalItems !== undefined && (
+                        <p className="font-semibold">{totalItems}</p>
+                    )}
+                </div>
             </div>
-            {isLoading && <LoadingSpinner />}
         </div>
     )
 }

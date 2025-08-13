@@ -29,6 +29,7 @@ import FootstepTableColumns, {
     IFootstepTableColumnProps,
     footstepGlobalSearchTargets,
 } from './columns'
+import { FootstepRowContext } from './row-action-context'
 
 export interface FootstepTableProps
     extends TableProps<IFootstep>,
@@ -50,21 +51,35 @@ export type TFootstepTableProps = FootstepTableProps &
     (
         | {
               mode: 'user-organization'
-              user_org_id: TEntityId
+              userOrgId: TEntityId
           }
         | { mode: 'me' }
         | { mode: 'branch' }
+        | { mode: 'me-branch' }
+        | {
+              mode: 'member-profile'
+              memberProfileId: TEntityId
+          }
     )
 
 const FootstepTable = ({
     mode,
     className,
-    user_org_id,
+    userOrgId,
     toolbarProps,
     defaultFilter,
+    memberProfileId,
+    onRowClick = () => {},
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     onSelectData,
     actionComponent,
-}: TFootstepTableProps & { user_org_id?: TEntityId }) => {
+    RowContextComponent = FootstepRowContext,
+}: TFootstepTableProps & {
+    userOrgId?: TEntityId
+    memberProfileId?: TEntityId
+}) => {
     const { pagination, setPagination } = usePagination()
     const { sortingState, tableSorting, setTableSorting } =
         useDataTableSorting()
@@ -105,7 +120,8 @@ const FootstepTable = ({
     } = useFilteredPaginatedFootsteps({
         mode,
         pagination,
-        user_org_id,
+        userOrgId,
+        memberProfileId,
         sort: sortingState,
         filterPayload: filterState.finalFilterPayload,
     })
@@ -161,7 +177,6 @@ const FootstepTable = ({
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    // No delete/export for footsteps by default
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
@@ -174,7 +189,12 @@ const FootstepTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

@@ -31,6 +31,7 @@ import AccountCategoryTableColumns, {
     AccountCategoryGlobalSearchTargets,
     IAccountCategoryTableColumnProps,
 } from './column'
+import { AccountCategoryRowContext } from './row-action-context'
 
 export interface AccountCategoryTableProps
     extends TableProps<IAccountCategory>,
@@ -52,7 +53,12 @@ const AccountCategoryTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = AccountCategoryRowContext,
 }: AccountCategoryTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -197,7 +203,12 @@ const AccountCategoryTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

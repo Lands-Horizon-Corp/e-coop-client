@@ -2,6 +2,8 @@ import z from 'zod'
 
 import {
     civilStatusSchema,
+    descriptionSchema,
+    descriptionTransformerSanitizer,
     entityIdSchema,
     generalStatusSchema,
     stringDateSchema,
@@ -26,7 +28,9 @@ export const memberProfilePersonalInfoSchema = z.object({
     business_contact_number: z.string().optional(),
 
     notes: z.string().optional(),
-    description: z.string().optional(),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 
     media_id: entityIdSchema.optional(),
     media: z.any(), // JUST FOR SHOWING MEDIA IMAGE IN FORM
@@ -41,6 +45,7 @@ export const memberProfileMembershipInfoSchema = z.object({
 
     status: generalStatusSchema.optional(),
 
+    member_department_id: entityIdSchema.optional(),
     member_type_id: entityIdSchema.optional(),
     member_group_id: entityIdSchema.optional(),
     member_classification_id: entityIdSchema.optional(),

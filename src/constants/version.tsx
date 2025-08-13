@@ -1,5 +1,4 @@
-import { FaBug } from 'react-icons/fa'
-import { TbGrowth } from 'react-icons/tb'
+import { BugIcon, PlantGrowthIcon } from '@/components/icons'
 
 import { SoftwareUpdates, UpdateStatus } from '@/types'
 
@@ -12,12 +11,12 @@ export const softwareUpdates: SoftwareUpdates = {
         {
             text: 'Improved loading times by optimizing database queries.',
             updateStatus: UpdateStatus.GENERAL,
-            Icon: <TbGrowth />,
+            Icon: <PlantGrowthIcon />,
         },
         {
             text: 'Resolved a bug in the reporting feature.',
             updateStatus: UpdateStatus.BUG,
-            Icon: <FaBug />,
+            Icon: <BugIcon />,
         },
     ],
 }

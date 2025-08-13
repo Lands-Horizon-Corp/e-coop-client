@@ -113,7 +113,7 @@ const BankTableColumns = (opts?: IBankTableColumnProps): ColumnDef<IBank>[] => [
             row: {
                 original: { description },
             },
-        }) => <div>{description}</div>,
+        }) => <div className="!text-wrap">{description}</div>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,

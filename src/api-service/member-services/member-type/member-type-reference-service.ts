@@ -8,10 +8,10 @@ import { IMemberTypeReference, IMemberTypeReferenceRequest } from '@/types'
 const CrudServices = createAPICrudService<
     IMemberTypeReference,
     IMemberTypeReferenceRequest
->('/member-type-reference')
+>('/api/v1/member-type-reference')
 
 const CollectionServices = createAPICollectionService<IMemberTypeReference>(
-    `member-type-reference`
+    `/api/v1/member-type-reference`
 )
 
 export const { create, getById, updateById, deleteById, deleteMany } =

@@ -9,6 +9,7 @@ import {
     IAPIFilteredPaginatedHook,
     IMemberCenterHistoryPaginated,
     IMemberClassificationHistoryPaginated,
+    IMemberDepartmentHistoryPaginated,
     IMemberGenderHistoryPaginated,
     IMemberGroupHistoryPaginated,
     IMemberMutualFundsHistoryPaginated,
@@ -161,59 +162,6 @@ export const useMemberClassificationHistory = ({
         retry: 1,
     })
 }
-
-// export const useMemberEducationalAttainmentHistory = ({
-//     sort,
-//     enabled,
-//     profileId,
-//     filterPayload,
-//     showMessage = true,
-//     pagination = { pageSize: 10, pageIndex: 1 },
-// }: IAPIFilteredPaginatedHook<
-//     IMemberEducationalAttainmentHistoryPaginated,
-//     string
-// > &
-//     IQueryProps & { profileId: TEntityId }) => {
-//     return useQuery<IMemberEducationalAttainmentHistoryPaginated, string>({
-//         queryKey: [
-//             'member-center-history',
-//             'resource-query',
-//             profileId,
-//             filterPayload,
-//             pagination,
-//             sort,
-//         ],
-//         queryFn: async () => {
-//             const [error, result] = await withCatchAsync(
-//                 MemberCenterHistoryService.getMemberEducationalAttainmentHistoryById(
-//                     {
-//                         profileId,
-//                         pagination,
-//                         sort: sort && toBase64(sort),
-//                         filters: filterPayload && toBase64(filterPayload),
-//                     }
-//                 )
-//             )
-
-//             if (error) {
-//                 const errorMessage = serverRequestErrExtractor({ error })
-//                 if (showMessage) toast.error(errorMessage)
-//                 throw errorMessage
-//             }
-
-//             return result
-//         },
-//         initialData: {
-//             data: [],
-//             pages: [],
-//             totalSize: 0,
-//             totalPage: 1,
-//             ...pagination,
-//         },
-//         enabled,
-//         retry: 1,
-//     })
-// }
 
 export const useMemberTypeHistory = ({
     sort,
@@ -380,6 +328,54 @@ export const useMemberMutualFundsHistory = ({
         queryFn: async () => {
             const [error, result] = await withCatchAsync(
                 MemberCenterHistoryService.getMemberMutualFundsHistoryById({
+                    profileId,
+                    pagination,
+                    sort: sort && toBase64(sort),
+                    filters: filterPayload && toBase64(filterPayload),
+                })
+            )
+
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                if (showMessage) toast.error(errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        initialData: {
+            data: [],
+            pages: [],
+            totalSize: 0,
+            totalPage: 1,
+            ...pagination,
+        },
+        enabled,
+        retry: 1,
+    })
+}
+
+export const useMemberDepartmentHistory = ({
+    sort,
+    enabled,
+    profileId,
+    filterPayload,
+    showMessage = true,
+    pagination = { pageSize: 10, pageIndex: 1 },
+}: IAPIFilteredPaginatedHook<IMemberDepartmentHistoryPaginated, string> &
+    IQueryProps & { profileId: TEntityId }) => {
+    return useQuery<IMemberDepartmentHistoryPaginated, string>({
+        queryKey: [
+            'member-department-history',
+            'resource-query',
+            profileId,
+            filterPayload,
+            pagination,
+            sort,
+        ],
+        queryFn: async () => {
+            const [error, result] = await withCatchAsync(
+                MemberCenterHistoryService.getMemberDepartmentHistoryById({
                     profileId,
                     pagination,
                     sort: sort && toBase64(sort),

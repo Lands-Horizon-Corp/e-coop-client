@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import Heartbeat from '@/components/heartbeat'
+
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(common)/dashboard'
 )({
@@ -7,5 +9,9 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-    return <div>Hello !</div>
+    return (
+        <div>
+            <Heartbeat />
+        </div>
+    )
 }

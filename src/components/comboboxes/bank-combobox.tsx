@@ -1,8 +1,7 @@
 import * as React from 'react'
 
-import { Check } from 'lucide-react'
-
-import { ChevronDownIcon } from '@/components/icons'
+import { CheckIcon, ChevronDownIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,6 +17,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { cn } from '@/lib/utils'
 
@@ -61,6 +61,12 @@ const BankCombobox = ({
         showMessage: false,
     })
 
+    // Find selected bank outside of JSX
+    const selectedBank = React.useMemo(
+        () => data.find((bank) => bank.id === value),
+        [data, value]
+    )
+
     return (
         <>
             <BankCreateUpdateFormModal
@@ -83,14 +89,24 @@ const BankCombobox = ({
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
                     >
-                        {value ? (
-                            data.find((option) => option.id === value)?.name
+                        {selectedBank ? (
+                            <div className="flex items-center gap-2 min-w-0">
+                                <PreviewMediaWrapper media={selectedBank.media}>
+                                    <ImageDisplay
+                                        src={selectedBank.media?.download_url}
+                                        className="size-4 rounded-full border bg-muted object-cover flex-shrink-0"
+                                    />
+                                </PreviewMediaWrapper>
+                                <span className="truncate">
+                                    {selectedBank.name}
+                                </span>
+                            </div>
                         ) : (
                             <span className="text-muted-foreground">
                                 {placeholder}
                             </span>
                         )}
-                        <ChevronDownIcon className="opacity-50" />
+                        <ChevronDownIcon className="opacity-50 flex-shrink-0" />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
@@ -133,10 +149,25 @@ const BankCombobox = ({
                                                 onChange?.(option)
                                             }}
                                         >
-                                            {option.name}
-                                            <Check
+                                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                                                <PreviewMediaWrapper
+                                                    media={option.media}
+                                                >
+                                                    <ImageDisplay
+                                                        src={
+                                                            option.media
+                                                                ?.download_url
+                                                        }
+                                                        className="h-5 w-5 rounded-full border bg-muted object-cover flex-shrink-0"
+                                                    />
+                                                </PreviewMediaWrapper>
+                                                <span className="truncate">
+                                                    {option.name}
+                                                </span>
+                                            </div>
+                                            <CheckIcon
                                                 className={cn(
-                                                    'ml-auto',
+                                                    'ml-auto flex-shrink-0',
                                                     value === option.id
                                                         ? 'opacity-100'
                                                         : 'opacity-0'

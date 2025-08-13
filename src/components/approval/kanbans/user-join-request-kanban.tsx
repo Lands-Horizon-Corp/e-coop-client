@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { cn } from '@/lib'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -39,11 +40,12 @@ const UserJoinRequestKanban = (_props: Props) => {
         },
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
-    const { data, isPending } = useUserOrgJoinRequests()
+    const { data, isRefetching, refetch } = useUserOrgJoinRequests()
 
     useSubscribe<IUserOrganization>(
         `user_organization.create.branch.${branch_id}`,
         (newData) => {
+            toast.info('User org join Kanban - create : Triggered')
             queryClient.setQueryData<IUserOrganization[]>(
                 ['user-organization', 'join-request', 'all'],
                 (oldData) => {
@@ -56,6 +58,7 @@ const UserJoinRequestKanban = (_props: Props) => {
     useSubscribe<IUserOrganization>(
         `user_organization.update.branch.${branch_id}`,
         () => {
+            toast.info('User org join Kanban - update : Triggered')
             queryClient.invalidateQueries({
                 queryKey: ['user-organization', 'join-request', 'all'],
             })
@@ -65,6 +68,7 @@ const UserJoinRequestKanban = (_props: Props) => {
     useSubscribe<IUserOrganization>(
         `user_organization.delete.branch.${branch_id}`,
         (deletedData) => {
+            toast.info('User org join Kanban - delete : Triggered')
             queryClient.setQueryData<IUserOrganization[]>(
                 ['user-organization', 'join-request', 'all'],
                 (oldData) => {
@@ -81,9 +85,10 @@ const UserJoinRequestKanban = (_props: Props) => {
             <div className="flex items-center">
                 <UserListIcon className="mr-2 size-4" />
                 <KanbanTitle
-                    isLoading={isPending}
                     totalItems={data.length}
                     title="User Join Requests"
+                    isLoading={isRefetching}
+                    onRefresh={() => refetch()}
                 />
             </div>
             <Separator />

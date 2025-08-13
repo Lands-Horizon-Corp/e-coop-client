@@ -1,6 +1,9 @@
 import { ReactNode } from 'react'
 
+import { Row } from '@tanstack/react-table'
+
 import {
+    CheckIcon,
     DotsVerticalIcon,
     EyeNoneIcon,
     PencilFillIcon,
@@ -22,18 +25,27 @@ export interface IRowActionOption {
     onClick: () => void
 }
 
-interface Props {
+interface Props<TData> {
+    row?: Row<TData>
     onDelete?: IRowActionOption
     onView?: IRowActionOption
     onEdit?: IRowActionOption
+    canSelect?: boolean
     canEdit?: boolean
     canView?: boolean
     canDelete?: boolean
     otherActions?: ReactNode
 }
 
-const RowActionsGroup = ({ onDelete, onView, onEdit, otherActions }: Props) => {
-    if (!onDelete && !onView && !onEdit) return null
+const RowActionsGroup = <TData,>({
+    row,
+    onView,
+    onEdit,
+    onDelete,
+    canSelect,
+    otherActions,
+}: Props<TData>) => {
+    if (!onDelete && !onView && !onEdit && !otherActions) return null
 
     return (
         <DropdownMenu>
@@ -45,6 +57,16 @@ const RowActionsGroup = ({ onDelete, onView, onEdit, otherActions }: Props) => {
             <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
                 <DropdownMenuLabel>Action</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {canSelect && (
+                    <DropdownMenuItem
+                        onClick={() => {
+                            row?.toggleSelected()
+                        }}
+                    >
+                        <CheckIcon className="mr-2 size-4" />
+                        {row?.getIsSelected() ? 'Unselect' : 'Select'}
+                    </DropdownMenuItem>
+                )}
                 {otherActions}
                 {onView && (
                     <DropdownMenuItem

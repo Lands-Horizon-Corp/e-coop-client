@@ -31,6 +31,7 @@ import accountTableColumns, {
     IAccountsTableColumnProps,
     accountsGlobalSearchTargets,
 } from './columns'
+import { AccountRowContext } from './row-action-context'
 
 export interface AccountsTableProps
     extends TableProps<IAccount>,
@@ -52,7 +53,12 @@ const AccountsTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = AccountRowContext,
 }: AccountsTableProps) => {
     const queryClient = useQueryClient()
 
@@ -199,6 +205,11 @@ const AccountsTable = ({
                     isStickyHeader
                     isStickyFooter
                     isScrollable={isScrollable}
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                     className="mb-2"
                 />

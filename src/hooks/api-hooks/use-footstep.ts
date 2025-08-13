@@ -11,39 +11,50 @@ import {
     TEntityId,
 } from '@/types'
 
-export type TFootstepHookMode = 'me' | 'branch' | 'user-organization'
+export type TFootstepHookMode =
+    | 'me' // current auth user all footstep
+    | 'member-profile' // all footstep of a member for current branch ( member profile with user only )
+    | 'me-branch' // current auth user all footstep from all branches of current org
+    | 'branch' // all footsteps from different users in current auth users branch
+    | 'user-organization' // all footstep of specific user
 
 export const useFilteredPaginatedFootsteps = ({
     sort,
     mode,
-    user_org_id,
+    userOrgId,
     filterPayload,
+    memberProfileId,
     pagination = { pageSize: 10, pageIndex: 1 },
 }: {
     mode?: TFootstepHookMode
-} & { user_org_id?: TEntityId } & IFilterPaginatedHookProps) => {
+} & {
+    userOrgId?: TEntityId
+    memberProfileId?: TEntityId
+} & IFilterPaginatedHookProps) => {
     return useQuery<IFootstepPaginated, string>({
         queryKey: [
             'footstep',
             'resource-query',
             mode,
-            user_org_id,
+            userOrgId,
             filterPayload,
             pagination,
             sort,
         ],
         queryFn: async () => {
             let url: string = `me`
-
-            if (mode == 'branch') {
+            if (mode == 'me-branch') {
+                url = 'current/me/branch'
+            } else if (mode == 'branch') {
                 url = 'branch'
             } else if (mode == 'user-organization') {
-                url = `user-organization/${user_org_id}`
-            }
+                url = `user-organization/${userOrgId}`
+            } else if (mode == 'member-profile')
+                url = `member-profile/${memberProfileId}`
 
             const [error, result] = await withCatchAsync(
-                FootstepService.getPaginatedFootsteps({
-                    url,
+                FootstepService.search({
+                    targetUrl: `${url}/search`,
                     pagination,
                     sort: sort && toBase64(sort),
                     filters: filterPayload && toBase64(filterPayload),

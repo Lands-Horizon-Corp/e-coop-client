@@ -29,6 +29,7 @@ import BillsAndCoinsTableColumns, {
     IBillsAndCoinsTableColumnProps,
     billsAndCoinsGlobalSearchTargets,
 } from './columns'
+import { BillsAndCoinsRowContext } from './row-action-context'
 
 export interface BillsAndCoinsTableProps
     extends TableProps<IBillsAndCoin>,
@@ -50,7 +51,12 @@ const BillsAndCoinsTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
+    onRowClick,
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
     actionComponent,
+    RowContextComponent = BillsAndCoinsRowContext,
 }: BillsAndCoinsTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -167,7 +173,12 @@ const BillsAndCoinsTable = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
+                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    RowContextComponent={(props) => (
+                        <RowContextComponent {...props} />
+                    )}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

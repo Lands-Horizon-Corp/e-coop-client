@@ -4,15 +4,16 @@ import { cn } from '@/lib'
 import { IconType } from 'react-icons/lib'
 
 import {
-    HandDepositIcon,
-    HandWithdrawIcon,
-    MoneyBagIcon,
+    BillIcon,
+    BookOpenIcon,
+    HandCoinsIcon,
+    HandDropCoinsIcon,
     MoneyCheckIcon,
     MoneyStackIcon,
-    OnlinePaymentIcon,
-    ReceiptIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import DisbursementTransactionTable from '@/components/tables/disbursement-transaction-table'
+import GeneralLedgerTable from '@/components/tables/ledgers-tables/general-ledger-table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -20,15 +21,9 @@ import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import BatchCashEntryHistory from './batch-cash-entry-history'
-import BatchCheckEntryHistory from './batch-check-entry-history'
-import BatchDepositEntryHistory from './batch-deposit-entry-history'
 import BatchFundingHistory from './batch-funding-history'
-import BatchOnlineEntryHistory from './batch-online-entry-history'
-import BatchTransactionEntryHistory from './batch-transaction-entry-history'
-import BatchWithdrawalEntryHistory from './batch-withdrwal-entry-history'
 
-export interface TransBatchHistoryTabsContentProps extends IClassProps {
+export interface ITransBatchHistoryTabsContentProps extends IClassProps {
     transactionBatchId: TEntityId
 }
 
@@ -36,11 +31,7 @@ const HistoryTabs: {
     value: string
     title: string
     Icon?: IconType
-    Component: (
-        props: IClassProps & {
-            transactionBatchId: TEntityId
-        }
-    ) => ReactNode
+    Component: (props: ITransBatchHistoryTabsContentProps) => ReactNode
 }[] = [
     {
         value: 'batch-funding',
@@ -49,40 +40,163 @@ const HistoryTabs: {
         Component: BatchFundingHistory,
     },
     {
-        value: 'cash-entries',
-        title: 'Cash Entries',
-        Icon: MoneyBagIcon,
-        Component: BatchCashEntryHistory,
+        value: 'disbursement-transaction',
+        title: 'Disbursement Transaction',
+        Icon: HandDropCoinsIcon,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <DisbursementTransactionTable
+                    className="grow"
+                    mode="transaction-batch"
+                    transactionBatchId={transactionBatchId}
+                />
+            </div>
+        ),
     },
     {
-        value: 'check-entries',
-        title: 'Check Entries',
+        value: 'general-ledger',
+        title: 'General Ledger',
+        Icon: BookOpenIcon,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <GeneralLedgerTable
+                    mode="transaction-batch"
+                    TEntryType=""
+                    transactionBatchId={transactionBatchId}
+                    className="grow"
+                />
+            </div>
+        ),
+    },
+    {
+        value: 'check-entry',
+        title: 'Check Entry',
         Icon: MoneyCheckIcon,
-        Component: BatchCheckEntryHistory,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <GeneralLedgerTable
+                    mode="transaction-batch"
+                    TEntryType="check-entry"
+                    transactionBatchId={transactionBatchId}
+                    className="grow"
+                />
+            </div>
+        ),
     },
     {
-        value: 'online-entries',
-        title: 'Online Entries',
-        Icon: OnlinePaymentIcon,
-        Component: BatchOnlineEntryHistory,
+        value: 'online-entry',
+        title: 'Online Entry',
+        Icon: BillIcon,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <GeneralLedgerTable
+                    mode="transaction-batch"
+                    TEntryType="online-entry"
+                    transactionBatchId={transactionBatchId}
+                    className="grow"
+                />
+            </div>
+        ),
     },
     {
-        value: 'withdrawal-entries',
-        title: 'Withdrawal Entries',
-        Icon: HandWithdrawIcon,
-        Component: BatchWithdrawalEntryHistory,
+        value: 'cash-entry',
+        title: 'Cash Entry',
+        Icon: HandCoinsIcon,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <GeneralLedgerTable
+                    mode="transaction-batch"
+                    TEntryType="cash-entry"
+                    transactionBatchId={transactionBatchId}
+                    className="grow"
+                />
+            </div>
+        ),
     },
     {
-        value: 'deposit-entries',
-        title: 'Deposit Entries',
-        Icon: HandDepositIcon,
-        Component: BatchDepositEntryHistory,
+        value: 'payment-entry',
+        title: 'Payment Entry',
+        Icon: BillIcon,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <GeneralLedgerTable
+                    mode="transaction-batch"
+                    TEntryType="payment-entry"
+                    transactionBatchId={transactionBatchId}
+                    className="grow"
+                />
+            </div>
+        ),
     },
     {
-        value: 'transaction-entries',
-        title: 'Transaction Entries',
-        Icon: ReceiptIcon,
-        Component: BatchTransactionEntryHistory,
+        value: 'withdraw-entry',
+        title: 'Withdraw Entry',
+        Icon: HandCoinsIcon,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <GeneralLedgerTable
+                    mode="transaction-batch"
+                    TEntryType="withdraw-entry"
+                    transactionBatchId={transactionBatchId}
+                    className="grow"
+                />
+            </div>
+        ),
+    },
+    {
+        value: 'deposit-entry',
+        title: 'Deposit Entry',
+        Icon: HandCoinsIcon,
+        Component: ({ transactionBatchId, className }) => (
+            <div
+                className={cn(
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    className
+                )}
+            >
+                <GeneralLedgerTable
+                    mode="transaction-batch"
+                    TEntryType="deposit-entry"
+                    transactionBatchId={transactionBatchId}
+                    className="grow"
+                />
+            </div>
+        ),
     },
 ]
 
@@ -155,6 +269,7 @@ export const TransactionBatchHistoriesModal = ({
             {...props}
             title={title}
             titleClassName="hidden"
+            closeButtonClassName="top-2 right-2"
             className={cn('flex max-w-[80vw] px-0 pb-4 pt-0', className)}
         >
             <TransactionBatchHistories {...transactionBatchHistoryProps} />

@@ -1,12 +1,17 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '../common'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '../common'
 
 export const memberTypeReferenceSchema = z.object({
     id: entityIdSchema.optional(),
 
-    description: z.string().min(1, 'Description is required'),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
     account_id: entityIdSchema,
+    account: z.any(),
     member_type_id: entityIdSchema,
 
     interest_rate: z.coerce.number().min(0, 'Interest rate is required'),

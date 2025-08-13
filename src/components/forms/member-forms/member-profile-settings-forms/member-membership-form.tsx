@@ -8,6 +8,7 @@ import { Path, useForm } from 'react-hook-form'
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
 import MemberCenterCombobox from '@/components/comboboxes/member-center-combobox'
 import MemberClassificationCombobox from '@/components/comboboxes/member-classification-combobox'
+import MemberDepartmentCombobox from '@/components/comboboxes/member-department-combobox'
 import MemberGroupCombobox from '@/components/comboboxes/member-group-combobox'
 import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
 import { HandCoinsIcon, PieChartIcon } from '@/components/icons'
@@ -206,6 +207,65 @@ const MemberMembershipForm = ({
                                 )}
                             />
                         </div>
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="member_department_id"
+                                label="Member Department"
+                                hiddenFields={hiddenFields}
+                                render={({ field }) => (
+                                    <MemberDepartmentCombobox
+                                        {...field}
+                                        placeholder="Select Department"
+                                        disabled={isDisabled(field.name)}
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="recruited_by_member_profile_id"
+                                label="Recruited By"
+                                hiddenFields={hiddenFields}
+                                render={({ field }) => {
+                                    const value = form.getValues(
+                                        'recruited_by_member_profile'
+                                    )
+
+                                    return (
+                                        <MemberPicker
+                                            value={value}
+                                            onSelect={(memberProfile) => {
+                                                if (
+                                                    memberProfile &&
+                                                    memberProfile.id ===
+                                                        memberProfileId
+                                                )
+                                                    return toast.warning(
+                                                        'Member cannot invite itself'
+                                                    )
+
+                                                field.onChange(
+                                                    memberProfile !== undefined
+                                                        ? memberProfile.id
+                                                        : memberProfile
+                                                )
+
+                                                if (memberProfile !== undefined)
+                                                    form.setValue(
+                                                        'recruited_by_member_profile',
+                                                        memberProfile
+                                                    )
+                                            }}
+                                            placeholder="Select Recruiter"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )
+                                }}
+                            />
+                        </div>
                         <div className="space-y-2">
                             <p className="text-muted-foreground">Other</p>
                             <div className="grid gap-x-2 gap-y-4 sm:grid-cols-2">
@@ -281,49 +341,6 @@ const MemberMembershipForm = ({
                                     )}
                                 />
                             </div>
-                        </div>
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="recruited_by_member_profile_id"
-                                label="Recruited By"
-                                hiddenFields={hiddenFields}
-                                render={({ field }) => {
-                                    const value = form.getValues(
-                                        'recruited_by_member_profile'
-                                    )
-
-                                    return (
-                                        <MemberPicker
-                                            value={value}
-                                            onSelect={(memberProfile) => {
-                                                if (
-                                                    memberProfile &&
-                                                    memberProfile.id ===
-                                                        memberProfileId
-                                                )
-                                                    return toast.warning(
-                                                        'Member cannot invite itself'
-                                                    )
-
-                                                field.onChange(
-                                                    memberProfile !== undefined
-                                                        ? memberProfile.id
-                                                        : memberProfile
-                                                )
-
-                                                if (memberProfile !== undefined)
-                                                    form.setValue(
-                                                        'recruited_by_member_profile',
-                                                        memberProfile
-                                                    )
-                                            }}
-                                            placeholder="Select Recruiter"
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )
-                                }}
-                            />
                         </div>
                     </div>
                 </fieldset>

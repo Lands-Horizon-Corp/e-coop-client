@@ -3,27 +3,31 @@ import { forwardRef, useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { type TFilterObject } from '@/contexts/filter-context'
-import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PaginationState } from '@tanstack/react-table'
 
-import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
+import {
+    BadgeCheckFillIcon,
+    ChevronDownIcon,
+    ScanLineIcon,
+} from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
 import { useFilteredPaginatedMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
+import { useShortcut } from '@/hooks/shortcut-hooks/use-shorcuts'
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IMemberProfile, IPickerBaseProps } from '@/types'
 
-import { useShortcut } from '../use-shorcuts'
+import { MemberQrScannerModal } from '../qrcode-scanner/scanners/member-qr-scanner'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
 import GenericPicker from './generic-picker'
 
 interface Props extends IPickerBaseProps<IMemberProfile> {
-    value?: IMemberProfile
     defaultFilter?: TFilterObject
     allowShorcutCommand?: boolean
 }
@@ -41,6 +45,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
         ref
     ) => {
         const queryClient = useQueryClient()
+        const qrScannerModal = useModalState()
         const [state, setState] = useInternalState(
             false,
             modalState?.open,
@@ -48,7 +53,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
         )
 
         const [pagination, setPagination] = useState<PaginationState>({
-            pageIndex: PAGINATION_INITIAL_INDEX,
+            pageIndex: 0,
             pageSize: PICKERS_SELECT_PAGE_SIZE,
         })
 
@@ -95,6 +100,16 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     listHeading={`Matched Results (${data.totalSize})`}
                     searchPlaceHolder="Search name or PB no."
                     isLoading={isPending || isLoading || isFetching}
+                    otherSearchInputChild={
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            className="size-fit p-2 text-muted-foreground "
+                            onClick={() => qrScannerModal.onOpenChange(true)}
+                        >
+                            <ScanLineIcon />
+                        </Button>
+                    }
                     onSelect={(member) => {
                         queryClient.setQueryData(['member', value], member)
                         onSelect?.(member)
@@ -135,8 +150,14 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 </span>
                             </div>
 
-                            <p className="mr-2 font-mono text-xs italic text-foreground/40">
-                                <span>#{abbreviateUUID(member.id)}</span>
+                            <p className="mr-2 font-mono text-xs text-muted-foreground">
+                                <span>
+                                    {member.passbook || (
+                                        <span className="text-xs italic text-muted-foreground/70">
+                                            -
+                                        </span>
+                                    )}
+                                </span>
                             </p>
                         </div>
                     )}
@@ -157,6 +178,15 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         }
                     />
                 </GenericPicker>
+                <MemberQrScannerModal
+                    {...qrScannerModal}
+                    scannerProps={{
+                        onSelectMemberProfile: (memberProfile) => {
+                            onSelect?.(memberProfile)
+                            setState(false)
+                        },
+                    }}
+                />
                 <Button
                     ref={ref}
                     type="button"
@@ -189,8 +219,8 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         {allowShorcutCommand && (
                             <span className="mr-2 text-sm">⌘ ↵ </span>
                         )}
-                        <span className="mr-1 font-mono text-sm text-foreground/30">
-                            #{value?.id ? abbreviateUUID(value.id) : '?'}
+                        <span className="mr-1 font-mono text-sm text-muted-foreground">
+                            {value?.passbook || ''}
                         </span>
                     </span>
                     <ChevronDownIcon />
