@@ -3,6 +3,7 @@ import qs from 'query-string'
 import {
     IMemberCenterHistoryPaginated,
     IMemberClassificationHistoryPaginated,
+    IMemberDepartmentHistoryPaginated,
     IMemberGenderHistoryPaginated,
     IMemberGroupHistoryPaginated,
     IMemberMutualFundsHistoryPaginated,
@@ -209,5 +210,34 @@ export const getMemberMutualFundsHistoryById = async ({
 
     const response =
         await APIService.get<IMemberMutualFundsHistoryPaginated>(url)
+    return response.data
+}
+
+export const getMemberDepartmentHistoryById = async ({
+    profileId,
+    ...props
+}: {
+    sort?: string
+    filters?: string
+    profileId: TEntityId
+    pagination?: { pageIndex: number; pageSize: number }
+}) => {
+    const { filters, pagination, sort } = props || {}
+
+    const url = qs.stringifyUrl(
+        {
+            url: `/api/v1/member-department-history/member-profile/${profileId}/search`,
+            query: {
+                sort,
+                filter: filters,
+                pageIndex: pagination?.pageIndex,
+                pageSize: pagination?.pageSize,
+            },
+        },
+        { skipNull: true }
+    )
+
+    const response =
+        await APIService.get<IMemberDepartmentHistoryPaginated>(url)
     return response.data
 }

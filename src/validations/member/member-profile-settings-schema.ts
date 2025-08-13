@@ -45,6 +45,7 @@ export const memberProfileMembershipInfoSchema = z.object({
 
     status: generalStatusSchema.optional(),
 
+    member_department_id: entityIdSchema.optional(),
     member_type_id: entityIdSchema.optional(),
     member_group_id: entityIdSchema.optional(),
     member_classification_id: entityIdSchema.optional(),

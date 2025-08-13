@@ -28,8 +28,9 @@ import { cn } from '@/lib/utils'
 import { branchSettingsSchema } from '@/validations/form-validation/settings/branch-settings-schema'
 
 import { useUpdateCurrentBranchSettings } from '@/hooks/api-hooks/use-branch'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IBranch, IClassProps, IForm } from '@/types'
+import { IBranch, IBranchSettingsRequest, IClassProps, IForm } from '@/types'
 
 export type TBranchSettingsFormValues = z.infer<typeof branchSettingsSchema>
 
@@ -42,6 +43,7 @@ const BranchSettingsForm = ({
     className,
     defaultValues,
     disabledFields,
+    resetOnDefaultChange,
     onError,
     onSuccess,
 }: IBranchSettingsFormProps) => {
@@ -50,7 +52,9 @@ const BranchSettingsForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            // Withdraw OR settings
+            // Withdraw settings
+            branch_setting_withdraw_allow_user_input: false,
+            branch_setting_withdraw_prefix: '',
             branch_setting_withdraw_or_start: 0,
             branch_setting_withdraw_or_current: 0,
             branch_setting_withdraw_or_end: 0,
@@ -58,7 +62,9 @@ const BranchSettingsForm = ({
             branch_setting_withdraw_or_unique: false,
             branch_setting_withdraw_use_date_or: false,
 
-            // Deposit OR settings
+            // Deposit settings
+            branch_setting_deposit_allow_user_input: false,
+            branch_setting_deposit_prefix: '',
             branch_setting_deposit_or_start: 0,
             branch_setting_deposit_or_current: 0,
             branch_setting_deposit_or_end: 0,
@@ -66,7 +72,9 @@ const BranchSettingsForm = ({
             branch_setting_deposit_or_unique: false,
             branch_setting_deposit_use_date_or: false,
 
-            // Loan OR settings
+            // Loan settings
+            branch_setting_loan_allow_user_input: false,
+            branch_setting_loan_prefix: '',
             branch_setting_loan_or_start: 0,
             branch_setting_loan_or_current: 0,
             branch_setting_loan_or_end: 0,
@@ -74,14 +82,15 @@ const BranchSettingsForm = ({
             branch_setting_loan_or_unique: false,
             branch_setting_loan_use_date_or: false,
 
-            // Check Voucher OR settings
+            // Check Voucher settings
+            branch_setting_check_voucher_allow_user_input: false,
+            branch_setting_check_voucher_prefix: '',
             branch_setting_check_voucher_or_start: 0,
             branch_setting_check_voucher_or_current: 0,
             branch_setting_check_voucher_or_end: 0,
             branch_setting_check_voucher_or_iteration: 0,
             branch_setting_check_voucher_or_unique: false,
             branch_setting_check_voucher_use_date_or: false,
-
             ...defaultValues,
         },
     })
@@ -94,14 +103,20 @@ const BranchSettingsForm = ({
         onError,
     })
 
-    const onSubmit = form.handleSubmit((formData) => {
-        updateMutation.mutate(formData)
-    })
+    const onSubmit = form.handleSubmit(
+        async (formData) => await updateMutation.mutateAsync(formData)
+    )
 
     const { error, isPending } = updateMutation
 
     const isDisabled = (field: Path<TBranchSettingsFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    useFormHelper<IBranchSettingsRequest>({
+        form,
+        defaultValues,
+        resetOnDefaultChange: resetOnDefaultChange,
+    })
 
     return (
         <Form {...form}>
@@ -192,7 +207,56 @@ const BranchSettingsForm = ({
                             />
                         </div>
 
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="branch_setting_withdraw_prefix"
+                            label="OR Prefix"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    type="text"
+                                    placeholder="Enter prefix (optional)"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+
                         <div className="space-y-3">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="branch_setting_withdraw_allow_user_input"
+                                render={({ field }) => (
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                        <Switch
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
+                                            aria-describedby={`${field.name}-desc`}
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <CheckIcon className="h-4 w-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Allow User Input
+                                                </Label>
+                                                <p
+                                                    id={`${field.name}-desc`}
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    Allow users to manually
+                                                    input OR numbers for
+                                                    withdrawals
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            />
+
                             <FormFieldWrapper
                                 control={form.control}
                                 name="branch_setting_withdraw_or_unique"
@@ -344,7 +408,56 @@ const BranchSettingsForm = ({
                             />
                         </div>
 
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="branch_setting_deposit_prefix"
+                            label="OR Prefix"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    type="text"
+                                    placeholder="Enter prefix (optional)"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+
                         <div className="space-y-3">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="branch_setting_deposit_allow_user_input"
+                                render={({ field }) => (
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                        <Switch
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
+                                            aria-describedby={`${field.name}-desc`}
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <CheckIcon className="h-4 w-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Allow User Input
+                                                </Label>
+                                                <p
+                                                    id={`${field.name}-desc`}
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    Allow users to manually
+                                                    input OR numbers for
+                                                    deposits
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            />
+
                             <FormFieldWrapper
                                 control={form.control}
                                 name="branch_setting_deposit_or_unique"
@@ -494,9 +607,56 @@ const BranchSettingsForm = ({
                                     />
                                 )}
                             />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="branch_setting_loan_prefix"
+                                label="OR Prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        type="text"
+                                        placeholder="Enter prefix (optional)"
+                                        disabled={isDisabled(field.name)}
+                                    />
+                                )}
+                            />
                         </div>
 
                         <div className="space-y-3">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="branch_setting_loan_allow_user_input"
+                                render={({ field }) => (
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                        <Switch
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
+                                            aria-describedby={`${field.name}-desc`}
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <CheckIcon className="h-4 w-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Allow User Input
+                                                </Label>
+                                                <p
+                                                    id={`${field.name}-desc`}
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    Allow users to manually
+                                                    input OR numbers for loans
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            />
                             <FormFieldWrapper
                                 control={form.control}
                                 name="branch_setting_loan_or_unique"
@@ -648,7 +808,56 @@ const BranchSettingsForm = ({
                             />
                         </div>
 
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="branch_setting_check_voucher_prefix"
+                            label="OR Prefix"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    type="text"
+                                    placeholder="Enter prefix (optional)"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+
                         <div className="space-y-3">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="branch_setting_check_voucher_allow_user_input"
+                                render={({ field }) => (
+                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                        <Switch
+                                            id={field.name}
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
+                                            aria-describedby={`${field.name}-desc`}
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                <CheckIcon className="h-4 w-4" />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor={field.name}>
+                                                    Allow User Input
+                                                </Label>
+                                                <p
+                                                    id={`${field.name}-desc`}
+                                                    className="text-xs text-muted-foreground"
+                                                >
+                                                    Allow users to manually
+                                                    input OR numbers for check
+                                                    vouchers
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            />
+
                             <FormFieldWrapper
                                 control={form.control}
                                 name="branch_setting_check_voucher_or_unique"

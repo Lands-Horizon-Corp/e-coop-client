@@ -30,6 +30,7 @@ import {
     UserLockIcon,
     UserTagIcon,
     Users3Icon,
+    Users3LineIcon,
 } from '@/components/icons'
 import {
     INavGroupItem,
@@ -282,7 +283,7 @@ export const generateSidebarGroups = (
             userType: ['employee', 'owner'],
             navItems: [
                 {
-                    title: 'All Members',
+                    title: 'Members',
                     url: `${baseUrl}/view-members`,
                     type: 'item',
                     icon: UserListIcon,
@@ -351,6 +352,14 @@ export const generateSidebarGroups = (
                             url: `/member-gender`,
                             userType: ['employee', 'owner'],
                             shortDescription: 'Manage member genders',
+                        },
+                        {
+                            title: 'Member Department',
+                            url: `/member-department`,
+                            type: 'item',
+                            icon: Users3LineIcon,
+                            userType: ['employee', 'owner'],
+                            shortDescription: 'Manage member departments',
                         },
                     ],
                 },

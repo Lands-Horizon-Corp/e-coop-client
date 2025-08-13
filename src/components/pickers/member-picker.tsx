@@ -3,7 +3,6 @@ import { forwardRef, useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { type TFilterObject } from '@/contexts/filter-context'
-import { abbreviateUUID } from '@/utils/formatting-utils'
 import { PaginationState } from '@tanstack/react-table'
 
 import {
@@ -55,7 +54,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
         )
 
         const [pagination, setPagination] = useState<PaginationState>({
-            pageIndex: PAGINATION_INITIAL_INDEX,
+            pageIndex: 0,
             pageSize: PICKERS_SELECT_PAGE_SIZE,
         })
 
@@ -152,8 +151,14 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 </span>
                             </div>
 
-                            <p className="mr-2 font-mono text-xs italic text-foreground/40">
-                                <span>#{abbreviateUUID(member.id)}</span>
+                            <p className="mr-2 font-mono text-xs text-muted-foreground">
+                                <span>
+                                    {member.passbook || (
+                                        <span className="text-xs italic text-muted-foreground/70">
+                                            -
+                                        </span>
+                                    )}
+                                </span>
                             </p>
                         </div>
                     )}
@@ -215,8 +220,8 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         {allowShorcutCommand && (
                             <span className="mr-2 text-sm">⌘ ↵ </span>
                         )}
-                        <span className="mr-1 font-mono text-sm text-foreground/30">
-                            #{value?.id ? abbreviateUUID(value.id) : '?'}
+                        <span className="mr-1 font-mono text-sm text-muted-foreground">
+                            {value?.passbook || ''}
                         </span>
                     </span>
                     <ChevronDownIcon />

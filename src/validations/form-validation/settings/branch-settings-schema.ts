@@ -1,7 +1,9 @@
 import { z } from 'zod'
 
 export const branchSettingsSchema = z.object({
-    // Withdraw OR settings
+    // Withdraw settings
+    branch_setting_withdraw_allow_user_input: z.boolean(),
+    branch_setting_withdraw_prefix: z.string(),
     branch_setting_withdraw_or_start: z.coerce
         .number()
         .min(0, 'Must be 0 or greater'),
@@ -17,7 +19,9 @@ export const branchSettingsSchema = z.object({
     branch_setting_withdraw_or_unique: z.boolean(),
     branch_setting_withdraw_use_date_or: z.boolean(),
 
-    // Deposit OR settings
+    // Deposit settings
+    branch_setting_deposit_allow_user_input: z.boolean(),
+    branch_setting_deposit_prefix: z.string(),
     branch_setting_deposit_or_start: z.coerce
         .number()
         .min(0, 'Must be 0 or greater'),
@@ -33,7 +37,9 @@ export const branchSettingsSchema = z.object({
     branch_setting_deposit_or_unique: z.boolean(),
     branch_setting_deposit_use_date_or: z.boolean(),
 
-    // Loan OR settings
+    // Loan settings
+    branch_setting_loan_allow_user_input: z.boolean(),
+    branch_setting_loan_prefix: z.string(),
     branch_setting_loan_or_start: z.coerce
         .number()
         .min(0, 'Must be 0 or greater'),
@@ -49,7 +55,9 @@ export const branchSettingsSchema = z.object({
     branch_setting_loan_or_unique: z.boolean(),
     branch_setting_loan_use_date_or: z.boolean(),
 
-    // Check Voucher OR settings
+    // Check Voucher settings
+    branch_setting_check_voucher_allow_user_input: z.boolean(),
+    branch_setting_check_voucher_prefix: z.string(),
     branch_setting_check_voucher_or_start: z.coerce
         .number()
         .min(0, 'Must be 0 or greater'),

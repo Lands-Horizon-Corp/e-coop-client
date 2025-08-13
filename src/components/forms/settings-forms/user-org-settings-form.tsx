@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils'
 import { userOrganizationSettingsSchema } from '@/validations/form-validation/settings/user-organization-settings-schema'
 
 import { useUpdateUserOrganizationSettings } from '@/hooks/api-hooks/use-user-organization'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, IUserOrganization, TEntityId } from '@/types'
 
@@ -43,6 +44,7 @@ const UserOrgSettingsForm = ({
     userOrganizationId,
     defaultValues,
     disabledFields,
+    resetOnDefaultChange,
     onError,
     onSuccess,
 }: IUserOrgSettingsFormProps &
@@ -80,14 +82,24 @@ const UserOrgSettingsForm = ({
         onError,
     })
 
-    const onSubmit = form.handleSubmit((formData) => {
-        updateMutation.mutate({ id: userOrganizationId, data: formData })
-    })
+    const onSubmit = form.handleSubmit(
+        async (formData) =>
+            await updateMutation.mutateAsync({
+                id: userOrganizationId,
+                data: formData,
+            })
+    )
 
     const { error, isPending } = updateMutation
 
     const isDisabled = (field: Path<TUserOrgSettingsFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
+
+    useFormHelper<TUserOrgSettingsFormValues>({
+        form,
+        defaultValues,
+        resetOnDefaultChange: resetOnDefaultChange,
+    })
 
     return (
         <Form {...form}>

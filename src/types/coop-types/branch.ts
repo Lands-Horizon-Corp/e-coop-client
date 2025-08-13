@@ -70,6 +70,9 @@ export interface IBranchRequest {
 export interface IBranchPaginated extends IPaginatedResult<IBranch> {}
 
 export interface IBranchSettings {
+    branch_setting_withdraw_allow_user_input: boolean
+    /** Validation: omitempty */
+    branch_setting_withdraw_prefix: string
     /** Validation: min=0 */
     branch_setting_withdraw_or_start: number
     /** Validation: min=0 */
@@ -80,6 +83,9 @@ export interface IBranchSettings {
     branch_setting_withdraw_or_iteration: number
     branch_setting_withdraw_or_unique: boolean
     branch_setting_withdraw_use_date_or: boolean
+    branch_setting_deposit_allow_user_input: boolean
+    /** Validation: omitempty */
+    branch_setting_deposit_prefix: string
     /** Validation: min=0 */
     branch_setting_deposit_or_start: number
     /** Validation: min=0 */
@@ -90,6 +96,9 @@ export interface IBranchSettings {
     branch_setting_deposit_or_iteration: number
     branch_setting_deposit_or_unique: boolean
     branch_setting_deposit_use_date_or: boolean
+    branch_setting_loan_allow_user_input: boolean
+    /** Validation: omitempty */
+    branch_setting_loan_prefix: string
     /** Validation: min=0 */
     branch_setting_loan_or_start: number
     /** Validation: min=0 */
@@ -100,6 +109,9 @@ export interface IBranchSettings {
     branch_setting_loan_or_iteration: number
     branch_setting_loan_or_unique: boolean
     branch_setting_loan_use_date_or: boolean
+    branch_setting_check_voucher_allow_user_input: boolean
+    /** Validation: omitempty */
+    branch_setting_check_voucher_prefix: string
     /** Validation: min=0 */
     branch_setting_check_voucher_or_start: number
     /** Validation: min=0 */

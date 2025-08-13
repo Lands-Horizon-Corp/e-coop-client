@@ -1,12 +1,13 @@
 import { ReactNode } from 'react'
 
+import { TooltipPortal } from '@radix-ui/react-tooltip'
+
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 export interface IActionTooltipProps {
     tooltipContent: string | ReactNode

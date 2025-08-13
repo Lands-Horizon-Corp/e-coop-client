@@ -24,6 +24,7 @@ import {
     IMemberContactReference,
     IMemberContactReferenceRequest,
 } from './member-contact-reference'
+import { IMemberDepartment } from './member-department'
 import { IMemberDescriptionRequest } from './member-description'
 import { IMemberEducationalAttainment } from './member-educational-attainment'
 import { IMemberExpense, IMemberExpenseRequest } from './member-expense'
@@ -178,6 +179,9 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
 
     member_verified_by_employee_user_id: TEntityId
     member_verified_by_employee_user: IUserBase
+
+    member_department_id?: TEntityId
+    member_department?: IMemberDepartment
 
     recruited_by_member_profile_id: TEntityId
     recruited_by_member_profile: IMemberProfile

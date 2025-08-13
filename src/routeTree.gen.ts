@@ -123,6 +123,7 @@ import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypes
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-occupation'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-group'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-gender'
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-department'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-classification'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-center'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/view-employees'
@@ -913,6 +914,15 @@ const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute =
     path: '/members/member-gender',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute =
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentImport.update(
+    {
+      id: '/(maintenance)/(members)/members/member-department',
+      path: '/members/member-department',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 
 const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute =
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationImport.update(
@@ -1767,6 +1777,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department'
+      path: '/members/member-department'
+      fullPath: '/org/$orgname/branch/$branchname/members/member-department'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
       path: '/members/member-gender'
@@ -2066,6 +2083,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
@@ -2211,6 +2229,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute,
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute:
+      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute:
@@ -2364,6 +2384,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
   '/org/$orgname/branch/$branchname/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
   '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/members/member-department': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
   '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
@@ -2483,6 +2504,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
   '/org/$orgname/branch/$branchname/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
   '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/members/member-department': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
   '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
@@ -2608,6 +2630,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
@@ -2733,6 +2756,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/employees/view-employees'
     | '/org/$orgname/branch/$branchname/members/member-center'
     | '/org/$orgname/branch/$branchname/members/member-classification'
+    | '/org/$orgname/branch/$branchname/members/member-department'
     | '/org/$orgname/branch/$branchname/members/member-gender'
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
@@ -2851,6 +2875,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/employees/view-employees'
     | '/org/$orgname/branch/$branchname/members/member-center'
     | '/org/$orgname/branch/$branchname/members/member-classification'
+    | '/org/$orgname/branch/$branchname/members/member-department'
     | '/org/$orgname/branch/$branchname/members/member-gender'
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
@@ -2974,6 +2999,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation'
@@ -3311,6 +3337,7 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification",
+        "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group",
         "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation",
@@ -3583,6 +3610,10 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification": {
       "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-classification.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department": {
+      "filePath": "org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-department.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender": {

@@ -111,6 +111,7 @@ import {
     FaUserLock as UserLockIcon,
     FaUserPlus as UserPlusIcon,
     FaUserShield as UserShieldIcon,
+    FaUsersLine as Users3LineIcon,
 } from 'react-icons/fa6'
 import {
     FiCamera as CameraIcon,
@@ -515,6 +516,7 @@ export {
     WoodSignsIcon,
     TelephoneIcon,
     UserGroupIcon,
+    Users3LineIcon,
     ReferencesIcon,
     ChecksGridIcon,
     NavigationIcon,
@@ -861,6 +863,7 @@ export const IconMap: Record<TIcon, IconType> = {
     Organization: OrganizationIcon,
     'Users 3 Fill': Users3FillIcon,
     Notification: NotificationIcon,
+    'Users 3 Line': Users3LineIcon,
     'Target Arrow': TargetArrowIcon,
     'Weight Scale': WeightScaleIcon,
     'Pin Location': PinLocationIcon,

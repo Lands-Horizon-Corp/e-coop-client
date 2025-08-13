@@ -5,7 +5,7 @@ import { toDateTimeFormatFile } from '@/utils'
 
 import { useMemberProfile } from '@/hooks/api-hooks/member/use-member-profile'
 
-import { IBaseProps, IMemberProfile, TEntityId } from '@/types'
+import { IBaseProps, IMemberProfile, TEntityId, TIcon } from '@/types'
 
 import CopyTextButton from '../copy-text-button'
 import {
@@ -13,6 +13,7 @@ import {
     HandCoinsIcon,
     PieChartIcon,
     QrCodeIcon,
+    RenderIcon,
     UserTagIcon,
 } from '../icons'
 import ImageDisplay from '../image-display'
@@ -220,6 +221,26 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                             <p>{data?.member_center?.name ?? '-'}</p>
                             <p className="text-xs text-muted-foreground/70">
                                 Membership Center
+                            </p>
+                        </div>
+
+                        <div className="space-y-2">
+                            <p className="inline-flex items-center gap-x-2">
+                                {data?.member_department?.icon && (
+                                    <div className="inline-flex p-1 text-muted-foreground size-fit items-center justify-center rounded-full border bg-muted">
+                                        <RenderIcon
+                                            icon={
+                                                data?.member_department
+                                                    ?.icon as TIcon
+                                            }
+                                            className="size-4"
+                                        />
+                                    </div>
+                                )}{' '}
+                                {data?.member_department?.name ?? '-'}
+                            </p>
+                            <p className="text-xs text-muted-foreground/70">
+                                Member Department
                             </p>
                         </div>
                     </div>

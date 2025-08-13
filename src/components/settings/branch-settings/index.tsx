@@ -4,17 +4,27 @@ import { useAuthUserWithOrg } from '@/store/user-auth-store'
 import BranchSettingsForm from '@/components/forms/settings-forms/branch-settings-form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
+import { useAuthContext } from '@/hooks/api-hooks/use-auth'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
 import { IClassProps } from '@/types'
 
 interface Props extends IClassProps {}
 
 const BranchSettings = ({ className }: Props) => {
     const {
-        currentAuth: {
-            user_organization: { branch, ...other },
-        },
+        currentAuth: { user_organization },
         updateCurrentAuth,
     } = useAuthUserWithOrg()
+
+    const { refetch } = useAuthContext({
+        onSuccess: (data) => updateCurrentAuth(data),
+    })
+
+    useSubscribe(`branch.update.${user_organization.branch_id}`, () => {
+        alert('changed')
+        refetch()
+    })
 
     return (
         <div className={cn('flex flex-col gap-y-4 flex-1 w-full', className)}>
@@ -25,17 +35,21 @@ const BranchSettings = ({ className }: Props) => {
                     operations.
                 </p>
             </div>
-            {branch && (
+            {user_organization.branch && (
                 <BranchSettingsForm
-                    defaultValues={branch}
+                    resetOnDefaultChange
+                    defaultValues={user_organization.branch}
                     onSuccess={(data) =>
                         updateCurrentAuth({
-                            user_organization: { ...other, branch: data },
+                            user_organization: {
+                                ...user_organization,
+                                branch: data,
+                            },
                         })
                     }
                 />
             )}
-            {!branch && (
+            {!user_organization.branch && (
                 <>
                     <p className="text-xs text-muted-foreground">
                         Failed to load your branch info :{' '}

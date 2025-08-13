@@ -13,6 +13,9 @@ import {
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/user-avatar'
 
+import { useAuthContext } from '@/hooks/api-hooks/use-auth'
+import { useSubscribe } from '@/hooks/use-pubsub'
+
 import { IBaseProps, IUserBase, TPageType } from '@/types'
 
 import { FlickeringGrid } from '../elements/backgrounds/flickering-grid'
@@ -26,9 +29,31 @@ interface Props extends IBaseProps {
 const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     const router = useRouter()
     const { pathname } = useLocation()
-    const { currentAuth, authStatus } = useAuthStore()
+    const { currentAuth, authStatus, updateCurrentAuth, setAuthStatus } =
+        useAuthStore()
 
-    // Replace the useMemo with useRef
+    const { refetch } = useAuthContext({
+        onSuccess(data) {
+            updateCurrentAuth(data)
+            setAuthStatus('authorized')
+        },
+    })
+
+    useSubscribe(
+        `user_organization.update.${currentAuth.user_organization?.id}`,
+        refetch
+    )
+
+    useSubscribe(
+        `branch.update.${currentAuth.user_organization?.branch_id}`,
+        refetch
+    )
+
+    useSubscribe(
+        `organization.update.${currentAuth.user_organization?.organization_id}`,
+        refetch
+    )
+
     const originalPathnameRef = useRef<string | null>(null)
 
     if (originalPathnameRef.current === null && !pathname.startsWith('/auth')) {

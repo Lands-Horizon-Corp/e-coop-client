@@ -29,8 +29,12 @@ export const useFormHelper = <T extends FieldValues>({
     const { onOpen } = useConfirmModalStore()
 
     useEffect(() => {
-        if (resetOnDefaultChange && defaultValues) {
-            if (form.formState.isDirty && !form.formState.isSubmitting) {
+        if (
+            resetOnDefaultChange &&
+            defaultValues &&
+            !form.formState.isSubmitting
+        ) {
+            if (form.formState.isDirty) {
                 onOpen({
                     title: 'Data Changed',
                     description:

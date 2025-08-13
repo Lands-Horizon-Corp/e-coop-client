@@ -43,6 +43,8 @@ export * from './member/member-occupation'
 export * from './member/member-occupation-history'
 export * from './member/member-profile-settings'
 export * from './member/member-accounting-ledger'
+export * from './member/member-department'
+export * from './member/member-department-history'
 
 export * from './account-classification'
 

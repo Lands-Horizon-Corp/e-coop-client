@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { useUserOrganiaztion } from '@/hooks/api-hooks/use-user-organization'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IClassProps } from '@/types'
 
@@ -29,6 +30,8 @@ const UserOrganizationSettings = ({ className }: Props) => {
         refetch,
     } = useUserOrganiaztion({ id })
 
+    useSubscribe(`user_organization.update.${id}`, refetch)
+
     return (
         <div className={cn('flex flex-col gap-y-4 flex-1 w-full', className)}>
             <div>
@@ -42,6 +45,7 @@ const UserOrganizationSettings = ({ className }: Props) => {
             {!isPending && userOrganization && (
                 <UserOrgSettingsForm
                     mode="current"
+                    resetOnDefaultChange
                     defaultValues={
                         userOrganization as TUserOrgSettingsFormValues
                     }
