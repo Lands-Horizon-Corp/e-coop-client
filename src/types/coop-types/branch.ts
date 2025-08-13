@@ -1,6 +1,7 @@
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 import { IOrganization } from '../lands-types'
 import { IMedia } from './media'
+import { IMemberType } from './member/member-type'
 import { IPaginatedResult } from './paginated-result'
 
 export enum branchTypeEnum {
@@ -122,6 +123,9 @@ export interface IBranchSettings {
     branch_setting_check_voucher_or_iteration: number
     branch_setting_check_voucher_or_unique: boolean
     branch_setting_check_voucher_use_date_or: boolean
+
+    branch_setting_default_member_type_id: TEntityId
+    branch_setting_default_member_type: IMemberType
 }
 
 export interface IBranchSettingsRequest extends IBranchSettings {}

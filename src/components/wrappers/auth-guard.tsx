@@ -3,6 +3,7 @@ import { ReactNode, useRef } from 'react'
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 import { useAuthStore } from '@/store/user-auth-store'
 import { Navigate, useLocation, useRouter } from '@tanstack/react-router'
+import { AxiosError } from 'axios'
 
 import {
     ArrowRightIcon,
@@ -29,14 +30,35 @@ interface Props extends IBaseProps {
 const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     const router = useRouter()
     const { pathname } = useLocation()
-    const { currentAuth, authStatus, updateCurrentAuth, setAuthStatus } =
-        useAuthStore()
+    const {
+        currentAuth,
+        authStatus,
+        updateCurrentAuth,
+        setAuthStatus,
+        resetAuth,
+    } = useAuthStore()
 
     const { refetch } = useAuthContext({
         onSuccess(data) {
             updateCurrentAuth(data)
             setAuthStatus('authorized')
         },
+
+        onError(_error, rawError) {
+            if (rawError instanceof AxiosError && rawError.status === 401) {
+                resetAuth()
+                setAuthStatus('unauthorized')
+                return null
+            }
+
+            if (rawError instanceof AxiosError && rawError.status === 500) {
+                setAuthStatus('error')
+                return null
+            }
+
+            setAuthStatus('error')
+        },
+        refetchOnWindowFocus: false,
     })
 
     useSubscribe(
