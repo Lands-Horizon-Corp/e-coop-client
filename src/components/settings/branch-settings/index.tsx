@@ -38,12 +38,15 @@ const BranchSettings = ({ className }: Props) => {
             {user_organization.branch && (
                 <BranchSettingsForm
                     resetOnDefaultChange
-                    defaultValues={user_organization.branch}
+                    defaultValues={user_organization.branch.branch_setting}
                     onSuccess={(data) =>
                         updateCurrentAuth({
                             user_organization: {
                                 ...user_organization,
-                                branch: data,
+                                branch: {
+                                    ...user_organization.branch,
+                                    branch_setting: data,
+                                },
                             },
                         })
                     }

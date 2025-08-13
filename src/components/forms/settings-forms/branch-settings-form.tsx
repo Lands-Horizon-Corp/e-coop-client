@@ -4,13 +4,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Path, useForm } from 'react-hook-form'
 
+import MemberTypeCombobox from '@/components/comboboxes/member-type-combobox'
+import InfoTooltip from '@/components/elements/info-tooltip'
 import {
     CalendarIcon,
     CheckIcon,
     CreditCardIcon,
     HandCoinsIcon,
+    InfoIcon,
     MoneyCheckIcon,
     ReceiptIcon,
+    UserIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -27,16 +31,21 @@ import { cn } from '@/lib/utils'
 
 import { branchSettingsSchema } from '@/validations/form-validation/settings/branch-settings-schema'
 
-import { useUpdateCurrentBranchSettings } from '@/hooks/api-hooks/use-branch'
+import { useUpdateCurrentBranchSettings } from '@/hooks/api-hooks/use-branch-settings'
 import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IBranch, IBranchSettingsRequest, IClassProps, IForm } from '@/types'
+import {
+    IBranchSettings,
+    IBranchSettingsRequest,
+    IClassProps,
+    IForm,
+} from '@/types'
 
 export type TBranchSettingsFormValues = z.infer<typeof branchSettingsSchema>
 
 export interface IBranchSettingsFormProps
     extends IClassProps,
-        IForm<Partial<TBranchSettingsFormValues>, IBranch, string> {}
+        IForm<Partial<TBranchSettingsFormValues>, IBranchSettings, string> {}
 
 const BranchSettingsForm = ({
     readOnly,
@@ -53,44 +62,44 @@ const BranchSettingsForm = ({
         mode: 'onSubmit',
         defaultValues: {
             // Withdraw settings
-            branch_setting_withdraw_allow_user_input: false,
-            branch_setting_withdraw_prefix: '',
-            branch_setting_withdraw_or_start: 0,
-            branch_setting_withdraw_or_current: 0,
-            branch_setting_withdraw_or_end: 0,
-            branch_setting_withdraw_or_iteration: 0,
-            branch_setting_withdraw_or_unique: false,
-            branch_setting_withdraw_use_date_or: false,
+            withdraw_allow_user_input: false,
+            withdraw_prefix: '',
+            withdraw_or_start: 0,
+            withdraw_or_current: 0,
+            withdraw_or_end: 0,
+            withdraw_or_iteration: 0,
+            withdraw_or_unique: false,
+            withdraw_use_date_or: false,
 
             // Deposit settings
-            branch_setting_deposit_allow_user_input: false,
-            branch_setting_deposit_prefix: '',
-            branch_setting_deposit_or_start: 0,
-            branch_setting_deposit_or_current: 0,
-            branch_setting_deposit_or_end: 0,
-            branch_setting_deposit_or_iteration: 0,
-            branch_setting_deposit_or_unique: false,
-            branch_setting_deposit_use_date_or: false,
+            deposit_allow_user_input: false,
+            deposit_prefix: '',
+            deposit_or_start: 0,
+            deposit_or_current: 0,
+            deposit_or_end: 0,
+            deposit_or_iteration: 0,
+            deposit_or_unique: false,
+            deposit_use_date_or: false,
 
             // Loan settings
-            branch_setting_loan_allow_user_input: false,
-            branch_setting_loan_prefix: '',
-            branch_setting_loan_or_start: 0,
-            branch_setting_loan_or_current: 0,
-            branch_setting_loan_or_end: 0,
-            branch_setting_loan_or_iteration: 0,
-            branch_setting_loan_or_unique: false,
-            branch_setting_loan_use_date_or: false,
+            loan_allow_user_input: false,
+            loan_prefix: '',
+            loan_or_start: 0,
+            loan_or_current: 0,
+            loan_or_end: 0,
+            loan_or_iteration: 0,
+            loan_or_unique: false,
+            loan_use_date_or: false,
 
             // Check Voucher settings
-            branch_setting_check_voucher_allow_user_input: false,
-            branch_setting_check_voucher_prefix: '',
-            branch_setting_check_voucher_or_start: 0,
-            branch_setting_check_voucher_or_current: 0,
-            branch_setting_check_voucher_or_end: 0,
-            branch_setting_check_voucher_or_iteration: 0,
-            branch_setting_check_voucher_or_unique: false,
-            branch_setting_check_voucher_use_date_or: false,
+            check_voucher_allow_user_input: false,
+            check_voucher_prefix: '',
+            check_voucher_or_start: 0,
+            check_voucher_or_current: 0,
+            check_voucher_or_end: 0,
+            check_voucher_or_iteration: 0,
+            check_voucher_or_unique: false,
+            check_voucher_use_date_or: false,
             ...defaultValues,
         },
     })
@@ -112,7 +121,7 @@ const BranchSettingsForm = ({
     const isDisabled = (field: Path<TBranchSettingsFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
-    useFormHelper<IBranchSettingsRequest>({
+    const { firstError } = useFormHelper<IBranchSettingsRequest>({
         form,
         defaultValues,
         resetOnDefaultChange: resetOnDefaultChange,
@@ -128,8 +137,70 @@ const BranchSettingsForm = ({
                     disabled={isPending || readOnly}
                     className="space-y-6"
                 >
+                    {/* Default Member Creation Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-yellow-100 p-2 dark:bg-yellow-900/20">
+                                <UserIcon className="size-5 " />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">
+                                    Default Member Creation Settings
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure default settings for member
+                                    creation, such as the default member type.
+                                </p>
+                            </div>
+                        </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="default_member_type_id"
+                            label={
+                                <span>
+                                    Default Member Type{' '}
+                                    <InfoTooltip
+                                        content={
+                                            <div className="flex gap-2 max-w-[400px]">
+                                                <InfoIcon
+                                                    className="size-6 shrink-0 opacity-60"
+                                                    size={16}
+                                                    aria-hidden="true"
+                                                />
+                                                <div className="space-y-1">
+                                                    <p className="text-[13px] font-medium">
+                                                        Default member type
+                                                    </p>
+                                                    <p className="text-muted-foreground text-xs">
+                                                        Select a default member
+                                                        type, so new member
+                                                        quick create form will
+                                                        default to the preferred
+                                                        default member type.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    />
+                                </span>
+                            }
+                            render={({ field }) => (
+                                <MemberTypeCombobox
+                                    value={field.value}
+                                    onChange={(selectedType) => {
+                                        field.onChange(selectedType?.id)
+                                    }}
+                                    placeholder="Select default member type"
+                                    disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+                    </div>
+                    <Separator />
+
                     {/* Withdraw OR Settings */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-red-100 p-2 dark:bg-red-900/20">
                                 <HandCoinsIcon className="h-5 w-5 text-red-600 dark:text-red-400" />
@@ -148,7 +219,7 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_withdraw_or_start"
+                                name="withdraw_or_start"
                                 label="Start OR"
                                 render={({ field }) => (
                                     <Input
@@ -163,7 +234,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_withdraw_or_current"
+                                name="withdraw_or_current"
                                 label="Current OR"
                                 render={({ field }) => (
                                     <Input
@@ -178,7 +249,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_withdraw_or_end"
+                                name="withdraw_or_end"
                                 label="End OR"
                                 render={({ field }) => (
                                     <Input
@@ -193,7 +264,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_withdraw_or_iteration"
+                                name="withdraw_or_iteration"
                                 label="OR Iteration"
                                 render={({ field }) => (
                                     <Input
@@ -209,7 +280,7 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="branch_setting_withdraw_prefix"
+                            name="withdraw_prefix"
                             label="OR Prefix"
                             render={({ field }) => (
                                 <Input
@@ -224,9 +295,9 @@ const BranchSettingsForm = ({
                         <div className="space-y-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_withdraw_allow_user_input"
+                                name="withdraw_allow_user_input"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -259,9 +330,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_withdraw_or_unique"
+                                name="withdraw_or_unique"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -293,9 +364,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_withdraw_use_date_or"
+                                name="withdraw_use_date_or"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -330,16 +401,16 @@ const BranchSettingsForm = ({
                     <Separator />
 
                     {/* Deposit OR Settings */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-green-100 p-2 dark:bg-green-900/20">
                                 <MoneyCheckIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold">
+                                <h3 className="text font-semibold">
                                     Deposit OR Settings
                                 </h3>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-xs text-muted-foreground">
                                     Configure official receipt settings for
                                     deposits
                                 </p>
@@ -349,7 +420,7 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_deposit_or_start"
+                                name="deposit_or_start"
                                 label="Start OR"
                                 render={({ field }) => (
                                     <Input
@@ -364,7 +435,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_deposit_or_current"
+                                name="deposit_or_current"
                                 label="Current OR"
                                 render={({ field }) => (
                                     <Input
@@ -379,7 +450,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_deposit_or_end"
+                                name="deposit_or_end"
                                 label="End OR"
                                 render={({ field }) => (
                                     <Input
@@ -394,7 +465,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_deposit_or_iteration"
+                                name="deposit_or_iteration"
                                 label="OR Iteration"
                                 render={({ field }) => (
                                     <Input
@@ -410,7 +481,7 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="branch_setting_deposit_prefix"
+                            name="deposit_prefix"
                             label="OR Prefix"
                             render={({ field }) => (
                                 <Input
@@ -425,9 +496,9 @@ const BranchSettingsForm = ({
                         <div className="space-y-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_deposit_allow_user_input"
+                                name="deposit_allow_user_input"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -460,9 +531,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_deposit_or_unique"
+                                name="deposit_or_unique"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -494,9 +565,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_deposit_use_date_or"
+                                name="deposit_use_date_or"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -531,16 +602,16 @@ const BranchSettingsForm = ({
                     <Separator />
 
                     {/* Loan OR Settings */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-blue-100 p-2 dark:bg-blue-900/20">
-                                <CreditCardIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                <CreditCardIcon className="size-5 text-blue-600 dark:text-blue-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold">
+                                <h3 className="font-semibold">
                                     Loan OR Settings
                                 </h3>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-xs text-muted-foreground">
                                     Configure official receipt settings for
                                     loans
                                 </p>
@@ -550,7 +621,7 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_or_start"
+                                name="loan_or_start"
                                 label="Start OR"
                                 render={({ field }) => (
                                     <Input
@@ -565,7 +636,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_or_current"
+                                name="loan_or_current"
                                 label="Current OR"
                                 render={({ field }) => (
                                     <Input
@@ -580,7 +651,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_or_end"
+                                name="loan_or_end"
                                 label="End OR"
                                 render={({ field }) => (
                                     <Input
@@ -595,7 +666,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_or_iteration"
+                                name="loan_or_iteration"
                                 label="OR Iteration"
                                 render={({ field }) => (
                                     <Input
@@ -610,8 +681,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_prefix"
+                                name="loan_prefix"
                                 label="OR Prefix"
+                                className="col-span-full"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -626,9 +698,9 @@ const BranchSettingsForm = ({
                         <div className="space-y-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_allow_user_input"
+                                name="loan_allow_user_input"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -659,9 +731,9 @@ const BranchSettingsForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_or_unique"
+                                name="loan_or_unique"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -693,9 +765,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_loan_use_date_or"
+                                name="loan_use_date_or"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -730,16 +802,16 @@ const BranchSettingsForm = ({
                     <Separator />
 
                     {/* Check Voucher OR Settings */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
                                 <ReceiptIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold">
+                                <h3 className="font-semibold">
                                     Check Voucher OR Settings
                                 </h3>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-xs text-muted-foreground">
                                     Configure official receipt settings for
                                     check vouchers
                                 </p>
@@ -749,7 +821,7 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_check_voucher_or_start"
+                                name="check_voucher_or_start"
                                 label="Start OR"
                                 render={({ field }) => (
                                     <Input
@@ -764,7 +836,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_check_voucher_or_current"
+                                name="check_voucher_or_current"
                                 label="Current OR"
                                 render={({ field }) => (
                                     <Input
@@ -779,7 +851,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_check_voucher_or_end"
+                                name="check_voucher_or_end"
                                 label="End OR"
                                 render={({ field }) => (
                                     <Input
@@ -794,7 +866,7 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_check_voucher_or_iteration"
+                                name="check_voucher_or_iteration"
                                 label="OR Iteration"
                                 render={({ field }) => (
                                     <Input
@@ -810,7 +882,7 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="branch_setting_check_voucher_prefix"
+                            name="check_voucher_prefix"
                             label="OR Prefix"
                             render={({ field }) => (
                                 <Input
@@ -825,9 +897,9 @@ const BranchSettingsForm = ({
                         <div className="space-y-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_check_voucher_allow_user_input"
+                                name="check_voucher_allow_user_input"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -860,9 +932,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_check_voucher_or_unique"
+                                name="check_voucher_or_unique"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -894,9 +966,9 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="branch_setting_check_voucher_use_date_or"
+                                name="check_voucher_use_date_or"
                                 render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
                                             id={field.name}
                                             checked={field.value}
@@ -929,7 +1001,7 @@ const BranchSettingsForm = ({
                     </div>
                 </fieldset>
 
-                <FormErrorMessage errorMessage={error} />
+                <FormErrorMessage errorMessage={error || firstError} />
 
                 <fieldset disabled={readOnly || !form.formState.isDirty}>
                     <Separator className="my-2 sm:my-4" />

@@ -37,7 +37,7 @@ const AppearanceSettings = ({ className }: Props) => {
                         tabIndex={0}
                         className={cn(
                             'bg-gray-100 border text-gray-700 rounded-xl h-48 flex items-center justify-center group-hover:border-primary ease-in-out duration-100',
-                            theme === 'light' && 'border-2 border-primary/80'
+                            theme === 'light' && 'border-4 border-primary/80'
                         )}
                     >
                         <div className="bg-gray-100 size-fit text-stone-800 p-4 rounded-full flex items-center justify-center">
@@ -65,7 +65,7 @@ const AppearanceSettings = ({ className }: Props) => {
                         tabIndex={0}
                         className={cn(
                             'bg-stone-900 border flex items-center justify-center rounded-xl h-48 group-hover:border-primary ease-in-out duration-100',
-                            theme === 'dark' && 'border-2 border-primary/80'
+                            theme === 'dark' && 'border-4 border-primary/80'
                         )}
                     >
                         <div className="bg-stone-800 size-fit text-stone-200 p-4 rounded-full flex items-center justify-center">
@@ -93,12 +93,12 @@ const AppearanceSettings = ({ className }: Props) => {
                         tabIndex={0}
                         className={cn(
                             'rounded-xl h-48 grid group-hover:border-primary ease-in-out duration-100 relative overflow-clip border grid-cols-2',
-                            theme === 'system' && 'border-2 border-primary/80'
+                            theme === 'system' && 'border-4 border-primary/80'
                         )}
                     >
                         <div className="bg-gray-100 flex items-center justify-center" />
                         <div className="bg-stone-950 flex items-center justify-center" />
-                        <div className="bg-secondary size-fit text-muted-foreground absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 p-4 rounded-full flex items-center justify-center">
+                        <div className="bg-secondary/60 backdrop-blur-sm border border-muted-foreground size-fit text-muted-foreground absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 p-4 rounded-full flex items-center justify-center">
                             <SunMoonIcon className="size-8" />
                         </div>
                     </div>

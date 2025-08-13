@@ -2,20 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import BranchService from '@/api-service/branch-service'
-import {
-    createMutationHook,
-    updateMutationInvalidationFn,
-} from '@/factory/api-hook-factory'
 import { serverRequestErrExtractor } from '@/helpers'
 import { withCatchAsync } from '@/utils'
 
-import {
-    IAPIHook,
-    IBranch,
-    IBranchRequest,
-    IBranchSettingsRequest,
-    TEntityId,
-} from '@/types'
+import { IAPIHook, IBranch, IBranchRequest, TEntityId } from '@/types'
 
 export const useCreateBranchByOrg = ({
     onError,
@@ -167,13 +157,3 @@ export const useDeleteBranch = ({ onSuccess }: IAPIHook<unknown, string>) => {
         },
     })
 }
-
-export const useUpdateCurrentBranchSettings = createMutationHook<
-    IBranch,
-    string,
-    IBranchSettingsRequest
->(
-    (data) => BranchService.updateCurrentBranchSettings(data),
-    'Branch settings updated',
-    (args) => updateMutationInvalidationFn('branch', args)
-)

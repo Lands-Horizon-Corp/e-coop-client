@@ -42,6 +42,11 @@ export interface IIDentity {
     branch: IBranch
 }
 
+export interface IOrgIdentity {
+    organization_id: TEntityId
+    organization: IOrganization
+}
+
 /* Identity of the entity */
 export interface IOrgBranchIdentity {
     organization_id: TEntityId

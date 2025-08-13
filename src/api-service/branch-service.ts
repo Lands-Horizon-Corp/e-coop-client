@@ -1,10 +1,4 @@
-import {
-    IBranch,
-    IBranchRequest,
-    IBranchSettingsRequest,
-    IUserOrganization,
-    TEntityId,
-} from '@/types'
+import { IBranch, IBranchRequest, IUserOrganization, TEntityId } from '@/types'
 
 import APIService from './api-service'
 
@@ -63,18 +57,6 @@ export const postBranchByOrganizationId = async (
     return response.data
 }
 
-// Update the branch settings of your currently signed in branch
-export const updateCurrentBranchSettings = async (
-    data: IBranchSettingsRequest
-) => {
-    const response = await APIService.put<IBranchSettingsRequest, IBranch>(
-        '/api/v1/branch/settings',
-        data
-    )
-
-    return response.data
-}
-
 const BranchService = {
     createBranchByOrgId,
     getAllBranches,
@@ -83,7 +65,6 @@ const BranchService = {
     getBranchesById,
     getBranchesByOrganizationId,
     postBranchByOrganizationId,
-    updateCurrentBranchSettings,
 }
 
 export default BranchService

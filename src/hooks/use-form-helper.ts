@@ -71,8 +71,11 @@ export const useFormHelper = <T extends FieldValues>({
         [hiddenFields, readOnly, disabledFields]
     )
 
+    const firstError = Object.values(form.formState.errors)[0]?.message
+
     return {
         isHidden,
+        firstError,
         isDisabled,
         getDisableHideFieldProps,
     }
