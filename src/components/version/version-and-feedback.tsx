@@ -1,8 +1,6 @@
 import { useState } from 'react'
 
 import { softwareUpdates } from '@/constants'
-import { MdExpandMore } from 'react-icons/md'
-import { MdOutlineExpandLess } from 'react-icons/md'
 
 import { Badge } from '@/components/ui/badge'
 import {
@@ -21,6 +19,7 @@ import {
 
 import { cn } from '@/lib/utils'
 
+import { ExpandLessIcon, ExpandMoreIcon } from '../icons'
 import { Button } from '../ui/button'
 import FeedbackForm from './feedback-form'
 import VersionUpdates from './version-updates'
@@ -50,9 +49,9 @@ export const VersionAndFeedBack = () => {
                         </span>
                         {'  ' + softwareUpdates.version}
                         {isOpen ? (
-                            <MdOutlineExpandLess className="size-5" />
+                            <ExpandLessIcon className="size-5" />
                         ) : (
-                            <MdExpandMore className="size-5" />
+                            <ExpandMoreIcon className="size-5" />
                         )}
                     </Badge>
                 </PopoverTrigger>

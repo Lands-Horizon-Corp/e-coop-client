@@ -1,9 +1,12 @@
 import { allErrorMessageExtractor } from '@/helpers'
 import { cn } from '@/lib'
 import { ErrorComponentProps, useRouter } from '@tanstack/react-router'
-import { IoMdArrowBack } from 'react-icons/io'
 
-import { BracketErrorIcon, RefreshIcon } from '@/components/icons'
+import {
+    ArrowLeftIcon,
+    BracketErrorIcon,
+    RefreshIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { IBaseProps } from '@/types'
@@ -52,7 +55,7 @@ const ErrorPage = ({ className, error }: Props) => {
                         className="gap-x-2 rounded-full"
                         onClick={() => router.history.back()}
                     >
-                        <IoMdArrowBack />
+                        <ArrowLeftIcon />
                         Go Back
                     </Button>
                 </div>

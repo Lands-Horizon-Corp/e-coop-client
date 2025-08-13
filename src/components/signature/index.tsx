@@ -7,7 +7,6 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useSignature } from '@/store/signature-store'
 import { format } from 'date-fns'
 import { FileWithPath } from 'react-dropzone'
-import { MdOutlineFileDownload } from 'react-icons/md'
 import SignaturePad from 'react-signature-canvas'
 import Webcam from 'react-webcam'
 
@@ -20,6 +19,7 @@ import {
 
 import {
     CameraIcon,
+    DownloadIcon,
     DrawIcon,
     FullscreenExitIcon,
     FullscreenIcon,
@@ -418,7 +418,7 @@ const Signature = ({
                         size={'sm'}
                         onClick={handleDownloadDrawSignature}
                     >
-                        <MdOutlineFileDownload className="mr-2 size-4" />
+                        <DownloadIcon className="mr-2 size-4" />
                         download
                     </Button>
                 )}

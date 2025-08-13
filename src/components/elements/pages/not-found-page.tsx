@@ -1,8 +1,7 @@
 import { cn } from '@/lib'
 import { NotFoundRouteProps, useRouter } from '@tanstack/react-router'
-import { IoMdArrowBack } from 'react-icons/io'
 
-import { SignPostIcon } from '@/components/icons'
+import { ArrowLeftIcon, SignPostIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { IBaseProps } from '@/types'
@@ -40,7 +39,7 @@ const NotFoundPage = ({ className }: Props) => {
                     className="gap-x-2 rounded-full"
                     onClick={() => router.history.back()}
                 >
-                    <IoMdArrowBack />
+                    <ArrowLeftIcon />
                     Go Back
                 </Button>
             </div>

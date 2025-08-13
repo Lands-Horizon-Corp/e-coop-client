@@ -9,9 +9,13 @@ import {
     FileWithPath,
     useDropzone,
 } from 'react-dropzone'
-import { FaCloudUploadAlt } from 'react-icons/fa'
 
-import { HardDriveUploadIcon, ReplaceIcon, TrashIcon } from '../icons'
+import {
+    HardDriveUploadIcon,
+    ReplaceIcon,
+    TrashIcon,
+    UploadIcon,
+} from '../icons'
 import { Button } from './button'
 import FileTypeIcon from './file-type'
 import { ScrollArea } from './scroll-area'
@@ -131,7 +135,7 @@ const FileUploader = ({
                         aria-label="File upload area"
                     >
                         <input {...getInputProps()} aria-hidden="true" />
-                        <FaCloudUploadAlt className="size-24 text-primary" />
+                        <UploadIcon className="size-24 text-primary" />
                         <p>
                             <span
                                 onClick={openFile}
