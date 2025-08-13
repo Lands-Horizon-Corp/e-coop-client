@@ -45,6 +45,8 @@ const PaymentTypeComboBox = ({
     // Using the provided hook
     const { data: paymentTypes, isLoading } = useGetAllpaymentTypes()
 
+    const selected = paymentTypes?.find((option) => option.id === value)
+
     return (
         <>
             <Popover modal open={open} onOpenChange={setOpen}>
@@ -57,8 +59,7 @@ const PaymentTypeComboBox = ({
                         disabled={disabled || isLoading}
                     >
                         {value ? (
-                            paymentTypes?.find((option) => option.id === value)
-                                ?.name
+                            selected?.name
                         ) : (
                             <span className="text-muted-foreground">
                                 {placeholder}

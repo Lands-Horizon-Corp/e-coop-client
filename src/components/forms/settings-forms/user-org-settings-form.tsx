@@ -4,8 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Path, useForm } from 'react-hook-form'
 
+import PaymentTypeComboBox from '@/components/comboboxes/payment-type-combobox'
+import InfoTooltip from '@/components/elements/info-tooltip'
 import { BillIcon, ShieldCheckIcon, WeightScaleIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import AccountPicker from '@/components/pickers/account-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
@@ -82,13 +85,12 @@ const UserOrgSettingsForm = ({
         onError,
     })
 
-    const onSubmit = form.handleSubmit(
-        async (formData) =>
-            await updateMutation.mutateAsync({
-                id: userOrganizationId,
-                data: formData,
-            })
-    )
+    const onSubmit = form.handleSubmit(async (formData) => {
+        await updateMutation.mutateAsync({
+            id: userOrganizationId,
+            data: formData,
+        })
+    })
 
     const { error, isPending } = updateMutation
 
@@ -132,7 +134,7 @@ const UserOrgSettingsForm = ({
                             name="user_setting_description"
                             label="User Setting Description"
                             render={({ field }) => (
-                                <Input
+                                <Textarea
                                     {...field}
                                     placeholder="Enter user setting description"
                                     disabled={isDisabled(field.name)}
@@ -140,7 +142,17 @@ const UserOrgSettingsForm = ({
                             )}
                         />
 
-                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-3">
+                        <fieldset className="grid gap-x-4 gap-y-3 md:grid-cols-3">
+                            <legend className="py-2 space-y-2">
+                                <p>Transaction Automation</p>
+                                <p className="text-sm text-muted-foreground">
+                                    These fields are used by the system to
+                                    automatically generate and manage official
+                                    receipt (OR) and voucher numbers. They act
+                                    as counters to ensure proper sequencing and
+                                    automation.
+                                </p>
+                            </legend>
                             <FormFieldWrapper
                                 control={form.control}
                                 name="user_setting_start_or"
@@ -200,9 +212,7 @@ const UserOrgSettingsForm = ({
                                     />
                                 )}
                             />
-                        </div>
 
-                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-3">
                             <FormFieldWrapper
                                 control={form.control}
                                 name="user_setting_start_voucher"
@@ -262,6 +272,7 @@ const UserOrgSettingsForm = ({
                                     />
                                 )}
                             />
+
                             <FormFieldWrapper
                                 control={form.control}
                                 name="user_setting_number_padding"
@@ -281,114 +292,248 @@ const UserOrgSettingsForm = ({
                                     />
                                 )}
                             />
-                        </div>
+                        </fieldset>
 
                         <div className="space-y-3">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="allow_withdraw_negative_balance"
-                                render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
-                                            aria-describedby={`${field.name}`}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <BillIcon />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Allow Withdraw Negative
-                                                    Balance
-                                                </Label>
-                                                <p
-                                                    id={`${field.name}`}
-                                                    className="text-xs text-muted-foreground"
-                                                >
-                                                    Allow withdrawal with
-                                                    negative balance for this
-                                                    user organization.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
+                            <fieldset className="space-y-3">
+                                <legend className="py-2 space-y-2">
+                                    <p>Withdrawal and Balance Settings</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        These settings control withdrawal
+                                        behavior and balance requirements for
+                                        the user organization.
+                                    </p>
+                                </legend>
 
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="allow_withdraw_exact_balance"
-                                render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
-                                            aria-describedby={`${field.name}`}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <WeightScaleIcon />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Allow Withdraw Exact Balance
-                                                </Label>
-                                                <p
-                                                    id={`${field.name}`}
-                                                    className="text-xs text-muted-foreground"
-                                                >
-                                                    Allow withdrawal of exact
-                                                    balance amount for this user
-                                                    organization.
-                                                </p>
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="allow_withdraw_negative_balance"
+                                    render={({ field }) => (
+                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                            <Switch
+                                                id={field.name}
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                className="order-1 after:absolute after:inset-0"
+                                                aria-describedby={`${field.name}`}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                            <div className="flex grow items-center gap-3">
+                                                <div className="size-fit rounded-full bg-secondary p-2">
+                                                    <BillIcon />
+                                                </div>
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor={field.name}>
+                                                        Allow Withdraw Negative
+                                                        Balance
+                                                    </Label>
+                                                    <p
+                                                        id={`${field.name}`}
+                                                        className="text-xs text-muted-foreground"
+                                                    >
+                                                        Allow withdrawal with
+                                                        negative balance for
+                                                        this user organization.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )}
-                            />
+                                    )}
+                                />
 
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="maintaining_balance"
-                                render={({ field }) => (
-                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
-                                            aria-describedby={`${field.name}`}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <ShieldCheckIcon />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Maintaining Balance
-                                                </Label>
-                                                <p
-                                                    id={`${field.name}`}
-                                                    className="text-xs text-muted-foreground"
-                                                >
-                                                    Require maintaining minimum
-                                                    balance for this user
-                                                    organization.
-                                                </p>
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="allow_withdraw_exact_balance"
+                                    render={({ field }) => (
+                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                            <Switch
+                                                id={field.name}
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                className="order-1 after:absolute after:inset-0"
+                                                aria-describedby={`${field.name}`}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                            <div className="flex grow items-center gap-3">
+                                                <div className="size-fit rounded-full bg-secondary p-2">
+                                                    <WeightScaleIcon />
+                                                </div>
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor={field.name}>
+                                                        Allow Withdraw Exact
+                                                        Balance
+                                                    </Label>
+                                                    <p
+                                                        id={`${field.name}`}
+                                                        className="text-xs text-muted-foreground"
+                                                    >
+                                                        Allow withdrawal of
+                                                        exact balance amount for
+                                                        this user organization.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )}
-                            />
+                                    )}
+                                />
+
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="maintaining_balance"
+                                    render={({ field }) => (
+                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                            <Switch
+                                                id={field.name}
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                className="order-1 after:absolute after:inset-0"
+                                                aria-describedby={`${field.name}`}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                            <div className="flex grow items-center gap-3">
+                                                <div className="size-fit rounded-full bg-secondary p-2">
+                                                    <ShieldCheckIcon />
+                                                </div>
+                                                <div className="grid gap-2">
+                                                    <Label htmlFor={field.name}>
+                                                        Maintaining Balance
+                                                    </Label>
+                                                    <p
+                                                        id={`${field.name}`}
+                                                        className="text-xs text-muted-foreground"
+                                                    >
+                                                        Require maintaining
+                                                        minimum balance for this
+                                                        user organization.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                />
+                            </fieldset>
+
+                            <fieldset className="space-y-3">
+                                <legend className="py-2 space-y-2">
+                                    <p>Accounting Default Values</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        These settings allow you to configure
+                                        default accounts for payment, deposit,
+                                        and withdrawal transactions.
+                                    </p>
+                                </legend>
+
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="settings_payment_type_default_value_id"
+                                    label={
+                                        <span>
+                                            Default Payment Type{' '}
+                                            <InfoTooltip content="Select the default payment type to be used for payment transactions. This type will be automatically selected during payment operations, ensuring consistency and efficiency." />
+                                        </span>
+                                    }
+                                    render={({ field }) => (
+                                        <PaymentTypeComboBox
+                                            placeholder="Select default payment type"
+                                            value={
+                                                field.value
+                                                    ? field.value
+                                                    : undefined
+                                            }
+                                            onChange={(paymentType) => {
+                                                field.onChange(paymentType?.id)
+                                            }}
+                                        />
+                                    )}
+                                />
+
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="settings_accounting_payment_default_value_id"
+                                    label={
+                                        <span>
+                                            Default Account for Payment{' '}
+                                            <InfoTooltip content="Select the default account to be used for payment transactions. This account will be automatically selected during payment operations." />
+                                        </span>
+                                    }
+                                    render={({ field }) => (
+                                        <AccountPicker
+                                            value={form.getValues(
+                                                'settings_accounting_payment_default_value'
+                                            )}
+                                            onSelect={(account) => {
+                                                field.onChange(account?.id)
+                                                form.setValue(
+                                                    'settings_accounting_payment_default_value',
+                                                    account
+                                                )
+                                            }}
+                                            placeholder="Select default payment account"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                />
+
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="settings_accounting_deposit_default_value_id"
+                                    label={
+                                        <span>
+                                            Default Account for Deposit{' '}
+                                            <InfoTooltip content="Select the default account to be used for deposit transactions. This account will be automatically selected during deposit operations." />
+                                        </span>
+                                    }
+                                    render={({ field }) => (
+                                        <AccountPicker
+                                            value={form.getValues(
+                                                'settings_accounting_deposit_default_value'
+                                            )}
+                                            onSelect={(account) => {
+                                                field.onChange(account?.id)
+                                                form.setValue(
+                                                    'settings_accounting_deposit_default_value',
+                                                    account
+                                                )
+                                            }}
+                                            placeholder="Select default deposit account"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                />
+
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="settings_accounting_withdraw_default_value_id"
+                                    label={
+                                        <span>
+                                            Default Account for Withdrawal{' '}
+                                            <InfoTooltip content="Select the default account to be used for withdrawal transactions. This account will be automatically selected during withdrawal operations." />
+                                        </span>
+                                    }
+                                    render={({ field }) => (
+                                        <AccountPicker
+                                            value={form.getValues(
+                                                'settings_accounting_withdraw_default_value'
+                                            )}
+                                            onSelect={(account) => {
+                                                field.onChange(account?.id)
+                                                form.setValue(
+                                                    'settings_accounting_withdraw_default_value',
+                                                    account
+                                                )
+                                            }}
+                                            placeholder="Select default withdraw account"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                />
+                            </fieldset>
                         </div>
                     </fieldset>
                 </fieldset>

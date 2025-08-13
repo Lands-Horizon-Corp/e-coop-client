@@ -75,6 +75,11 @@ export interface IUserOrganizationSettings {
     allow_withdraw_negative_balance: boolean
     allow_withdraw_exact_balance: boolean
     maintaining_balance: boolean
+
+    settings_accounting_payment_default_value_id?: TEntityId | null
+    settings_accounting_deposit_default_value_id?: TEntityId | null
+    settings_accounting_withdraw_default_value_id?: TEntityId | null
+    settings_payment_type_default_value_id?: TEntityId | null
 }
 
 export interface IUserOrganizationSettingsRequest

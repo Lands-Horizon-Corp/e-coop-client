@@ -127,10 +127,12 @@ const AccountPicker = ({
                                     <RenderIcon icon={Account.icon as TIcon} />
                                 </span>
                             )}
-                            <span className="text-ellipsis text-foreground/80">
+                            <span className="text-ellipsis text-left text-foreground/80">
                                 {Account.name}
                                 <br />
-                                <span>{Account.description}</span>
+                                <span className="text-xs text-muted-foreground/70">
+                                    {Account.description}
+                                </span>
                             </span>
                         </div>
 
@@ -194,10 +196,11 @@ const AccountPicker = ({
                                     {placeholder || 'Select Account'}
                                 </span>
                             ) : (
-                                <span>
+                                <span className="inline-flex gap-x-4 items-center">
                                     <span>{value.name}</span>
-                                    <br />
-                                    <span>{value.description}</span>
+                                    <span className="text-xs text-muted-foreground/70">
+                                        {value.description}
+                                    </span>
                                 </span>
                             )}
                         </span>

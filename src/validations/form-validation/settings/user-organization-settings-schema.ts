@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import { USER_TYPE } from '@/constants'
 
+import { entityIdSchema } from '@/validations/common'
+
 export const userOrganizationSettingsSchema = z.object({
     user_type: z.enum(USER_TYPE),
     description: z.string(),
@@ -26,6 +28,25 @@ export const userOrganizationSettingsSchema = z.object({
     allow_withdraw_negative_balance: z.boolean(),
     allow_withdraw_exact_balance: z.boolean(),
     maintaining_balance: z.boolean(),
+
+    settings_payment_type_default_value_id: entityIdSchema
+        .optional()
+        .nullable(),
+
+    settings_accounting_payment_default_value_id: entityIdSchema
+        .optional()
+        .nullable(),
+    settings_accounting_payment_default_value: z.any().optional().nullable(),
+
+    settings_accounting_deposit_default_value_id: entityIdSchema
+        .optional()
+        .nullable(),
+    settings_accounting_deposit_default_value: z.any().optional(),
+
+    settings_accounting_withdraw_default_value_id: entityIdSchema
+        .optional()
+        .nullable(),
+    settings_accounting_withdraw_default_value: z.any().optional(),
 })
 
 export type TUserOrganizationSettingsFormValues = z.infer<
