@@ -1,7 +1,8 @@
 import React, { memo, useState } from 'react'
 
-import { EmptyIcon, UserPlusIcon } from '@/components/icons'
+import { EmptyIcon, HandShakeHeartIcon, UserPlusIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import SectionTitle from '@/components/member-infos/section-title'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
@@ -26,18 +27,16 @@ interface JointMemberModalProps extends IModalProps {
 const JointMemberPicker = ({
     onSelect,
     memberJointProfile,
-    selectedMemberJointId,
     triggerClassName,
     triggerProps,
+    value,
     ...rest
 }: JointMemberModalProps) => {
     const [openPicker, setOpenPicker] = useState(false)
 
     const selectedJointMember =
         memberJointProfile.find(
-            (joint) =>
-                joint.id === selectedMemberJointId ||
-                joint.id === selectedMemberJointId
+            (joint) => joint.id === value || joint.id === value
         ) || null
 
     const handleSelected = (jointMember: IMemberJointAccount) => {
@@ -56,6 +55,13 @@ const JointMemberPicker = ({
             <Modal
                 open={openPicker}
                 onOpenChange={setOpenPicker}
+                title={
+                    <SectionTitle
+                        title="Joint Accounts"
+                        subTitle="Co-owners of this account that have the access and share  financial responsibility of this account (Select a one joint member )"
+                        Icon={HandShakeHeartIcon}
+                    />
+                }
                 {...rest}
                 className="max-w-[1200px]"
             >

@@ -9,14 +9,12 @@ import ImageNameDisplay from '@/components/elements/image-name-display'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     BadgeCheckIcon,
-    HandShakeHeartIcon,
     IdCardIcon,
     PhoneIcon,
     SignatureLightIcon,
     UserIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import SectionTitle from '@/components/member-infos/section-title'
 import MemberOverallInfo, {
     MemberOverallInfoModal,
 } from '@/components/member-infos/view-member-info'
@@ -46,6 +44,7 @@ type MemberProfileTransactionViewProps = {
     onSelectMember: () => void
     onSelectedJointMember?: (jointMemberId: TEntityId | undefined) => void
     hasTransaction?: boolean
+    viewOnly?: boolean
 }
 
 const MemberProfileTransactionView = ({
@@ -53,6 +52,7 @@ const MemberProfileTransactionView = ({
     onSelectMember,
     onSelectedJointMember,
     hasTransaction,
+    viewOnly = false,
 }: MemberProfileTransactionViewProps) => {
     const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
@@ -101,7 +101,7 @@ const MemberProfileTransactionView = ({
                         <div className="flex-shrink-0">
                             <PreviewMediaWrapper media={memberInfo.media}>
                                 <ImageDisplay
-                                    className="size-20"
+                                    className="size-24"
                                     src={memberInfo.media?.download_url}
                                     fallback={
                                         memberInfo.first_name.charAt(0) ?? '-'
@@ -119,14 +119,16 @@ const MemberProfileTransactionView = ({
                                     View Profile
                                 </Button>
                             </DrawerTrigger>
-                            <Button
-                                size="sm"
-                                className="w-full h-7 min-w-24"
-                                disabled={hasTransaction}
-                                onClick={onSelectMember}
-                            >
-                                select
-                            </Button>
+                            {!viewOnly && (
+                                <Button
+                                    size="sm"
+                                    className="w-full h-7 min-w-24"
+                                    disabled={hasTransaction}
+                                    onClick={onSelectMember}
+                                >
+                                    select
+                                </Button>
+                            )}
                             <DrawerContent className="h-full w-full">
                                 <MemberOverallInfo
                                     className="overflow-y-auto px-5"
@@ -244,24 +246,21 @@ const MemberProfileTransactionView = ({
                         </div>
                     </div>
                 </div>
-                <JointMemberProfileListModal
-                    triggerProps={{
-                        disabled: hasTransaction,
-                    }}
-                    title={
-                        <SectionTitle
-                            title="Joint Accounts"
-                            subTitle="Co-owners of this account that have the access and share  financial responsibility of this account (Select a one joint member )"
-                            Icon={HandShakeHeartIcon}
-                        />
-                    }
-                    onSelect={(jointMember) => {
-                        setSelectedJointMember(jointMember || null)
-                    }}
-                    value={selectedJointMember?.id}
-                    selectedMemberJointId={selectedJointMember?.id}
-                    memberJointProfile={memberInfo.member_joint_accounts ?? []}
-                />
+                {!viewOnly && (
+                    <JointMemberProfileListModal
+                        triggerProps={{
+                            disabled: hasTransaction,
+                        }}
+                        onSelect={(jointMember) => {
+                            setSelectedJointMember(jointMember || null)
+                        }}
+                        value={selectedJointMember?.id}
+                        selectedMemberJointId={selectedJointMember?.id}
+                        memberJointProfile={
+                            memberInfo.member_joint_accounts ?? []
+                        }
+                    />
+                )}
             </GradientBackground>
         </>
     )

@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { formatDate } from '@/helpers'
+import { cn } from '@/lib'
 import { ITransactionResponse } from '@/types/coop-types'
 import { dateAgo, toReadableDateTime } from '@/utils'
 import { useNavigate } from '@tanstack/react-router'
@@ -31,14 +32,14 @@ interface TransactionCardListProps {
     fullPath: string
 }
 
-const formatCurrency = (amount: number): string => {
+export const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('en-PH', {
         style: 'currency',
         currency: 'PHP',
     }).format(amount)
 }
 
-const NoTransactionsFound = () => (
+export const NoTransactionsFound = () => (
     <div className="flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
         <FileText size={48} className="mb-4 text-gray-400" />
         <p className="text-lg font-semibold">No Transactions Found</p>
@@ -48,7 +49,7 @@ const NoTransactionsFound = () => (
     </div>
 )
 
-const TransactionCardSkeleton = () => (
+export const TransactionCardSkeleton = () => (
     <Card className="w-full animate-pulse">
         <CardHeader>
             <div className="flex items-start justify-between">
@@ -94,7 +95,7 @@ interface UserInfoItemProps {
     value: string | number | React.ReactNode
 }
 
-const UserInfoItem: React.FC<UserInfoItemProps> = ({ label, value }) => (
+export const UserInfoItem = ({ label, value }: UserInfoItemProps) => (
     <div className="space-y-1">
         <p className="text-[11px] dark:text-muted-foreground  text-muted-foreground">
             {label}
@@ -108,11 +109,17 @@ const UserInfoItem: React.FC<UserInfoItemProps> = ({ label, value }) => (
 interface UserInfoGridProps {
     data: { label: string; value: string | number | React.ReactNode }[]
     title?: string
+    className?: string
 }
 
-const UserInfoGrid: React.FC<UserInfoGridProps> = ({ data, title }) => {
+export const UserInfoGrid = ({ data, title, className }: UserInfoGridProps) => {
     return (
-        <div className="dark:bg-secondary/30 bg-transparent p-4 dark:rounded-xl">
+        <div
+            className={cn(
+                `dark:bg-secondary/30 bg-transparent p-4 dark:rounded-xl`,
+                className
+            )}
+        >
             <h3 className="text-sm font-semibold text-muted-foreground mb-2">
                 {title}
             </h3>
@@ -129,7 +136,7 @@ const UserInfoGrid: React.FC<UserInfoGridProps> = ({ data, title }) => {
     )
 }
 
-const TransactionDetailsCard = ({
+export const TransactionDetailsCard = ({
     transaction,
 }: TransactionDetailsCardProps) => {
     const {
@@ -246,12 +253,13 @@ const TransactionDetailsCard = ({
         </div>
     )
 }
+
 type TransactionCardListItemProps = {
     item: ITransactionResponse
     onClick?: () => void
 }
 
-const TransactionCardListItem = ({
+export const TransactionCardListItem = ({
     item,
     onClick,
 }: TransactionCardListItemProps) => {
@@ -272,10 +280,12 @@ const TransactionCardListItem = ({
             </div>
             <div className="content grow">
                 <p onClick={() => onClick?.()}>
-                    {item.member_profile?.full_name || 'Unknown Member'} -{' '}
-                    <span className="text-xs rounded-sm bg-secondary px-1.5 py-1">
-                        {item.reference_number}
-                    </span>
+                    {item.member_profile?.full_name || 'Unknown Member'}
+                    {item.reference_number !== '' && (
+                        <span className="text-xs rounded-sm bg-secondary px-1.5 py-1">
+                            - {item.reference_number}
+                        </span>
+                    )}
                     <span className="italic text-xs">{item.source}</span>
                 </p>
                 <div className="flex">
@@ -296,7 +306,7 @@ const TransactionCardListItem = ({
     )
 }
 
-const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
+export const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
     const navigate = useNavigate()
     const [onOpen, setOnOpen] = useState(false)
     const [pagination, setPagination] = useState<PaginationState>({
@@ -369,16 +379,16 @@ const TransactionCardList = ({ fullPath }: TransactionCardListProps) => {
                 </SheetTrigger>
                 <SheetContent className=" min-w-full max-w-[500px] md:min-w-[600px]">
                     <div className="overflow-y-auto ecoop-scroll">
+                        <h1 className="text-lg font-bold border mb-2">
+                            Transaction History
+                            <RefreshButton
+                                className="bg-transparent size-7"
+                                onClick={refetchCurrentTransaction}
+                                isLoading={isLoadingCurrentTransaction}
+                            />
+                        </h1>
                         <ScrollArea>
                             <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
-                                <h1 className="text-lg font-bold">
-                                    Transaction History
-                                    <RefreshButton
-                                        className="bg-transparent size-7"
-                                        onClick={refetchCurrentTransaction}
-                                        isLoading={isLoadingCurrentTransaction}
-                                    />
-                                </h1>
                                 {isNoCurrentTransaction && (
                                     <NoTransactionsFound />
                                 )}

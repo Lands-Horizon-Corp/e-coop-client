@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
 import {
     commaSeparators,
@@ -17,47 +17,48 @@ type AmountFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
     InputClassName?: string
     className?: string
 }
-const AmountField = ({
-    value,
-    onChange,
-    InputClassName,
-    className,
-    ...field
-}: AmountFieldProps) => {
-    const formattedValue =
-        value !== undefined && value !== null
-            ? commaSeparators(value.toString())
-            : ''
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = sanitizeNumberInput(e.target.value)
-        if (isValidDecimalInput(rawValue)) {
-            onChange?.(rawValue)
-        }
-    }
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-        if (onChange) {
-            formatNumberOnBlur(e.target.value, onChange)
-        }
-    }
+const AmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
+    ({ value, onChange, InputClassName, className, ...field }, ref) => {
+        const formattedValue =
+            value !== undefined && value !== null
+                ? commaSeparators(value.toString())
+                : ''
 
-    return (
-        <div className={cn('relative w-full', className)}>
-            <Input
-                {...field}
-                value={formattedValue}
-                className={cn(
-                    'h-16 rounded-2xl pl-8 pr-10 text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',
-                    InputClassName
-                )}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                type="text"
-                placeholder="Enter the payment amount"
-            />
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary after:content-['₱']"></span>
-        </div>
-    )
-}
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const rawValue = sanitizeNumberInput(e.target.value)
+            if (isValidDecimalInput(rawValue)) {
+                onChange?.(rawValue)
+            }
+        }
+
+        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+            if (onChange) {
+                formatNumberOnBlur(e.target.value, onChange)
+            }
+        }
+
+        return (
+            <div className={cn('relative w-full', className)}>
+                <Input
+                    {...field}
+                    ref={ref}
+                    value={formattedValue}
+                    className={cn(
+                        'h-16 rounded-2xl pl-8 pr-10 text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',
+                        InputClassName
+                    )}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="text"
+                    placeholder="Enter the payment amount"
+                />
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary after:content-['₱']"></span>
+            </div>
+        )
+    }
+)
+
+AmountField.displayName = 'AmountField'
 
 export default AmountField

@@ -129,6 +129,8 @@ import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCente
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/view-employees'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/roles-management'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/permission-management'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/quick-transfer/withdraw'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/quick-transfer/deposit'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/general-ledger-definition'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/financial-statement'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/cash-count'
@@ -967,6 +969,24 @@ const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagemen
     } as any,
   )
 
+const OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawImport.update(
+    {
+      id: '/(employee)/transaction/quick-transfer/withdraw',
+      path: '/transaction/quick-transfer/withdraw',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+
+const OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositImport.update(
+    {
+      id: '/(employee)/transaction/quick-transfer/deposit',
+      path: '/transaction/quick-transfer/deposit',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+
 const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute =
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionImport.update(
     {
@@ -1742,6 +1762,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
     }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit'
+      path: '/transaction/quick-transfer/deposit'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw'
+      path: '/transaction/quick-transfer/withdraw'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteImport
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management'
       path: '/employees/permission-management'
@@ -2078,6 +2112,8 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -2219,6 +2255,10 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute:
       OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute:
@@ -2379,6 +2419,8 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
+  '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
+  '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -2499,6 +2541,8 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
+  '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
+  '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
   '/org/$orgname/branch/$branchname/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -2625,6 +2669,8 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesPermissionManagementRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesRolesManagementRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
@@ -2751,6 +2797,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
+    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit'
+    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
     | '/org/$orgname/branch/$branchname/employees/roles-management'
     | '/org/$orgname/branch/$branchname/employees/view-employees'
@@ -2870,6 +2918,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
+    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit'
+    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw'
     | '/org/$orgname/branch/$branchname/employees/permission-management'
     | '/org/$orgname/branch/$branchname/employees/roles-management'
     | '/org/$orgname/branch/$branchname/employees/view-employees'
@@ -2994,6 +3044,8 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees'
@@ -3332,6 +3384,8 @@ export const routeTree = rootRoute
         "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count",
         "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement",
         "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition",
+        "/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit",
+        "/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/roles-management",
         "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees",
@@ -3590,6 +3644,14 @@ export const routeTree = rootRoute
     },
     "/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition": {
       "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/maintenance/general-ledger-definition.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/quick-transfer/deposit.tsx",
+      "parent": "/org/$orgname/branch/$branchname"
+    },
+    "/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw": {
+      "filePath": "org/$orgname/branch.$branchname/(employee)/transaction/quick-transfer/withdraw.tsx",
       "parent": "/org/$orgname/branch/$branchname"
     },
     "/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/permission-management": {
