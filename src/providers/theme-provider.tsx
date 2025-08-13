@@ -55,30 +55,47 @@ export const ThemeProvider = ({
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
         const handleThemeChange = (event: MediaQueryListEvent) => {
-            removeClassTheme(root)
-            if (event.matches) handleSetTheme(root, 'dark')
-            else handleSetTheme(root, 'light')
+            if (theme === 'system') {
+                removeClassTheme(root)
+                if (event.matches) handleSetTheme(root, 'dark')
+                else handleSetTheme(root, 'light')
+            }
         }
 
         if (theme === 'system') {
-            mediaQuery.addEventListener('change', handleThemeChange)
-            const systemTheme = window.matchMedia(
-                '(prefers-color-scheme: dark)'
-            ).matches
-                ? 'dark'
-                : 'light'
+            if (mediaQuery.addEventListener) {
+                mediaQuery.addEventListener('change', handleThemeChange)
+            } else {
+                mediaQuery.addListener(handleThemeChange) // Fallback for older browsers
+            }
 
+            const systemTheme = mediaQuery.matches ? 'dark' : 'light'
             handleSetTheme(root, systemTheme)
-            root.classList.add(systemTheme)
-            return
+        } else {
+            handleSetTheme(root, theme)
         }
-
-        handleSetTheme(root, theme)
 
         return () => {
-            mediaQuery.removeEventListener('change', handleThemeChange)
+            if (mediaQuery.removeEventListener) {
+                mediaQuery.removeEventListener('change', handleThemeChange)
+            } else {
+                mediaQuery.removeListener(handleThemeChange)
+            }
         }
     }, [theme])
+
+    useEffect(() => {
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === storageKey && event.newValue) {
+                setTheme(event.newValue as Theme)
+            }
+        }
+
+        window.addEventListener('storage', handleStorageChange)
+        return () => {
+            window.removeEventListener('storage', handleStorageChange)
+        }
+    }, [storageKey])
 
     const value = {
         theme,
