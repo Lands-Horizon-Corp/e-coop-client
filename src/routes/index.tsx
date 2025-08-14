@@ -1,3 +1,4 @@
+import BankCategoryInstance from "@/data-layer/bank";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -5,8 +6,9 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
+    const { data, isLoading } = BankCategoryInstance.useGetAll({
+        showMessage : true,
+    });
 
-    
-
-    return <div>Hello "/"!</div>;
+    return <div>Hello "/"! {isLoading ? 'd' : 's'}</div>;
 }

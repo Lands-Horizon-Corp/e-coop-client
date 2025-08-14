@@ -8,7 +8,7 @@ import App from "./app";
 
 // const isDevelopment =
 //     typeof import.meta.env !== "undefined" &&
-//     import.meta.env.VITE_APP_ENV === "development";
+//     import.meta.env.APP_ENV === "development";
 
 // if (!isDevelopment) {
 //     disableReactDevTools();

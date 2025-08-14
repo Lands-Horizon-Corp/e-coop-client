@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { MediaResponseSchema } from "./media";
 import { entityIdSchema } from "./common";
+import { DataLayerFactory } from "@/providers/repository";
 // import { UserResponseSchema } from './user'
 // import { OrganizationResponseSchema } from './organization'
 // import { BranchResponseSchema } from './branch'
@@ -33,5 +34,23 @@ export const BankRequestSchema = z.object({
 });
 
 // Infer the TypeScript types from the Zod schemas
-export type IBankResponse = z.infer<typeof BankResponseSchema>;
+export type IBank = z.infer<typeof BankResponseSchema>;
 export type IBankRequest = z.infer<typeof BankRequestSchema>;
+
+export class BankCategory extends DataLayerFactory<IBank, IBankRequest> {
+    constructor() {
+        super("/api/v1/categoryx", "category");
+    }
+
+    // add here ur csutom
+    useGeneralLedger({
+        mode,
+        ...args
+    }: { mode: "" } & Parameters<BankCategory["useGetAll"]>[0]) {
+        return this.useGetAll(args);
+    }
+}
+
+const BankCategoryInstance = new BankCategory();
+
+export default BankCategoryInstance;

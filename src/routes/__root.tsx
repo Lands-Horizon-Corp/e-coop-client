@@ -14,7 +14,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 // import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
 // import ConfirmModal from '@/components/modals/confirm-modal'
 // import InfoModal from '@/components/modals/info-modal'
-// import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from '@/components/ui/sonner'
 
 // import { useAuthContext } from '@/hooks/api-hooks/use-auth'
 // import { useNatsConnect } from '@/hooks/use-pubsub'
@@ -54,13 +54,13 @@ function RootLayout() {
     return (
         <div className="relative">
             <DndProvider backend={HTML5Backend}>
-                {/* <Toaster
+                <Toaster
                     expand
                     richColors
                     closeButton
                     theme="system"
                     className="z-[9999]"
-                /> */}
+                />
                 <Outlet />
                 {/* <ConnectionProvider />
                 <CookieConsent />
