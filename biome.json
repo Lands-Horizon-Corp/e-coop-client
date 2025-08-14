@@ -1,0 +1,67 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+    "extends": [
+        "ultracite"
+    ],
+    "files": {
+        "includes": [
+            "src/**/*.{ts,tsx}",
+            "!/package.json"
+        ],
+        "ignoreUnknown": true
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "linter": {
+        "enabled": true,
+        "includes": [
+            "**",
+            "!test/**"
+        ],
+        "rules": {
+            "recommended": true,
+            "a11y": {
+                "noAccessKey": "error",
+                "noAriaHiddenOnFocusable": "error"
+            },
+            "nursery": {
+                "useSortedClasses": "error"
+            },
+            "correctness": {
+                "noUnusedImports": "error",
+                "noUnusedVariables": "error"
+            },
+            "style": {
+                "noDefaultExport": "off",
+                "noImplicitBoolean": "warn",
+                "useBlockStatements": "error"
+            },
+            "suspicious": {
+                "noDoubleEquals": "error",
+                "noAsyncPromiseExecutor": "error"
+            },
+            "complexity": {
+                "useFlatMap": "warn"
+            }
+        }
+    },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on",
+                "useSortedAttributes": "on",
+                "useSortedKeys": "on",
+                "useSortedProperties": "on"
+            }
+        }
+    },
+    "javascript": {
+        "formatter": {
+            "quoteStyle": "single",
+            "jsxQuoteStyle": "single"
+        }
+    },
+}
