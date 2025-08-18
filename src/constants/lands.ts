@@ -1,4 +1,4 @@
-import { LandsTeamMember } from '@/types'
+import { LandsTeamMember } from '@/types';
 
 export const LANDS_TEAM: LandsTeamMember[] = [
     {
@@ -53,4 +53,4 @@ export const LANDS_TEAM: LandsTeamMember[] = [
         instagramUrl:
             'https://www.instagram.com/rojanyepes?utm_source=ig_web_button_share_sheet&igsh=MWFyYjIwYjZvb3gzMg==',
     },
-]
+];

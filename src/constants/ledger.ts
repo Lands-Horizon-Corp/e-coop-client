@@ -1,4 +1,4 @@
-export const TYPES_OF_PAYMENT_TYPES = ['cash', 'check', 'online'] as const
+export const TYPES_OF_PAYMENT_TYPES = ['cash', 'check', 'online'] as const;
 
 export const GENERAL_LEDGER_SOURCES = [
     'withdraw',
@@ -8,6 +8,6 @@ export const GENERAL_LEDGER_SOURCES = [
     'adjustment',
     'journal voucher',
     'check voucher',
-] as const
+] as const;
 
-export const GENERAL_LEDGER_DEFINITION_MAX_DEPTH = 3
+export const GENERAL_LEDGER_DEFINITION_MAX_DEPTH = 3;

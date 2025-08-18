@@ -1,6 +1,6 @@
-import { BugIcon, PlantGrowthIcon } from '@/components/icons'
+import { BugIcon, PlantGrowthIcon } from '@/components/icons';
 
-import { SoftwareUpdates, UpdateStatus } from '@/types'
+import { SoftwareUpdates, UpdateStatus } from '@/types';
 
 export const softwareUpdates: SoftwareUpdates = {
     name: 'e-Coop Beta',
@@ -19,4 +19,4 @@ export const softwareUpdates: SoftwareUpdates = {
             Icon: <BugIcon />,
         },
     ],
-}
+};

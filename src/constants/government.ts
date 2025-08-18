@@ -9,4 +9,4 @@ export const philippinesCards = [
     { value: 'voters_id', text: 'Voter’s ID' },
     { value: 'national_id', text: 'PhilSys National ID' },
     { value: 'prc', text: 'Professional Regulation Commission (PRC) ID' },
-]
+];

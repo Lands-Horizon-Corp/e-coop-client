@@ -1,18 +1,18 @@
 // import { useTheme } from "next-themes"
-import { Toaster as Sonner } from 'sonner'
+import { Toaster as Sonner } from 'sonner';
 
-import { useTheme } from '@/providers/theme-provider'
-import { createPortal as yeetToDOM } from 'react-dom'
+import { useTheme } from '@/providers/theme-provider';
+import { createPortal as yeetToDOM } from 'react-dom';
 
-type ToasterProps = React.ComponentProps<typeof Sonner>
+type ToasterProps = React.ComponentProps<typeof Sonner>;
 
 const Toasterize = ({ ...props }: ToasterProps) => {
-    const { theme = 'system' } = useTheme()
+    const { theme = 'system' } = useTheme();
 
     return (
         <Sonner
             theme={theme as ToasterProps['theme']}
-            className="toaster group"
+            className='toaster group'
             toastOptions={{
                 classNames: {
                     toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
@@ -25,11 +25,11 @@ const Toasterize = ({ ...props }: ToasterProps) => {
             }}
             {...props}
         />
-    )
-}
+    );
+};
 
 const Toaster = (props: ToasterProps) => {
-    return <>{yeetToDOM(<Toasterize {...props} />, document.body)}</>
-}
+    return <>{yeetToDOM(<Toasterize {...props} />, document.body)}</>;
+};
 
-export { Toaster }
+export { Toaster };

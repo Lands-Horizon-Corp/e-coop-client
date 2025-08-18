@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ecoop OTP Verification</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      padding: 0;
+      margin: 0;
+    }
+
+    img {
+      border: none;
+      -ms-interpolation-mode: bicubic;
+      max-width: 100%;
+    }
+
+    body {
+      background-color: #eaebed;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: auto;
+      padding: 0;
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    table {
+      border-collapse: separate;
+      min-width: 100%;
+      width: 100%;
+    }
+
+    table td {
+      font-family: sans-serif;
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    .body {
+
+      width: 100%;
+    }
+
+    .container {
+      display: block;
+      Margin: 0 auto !important;
+      width: 600px;
+      height: 891px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding: 30px;
+      background-image:url('https://s3.ap-southeast-2.amazonaws.com/horizon.assets/download.png');
+    }
+
+    .content {
+      box-sizing: border-box;
+      display: block;
+      Margin: 0 auto;
+      font-family: Raleway;
+    }
+
+    .main {
+      border-radius: 3px;
+      width: 100%;
+    }
+
+    .header {
+      padding: 20px 0;
+    }
+
+    .footer {
+      clear: both;
+      Margin-top: 70px;
+      text-align: center;
+      width: 100%;
+      padding: 0px 30px;
+    }
+
+    .footer td,
+    .footer p,
+    .footer span,
+    .footer a {
+      color: #1A1A1A;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: #06090f;
+      font-family: sans-serif;
+      font-weight: 400;
+      line-height: 1.4;
+      margin: 0;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 35px;
+      font-weight: 300;
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    p,
+    ul,
+    ol {
+      font-family: sans-serif;
+      font-size: 14px;
+      font-weight: normal;
+      margin: 0;
+      margin-bottom: 15px;
+    }
+
+    p li,
+    ul li,
+    ol li {
+      list-style-position: inside;
+      margin-left: 5px;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+   
+    .align-center {
+      text-align: center;
+    }
+
+    .title {
+      text-align: center;
+      font-weight: 700;
+      font-family: sans-serif;
+      font-weight: 600;
+      font-size: xx-large;
+      color: black;
+    }
+
+    .sub-title {
+      text-align: center;
+      font-family: sans-serif;
+      color: black;
+      font-size:medium;
+    }
+
+    .border {
+      border: 1px solid black;
+    }
+
+    .code tbody tr td {
+      font-size: 35px;
+      font-weight: 600;
+      color: #CBA50A;
+      padding: 20px 20px;
+    }
+    .note tbody tr td {
+      font-size: 12px;
+      font-weight: 600;
+      color: #484848;
+      padding: 20px 20px;
+    }
+  </style>
+</head>
+
+<body >
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body ">
+    <tr>
+      <td class="container">
+        <div class="header">
+          <table style="margin-top: 100px;" role="presentation" border="0" cellpadding="" cellspacing="0" width="100%">
+            <tr>
+              <td class="align-center" width="100%">
+                <a href="/">
+                  <img style="width: 150px; height: auto;"
+                    src="https://s3.ap-southeast-2.amazonaws.com/horizon.assets/ecoop-logo.png">
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="content ">
+          <table role="presentation" class="main">
+            <tr>
+              <td class="wrapper">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td>
+                      <p class="title">Confirm your registration</p>
+                      <p class="sub-title">Here's is your account number:</p>
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="code">
+                        <tbody>
+                          <tr>
+                            <td align="center">
+                              {{.otp}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="note">
+                              <tbody>
+                                <tr>
+                                  <td align="center">
+                                        if you did not initiate this request, please ignore it and no further action will be taken.
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <div class="footer">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="15">
+              <tr>
+                <td class="content-block">
+                  <span class="apple-link">Please contact us if you have any questions via phone at:09311783911 or email
+                    us at: e-Coop@gmail.com</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="content-block">
+                  <a href="https://facebook.com">
+                    <img
+                      src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGbSURBVHgB5VXNbYNQDDYoyiEneogUJRe6AZmg7QbJBtmg3aCwQTtBmgmSTtB2A7pBLvmRcggnkDhAP1NAL/AekJRT80nW+5H9PtvYhui/QKtTGAwG95qmTSB3OJoQA+LFcexi/cb6st/v1xeRGECv15tjO6F6vEVR5KjIpCSj0ciCh8vU86ZYg+hBRlQiQXpMXdc/ziTI4IFoXCTSi1pVBIgu8db3/Zvtdqux4NoRVAzYL0tvigekaUYVEYCE0/HpAaSGNRwObSUJHnmuMH6vqyIBj+Khk23Sj21WGLqC7gy68wpdo9/vW4fDIbHJI0GuTWqIGmcSdLtdK9vnJGg2i1qE6IjeQN9JK8nOLnivqC4pxEjW1CLE98RIXGoRYRjm7510POr7SL8DUAYnS1naB8py56bd7Xa32bn4TV6pBYDEFs8nJKmnf0obR4GmXShJGOiXKRaPLgAT8Ogp3pdIeHTwJGUDOpMAw3EqGz3SPmFF9giyoGZYBUEw3mw20lR3VFapRzP8X2zU/JMYGfZH3LlYvyArnsx0FfgBoCXjF3v8Hr8AAAAASUVORK5CYII=" />
+                  </a>
+                  <a href="https://gmail.com">
+                    <img
+                      src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFaSURBVHgB7ZTLbYNAEIYXZAvBiQsSjwvpIOkAd5AS1hU4HRhXEKcC4w6cCuwOXAJceBw5ASfIPwobIScOoFiRD3zSamd3Z+afHbNmbOLekLoLy7KOkiR57O8ciqJY5oAWsth1HIffSIB4VlWVi8VMGE3TuK0ZQcyP43jPRoJOrCgWpo5ZF/vyD74uBANqnWmaLhsA+bWt3pLA5fk3EQjsaVDrZFkObdteX0uuAzqH35n8EfdGo1cEzlGapryu6wUCImz5SBSiWu+iek/TtDOdwy8nf8S9ID7vFRFkWXZC0APMDYaLao8Q2xmG8YiP5JXW7LM1m7Isn8j/Wq4Z6yFJEh9VB6hwh8Hn8zlH5dTWE8YSyaO+HL0i7a0iTAuIcdxgRb8ZbrllAxkk0hELMAVsJDL7ByaRUXT/u3J8omSuf3vlQ8HjDIX9dRNFUQJMB3YD6A1VVfXOJu6WD01cjvyB+3yWAAAAAElFTkSuQmCC" />
+                  </a>
+                  <a href="https://instagram.com">
+                    <img
+                      src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABMAAAAUCAYAAABvVQZ0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIYSURBVHgBpVTLbcJAELUtI4G4kAMSn4tTAS4BKiCpIE4FOBVgKgAqCFQQqCB0EDrIXvhIXHwC8XXeI7vJYpzISkaydz3refvm7eyYRsyKxaJr27YTRVHB+NnE8XgMV6vVVHeaalIul1umaQaY/gZyBYpN+4vFovcFVqlU2hgCPCEWh3jUjiIejQ0LZI3RxWcTo8PY+XzeMavVqovFNzim6/W6EcKMFFYqlZxsNhvudrtXfLqn06lhYeJxcb/fP6YFAgHfsqz37XbrAeRJMr6z8VHD5EpMGeSBdVMdBgAGs9lsiBgGn/9ZLpcTyEQSNZsaUCsdpADL5XIvAKlLl6A2/MZBeZvN5h4pjgAk5HrIdaZJQYUOls/n21is86Sg4w1O6xZsbuHr04+N2hqQochYRoKwAPExnQLEVzoyGCn6WJsA0Cd7FQPfN5hMVZkjfxgayTbmC2m68QVLR/6vXaWJHdWpNpMCkMWDnIpEMD1NIUSohMbJdakh/dQIpdLFlEXejx3A2Ww5XtzHTCYToCBZfz4fgKrSoCQTlEYQY+tgCG2Whbxnhs4OQwOsPC2tKcqDtZV0MJ/lBeo9VHCEwLrxB+PdZjzY9yz0pRGduCpdvXbSGP8Ho2fOD4fDQLWgAAPbEPvTmC2I91WVjGw7qnwc6XOlBCTQQQsK9ObIqm9JMdMaN+xcNEfdqAFSLygGSUbWkIXX66LTfADbUSSdjSaGEQAAAABJRU5ErkJggg==" />
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td class="content-block">
+                  @ 2024 e-Coop. All Rights Reserved.
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</body>
+</html>

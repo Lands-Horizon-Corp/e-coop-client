@@ -1,8 +1,6 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
-    "extends": [
-        "ultracite"
-    ],
+    "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+    "extends": [],
     "files": {
         "includes": [
             "src/**/*.{ts,tsx}",
@@ -28,16 +26,18 @@
                 "noAriaHiddenOnFocusable": "error"
             },
             "nursery": {
-                "useSortedClasses": "error"
+                "useSortedClasses": "on"
             },
             "correctness": {
                 "noUnusedImports": "error",
-                "noUnusedVariables": "error"
+                "noUnusedVariables": "error",
+                "useExhaustiveDependencies": "error",
+                "useHookAtTopLevel": "error"
             },
             "style": {
                 "noDefaultExport": "off",
                 "noImplicitBoolean": "warn",
-                "useBlockStatements": "error"
+                "useBlockStatements": "off"
             },
             "suspicious": {
                 "noDoubleEquals": "error",
@@ -51,10 +51,10 @@
     "assist": {
         "actions": {
             "source": {
-                "organizeImports": "on",
-                "useSortedAttributes": "on",
-                "useSortedKeys": "on",
-                "useSortedProperties": "on"
+                "organizeImports": "off",
+                "useSortedAttributes": "off",
+                "useSortedKeys": "off",
+                "useSortedProperties": "off"
             }
         }
     },
@@ -63,5 +63,5 @@
             "quoteStyle": "single",
             "jsxQuoteStyle": "single"
         }
-    },
+    }
 }

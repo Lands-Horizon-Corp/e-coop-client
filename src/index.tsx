@@ -1,10 +1,10 @@
 import './index.css';
-import { StrictMode } from "react";
+import { StrictMode } from 'react';
 
 // import { disableReactDevTools } from "@fvilers/disable-react-devtools";
-import { createRoot } from "react-dom/client";
+import { createRoot } from 'react-dom/client';
 
-import App from "./app";
+import App from './app';
 
 // const isDevelopment =
 //     typeof import.meta.env !== "undefined" &&
@@ -14,8 +14,8 @@ import App from "./app";
 //     disableReactDevTools();
 // }
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <App />
-    </StrictMode>
+    </StrictMode>,
 );

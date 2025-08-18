@@ -9,12 +9,12 @@ export const PERMISSION_BASE_ACTIONS = [
     'OwnUpdate',
     'OwnDelete',
     'OwnExport',
-] as const
+] as const;
 
 export const PERMISSION_ALL_ACTIONS: {
-    action: (typeof PERMISSION_BASE_ACTIONS)[number]
-    label: string
-    description: string
+    action: (typeof PERMISSION_BASE_ACTIONS)[number];
+    label: string;
+    description: string;
 }[] = [
     {
         action: 'Create',
@@ -62,7 +62,7 @@ export const PERMISSION_ALL_ACTIONS: {
         label: 'Own Export',
         description: 'Allows exporting own resources',
     },
-] as const
+] as const;
 
 export const PERMISSION_BASE_RESOURCE = [
     'User',
@@ -85,15 +85,15 @@ export const PERMISSION_BASE_RESOURCE = [
     'Timesheet',
     'Footstep',
     'Approvals',
-] as const
+] as const;
 
-type ActionType = (typeof PERMISSION_ALL_ACTIONS)[number]['action']
+type ActionType = (typeof PERMISSION_ALL_ACTIONS)[number]['action'];
 
 export const PERMISSION_ALL_RESOURCE_ACTION: {
-    resource: (typeof PERMISSION_BASE_RESOURCE)[number]
-    label: string
-    description: string
-    supportedActions: ActionType[]
+    resource: (typeof PERMISSION_BASE_RESOURCE)[number];
+    label: string;
+    description: string;
+    supportedActions: ActionType[];
 }[] = [
     {
         resource: 'MemberType',
@@ -101,7 +101,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Classification type for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -111,7 +111,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Groupings of members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -121,7 +121,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Centers associated with members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -131,7 +131,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Gender classification for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -141,7 +141,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Occupational classification for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -151,7 +151,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'General classification for members',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -161,7 +161,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Profile details of a member',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -177,7 +177,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Bank-related resources',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -187,7 +187,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Holiday schedules and information',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -197,7 +197,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Bills and coin denomination settings',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -207,7 +207,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Loan details and management',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -217,7 +217,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Status information for loans',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -227,7 +227,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Purpose classification for loans',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -237,7 +237,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Batch processing for transactions',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -247,7 +247,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Codes for inviting new members/users',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -257,7 +257,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Timesheet entries (time in/out)',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
@@ -267,8 +267,8 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         description: 'Footstep tracking',
         supportedActions: [
             ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
+                (val) => !['Approve'].includes(val),
             ),
         ],
     },
-]
+];

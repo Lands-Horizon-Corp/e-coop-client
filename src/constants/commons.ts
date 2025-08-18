@@ -1,8 +1,8 @@
-export const PASSWORD_MIN_LENGTH = 8
+export const PASSWORD_MIN_LENGTH = 8;
 
-export const HELP_CONTACT = '09123456789'
+export const HELP_CONTACT = '09123456789';
 
-export const PICKERS_SELECT_PAGE_SIZE = 100 // Use for Selects or Pickers with Filter/Pagination fetching
+export const PICKERS_SELECT_PAGE_SIZE = 100; // Use for Selects or Pickers with Filter/Pagination fetching
 export const predefinedSuffixes = [
     'Jr.',
     'Sr.',
@@ -13,7 +13,7 @@ export const predefinedSuffixes = [
     'Ph.D.',
     'M.D.',
     'Esq.',
-] as const
+] as const;
 
 export const FAMILY_RELATIONSHIP = [
     'Father',
@@ -59,7 +59,7 @@ export const FAMILY_RELATIONSHIP = [
     'Adopted Daughter',
     'Ward',
     'Other',
-] as const
+] as const;
 
 export const AccountClosureReasons = [
     'Voluntary Withdrawal',
@@ -92,7 +92,7 @@ export const AccountClosureReasons = [
     'Inheritance or Windfall Allowing Independence',
     'Shifting Personal Values or Priorities',
     'Formation of a New, More Suitable Cooperative',
-] as const
+] as const;
 
 export const EDUCATIONAL_ATTAINMENT = [
     'elementary (incomplete)',
@@ -109,16 +109,16 @@ export const EDUCATIONAL_ATTAINMENT = [
     'doctorate (incomplete)',
     'doctorate graduate',
     'others',
-] as const
+] as const;
 
-export const FEEDBACK_TYPE = ['bug', 'feature', 'general'] as const
+export const FEEDBACK_TYPE = ['bug', 'feature', 'general'] as const;
 
 export const GENERAL_STATUS = [
     'pending',
     'for review',
     'verified',
     'not allowed',
-] as const
+] as const;
 
 export const CIVIL_STATUS = [
     'married',
@@ -127,13 +127,13 @@ export const CIVIL_STATUS = [
     'divorced',
     'separated',
     'civil partnership',
-] as const
+] as const;
 
-export const USER_TYPE = ['owner', 'employee', 'member', 'ban'] as const
+export const USER_TYPE = ['owner', 'employee', 'member', 'ban'] as const;
 
 export const USER_ORG_APPLICATION_STATUS = [
     'pending',
     'reported',
     'accepted',
     'ban',
-] as const
+] as const;
