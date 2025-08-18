@@ -1,10 +1,9 @@
-import { IBatchFundingRequest } from "../batch-funding/batch-funding.types"
-import { IBranch } from "../branch"
-import { TEntityId, ITimeStamps, IAuditable, IPaginatedResult } from "../common"
-import { IMedia } from "../media/media.types"
-import { IOrganization } from "../organization"
-import { IUserBase } from "../user/user.types"
-
+import { IBatchFundingRequest } from '../batch-funding/batch-funding.types'
+import { IBranch } from '../branch'
+import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
+import { IMedia } from '../media/media.types'
+import { IOrganization } from '../organization'
+import { IUserBase } from '../user/user.types'
 
 export type TBatchBalanceStatus =
     | 'balanced'

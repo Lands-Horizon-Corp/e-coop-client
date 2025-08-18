@@ -1,1 +1,1 @@
-export * from "./disbursement-transaction.types";
+export * from './disbursement-transaction.types'

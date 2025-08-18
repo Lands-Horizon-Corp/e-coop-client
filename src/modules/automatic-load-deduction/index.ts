@@ -1,1 +1,1 @@
-export * from "./automatic-load-deduction.types";
+export * from './automatic-load-deduction.types'

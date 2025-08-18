@@ -1,1 +1,1 @@
-export * from "./branch-settings.types";
+export * from './branch-settings.types'

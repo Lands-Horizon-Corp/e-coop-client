@@ -1,6 +1,6 @@
-import { IAccount } from "../account"
-import { IBaseEntityMeta, TEntityId, IPaginatedResult } from "../common"
-import { IMemberProfile } from "../member-profile/member-profile.types"
+import { IAccount } from '../account'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '../common'
+import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberAccountingLedger extends IBaseEntityMeta {
     id: TEntityId

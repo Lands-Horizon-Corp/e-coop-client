@@ -3,10 +3,10 @@ export const formatNumber = (
     minimumFractionDigits = 0,
     maximumFractionDigits = 2
 ) => {
-    if (Number.isNaN(value)) return "...";
-    return value.toLocaleString("en-US", {
+    if (Number.isNaN(value)) return '...'
+    return value.toLocaleString('en-US', {
         useGrouping: true,
         minimumFractionDigits,
         maximumFractionDigits,
-    });
-};
+    })
+}

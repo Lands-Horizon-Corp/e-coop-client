@@ -1,1 +1,1 @@
-export * from "./transaction-batch.types";
+export * from './transaction-batch.types'

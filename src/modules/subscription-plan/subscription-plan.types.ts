@@ -1,9 +1,6 @@
-import z from "zod";
-import {
-  entityIdSchema,
-  IPaginatedResult,
-} from "../common";
+import z from 'zod'
 
+import { IPaginatedResult, entityIdSchema } from '../common'
 import { IAuditable, ITimeStamps, TEntityId } from '../common'
 
 export interface ISubscriptionPlan extends ITimeStamps, IAuditable {
@@ -52,18 +49,16 @@ export interface ISubscriptionPlanRequest {
 export interface ISubscriptionPlanPaginated
     extends IPaginatedResult<ISubscriptionPlan> {}
 
-
 export const SubscriptionPlanRequestSchema = z.object({
-  id: entityIdSchema.optional(),
-  name: z.string().min(1).max(255),
-  description: z.string().min(1),
-  cost: z.number().positive(),
-  timespan: z.number().int().positive(),
-  max_branches: z.number().int().nonnegative(),
-  max_employees: z.number().int().nonnegative(),
-  max_members_per_branch: z.number().int().nonnegative(),
-  discount: z.number().nonnegative().optional().default(0),
-  yearly_discount: z.number().nonnegative().optional().default(0),
-  // organizations: z.array(OrganizationResponseSchema).optional(),
-});
-
+    id: entityIdSchema.optional(),
+    name: z.string().min(1).max(255),
+    description: z.string().min(1),
+    cost: z.number().positive(),
+    timespan: z.number().int().positive(),
+    max_branches: z.number().int().nonnegative(),
+    max_employees: z.number().int().nonnegative(),
+    max_members_per_branch: z.number().int().nonnegative(),
+    discount: z.number().nonnegative().optional().default(0),
+    yearly_discount: z.number().nonnegative().optional().default(0),
+    // organizations: z.array(OrganizationResponseSchema).optional(),
+})

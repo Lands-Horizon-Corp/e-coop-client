@@ -1,1 +1,1 @@
-export * from "./loan-tag.types";
+export * from './loan-tag.types'

@@ -1,4 +1,4 @@
-import type { IconBaseProps, IconType } from 'react-icons/lib';
+import type { ICONS } from '@/constants'
 import {
     AiOutlineFullscreenExit as FullscreenExitIcon,
     AiOutlineFullscreen as FullscreenIcon,
@@ -10,14 +10,14 @@ import {
     AiOutlineRotateLeft as RotateBoxLeftIcon,
     AiOutlineRotateRight as RotateBoxRightIcon,
     AiOutlineClear as SmallBrushIcon,
-} from 'react-icons/ai';
-import { BiErrorCircle as WarningIcon } from 'react-icons/bi';
+} from 'react-icons/ai'
+import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
 import {
     BsRocketTakeoff as BsRocketTakeoffIcon,
     BsBuildingGear as BuildingCogIcon,
     BsLayoutSidebarInset as SidebarIcon,
     BsLayoutSidebarInsetReverse as SidebarRightIcon,
-} from 'react-icons/bs';
+} from 'react-icons/bs'
 import {
     BsFillPatchCheckFill as BadgeCheckFillIcon,
     BsPatchCheckFill as BadgeCheckIcon,
@@ -51,20 +51,20 @@ import {
     BsFileEarmarkPlayFill as VideoFileFillIcon,
     BsZoomIn as ZoomInIcon,
     BsZoomOut as ZoomOutIcon,
-} from 'react-icons/bs';
+} from 'react-icons/bs'
 import {
     CgDetailsLess as DetailsIcon,
     CgFacebook as FacebookIcon,
     CgInternal as InternalIcon,
     CgSmartphone as SmartphoneIcon,
     CgUnavailable as UnavailableIcon,
-} from 'react-icons/cg';
+} from 'react-icons/cg'
 import {
     CiBarcode as BarcodeScanIcon,
     CiExport as ExportIcon,
     CiFilter as FunnelOutlineIcon,
     CiGlobe as GlobeIcon,
-} from 'react-icons/ci';
+} from 'react-icons/ci'
 import {
     FaMoneyBill as BillIcon,
     FaBookOpen as BookOpenIcon,
@@ -85,7 +85,7 @@ import {
     FaTwitter as TwitterIcon,
     FaUserClock as UserClockFillIcon,
     FaYoutube as YoutubeIcon,
-} from 'react-icons/fa';
+} from 'react-icons/fa'
 import {
     FaAddressCard as AddressCardIcon,
     FaArrowTrendUp as ArrowTrendUpIcon,
@@ -112,7 +112,7 @@ import {
     FaUserPlus as UserPlusIcon,
     FaUserShield as UserShieldIcon,
     FaUsersLine as Users3LineIcon,
-} from 'react-icons/fa6';
+} from 'react-icons/fa6'
 import {
     FiCamera as CameraIcon,
     FiCodesandbox as CodeSandBox,
@@ -122,7 +122,7 @@ import {
     FiHash as HashIcon,
     FiNavigation as NavigationIcon,
     FiUpload as UploadIcon,
-} from 'react-icons/fi';
+} from 'react-icons/fi'
 import {
     GiBorderedShield as BorderedShieldIcon,
     GiTreeBranch as BranchIcon,
@@ -134,7 +134,7 @@ import {
     GiVillage as VillageIcon,
     GiWallet as WalletIcon,
     GiWoodenSign as WoodSignsIcon,
-} from 'react-icons/gi';
+} from 'react-icons/gi'
 import {
     GoArrowLeft as ArrowLeftIcon,
     GoArrowRight as ArrowRightIcon,
@@ -143,14 +143,14 @@ import {
     GoHorizontalRule as HorizontalRuleIcon,
     GoSearch as MagnifyingGlassIcon,
     GoOrganization as OrganizationIcon,
-} from 'react-icons/go';
+} from 'react-icons/go'
 import {
     GrMoney as CoinsStackIcon,
     GrView as EyeViewIcon,
     GrVmMaintenance as MaintenanceIcon,
     GrFormNextLink as NextIcon,
     GrPowerReset as PowerResetIcon,
-} from 'react-icons/gr';
+} from 'react-icons/gr'
 import {
     HiAdjustmentsHorizontal as AdjustIcon,
     HiChevronDown as ArrowChevronDown,
@@ -184,13 +184,13 @@ import {
     HiShieldExclamation as ShieldExclamationIcon,
     HiOutlineSun as SunIcon,
     HiTag as TagIcon,
-} from 'react-icons/hi2';
+} from 'react-icons/hi2'
 import {
     IoIosFunnel as FunnelFilledIcon,
     IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
     IoIosClose as XIcon,
-} from 'react-icons/io';
+} from 'react-icons/io'
 import {
     IoReturnDownBackOutline as BackIcon,
     IoCalendar as CalendarDotsIcon,
@@ -216,7 +216,7 @@ import {
     IoShield as ShieldFillIcon,
     IoStorefront as StoreIcon,
     IoCallOutline as TelephoneIcon,
-} from 'react-icons/io5';
+} from 'react-icons/io5'
 import {
     LiaMapMarkedAltSolid as MapMarkedIcon,
     LiaShieldAltSolid as ShieldIcon,
@@ -224,7 +224,8 @@ import {
     LiaUserCogSolid as UserCogIcon,
     LiaUser as UserIcon,
     LiaUserTagSolid as UserTagIcon,
-} from 'react-icons/lia';
+} from 'react-icons/lia'
+import type { IconBaseProps, IconType } from 'react-icons/lib'
 import {
     LuCalendarCheck as CalendarCheckIcon,
     LuCalendar as CalendarIcon,
@@ -249,7 +250,7 @@ import {
     LuUndo2 as UndoIcon,
     LuView as ViewIcon,
     LuScale as WeightScaleIcon,
-} from 'react-icons/lu';
+} from 'react-icons/lu'
 import {
     MdManageAccounts as AccountSettingIcon,
     MdOutlineManageAccounts as AccountSetupIcon,
@@ -276,7 +277,7 @@ import {
     MdOutlineSavings as SavingsIcon,
     MdGroups as UserGroupIcon,
     MdOutlineGroupAdd as UsersAddIcon,
-} from 'react-icons/md';
+} from 'react-icons/md'
 import {
     PiBankDuotone as BankDuoToneIcon,
     PiBuildingOffice as BuildingBranchIcon,
@@ -310,7 +311,7 @@ import {
     PiUsersThree as Users3Icon,
     PiWarningCircleFill as WarningCircleIcon,
     PiWarningFill as WarningFillIcon,
-} from 'react-icons/pi';
+} from 'react-icons/pi'
 import {
     RiFlipHorizontalFill as FlipHorizontalIcon,
     RiFlipHorizontalLine as FlipHorizontalLineIcon,
@@ -318,7 +319,7 @@ import {
     RiFlipVerticalLine as FlipVerticalLineIcon,
     RiCommunityFill as RiCommunityFillIcon,
     RiListCheck3 as TransactionListIcon,
-} from 'react-icons/ri';
+} from 'react-icons/ri'
 import {
     RxDotFilled as DotMediumIcon,
     RxDotsVertical as DotsVerticalIcon,
@@ -329,12 +330,12 @@ import {
     RxReset as ResetIcon,
     RxRowSpacing as RowSpacingIcon,
     RxFontItalic as ToolbarItalicIcon,
-} from 'react-icons/rx';
+} from 'react-icons/rx'
 import {
     SiBookstack as BookStackIcon,
     SiGitbook as SigiBookIcon,
-} from 'react-icons/si';
-import { SlOptions as OptionsIcon } from 'react-icons/sl';
+} from 'react-icons/si'
+import { SlOptions as OptionsIcon } from 'react-icons/sl'
 import {
     TbBlockquote as BlockQuoteIcon,
     TbCreditCard as CreditCardIcon2,
@@ -350,8 +351,8 @@ import {
     TbTargetArrow as TargetArrowIcon,
     TbTransactionDollar as TransactionDollarIcon,
     TbUnlink as UnlinkIcon,
-} from 'react-icons/tb';
-import { TiBook as BookIcon } from 'react-icons/ti';
+} from 'react-icons/tb'
+import { TiBook as BookIcon } from 'react-icons/ti'
 import {
     VscBracketError as BracketErrorIcon,
     VscCollapseAll as CollapseIcon,
@@ -361,8 +362,7 @@ import {
     VscLayersDot as LayersSharpDotIcon,
     VscLocation as LocationPinOutlineIcon,
     VscReferences as ReferencesIcon,
-} from 'react-icons/vsc';
-import type { ICONS } from '@/constants';
+} from 'react-icons/vsc'
 
 export {
     XIcon,
@@ -682,7 +682,7 @@ export {
     Rotate90DegreeRightIcon,
     BadgeExclamationFillIcon,
     TextStrikethroughLightIcon,
-};
+}
 
 export const IconMap: Record<TIcon, IconType> = {
     X: XIcon,
@@ -995,17 +995,17 @@ export const IconMap: Record<TIcon, IconType> = {
     'Outline Payment': OutlinePaymentIcon,
     'Pi Hand Deposit': PiHandDepositIcon,
     'Pi Hand Withdraw': PiHandWithdrawIcon,
-};
+}
 
-export type TIcon = (typeof ICONS)[number];
+export type TIcon = (typeof ICONS)[number]
 
 export const RenderIcon = ({
     icon,
     ...props
 }: { icon: TIcon } & IconBaseProps) => {
-    const FoundIcon = IconMap[icon];
+    const FoundIcon = IconMap[icon]
 
-    if (FoundIcon === undefined) return;
+    if (FoundIcon === undefined) return
 
-    return <FoundIcon {...props} />;
-};
+    return <FoundIcon {...props} />
+}

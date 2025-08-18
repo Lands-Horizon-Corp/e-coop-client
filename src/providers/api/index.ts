@@ -1,92 +1,92 @@
+import { API_URL } from '@/constants/envs'
 import axios, {
-    type AxiosResponse,
     type AxiosInstance,
     type AxiosRequestConfig,
+    type AxiosResponse,
     type InternalAxiosRequestConfig,
-} from "axios";
-import { API_URL } from "@/constants/envs";
+} from 'axios'
 
 export interface IRequestParams {
-    [key: string]: unknown;
+    [key: string]: unknown
 }
 
 const getDefaultUrl = (): string => {
-    return API_URL?.endsWith("/") ? API_URL : `${API_URL}/`;
-};
+    return API_URL?.endsWith('/') ? API_URL : `${API_URL}/`
+}
 
 const getCsrfTokenFromCookies = (): string | null => {
-    const name = "csrf=";
-    const decodedCookies = decodeURIComponent(document.cookie);
-    const cookies = decodedCookies.split(";");
+    const name = 'csrf='
+    const decodedCookies = decodeURIComponent(document.cookie)
+    const cookies = decodedCookies.split(';')
     for (let cookie of cookies) {
-        cookie = cookie.trim();
+        cookie = cookie.trim()
         if (cookie.startsWith(name)) {
-            return cookie.substring(name.length);
+            return cookie.substring(name.length)
         }
     }
-    return null;
-};
+    return null
+}
 
 const getDeviceType = (): string => {
-    const ua = navigator.userAgent;
-    if (/mobile/i.test(ua)) return "Mobile";
-    if (/tablet/i.test(ua)) return "Tablet";
-    if (/iPad|Android|Touch/.test(ua)) return "Tablet";
-    if (/Macintosh/i.test(ua) && "ontouchend" in document) return "Tablet";
-    return "Desktop";
-};
+    const ua = navigator.userAgent
+    if (/mobile/i.test(ua)) return 'Mobile'
+    if (/tablet/i.test(ua)) return 'Tablet'
+    if (/iPad|Android|Touch/.test(ua)) return 'Tablet'
+    if (/Macintosh/i.test(ua) && 'ontouchend' in document) return 'Tablet'
+    return 'Desktop'
+}
 
 const getGeoHeaders = (): Promise<Record<string, string>> => {
     return new Promise((resolve) => {
-        if (typeof window === "undefined" || !navigator.geolocation) {
-            resolve({});
-            return;
+        if (typeof window === 'undefined' || !navigator.geolocation) {
+            resolve({})
+            return
         }
         navigator.geolocation.getCurrentPosition(
             (pos) => {
-                const longitude = pos.coords.longitude.toString();
-                const latitude = pos.coords.latitude.toString();
+                const longitude = pos.coords.longitude.toString()
+                const latitude = pos.coords.latitude.toString()
                 const location =
-                    Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    Intl.DateTimeFormat().resolvedOptions().timeZone
                 resolve({
-                    "X-Longitude": longitude,
-                    "X-Latitude": latitude,
+                    'X-Longitude': longitude,
+                    'X-Latitude': latitude,
                     Location: location,
-                    "X-Device-Type": getDeviceType(),
-                });
+                    'X-Device-Type': getDeviceType(),
+                })
             },
             () => resolve({})
-        );
-    });
-};
+        )
+    })
+}
 
 const httpClient: AxiosInstance = axios.create({
     baseURL: getDefaultUrl(),
     headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
     },
-    withCredentials: true, 
-});
+    withCredentials: true,
+})
 
 httpClient.interceptors.request.use(async (config) => {
-    const csrfToken = getCsrfTokenFromCookies();
+    const csrfToken = getCsrfTokenFromCookies()
     if (csrfToken) {
-        config.headers["X-CSRF-Token"] = csrfToken;
+        config.headers['X-CSRF-Token'] = csrfToken
     }
-    if (typeof navigator !== "undefined" && navigator.userAgent) {
-        config.headers["X-User-Agent"] = navigator.userAgent;
+    if (typeof navigator !== 'undefined' && navigator.userAgent) {
+        config.headers['X-User-Agent'] = navigator.userAgent
     }
 
-    const geoHeaders = await getGeoHeaders();
-    if (config.headers && typeof config.headers.set === "function") {
+    const geoHeaders = await getGeoHeaders()
+    if (config.headers && typeof config.headers.set === 'function') {
         Object.entries(geoHeaders).forEach(([key, value]) => {
-            config.headers.set(key, value);
-        });
+            config.headers.set(key, value)
+        })
     } else {
-        Object.assign(config.headers, geoHeaders);
+        Object.assign(config.headers, geoHeaders)
     }
-    return config;
-});
+    return config
+})
 
 const API = {
     getHttpClient: (): AxiosInstance => httpClient,
@@ -97,7 +97,7 @@ const API = {
         ) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>,
         onRejected?: (error: unknown) => Promise<never> | undefined
     ): number {
-        return httpClient.interceptors.request.use(onFulfilled, onRejected);
+        return httpClient.interceptors.request.use(onFulfilled, onRejected)
     },
 
     addResponseInterceptor(
@@ -106,7 +106,7 @@ const API = {
         ) => AxiosResponse | Promise<AxiosResponse>,
         onRejected?: (error: unknown) => Promise<never> | undefined
     ): number {
-        return httpClient.interceptors.response.use(onFulfilled, onRejected);
+        return httpClient.interceptors.response.use(onFulfilled, onRejected)
     },
 
     async get<R = unknown>(
@@ -114,7 +114,7 @@ const API = {
         params?: IRequestParams,
         config?: AxiosRequestConfig
     ): Promise<AxiosResponse<R>> {
-        return httpClient.get<R>(url, { params, ...config });
+        return httpClient.get<R>(url, { params, ...config })
     },
 
     async post<D = unknown, R = unknown>(
@@ -123,7 +123,7 @@ const API = {
         params?: IRequestParams,
         config?: AxiosRequestConfig
     ): Promise<AxiosResponse<R>> {
-        return httpClient.post<R>(url, data, { params, ...config });
+        return httpClient.post<R>(url, data, { params, ...config })
     },
 
     async patch<D = unknown, R = unknown>(
@@ -132,7 +132,7 @@ const API = {
         params?: IRequestParams,
         config?: AxiosRequestConfig
     ): Promise<AxiosResponse<R>> {
-        return httpClient.patch<R>(url, data, { params, ...config });
+        return httpClient.patch<R>(url, data, { params, ...config })
     },
 
     async put<D = unknown, R = unknown>(
@@ -141,7 +141,7 @@ const API = {
         params?: IRequestParams,
         config?: AxiosRequestConfig
     ): Promise<AxiosResponse<R>> {
-        return httpClient.put<R>(url, data, { params, ...config });
+        return httpClient.put<R>(url, data, { params, ...config })
     },
 
     async delete<R = unknown>(
@@ -150,7 +150,7 @@ const API = {
         params?: IRequestParams,
         config?: AxiosRequestConfig
     ): Promise<AxiosResponse<R>> {
-        return httpClient.delete<R>(url, { data, params, ...config });
+        return httpClient.delete<R>(url, { data, params, ...config })
     },
 
     async uploadFile<R = unknown>(
@@ -162,14 +162,14 @@ const API = {
         return httpClient.post<R>(url, formData, {
             params,
             headers: {
-                "Content-Type": "multipart/form-data",
+                'Content-Type': 'multipart/form-data',
             },
             ...config,
-        });
+        })
     },
-};
+}
 
-export default API;
+export default API
 
 /*
 import { API_URL } from '@/constants/envs';

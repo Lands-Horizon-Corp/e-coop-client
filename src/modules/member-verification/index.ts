@@ -1,1 +1,1 @@
-export * from "./member-verification.types";
+export * from './member-verification.types'

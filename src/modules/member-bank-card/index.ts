@@ -1,1 +1,1 @@
-export * from "./member-bank-card.types";
+export * from './member-bank-card.types'

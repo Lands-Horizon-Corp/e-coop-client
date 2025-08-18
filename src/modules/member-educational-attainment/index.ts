@@ -1,1 +1,1 @@
-export * from "./member-educational-attainment.types";
+export * from './member-educational-attainment.types'

@@ -6,4 +6,4 @@ export const TAG_CATEGORY = [
     'adjustment',
     'transaction',
     'general acconting ledger',
-] as const;
+] as const

@@ -1,1 +1,1 @@
-export * from "./transaction-tag.types";
+export * from './transaction-tag.types'

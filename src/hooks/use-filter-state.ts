@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react'
 
 import type {
     IFilterState,
@@ -7,79 +7,79 @@ import type {
     TFilterPayload,
     TFinalFilter,
     TSearchFilter,
-} from "@/contexts/filter-context";
+} from '@/contexts/filter-context'
 
-import useDebounce from "@/hooks/use-debounce";
+import useDebounce from '@/hooks/use-debounce'
 
 // import logger from '@/helpers/loggers/logger'
 
 const useFilterState = ({
     debounceFinalFilterMs,
     defaultFilter = {},
-    defaultFilterMode = "AND",
+    defaultFilterMode = 'AND',
     onFilterChange,
 }: {
-    onFilterChange?: () => void;
-    debounceFinalFilterMs?: number;
-    defaultFilter?: TFilterObject;
-    defaultFilterMode?: TFilterLogic;
+    onFilterChange?: () => void
+    debounceFinalFilterMs?: number
+    defaultFilter?: TFilterObject
+    defaultFilterMode?: TFilterLogic
 } = {}): IFilterState => {
-    const [filters, setFilters] = useState<TFilterObject>(defaultFilter);
+    const [filters, setFilters] = useState<TFilterObject>(defaultFilter)
     const [filterLogic, setFilterLogic] =
-        useState<TFilterLogic>(defaultFilterMode);
+        useState<TFilterLogic>(defaultFilterMode)
 
     const setFilter = (field: string, filter?: TSearchFilter) => {
-        setFilters((prev) => ({ ...prev, [field]: filter }));
-    };
+        setFilters((prev) => ({ ...prev, [field]: filter }))
+    }
 
     const removeFilter = (field: string) => {
-        const targetFilter = filters[field];
+        const targetFilter = filters[field]
 
         setFilters((prev) => {
-            const newFilters = { ...prev };
-            delete newFilters[field];
-            return newFilters;
-        });
+            const newFilters = { ...prev }
+            delete newFilters[field]
+            return newFilters
+        })
 
-        return targetFilter;
-    };
+        return targetFilter
+    }
 
     const bulkSetFilter = (
         targets: { field: string; displayText: string }[],
         filterValue?: TSearchFilter
     ) => {
-        const constructedObject = {} as TFilterObject;
+        const constructedObject = {} as TFilterObject
         targets.forEach(({ field, displayText }) => {
             constructedObject[field] = {
                 ...filterValue,
                 displayText,
-            } as TSearchFilter;
-        });
-        setFilters((prev) => ({ ...prev, ...constructedObject }));
-    };
+            } as TSearchFilter
+        })
+        setFilters((prev) => ({ ...prev, ...constructedObject }))
+    }
 
     const resetFilter = () => {
-        setFilters(defaultFilter);
-    };
+        setFilters(defaultFilter)
+    }
 
-    const debouncedFilter = useDebounce(filters, debounceFinalFilterMs ?? 800);
+    const debouncedFilter = useDebounce(filters, debounceFinalFilterMs ?? 800)
 
     const finalFilterPayload: TFilterPayload = useMemo(() => {
-        const filteredFilter: TFinalFilter[] = [];
+        const filteredFilter: TFinalFilter[] = []
 
         Object.entries(debouncedFilter).forEach(([key, value]) => {
-            if ((!value || !value.value) && value?.mode !== "range") {
+            if ((!value || !value.value) && value?.mode !== 'range') {
                 // logger.log('Value failed', value)
-                return;
+                return
             }
 
-            if (!value.mode || key === "globalSearch") {
+            if (!value.mode || key === 'globalSearch') {
                 // logger.log('value mode, globalSearch failed', value.mode, key)
-                return;
+                return
             }
 
             if (
-                value.mode === "range" &&
+                value.mode === 'range' &&
                 !Array.isArray(value.value) &&
                 (value.from === undefined || value.to === undefined)
             ) {
@@ -88,16 +88,16 @@ const useFilterState = ({
                 //     value.from,
                 //     value.to
                 // )
-                return;
-            } else if (value.mode !== "range" && value.value === undefined) {
+                return
+            } else if (value.mode !== 'range' && value.value === undefined) {
                 // logger.log('line 86 failed -> invalid value', value.value)
-                return;
+                return
             } else if (Array.isArray(value.value) && value.value.length === 0) {
                 // logger.log(
                 //     'line 89 failed -> invalid multi select array',
                 //     value.value
                 // )
-                return;
+                return
             }
 
             filteredFilter.push({
@@ -106,19 +106,19 @@ const useFilterState = ({
                 dataType: value.dataType,
                 isStaticFilter: value.isStaticFilter,
                 value:
-                    value.mode === "range" && !Array.isArray(value.value)
+                    value.mode === 'range' && !Array.isArray(value.value)
                         ? { from: value.from, to: value.to }
                         : value.value,
-            });
-        });
+            })
+        })
 
-        onFilterChange?.();
+        onFilterChange?.()
 
-        return { filters: filteredFilter, logic: filterLogic };
+        return { filters: filteredFilter, logic: filterLogic }
 
         // WARNING: don't worry about this, if you remove this and follow the suggestion, infinite loop will happen
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedFilter, filterLogic]);
+    }, [debouncedFilter, filterLogic])
 
     return {
         filters,
@@ -129,7 +129,7 @@ const useFilterState = ({
         removeFilter,
         bulkSetFilter,
         setFilterLogic,
-    };
-};
+    }
+}
 
-export default useFilterState;
+export default useFilterState

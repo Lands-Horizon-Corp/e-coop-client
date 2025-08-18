@@ -1,17 +1,17 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 @tailwind base;
 
 @font-face {
-    font-family: "Inter";
-    src: url("./assets/fonts/Inter/Inter-VariableFont.ttf") format("truetype");
+    font-family: 'Inter';
+    src: url('./assets/fonts/Inter/Inter-VariableFont.ttf') format('truetype');
     font-weight: 100 900;
     font-display: swap;
 }
 
 @font-face {
-    font-family: "Inter";
-    src: url("./assets/fonts/Inter/Inter-VariableFont.ttf") format("truetype");
+    font-family: 'Inter';
+    src: url('./assets/fonts/Inter/Inter-VariableFont.ttf') format('truetype');
     font-weight: 100 900;
     font-display: swap;
 }
@@ -290,11 +290,11 @@ html {
 }
 
 .toolbar-custom code {
-    @apply rounded bg-secondary/80 px-1 py-0.5 text-[0.95em] font-semibold;
+    @apply bg-secondary/80 rounded px-1 py-0.5 text-[0.95em] font-semibold;
 }
 
 .toolbar-custom pre {
-    @apply overflow-x-auto rounded-lg bg-secondary/70 p-4;
+    @apply bg-secondary/70 overflow-x-auto rounded-lg p-4;
 }
 
 .toolbar-custom pre code {

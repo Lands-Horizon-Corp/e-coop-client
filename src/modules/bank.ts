@@ -1,7 +1,10 @@
-import { z } from 'zod';
-import { MediaResponseSchema } from './media';
-import { entityIdSchema } from './common';
-import { createAPIHookRepository } from '@/providers/repositories/api-crud-factory';
+import { z } from 'zod'
+
+import { createAPIHookRepository } from '@/providers/repositories/api-crud-factory'
+
+import { entityIdSchema } from './common'
+import { MediaResponseSchema } from './media'
+
 // import { UserResponseSchema } from './user'
 // import { OrganizationResponseSchema } from './organization'
 // import { BranchResponseSchema } from './branch'
@@ -23,7 +26,7 @@ export const BankResponseSchema = z.object({
     media: MediaResponseSchema.optional(),
     name: z.string(),
     description: z.string(),
-});
+})
 
 // Define the Zod schema for BankRequest
 export const BankRequestSchema = z.object({
@@ -31,17 +34,17 @@ export const BankRequestSchema = z.object({
     name: z.string().min(1).max(255),
     description: z.string().optional(),
     media_id: entityIdSchema.optional(),
-});
+})
 
 // Infer the TypeScript types from the Zod schemas
-export type IBank = z.infer<typeof BankResponseSchema>;
-export type IBankRequest = z.infer<typeof BankRequestSchema>;
+export type IBank = z.infer<typeof BankResponseSchema>
+export type IBankRequest = z.infer<typeof BankRequestSchema>
 
 const BankDataLayer = createAPIHookRepository({
     url: '/api/v1/bank',
     baseKey: 'bank',
-});
+})
 
 // add custom mo dito na hook
 
-export default { ...BankDataLayer };
+export default { ...BankDataLayer }

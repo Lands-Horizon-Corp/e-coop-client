@@ -1,4 +1,4 @@
-import { randomChoose } from '@/helpers';
+import { randomChoose } from '@/helpers'
 
 export const startOfDayQuotes: string[] = [
     'Start your day with a positive mindset and watch the magic happen.',
@@ -94,7 +94,7 @@ export const startOfDayQuotes: string[] = [
     'Your perseverance today leads to triumph tomorrow.',
     'Begin with purpose, work with passion, and achieve greatness.',
     'Stay focused, stay driven, and make your dreams a reality.',
-];
+]
 
 export const endOfDayQuotes: string[] = [
     'Great job today! Rest well and recharge for tomorrow.',
@@ -176,12 +176,12 @@ export const endOfDayQuotes: string[] = [
     'Take time to unwind and appreciate your day’s efforts.',
     'Celebrate your successes and learn from today’s experiences.',
     'Your hard work today is paving the way for tomorrow’s achievements.',
-];
+]
 
 export const randomStartOfDayQuoute = () => {
-    return randomChoose(startOfDayQuotes);
-};
+    return randomChoose(startOfDayQuotes)
+}
 
 export const randomEndOfDayQuoute = () => {
-    return randomChoose(endOfDayQuotes);
-};
+    return randomChoose(endOfDayQuotes)
+}

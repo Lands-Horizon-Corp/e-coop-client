@@ -1,1 +1,1 @@
-export * from "./member-classification-interest-rate.types";
+export * from './member-classification-interest-rate.types'

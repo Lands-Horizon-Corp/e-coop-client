@@ -1,5 +1,6 @@
-import { z } from 'zod';
-import { entityIdSchema } from './common';
+import { z } from 'zod'
+
+import { entityIdSchema } from './common'
 
 // Define the Zod schema for MediaResponse
 export const MediaResponseSchema = z.object({
@@ -16,7 +17,7 @@ export const MediaResponseSchema = z.object({
     bucket_name: z.string(),
     status: z.string(),
     progress: z.number(),
-});
+})
 
 // Infer the TypeScript type from the Zod schema
-export type TMedia = z.infer<typeof MediaResponseSchema>;
+export type TMedia = z.infer<typeof MediaResponseSchema>

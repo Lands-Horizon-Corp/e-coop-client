@@ -1,1 +1,1 @@
-export * from "./adjustment-entry-tag.types";
+export * from './adjustment-entry-tag.types'

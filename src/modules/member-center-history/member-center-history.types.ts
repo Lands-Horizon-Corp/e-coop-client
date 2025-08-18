@@ -1,7 +1,7 @@
-import { IBranch } from "../branch"
-import { ITimeStamps, IAuditable, TEntityId, IPaginatedResult } from "../common"
-import { IMemberCenter } from "../member-center/member-center.types"
-import { IMemberProfile } from "../member-profile/member-profile.types"
+import { IBranch } from '../branch'
+import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
+import { IMemberCenter } from '../member-center/member-center.types'
+import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberCenterHistory extends ITimeStamps, IAuditable {
     id: TEntityId

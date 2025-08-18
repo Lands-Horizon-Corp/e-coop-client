@@ -1,1 +1,1 @@
-export * from "./orgnaization-daily-usage.types";
+export * from './orgnaization-daily-usage.types'

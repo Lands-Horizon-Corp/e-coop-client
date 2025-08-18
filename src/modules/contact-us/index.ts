@@ -1,1 +1,1 @@
-export * from "./contact-us.types";
+export * from './contact-us.types'

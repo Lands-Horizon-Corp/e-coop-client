@@ -1,1 +1,1 @@
-export * from "./member-joint-account.types";
+export * from './member-joint-account.types'

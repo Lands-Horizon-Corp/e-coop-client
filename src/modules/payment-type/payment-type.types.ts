@@ -1,35 +1,30 @@
-import {
-  IAuditable,
-  IPaginatedResult,
-  ITimeStamps,
-  TEntityId,
-} from "../common";
+import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
 
-export type PaymentTypeEnum = "cash" | "check" | "online";
+export type PaymentTypeEnum = 'cash' | 'check' | 'online'
 
 export interface IPaymentType extends IAuditable, ITimeStamps {
-  id: TEntityId;
+    id: TEntityId
 
-  organization_id: TEntityId;
-  branch_id: TEntityId;
+    organization_id: TEntityId
+    branch_id: TEntityId
 
-  name: string;
-  description?: string;
-  number_of_days?: number;
+    name: string
+    description?: string
+    number_of_days?: number
 
-  type: PaymentTypeEnum;
+    type: PaymentTypeEnum
 }
 
 export interface IPaymentTypeRequest {
-  name: string;
-  description?: string;
-  number_of_days?: number;
+    name: string
+    description?: string
+    number_of_days?: number
 
-  type: PaymentTypeEnum;
+    type: PaymentTypeEnum
 
-  organization_id?: TEntityId;
-  branch_id?: TEntityId;
+    organization_id?: TEntityId
+    branch_id?: TEntityId
 }
 
 export interface IPaymentTypePaginatedResource
-  extends IPaginatedResult<IPaymentType> {}
+    extends IPaginatedResult<IPaymentType> {}

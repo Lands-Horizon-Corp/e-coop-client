@@ -1,431 +1,433 @@
-import { isBefore, startOfDay } from "date-fns";
-import { ISignUpRequest } from "../auth";
-import { IBranch } from "../branch";
+import z from 'zod'
+
+import { isBefore, startOfDay } from 'date-fns'
+
+import { ISignUpRequest } from '../auth'
+import { IBranch } from '../branch'
 import {
-  TEntityId,
-  TCivilStatus,
-  TGeneralStatus,
-  ITimeStamps,
-  IAuditable,
-  IPaginatedResult,
-  civilStatusSchema,
-  generalStatusSchema,
-  stringDateSchema,
-} from "../common";
-import { IMedia } from "../media/media.types";
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TCivilStatus,
+    TEntityId,
+    TGeneralStatus,
+    civilStatusSchema,
+    generalStatusSchema,
+    stringDateSchema,
+} from '../common'
 import {
-  IMemberAddress,
-  IMemberAddressRequest,
-} from "../member-address/member-address.types";
+    birthDateSchema,
+    contactNumberSchema,
+    emailSchema,
+    entityIdSchema,
+    firstNameSchema,
+    lastNameSchema,
+    middleNameSchema,
+    passwordSchema,
+    permanentAddressSchema,
+    userNameSchema,
+} from '../common'
+import { IMedia } from '../media/media.types'
 import {
-  IMemberAsset,
-  IMemberAssetRequest,
-} from "../member-asset/member-asset.types";
-import { IMemberCenter } from "../member-center/member-center.types";
-import { IMemberClassification } from "../member-classification/member-classification.types";
+    IMemberAddress,
+    IMemberAddressRequest,
+} from '../member-address/member-address.types'
 import {
-  IMemberCloseRemark,
-  IMemberCloseRemarkRequest,
-} from "../member-close-remark/member-close-remark.types";
+    IMemberAsset,
+    IMemberAssetRequest,
+} from '../member-asset/member-asset.types'
+import { IMemberCenter } from '../member-center/member-center.types'
+import { IMemberClassification } from '../member-classification/member-classification.types'
 import {
-  IMemberContactReference,
-  IMemberContactReferenceRequest,
-} from "../member-contact-reference/member-contact-reference.types";
-import { IMemberDepartment } from "../member-department/member-department.types";
-import { IMemberEducationalAttainment } from "../member-educational-attainment/member-educational-attainment.types";
+    IMemberCloseRemark,
+    IMemberCloseRemarkRequest,
+} from '../member-close-remark/member-close-remark.types'
 import {
-  IMemberExpense,
-  IMemberExpenseRequest,
-} from "../member-expense/member-expense.types";
-import { IMemberGender } from "../member-gender/member-gender.types";
+    IMemberContactReference,
+    IMemberContactReferenceRequest,
+} from '../member-contact-reference/member-contact-reference.types'
+import { IMemberDepartment } from '../member-department/member-department.types'
+import { IMemberDescriptionRequest } from '../member-description-schema/member-description-schema.types'
+import { IMemberEducationalAttainment } from '../member-educational-attainment/member-educational-attainment.types'
 import {
-  IMemberGovernmentBenefit,
-  IMemberGovernmentBenefitRequest,
-} from "../member-government-benefit/member-government-benefit.types";
-import { IMemberGroup } from "../member-group/member-group.types";
+    IMemberExpense,
+    IMemberExpenseRequest,
+} from '../member-expense/member-expense.types'
+import { IMemberGender } from '../member-gender/member-gender.types'
 import {
-  IMemberJointAccount,
-  IMemberJointAccountRequest,
-} from "../member-joint-account/member-joint-account.types";
-import { IMemberOccupation } from "../member-occupation/member-occupation.types";
+    IMemberGovernmentBenefit,
+    IMemberGovernmentBenefitRequest,
+} from '../member-government-benefit/member-government-benefit.types'
+import { IMemberGroup } from '../member-group/member-group.types'
 import {
-  IMemberRelativeAccount,
-  IMemberRelativeAccountRequest,
-} from "../member-relative-account/member-relative-account.types";
-import { IMemberType } from "../member-type/member-type.types";
-import { IOrganization } from "../organization";
-import { IQrScanResult } from "../qr-result";
-import { IUserBase } from "../user/user.types";
-import z from "zod";
+    IMemberJointAccount,
+    IMemberJointAccountRequest,
+} from '../member-joint-account/member-joint-account.types'
+import { IMemberOccupation } from '../member-occupation/member-occupation.types'
+import { IMemberRecruitedMembers } from '../member-recruits/member-recruits.types'
+import {
+    IMemberRelativeAccount,
+    IMemberRelativeAccountRequest,
+} from '../member-relative-account/member-relative-account.types'
+import { IMemberType } from '../member-type/member-type.types'
+import { IOrganization } from '../organization'
+import { IQrScanResult } from '../qr-result'
+import { IUserBase } from '../user/user.types'
 
 // For creation of member user account
 export interface IMemberProfileUserAccountRequest
-  extends Omit<ISignUpRequest, "password"> {
-  id?: TEntityId;
-  password?: string;
+    extends Omit<ISignUpRequest, 'password'> {
+    id?: TEntityId
+    password?: string
 }
 
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
 // Should Only use by employee
 export interface IMemberProfileQuickCreateRequest {
-  old_reference_id?: string;
-  passbook?: string;
+    old_reference_id?: string
+    passbook?: string
 
-  organization_id?: TEntityId;
-  branch_id?: TEntityId;
+    organization_id?: TEntityId
+    branch_id?: TEntityId
 
-  first_name: string;
-  middle_name?: string;
-  last_name: string;
-  full_name?: string;
-  suffix?: string;
-  member_gender_id?: TEntityId;
-  birthdate?: string;
-  contact_number?: string;
+    first_name: string
+    middle_name?: string
+    last_name: string
+    full_name?: string
+    suffix?: string
+    member_gender_id?: TEntityId
+    birthdate?: string
+    contact_number?: string
 
-  civil_status: TCivilStatus;
-  occupation_id?: TEntityId;
+    civil_status: TCivilStatus
+    occupation_id?: TEntityId
 
-  status: TGeneralStatus;
+    status: TGeneralStatus
 
-  is_mutual_fund_member: boolean;
-  is_micro_finance_member: boolean;
+    is_mutual_fund_member: boolean
+    is_micro_finance_member: boolean
 
-  member_type_id: TEntityId;
+    member_type_id: TEntityId
 
-  // Prior Connect
+    // Prior Connect
 
-  user_id?: TEntityId;
+    user_id?: TEntityId
 
-  // Or Create User Account
-  account_info?: Pick<ISignUpRequest, "user_name" | "email" | "password">;
+    // Or Create User Account
+    account_info?: Pick<ISignUpRequest, 'user_name' | 'email' | 'password'>
 }
 
 export interface IMemberProfileRequest {
-  id?: TEntityId;
-  oldReferenceId?: string;
-  passbookNumber?: string;
+    id?: TEntityId
+    oldReferenceId?: string
+    passbookNumber?: string
 
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  suffix?: string;
+    firstName: string
+    middleName?: string
+    lastName: string
+    suffix?: string
 
-  notes: string;
-  description: string;
-  contactNumber: string;
-  civilStatus: TCivilStatus;
-  occupationId?: TEntityId;
-  businessAddress?: string;
-  businessContact?: string;
+    notes: string
+    description: string
+    contactNumber: string
+    civilStatus: TCivilStatus
+    occupationId?: TEntityId
+    businessAddress?: string
+    businessContact?: string
 
-  status: TGeneralStatus;
-  isClosed: boolean;
+    status: TGeneralStatus
+    isClosed: boolean
 
-  isMutualFundMember: boolean;
-  isMicroFinanceMember: boolean;
+    isMutualFundMember: boolean
+    isMicroFinanceMember: boolean
 
-  mediaId?: TEntityId;
-  media?: IMedia; //This is just for form media display, not actually needed in backend
+    mediaId?: TEntityId
+    media?: IMedia //This is just for form media display, not actually needed in backend
 
-  memberId?: TEntityId;
-  branchId?: TEntityId;
-  memberTypeId?: TEntityId;
-  memberGenderId?: TEntityId;
-  memberCenterId?: TEntityId;
-  memberClassificationId?: TEntityId;
-  memberEducationalAttainmentId?: TEntityId;
+    memberId?: TEntityId
+    branchId?: TEntityId
+    memberTypeId?: TEntityId
+    memberGenderId?: TEntityId
+    memberCenterId?: TEntityId
+    memberClassificationId?: TEntityId
+    memberEducationalAttainmentId?: TEntityId
 
-  memberIncome?: IMemberIncomeRequest[];
-  memberAssets?: IMemberAssetRequest[];
-  member_addresses: IMemberAddressRequest[];
-  memberExpenses?: IMemberExpenseRequest[];
-  memberDescriptions?: IMemberDescriptionRequest[];
-  memberCloseRemarks?: IMemberCloseRemarkRequest[];
-  memberJointAccounts?: IMemberJointAccountRequest[];
-  memberRelativeAccounts?: IMemberRelativeAccountRequest[];
-  memberGovernmentBenefits?: IMemberGovernmentBenefitRequest[];
-  memberContactNumberReferences: IMemberContactReferenceRequest[];
+    memberIncome?: IMemberIncomeRequest[]
+    memberAssets?: IMemberAssetRequest[]
+    member_addresses: IMemberAddressRequest[]
+    memberExpenses?: IMemberExpenseRequest[]
+    memberDescriptions?: IMemberDescriptionRequest[]
+    memberCloseRemarks?: IMemberCloseRemarkRequest[]
+    memberJointAccounts?: IMemberJointAccountRequest[]
+    memberRelativeAccounts?: IMemberRelativeAccountRequest[]
+    memberGovernmentBenefits?: IMemberGovernmentBenefitRequest[]
+    memberContactNumberReferences: IMemberContactReferenceRequest[]
 }
 
 export interface IMemberProfile extends ITimeStamps, IAuditable {
-  id: TEntityId;
+    id: TEntityId
 
-  branch_id: TEntityId;
-  branch: IBranch;
+    branch_id: TEntityId
+    branch: IBranch
 
-  organization_id: TEntityId;
-  organization: IOrganization;
+    organization_id: TEntityId
+    organization: IOrganization
 
-  user_id?: TEntityId;
-  user?: IUserBase;
+    user_id?: TEntityId
+    user?: IUserBase
 
-  media_id?: TEntityId;
-  media?: IMedia;
+    media_id?: TEntityId
+    media?: IMedia
 
-  signature_id?: TEntityId;
-  signature?: IMedia;
+    signature_id?: TEntityId
+    signature?: IMedia
 
-  member_type_id: TEntityId;
-  member_type: IMemberType;
+    member_type_id: TEntityId
+    member_type: IMemberType
 
-  member_group_id: TEntityId;
-  member_group: IMemberGroup;
+    member_group_id: TEntityId
+    member_group: IMemberGroup
 
-  member_gender_id: TEntityId;
-  member_gender: IMemberGender;
+    member_gender_id: TEntityId
+    member_gender: IMemberGender
 
-  member_center_id: TEntityId;
-  member_center: IMemberCenter;
+    member_center_id: TEntityId
+    member_center: IMemberCenter
 
-  signature_media_id: TEntityId;
-  signature_media: IMedia;
+    signature_media_id: TEntityId
+    signature_media: IMedia
 
-  member_occupation_id: TEntityId;
-  member_occupation: IMemberOccupation;
+    member_occupation_id: TEntityId
+    member_occupation: IMemberOccupation
 
-  member_classification_id: TEntityId;
-  member_classification: IMemberClassification;
+    member_classification_id: TEntityId
+    member_classification: IMemberClassification
 
-  member_verified_by_employee_user_id: TEntityId;
-  member_verified_by_employee_user: IUserBase;
+    member_verified_by_employee_user_id: TEntityId
+    member_verified_by_employee_user: IUserBase
 
-  member_department_id?: TEntityId;
-  member_department?: IMemberDepartment;
+    member_department_id?: TEntityId
+    member_department?: IMemberDepartment
 
-  recruited_by_member_profile_id: TEntityId;
-  recruited_by_member_profile: IMemberProfile;
+    recruited_by_member_profile_id: TEntityId
+    recruited_by_member_profile: IMemberProfile
 
-  is_closed: boolean;
-  is_mutual_fund_member: boolean;
-  is_micro_finance_member: boolean;
+    is_closed: boolean
+    is_mutual_fund_member: boolean
+    is_micro_finance_member: boolean
 
-  first_name: string;
-  middle_name?: string;
-  last_name: string;
-  full_name: string;
-  suffix?: string;
-  birthdate?: string;
-  status: TGeneralStatus;
+    first_name: string
+    middle_name?: string
+    last_name: string
+    full_name: string
+    suffix?: string
+    birthdate?: string
+    status: TGeneralStatus
 
-  description: string;
-  notes: string;
-  contact_number: string;
-  old_reference_id: string; // OLD PB NUMBER
+    description: string
+    notes: string
+    contact_number: string
+    old_reference_id: string // OLD PB NUMBER
 
-  passbook: string;
-  occupation: string;
+    passbook: string
+    occupation: string
 
-  business_address: string;
-  business_contact_number: string;
-  civil_status: TCivilStatus;
+    business_address: string
+    business_contact_number: string
+    civil_status: TCivilStatus
 
-  qr_code: IQrScanResult<string, "member-qr">;
+    qr_code: IQrScanResult<string, 'member-qr'>
 
-  // occupationId?: TEntityId
+    // occupationId?: TEntityId
 
-  // memberEducationalAttainmentId?: TEntityId
-  member_educational_attainments?: IMemberEducationalAttainment[];
+    // memberEducationalAttainmentId?: TEntityId
+    member_educational_attainments?: IMemberEducationalAttainment[]
 
-  recruited_members?: IMemberRecruitedMembers[];
+    recruited_members?: IMemberRecruitedMembers[]
 
-  member_assets?: IMemberAsset[];
-  member_incomes?: IMemberIncome[];
-  // memberWallets?: IMemberWallet[] // ano to desu
-  member_addresses?: IMemberAddress[];
-  member_expenses?: IMemberExpense[];
-  // memberDescriptions?: IMemberDescription[]
-  member_close_remarks?: IMemberCloseRemark[];
-  member_joint_accounts?: IMemberJointAccount[];
-  member_relative_accounts?: IMemberRelativeAccount[];
-  member_government_benefits?: IMemberGovernmentBenefit[];
-  // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
-  member_contact_references?: IMemberContactReference[];
+    member_assets?: IMemberAsset[]
+    member_incomes?: IMemberIncome[]
+    // memberWallets?: IMemberWallet[] // ano to desu
+    member_addresses?: IMemberAddress[]
+    member_expenses?: IMemberExpense[]
+    // memberDescriptions?: IMemberDescription[]
+    member_close_remarks?: IMemberCloseRemark[]
+    member_joint_accounts?: IMemberJointAccount[]
+    member_relative_accounts?: IMemberRelativeAccount[]
+    member_government_benefits?: IMemberGovernmentBenefit[]
+    // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
+    member_contact_references?: IMemberContactReference[]
 }
 
 export interface IMemberProfilePaginated
-  extends IPaginatedResult<IMemberProfile> {}
+    extends IPaginatedResult<IMemberProfile> {}
 
 export type IMemberProfilePicker = Pick<
-  IMemberProfile,
-  "id" | "old_reference_id" | "passbook" | "notes" | "description"
->;
+    IMemberProfile,
+    'id' | 'old_reference_id' | 'passbook' | 'notes' | 'description'
+>
 
 export interface IMemberIncomeRequest {
-  id?: TEntityId;
+    id?: TEntityId
 
-  member_profile_id: TEntityId;
-  media_id?: TEntityId;
-  branch_id?: TEntityId;
+    member_profile_id: TEntityId
+    media_id?: TEntityId
+    branch_id?: TEntityId
 
-  name: string;
-  amount: number;
-  release_date: string;
+    name: string
+    amount: number
+    release_date: string
 }
 
 // LATEST FROM ERD
 export interface IMemberIncome extends ITimeStamps {
-  id: TEntityId;
+    id: TEntityId
 
-  member_profile_id: TEntityId;
-  member_profile: IMemberProfile;
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
 
-  media_id?: TEntityId;
-  media?: IMedia;
+    media_id?: TEntityId
+    media?: IMedia
 
-  branch_id?: TEntityId;
-  branch?: IBranch;
+    branch_id?: TEntityId
+    branch?: IBranch
 
-  name: string;
-  amount: number;
-  release_date: string;
+    name: string
+    amount: number
+    release_date: string
 }
 
-import {
-  birthDateSchema,
-  contactNumberSchema,
-  emailSchema,
-  entityIdSchema,
-  firstNameSchema,
-  lastNameSchema,
-  middleNameSchema,
-  passwordSchema,
-  permanentAddressSchema,
-  userNameSchema,
-} from "../common";
-import { IMemberDescriptionRequest } from "../member-description-schema/member-description-schema.types";
-import { IMemberRecruitedMembers } from "../member-recruits/member-recruits.types";
-
 export const baseMemberAccountSchema = z.object({
-  id: entityIdSchema.optional(),
-  email: emailSchema,
-  username: userNameSchema,
-  firstName: firstNameSchema,
-  middleName: middleNameSchema.optional(),
-  lastName: lastNameSchema,
-  birthDate: birthDateSchema,
-  companyId: entityIdSchema,
-  contactNumber: contactNumberSchema,
-  permanentAddress: permanentAddressSchema,
-});
+    id: entityIdSchema.optional(),
+    email: emailSchema,
+    username: userNameSchema,
+    firstName: firstNameSchema,
+    middleName: middleNameSchema.optional(),
+    lastName: lastNameSchema,
+    birthDate: birthDateSchema,
+    companyId: entityIdSchema,
+    contactNumber: contactNumberSchema,
+    permanentAddress: permanentAddressSchema,
+})
 
 export const createMemberAccountSchema = baseMemberAccountSchema.extend({
-  mode: z.literal("create"),
-  password: passwordSchema,
-  confirmPassword: passwordSchema,
-});
+    mode: z.literal('create'),
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
+})
 
 export const updateMemberAccountSchema = baseMemberAccountSchema.extend({
-  mode: z.literal("update"),
-  id: entityIdSchema.optional(),
-  password: passwordSchema.optional(),
-  confirmPassword: passwordSchema.optional(),
-});
+    mode: z.literal('update'),
+    id: entityIdSchema.optional(),
+    password: passwordSchema.optional(),
+    confirmPassword: passwordSchema.optional(),
+})
 
 export const memberCreateUpdateAccountSchema = z
-  .discriminatedUnion("mode", [
-    createMemberAccountSchema,
-    updateMemberAccountSchema,
-  ])
-  .superRefine((data, ctx) => {
-    if (data.password || data.confirmPassword) {
-      if (data.password !== data.confirmPassword) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["confirmPassword"],
-          message: "Passwords do not match.",
-        });
-      }
-    }
-  });
+    .discriminatedUnion('mode', [
+        createMemberAccountSchema,
+        updateMemberAccountSchema,
+    ])
+    .superRefine((data, ctx) => {
+        if (data.password || data.confirmPassword) {
+            if (data.password !== data.confirmPassword) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ['confirmPassword'],
+                    message: 'Passwords do not match.',
+                })
+            }
+        }
+    })
 
 export const withNewUserAccountSchema = z.discriminatedUnion(
-  "create_new_user",
-  [
-    z.object({
-      create_new_user: z.literal(false),
-    }),
-    z.object({
-      create_new_user: z.literal(true),
-      new_user_info: z
-        .object({
-          user_name: z.string(),
-          email: emailSchema,
-          password: passwordSchema,
-        })
-        .optional(),
-    }),
-  ]
-);
+    'create_new_user',
+    [
+        z.object({
+            create_new_user: z.literal(false),
+        }),
+        z.object({
+            create_new_user: z.literal(true),
+            new_user_info: z
+                .object({
+                    user_name: z.string(),
+                    email: emailSchema,
+                    password: passwordSchema,
+                })
+                .optional(),
+        }),
+    ]
+)
 
 export const quickCreateMemberProfileSchema = z
-  .object({
-    old_reference_id: z.string().optional(),
-    passbook: z.string().optional(),
+    .object({
+        old_reference_id: z.string().optional(),
+        passbook: z.string().optional(),
 
-    organization_id: entityIdSchema.optional(),
-    branch_id: entityIdSchema.optional(),
+        organization_id: entityIdSchema.optional(),
+        branch_id: entityIdSchema.optional(),
 
-    first_name: z.string().min(1, "First name is required"),
-    middle_name: z.string().optional(),
-    last_name: z.string().min(1, "Last name is required"),
-    full_name: z.string().optional(),
-    suffix: z.string().max(15).optional(),
-    contact_number: z.string().optional(),
-    birthdate: stringDateSchema
-      .refine(
-        (val) => {
-          const date = startOfDay(new Date(val));
-          const now = startOfDay(new Date());
-          return isBefore(date, now);
-        },
-        { message: "Birthdate must be in the past" }
-      )
-      .transform((val) => new Date(val).toISOString()),
-    member_gender_id: entityIdSchema.optional(),
+        first_name: z.string().min(1, 'First name is required'),
+        middle_name: z.string().optional(),
+        last_name: z.string().min(1, 'Last name is required'),
+        full_name: z.string().optional(),
+        suffix: z.string().max(15).optional(),
+        contact_number: z.string().optional(),
+        birthdate: stringDateSchema
+            .refine(
+                (val) => {
+                    const date = startOfDay(new Date(val))
+                    const now = startOfDay(new Date())
+                    return isBefore(date, now)
+                },
+                { message: 'Birthdate must be in the past' }
+            )
+            .transform((val) => new Date(val).toISOString()),
+        member_gender_id: entityIdSchema.optional(),
 
-    civil_status: civilStatusSchema,
-    occupation_id: entityIdSchema.optional(),
+        civil_status: civilStatusSchema,
+        occupation_id: entityIdSchema.optional(),
 
-    status: generalStatusSchema.default("verified"),
+        status: generalStatusSchema.default('verified'),
 
-    is_mutual_fund_member: z.boolean().default(false),
-    is_micro_finance_member: z.boolean().default(false),
+        is_mutual_fund_member: z.boolean().default(false),
+        is_micro_finance_member: z.boolean().default(false),
 
-    member_type_id: entityIdSchema,
-  })
-  .and(withNewUserAccountSchema);
+        member_type_id: entityIdSchema,
+    })
+    .and(withNewUserAccountSchema)
 
-export const withPassword = z.discriminatedUnion("with_password", [
-  z.object({
-    with_password: z.literal(false),
-    password: z.preprocess(
-      (val) => (typeof val === "string" && val.length === 0 ? undefined : val),
-      passwordSchema.optional()
-    ),
-  }),
-  z.object({ with_password: z.literal(true), password: passwordSchema }),
-]);
+export const withPassword = z.discriminatedUnion('with_password', [
+    z.object({
+        with_password: z.literal(false),
+        password: z.preprocess(
+            (val) =>
+                typeof val === 'string' && val.length === 0 ? undefined : val,
+            passwordSchema.optional()
+        ),
+    }),
+    z.object({ with_password: z.literal(true), password: passwordSchema }),
+])
 
 export const memberProfileUserAccountSchema = z
-  .object({
-    email: emailSchema,
-    user_name: userNameSchema,
-    first_name: firstNameSchema,
-    middle_name: middleNameSchema,
-    last_name: lastNameSchema,
-    full_name: z.string().min(1, "full name is required"),
-    suffix: z.string().optional(),
+    .object({
+        email: emailSchema,
+        user_name: userNameSchema,
+        first_name: firstNameSchema,
+        middle_name: middleNameSchema,
+        last_name: lastNameSchema,
+        full_name: z.string().min(1, 'full name is required'),
+        suffix: z.string().optional(),
 
-    birthdate: stringDateSchema.refine(
-      (val) => {
-        const date = startOfDay(new Date(val));
-        const now = startOfDay(new Date());
-        return isBefore(date, now);
-      },
-      { message: "Birthdate must be in the past" }
-    ),
-    contact_number: contactNumberSchema,
-  })
-  .and(withPassword);
+        birthdate: stringDateSchema.refine(
+            (val) => {
+                const date = startOfDay(new Date(val))
+                const now = startOfDay(new Date())
+                return isBefore(date, now)
+            },
+            { message: 'Birthdate must be in the past' }
+        ),
+        contact_number: contactNumberSchema,
+    })
+    .and(withPassword)

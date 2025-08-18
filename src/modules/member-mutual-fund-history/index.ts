@@ -1,1 +1,1 @@
-export * from "./member-mutual-fund-history.types";
+export * from './member-mutual-fund-history.types'

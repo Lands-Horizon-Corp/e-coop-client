@@ -1,30 +1,30 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from 'react'
 
-import { cn } from '@/helpers/tw-utils';
-import type * as DialogPrimitive from '@radix-ui/react-dialog';
+import { cn } from '@/helpers/tw-utils'
+import type { IBaseProps, IClassProps } from '@/types/base-component'
+import type * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import {
     Dialog,
-    DialogTitle,
     DialogContent,
     DialogDescription,
     type DialogExtraProps,
-} from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
-import type { IBaseProps, IClassProps } from '@/types/base-component';
+    DialogTitle,
+} from '@/components/ui/dialog'
+import { Separator } from '@/components/ui/separator'
 
 export interface IModalClassNames extends DialogExtraProps, IClassProps {
-    titleClassName?: string;
-    descriptionClassName?: string;
+    titleClassName?: string
+    descriptionClassName?: string
 }
 
 export interface IModalProps
     extends IBaseProps,
         DialogPrimitive.DialogProps,
         IModalClassNames {
-    title?: string | ReactNode;
-    description?: string | ReactNode;
-    footer?: React.ReactNode;
+    title?: string | ReactNode
+    description?: string | ReactNode
+    footer?: React.ReactNode
 }
 
 const Modal = ({
@@ -48,7 +48,7 @@ const Modal = ({
                 overlayClassName={cn('backdrop-blur', overlayClassName)}
                 className={cn(
                     'shadow-2 ecoop-scroll max-h-[95vh] max-w-xl overflow-y-auto !rounded-2xl border font-inter',
-                    className,
+                    className
                 )}
             >
                 <DialogTitle className={cn('font-medium', titleClassName)}>
@@ -58,17 +58,17 @@ const Modal = ({
                     className={cn(
                         'mb-4',
                         descriptionClassName,
-                        !description && 'hidden',
+                        !description && 'hidden'
                     )}
                 >
                     {description}
                 </DialogDescription>
                 {children}
-                {footer && <Separator className='bg-muted/70' />}
+                {footer && <Separator className="bg-muted/70" />}
                 {footer}
             </DialogContent>
         </Dialog>
-    );
-};
+    )
+}
 
-export default Modal;
+export default Modal

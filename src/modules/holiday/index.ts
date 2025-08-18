@@ -1,1 +1,1 @@
-export * from "./holiday.types";
+export * from './holiday.types'

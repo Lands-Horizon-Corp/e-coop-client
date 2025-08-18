@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
+
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogTitle,
 } from '@/components/ui/dialog'
-
-import { cn } from '@/helpers/tw-utils' 
 
 const ConnectionProvider = ({ interval = 10_000 }: { interval?: number }) => {
     const [isConnected, setIsConnected] = useState(true)

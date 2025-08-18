@@ -1,1 +1,1 @@
-export * from "./post-dated-check.types";
+export * from './post-dated-check.types'

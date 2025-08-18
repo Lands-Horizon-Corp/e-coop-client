@@ -1,1 +1,1 @@
-export * from "./general-ledger.types";
+export * from './general-ledger.types'

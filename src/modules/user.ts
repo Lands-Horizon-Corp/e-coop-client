@@ -1,6 +1,7 @@
-import { z } from 'zod';
-import { MediaResponseSchema } from './media';
-import { entityIdSchema } from './common';
+import { z } from 'zod'
+
+import { entityIdSchema } from './common'
+import { MediaResponseSchema } from './media'
 
 // Define the Zod schema for UserResponse
 export const UserResponseSchema = z.object({
@@ -28,7 +29,7 @@ export const UserResponseSchema = z.object({
     generated_reports: z.array(z.any()).optional(),
     notifications: z.array(z.any()).optional(),
     user_organizations: z.array(z.any()).optional(),
-});
+})
 
 // Define the Zod schema for CurrentUserResponse
 export const CurrentUserResponseSchema = z.object({
@@ -37,13 +38,13 @@ export const CurrentUserResponseSchema = z.object({
     user_organization: z.any().optional(),
     is_logged_in_on_other_device: z.boolean(),
     users: z.any().optional(),
-});
+})
 
 // Define the Zod schema for UserLoginRequest
 export const UserLoginRequestSchema = z.object({
     key: z.string().min(1),
     password: z.string().min(8),
-});
+})
 
 // Define the Zod schema for UserRegisterRequest
 export const UserRegisterRequestSchema = z.object({
@@ -58,58 +59,58 @@ export const UserRegisterRequestSchema = z.object({
     suffix: z.string().optional(),
     contact_number: z.string().min(7).max(20),
     media_id: entityIdSchema.optional(),
-});
+})
 
 // Define the Zod schema for UserForgotPasswordRequest
 export const UserForgotPasswordRequestSchema = z.object({
     key: z.string().min(1),
-});
+})
 
 // Define the Zod schema for UserChangePasswordRequest
 export const UserChangePasswordRequestSchema = z.object({
     new_password: z.string().min(8),
     confirm_password: z.string().min(8),
-});
+})
 
 // Define the Zod schema for UserVerifyContactNumberRequest
 export const UserVerifyContactNumberRequestSchema = z.object({
     otp: z.string().min(6),
-});
+})
 
 // Define the Zod schema for UserVerifyEmailRequest
 export const UserVerifyEmailRequestSchema = z.object({
     otp: z.string().min(6),
-});
+})
 
 // Define the Zod schema for UserSettingsChangePasswordRequest
 export const UserSettingsChangePasswordRequestSchema = z.object({
     old_password: z.string().min(8),
     new_password: z.string().min(8),
     confirm_password: z.string().min(8),
-});
+})
 
 // Define the Zod schema for UserSettingsChangeEmailRequest
 export const UserSettingsChangeEmailRequestSchema = z.object({
     email: z.string().email(),
     password: z.string().min(8),
-});
+})
 
 // Define the Zod schema for UserSettingsChangeUsernameRequest
 export const UserSettingsChangeUsernameRequestSchema = z.object({
     user_name: z.string().min(3).max(100),
     password: z.string().min(8),
-});
+})
 
 // Define the Zod schema for UserSettingsChangeContactNumberRequest
 export const UserSettingsChangeContactNumberRequestSchema = z.object({
     contact_number: z.string().min(7).max(20),
     password: z.string().min(8),
-});
+})
 
 // Define the Zod schema for UserSettingsChangeProfilePictureRequest
 export const UserSettingsChangeProfilePictureRequestSchema = z.object({
     media_id: entityIdSchema,
-});
+})
 
 // Define the Zod schema for UserSettingsChangeProfileRequest
 export const UserSettingsChangeProfileRequestSchema = z.object({
@@ -120,7 +121,7 @@ export const UserSettingsChangeProfileRequestSchema = z.object({
     last_name: z.string().optional(),
     full_name: z.string().optional(),
     suffix: z.string().optional(),
-});
+})
 
 // Define the Zod schema for UserSettingsChangeGeneralRequest
 export const UserSettingsChangeGeneralRequestSchema = z.object({
@@ -128,43 +129,43 @@ export const UserSettingsChangeGeneralRequestSchema = z.object({
     description: z.string().optional(),
     email: z.email(),
     user_name: z.string().min(3).max(100),
-});
+})
 
 // Infer the TypeScript types from the Zod schemas
-export type IUserResponse = z.infer<typeof UserResponseSchema>;
-export type ICurrentUserResponse = z.infer<typeof CurrentUserResponseSchema>;
-export type IUserLoginRequest = z.infer<typeof UserLoginRequestSchema>;
-export type IUserRegisterRequest = z.infer<typeof UserRegisterRequestSchema>;
+export type IUserResponse = z.infer<typeof UserResponseSchema>
+export type ICurrentUserResponse = z.infer<typeof CurrentUserResponseSchema>
+export type IUserLoginRequest = z.infer<typeof UserLoginRequestSchema>
+export type IUserRegisterRequest = z.infer<typeof UserRegisterRequestSchema>
 export type IUserForgotPasswordRequest = z.infer<
     typeof UserForgotPasswordRequestSchema
->;
+>
 export type IUserChangePasswordRequest = z.infer<
     typeof UserChangePasswordRequestSchema
->;
+>
 export type IUserVerifyContactNumberRequest = z.infer<
     typeof UserVerifyContactNumberRequestSchema
->;
+>
 export type IUserVerifyEmailRequest = z.infer<
     typeof UserVerifyEmailRequestSchema
->;
+>
 export type IUserSettingsChangePasswordRequest = z.infer<
     typeof UserSettingsChangePasswordRequestSchema
->;
+>
 export type IUserSettingsChangeEmailRequest = z.infer<
     typeof UserSettingsChangeEmailRequestSchema
->;
+>
 export type IUserSettingsChangeUsernameRequest = z.infer<
     typeof UserSettingsChangeUsernameRequestSchema
->;
+>
 export type IUserSettingsChangeContactNumberRequest = z.infer<
     typeof UserSettingsChangeContactNumberRequestSchema
->;
+>
 export type IUserSettingsChangeProfilePictureRequest = z.infer<
     typeof UserSettingsChangeProfilePictureRequestSchema
->;
+>
 export type IUserSettingsChangeProfileRequest = z.infer<
     typeof UserSettingsChangeProfileRequestSchema
->;
+>
 export type IUserSettingsChangeGeneralRequest = z.infer<
     typeof UserSettingsChangeGeneralRequestSchema
->;
+>

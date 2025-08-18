@@ -1,1 +1,1 @@
-export * from "./member-government-benefit.types";
+export * from './member-government-benefit.types'

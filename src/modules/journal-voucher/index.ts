@@ -1,1 +1,1 @@
-export * from "./journal-voucher.types";
+export * from './journal-voucher.types'

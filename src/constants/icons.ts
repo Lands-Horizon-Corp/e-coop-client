@@ -310,4 +310,4 @@ export const ICONS = [
     'Badge Exclamation Fill',
     'Text Strikethrough Light',
     'Ri Community Fill Icon',
-] as const;
+] as const

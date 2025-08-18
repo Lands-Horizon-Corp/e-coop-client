@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react'
 
 // Since naremove na ang onSuccess, onError from TQ-V4 to TQ-V5, this serves as reusable listender for that
 // that the consumer/components can use
@@ -10,18 +10,18 @@ export const useQeueryHookCallback = <TData = unknown, TError = unknown>({
     onError,
     onSuccess,
 }: {
-    error: TError;
-    data: TData;
-    isError?: boolean;
-    isSuccess?: boolean;
-    onError?: (error: TError) => void;
-    onSuccess?: (data: TData) => void;
+    error: TError
+    data: TData
+    isError?: boolean
+    isSuccess?: boolean
+    onError?: (error: TError) => void
+    onSuccess?: (data: TData) => void
 }) => {
     useEffect(() => {
-        if (isSuccess) onSuccess?.(data);
-    }, [isSuccess, data, onSuccess]);
+        if (isSuccess) onSuccess?.(data)
+    }, [isSuccess, data, onSuccess])
 
     useEffect(() => {
-        if (isError) onError?.(error);
-    }, [isError, error, onError]);
-};
+        if (isError) onError?.(error)
+    }, [isError, error, onError])
+}

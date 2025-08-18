@@ -1,18 +1,18 @@
-import { TEntityId, ITimeStamps, IAuditable } from "../common";
-import { IMemberProfile } from "../member-profile";
+import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IMemberProfile } from '../member-profile'
 
 export interface IMemberDescriptionRequest {
-  id?: TEntityId;
-  name: string;
-  description: string;
+    id?: TEntityId
+    name: string
+    description: string
 }
 
 export interface IMemberDescription extends ITimeStamps, IAuditable {
-  id: TEntityId;
-  member_profile_id: TEntityId;
-  member_profile: IMemberProfile;
+    id: TEntityId
+    member_profile_id: TEntityId
+    member_profile: IMemberProfile
 
-  date: string;
-  description: string;
-  name: string;
+    date: string
+    description: string
+    name: string
 }

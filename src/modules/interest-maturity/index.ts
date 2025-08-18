@@ -1,1 +1,1 @@
-export * from "./interest-maturity.types";
+export * from './interest-maturity.types'

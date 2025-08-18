@@ -1,1 +1,1 @@
-export * from "./fines-maturity.types";
+export * from './fines-maturity.types'

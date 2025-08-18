@@ -1,1 +1,1 @@
-export * from "./member-damayan-extension-entry.types";
+export * from './member-damayan-extension-entry.types'

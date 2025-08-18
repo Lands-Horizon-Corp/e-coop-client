@@ -1,1 +1,1 @@
-export * from "./user-organization.types";
+export * from './user-organization.types'

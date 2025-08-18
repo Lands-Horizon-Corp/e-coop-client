@@ -1,1 +1,1 @@
-export * from "./member-gender.types";
+export * from './member-gender.types'

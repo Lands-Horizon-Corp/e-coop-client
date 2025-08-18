@@ -1,1 +1,1 @@
-export * from "./member-asset.types";
+export * from './member-asset.types'

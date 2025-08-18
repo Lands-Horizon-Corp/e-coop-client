@@ -1,1 +1,1 @@
-export * from "./member-deduction-entry.types";
+export * from './member-deduction-entry.types'

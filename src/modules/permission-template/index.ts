@@ -1,1 +1,1 @@
-export * from "./permission-template.types";
+export * from './permission-template.types'

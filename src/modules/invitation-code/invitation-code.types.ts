@@ -1,62 +1,74 @@
-import z from "zod";
-import { IBranch } from "../branch";
-import { descriptionSchema, descriptionTransformerSanitizer, IAuditable, IPaginatedResult, ITimeStamps, stringDateSchema, TEntityId, TUserType, userAccountTypeSchema } from "../common";
-import { IOrganization } from "../organization";
-import { TPermission } from "@/constants/permission";
+import z from 'zod'
+
+import { TPermission } from '@/constants/permission'
+
+import { IBranch } from '../branch/branch.types'
+import {
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TEntityId,
+    TUserType,
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+    stringDateSchema,
+    userAccountTypeSchema,
+} from '../common'
+import { IOrganization } from '../organization'
 
 // Invitation Code Resource
 export interface IInvitationCode extends ITimeStamps, IAuditable {
-  id: TEntityId;
+    id: TEntityId
 
-  user_type: TUserType;
-  code: string;
+    user_type: TUserType
+    code: string
 
-  expiration_date?: string;
-  max_use: number;
-  current_use: number;
+    expiration_date?: string
+    max_use: number
+    current_use: number
 
-  permission_name: string;
-  permission_description: string;
-  // permissions: TPermission[];
+    permission_name: string
+    permission_description: string
+    // permissions: TPermission[];
 
-  description: string;
-  branch: IBranch;
-  organization: IOrganization;
+    description: string
+    branch: IBranch
+    organization: IOrganization
 }
 
 export interface IInvitationCodeRequest {
-  id?: TEntityId;
+    id?: TEntityId
 
-  user_type: TUserType;
-  code: string;
+    user_type: TUserType
+    code: string
 
-  expiration_date?: string;
-  max_use: number;
-  current_use?: number;
+    expiration_date?: string
+    max_use: number
+    current_use?: number
 
-  permission_name: string;
-  permission_description: string;
-  permissions: TPermission[];
+    permission_name: string
+    permission_description: string
+    permissions: TPermission[]
 
-  description: string;
+    description: string
 }
 
 export interface IInvitationCodePaginated
-  extends IPaginatedResult<IInvitationCode> {}
+    extends IPaginatedResult<IInvitationCode> {}
 
-const InviationCodeSchema = z.object({
-  code: z.string().min(1, "invitation code is required"),
-  expiration_date: stringDateSchema,
-  current_use: z.coerce.number().min(0, "Current use cannot be negative"),
-  max_use: z.coerce.number().min(0, "Current use cannot be negative"),
-  description: descriptionSchema.transform(descriptionTransformerSanitizer),
-  user_type: userAccountTypeSchema,
+export const InviationCodeSchema = z.object({
+    code: z.string().min(1, 'invitation code is required'),
+    expiration_date: stringDateSchema,
+    current_use: z.coerce.number().min(0, 'Current use cannot be negative'),
+    max_use: z.coerce.number().min(0, 'Current use cannot be negative'),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+    user_type: userAccountTypeSchema,
 
-  permission_name: z.string(),
-  permission_description: descriptionSchema.transform(
-    descriptionTransformerSanitizer
-  ),
-  permissions: z.array(z.string()),
-});
+    permission_name: z.string(),
+    permission_description: descriptionSchema.transform(
+        descriptionTransformerSanitizer
+    ),
+    permissions: z.array(z.string()),
+})
 
-export type TInvitationCodeFormValues = z.infer<typeof InviationCodeSchema>;
+export type TInvitationCodeFormValues = z.infer<typeof InviationCodeSchema>

@@ -1,1 +1,1 @@
-export * from "./member-description-schema.types";
+export * from './member-description-schema.types'

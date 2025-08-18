@@ -1,1 +1,1 @@
-export * from "./loan-transaction-entry.types";
+export * from './loan-transaction-entry.types'

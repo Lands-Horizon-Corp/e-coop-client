@@ -1,1 +1,1 @@
-export * from "./user-rating.types";
+export * from './user-rating.types'

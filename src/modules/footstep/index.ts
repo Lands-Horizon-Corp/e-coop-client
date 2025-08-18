@@ -1,1 +1,1 @@
-export * from "./footstep.types";
+export * from './footstep.types'

@@ -6,7 +6,7 @@ export const LOAN_MODE_OF_PAYMENT = [
     'quarterly',
     'semi-annual',
     'lumpsum',
-] as const;
+] as const
 
 export const WEEKDAYS = [
     'monday',
@@ -16,11 +16,11 @@ export const WEEKDAYS = [
     'friday',
     'saturday',
     'sunday',
-] as const;
+] as const
 
-export const LOAN_COLLECTOR_PLACE = ['office', 'field'] as const;
+export const LOAN_COLLECTOR_PLACE = ['office', 'field'] as const
 
-export const LOAN_COMAKER_TYPE = ['member', 'deposit', 'others'] as const;
+export const LOAN_COMAKER_TYPE = ['member', 'deposit', 'others'] as const
 
 export const LOAN_TYPE = [
     'standard',
@@ -28,9 +28,9 @@ export const LOAN_TYPE = [
     'standard previous',
     'renewal',
     'renewal without deduction',
-] as const;
+] as const
 
-export const LOAN_AMORTIZATION_TYPE = ['suggested', 'none'] as const;
+export const LOAN_AMORTIZATION_TYPE = ['suggested', 'none'] as const
 
 export const COMPUTATION_TYPE = [
     'Straight',
@@ -39,4 +39,4 @@ export const COMPUTATION_TYPE = [
     'Diminishing Yearly',
     'Diminishing Straight',
     'Diminishing Quarterly',
-] as const;
+] as const

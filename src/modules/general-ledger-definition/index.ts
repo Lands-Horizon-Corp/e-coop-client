@@ -1,1 +1,1 @@
-export * from "./general-ledger-definition.types";
+export * from './general-ledger-definition.types'

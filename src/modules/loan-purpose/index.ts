@@ -1,1 +1,1 @@
-export * from "./loan-purpose.types";
+export * from './loan-purpose.types'

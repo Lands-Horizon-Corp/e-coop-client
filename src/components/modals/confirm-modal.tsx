@@ -1,13 +1,13 @@
-import useConfirmModalStore from '@/store/confirm-modal-store';
+import { cn } from '@/helpers/tw-utils'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 
-import Modal from '@/components/modals/modal';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/helpers/tw-utils';
+import Modal from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
 const ConfirmModal = () => {
     const { isOpen, modalData, onConfirm, onClose, onCancel } =
-        useConfirmModalStore();
+        useConfirmModalStore()
 
     return (
         <Modal
@@ -17,24 +17,24 @@ const ConfirmModal = () => {
             description={modalData?.description}
         >
             {modalData?.content}
-            {modalData?.hideSeparator ? null : <Separator className='my-4' />}
+            {modalData?.hideSeparator ? null : <Separator className="my-4" />}
             <div
                 className={cn(
                     `flex justify-end gap-x-2`,
-                    modalData?.footerClassName,
+                    modalData?.footerClassName
                 )}
             >
                 <Button
                     onClick={onCancel}
                     variant={'ghost'}
-                    className='bg-muted/60 hover:bg-muted'
+                    className="bg-muted/60 hover:bg-muted"
                 >
                     {modalData?.cancelString}
                 </Button>
                 <Button onClick={onConfirm}>{modalData?.confirmString}</Button>
             </div>
         </Modal>
-    );
-};
+    )
+}
 
-export default ConfirmModal;
+export default ConfirmModal
