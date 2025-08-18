@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'

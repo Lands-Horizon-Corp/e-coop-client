@@ -1,9 +1,9 @@
 import { forwardRef } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
+
 import { ReceiptIcon } from '@/components/icons'
 import { Input } from '@/components/ui/input'
-
-import { cn } from '@/lib/utils'
 
 type ReferenceNumberPros = React.InputHTMLAttributes<HTMLInputElement> & {
     InputClassName?: string

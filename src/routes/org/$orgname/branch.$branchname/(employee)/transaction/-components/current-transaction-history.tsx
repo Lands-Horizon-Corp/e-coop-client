@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { formatDate } from '@/helpers'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { ITransactionResponse } from '@/types/coop-types'
 import { dateAgo, toReadableDateTime } from '@/utils'
 import { useNavigate } from '@tanstack/react-router'

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { withCatchAsync } from '@/utils'
 import { Table } from '@tanstack/react-table'

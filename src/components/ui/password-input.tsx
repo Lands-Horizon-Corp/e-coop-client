@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-import { Input, InputProps } from '@/components/ui/input'
+import { cn } from '@/helpers/tw-utils'
 
-import { cn } from '@/lib/utils'
+import { Input, InputProps } from '@/components/ui/input'
 
 import { EyeIcon, EyeOffIcon } from '../icons'
 

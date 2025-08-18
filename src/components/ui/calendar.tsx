@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { format, setMonth } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { DayPicker, useDayPicker, useNavigation } from 'react-day-picker'
@@ -10,8 +11,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-
-import { cn } from '@/lib/utils'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 

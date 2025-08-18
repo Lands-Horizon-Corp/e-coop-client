@@ -60,7 +60,12 @@ function RouteComponent() {
                         <AuthFooter />
                     </div>
                     <div className="hidden h-screen sm:block sm:w-1/3">
-                        <div className="size-full rounded-l-3xl bg-cover sm:bg-[url('/auth-bg.webp')]" />
+                        <div
+                            className="size-full rounded-l-3xl bg-cover"
+                            style={{
+                                backgroundImage: "url('/auth-bg.webp')",
+                            }}
+                        />
                     </div>
                 </main>
             </div>

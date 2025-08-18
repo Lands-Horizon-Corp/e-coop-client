@@ -1,0 +1,31 @@
+{
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "overrides": [
+        {
+            "files": "src/*.{js,ts,jsx,tsx}",
+            "options": {
+                "semi": true
+            }
+        }
+    ],
+    "importOrder": [
+        "^(react|zod|sonner|@tanstack/react-query|query-string|fuse(.)js)$",
+        "^@hookform/(.*)$",
+        "<THIRD_PARTY_MODULES>",
+        "^@/components/(.*)$",
+        "^@/lib/(.*)$",
+        "^@/validations/(.*)$",
+        "^@/hooks/(.*)$",
+        "^@/types$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "plugins": [
+        "prettier-plugin-tailwindcss",
+        "@trivago/prettier-plugin-sort-imports"
+    ]
+}

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { format } from 'date-fns'
-
-import { cn } from '@/lib/utils'
 
 import { IClassProps } from '@/types'
 

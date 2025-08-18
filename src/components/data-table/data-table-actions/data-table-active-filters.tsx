@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { useFilter } from '@/contexts/filter-context'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import ActionTooltip from '@/components/action-tooltip'
 import { FunnelFilledIcon, FunnelIcon, XIcon } from '@/components/icons'

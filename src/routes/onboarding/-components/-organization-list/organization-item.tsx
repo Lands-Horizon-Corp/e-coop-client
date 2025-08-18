@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { Link, useNavigate } from '@tanstack/react-router'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import PlainTextEditor from '@/components/plain-text-editor'
 import { Button } from '@/components/ui/button'
-
-import { cn } from '@/lib/utils'
 
 import { IOrganization } from '@/types'
 

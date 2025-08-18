@@ -1,5 +1,5 @@
-import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin";
-import { rspack } from "@rspack/core";
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin'
+import { rspack } from '@rspack/core'
 
 export default {
     mode: process.env.NODE_ENV,
@@ -7,8 +7,8 @@ export default {
         rules: [
             {
                 test: /\.css$/,
-                use: ["postcss-loader"],
-                type: "css",
+                use: ['postcss-loader'],
+                type: 'css',
             },
             // ...
         ],
@@ -24,4 +24,4 @@ export default {
             WS_PASSWORD: undefined,
         }),
     ],
-};
+}

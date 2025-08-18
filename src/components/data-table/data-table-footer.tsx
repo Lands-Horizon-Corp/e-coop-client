@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { Table, flexRender } from '@tanstack/react-table'
 
 import { TableCell, TableFooter, TableRow } from '@/components/ui/table'

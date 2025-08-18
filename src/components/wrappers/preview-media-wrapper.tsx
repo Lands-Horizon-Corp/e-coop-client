@@ -1,6 +1,6 @@
 import React, { MouseEvent, ReactElement, cloneElement } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { useImagePreview } from '@/store/image-preview-store'
 
 import { IMedia } from '@/types'

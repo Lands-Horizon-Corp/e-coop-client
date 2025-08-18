@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'
 
 import { Badge } from '@/components/ui/badge'

@@ -73,7 +73,12 @@ function RouteComponent() {
                         )}
                     </div>
                     <div className="hidden h-screen sm:block sm:w-1/3">
-                        <div className="size-full rounded-l-3xl bg-cover shadow-lg dark:shadow-none sm:bg-[url('/auth-bg.webp')]" />
+                        <div
+                            className="size-full rounded-l-3xl bg-cover shadow-lg dark:shadow-none"
+                            style={{
+                                backgroundImage: "url('/auth-bg.webp')",
+                            }}
+                        />
                     </div>
                 </main>
             </div>

@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { commaSeparators } from '@/helpers'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { dateAgo, toReadableDate } from '@/utils'
 import { PaginationState } from '@tanstack/react-table'
 

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
-import { cn } from '@/lib'
-import { Table } from '@tanstack/react-table'
+import { cn } from '@/helpers/tw-utils'
+import type { Table } from '@tanstack/react-table'
 
 import { ColumnOutlineIcon, EyeIcon, EyeNoneIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { IClassProps } from '@/types'
+import type { IClassProps } from '@/types'
 
 interface DataTableViewOptionsProps<TData> extends IClassProps {
     table: Table<TData>
@@ -33,7 +33,9 @@ const DatatableColumnVisibility = <TData,>({
     ).length
 
     const onShowAllColumns = useCallback(() => {
-        table.getAllColumns().forEach((col) => col.toggleVisibility(true))
+        table.getAllColumns().forEach((col) => {
+            col.toggleVisibility(true)
+        })
     }, [table])
 
     return (

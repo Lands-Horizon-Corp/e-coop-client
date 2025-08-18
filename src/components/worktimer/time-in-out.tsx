@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { toDateTimeFormatFile } from '@/utils'
 
 import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'

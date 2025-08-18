@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { Table } from '@tanstack/react-table'
 
 import DataTableActiveFilters from '@/components/data-table/data-table-actions/data-table-active-filters'

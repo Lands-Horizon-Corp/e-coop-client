@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { formatBytes } from '@/helpers'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import {
     CameraIcon,

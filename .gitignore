@@ -43,6 +43,7 @@ dist-ssr
 *.sw?
 
 # Environment files
+.*.env
 .env
 .env.development
 .env.staging

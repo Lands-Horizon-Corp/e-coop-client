@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 import { useAuthUser } from '@/store/user-auth-store'
 import { useNavigate } from '@tanstack/react-router'

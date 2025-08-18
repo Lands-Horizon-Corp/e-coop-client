@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import { dataUrlToFile } from '@/helpers'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useSignature } from '@/store/signature-store'
 import { format } from 'date-fns'

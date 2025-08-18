@@ -1,3 +1,4 @@
+import { cn } from '@/helpers/tw-utils'
 import { type VariantProps, cva } from 'class-variance-authority'
 import {
     CheckCircle,
@@ -11,8 +12,6 @@ import {
     Trash,
     Trash2,
 } from 'lucide-react'
-
-import { cn } from '@/lib/utils'
 
 import { TPermissionAction } from '@/types'
 

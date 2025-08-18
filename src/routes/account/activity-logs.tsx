@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 import footstepService from '@/api-service/footstep-service'
 import { serverRequestErrExtractor } from '@/helpers'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { dateAgo, toReadableDateTime, withCatchAsync } from '@/utils'
 import { createFileRoute } from '@tanstack/react-router'
 

@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { toReadableDate } from '@/utils'
 
 import GeneralStatusBadge from '@/components/badges/general-status-badge'

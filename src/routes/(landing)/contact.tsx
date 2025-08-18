@@ -3,6 +3,7 @@ import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { cn } from '@/helpers/tw-utils'
 import { contactFormSchema } from '@/routes/(landing)/-validations/contact-form'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
@@ -27,8 +28,6 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-
-import { cn } from '@/lib/utils'
 
 import { useCreateContactUs } from '@/hooks/api-hooks/use-contact-us'
 import UseCooldown from '@/hooks/use-cooldown'

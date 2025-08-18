@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import { ChevronRightIcon, ScanLineIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'

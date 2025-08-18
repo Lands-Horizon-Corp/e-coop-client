@@ -1,3 +1,5 @@
+import { cn } from '@/helpers/tw-utils'
+
 import { BriefCaseClockIcon, DotBigIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
@@ -7,8 +9,6 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 import WorkTimer from '@/components/worktimer'
-
-import { cn } from '@/lib/utils'
 
 import { useCurrentTimesheet } from '@/hooks/api-hooks/use-timesheet'
 

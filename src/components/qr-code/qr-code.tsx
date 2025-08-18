@@ -1,10 +1,9 @@
 import { forwardRef } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { QRCodeSVG } from 'qrcode.react'
 
 import { QrCodeIcon } from '@/components/icons'
-
-import { cn } from '@/lib/utils'
 
 import { IClassProps } from '@/types'
 

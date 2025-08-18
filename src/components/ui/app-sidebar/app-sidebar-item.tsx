@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { useLocation, useRouter } from '@tanstack/react-router'
 import { VariantProps } from 'class-variance-authority'
 

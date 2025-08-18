@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 
 import { Badge } from '@/components/ui/badge'

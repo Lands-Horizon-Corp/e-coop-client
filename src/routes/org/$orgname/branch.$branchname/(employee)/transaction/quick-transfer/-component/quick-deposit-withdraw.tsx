@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
 import { QuickTransferTransactionForm } from '@/components/forms/transaction-forms/quick-transaction-form'

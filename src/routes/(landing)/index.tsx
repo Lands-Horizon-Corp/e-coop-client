@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { useTheme } from '@/providers/theme-provider'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
@@ -42,6 +42,7 @@ const Card: React.FC<CardProps> = ({ icon, label, description }) => {
 
 export function HeroSection() {
     const { resolvedTheme } = useTheme()
+
     return (
         <>
             <div className={cn(resolvedTheme === 'dark' ? 'hidden' : 'block')}>

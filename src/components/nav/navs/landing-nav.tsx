@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { Link, ReactNode, useLocation } from '@tanstack/react-router'
 
 import { CurlyBracketIcon } from '@/components/icons'

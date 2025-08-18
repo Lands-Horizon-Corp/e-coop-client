@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import { Input } from './input'
 

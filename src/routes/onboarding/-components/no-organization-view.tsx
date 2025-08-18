@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 import { useNavigate } from '@tanstack/react-router'
 

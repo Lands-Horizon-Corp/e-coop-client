@@ -9,6 +9,7 @@ import React, {
     useState,
 } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { Check, Copy } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
@@ -21,8 +22,6 @@ import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 
 import { Button } from '@/components/ui/button'
-
-import { cn } from '@/lib/utils'
 
 // Define remark and rehype plugins
 const remarkPlugins = [remarkGfm]

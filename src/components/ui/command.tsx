@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import {
     DialogDescription,
     type DialogProps,
@@ -9,8 +10,6 @@ import { Command as CommandPrimitive } from 'cmdk'
 import { Search } from 'lucide-react'
 
 import { Dialog, DialogContent, DialogExtraProps } from '@/components/ui/dialog'
-
-import { cn } from '@/lib/utils'
 
 const Command = React.forwardRef<
     React.ElementRef<typeof CommandPrimitive>,

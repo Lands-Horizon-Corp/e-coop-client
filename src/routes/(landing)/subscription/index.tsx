@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { formatNumber } from '@/utils'
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'

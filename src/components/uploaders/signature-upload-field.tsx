@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import { toast } from 'sonner'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { IconType } from 'react-icons/lib'
 
 import { ImageIcon, TrashIcon } from '@/components/icons'

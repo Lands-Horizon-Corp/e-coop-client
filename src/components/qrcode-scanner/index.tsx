@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { IDetectedBarcode } from '@yudiel/react-qr-scanner'
 
 import { useQrDecryptData } from '@/hooks/api-hooks/use-qr-crypto'

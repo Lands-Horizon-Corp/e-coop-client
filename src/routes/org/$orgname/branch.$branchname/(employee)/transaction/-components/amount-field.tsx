@@ -6,7 +6,7 @@ import {
     isValidDecimalInput,
     sanitizeNumberInput,
 } from '@/helpers'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import { Input } from '@/components/ui/input'
 

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import { ChevronDownIcon, DownloadIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'

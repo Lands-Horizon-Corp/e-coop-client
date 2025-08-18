@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { useAuthUserWithOrg } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 

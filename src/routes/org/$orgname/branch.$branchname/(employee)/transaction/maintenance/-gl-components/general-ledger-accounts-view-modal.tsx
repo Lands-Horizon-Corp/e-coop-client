@@ -1,7 +1,7 @@
+import { cn } from '@/helpers/tw-utils'
+
 import Modal, { IModalProps } from '@/components/modals/modal'
 import GeneralLedgerAccountTable from '@/components/tables/ledgers-tables/general-ledger-accounts-table'
-
-import { cn } from '@/lib/utils'
 
 import { TEntityId } from '@/types'
 

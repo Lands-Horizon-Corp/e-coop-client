@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { Table } from '@tanstack/react-table'
 
 import { MixerHorizontalIcon } from '@/components/icons'
