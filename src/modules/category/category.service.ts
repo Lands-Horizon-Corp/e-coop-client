@@ -2,7 +2,10 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { TCategory, TCategoryRequest } from '../category'
 
-const CategoryDataLayer = createDataLayerFactory<TCategory, TCategoryRequest>({
+const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
+    TCategory,
+    TCategoryRequest
+>({
     url: '/api/v1/category',
     baseKey: 'category',
 })
@@ -17,8 +20,8 @@ export const {
     useGetById,
     useGetPaginated,
     useUpdateById,
-} = CategoryDataLayer.apiCrudHooks
+} = apiCrudHooks
 
 // Add mo custom api query hooks here
 
-export const CategoryAPI = { ...CategoryDataLayer.apiCrudService }
+export const CategoryAPI = apiCrudService
