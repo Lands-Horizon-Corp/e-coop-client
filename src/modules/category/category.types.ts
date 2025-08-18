@@ -1,27 +1,28 @@
-import { z } from 'zod';
-import { entityIdSchema } from '../common';
+import { z } from "zod";
+import { entityIdSchema } from "../common";
+import { OrganizationCategoryResponseSchema } from "../organization-category";
 
-// Define the Zod schema for CategoryResponse
-export const CategoryResponseSchema = z.object({
-    id: entityIdSchema,
-    created_at: z.string(),
-    updated_at: z.string(),
-    name: z.string(),
-    description: z.string(),
-    color: z.string(),
-    icon: z.string(),
-    organization_categories: z.array(z.any()).optional(), // Replace `z.any()` with the schema for OrganizationCategoryResponse if available
+export const CategoryBaseSchema = z.object({
+  name: z.string().min(1).max(255),
+  description: z.string().min(1).max(2048),
+  color: z.string().min(1).max(50),
+  icon: z.string().min(1).max(50),
 });
 
-// Define the Zod schema for CategoryRequest
-export const CategoryRequestSchema = z.object({
-    id: entityIdSchema.optional(),
-    name: z.string().min(1).max(255),
-    description: z.string().min(1).max(2048),
-    color: z.string().min(1).max(50),
-    icon: z.string().min(1).max(50),
+export const CategoryResponseSchema = CategoryBaseSchema.extend({
+  id: entityIdSchema,
+  created_at: z.string(),
+  updated_at: z.string(),
+  organization_categories: z
+    .array(OrganizationCategoryResponseSchema)
+    .optional(),
 });
 
-// Infer the TypeScript types from the Zod schemas
+export const CategoryRequestSchema = CategoryBaseSchema.extend({
+  id: entityIdSchema.optional(),
+});
+
+export type TCategoryBase = z.infer<typeof CategoryBaseSchema>;
 export type TCategory = z.infer<typeof CategoryResponseSchema>;
+export type TCategoryResponse = z.infer<typeof CategoryResponseSchema>;
 export type TCategoryRequest = z.infer<typeof CategoryRequestSchema>;

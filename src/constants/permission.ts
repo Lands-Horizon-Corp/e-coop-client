@@ -272,3 +272,11 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         ],
     },
 ];
+
+export type TPermissionAction =
+    (typeof PERMISSION_ALL_ACTIONS)[number]['action']
+
+export type TPermissionResource =
+    (typeof PERMISSION_ALL_RESOURCE_ACTION)[number]['resource']
+
+export type TPermission = `${TPermissionResource}:${TPermissionAction}`

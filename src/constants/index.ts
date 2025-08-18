@@ -3,7 +3,7 @@ export * from './icons';
 export * from './regex';
 export * from './table';
 export * from './quotes';
-export * from './commons';
+export * from './common-constant';
 export * from './version';
 export * from './government';
 export * from './ledger';
