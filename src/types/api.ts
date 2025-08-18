@@ -1,13 +1,13 @@
+import type { KeysOfOrString } from "./type-utils";
+
 export interface IErrorResponse {
     error?: string;
     message?: string;
 }
 
-export type KeysOfOrString<T> = (string & {}) | keyof T;
-
 export interface ISortItem<T = unknown> {
     field: KeysOfOrString<T>;
-    order: 'asc' | 'desc';
+    order: "asc" | "desc";
 }
 
 export type TSortingState<T = unknown> = ISortItem<T>[];

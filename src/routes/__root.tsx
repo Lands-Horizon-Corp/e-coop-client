@@ -1,6 +1,6 @@
 // import { NATS_PASS, NATS_USER } from "@/constants";
-// import { ActionSecurityProvider } from '@/providers/action-security-provider'
-// import ConnectionProvider from '@/providers/connection-provider'
+import { ActionSecurityProvider } from '@/providers/action-security-provider';
+import ConnectionProvider from '@/providers/connection-provider'
 // import { useAuthStore } from '@/store/user-auth-store'
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
@@ -62,13 +62,14 @@ function RootLayout() {
                     className='z-[9999]'
                 />
                 <Outlet />
-                {/* <ConnectionProvider />
+                <ConnectionProvider />
+                {/*
                 <CookieConsent />
                 <ImagePreviewModal />
                 <ConfirmModal />
                 <InfoModal /> */}
                 <TanStackRouterDevtools />
-                {/* <ActionSecurityProvider /> */}
+                <ActionSecurityProvider />
             </DndProvider>
         </div>
     );

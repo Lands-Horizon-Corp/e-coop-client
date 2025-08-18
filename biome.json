@@ -23,20 +23,22 @@
             "recommended": true,
             "a11y": {
                 "noAccessKey": "error",
-                "noAriaHiddenOnFocusable": "error"
+                "noAriaHiddenOnFocusable": "error",
+                "noSvgWithoutTitle": "off"
             },
             "nursery": {
-                "useSortedClasses": "on"
+                "useSortedClasses": "off"
             },
             "correctness": {
                 "noUnusedImports": "error",
                 "noUnusedVariables": "error",
                 "useExhaustiveDependencies": "error",
-                "useHookAtTopLevel": "error"
+                "useHookAtTopLevel": "error",
+                "useUniqueElementIds": "off"
             },
             "style": {
                 "noDefaultExport": "off",
-                "noImplicitBoolean": "warn",
+                "noImplicitBoolean": "off",
                 "useBlockStatements": "off"
             },
             "suspicious": {

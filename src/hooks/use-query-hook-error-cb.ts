@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+// Since naremove na ang onSuccess, onError from TQ-V4 to TQ-V5, this serves as reusable listender for that
+// that the consumer/components can use
 export const useQeueryHookCallback = <TData = unknown, TError = unknown>({
     data,
     error,
