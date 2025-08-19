@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from 'react'
 import { useMemo } from 'react'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { cn } from '@/helpers/tw-utils'
 
 type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
     fallbackSrc?: string

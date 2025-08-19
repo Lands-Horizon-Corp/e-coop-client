@@ -1,12 +1,11 @@
 import { ReactElement, forwardRef, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
+import { IMedia } from '@/modules/media/media.types'
 
 import { SignatureLightIcon, XIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import { Button, ButtonProps } from '@/components/ui/button'
-
-import { IMedia } from '@/types'
 
 import { SignaturePickerUploaderModal } from '../signature/signature-picker-uploader'
 

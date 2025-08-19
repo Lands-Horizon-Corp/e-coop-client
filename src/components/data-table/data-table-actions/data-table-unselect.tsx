@@ -1,7 +1,7 @@
 import { Table } from '@tanstack/react-table'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { DashSquareDottedIcon } from '@/components/icons'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 
 import { IClassProps } from '@/types'

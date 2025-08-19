@@ -1,12 +1,14 @@
 import { useState } from 'react'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { formatNumber } from '@/helpers/number-utils'
 import { cn } from '@/helpers/tw-utils'
-import { formatNumber } from '@/utils'
+import { ISubscriptionPlan, useGetAll } from '@/modules/subscription-plan'
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 
+import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import PageContainer from '@/components/containers/page-container'
-import { FlickeringGrid } from '@/components/elements/backgrounds/flickering-grid'
 import {
     BuildingBranchIcon,
     ClockIcon,
@@ -19,9 +21,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
-import { useSubscriptionPlans } from '@/hooks/api-hooks/use-subscription-plan'
-
-import { IClassProps, ISubscriptionPlan } from '@/types'
+import { IClassProps } from '@/types'
 
 type PricingPlanMode = 'monthly' | 'yearly'
 
@@ -31,10 +31,17 @@ export const Route = createFileRoute('/(landing)/subscription/')({
 
 function RouteComponent() {
     const [mode, setMode] = useState<PricingPlanMode>('monthly')
-    const { data: subscriptionPlans, isPending, error } = useSubscriptionPlans()
+    const {
+        data: subscriptionPlans,
+        isPending,
+        error: responseError,
+        isError,
+    } = useGetAll()
+
+    const error = serverRequestErrExtractor({ error: responseError })
 
     return (
-        <PageContainer className="py-8 space-y-2 relative bg-background/10 backdrop-blur-sm">
+        <PageContainer className="py-8 space-y-2 relative min-h-[40vh] bg-background/10 backdrop-blur-sm">
             <FlickeringGrid
                 gridGap={1}
                 squareSize={64}
@@ -49,8 +56,10 @@ function RouteComponent() {
                 Flexible and transparent pricing designed to fit cooperatives of
                 all sizes, pay only for what you need as you grow.
             </p>
-            <FormErrorMessage errorMessage={error} />
-            {isPending && <LoadingSpinner className="mx-auto" />}
+            {!isPending && isError && (
+                <FormErrorMessage errorMessage={error} className="my-24" />
+            )}
+            {isPending && <LoadingSpinner className="mx-auto my-24" />}
             {subscriptionPlans && (
                 <>
                     <div className="p-1 bg-muted rounded-full inline-flex border !mt-9 gap-x-1 border-border">
@@ -59,7 +68,7 @@ function RouteComponent() {
                                 key={value}
                                 variant="ghost"
                                 className={cn(
-                                    'rounded-full px-4 hover:bg-background/70 py-1 text-sm transition-all',
+                                    'rounded-full px-4 cursor-pointer hover:bg-background/70 py-1 text-sm transition-all',
                                     mode === value &&
                                         'bg-background shadow-sm text-foreground'
                                 )}

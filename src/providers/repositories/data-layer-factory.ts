@@ -18,15 +18,17 @@ export interface IPaginatedResponse<TData> {
     totalSize: number
 }
 
-type HookQueryOptions<TQueryFnData, TError, TData = TQueryFnData> = Omit<
-    QueryOptions<TQueryFnData, TError, TData>,
-    'queryKey' | 'queryFn'
->
+export type HookQueryOptions<
+    TQueryFnData,
+    TError = Error,
+    TData = TQueryFnData,
+> = Omit<QueryOptions<TQueryFnData, TError, TData>, 'queryKey' | 'queryFn'>
 
-type HookMutationOptions<TQueryFnData, TError, TData = TQueryFnData> = Omit<
-    MutationOptions<TQueryFnData, TError, TData>,
-    'mutationFn'
->
+export type HookMutationOptions<
+    TQueryFnData,
+    TError = Error,
+    TData = TQueryFnData,
+> = Omit<MutationOptions<TQueryFnData, TError, TData>, 'mutationFn'>
 
 // Create and Returns api base crud service and the query hook version of it
 export const createDataLayerFactory = <TResponse, TRequest>({

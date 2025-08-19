@@ -3,13 +3,13 @@ import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { useVerifyPassword } from '@/modules/authentication'
 import useActionSecurityStore from '@/store/action-security-store'
 import { useForm } from 'react-hook-form'
 
 import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
-
-import { useVerifyPassword } from '@/hooks/api-hooks/use-verification'
 
 import { ShieldCheckIcon, ShieldLockIcon } from '../icons'
 import LoadingSpinner from '../spinners/loading-spinner'
@@ -56,11 +56,13 @@ const ActionSecurityModal = () => {
         isPending,
         error,
     } = useVerifyPassword({
-        onSuccess: () => {
-            // onClose()
-            // onSuccess()
-            onPasswordSuccess()
-            form.reset({ password: '' })
+        options: {
+            onSuccess: () => {
+                // onClose()
+                // onSuccess()
+                onPasswordSuccess()
+                form.reset({ password: '' })
+            },
         },
     })
 
@@ -71,6 +73,8 @@ const ActionSecurityModal = () => {
             }, 500)
         }
     }, [isOpen, success])
+
+    const Error = serverRequestErrExtractor({ error })
 
     return (
         <Modal
@@ -112,7 +116,7 @@ const ActionSecurityModal = () => {
                                     />
                                 )}
                             />
-                            <FormErrorMessage errorMessage={error} />
+                            <FormErrorMessage errorMessage={Error} />
 
                             <div className="flex justify-end gap-x-2">
                                 <Button

@@ -6,8 +6,8 @@ import {
     useFilter,
 } from '@/contexts/filter-context'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { ChevronLeftIcon, MagnifyingGlassIcon } from '@/components/icons'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { DebouncedInput } from '@/components/ui/debounced-input'
 

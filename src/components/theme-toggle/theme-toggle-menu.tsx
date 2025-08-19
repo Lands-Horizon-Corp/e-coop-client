@@ -1,6 +1,6 @@
 import { cn } from '@/helpers/tw-utils'
 import { useTheme } from '@/providers/theme-provider'
-import type { IBaseProps } from '@/types/base-component'
+import type { IBaseProps } from '@/types/component-types/base-component'
 
 import { MoonIcon, SunIcon, SunMoonIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'

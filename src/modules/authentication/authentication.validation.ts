@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { MediaResponseSchema } from '../media'
 
@@ -92,7 +92,7 @@ export const UserSettingsChangePasswordRequestSchema = z.object({
 
 // Define the Zod schema for UserSettingsChangeEmailRequest
 export const UserSettingsChangeEmailRequestSchema = z.object({
-    email: z.string().email(),
+    email: z.email(),
     password: z.string().min(8),
 })
 

@@ -2,6 +2,8 @@ import { IAuditable, ITimeStamps, TEntityId, TUserType } from '@/types/common'
 
 import { IFootstep } from '../footstep'
 import { IMedia } from '../media/media.types'
+import { INotification } from '../notification'
+import { IUserOrganization } from '../user-organization'
 
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps, IAuditable {
@@ -59,15 +61,15 @@ export interface IUser extends ITimeStamps {
     signature_media?: IMedia
 
     foot_steps?: IFootstep[]
-    notifications?: TNotificationResponse[]
+    notifications?: INotification[]
     // generated_reports?: TGeneratedReportResponse[];
-    user_organizations?: TUserOrganization[]
+    user_organizations?: IUserOrganization[]
 }
 
 export interface ICurrentUserResponse {
     user_id: string
     user?: IUser
-    user_organization: TUserOrganization
+    user_organization: IUserOrganization
     is_logged_in_on_other_device: boolean
     users?: IUser[]
 }

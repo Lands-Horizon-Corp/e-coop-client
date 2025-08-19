@@ -6,7 +6,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import Footer from '@/components/footers/landing-footer'
 import LandingNav from '@/components/nav/navs/landing-nav'
-import { VersionAndFeedBack } from '@/components/version'
+
+import { VersionAndFeedBack } from './-landing-components/version'
 
 const PublicLayout = () => {
     return (

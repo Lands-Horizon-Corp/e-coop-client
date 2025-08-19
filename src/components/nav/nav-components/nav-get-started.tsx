@@ -1,8 +1,8 @@
+import UserAvatar from '@/modules/user/components/user-avatar'
 import { useAuthStore } from '@/store/user-auth-store'
 import { useRouter } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
-import UserAvatar from '@/components/user-avatar'
 
 const NavGetStarted = () => {
     const { navigate } = useRouter()

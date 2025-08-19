@@ -4,7 +4,6 @@ import { IconType } from 'react-icons/lib'
 
 import { TTagCategory } from '@/types'
 
-import ActionTooltip from '../action-tooltip'
 import {
     BookOpenIcon,
     GearIcon,
@@ -14,6 +13,7 @@ import {
     ReceiptIcon,
     SigiBookIcon,
 } from '../icons'
+import ActionTooltip from '../tooltips/action-tooltip'
 
 const tagTemplateBadgeVariants = cva(
     'font-medium transition-colors duration-200 inline-flex items-center border',

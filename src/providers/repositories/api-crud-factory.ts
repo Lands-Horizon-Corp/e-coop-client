@@ -38,6 +38,7 @@ export interface IAPIRepository<TResponse, TRequest> {
         query?: TAPIQueryOptions
         url?: string
     }) => Promise<IPaginatedResponse<TData>>
+    API: typeof API
 }
 
 export const createAPIRepository = <TResponse, TRequest>(
@@ -140,6 +141,7 @@ export const createAPIRepository = <TResponse, TRequest>(
     }
 
     return {
+        API,
         route,
         create,
         updateById,

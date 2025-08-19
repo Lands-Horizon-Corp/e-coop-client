@@ -6,7 +6,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import CopyWrapper from '@/components/elements/copy-wrapper'
 import { MagnifyingGlassIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import {
@@ -16,6 +15,7 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Input } from '@/components/ui/input'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 import useDebounce from '@/hooks/use-debounce'
 
@@ -310,7 +310,7 @@ function RouteComponent() {
                             <AccordionTrigger className="text-foreground/70 hover:text-foreground duration-300">
                                 {item.title}
                             </AccordionTrigger>
-                            <AccordionContent className="text-muted-foreground max-w-full pb-4">
+                            <AccordionContent className="text-foreground max-w-full pb-4">
                                 {item.content}
                             </AccordionContent>
                         </AccordionItem>
@@ -318,14 +318,14 @@ function RouteComponent() {
                 </Accordion>
                 <p className="text-muted-foreground">
                     Didn&apos;t find your question? Contact us at
-                    <CopyWrapper className="ml-1 text-teal-600 underline-offset-4 underline hover:text-teal-400">
+                    <CopyWrapper className="ml-1 text-inherit underline-offset-4 underline hover:text-primary">
                         lands.horizon.corp@gmail.com
                     </CopyWrapper>{' '}
                     or{' '}
                     <Link
                         resetScroll
                         to="/contact"
-                        className="underline underline-offset-4 text-teal-600"
+                        className="underline underline-offset-4 hover:text-primary"
                     >
                         send us a message
                     </Link>{' '}

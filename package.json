@@ -54,6 +54,7 @@
         "@react-three/fiber": "^9.3.0",
         "@rspack/cli": "^1.4.11",
         "@tailwindcss/typography": "^0.5.16",
+        "@tailwindcss/vite": "^4.1.12",
         "@tanstack/react-location": "^3.7.4",
         "@tanstack/react-query": "^5.85.0",
         "@tanstack/react-query-devtools": "^5.85.0",

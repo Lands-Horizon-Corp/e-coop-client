@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { type Editor } from '@tiptap/react'
 
 import {
@@ -15,11 +15,11 @@ import {
     ToolbarItalicIcon,
     UndoIcon,
 } from '@/components/icons'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 
 import { THeadingLevel } from '.'
-import ActionTooltip from '../action-tooltip'
 
 type ToolbarProps = {
     editor: Editor | null

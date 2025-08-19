@@ -4,9 +4,9 @@ import ARTWORK_EXPERIMENT from '@/assets/artworks/artwork-experiment.svg'
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import CopyWrapper from '@/components/elements/copy-wrapper'
 import { CurlyBracketIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 export const Route = createFileRoute('/(landing)/developers')({
     component: RouteComponent,

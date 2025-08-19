@@ -7,7 +7,7 @@ import {
 
 import { branchTypeEnum } from './branch.types'
 
-export const branchRequestSchema = z.object({
+export const branchSchema = z.object({
     media: z.any(),
     type: z.enum(branchTypeEnum),
     name: z.string().min(1, 'Name is Required'),

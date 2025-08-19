@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { useFilter } from '@/contexts/filter-context'
 import { cn } from '@/helpers/tw-utils'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { FunnelFilledIcon, FunnelIcon, XIcon } from '@/components/icons'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
