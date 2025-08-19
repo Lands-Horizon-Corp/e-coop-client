@@ -8,9 +8,14 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as landingRouteRouteImport } from './routes/(landing)/route'
 import { Route as landingIndexRouteImport } from './routes/(landing)/index'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as landingTestRouteImport } from './routes/(landing)/test'
 import { Route as landingFrequentlyAskedQuestionsRouteImport } from './routes/(landing)/frequently-asked-questions'
 import { Route as landingDevelopersRouteImport } from './routes/(landing)/developers'
@@ -18,6 +23,7 @@ import { Route as landingContactRouteImport } from './routes/(landing)/contact'
 import { Route as landingAboutRouteImport } from './routes/(landing)/about'
 import { Route as landingPolicyRouteRouteImport } from './routes/(landing)/policy/route'
 import { Route as landingSubscriptionIndexRouteImport } from './routes/(landing)/subscription/index'
+import { Route as AuthPasswordResetResetIdRouteImport } from './routes/auth/password-reset.$resetId'
 import { Route as landingPolicyTermsOfUseRouteImport } from './routes/(landing)/policy/terms-of-use'
 import { Route as landingPolicyTermsAndConditionRouteImport } from './routes/(landing)/policy/terms-and-condition'
 import { Route as landingPolicySecurityPolicyRouteImport } from './routes/(landing)/policy/security-policy'
@@ -32,6 +38,13 @@ import { Route as landingPolicyComplaintHandlingAndDisputePolicyRouteImport } fr
 import { Route as landingPolicyCodeOfConductEthicsPolicyRouteImport } from './routes/(landing)/policy/code-of-conduct-ethics-policy'
 import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing)/policy/aml-ctf-policy'
 
+const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
+
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const landingRouteRoute = landingRouteRouteImport.update({
   id: '/(landing)',
   getParentRoute: () => rootRouteImport,
@@ -40,6 +53,21 @@ const landingIndexRoute = landingIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => landingRouteRoute,
+} as any)
+const AuthSignUpLazyRoute = AuthSignUpLazyRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRouteRoute,
+} as any).lazy(() => import('./routes/auth/sign-up.lazy').then((d) => d.Route))
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const landingTestRoute = landingTestRouteImport.update({
   id: '/test',
@@ -77,6 +105,12 @@ const landingSubscriptionIndexRoute =
     id: '/subscription/',
     path: '/subscription/',
     getParentRoute: () => landingRouteRoute,
+  } as any)
+const AuthPasswordResetResetIdRoute =
+  AuthPasswordResetResetIdRouteImport.update({
+    id: '/password-reset/$resetId',
+    path: '/password-reset/$resetId',
+    getParentRoute: () => AuthRouteRoute,
   } as any)
 const landingPolicyTermsOfUseRoute = landingPolicyTermsOfUseRouteImport.update({
   id: '/terms-of-use',
@@ -157,12 +191,16 @@ const landingPolicyAmlCtfPolicyRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof landingIndexRoute
+  '/auth': typeof AuthRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -176,15 +214,20 @@ export interface FileRoutesByFullPath {
   '/policy/security-policy': typeof landingPolicySecurityPolicyRoute
   '/policy/terms-and-condition': typeof landingPolicyTermsAndConditionRoute
   '/policy/terms-of-use': typeof landingPolicyTermsOfUseRoute
+  '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/subscription': typeof landingSubscriptionIndexRoute
 }
 export interface FileRoutesByTo {
+  '/auth': typeof AuthRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/': typeof landingIndexRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
@@ -199,17 +242,22 @@ export interface FileRoutesByTo {
   '/policy/security-policy': typeof landingPolicySecurityPolicyRoute
   '/policy/terms-and-condition': typeof landingPolicyTermsAndConditionRoute
   '/policy/terms-of-use': typeof landingPolicyTermsOfUseRoute
+  '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/subscription': typeof landingSubscriptionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(landing)': typeof landingRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
   '/(landing)/policy': typeof landingPolicyRouteRouteWithChildren
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/developers': typeof landingDevelopersRoute
   '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/(landing)/test': typeof landingTestRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/(landing)/': typeof landingIndexRoute
   '/(landing)/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/(landing)/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
@@ -224,18 +272,23 @@ export interface FileRoutesById {
   '/(landing)/policy/security-policy': typeof landingPolicySecurityPolicyRoute
   '/(landing)/policy/terms-and-condition': typeof landingPolicyTermsAndConditionRoute
   '/(landing)/policy/terms-of-use': typeof landingPolicyTermsOfUseRoute
+  '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/(landing)/subscription/': typeof landingSubscriptionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/policy'
     | '/about'
     | '/contact'
     | '/developers'
     | '/frequently-asked-questions'
     | '/test'
+    | '/auth/forgot-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
@@ -249,15 +302,20 @@ export interface FileRouteTypes {
     | '/policy/security-policy'
     | '/policy/terms-and-condition'
     | '/policy/terms-of-use'
+    | '/auth/password-reset/$resetId'
     | '/subscription'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/auth'
     | '/policy'
     | '/about'
     | '/contact'
     | '/developers'
     | '/frequently-asked-questions'
     | '/test'
+    | '/auth/forgot-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
@@ -272,16 +330,21 @@ export interface FileRouteTypes {
     | '/policy/security-policy'
     | '/policy/terms-and-condition'
     | '/policy/terms-of-use'
+    | '/auth/password-reset/$resetId'
     | '/subscription'
   id:
     | '__root__'
     | '/(landing)'
+    | '/auth'
     | '/(landing)/policy'
     | '/(landing)/about'
     | '/(landing)/contact'
     | '/(landing)/developers'
     | '/(landing)/frequently-asked-questions'
     | '/(landing)/test'
+    | '/auth/forgot-password'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/(landing)/'
     | '/(landing)/policy/aml-ctf-policy'
     | '/(landing)/policy/code-of-conduct-ethics-policy'
@@ -296,15 +359,24 @@ export interface FileRouteTypes {
     | '/(landing)/policy/security-policy'
     | '/(landing)/policy/terms-and-condition'
     | '/(landing)/policy/terms-of-use'
+    | '/auth/password-reset/$resetId'
     | '/(landing)/subscription/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   landingRouteRoute: typeof landingRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(landing)': {
       id: '/(landing)'
       path: '/'
@@ -318,6 +390,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof landingIndexRouteImport
       parentRoute: typeof landingRouteRoute
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/(landing)/test': {
       id: '/(landing)/test'
@@ -367,6 +460,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/subscription'
       preLoaderRoute: typeof landingSubscriptionIndexRouteImport
       parentRoute: typeof landingRouteRoute
+    }
+    '/auth/password-reset/$resetId': {
+      id: '/auth/password-reset/$resetId'
+      path: '/password-reset/$resetId'
+      fullPath: '/auth/password-reset/$resetId'
+      preLoaderRoute: typeof AuthPasswordResetResetIdRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/(landing)/policy/terms-of-use': {
       id: '/(landing)/policy/terms-of-use'
@@ -527,8 +627,27 @@ const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
   landingRouteRouteChildren,
 )
 
+interface AuthRouteRouteChildren {
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpLazyRoute: typeof AuthSignUpLazyRoute
+  AuthPasswordResetResetIdRoute: typeof AuthPasswordResetResetIdRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpLazyRoute: AuthSignUpLazyRoute,
+  AuthPasswordResetResetIdRoute: AuthPasswordResetResetIdRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   landingRouteRoute: landingRouteRouteWithChildren,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

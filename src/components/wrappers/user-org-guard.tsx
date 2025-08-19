@@ -1,8 +1,8 @@
+import { Navigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 
 import { useAuthUser } from '@/store/user-auth-store'
-import { Navigate } from '@tanstack/react-router'
 
 import {
     useSendHeartbeatOffline,

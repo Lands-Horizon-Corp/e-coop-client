@@ -1,9 +1,9 @@
+import { Navigate, useLocation, useRouter } from '@tanstack/react-router'
+import { AxiosError } from 'axios'
 import { ReactNode, useRef } from 'react'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 import { useAuthStore } from '@/store/user-auth-store'
-import { Navigate, useLocation, useRouter } from '@tanstack/react-router'
-import { AxiosError } from 'axios'
 
 import {
     ArrowRightIcon,

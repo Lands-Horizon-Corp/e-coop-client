@@ -1,13 +1,13 @@
 'use client'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useAuthStore } from '@/store/user-auth-store'
 import { getOrgBranchSafeURLNames } from '@/utils'
-import { useRouter } from '@tanstack/react-router'
 
 import {
     ArrowRightIcon,

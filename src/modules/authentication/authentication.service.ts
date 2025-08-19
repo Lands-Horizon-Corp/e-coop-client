@@ -49,7 +49,8 @@ export const signUp = async (data: ISignUpRequest) => {
 
 export const forgotPassword = async (data: IForgotPasswordRequest) => {
     const endpoint = `${route}/forgot-password`
-    await API.post<IForgotPasswordRequest, void>(endpoint, data)
+    await API.post<IForgotPasswordRequest, { key: string }>(endpoint, data)
+    return data
 }
 
 export const changePassword = async (
@@ -126,9 +127,13 @@ export const useSignUp = ({
 export const useForgotPassword = ({
     options,
 }: {
-    options?: HookMutationOptions<void, Error, IForgotPasswordRequest>
+    options?: HookMutationOptions<
+        { key: string },
+        Error,
+        IForgotPasswordRequest
+    >
 } = {}) => {
-    return useMutation<void, Error, IForgotPasswordRequest>({
+    return useMutation<{ key: string }, Error, IForgotPasswordRequest>({
         mutationFn: forgotPassword,
         ...options,
     })

@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { ThemeProvider } from '@/providers/theme-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
 
 // import SpySvg from '../src/assets/spy.svg';
 // import PageContainer from './components/containers/page-container';

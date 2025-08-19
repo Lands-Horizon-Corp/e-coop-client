@@ -1,11 +1,11 @@
+import { createFileRoute } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { formatNumber } from '@/helpers/number-utils'
 import { cn } from '@/helpers/tw-utils'
 import { ISubscriptionPlan, useGetAll } from '@/modules/subscription-plan'
-import { createFileRoute } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
 
 import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import PageContainer from '@/components/containers/page-container'
@@ -35,7 +35,6 @@ function RouteComponent() {
         data: subscriptionPlans,
         isPending,
         error: responseError,
-        isError,
     } = useGetAll()
 
     const error = serverRequestErrExtractor({ error: responseError })
@@ -56,9 +55,7 @@ function RouteComponent() {
                 Flexible and transparent pricing designed to fit cooperatives of
                 all sizes, pay only for what you need as you grow.
             </p>
-            {!isPending && isError && (
-                <FormErrorMessage errorMessage={error} className="my-24" />
-            )}
+            <FormErrorMessage errorMessage={error} className="my-24" />
             {isPending && <LoadingSpinner className="mx-auto my-24" />}
             {subscriptionPlans && (
                 <>

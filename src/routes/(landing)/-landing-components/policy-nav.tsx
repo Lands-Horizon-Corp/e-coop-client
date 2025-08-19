@@ -1,5 +1,6 @@
-import { cn } from '@/helpers/tw-utils'
 import { Link, useLocation } from '@tanstack/react-router'
+
+import { cn } from '@/helpers/tw-utils'
 
 type PolicyNavLinkProps = {
     className?: string

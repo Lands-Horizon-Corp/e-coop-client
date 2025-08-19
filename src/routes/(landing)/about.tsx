@@ -1,6 +1,7 @@
+import { createFileRoute } from '@tanstack/react-router'
+
 import { LANDS_TEAM } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
-import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import {

@@ -1,5 +1,6 @@
-import { cn } from '@/helpers/tw-utils'
 import { Link } from '@tanstack/react-router'
+
+import { cn } from '@/helpers/tw-utils'
 
 import EcoopLogo from '@/components/ecoop-logo'
 

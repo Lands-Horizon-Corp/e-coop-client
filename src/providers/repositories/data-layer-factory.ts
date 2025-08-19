@@ -1,6 +1,6 @@
 import {
     type MutationOptions,
-    type QueryOptions,
+    type QueryObserverOptions,
     useMutation,
     useQuery,
 } from '@tanstack/react-query'
@@ -22,7 +22,10 @@ export type HookQueryOptions<
     TQueryFnData,
     TError = Error,
     TData = TQueryFnData,
-> = Omit<QueryOptions<TQueryFnData, TError, TData>, 'queryKey' | 'queryFn'>
+> = Omit<
+    QueryObserverOptions<TQueryFnData, TError, TData>,
+    'queryKey' | 'queryFn'
+>
 
 export type HookMutationOptions<
     TQueryFnData,

@@ -1,7 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useRef } from 'react'
 import { useMemo } from 'react'
-
-import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import CopyWrapper from '@/components/elements/copy-wrapper'

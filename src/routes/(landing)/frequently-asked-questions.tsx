@@ -1,9 +1,9 @@
+import { createFileRoute } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import Fuse from 'fuse.js'
 import { useMemo, useState } from 'react'
 
 import ARTWORK_FAQ from '@/assets/artworks/artwork-faq.svg'
-import { createFileRoute } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import { MagnifyingGlassIcon } from '@/components/icons'

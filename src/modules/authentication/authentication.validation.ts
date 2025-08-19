@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { PASSWORD_MIN_LENGTH } from '@/constants'
+import { emailSchema, entityIdSchema, passwordSchema } from '@/validation'
 
 import { MediaResponseSchema } from '../media'
 
@@ -130,4 +131,28 @@ export const UserSettingsChangeGeneralRequestSchema = z.object({
     description: z.string().optional(),
     email: z.email(),
     user_name: z.string().min(3).max(100),
+})
+
+export const ResetPasswordSchema = z
+    .object({
+        new_password: passwordSchema,
+        confirm_password: z
+            .string({ error: 'Confirm password' })
+            .min(PASSWORD_MIN_LENGTH, `Password doesn't match`),
+    })
+    .refine(
+        ({ new_password, confirm_password }) =>
+            new_password === confirm_password,
+        {
+            message: "Password doesn't match",
+            path: ['confirm_password'],
+        }
+    )
+
+// For sign in
+export const SignInSchema = z.object({
+    key: emailSchema,
+    password: z
+        .string({ error: 'Password is required' })
+        .min(1, 'Password is empty'),
 })

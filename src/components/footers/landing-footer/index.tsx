@@ -1,5 +1,6 @@
-import { useAuthStore } from '@/store/user-auth-store'
 import { Link, useRouter } from '@tanstack/react-router'
+
+import { useAuthStore } from '@/store/user-auth-store'
 
 import EcoopLogo from '@/components/ecoop-logo'
 import {

@@ -1,7 +1,7 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { Fragment, ReactNode } from 'react'
 
 import ARTWORK_EXPERIMENT from '@/assets/artworks/artwork-experiment.svg'
-import { Link, createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
 import { CurlyBracketIcon } from '@/components/icons'

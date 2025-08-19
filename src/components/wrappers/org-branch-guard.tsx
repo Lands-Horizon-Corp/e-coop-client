@@ -1,6 +1,7 @@
+import { useParams, useRouter } from '@tanstack/react-router'
+
 import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { getOrgBranchSafeURLNames } from '@/utils'
-import { useParams, useRouter } from '@tanstack/react-router'
 
 import { IChildProps } from '@/types'
 

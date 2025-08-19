@@ -51,16 +51,9 @@ export const allErrorMessageExtractor = ({
     return extractErrorMessage({ ...other, errorMessageExtractors })
 }
 
-/**
- * Since Horizon Server utilize axios, it will throw an AxiosError when an error is encountered,
- * this function returns error message
- * @returns {string}
- */
-export const serverRequestErrExtractor = ({
-    error,
-}: {
-    error: unknown
-}): string => {
+export const serverRequestErrExtractor = ({ error }: { error: unknown }) => {
+    if (!error) return
+
     return extractErrorMessage({
         error,
         errorMessageExtractors: [axiosErrExtractor],

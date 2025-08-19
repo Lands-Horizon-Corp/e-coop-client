@@ -1,12 +1,9 @@
+import { IAuthContext } from '@/modules/authentication'
+import { IBranch } from '@/modules/branch'
+import { IOrganization } from '@/modules/organization'
+import { IUserBase } from '@/modules/user'
+import { IUserOrganization } from '@/modules/user-organization'
 import { create } from 'zustand'
-
-import {
-    IAuthContext,
-    IBranch,
-    IOrganization,
-    IUserBase,
-    IUserOrganization,
-} from '@/types'
 
 type TAuthStoreStatus = 'loading' | 'authorized' | 'unauthorized' | 'error'
 

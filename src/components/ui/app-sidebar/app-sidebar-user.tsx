@@ -1,9 +1,9 @@
+import { useParams, useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { useTheme } from '@/providers/theme-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useAuthUser } from '@/store/user-auth-store'
-import { useParams, useRouter } from '@tanstack/react-router'
 
 import { APIKeyGenModal } from '@/components/developer/api-key-gen'
 import {
