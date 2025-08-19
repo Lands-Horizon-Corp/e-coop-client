@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { IOrgIdentity, TEntityId, entityIdSchema } from '../common'
+import { IOrgIdentity, TEntityId, entityIdSchema } from '@/types/common'
 
 export interface IBranchSettings extends IOrgIdentity {
     id: TEntityId

@@ -1,6 +1,5 @@
 import z from 'zod'
 
-import { IBranch } from '../branch'
 import {
     IAuditable,
     IPaginatedResult,
@@ -9,7 +8,9 @@ import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IBranch } from '../branch'
 
 export interface IMemberTypeRequest {
     id?: TEntityId

@@ -1,4 +1,5 @@
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
+import { useGetUserOrganizationByUserId } from '@/modules/user-organization'
 import ErrorPage from '@/routes/-common-pages/error-page'
 import { useAuthUser } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
@@ -6,7 +7,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { LandmarkIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 
-import { useGetUserOrganizationByUserId } from '@/hooks/api-hooks/use-user-organization'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import NoOrganizationView from './-components/no-organization-view'

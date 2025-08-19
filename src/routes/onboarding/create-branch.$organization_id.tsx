@@ -2,7 +2,9 @@ import { toast } from 'sonner'
 import z from 'zod'
 
 import { cn } from '@/helpers/tw-utils'
+import { IBranch } from '@/modules/branch'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { entityIdSchema } from '@/validation'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { CreateUpdateBranchFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
@@ -21,13 +23,11 @@ import {
     TrashIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import PlainTextEditor from '@/components/plain-text-editor'
-import RawDescription from '@/components/raw-description'
+import TextRenderer from '@/components/text-renderer'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-
-import { entityIdSchema } from '@/validations/common'
+import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import {
     useDeleteBranch,
@@ -38,7 +38,7 @@ import { useSeedOrganization } from '@/hooks/api-hooks/use-user-organization'
 import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IBranch, TEntityId } from '@/types'
+import { TEntityId } from '@/types'
 
 const routeSchema = z.object({
     organization_id: entityIdSchema,
@@ -136,7 +136,7 @@ function RouteComponent() {
                                 </span>
                                 {organization?.name}
                             </h1>
-                            <RawDescription
+                            <TextRenderer
                                 className="text-sm"
                                 content={organization?.description ?? ''}
                             />

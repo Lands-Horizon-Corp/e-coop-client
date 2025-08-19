@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { BaseEntityMetaSchema, NullableStringSchema } from '../common'
+import { BaseEntityMetaSchema, NullableStringSchema } from '@/types/common'
 
 export const PermissionTemplateRequestSchema = z.object({
     name: z.string().min(1).max(255),

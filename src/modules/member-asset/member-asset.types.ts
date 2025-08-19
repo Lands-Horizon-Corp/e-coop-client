@@ -1,14 +1,13 @@
 import z from 'zod'
 
-import { IBranch } from '../branch'
+import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
 import {
-    IAuditable,
-    ITimeStamps,
-    TEntityId,
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/validation'
+
+import { IBranch } from '../branch'
 import { IMedia } from '../media/media.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 

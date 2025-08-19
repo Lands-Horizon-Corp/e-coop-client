@@ -13,7 +13,6 @@ import {
     PinLocationIcon,
     PlusIcon,
 } from '@/components/icons'
-import PlainTextEditor from '@/components/plain-text-editor'
 import OrganizationPolicies from '@/components/policies'
 import { StatusBadge } from '@/components/status-badge'
 import {

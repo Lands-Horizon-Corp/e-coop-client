@@ -1,15 +1,18 @@
 import z from 'zod'
 
-import { IBranch } from '../branch/branch.types'
 import {
     IAuditable,
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
+} from '@/types/common'
+import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/validation'
+
+import { IBranch } from '../branch/branch.types'
 import { IMedia } from '../media/media.types'
 import { IOrganization } from '../organization/organization.types'
 

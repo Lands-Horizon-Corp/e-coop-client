@@ -1,11 +1,12 @@
-import { IBranch } from '../branch'
 import {
     IAuditable,
     IPaginatedResult,
     ITimeStamps,
     TEducationalAttainment,
     TEntityId,
-} from '../common'
+} from '@/types/common'
+
+import { IBranch } from '../branch'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
 // FROM LATEST ERD

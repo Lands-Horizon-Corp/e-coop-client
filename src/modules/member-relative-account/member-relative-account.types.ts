@@ -1,6 +1,5 @@
 import z from 'zod'
 
-import { IBranch } from '../branch'
 import {
     IAuditable,
     ITimeStamps,
@@ -9,7 +8,9 @@ import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IBranch } from '../branch'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 import { IOrganization } from '../organization'
 

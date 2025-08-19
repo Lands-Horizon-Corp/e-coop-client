@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IUser } from '../user/user.types'
 
 export interface IUserRatingRequest {

@@ -5,8 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-} from '../common'
+} from '@/types/common'
+import { descriptionSchema } from '@/validation'
 
 export interface IComputationSheetRequest {
     name: string

@@ -1,13 +1,14 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
 import { ILoanTransaction } from '../loan-transaction'
 
 export interface ILoanTermsAndConditionAmountReceiptRequest {

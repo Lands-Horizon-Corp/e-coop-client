@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IMemberTypeReference } from '../member-type-reference/member-type-reference.types'
 
 export interface IMemberTypeReferenceInterestRateByUltimaMembershipDatePerYearRequest {

@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IMemberGender } from '../member-gender/member-gender.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 

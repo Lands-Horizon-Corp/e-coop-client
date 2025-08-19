@@ -1,4 +1,5 @@
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
+
 import { IMemberProfile } from '../member-profile'
 
 export interface IMemberDescriptionRequest {

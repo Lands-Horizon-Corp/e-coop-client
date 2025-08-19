@@ -1,13 +1,14 @@
 import z from 'zod'
 
-import { IBank } from '../bank'
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IBank } from '../bank'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberBankCardRequest {

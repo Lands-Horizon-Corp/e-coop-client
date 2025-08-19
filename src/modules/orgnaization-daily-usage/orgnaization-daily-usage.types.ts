@@ -1,6 +1,7 @@
 import z from 'zod'
 
-import { TEntityId, entityIdSchema } from '../common'
+import { TEntityId, entityIdSchema } from '@/types/common'
+
 import { IOrganization } from '../organization'
 
 export interface IOrganizationDailyUsageRequest {

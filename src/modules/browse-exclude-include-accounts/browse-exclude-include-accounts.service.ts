@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
+import { IBaseEntityMeta, TEntityId, entityIdSchema } from '@/types/common'
+
 import { IAccount } from '../account/account.types'
-import { IBaseEntityMeta, TEntityId, entityIdSchema } from '../common'
 
 export interface IBrowseExcludeIncludeAccounts extends IBaseEntityMeta {
     computation_sheet_id: TEntityId

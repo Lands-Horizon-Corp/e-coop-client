@@ -1,4 +1,5 @@
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '../common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+
 import { IMedia } from '../media/media.types'
 
 export interface IBankRequest {

@@ -1,19 +1,21 @@
 import z from 'zod'
 
 import { TPermission } from '@/constants/permission'
-
-import { IBranch } from '../branch/branch.types'
 import {
     IAuditable,
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
     TUserType,
+} from '@/types/common'
+import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     stringDateSchema,
     userAccountTypeSchema,
-} from '../common'
+} from '@/validation'
+
+import { IBranch } from '../branch/branch.types'
 import { IOrganization } from '../organization'
 
 // Invitation Code Resource

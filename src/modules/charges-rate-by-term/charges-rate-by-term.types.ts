@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { ITimeStamps, entityIdSchema } from '../common'
+import { ITimeStamps, entityIdSchema } from '@/types/common'
 
 // ---------- Interfaces ----------
 

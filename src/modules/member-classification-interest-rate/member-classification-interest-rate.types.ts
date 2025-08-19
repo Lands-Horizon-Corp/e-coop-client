@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IInterestRateByTermsHeaderResponse } from '../interest-rate-by-terms-header'
 import { IInterestRateSchemeResponse } from '../interest-rate-scheme'
 import { IMemberClassification } from '../member-classification/member-classification.types'

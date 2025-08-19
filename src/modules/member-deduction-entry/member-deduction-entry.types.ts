@@ -1,6 +1,5 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -9,7 +8,9 @@ import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberDeductionEntryRequest {

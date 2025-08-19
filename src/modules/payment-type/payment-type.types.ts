@@ -1,4 +1,9 @@
-import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
+import {
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TEntityId,
+} from '@/types/common'
 
 export type PaymentTypeEnum = 'cash' | 'check' | 'online'
 

@@ -6,7 +6,7 @@ import {
     TEntityId,
     descriptionSchema,
     descriptionTransformerSanitizer,
-} from '../common'
+} from '@/types/common'
 
 export interface IMemberGroup extends IBaseEntityMeta {
     id: TEntityId

@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { ITransactionResponse } from '../transaction'
 import { IUser } from '../user/user.types'
 

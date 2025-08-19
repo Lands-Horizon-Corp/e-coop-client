@@ -1,16 +1,16 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
-import { IBank } from '../bank'
-import { ChargesRateByTermHeaderRequest } from '../charges-rate-by-term-header'
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    entityIdSchema,
-} from '../common'
+} from '@/types/common'
+import { descriptionSchema, entityIdSchema } from '@/validation'
+
+import { IAccount } from '../account'
+import { IBank } from '../bank'
+import { ChargesRateByTermHeaderRequest } from '../charges-rate-by-term-header'
 import { IDisbursementResponse } from '../disbursement'
 import { IGeneralLedgerResponse } from '../general-ledger'
 import { IMedia } from '../media/media.types'

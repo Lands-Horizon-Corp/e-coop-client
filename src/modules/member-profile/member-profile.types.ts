@@ -1,9 +1,5 @@
 import z from 'zod'
 
-import { isBefore, startOfDay } from 'date-fns'
-
-import { ISignUpRequest } from '../auth'
-import { IBranch } from '../branch'
 import {
     IAuditable,
     IPaginatedResult,
@@ -14,7 +10,7 @@ import {
     civilStatusSchema,
     generalStatusSchema,
     stringDateSchema,
-} from '../common'
+} from '@/types/common'
 import {
     birthDateSchema,
     contactNumberSchema,
@@ -26,7 +22,11 @@ import {
     passwordSchema,
     permanentAddressSchema,
     userNameSchema,
-} from '../common'
+} from '@/types/common'
+import { isBefore, startOfDay } from 'date-fns'
+
+import { ISignUpRequest } from '../auth'
+import { IBranch } from '../branch'
 import { IMedia } from '../media/media.types'
 import {
     IMemberAddress,

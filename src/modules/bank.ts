@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { createAPIHookRepository } from '@/providers/repositories/api-crud-factory'
 
-import { entityIdSchema } from './common'
+import { entityIdSchema } from '../types/common'
 import { MediaResponseSchema } from './media'
 
 // import { UserResponseSchema } from './user'

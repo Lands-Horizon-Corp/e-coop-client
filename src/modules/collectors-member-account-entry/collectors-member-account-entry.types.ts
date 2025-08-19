@@ -1,6 +1,5 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -8,7 +7,9 @@ import {
     TEntityId,
     descriptionSchema,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
 import { IMemberProfile } from '../member-profile'
 import { IUser } from '../user/user.types'
 

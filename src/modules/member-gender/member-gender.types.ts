@@ -8,7 +8,7 @@ import {
     descriptionTransformerSanitizer,
     entityIdSchema,
     mediaSchema,
-} from '../common'
+} from '@/types/common'
 
 export interface IMemberGender extends IBaseEntityMeta {
     id: TEntityId

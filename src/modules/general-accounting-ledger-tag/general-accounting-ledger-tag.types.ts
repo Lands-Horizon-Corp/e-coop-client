@@ -5,9 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    entityIdSchema,
-} from '../common'
+} from '@/types/common'
+import { descriptionSchema, entityIdSchema } from '@/validation'
 
 // export type TagCategory = string;
 

@@ -1,13 +1,12 @@
 import z from 'zod'
 
 import { TAG_CATEGORY } from '@/constants'
-
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '../common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
 
 export type TTagCategory = (typeof TAG_CATEGORY)[number]
 

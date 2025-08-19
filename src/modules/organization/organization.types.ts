@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IMedia } from '../media/media.types'
 import { ISubscriptionPlan } from '../subscription-plan'
 

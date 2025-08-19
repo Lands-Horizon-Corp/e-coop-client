@@ -5,9 +5,11 @@ import {
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
+} from '@/types/common'
+import {
     descriptionSchema,
     descriptionTransformerSanitizer,
-} from '../common'
+} from '@/validation'
 
 export interface IMemberClassification extends ITimeStamps, IAuditable {
     id: TEntityId

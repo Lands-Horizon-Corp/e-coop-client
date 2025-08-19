@@ -1,7 +1,7 @@
 import qs from 'query-string'
 
-import type { TEntityId } from '@/modules/common'
 import type { TAPIQueryOptions } from '@/types/api'
+import type { TEntityId } from '@/types/common'
 
 import API from '../api'
 

@@ -1,7 +1,7 @@
 import z from 'zod'
 
-import { IBaseEntityMeta, TEntityId } from '../common'
-import { entityIdSchema, stringDateWithTransformSchema } from '../common'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
+import { entityIdSchema, stringDateWithTransformSchema } from '@/types/common'
 
 export interface IAutomaticLoanDeductionBase {
     loan_id: TEntityId

@@ -1,6 +1,5 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
 import {
     IBaseEntityMeta,
     IPaginatedResult,
@@ -8,7 +7,9 @@ import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
 import { IMemberType } from '../member-type/member-type.types'
 
 // LATEST FROM ERD

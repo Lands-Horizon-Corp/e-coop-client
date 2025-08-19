@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from './common'
-import { MediaResponseSchema } from './media'
+import { entityIdSchema } from '@/types/common'
+
+import { MediaResponseSchema } from '../media'
 
 // Define the Zod schema for UserResponse
 export const UserResponseSchema = z.object({
@@ -48,7 +49,7 @@ export const UserLoginRequestSchema = z.object({
 
 // Define the Zod schema for UserRegisterRequest
 export const UserRegisterRequestSchema = z.object({
-    email: z.string().email(),
+    email: z.email(),
     password: z.string().min(8),
     birthdate: z.string().optional(),
     user_name: z.string().min(3).max(100),
@@ -130,42 +131,3 @@ export const UserSettingsChangeGeneralRequestSchema = z.object({
     email: z.email(),
     user_name: z.string().min(3).max(100),
 })
-
-// Infer the TypeScript types from the Zod schemas
-export type IUserResponse = z.infer<typeof UserResponseSchema>
-export type ICurrentUserResponse = z.infer<typeof CurrentUserResponseSchema>
-export type IUserLoginRequest = z.infer<typeof UserLoginRequestSchema>
-export type IUserRegisterRequest = z.infer<typeof UserRegisterRequestSchema>
-export type IUserForgotPasswordRequest = z.infer<
-    typeof UserForgotPasswordRequestSchema
->
-export type IUserChangePasswordRequest = z.infer<
-    typeof UserChangePasswordRequestSchema
->
-export type IUserVerifyContactNumberRequest = z.infer<
-    typeof UserVerifyContactNumberRequestSchema
->
-export type IUserVerifyEmailRequest = z.infer<
-    typeof UserVerifyEmailRequestSchema
->
-export type IUserSettingsChangePasswordRequest = z.infer<
-    typeof UserSettingsChangePasswordRequestSchema
->
-export type IUserSettingsChangeEmailRequest = z.infer<
-    typeof UserSettingsChangeEmailRequestSchema
->
-export type IUserSettingsChangeUsernameRequest = z.infer<
-    typeof UserSettingsChangeUsernameRequestSchema
->
-export type IUserSettingsChangeContactNumberRequest = z.infer<
-    typeof UserSettingsChangeContactNumberRequestSchema
->
-export type IUserSettingsChangeProfilePictureRequest = z.infer<
-    typeof UserSettingsChangeProfilePictureRequestSchema
->
-export type IUserSettingsChangeProfileRequest = z.infer<
-    typeof UserSettingsChangeProfileRequestSchema
->
-export type IUserSettingsChangeGeneralRequest = z.infer<
-    typeof UserSettingsChangeGeneralRequestSchema
->

@@ -1,7 +1,8 @@
 import z from 'zod'
 
+import { IPaginatedResult, ITimeStamps, TEntityId } from '@/types/common'
+
 import { IBranch } from '../branch/branch.types'
-import { IPaginatedResult, ITimeStamps, TEntityId } from '../common'
 import { IMedia } from '../media/media.types'
 import { IOrganization } from '../organization/organization.types'
 

@@ -1,5 +1,6 @@
+import { ITimeStamps, TEntityId } from '@/types/common'
+
 import { IBranch } from '../branch'
-import { ITimeStamps, TEntityId } from '../common'
 import { IMedia } from '../media/media.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 import { IOrganization } from '../organization'

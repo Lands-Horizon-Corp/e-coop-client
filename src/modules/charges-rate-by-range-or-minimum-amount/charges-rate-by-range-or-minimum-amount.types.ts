@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { IAuditable, ITimeStamps, entityIdSchema } from '../common'
+import { IAuditable, ITimeStamps, entityIdSchema } from '@/types/common'
 
 // ---------- Interfaces ----------
 export interface IChargesRateByRangeOrMinimumAmountBase

@@ -1,4 +1,5 @@
-import { IBaseEntityMeta } from '../common'
+import { IBaseEntityMeta } from '@/types/common'
+
 import { IMedia } from '../media/media.types'
 import { IUserBase } from '../user/user.types'
 

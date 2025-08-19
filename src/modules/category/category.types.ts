@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '../common'
+import { entityIdSchema } from '@/types/common'
+
 import { OrganizationCategoryResponseSchema } from '../organization-category'
 
 export const CategoryBaseSchema = z.object({

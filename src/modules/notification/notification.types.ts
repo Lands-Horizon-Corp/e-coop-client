@@ -1,4 +1,5 @@
-import { IPaginatedResult, ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult, ITimeStamps, TEntityId } from '@/types/common'
+
 import { IUserBase } from '../user/user.types'
 
 export type INotificationType =

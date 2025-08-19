@@ -1,7 +1,5 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
-import { ChargesRateByTermHeaderRequest } from '../charges-rate-by-term-header'
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -9,7 +7,10 @@ import {
     TEntityId,
     descriptionSchema,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
+import { ChargesRateByTermHeaderRequest } from '../charges-rate-by-term-header'
 
 export interface IChargesRateMemberTypeModeOfPaymentRequest {
     member_type_id: TEntityId

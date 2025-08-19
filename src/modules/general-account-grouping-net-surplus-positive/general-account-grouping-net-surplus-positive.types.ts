@@ -1,14 +1,14 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    entityIdSchema,
-} from '../common'
+} from '@/types/common'
+import { descriptionSchema, entityIdSchema } from '@/validation'
+
+import { IAccount } from '../account'
 
 export interface IGeneralAccountGroupingNetSurplusPositiveRequest {
     name: string

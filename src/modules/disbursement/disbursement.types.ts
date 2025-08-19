@@ -1,13 +1,14 @@
 import z from 'zod'
 
-import { IAccount } from '../account'
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
 import { IGeneralLedger } from '../general-ledger'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account'

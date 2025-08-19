@@ -6,7 +6,7 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
 
 export interface IMemberTypeReferenceByAmountRequest {
     member_type_reference_id: TEntityId

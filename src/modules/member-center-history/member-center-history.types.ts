@@ -1,5 +1,11 @@
+import {
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TEntityId,
+} from '@/types/common'
+
 import { IBranch } from '../branch'
-import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
 import { IMemberCenter } from '../member-center/member-center.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 

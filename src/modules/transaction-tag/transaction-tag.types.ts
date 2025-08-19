@@ -7,7 +7,8 @@ import {
     TEntityId,
     descriptionSchema,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { ITransactionResponse } from '../transaction/transaction.types'
 
 export type TagCategory = string

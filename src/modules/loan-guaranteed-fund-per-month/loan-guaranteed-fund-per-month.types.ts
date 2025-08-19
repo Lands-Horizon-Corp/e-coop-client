@@ -5,7 +5,7 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-} from '../common'
+} from '@/types/common'
 
 export interface ILoanGuaranteedFundPerMonthRequest {
     month?: number

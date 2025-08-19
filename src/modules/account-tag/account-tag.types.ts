@@ -5,9 +5,11 @@ import {
     IPaginatedResult,
     TEntityId,
     TTagCategory,
+} from '@/types/common'
+import {
     descriptionSchema,
     descriptionTransformerSanitizer,
-} from '../common'
+} from '@/validation'
 
 export interface IAccountTag extends IBaseEntityMeta {
     account_id: TEntityId

@@ -1,6 +1,12 @@
 import z from 'zod'
 
-import { IAuditable, ITimeStamps, TEntityId, entityIdSchema } from '../common'
+import {
+    IAuditable,
+    ITimeStamps,
+    TEntityId,
+    entityIdSchema,
+} from '@/types/common'
+
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberAddress extends ITimeStamps, IAuditable {

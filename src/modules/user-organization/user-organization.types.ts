@@ -1,14 +1,14 @@
 import { USER_ORG_APPLICATION_STATUS } from '@/constants'
 import { TPermission } from '@/constants/permission'
-
-import { IAccount } from '../account'
-import { IBranch } from '../branch'
 import {
     IBaseEntityMeta,
     IPaginatedResult,
     TEntityId,
     TUserType,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
+import { IBranch } from '../branch'
 import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { IUserBase } from '../user/user.types'

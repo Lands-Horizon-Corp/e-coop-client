@@ -1,7 +1,8 @@
 import z from 'zod'
 
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '../common'
-import { entityIdSchema } from '../common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+import { entityIdSchema } from '@/types/common'
+
 import { IUserBase } from '../user/user.types'
 
 export interface ICashCount extends IBaseEntityMeta {

@@ -13,7 +13,7 @@ import GuestGuard from '@/components/wrappers/guest-guard'
 import { useCheckResetId } from '@/hooks/api-hooks/use-auth'
 
 export const PasswordResetPagePathSchema = z.object({
-    resetId: z.string({ required_error: 'Missing Reset Link' }),
+    resetId: z.string({ error: 'Missing Reset Link' }),
 })
 
 export const Route = createFileRoute('/auth/password-reset/$resetId')({

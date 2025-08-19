@@ -1,12 +1,10 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IMedia } from '../media/media.types'
 import { IUser } from '../user/user.types'
 
@@ -14,7 +12,7 @@ export interface ITimesheetRequest {
     media_id?: TEntityId
 }
 
-export interface ITimesheetResponse
+export interface ITimesheet
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
@@ -28,7 +26,3 @@ export interface ITimesheetResponse
     time_in: string
     time_out?: string
 }
-
-export const timesheetRequestSchema = z.object({
-    media_id: entityIdSchema.optional(),
-})

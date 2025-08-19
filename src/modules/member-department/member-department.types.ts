@@ -1,4 +1,4 @@
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '../common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 export interface IMemberDepartment extends IBaseEntityMeta {
     id: TEntityId

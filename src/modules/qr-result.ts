@@ -1,4 +1,4 @@
-import { TEntityId } from './common'
+import { TEntityId } from '../types/common'
 
 // Type of QR content identifier
 export type TQrContentType =

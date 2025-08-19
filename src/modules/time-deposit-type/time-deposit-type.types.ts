@@ -5,7 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-} from '../common'
+} from '@/types/common'
+
 import { ITimeDepositComputationResponse } from '../time-deposit-computation'
 
 export interface ITimeDepositTypeRequest {

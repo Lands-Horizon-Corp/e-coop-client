@@ -1,6 +1,4 @@
-import z from 'zod'
-
-import { ITimeStamps, TEntityId, entityIdSchema } from '../common'
+import { ITimeStamps, TEntityId } from '@/types/common'
 
 export interface IContactUsRequest {
     id?: TEntityId
@@ -11,7 +9,7 @@ export interface IContactUsRequest {
     description: string
 }
 
-export interface IContactUsResponse extends ITimeStamps {
+export interface IContactUs extends ITimeStamps {
     id: TEntityId
     first_name: string
     last_name?: string
@@ -19,12 +17,3 @@ export interface IContactUsResponse extends ITimeStamps {
     contact_number?: string
     description: string
 }
-
-export const contactUsRequestSchema = z.object({
-    id: entityIdSchema.optional(),
-    first_name: z.string().min(1).max(255),
-    last_name: z.string().min(1).max(255).optional(),
-    email: z.string().email().max(255).optional(),
-    contact_number: z.string().min(1).max(20).optional(),
-    description: z.string().min(1),
-})

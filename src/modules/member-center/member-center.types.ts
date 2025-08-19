@@ -5,10 +5,12 @@ import {
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
+} from '@/types/common'
+import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/validation'
 
 export interface IMemberCenterRequest {
     id?: TEntityId

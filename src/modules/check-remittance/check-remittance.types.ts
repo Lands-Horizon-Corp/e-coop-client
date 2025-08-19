@@ -1,13 +1,14 @@
 import z from 'zod'
 
-import { IBank } from '../bank'
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IBank } from '../bank'
 import { IMedia } from '../media/media.types'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user/user.types'

@@ -1,5 +1,6 @@
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+
 import { IAccount } from '../account'
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '../common'
 import { TGeneralLedgerSource } from '../general-ledger'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account'

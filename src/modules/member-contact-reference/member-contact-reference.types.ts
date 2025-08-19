@@ -7,7 +7,8 @@ import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
 // LATEST FROM ERD

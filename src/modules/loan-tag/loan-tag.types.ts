@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { ILoanTransaction } from '../loan-transaction'
 
 export interface ILoanTagRequest {

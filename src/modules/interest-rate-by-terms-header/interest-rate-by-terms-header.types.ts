@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IMemberClassificationInterestRateResponse } from '../member-classification-interest-rate'
 
 export interface IInterestRateByTermsHeaderRequest {

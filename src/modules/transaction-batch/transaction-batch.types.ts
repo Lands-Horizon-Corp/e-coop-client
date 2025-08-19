@@ -1,6 +1,12 @@
+import {
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TEntityId,
+} from '@/types/common'
+
 import { IBatchFundingRequest } from '../batch-funding/batch-funding.types'
 import { IBranch } from '../branch'
-import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
 import { IMedia } from '../media/media.types'
 import { IOrganization } from '../organization'
 import { IUserBase } from '../user/user.types'

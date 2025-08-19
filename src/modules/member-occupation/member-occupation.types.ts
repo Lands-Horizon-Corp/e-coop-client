@@ -1,5 +1,11 @@
+import {
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TEntityId,
+} from '@/types/common'
+
 import { IBranch } from '../branch'
-import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
 
 export interface IMemberOccupationRequest {
     name: string

@@ -5,7 +5,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberMutualFundHistoryRequest {

@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
+import { IBaseEntityMeta, ITimeStamps, entityIdSchema } from '@/types/common'
+
 import { IAccount } from '../account'
-import { IBaseEntityMeta, ITimeStamps, entityIdSchema } from '../common'
 import { IMedia } from '../media/media.types'
 import { IUserBase } from '../user/user.types'
 

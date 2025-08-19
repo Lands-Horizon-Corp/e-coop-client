@@ -1,7 +1,12 @@
 import z from 'zod'
 
-import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
-import { descriptionTransformerSanitizer, entityIdSchema } from '../common'
+import {
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TEntityId,
+} from '@/types/common'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/types/common'
 
 // import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
 // import { GeneralLedgerTypeEnum } from '@/types/coop-types/general-ledger-definitions'

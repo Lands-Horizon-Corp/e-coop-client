@@ -1,7 +1,7 @@
 import z from 'zod'
 
-import { IPaginatedResult, entityIdSchema } from '../common'
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
+import { IPaginatedResult, entityIdSchema } from '@/types/common'
+import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
 
 export interface ISubscriptionPlan extends ITimeStamps, IAuditable {
     id: TEntityId

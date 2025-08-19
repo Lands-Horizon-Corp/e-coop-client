@@ -5,9 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    entityIdSchema,
-} from '../common'
+} from '@/types/common'
+import { descriptionSchema, entityIdSchema } from '@/validation'
 
 export interface IChargesRateMemberTypeModeOfPaymentRequest {
     member_type_id: TEntityId

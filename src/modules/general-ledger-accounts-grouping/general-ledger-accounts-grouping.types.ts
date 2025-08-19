@@ -1,6 +1,12 @@
 import { z } from 'zod'
 
-import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '../common'
+import {
+    IAuditable,
+    IPaginatedResult,
+    ITimeStamps,
+    TEntityId,
+} from '@/types/common'
+
 import { IGeneralLedgerDefinition } from '../general-ledger-definition/general-ledger-definition.types'
 
 export type AccountingPrincipleType = 'positive' | 'negative'

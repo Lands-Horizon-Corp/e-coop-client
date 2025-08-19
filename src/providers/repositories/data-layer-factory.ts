@@ -5,8 +5,8 @@ import {
     useQuery,
 } from '@tanstack/react-query'
 
-import type { TEntityId } from '@/modules/common'
 import type { TAPIQueryOptions } from '@/types/api'
+import type { TEntityId } from '@/types/common'
 
 import { createAPIRepository } from './api-crud-factory'
 

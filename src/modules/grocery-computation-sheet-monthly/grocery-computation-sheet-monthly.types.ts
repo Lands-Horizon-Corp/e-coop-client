@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IGroceryComputationSheetResponse } from '../grocery-computation-sheet/grocery-computation-sheet.types'
 
 export interface IGroceryComputationSheetMonthlyRequest {

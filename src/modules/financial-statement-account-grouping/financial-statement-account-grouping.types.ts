@@ -5,9 +5,9 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    entityIdSchema,
-} from '../common'
+} from '@/types/common'
+import { descriptionSchema, entityIdSchema } from '@/validation'
+
 import { IFinancialStatementDefinitionResponse } from '../financial-statement-definition/financial-statement-definition.types'
 import { IMedia } from '../media/media.types'
 

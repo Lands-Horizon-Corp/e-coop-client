@@ -2,7 +2,7 @@ import { toReadableDate } from '@/utils'
 
 import { CalendarIcon, Users3Icon, WoodSignsIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import RawDescription from '@/components/raw-description'
+import TextRenderer from '@/components/raw-description'
 import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
@@ -101,7 +101,7 @@ const JointAccountCardView = ({
             <div className="col-span-full !mt-4 space-y-2">
                 <p className="text-muted-foreground/70">Description</p>
                 {jointAccounts?.description ? (
-                    <RawDescription
+                    <TextRenderer
                         content={jointAccounts.description ?? 'no description'}
                     />
                 ) : (

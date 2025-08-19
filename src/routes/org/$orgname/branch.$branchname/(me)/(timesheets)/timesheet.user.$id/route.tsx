@@ -1,13 +1,12 @@
 import z from 'zod'
 
+import { entityIdSchema } from '@/validation'
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import { zodSearchValidator } from '@tanstack/router-zod-adapter'
 
 import PageContainer from '@/components/containers/page-container'
 import TimesheetTable from '@/components/tables/timesheet-table'
 import TimesheetTableAction from '@/components/tables/timesheet-table/row-action-context'
-
-import { entityIdSchema } from '@/validations/common'
 
 const pathSchema = z.object({
     id: entityIdSchema,

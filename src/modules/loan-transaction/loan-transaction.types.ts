@@ -1,4 +1,3 @@
-import { IAccount } from '../account'
 import {
     IBaseEntityMeta,
     TEntityId,
@@ -6,7 +5,9 @@ import {
     TLoanModeOfPayment,
     TLoanType,
     TWeekdays,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
 import { ILoanPurposeResponse } from '../loan-purpose'
 import { ILoanStatusResponse } from '../loan-status'
 import { ILoanTagResponse } from '../loan-tag'

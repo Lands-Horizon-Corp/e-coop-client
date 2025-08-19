@@ -4,8 +4,9 @@ import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
-} from '../common'
-import { ITimeStamps, TEntityId } from '../common'
+} from '@/types/common'
+import { ITimeStamps, TEntityId } from '@/types/common'
+
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberRecruitedMembers extends ITimeStamps {

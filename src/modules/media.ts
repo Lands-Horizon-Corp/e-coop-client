@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from './common'
+import { entityIdSchema } from '@/validation'
 
 // Define the Zod schema for MediaResponse
 export const MediaResponseSchema = z.object({

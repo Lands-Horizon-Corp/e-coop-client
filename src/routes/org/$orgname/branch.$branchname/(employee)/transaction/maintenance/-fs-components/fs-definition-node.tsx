@@ -22,7 +22,7 @@ import {
     ArrowChevronRight,
     DragHandleIcon,
 } from '@/components/icons'
-import RawDescription from '@/components/raw-description'
+import TextRenderer from '@/components/raw-description'
 
 import { IFinancialStatementDefinition, TEntityId } from '@/types'
 
@@ -208,7 +208,7 @@ const FinancialStatementDefinitionNode = ({
                     </span>
                     {node.description && (
                         <span className="text-xs text-accent-foreground/70">
-                            <RawDescription content={node.description} />
+                            <TextRenderer content={node.description} />
                         </span>
                     )}
 

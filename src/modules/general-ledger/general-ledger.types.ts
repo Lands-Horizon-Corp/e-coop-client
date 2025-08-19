@@ -1,15 +1,15 @@
 import z from 'zod'
 
 import { GENERAL_LEDGER_SOURCES } from '@/constants'
-
-import { IAccount } from '../account'
-import { IBank } from '../bank'
 import {
     IBaseEntityMeta,
     IPaginatedResult,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { IAccount } from '../account'
+import { IBank } from '../bank'
 import { IMedia } from '../media/media.types'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { ITransactionBatch } from '../transaction-batch/transaction-batch.types'

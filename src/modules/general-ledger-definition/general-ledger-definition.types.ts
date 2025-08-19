@@ -1,5 +1,6 @@
+import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
+
 import { IAccount } from '../account/account.types'
-import { IAuditable, ITimeStamps, TEntityId } from '../common'
 
 export enum GeneralLedgerTypeEnum {
     Assets = 'Assets',

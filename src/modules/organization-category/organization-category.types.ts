@@ -1,11 +1,12 @@
 import { z } from 'zod'
 
-import { CategoryBaseSchema } from '../category/category.types'
 import {
     NullableentityIdSchema,
     TimeStampSchema,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
+import { CategoryBaseSchema } from '../category/category.types'
 
 export const OrganizationCategoryBaseSchema = z.object({
     organization_id: NullableentityIdSchema,

@@ -6,7 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
     entityIdSchema,
-} from '../common'
+} from '@/types/common'
+
 import { IJournalVoucherResponse } from '../journal-voucher/journal-voucher.types'
 
 export interface IJournalVoucherTagRequest {

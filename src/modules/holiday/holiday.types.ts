@@ -1,11 +1,7 @@
 import z from 'zod'
 
-import {
-    IBaseEntityMeta,
-    IPaginatedResult,
-    TEntityId,
-    descriptionSchema,
-} from '../common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+import { descriptionSchema } from '@/validation'
 
 export interface IHoliday extends IBaseEntityMeta {
     name: string
