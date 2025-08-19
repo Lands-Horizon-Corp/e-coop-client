@@ -42,7 +42,7 @@ function SignInPage() {
         [cbUrl, queryClient, router, setCurrentAuth]
     )
 
-    console.log(authStatus)
+    console.log(authStatus, currentAuth)
 
     return (
         <GuestGuard>

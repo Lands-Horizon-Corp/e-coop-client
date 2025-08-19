@@ -16,14 +16,6 @@ import {
     IVerificationPasswordRequest,
 } from './authentication.types'
 
-// Mock AuthService for demonstration purposes
-const AuthService = {
-    signOut: async () => {
-        // Simulate API call
-        return Promise.resolve()
-    },
-}
-
 const { API, route } = createAPIRepository('/api/v1/authentication')
 
 // API Functions
@@ -69,6 +61,10 @@ export const verifyWithPassword = async (
         IVerification
     >(`${route}/verify-with-password`, verificationData)
     return response.data
+}
+
+export const signOut = async () => {
+    await API.post(`${route}/logout`)
 }
 
 // API Query Hooks
@@ -164,7 +160,7 @@ export const useSignOut = (
     options?: HookMutationOptions<void, string, void>
 ) => {
     return useMutation<void, string, void>({
-        mutationFn: AuthService.signOut,
+        mutationFn: signOut,
         ...options,
     })
 }
