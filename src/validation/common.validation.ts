@@ -12,11 +12,9 @@ import {
     USER_TYPE,
 } from '@/constants'
 
-export const entityIdSchema = z.string().uuidv4()
+export const entityIdSchema = z.uuidv4()
 
-export const descriptionSchema = z.coerce
-    .string()
-    .min(1, 'Description is required')
+export const descriptionSchema = z.string().min(1, 'Description is required')
 
 export const organizationBranchIdsSchema = z.object({
     organization_id: entityIdSchema.optional(),
