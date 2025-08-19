@@ -43,6 +43,7 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     const { refetch, data, error, isError, isSuccess } = useAuthContext({
         options: {
             refetchOnWindowFocus: false,
+            retry: 0,
         },
     })
 

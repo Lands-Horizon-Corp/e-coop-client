@@ -33,12 +33,15 @@ function RootLayout() {
     const { setAuthStatus, setCurrentAuth, resetAuth } = useAuthStore()
 
     const { error, isError, data, isSuccess } = useAuthContext({
-        options: { refetchOnWindowFocus: false },
+        options: {
+            refetchOnWindowFocus: false,
+            retry: 0,
+        },
     })
 
     const handleSuccess = useCallback(
         (authorizationContext: IAuthContext) => {
-            console.log('Loaded ')
+            console.log('Loaded Success ', authorizationContext)
             setCurrentAuth(authorizationContext)
             setAuthStatus('authorized')
         },
@@ -47,7 +50,7 @@ function RootLayout() {
 
     const handleError = useCallback(
         (rawError: Error) => {
-            console.log(rawError)
+            console.log('Erred', rawError)
 
             if (rawError instanceof AxiosError && rawError.status === 401) {
                 resetAuth()
