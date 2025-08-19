@@ -30,6 +30,8 @@ export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number]
 
 export type TTagCategory = (typeof TAG_CATEGORY)[number]
 
+export type TPageType = 'PUBLIC' | 'AUTHENTICATED'
+
 export interface ILongLat {
     longitude?: number
     latitude?: number

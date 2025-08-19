@@ -2,7 +2,9 @@ import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { IMedia } from '@/modules/media/media.types'
 import { Path, useForm } from 'react-hook-form'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -11,8 +13,10 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
@@ -40,7 +44,7 @@ const BankCreateUpdateForm = ({
     onSuccess,
 }: IBankFormProps) => {
     const form = useForm<TBankFormValues>({
-        resolver : zodResolver(BankSchema),
+        resolver: zodResolver(BankSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -71,7 +75,13 @@ const BankCreateUpdateForm = ({
         }
     })
 
-    const { error, isPending, reset } = bankId ? updateMutation : createMutation
+    const {
+        error: errorResponse,
+        isPending,
+        reset,
+    } = bankId ? updateMutation : createMutation
+
+    const error = serverRequestErrExtractor({ error: errorResponse })
 
     const isDisabled = (field: Path<TBankFormValues>) =>
         readOnly || disabledFields?.includes(field) || false

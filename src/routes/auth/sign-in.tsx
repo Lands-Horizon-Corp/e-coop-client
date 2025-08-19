@@ -42,6 +42,8 @@ function SignInPage() {
         [cbUrl, queryClient, router, setCurrentAuth]
     )
 
+    console.log(authStatus)
+
     return (
         <GuestGuard>
             <div className="flex min-h-full w-full flex-col items-center justify-center">

@@ -1,8 +1,11 @@
 import { Navigate, useLocation, useRouter } from '@tanstack/react-router'
 import { AxiosError } from 'axios'
-import { ReactNode, useRef } from 'react'
+import { ReactNode, useCallback, useRef } from 'react'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
+import { IAuthContext, useAuthContext } from '@/modules/authentication'
+import { IUserBase } from '@/modules/user'
+import UserAvatar from '@/modules/user/components/user-avatar'
 import { useAuthStore } from '@/store/user-auth-store'
 
 import {
@@ -12,14 +15,13 @@ import {
     ShieldExclamationIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import UserAvatar from '@/components/user-avatar'
 
-import { useAuthContext } from '@/hooks/api-hooks/use-auth'
 import { useSubscribe } from '@/hooks/use-pubsub'
+import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
-import { IBaseProps, IUserBase, TPageType } from '@/types'
+import { IBaseProps, TPageType } from '@/types'
 
-import { FlickeringGrid } from '../elements/backgrounds/flickering-grid'
+import { FlickeringGrid } from '../backgrounds/flickering-grid'
 import ImageDisplay from '../image-display'
 
 interface Props extends IBaseProps {
@@ -38,13 +40,22 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
         resetAuth,
     } = useAuthStore()
 
-    const { refetch } = useAuthContext({
-        onSuccess(data) {
+    const { refetch, data, error, isError, isSuccess } = useAuthContext({
+        options: {
+            refetchOnWindowFocus: false,
+        },
+    })
+
+    const handleSuccess = useCallback(
+        (data: IAuthContext) => {
             updateCurrentAuth(data)
             setAuthStatus('authorized')
         },
+        [updateCurrentAuth, setAuthStatus]
+    )
 
-        onError(_error, rawError) {
+    const handleError = useCallback(
+        (rawError: Error) => {
             if (rawError instanceof AxiosError && rawError.status === 401) {
                 resetAuth()
                 setAuthStatus('unauthorized')
@@ -58,7 +69,16 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
 
             setAuthStatus('error')
         },
-        refetchOnWindowFocus: false,
+        [resetAuth, setAuthStatus]
+    )
+
+    useQeueryHookCallback({
+        data,
+        error,
+        isError,
+        isSuccess,
+        onSuccess: handleSuccess,
+        onError: handleError,
     })
 
     useSubscribe(
