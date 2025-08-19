@@ -1,8 +1,5 @@
-import { z } from 'zod'
+import { IAuditable, ITimeStamps } from '@/types/common'
 
-import { IAuditable, ITimeStamps, entityIdSchema } from '@/types/common'
-
-// ---------- Interfaces ----------
 export interface IChargesRateByRangeOrMinimumAmountBase
     extends ITimeStamps,
         IAuditable {
@@ -30,20 +27,3 @@ export interface IChargesRateByRangeOrMinimumAmountRequest {
     amount: number
     minimum_amount: number
 }
-
-// ---------- Zod Schemas ----------
-export const ChargesRateByRangeOrMinimumAmountRequestSchema = z.object({
-    id: entityIdSchema.optional(),
-    organization_id: entityIdSchema,
-    branch_id: entityIdSchema,
-    charges_rate_scheme_id: entityIdSchema,
-    from: z.number().nonnegative(),
-    to: z.number().nonnegative(),
-    charge: z.number().nonnegative(),
-    amount: z.number().nonnegative(),
-    minimum_amount: z.number().nonnegative(),
-})
-
-export type TChargesRateByRangeOrMinimumAmountRequest = z.infer<
-    typeof ChargesRateByRangeOrMinimumAmountRequestSchema
->

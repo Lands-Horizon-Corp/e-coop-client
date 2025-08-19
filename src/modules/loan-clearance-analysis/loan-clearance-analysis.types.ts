@@ -1,11 +1,8 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { ILoanTransaction } from '../loan-transaction'
@@ -32,12 +29,3 @@ export interface ILoanClearanceAnalysisResponse
     balances_amount: number
     balances_count: number
 }
-
-export const loanClearanceAnalysisRequestSchema = z.object({
-    loan_transaction_id: entityIdSchema,
-    regular_deduction_description: z.string().optional(),
-    regular_deduction_amount: z.number().optional(),
-    balances_description: z.string().optional(),
-    balances_amount: z.number().optional(),
-    balances_count: z.number().optional(),
-})

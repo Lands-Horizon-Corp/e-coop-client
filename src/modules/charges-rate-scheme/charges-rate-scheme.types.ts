@@ -1,45 +1,12 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
-import { descriptionSchema, entityIdSchema } from '@/validation'
 
 import { ChargesRateByTermHeaderRequest } from '../charges-rate-by-term-header'
-
-export interface IChargesRateMemberTypeModeOfPaymentRequest {
-    member_type_id: TEntityId
-    mode_of_payment?: string
-    name?: string
-    description?: string
-}
-
-export interface IChargesRateMemberTypeModeOfPaymentResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    member_type_id: TEntityId
-    member_type?: {
-        id: TEntityId
-        name: string
-    }
-    mode_of_payment: string
-    name: string
-    description: string
-}
-
-const modeOfPaymentSchema = z.string().optional()
-
-export const chargesRateMemberTypeModeOfPaymentRequestSchema = z.object({
-    member_type_id: entityIdSchema.min(1, 'Member Type ID is required'),
-    mode_of_payment: modeOfPaymentSchema,
-    name: z.string().optional(),
-    description: descriptionSchema.optional(),
-})
+import { IChargesRateMemberTypeModeOfPaymentResponse } from '../charges-rate-scheme-mode-of-payment'
 
 export interface IChargesRateSchemeRequest {
     charges_rate_by_term_header_id?: TEntityId
@@ -60,10 +27,3 @@ export interface IChargesRateSchemeResponse
     name: string
     description: string
 }
-
-export const chargesRateSchemeRequestSchema = z.object({
-    charges_rate_by_term_header_id: entityIdSchema.optional(),
-    charges_rate_member_type_mode_of_payment_id: entityIdSchema.optional(),
-    name: z.string().min(1).max(255),
-    description: descriptionSchema,
-})

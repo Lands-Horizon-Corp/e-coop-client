@@ -1,11 +1,8 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IAccount } from '../account'
@@ -28,10 +25,3 @@ export interface IFinesMaturityResponse
     to: number
     rate: number
 }
-
-export const finesMaturityRequestSchema = z.object({
-    account_id: entityIdSchema.optional().nullable(),
-    from: z.number(),
-    to: z.number(),
-    rate: z.number(),
-})

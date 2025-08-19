@@ -1,14 +1,9 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
-import { descriptionSchema, entityIdSchema } from '@/validation'
-
-// export type TagCategory = string;
 
 export interface IGeneralLedgerTagRequest {
     general_ledger_id: TEntityId
@@ -32,12 +27,3 @@ export interface IGeneralLedgerTagResponse
     color: string
     icon: string
 }
-
-export const generalLedgerTagRequestSchema = z.object({
-    general_ledger_id: entityIdSchema,
-    name: z.string().min(1).max(50),
-    description: descriptionSchema.optional(),
-    category: z.string().optional(),
-    color: z.string().optional(),
-    icon: z.string().optional(),
-})

@@ -1,28 +1,35 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IMedia } from '../media/media.types'
-import { IUser } from '../user/user.types'
+import { IUserBase } from '../user'
 
-export interface ITimesheetRequest {
-    media_id?: TEntityId
-}
-
-export interface ITimesheet
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
+export interface ITimesheet extends IBaseEntityMeta {
     user_id: TEntityId
-    user?: IUser
+    user?: IUserBase
+
     media_in_id?: TEntityId
     media_in?: IMedia
+
     media_out_id?: TEntityId
     media_out?: IMedia
+
     time_in: string
     time_out?: string
 }
+
+export interface ITimesheetRequest {
+    id?: TEntityId
+    user_id?: TEntityId
+
+    media_in_id?: TEntityId
+    media_out_id?: TEntityId
+
+    time_in: string
+    time_out?: string
+}
+
+export interface ITimesheetInOutRequest {
+    media_id?: TEntityId
+}
+
+export interface IPaginatedTimesheet extends IPaginatedResult<ITimesheet> {}

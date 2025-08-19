@@ -5,7 +5,6 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { ITransactionResponse } from '../transaction'
@@ -59,14 +58,3 @@ export interface IDisbursementTransactionResponse
     reference_number: string
     amount: number
 }
-
-export const disbursementTransactionRequestSchema = z.object({
-    organization_id: entityIdSchema,
-    branch_id: entityIdSchema,
-    disbursement_id: entityIdSchema,
-    transaction_batch_id: entityIdSchema,
-    employee_user_id: entityIdSchema,
-    transaction_reference_number: z.string().optional(),
-    reference_number: z.string().optional(),
-    amount: z.number().optional(),
-})

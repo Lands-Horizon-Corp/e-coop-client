@@ -1,11 +1,8 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IBank } from '../bank'
@@ -46,16 +43,3 @@ export interface ICheckRemittanceResponse
     date_entry?: string
     description: string
 }
-
-export const checkRemittanceRequestSchema = z.object({
-    bank_id: entityIdSchema,
-    media_id: entityIdSchema.optional().nullable(),
-    employee_user_id: entityIdSchema.optional().nullable(),
-    transaction_batch_id: entityIdSchema.optional().nullable(),
-    country_code: z.string().optional(),
-    reference_number: z.string().optional(),
-    account_name: z.string().optional(),
-    amount: z.number(),
-    date_entry: z.string().optional().nullable(),
-    description: z.string().optional(),
-})

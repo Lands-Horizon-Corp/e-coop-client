@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { IBaseEntityMeta } from '@/types'
 
 export type ChargesRateByTermHeaderRequest = {
     header_1?: number
@@ -25,31 +25,6 @@ export type ChargesRateByTermHeaderRequest = {
     header_22?: number
 }
 
-export const ChargesRateByTermHeaderRequestSchema = z.object({
-    header_1: z.number().int().optional(),
-    header_2: z.number().int().optional(),
-    header_3: z.number().int().optional(),
-    header_4: z.number().int().optional(),
-    header_5: z.number().int().optional(),
-    header_6: z.number().int().optional(),
-    header_7: z.number().int().optional(),
-    header_8: z.number().int().optional(),
-    header_9: z.number().int().optional(),
-    header_10: z.number().int().optional(),
-    header_11: z.number().int().optional(),
-    header_12: z.number().int().optional(),
-    header_13: z.number().int().optional(),
-    header_14: z.number().int().optional(),
-    header_15: z.number().int().optional(),
-    header_16: z.number().int().optional(),
-    header_17: z.number().int().optional(),
-    header_18: z.number().int().optional(),
-    header_19: z.number().int().optional(),
-    header_20: z.number().int().optional(),
-    header_21: z.number().int().optional(),
-    header_22: z.number().int().optional(),
-})
-
-export type ChargesRateByTermHeaderRequestInput = z.infer<
-    typeof ChargesRateByTermHeaderRequestSchema
->
+export interface ChargesRateByTermHeaderResponse
+    extends IBaseEntityMeta,
+        ChargesRateByTermHeaderRequest {}

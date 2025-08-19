@@ -1,57 +1,36 @@
-import z from 'zod'
+import { IAuditable, ITimeStamps, TEntityId } from '@/types'
 
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
-import { descriptionSchema, entityIdSchema } from '@/validation'
+import { IFinancialStatementDefinition } from '../financial-statement-definition'
+import { AccountingPrincipleType } from '../general-ledger-accounts-grouping'
 
-import { IFinancialStatementDefinitionResponse } from '../financial-statement-definition/financial-statement-definition.types'
-import { IMedia } from '../media/media.types'
+export interface IFinancialStatementAccountGrouping
+    extends IAuditable,
+        ITimeStamps {
+    id: TEntityId
 
-const AccountingPrinciple = z.enum([
-    'asset',
-    'liability',
-    'equity',
-    'income',
-    'expense',
-])
-
-export interface IFinancialStatementGroupingRequest {
     organization_id: TEntityId
     branch_id: TEntityId
+
+    debit: AccountingPrincipleType
+    credit: AccountingPrincipleType
     name: string
     description: string
-    debit: z.infer<typeof AccountingPrinciple>
-    credit: z.infer<typeof AccountingPrinciple>
-    code: number
-    icon_media_id?: TEntityId
+    financial_statement_definition_entries: IFinancialStatementDefinition[]
+
+    from_code?: number
+    to_code?: number
 }
 
-export interface IFinancialStatementGroupingResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    icon_media_id?: TEntityId
-    icon_media?: IMedia
+export interface IFinancialStatementAccountGroupingRequest {
+    debit: AccountingPrincipleType
+    credit: AccountingPrincipleType
+
     name: string
-    description: string
-    debit: z.infer<typeof AccountingPrinciple>
-    credit: z.infer<typeof AccountingPrinciple>
-    code: number
-    financial_statement_definition_entries?: IFinancialStatementDefinitionResponse[]
-}
+    description?: string
 
-export const financialStatementGroupingRequestSchema = z.object({
-    organization_id: entityIdSchema,
-    branch_id: entityIdSchema,
-    name: z.string().min(1).max(50),
-    description: descriptionSchema,
-    debit: AccountingPrinciple,
-    credit: AccountingPrinciple,
-    code: z.number(),
-    icon_media_id: entityIdSchema.optional().nullable(),
-})
+    from_code?: number
+    to_code?: number
+
+    branch_id: TEntityId
+    organization_id: TEntityId
+}

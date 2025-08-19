@@ -1,12 +1,9 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
-import { descriptionSchema } from '@/validation'
 
 export interface IComputationSheetRequest {
     name: string
@@ -31,13 +28,3 @@ export interface IComputationSheetResponse
     comaker_account: number
     exist_account: boolean
 }
-
-export const computationSheetRequestSchema = z.object({
-    name: z.string().min(1).max(254),
-    description: descriptionSchema.optional(),
-    deliquent_account: z.boolean().optional(),
-    fines_account: z.boolean().optional(),
-    interest_account_id: z.boolean().optional(),
-    comaker_account: z.number().optional(),
-    exist_account: z.boolean().optional(),
-})

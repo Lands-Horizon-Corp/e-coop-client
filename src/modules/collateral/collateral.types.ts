@@ -1,12 +1,9 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
-import { descriptionSchema } from '@/validation'
 
 export interface ICollateralRequest {
     icon?: string
@@ -23,9 +20,3 @@ export interface ICollateralResponse
     name: string
     description: string
 }
-
-export const collateralRequestSchema = z.object({
-    icon: z.string().optional(),
-    name: z.string().min(1).max(255),
-    description: descriptionSchema.optional(),
-})

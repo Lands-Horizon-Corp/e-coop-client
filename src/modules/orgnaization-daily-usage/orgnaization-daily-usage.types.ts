@@ -1,6 +1,4 @@
-import z from 'zod'
-
-import { TEntityId, entityIdSchema } from '@/types/common'
+import { TEntityId } from '@/types/common'
 
 import { IOrganization } from '../organization'
 
@@ -42,21 +40,3 @@ export interface IOrganizationDailyUsageResponse {
     total_upload_size: number
     total_report_render_time: number
 }
-
-export const organizationDailyUsageRequestSchema = z.object({
-    id: entityIdSchema.optional(),
-    organization_id: entityIdSchema,
-    total_members: z.number().min(0),
-    total_branches: z.number().min(0),
-    total_employees: z.number().min(0),
-    cash_transaction_count: z.number().min(0),
-    check_transaction_count: z.number().min(0),
-    online_transaction_count: z.number().min(0),
-    cash_transaction_amount: z.number().min(0),
-    check_transaction_amount: z.number().min(0),
-    online_transaction_amount: z.number().min(0),
-    total_email_send: z.number().min(0),
-    total_message_send: z.number().min(0),
-    total_upload_size: z.number().min(0),
-    total_report_render_time: z.number().min(0),
-})

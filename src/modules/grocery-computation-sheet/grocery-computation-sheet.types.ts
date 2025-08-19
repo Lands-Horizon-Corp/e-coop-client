@@ -1,5 +1,3 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -20,8 +18,3 @@ export interface IGroceryComputationSheetResponse
     scheme_number: number
     description: string
 }
-
-export const groceryComputationSheetRequestSchema = z.object({
-    scheme_number: z.number(),
-    description: z.string().optional(),
-})

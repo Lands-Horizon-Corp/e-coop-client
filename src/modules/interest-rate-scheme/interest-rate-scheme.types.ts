@@ -1,5 +1,3 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -20,8 +18,3 @@ export interface IInterestRateSchemeResponse
     name: string
     description: string
 }
-
-export const interestRateSchemeRequestSchema = z.object({
-    name: z.string().min(1).max(255),
-    description: z.string().optional(),
-})

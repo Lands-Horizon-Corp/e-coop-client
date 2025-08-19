@@ -1,2 +1,3 @@
 export * from './organization.types'
-export * from './organization.base'
+export * from './organization.service'
+export * from './organization.validation'

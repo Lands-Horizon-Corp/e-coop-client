@@ -1,5 +1,3 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -20,8 +18,3 @@ export interface ILoanGuaranteedFundResponse
     scheme_number: number
     increasing_rate: number
 }
-
-export const loanGuaranteedFundRequestSchema = z.object({
-    scheme_number: z.number(),
-    increasing_rate: z.number(),
-})

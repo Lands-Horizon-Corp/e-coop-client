@@ -1,16 +1,9 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/validation'
 
 import { IBranch } from '../branch/branch.types'
 import { IMedia } from '../media/media.types'
@@ -56,20 +49,3 @@ export interface IBatchFunding extends ITimeStamps, IAuditable {
 
 export interface IBatchFundingPaginated
     extends IPaginatedResult<IBatchFunding> {}
-
-export const batchFundingSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    amount: z.coerce.number().min(0, 'Amount is required'),
-    description: descriptionSchema
-        .optional()
-        .transform(descriptionTransformerSanitizer),
-    organization_id: z.string().optional(),
-    branch_id: z.string().optional(),
-    transaction_batch_id: entityIdSchema.min(1, 'Batch is required'),
-    provided_by_user_id: entityIdSchema.min(1, 'Provider is required'),
-    provided_by_user: z.any(),
-    signature_media_id: z.string().optional(),
-    signature_media: z.any(),
-})
-
-export type TBatchFundingFormValues = z.infer<typeof batchFundingSchema>

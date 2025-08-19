@@ -1,11 +1,8 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IGroceryComputationSheetResponse } from '../grocery-computation-sheet/grocery-computation-sheet.types'
@@ -28,10 +25,3 @@ export interface IGroceryComputationSheetMonthlyResponse
     interest_rate: number
     loan_guaranteed_fund_rate: number
 }
-
-export const groceryComputationSheetMonthlyRequestSchema = z.object({
-    grocery_computation_sheet_id: entityIdSchema,
-    months: z.number().optional(),
-    interest_rate: z.number().optional(),
-    loan_guaranteed_fund_rate: z.number().optional(),
-})

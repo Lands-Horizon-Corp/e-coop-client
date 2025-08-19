@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 export const footstepRequestSchema = z.object({
     organization_id: entityIdSchema,

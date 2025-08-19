@@ -1,12 +1,8 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IAccount } from '../account'
@@ -33,10 +29,3 @@ export interface ICollectorsMemberAccountEntryResponse
     account?: IAccount
     description: string
 }
-
-export const collectorsMemberAccountEntryRequestSchema = z.object({
-    collector_user_id: entityIdSchema.optional().nullable(),
-    member_profile_id: entityIdSchema.optional().nullable(),
-    account_id: entityIdSchema.optional().nullable(),
-    description: descriptionSchema.optional(),
-})

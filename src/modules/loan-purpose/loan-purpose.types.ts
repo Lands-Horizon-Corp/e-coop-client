@@ -1,5 +1,3 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -20,8 +18,3 @@ export interface ILoanPurposeResponse
     description: string
     icon: string
 }
-
-export const loanPurposeRequestSchema = z.object({
-    description: z.string().optional(),
-    icon: z.string().optional(),
-})

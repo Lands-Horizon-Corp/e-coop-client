@@ -1,11 +1,8 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IAccount } from '../account'
@@ -28,9 +25,3 @@ export interface ILoanTermsAndConditionAmountReceiptResponse
     account?: IAccount
     amount: number
 }
-
-export const loanTermsAndConditionAmountReceiptRequestSchema = z.object({
-    loan_transaction_id: entityIdSchema,
-    account_id: entityIdSchema,
-    amount: z.number().optional(),
-})

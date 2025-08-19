@@ -1,9 +1,9 @@
-import { z } from 'zod'
-
-import { IBaseEntityMeta, ITimeStamps, entityIdSchema } from '@/types/common'
+import { IBaseEntityMeta, ITimeStamps } from '@/types/common'
 
 import { IAccount } from '../account'
 import { IMedia } from '../media/media.types'
+import { IMemberProfile } from '../member-profile'
+import { IPaymentType } from '../payment-type/payment-type.types'
 import { IUserBase } from '../user/user.types'
 
 export interface IAdjustmentEntry extends IBaseEntityMeta {
@@ -13,11 +13,11 @@ export interface IAdjustmentEntry extends IBaseEntityMeta {
     account_id: string
     account?: IAccount
     member_profile_id?: string
-    //   member_profile?: IMemberProfileResponse;
+    member_profile?: IMemberProfile
     employee_user_id?: string
     employee_user?: IUserBase
     payment_type_id?: string
-    //   payment_type?: IPaymentTypeResponse;
+    payment_type?: IPaymentType
     type_of_payment_type: string
     description: string
     reference_number: string
@@ -41,17 +41,3 @@ export interface IAdjustmentEntryRequest {
 }
 
 export type IAdjustmentEntryResponse = IAdjustmentEntry & ITimeStamps
-
-export const AdjustmentEntryRequestSchema = z.object({
-    signature_media_id: entityIdSchema.optional(),
-    account_id: entityIdSchema, // required
-    member_profile_id: entityIdSchema.optional(),
-    employee_user_id: entityIdSchema.optional(),
-    payment_type_id: entityIdSchema.optional(),
-    type_of_payment_type: z.string().max(50).optional(),
-    description: z.string().optional(),
-    reference_number: z.string().optional(),
-    entry_date: z.string().optional(),
-    debit: z.number().optional(),
-    credit: z.number().optional(),
-})

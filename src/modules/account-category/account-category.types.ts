@@ -1,15 +1,9 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-} from '@/validation'
 
 export interface IAccountCategory extends IAuditable, ITimeStamps {
     id: TEntityId
@@ -31,12 +25,3 @@ export interface IAccountCategoryRequest {
 
 export interface IAccountCategoryPaginated
     extends IPaginatedResult<IAccountCategory> {}
-
-export const AccountCategorySchema = z.object({
-    name: z.string().min(1, 'Category name is required'),
-    description: descriptionSchema
-        .optional()
-        .transform(descriptionTransformerSanitizer),
-})
-
-export type AccountCategoryFormValues = z.infer<typeof AccountCategorySchema>

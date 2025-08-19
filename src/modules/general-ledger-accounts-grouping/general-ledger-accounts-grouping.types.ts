@@ -1,5 +1,3 @@
-import { z } from 'zod'
-
 import {
     IAuditable,
     IPaginatedResult,
@@ -42,16 +40,3 @@ export interface IGeneralLedgerAccountsGroupingRequest {
 
 export interface IPaginatedGeneralLedgerAccountsGroupingRequest
     extends IPaginatedResult<IGeneralLedgerAccountsGrouping> {}
-
-// Enum schema for debit/credit principle
-
-export const GeneralLedgerAccountsGroupingRequestSchema = z.object({
-    name: z.string().min(1).max(255),
-    description: z.string().max(1024).optional(),
-
-    //   debit: AccountingPrincipleTypeSchema,
-    //   credit: AccountingPrincipleTypeSchema,
-
-    from_code: z.number().int().nonnegative().optional(),
-    to_code: z.number().int().nonnegative().optional(),
-})

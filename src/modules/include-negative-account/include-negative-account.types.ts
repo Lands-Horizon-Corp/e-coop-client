@@ -1,11 +1,4 @@
-import { z } from 'zod'
-
-import { IBaseEntityMeta, TEntityId } from '@/types/common'
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/validation'
+import { IBaseEntityMeta, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import { IComputationSheetResponse } from '../computation-sheet'
@@ -29,15 +22,3 @@ export interface IIncludeNegativeAccountRequest {
 
     description?: string
 }
-
-export const includeNegativeAccountSchema = z.object({
-    id: entityIdSchema.optional(),
-
-    computation_sheet_id: entityIdSchema,
-    account_id: entityIdSchema,
-    account: z.any(),
-
-    description: descriptionSchema
-        .optional()
-        .transform(descriptionTransformerSanitizer),
-})
