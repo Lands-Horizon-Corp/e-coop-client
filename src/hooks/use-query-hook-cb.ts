@@ -10,20 +10,18 @@ export const useQeueryHookCallback = <TData = unknown, TError = unknown>({
     onError,
     onSuccess,
 }: {
-    error: TError | null // Allow null for error
-    data?: TData // Made data optional to handle undefined cases
+    error: TError | null
+    data?: TData
     isError?: boolean
     isSuccess?: boolean
     onError?: (error: TError) => void
     onSuccess?: (data: TData) => void
 }) => {
     useEffect(() => {
-        console.log('Succcess', isSuccess, data, onSuccess)
-        if (isSuccess && data) onSuccess?.(data) // Added a check for data
+        if (isSuccess && data) onSuccess?.(data)
     }, [isSuccess, data, onSuccess])
 
     useEffect(() => {
-        console.log('Error', isError, error, onError)
-        if (isError && error) onError?.(error) // Added a check for error
+        if (isError && error) onError?.(error)
     }, [isError, error, onError])
 }

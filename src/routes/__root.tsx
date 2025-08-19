@@ -38,13 +38,17 @@ function RootLayout() {
 
     const handleSuccess = useCallback(
         (authorizationContext: IAuthContext) => {
+            console.log('Loaded ')
             setCurrentAuth(authorizationContext)
+            setAuthStatus('authorized')
         },
         [setCurrentAuth]
     )
 
     const handleError = useCallback(
         (rawError: Error) => {
+            console.log(rawError)
+
             if (rawError instanceof AxiosError && rawError.status === 401) {
                 resetAuth()
                 setAuthStatus('unauthorized')
