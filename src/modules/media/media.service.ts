@@ -25,9 +25,16 @@ export const uploadMedia = async (
     const formData = new FormData()
     formData.append('file', file)
 
-    const response = await API.post<FormData, IMedia>(`${route}`, formData, {
-        onUploadProgress: onProgress,
-    })
+    console.log('Passed file ', file)
+
+    const response = await API.uploadFile<IMedia>(
+        `${route}`,
+        formData,
+        {},
+        {
+            onUploadProgress: onProgress,
+        }
+    )
 
     return response.data
 }
@@ -42,20 +49,14 @@ export const deleteMedia = async (id: TEntityId): Promise<void> => {
 // Hook for uploading media
 export const useUploadMedia = ({
     options,
+    onProgress,
 }: {
-    options?: HookMutationOptions<
-        IMedia,
-        Error,
-        { file: File; onProgress?: (progressEvent: AxiosProgressEvent) => void }
-    >
+    options?: HookMutationOptions<IMedia, Error, { file: File }>
+
+    onProgress?: (progressEvent: AxiosProgressEvent) => void
 } = {}) => {
-    return useMutation<
-        IMedia,
-        Error,
-        { file: File; onProgress?: (progressEvent: AxiosProgressEvent) => void }
-    >({
-        mutationFn: async ({ file, onProgress }) =>
-            uploadMedia(file, onProgress),
+    return useMutation<IMedia, Error, { file: File }>({
+        mutationFn: async ({ file }) => uploadMedia(file, onProgress),
         ...options,
     })
 }

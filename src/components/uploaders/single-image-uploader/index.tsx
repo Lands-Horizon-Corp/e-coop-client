@@ -43,6 +43,12 @@ const SingleImageUpload = ({
         options: {
             onSuccess: (data) => onUploadComplete?.(data),
         },
+        onProgress: (progressEvent) => {
+            const calculated = calculateUploadProgress(progressEvent)
+            if (!calculated) return
+
+            setUploadMediaProgress(calculated.progress)
+        },
     })
 
     return (
@@ -136,17 +142,6 @@ const SingleImageUpload = ({
                                             croppedImage,
                                             `${defaultFileName}.jpg`
                                         ) as File,
-                                        onProgress: (progressEvent) => {
-                                            const calculated =
-                                                calculateUploadProgress(
-                                                    progressEvent
-                                                )
-                                            if (!calculated) return
-
-                                            setUploadMediaProgress(
-                                                calculated.progress
-                                            )
-                                        },
                                     })
                                 }
                             >
