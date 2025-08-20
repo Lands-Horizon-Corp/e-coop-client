@@ -1,10 +1,10 @@
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import type { IBank as TBank, IBankRequest as TBankRequest } from '../bank'
+import type { IBank, IBankRequest } from '../bank'
 
 const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
-    TBank,
-    TBankRequest
+    IBank,
+    IBankRequest
 >({
     url: '/api/v1/bank',
     baseKey: 'bank',

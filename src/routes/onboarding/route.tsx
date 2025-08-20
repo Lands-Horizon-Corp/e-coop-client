@@ -2,10 +2,10 @@ import { useRouter } from '@tanstack/react-router'
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { useGetAll } from '@/modules/category/category.service'
 import OrganizationCategoryPicker from '@/modules/organization/components/category-pickers/organization-category-picker'
 import { useCategoryStore } from '@/store/onboarding/category-store'
-import { useAuthStore } from '@/store/user-auth-store'
 
 import AuthFooter from '@/components/footers/auth-footer'
 import OnboardingNav from '@/components/nav/navs/onboarding-nav'
@@ -41,28 +41,28 @@ function RouteComponent() {
 
     return (
         // <AuthGuard>
-            <div className="flex">
-                <OnboardingNav />
-                <OrganizationCategoryPicker
-                    open={onOpenCategoryPicker}
-                    onOpenChange={setOnOpenCategoryPicker}
-                    data={Category}
-                />
-                <main className="flex w-full flex-1 items-center">
-                    <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col overflow-y-auto">
-                        <div className="relative mx-auto my-5 flex w-[80%] flex-1 flex-col py-8">
-                            {!isCreateBranchRoute && user_organization && (
-                                <LocationBack className="absolute right-5 top-10 max-w-24" />
-                            )}
-                            <Outlet />
-                        </div>
-                        <AuthFooter />
+        <div className="flex">
+            <OnboardingNav />
+            <OrganizationCategoryPicker
+                open={onOpenCategoryPicker}
+                onOpenChange={setOnOpenCategoryPicker}
+                data={Category}
+            />
+            <main className="flex w-full flex-1 items-center">
+                <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col overflow-y-auto">
+                    <div className="relative mx-auto my-5 flex w-[80%] flex-1 flex-col py-8">
+                        {!isCreateBranchRoute && user_organization && (
+                            <LocationBack className="absolute right-5 top-10 max-w-24" />
+                        )}
+                        <Outlet />
                     </div>
-                    <div className="hidden h-screen sm:block sm:w-1/3">
-                        <div className="size-full rounded-l-3xl bg-cover sm:bg-[url('/auth-bg.webp')]" />
-                    </div>
-                </main>
-            </div>
+                    <AuthFooter />
+                </div>
+                <div className="hidden h-screen sm:block sm:w-1/3">
+                    <div className="size-full rounded-l-3xl bg-cover sm:bg-[url('/auth-bg.webp')]" />
+                </div>
+            </main>
+        </div>
         // </AuthGuard>
     )
 }

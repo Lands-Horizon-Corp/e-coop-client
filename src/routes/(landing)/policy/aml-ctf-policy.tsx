@@ -2,8 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useMemo, useRef } from 'react'
 
 import PageContainer from '@/components/containers/page-container'
-import CopyWrapper from '@/components/elements/copy-wrapper'
 import { Separator } from '@/components/ui/separator'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'

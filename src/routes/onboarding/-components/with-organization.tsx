@@ -3,13 +3,15 @@ import { toast } from 'sonner'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { cn } from '@/helpers/tw-utils'
+// import { useCategoryStore, useCategoryStore } from '@/store/onboarding/category-store'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { IOrganizationWithPolicies } from '@/modules/organization'
 import {
     IOrgUserOrganizationGroup,
     IUserOrganization,
 } from '@/modules/user-organization'
-// import { useCategoryStore, useCategoryStore } from '@/store/onboarding/category-store'
-import { useAuthUser } from '@/store/user-auth-store'
+import { useSwitchOrganization } from '@/modules/user-organization/user-organization.service'
+import { useCategoryStore } from '@/store/onboarding/category-store'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
@@ -31,9 +33,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import { StatusBadge } from './org-status-badge'
-import { useSwitchOrganization } from '@/modules/user-organization/user-organization.service'
-import { useCategoryStore } from '@/store/onboarding/category-store'
-
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: IOrgUserOrganizationGroup[]
@@ -48,7 +47,7 @@ const WithOrganization = ({
         currentAuth: { user },
     } = useAuthUser()
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
-     const { handleProceedToSetupOrg } = useCategoryStore()
+    const { handleProceedToSetupOrg } = useCategoryStore()
 
     const handleVisit = async (userOrganization: IUserOrganization) => {
         const response = await switchOrganization(userOrganization.id)

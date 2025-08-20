@@ -1,8 +1,9 @@
+import { createFileRoute, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
 import z from 'zod'
 
-import { useAuthUser } from '@/store/user-auth-store'
-import { createFileRoute, useSearch } from '@tanstack/react-router'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import { useGetAllOrganizations } from '@/modules/organization'
 
 import { QrCodeIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -12,7 +13,6 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import OrganizationItem from '../-components/-organization-list/organization-item'
 import OrganizationItemSkeleton from '../-components/organization-item-skeleton'
-import { useGetAllOrganizations } from '@/modules/organization'
 
 const paramSchema = z.object({
     invitation_code: z.string().optional(),

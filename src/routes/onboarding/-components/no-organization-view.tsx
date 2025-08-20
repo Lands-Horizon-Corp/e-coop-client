@@ -1,10 +1,12 @@
-import { useCategoryStore } from '@/store/onboarding/category-store'
 import { useNavigate } from '@tanstack/react-router'
+
+import { cn } from '@/helpers/tw-utils'
+import { useCategoryStore } from '@/store/onboarding/category-store'
+
 import { BuildingIcon, PlusIcon } from '@/components/icons'
 import { HikingLandscape } from '@/components/svg/svg'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/helpers/tw-utils'
 
 const NoOrganizationView = () => {
     const { handleProceedToSetupOrg } = useCategoryStore()

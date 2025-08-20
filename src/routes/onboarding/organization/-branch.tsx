@@ -1,8 +1,8 @@
+import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
-import { useNavigate } from '@tanstack/react-router'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import ImageDisplay from '@/components/image-display'

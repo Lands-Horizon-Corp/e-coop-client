@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { useGetUserOrganizationByUserId } from '@/modules/user-organization/user-organization.service'
-import { useAuthUser } from '@/store/user-auth-store'
 
 import { LandmarkIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'

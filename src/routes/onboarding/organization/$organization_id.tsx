@@ -1,5 +1,6 @@
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { createFileRoute } from '@tanstack/react-router'
+
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { BranchIcon, PhoneIcon, PushPinIcon } from '@/components/icons'
