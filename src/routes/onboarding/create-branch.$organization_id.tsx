@@ -3,14 +3,17 @@ import { toast } from 'sonner'
 import z from 'zod'
 
 import { cn } from '@/helpers/tw-utils'
-import { IBranch } from '@/modules/branch'
+import {
+    IBranch,
+    useDeleteBranch,
+    useGetBranchesByOrganizationId,
+} from '@/modules/branch'
+import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
 import { useGetById } from '@/modules/organization'
 import { useSeedOrganization } from '@/modules/user-organization/user-organization.service'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { entityIdSchema } from '@/validation'
 
-// import { CreateUpdateBranchFormModal } from '@/components/forms/onboarding-forms/create-branch-form'
-// import UpdateOrganizationFormModal from '@/components/forms/onboarding-forms/update-organization-form'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     AddressCardIcon,
@@ -53,6 +56,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
     const navigate = useNavigate()
+    const createModal = useModalState()
+    const updateOrganization = useModalState()
 
     const { countryCode } = useLocationInfo()
     const { organization_id } = Route.useParams()
@@ -63,7 +68,7 @@ function RouteComponent() {
     const { organization: organizationData } = organization || {}
 
     const { data: branches, isPending: isPendingBranches } =
-        useGetBranchesByOrganizationId(organization_id)
+        useGetBranchesByOrganizationId({ organizationId: organization_id })
 
     const { mutateAsync: seed, isPending: isSeeding } = useSeedOrganization()
 
@@ -79,13 +84,10 @@ function RouteComponent() {
         }
     }
 
-    const createModal = useModalState()
-    const updateOrganization = useModalState()
-
     const isNoBranches = branches?.length === 0
     return (
         <div className="w-full">
-            {/* <CreateUpdateBranchFormModal
+            <CreateUpdateBranchFormModal
                 {...createModal}
                 formProps={{
                     organizationId: organization_id,
@@ -93,9 +95,15 @@ function RouteComponent() {
                         country_code: countryCode,
                     },
                     hiddenFields: ['is_main_branch'],
+                    onSuccess: (data) => {
+                        toast.success(
+                            `Branch ${data.name} created successfully`
+                        )
+                        createModal.onOpenChange(false)
+                    },
                 }}
             />
-            <UpdateOrganizationFormModal
+            {/* <UpdateOrganizationFormModal
                 formProps={{
                     organizationId: organization_id,
                     defaultValues: organizationData,
@@ -275,8 +283,10 @@ export const BranchBar = ({
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: deleteBranch } = useDeleteBranch({
-        onSuccess: () => {
-            toast.success(`Successfully deleted Branch!`)
+        options: {
+            onSuccess: () => {
+                toast.success(`Successfully deleted Branch!`)
+            },
         },
     })
 

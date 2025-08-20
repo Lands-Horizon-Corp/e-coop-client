@@ -1,12 +1,7 @@
-import {
-    IAuditable,
-    IPaginatedResult,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
-
-import { IMedia } from '../media/media.types'
-import { IOrganization } from '../organization'
+import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from "@/types"
+import { IMedia } from "../media"
+import { IOrganization } from "../organization"
+import { IBranchSettings } from "../branch-settings"
 
 export enum branchTypeEnum {
     CooperativeBranch = 'cooperative branch',
@@ -42,9 +37,9 @@ export interface IBranch extends ITimeStamps, IAuditable {
     latitude: number
     longitude: number
 
-    is_main_branch: boolean
+    is_main_branch?: boolean
 
-    // branch_setting: IBranchSettings
+    branch_setting: IBranchSettings
 }
 
 export interface IBranchRequest {

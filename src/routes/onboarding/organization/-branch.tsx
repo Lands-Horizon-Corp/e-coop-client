@@ -3,17 +3,18 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { IBranch } from '@/modules/branch'
+import { IOrganizationWithPolicies } from '@/modules/organization'
+import { useJoinOrganization } from '@/modules/user-organization'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import PlainTextEditor from '@/components/plain-text-editor'
 import OrganizationPolicies from '@/components/policies'
 import { Button } from '@/components/ui/button'
+import { PlainTextEditor } from '@/components/ui/text-editor'
 
-import { useJoinOrganization } from '@/hooks/api-hooks/use-user-organization'
-
-import { IBranch, IOrganizationWithPolicies, TEntityId } from '@/types'
+import { TEntityId } from '@/types'
 
 type PolicyAcceptanceModalProps = IModalProps & {
     onAcceptAndProceed: (branchId: TEntityId, organizationId: TEntityId) => void

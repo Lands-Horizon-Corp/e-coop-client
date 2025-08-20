@@ -14,9 +14,9 @@ import {
 
 export const entityIdSchema = z.uuidv4()
 
-export const descriptionSchema = z.coerce
-    .string()
-    .min(1, 'Description is required')
+export const descriptionSchema = z
+    .string({ error: 'Description is required' })
+    .min(1)
 
 export const organizationBranchIdsSchema = z.object({
     organization_id: entityIdSchema.optional(),

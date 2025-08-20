@@ -1,4 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import {
+    UseMutationOptions,
+    useMutation,
+    useQuery,
+} from '@tanstack/react-query'
 
 import { groupBy } from '@/helpers/function-utils'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
@@ -157,9 +161,31 @@ export const useSeedOrganization = () => {
     })
 }
 
-// export const useUserOrgJoinRequest = () => {
-//     return useMutation<IUserOrganization[], string, TEntityId>({
-//         mutationKey: ['user-organization', 'join-request'],
-//         mutationFn: getAllJoinRequests,
-//     })
-// }
+export const useUserOrgJoinRequest = () => {
+    return useMutation<IUserOrganization[], string, TEntityId>({
+        mutationKey: ['user-organization', 'join-request'],
+        mutationFn: getAllJoinRequests,
+    })
+}
+interface Options<TData = IOrgUserOrganizationGroup[]> {
+    options?: HookQueryOptions<TData>
+}
+
+export const useJoinOrganization = (
+    options?: UseMutationOptions<
+        IUserOrganization,
+        Error,
+        { organizationId: TEntityId; branchId: TEntityId }
+    >
+) => {
+    return useMutation<
+        IUserOrganization,
+        Error,
+        { organizationId: TEntityId; branchId: TEntityId }
+    >({
+        mutationKey: ['user-organization', 'join'],
+        mutationFn: ({ organizationId, branchId }) =>
+            joinOrganization(organizationId, branchId),
+        ...options,
+    })
+}

@@ -1,17 +1,16 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { base64ImagetoFile } from '@/helpers'
-import { cn } from '@/lib'
+import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
+import { cn } from '@/helpers/tw-utils'
+import { IMedia, useUploadMedia } from '@/modules/media'
 import { LatLngLiteral } from 'leaflet'
 import { useForm } from 'react-hook-form'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
-import { PhoneInput } from '@/components/contact-input/contact-input'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     HouseIcon,
@@ -20,10 +19,11 @@ import {
     ReplaceIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import MapPicker from '@/components/map-picker'
+import MapPicker from '@/components/map/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import TextEditor from '@/components/text-editor'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
@@ -31,6 +31,7 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { PhoneInput } from '@/components/ui/phone-input'
 import {
     Select,
     SelectContent,
@@ -38,30 +39,20 @@ import {
     SelectTrigger,
 } from '@/components/ui/select'
 
-import { branchRequestSchema } from '@/validations/form-validation/branch/create-branch-schema'
-
-import {
-    useCreateBranchByOrg,
-    useUpdateBranch,
-} from '@/hooks/api-hooks/use-branch'
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
-import {
-    IBranch,
-    IClassProps,
-    IForm,
-    IMedia,
-    TEntityId,
-    branchTypeEnum,
-} from '@/types'
+import { IClassProps, IForm, TEntityId } from '@/types'
 
-type ICreateBranchSchema = z.infer<typeof branchRequestSchema>
+import { useCreateBranchByOrgId, useUpdateBranch } from '../../branch.service'
+import { IBranch, branchTypeEnum } from '../../branch.types'
+import { branchSchema } from '../../branch.validation'
+
+export type TBranchSchema = z.infer<typeof branchSchema>
 
 export interface ICreateBranchFormProps
     extends IClassProps,
-        IForm<Partial<ICreateBranchSchema>, IBranch, string>,
+        IForm<Partial<TBranchSchema>, IBranch, string>,
         IModalProps {
     branchId?: TEntityId
     organizationId: TEntityId
@@ -73,15 +64,14 @@ export const CreateUpdateBranchByOrgForm = ({
     organizationId,
     hiddenFields,
     onSuccess,
-    onError,
 }: ICreateBranchFormProps) => {
     const { countryCode } = useLocationInfo()
 
     const [openImagePicker, setOpenImagePicker] = useState(false)
     const [onOpenMap, setOnOpenMapPicker] = useState(false)
 
-    const form = useForm<ICreateBranchSchema>({
-        resolver: zodResolver(branchRequestSchema),
+    const form = useForm<TBranchSchema>({
+        resolver: zodResolver(branchSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -90,46 +80,38 @@ export const CreateUpdateBranchByOrgForm = ({
         },
     })
 
+    console.log(form.formState.errors)
+
     const {
         mutate: createBranch,
         isPending: isPedingCreateBranch,
         error,
-    } = useCreateBranchByOrg({
-        onSuccess: (data) => {
-            toast.success('Branch created successfully')
-            form.reset()
-            onSuccess?.(data)
-        },
-        onError: (err) => {
-            toast.error(<>{err}</>)
-            onError?.(err)
-        },
-    })
+    } = useCreateBranchByOrgId()
 
     const { mutate: updateBranch, isPending: isLoadingUpdateBranch } =
         useUpdateBranch({
-            onSuccess: (data) => {
-                toast.success('Update Branch successfully')
-                form.reset()
-                onSuccess?.(data)
-            },
-            onError: (err) => {
-                toast.error(<>{err}</>)
-                onError?.(err)
+            options: {
+                onSuccess: () => {
+                    toast.success('Update Branch successfully')
+                    form.reset()
+                },
+                onError: (err) => {
+                    toast.error(err ? err.message : 'Unknown error')
+                },
             },
         })
 
     const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
-        useSinglePictureUpload({})
+        useUploadMedia()
 
     const handleUploadPhoto = async (mediaId: TEntityId): Promise<string> => {
-        const uploadedMedia = await uploadPhoto(
-            base64ImagetoFile(mediaId, `bg-banner.jpg`) as File
-        )
+        const uploadedMedia = await uploadPhoto({
+            file: base64ImagetoFile(mediaId, `bg-banner.jpg`) as File,
+        })
         return uploadedMedia.id
     }
 
-    const handleSubmit = async (data: ICreateBranchSchema) => {
+    const handleSubmit = form.handleSubmit(async (data) => {
         if (organizationId) {
             if (branchId) {
                 const isMediaFromDB =
@@ -138,7 +120,7 @@ export const CreateUpdateBranchByOrgForm = ({
                     ? data.media.id
                     : await handleUploadPhoto(data.media.download_url ?? '')
                 const request = { ...data, media_id: media }
-                updateBranch({ id: branchId, data: request })
+                updateBranch({ id: branchId, payload: request })
             } else {
                 const mediaId = await handleUploadPhoto(
                     data.media.download_url ?? ''
@@ -147,12 +129,15 @@ export const CreateUpdateBranchByOrgForm = ({
                     ...data,
                     media_id: mediaId,
                 }
-                createBranch({ data: request, organizationId })
+                createBranch(
+                    { branchData: request, organizationId },
+                    { onSuccess }
+                )
             }
         } else {
             console.error('Organization ID is missing.')
         }
-    }
+    })
 
     const isBranchOnChanged = form.formState.isDirty
 
@@ -185,10 +170,7 @@ export const CreateUpdateBranchByOrgForm = ({
                 }}
             />
             <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(handleSubmit)}
-                    className="w-full"
-                >
+                <form onSubmit={handleSubmit} className="w-full">
                     <div className="flex w-full gap-x-5">
                         <div className="grid w-1/2 grow grid-cols-2 gap-5">
                             <FormFieldWrapper
@@ -360,10 +342,11 @@ export const CreateUpdateBranchByOrgForm = ({
                                     )}
                                 />
                             </div>
+
                             <FormFieldWrapper
                                 control={form.control}
                                 name="is_main_branch"
-                                className="col-span-2"
+                                className="col-span-2 bg-red-500"
                                 label="Set as Main Branch"
                                 hiddenFields={hiddenFields}
                                 render={({ field }) => {
@@ -563,7 +546,7 @@ export const CreateUpdateBranchByOrgForm = ({
                     </div>
                     <FormErrorMessage
                         className="my-5 w-full"
-                        errorMessage={combinedError}
+                        errorMessage={combinedError?.message ?? undefined}
                     />
                     <div className="mt-5 flex justify-end gap-x-2">
                         <Button
