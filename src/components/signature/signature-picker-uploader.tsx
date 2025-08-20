@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
+import { useUploadMedia } from '@/hooks/api-hooks/use-media'
 
 import { IMedia } from '@/types'
 
@@ -25,14 +25,13 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
         [file]
     )
 
-    const { isPending: isUploading, mutate: uploadSignature } =
-        useSinglePictureUpload({
-            onSuccess: (media) => {
-                onSignatureUpload?.(media)
-            },
-            onUploadProgressChange: (progress) => setProgress(progress),
-            onUploadETAChange: (ETA) => setEta(ETA),
-        })
+    const { isPending: isUploading, mutate: uploadSignature } = useUploadMedia({
+        onSuccess: (media) => {
+            onSignatureUpload?.(media)
+        },
+        onUploadProgressChange: (progress) => setProgress(progress),
+        onUploadETAChange: (ETA) => setEta(ETA),
+    })
 
     return (
         <div className="space-y-2">

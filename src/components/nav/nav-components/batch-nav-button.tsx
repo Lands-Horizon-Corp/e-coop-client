@@ -1,9 +1,7 @@
 import { toast } from 'sonner'
 
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { useTransactionBatchStore } from '@/store/transaction-batch-store'
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
-// import { useAuthUser } from '@/store/user-auth-store'
-
 import { toReadableDate } from '@/utils'
 
 import { TransactionBatchCreateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-create-form'

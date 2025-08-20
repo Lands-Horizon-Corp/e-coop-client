@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 
-import { dataUrlToFile } from '@/helpers'
+import { dataUrlToFile } from '@/helpers/common-helper'
 import { format } from 'date-fns'
 import Webcam from 'react-webcam'
 

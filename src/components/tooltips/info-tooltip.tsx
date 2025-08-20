@@ -1,11 +1,11 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 import {
     Tooltip,
     TooltipContent,
+    TooltipPortal,
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'

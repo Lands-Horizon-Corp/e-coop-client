@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 
+import { formatBytes } from '@/helpers/common-helper'
 import { cn } from '@/helpers/tw-utils'
 import {
     DropzoneOptions,
@@ -18,7 +19,6 @@ import {
 import { Button } from './button'
 import FileTypeIcon from './file-type'
 import { ScrollArea } from './scroll-area'
-import { formatBytes } from '@/helpers/common-helper'
 
 interface FileUploaderProps extends DropzoneOptions {
     className?: string

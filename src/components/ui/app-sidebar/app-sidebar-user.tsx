@@ -1,11 +1,13 @@
 import { useParams, useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
+import { useSignOut } from '@/modules/authentication'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import { APIKeyGenModal } from '@/modules/developer/components/api-key-gen'
+import UserAvatar from '@/modules/user/components/user-avatar'
 import { useTheme } from '@/providers/theme-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useAuthUser } from '@/store/user-auth-store'
 
-import { APIKeyGenModal } from '@/components/developer/api-key-gen'
 import {
     BookOpenIcon,
     ChevronsUpDownIcon,
@@ -18,11 +20,6 @@ import {
     SunIcon,
     SunMoonIcon,
 } from '@/components/icons'
-import UserAvatar from '@/components/user-avatar'
-
-import { useSignOut } from '@/hooks/api-hooks/use-auth'
-import { useModalState } from '@/hooks/use-modal-state'
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,8 +29,14 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
-} from '../dropdown-menu'
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../sidebar'
+} from '@/components/ui/dropdown-menu'
+import {
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+} from '@/components/ui/sidebar'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 const AppSidebarUser = () => {
     const router = useRouter()
@@ -51,10 +54,12 @@ const AppSidebarUser = () => {
     }) as { orgname: string; branchname: string }
 
     const { mutate: handleSignout } = useSignOut({
-        onSuccess: () => {
-            resetAuth()
-            router.navigate({ to: '/auth/sign-in' as string })
-            toast.success('Signed Out')
+        options: {
+            onSuccess: () => {
+                resetAuth()
+                router.navigate({ to: '/auth/sign-in' as string })
+                toast.success('Signed Out')
+            },
         },
     })
 

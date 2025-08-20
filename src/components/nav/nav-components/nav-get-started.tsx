@@ -1,7 +1,7 @@
 import { useRouter } from '@tanstack/react-router'
 
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import UserAvatar from '@/modules/user/components/user-avatar'
-import { useAuthStore } from '@/store/user-auth-store'
 
 import { Button } from '@/components/ui/button'
 

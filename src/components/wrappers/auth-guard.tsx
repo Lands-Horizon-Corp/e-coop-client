@@ -4,9 +4,9 @@ import { ReactNode, useCallback, useRef } from 'react'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 import { IAuthContext, useAuthContext } from '@/modules/authentication'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { IUserBase } from '@/modules/user'
 import UserAvatar from '@/modules/user/components/user-avatar'
-import { useAuthStore } from '@/store/user-auth-store'
 
 import {
     ArrowRightIcon,

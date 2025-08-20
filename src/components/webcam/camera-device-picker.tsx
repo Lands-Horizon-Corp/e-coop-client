@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
+import { withCatchAsync } from '@/helpers/function-utils'
 import { cn } from '@/helpers/tw-utils'
-import { withCatchAsync } from '@/utils'
 
 import { CameraIcon, RefreshIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
