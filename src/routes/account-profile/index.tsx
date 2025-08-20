@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { IUserBase } from '@/modules/user'
 import AccountProfilePicture from '@/modules/user-profile/components/account-profile-picture'
 import AccountGeneralForm from '@/modules/user-profile/components/forms/account-general-form'
-import { useAuthUser } from '@/store/user-auth-store'
 
 import { Label } from '@/components/ui/label'
 

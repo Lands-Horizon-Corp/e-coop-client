@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { IUserBase } from '@/modules/user'
 import AccountProfileForm from '@/modules/user-profile/components/forms/account-profile-form'
-import { useAuthUser } from '@/store/user-auth-store'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 

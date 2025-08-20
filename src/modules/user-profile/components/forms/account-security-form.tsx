@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,6 +11,7 @@ import {
     ValueChecklistMeter,
 } from '@/modules/authentication/components/value-checklist-indicator'
 import { IUserBase } from '@/modules/user/user.types'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Path, useForm } from 'react-hook-form'
 
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -40,6 +42,8 @@ const AccountSecurityForm = ({
     onError,
     onSuccess,
 }: IAccountSecurityFormProps) => {
+    const { onOpen } = useConfirmModalStore()
+
     const form = useForm<TAccountSecurityFormValues>({
         resolver: zodResolver(UserProfileSecuritySchema),
         reValidateMode: 'onChange',
@@ -61,12 +65,19 @@ const AccountSecurityForm = ({
             onError,
             onSuccess: (newUserData) => {
                 onSuccess?.(newUserData)
+                toast.success('Your password has been changed!')
+                form.reset()
             },
         },
     })
 
     const onSubmit = form.handleSubmit((formData) => {
-        mutate(formData)
+        onOpen({
+            title: 'Change Password',
+            description:
+                'Are you sure to change your password? You will be signed out after saving. Continue?',
+            onConfirm: () => mutate(formData),
+        })
     })
 
     const error = serverRequestErrExtractor({ error: rawError })

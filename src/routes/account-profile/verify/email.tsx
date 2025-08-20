@@ -2,9 +2,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { useSendOTPVerification } from '@/modules/authentication'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import VerifyForm from '@/modules/authentication/components/forms/verify-form'
 import { IUserBase } from '@/modules/user'
-import { useAuthUser } from '@/store/user-auth-store'
 
 import { BadgeCheckFillIcon, BadgeQuestionFillIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'

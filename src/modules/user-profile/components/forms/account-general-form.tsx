@@ -48,10 +48,11 @@ const AccountGeneralForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            user_name: '',
-            email: '',
-            description: '',
-            ...defaultValues,
+            user_name: defaultValues?.user_name,
+            email: defaultValues?.email,
+            description: defaultValues?.description
+                ? defaultValues?.description
+                : undefined,
         },
     })
 
@@ -68,7 +69,13 @@ const AccountGeneralForm = ({
         },
     })
 
-    const error = serverRequestErrExtractor({ error: rawError })
+    const descr = form.watch('description')
+
+    console.log('Description changes', descr)
+
+    const error =
+        serverRequestErrExtractor({ error: rawError }) ||
+        Object.values(form.formState.errors)[0]?.message
 
     const { onOpenSecurityAction } = useActionSecurityStore()
 

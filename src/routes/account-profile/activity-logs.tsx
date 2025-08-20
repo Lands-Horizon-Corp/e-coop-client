@@ -33,6 +33,7 @@ function RouteComponent() {
                 pageIndex: 0,
                 pageSize: 10,
             },
+            retry: 0,
             queryFn: async ({ pageParam: { pageIndex, pageSize } }) => {
                 const [error, result] = await withCatchAsync(
                     FootstepAPI.getPaginated<IFootstep>({

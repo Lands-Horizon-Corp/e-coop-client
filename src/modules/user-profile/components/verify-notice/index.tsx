@@ -1,6 +1,6 @@
 import { useLocation } from '@tanstack/react-router'
 
-import { useAuthUser } from '@/store/user-auth-store'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 
 import VerifyContactBar from './verify-contact-bar'
 

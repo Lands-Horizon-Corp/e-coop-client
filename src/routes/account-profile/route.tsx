@@ -1,9 +1,9 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { useRouter } from '@tanstack/react-router'
 
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import AccountSettingsSidebar from '@/modules/user-profile/components/account-settings-sidebar'
 import VerifyNotice from '@/modules/user-profile/components/verify-notice'
-import { useAuthUser } from '@/store/user-auth-store'
 
 import AuthFooter from '@/components/footers/auth-footer'
 import { ArrowLeftIcon } from '@/components/icons'
@@ -17,7 +17,7 @@ export const Route = createFileRoute('/account-profile')({
     component: RouteComponent,
 })
 
-function RouteComponent() {
+const BackButton = () => {
     const router = useRouter()
     const {
         currentAuth: { user_organization },
@@ -41,12 +41,28 @@ function RouteComponent() {
         router.history.back()
     }
 
+    if (!user_organization) return
+
+    return (
+        <Button
+            variant="ghost"
+            size="sm"
+            className="absolute top-5 right-5"
+            onClick={() => handleBack()}
+        >
+            <ArrowLeftIcon className="mr-2" /> Back to Org
+        </Button>
+    )
+}
+
+function RouteComponent() {
     return (
         <AuthGuard>
             <div className="flex">
                 <OnboardingNav />
                 <main className="flex w-full flex-1 items-center">
                     <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col items-center justify-center overflow-y-auto">
+                        <BackButton />
                         <div className="relative mt-24 flex min-h-[80vh] w-full max-w-5xl flex-1 flex-col space-y-4">
                             {/* <AccountSettingsUserBanner /> */}
                             <div className="flex flex-1 gap-x-8">
@@ -62,16 +78,6 @@ function RouteComponent() {
                             </div>
                             <AuthFooter />
                         </div>
-                        {user_organization && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="absolute top-5 right-5"
-                                onClick={() => handleBack()}
-                            >
-                                <ArrowLeftIcon className="mr-2" /> Back to Org
-                            </Button>
-                        )}
                     </div>
                     <div className="hidden h-screen sm:block sm:w-1/3">
                         <div

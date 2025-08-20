@@ -1,17 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { useAuthUser } from '@/store/user-auth-store'
+import { useSendOTPVerification } from '@/modules/authentication'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import VerifyForm from '@/modules/authentication/components/forms/verify-form'
+import { IUserBase } from '@/modules/user'
 
-import VerifyForm from '@/components/forms/auth-forms/verify-form'
 import { BadgeCheckFillIcon, BadgeQuestionFillIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { useSendOTPVerification } from '@/hooks/api-hooks/use-auth'
 import { useSubscribe } from '@/hooks/use-pubsub'
-
-import { IUserBase } from '@/types'
 
 export const Route = createFileRoute('/account-profile/verify/contact')({
     component: RouteComponent,
@@ -31,8 +30,10 @@ function RouteComponent() {
 
     const { mutate: sendcode, isPending } = useSendOTPVerification({
         verifyMode: 'mobile',
-        onSuccess: () => {
-            setVerifying(true)
+        options: {
+            onSuccess: () => {
+                setVerifying(true)
+            },
         },
     })
 

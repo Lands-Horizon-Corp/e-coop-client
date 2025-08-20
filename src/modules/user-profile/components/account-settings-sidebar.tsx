@@ -4,8 +4,8 @@ import { useLocation } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { useSignOut } from '@/modules/authentication'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useAuthUser } from '@/store/user-auth-store'
 
 import {
     ArrowLeftIcon,

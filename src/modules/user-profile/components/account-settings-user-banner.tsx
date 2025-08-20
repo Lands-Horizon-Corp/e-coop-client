@@ -1,4 +1,4 @@
-import { useAuthUser } from '@/store/user-auth-store'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 
 import ImageDisplay from '@/components/image-display'
 
