@@ -7,9 +7,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { NATS_PASS, NATS_USER } from '@/constants'
 import { IAuthContext, useAuthContext } from '@/modules/authentication'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
-import { useAuthStore } from '@/store/user-auth-store'
 
 import CookieConsent from '@/components/cookie-consent'
 // import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
@@ -76,6 +76,8 @@ function RootLayout() {
         onSuccess: handleSuccess,
         onError: handleError,
     })
+
+    console.log('Rereder root')
 
     useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
 

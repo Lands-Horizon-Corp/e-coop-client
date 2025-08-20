@@ -19,7 +19,6 @@ export interface IUserOrganizationContext<
     user_organization?: TUserOrganization | null
 }
 
-
 export type TUserOrganizationApplicationStatus =
     (typeof USER_ORG_APPLICATION_STATUS)[number]
 

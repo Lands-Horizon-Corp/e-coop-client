@@ -438,8 +438,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                                                     newImage,
                                                             },
                                                             {
-                                                                shouldDirty:
-                                                                    true,
+                                                                shouldDirty: true,
                                                             }
                                                         )
                                                     }}
