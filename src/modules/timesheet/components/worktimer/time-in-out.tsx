@@ -1,22 +1,25 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 
+import { toDateTimeFormatFile } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { toDateTimeFormatFile } from '@/utils'
+import { useUploadMedia } from '@/modules/media'
 
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
-import { useTimeInOut } from '@/hooks/api-hooks/use-timesheet'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import WebCam from '@/components/webcam'
+
 import { useCamera } from '@/hooks/use-camera'
 
-import { IClassProps, IOperationCallbacks, ITimesheet } from '@/types'
+import { IClassProps, IOperationCallback } from '@/types'
 
-import LoadingSpinner from '../spinners/loading-spinner'
-import { Button } from '../ui/button'
-import FormErrorMessage from '../ui/form-error-message'
-import WebCam from '../webcam'
+import { useTimeInOut } from '../../timesheet.service'
+import { ITimesheet } from '../../timesheet.types'
 import RealtimeTimeText from './realtime-time-text'
 
-interface Props extends IClassProps, IOperationCallbacks<ITimesheet, string> {
+interface Props extends IClassProps, IOperationCallback<ITimesheet> {
     timesheet?: ITimesheet
     onCancel?: () => void
 }
@@ -35,18 +38,24 @@ const TimeInOut = ({
         mutateAsync: uploadMediaAsync,
         isPending: isUploading,
         error: uploadImageError,
-    } = useSinglePictureUpload()
+    } = useUploadMedia()
 
     const {
         mutate: saveTimeInOut,
         isPending: isSaving,
-        error,
+        error: rawError,
     } = useTimeInOut({
-        onSuccess: (timesheetData) => {
-            onSuccess?.(timesheetData)
-            setImageId(undefined)
+        options: {
+            onSuccess: (timesheetData) => {
+                onSuccess?.(timesheetData)
+                setImageId(undefined)
+            },
+            onError,
         },
-        onError,
+    })
+
+    const error = serverRequestErrExtractor({
+        error: uploadImageError || rawError,
     })
 
     const handleSave = async () => {
@@ -75,7 +84,7 @@ const TimeInOut = ({
                 />
             </div>
             <RealtimeTimeText className="text-center text-sm text-muted-foreground" />
-            <FormErrorMessage errorMessage={error || uploadImageError} />
+            <FormErrorMessage errorMessage={error} />
             <div className="flex w-full items-center gap-x-2">
                 <Button
                     size="sm"
