@@ -11,7 +11,10 @@ const NavSignUp = () => {
 
     return (
         <Link to={'/auth/sign-up' as string}>
-            <Button variant="outline" className="scale-effects rounded-full">
+            <Button
+                variant="outline"
+                className="scale-effects cursor-pointer rounded-full"
+            >
                 Sign-Up
             </Button>
         </Link>

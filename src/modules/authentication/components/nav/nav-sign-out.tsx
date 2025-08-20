@@ -18,10 +18,12 @@ const NavSignOut = () => {
     } = useAuthStore()
 
     const { mutate: handleSignout, isPending: isSigningOut } = useSignOut({
-        onSuccess: () => {
-            resetAuth()
-            router.navigate({ to: '/auth/sign-in' as string })
-            toast.success('Signed out')
+        options: {
+            onSuccess: () => {
+                resetAuth()
+                router.navigate({ to: '/auth/sign-in' as string })
+                toast.success('Signed out')
+            },
         },
     })
 
@@ -38,7 +40,7 @@ const NavSignOut = () => {
                     onConfirm: () => handleSignout(),
                 })
             }
-            className="scale-effects rounded-full"
+            className="scale-effects rounded-full cursor-pointer"
         >
             Sign-Out
         </Button>

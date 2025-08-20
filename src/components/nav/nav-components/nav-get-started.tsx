@@ -38,7 +38,7 @@ const NavGetStarted = () => {
                     })
                 }
             }}
-            className="scale-effects gap-x-2 rounded-full px-2"
+            className="scale-effects gap-x-2 cursor-pointer rounded-full px-2"
         >
             <UserAvatar
                 src={user.media?.download_url ?? ''}
