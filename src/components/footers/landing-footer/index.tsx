@@ -187,7 +187,7 @@ const NeonFooter = () => {
                                 <span className="flex items-center p-1.5">
                                     {item.icon}
                                 </span>
-                                <p className="border break-all inline-block !text-wrap ">
+                                <p className="break-all inline-block !text-wrap ">
                                     {' '}
                                     {item.text}
                                 </p>
