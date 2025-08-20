@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { useAuthStore } from '@/store/user-auth-store'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 
 import { Button } from '@/components/ui/button'
 

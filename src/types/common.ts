@@ -22,11 +22,11 @@ import { IUserBase } from '../modules/user/user.types'
 
 export type TEntityId = string
 
-export type TUserType = (typeof USER_TYPE)[number]
+export type TUserType = (typeof USER_TYPE)[number] // move User module
 
 export type TGeneralStatus = (typeof GENERAL_STATUS)[number]
 
-export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number]
+export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number] // move to member profile relative
 
 export type TTagCategory = (typeof TAG_CATEGORY)[number]
 
@@ -83,20 +83,15 @@ export interface ITimeStamps {
     updated_at?: string
 }
 
-export type TCivilStatus = (typeof CIVIL_STATUS)[number]
+export type TCivilStatus = (typeof CIVIL_STATUS)[number] // move to member profile
 
-export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]
+export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number] // member profile
 
-export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number]
+export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number] // move to member educ attainment
 
 export interface UpdateIndexRequest {
     id: TEntityId
     index: number
-}
-
-interface IPages {
-    page: string
-    pageIndex: string
 }
 
 export interface IPaginatedResult<T> {
@@ -107,16 +102,16 @@ export interface IPaginatedResult<T> {
     totalSize: number
 }
 
-export type TLoanModeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number]
+export type TLoanModeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number] // move to loan mode of payment
 
-export type TWeekdays = (typeof WEEKDAYS)[number]
+export type TWeekdays = (typeof WEEKDAYS)[number] // move to loan
 
-export type TLoanCollectorPlace = (typeof LOAN_COLLECTOR_PLACE)[number]
+export type TLoanCollectorPlace = (typeof LOAN_COLLECTOR_PLACE)[number] // loan collector
 
-export type TLoanComakerType = (typeof LOAN_COMAKER_TYPE)[number]
+export type TLoanComakerType = (typeof LOAN_COMAKER_TYPE)[number] // loan
 
-export type TLoanType = (typeof LOAN_TYPE)[number]
+export type TLoanType = (typeof LOAN_TYPE)[number] // loan
 
-export type TLoanAmortizationType = (typeof LOAN_AMORTIZATION_TYPE)[number]
+export type TLoanAmortizationType = (typeof LOAN_AMORTIZATION_TYPE)[number] // loan
 
-export type TComputationType = (typeof COMPUTATION_TYPE)[number]
+export type TComputationType = (typeof COMPUTATION_TYPE)[number] // loan

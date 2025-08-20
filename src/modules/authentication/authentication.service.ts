@@ -11,6 +11,7 @@ import {
     IAuthContext,
     IChangePasswordRequest,
     IForgotPasswordRequest,
+    ILoggedInUser,
     ISignInRequest,
     ISignUpRequest,
     IVerification,
@@ -100,6 +101,19 @@ export const verifyContactNumber = async (
     return (
         await API.post<IVerifyContactNumberRequest, IUserBase>(endpoint, data)
     ).data
+}
+
+// Current Logged in user
+export const currentLoggedInUsers = async () => {
+    // /authentication/current-logged-in-accounts
+    const endpoint = `${route}/current-logged-in-accounts`
+    return (await API.get<ILoggedInUser[]>(endpoint)).data
+}
+
+// Sign out all logged in session of current user
+export const signOutLoggedInUsers = async () => {
+    const endpoint = `${route}/current-logged-in-accounts/logout`
+    await API.post<void>(endpoint)
 }
 
 // 🪝 HOOK STARTS HERE
@@ -261,5 +275,31 @@ export const useVerify = ({
             throw new Error('Unknown verify mode')
         },
         ...options,
+    })
+}
+
+// Get Current Logged In User
+export const useCurrentLoggedInUser = ({
+    options,
+}: {
+    options?: HookQueryOptions<ILoggedInUser[], Error>
+} = {}) => {
+    return useQuery<ILoggedInUser[], Error>({
+        ...options,
+        queryKey: ['auth', 'current-logged-in-user'],
+        queryFn: async () => await currentLoggedInUsers(),
+    })
+}
+
+// Sign Out Current Logged In User
+export const useCurrentLoggedInUserLogout = ({
+    options,
+}: {
+    options?: HookMutationOptions<void, Error, void>
+} = {}) => {
+    return useMutation<void, Error, void>({
+        ...options,
+        mutationKey: ['auth', 'signout', 'current-logged-in-user'],
+        mutationFn: async () => await signOutLoggedInUsers(),
     })
 }

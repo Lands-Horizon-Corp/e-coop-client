@@ -2,12 +2,12 @@ import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { otpSchema } from '@/validations'
+import { IUserBase } from '@/modules/user'
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp'
 import { useForm } from 'react-hook-form'
 
-import ResendVerifyContactButton from '@/components/auth/resend-verify-button'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,11 +25,13 @@ import {
     InputOTPSlot,
 } from '@/components/ui/input-otp'
 
-import { useVerify } from '@/hooks/api-hooks/use-auth'
+import { IForm } from '@/types'
 
-import { IForm, IUserBase } from '@/types'
+import { useVerify } from '../../authentication.service'
+import { OtpSchema } from '../../authentication.validation'
+import ResendVerifyContactButton from '../resend-verify-button'
 
-type TVerifyForm = z.infer<typeof otpSchema>
+type TVerifyForm = z.infer<typeof OtpSchema>
 
 interface Props extends IForm<TVerifyForm, IUserBase> {
     verifyMode: 'mobile' | 'email'
@@ -46,7 +48,7 @@ const VerifyForm = ({
     onSuccess,
 }: Props) => {
     const form = useForm({
-        resolver: zodResolver(otpSchema),
+        resolver: zodResolver(OtpSchema),
         reValidateMode: 'onChange',
         defaultValues,
     })
@@ -54,12 +56,16 @@ const VerifyForm = ({
     const {
         mutate: handleVerify,
         isPending,
-        error,
+        error: rawError,
     } = useVerify({
         verifyMode,
-        onSuccess,
-        onError,
+        options: {
+            onSuccess,
+            onError,
+        },
     })
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <>

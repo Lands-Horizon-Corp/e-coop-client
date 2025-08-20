@@ -1,8 +1,8 @@
 import { useRouter } from '@tanstack/react-router'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { SignUpForm } from '@/modules/authentication/components/forms'
-import { useAuthStore } from '@/store/user-auth-store'
 
 import GuestGuard from '@/components/wrappers/guest-guard'
 

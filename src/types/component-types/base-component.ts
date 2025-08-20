@@ -15,3 +15,9 @@ export interface IClassProps {
 export interface IChildProps {
     children?: ReactNode
 }
+
+/* For components that has generic onSuccess and onError */
+export interface IOperationCallback<TData = unknown, TError = Error> {
+    onSuccess?: (data: TData) => void
+    onError?: (error: TError) => void
+}

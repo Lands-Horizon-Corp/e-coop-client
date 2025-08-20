@@ -14,7 +14,9 @@ import {
 
 export const entityIdSchema = z.uuidv4()
 
-export const descriptionSchema = z.string().min(1, 'Description is required')
+export const descriptionSchema = z.coerce
+    .string()
+    .min(1, 'Description is required')
 
 export const organizationBranchIdsSchema = z.object({
     organization_id: entityIdSchema.optional(),
@@ -105,10 +107,10 @@ export const contactNumberSchema = z.string().min(1, 'Contact Number is empty')
 
 export const generalStatusSchema = z.enum(GENERAL_STATUS)
 
-export const civilStatusSchema = z.enum(CIVIL_STATUS)
+export const civilStatusSchema = z.enum(CIVIL_STATUS) //TODO: MOVE TO member profile constant.ts
 
-export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT)
+export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT) // MOVE TO member education attainment module
 
-export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP)
+export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP) // Member profile
 
 export const TEntityId = z.string()

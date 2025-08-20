@@ -1,8 +1,8 @@
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useAuthStore } from '@/store/user-auth-store'
 
 import { Button } from '@/components/ui/button'
 

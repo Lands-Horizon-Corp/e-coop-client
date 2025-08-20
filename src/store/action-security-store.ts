@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 import { create } from 'zustand'
 
-import { useAuthStore } from './user-auth-store'
+import { useAuthStore } from '../modules/authentication/authgentication.store.ts'
 
 interface IConfirmModalOnOpenData {
     title: string | ReactNode

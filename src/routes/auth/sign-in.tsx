@@ -4,8 +4,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useCallback } from 'react'
 
 import { IAuthContext } from '@/modules/authentication'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import SignInForm from '@/modules/authentication/components/forms/sign-in-form'
-import { useAuthStore } from '@/store/user-auth-store'
 
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import GuestGuard from '@/components/wrappers/guest-guard'
