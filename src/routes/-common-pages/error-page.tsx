@@ -41,8 +41,8 @@ const ErrorPage = ({ className, error }: Props) => {
                 <p className="text-muted-foreground">{errorMessage}</p>
                 <div className="z-10 flex items-center gap-x-2">
                     <Button
-                        variant="secondary"
-                        hoverVariant="primary"
+                        // variant="secondary"
+                        // hoverVariant="primary"
                         className="gap-x-2 rounded-full"
                         onClick={() => location.reload()}
                     >
@@ -50,8 +50,8 @@ const ErrorPage = ({ className, error }: Props) => {
                         Refresh
                     </Button>
                     <Button
-                        variant="secondary"
-                        hoverVariant="primary"
+                        // variant="secondary"
+                        // hoverVariant="primary"
                         className="gap-x-2 rounded-full"
                         onClick={() => router.history.back()}
                     >

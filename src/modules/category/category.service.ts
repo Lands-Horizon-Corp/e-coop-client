@@ -15,6 +15,4 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 export const { useDeleteById, useGetAll, useGetById, useGetPaginated } =
     apiCrudHooks
 
-// Add mo custom api query hooks here
-
 export const CategoryAPI = apiCrudService

@@ -26,9 +26,10 @@ export const OrganizationSchema = z.object({
             message: 'Invalid email',
         }),
     contact_number: z.string().optional(),
-    description: descriptionSchema
-        .optional()
-        .transform(descriptionTransformerSanitizer),
+    description: z
+        .string()
+        .max(200, 'Description must be less than 200 characters')
+        .optional(),
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
 })
@@ -45,4 +46,4 @@ export const EditOrganizationSchema = OrganizationSchema.extend({
     cover_media_id: z.string().optional(),
 })
 
-export type OrganizationFormValues = z.infer<typeof OrganizationSchema>
+export type TOrganizationFormValues = z.infer<typeof OrganizationSchema>

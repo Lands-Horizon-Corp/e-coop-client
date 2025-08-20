@@ -11,11 +11,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OnboardingRouteRouteImport } from './routes/onboarding/route'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AccountProfileRouteRouteImport } from './routes/account-profile/route'
 import { Route as landingRouteRouteImport } from './routes/(landing)/route'
+import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as AccountProfileIndexRouteImport } from './routes/account-profile/index'
 import { Route as landingIndexRouteImport } from './routes/(landing)/index'
+import { Route as OnboardingSetupOrgRouteImport } from './routes/onboarding/setup-org'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AccountProfileSecurityRouteImport } from './routes/account-profile/security'
@@ -27,8 +30,12 @@ import { Route as landingFrequentlyAskedQuestionsRouteImport } from './routes/(l
 import { Route as landingDevelopersRouteImport } from './routes/(landing)/developers'
 import { Route as landingContactRouteImport } from './routes/(landing)/contact'
 import { Route as landingAboutRouteImport } from './routes/(landing)/about'
+import { Route as OnboardingOrganizationRouteRouteImport } from './routes/onboarding/organization/route'
 import { Route as landingPolicyRouteRouteImport } from './routes/(landing)/policy/route'
+import { Route as OnboardingOrganizationIndexRouteImport } from './routes/onboarding/organization/index'
 import { Route as landingSubscriptionIndexRouteImport } from './routes/(landing)/subscription/index'
+import { Route as OnboardingOrganizationOrganization_idRouteImport } from './routes/onboarding/organization/$organization_id'
+import { Route as OnboardingCreateBranchOrganization_idRouteImport } from './routes/onboarding/create-branch.$organization_id'
 import { Route as AuthPasswordResetResetIdRouteImport } from './routes/auth/password-reset.$resetId'
 import { Route as AccountProfileVerifyEmailRouteImport } from './routes/account-profile/verify/email'
 import { Route as AccountProfileVerifyContactRouteImport } from './routes/account-profile/verify/contact'
@@ -48,6 +55,11 @@ import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing
 
 const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
 
+const OnboardingRouteRoute = OnboardingRouteRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -61,6 +73,11 @@ const AccountProfileRouteRoute = AccountProfileRouteRouteImport.update({
 const landingRouteRoute = landingRouteRouteImport.update({
   id: '/(landing)',
   getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingIndexRoute = OnboardingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OnboardingRouteRoute,
 } as any)
 const AccountProfileIndexRoute = AccountProfileIndexRouteImport.update({
   id: '/',
@@ -77,6 +94,11 @@ const AuthSignUpLazyRoute = AuthSignUpLazyRouteImport.update({
   path: '/sign-up',
   getParentRoute: () => AuthRouteRoute,
 } as any).lazy(() => import('./routes/auth/sign-up.lazy').then((d) => d.Route))
+const OnboardingSetupOrgRoute = OnboardingSetupOrgRouteImport.update({
+  id: '/setup-org',
+  path: '/setup-org',
+  getParentRoute: () => OnboardingRouteRoute,
+} as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
@@ -134,16 +156,40 @@ const landingAboutRoute = landingAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => landingRouteRoute,
 } as any)
+const OnboardingOrganizationRouteRoute =
+  OnboardingOrganizationRouteRouteImport.update({
+    id: '/organization',
+    path: '/organization',
+    getParentRoute: () => OnboardingRouteRoute,
+  } as any)
 const landingPolicyRouteRoute = landingPolicyRouteRouteImport.update({
   id: '/policy',
   path: '/policy',
   getParentRoute: () => landingRouteRoute,
 } as any)
+const OnboardingOrganizationIndexRoute =
+  OnboardingOrganizationIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => OnboardingOrganizationRouteRoute,
+  } as any)
 const landingSubscriptionIndexRoute =
   landingSubscriptionIndexRouteImport.update({
     id: '/subscription/',
     path: '/subscription/',
     getParentRoute: () => landingRouteRoute,
+  } as any)
+const OnboardingOrganizationOrganization_idRoute =
+  OnboardingOrganizationOrganization_idRouteImport.update({
+    id: '/$organization_id',
+    path: '/$organization_id',
+    getParentRoute: () => OnboardingOrganizationRouteRoute,
+  } as any)
+const OnboardingCreateBranchOrganization_idRoute =
+  OnboardingCreateBranchOrganization_idRouteImport.update({
+    id: '/create-branch/$organization_id',
+    path: '/create-branch/$organization_id',
+    getParentRoute: () => OnboardingRouteRoute,
   } as any)
 const AuthPasswordResetResetIdRoute =
   AuthPasswordResetResetIdRouteImport.update({
@@ -244,7 +290,9 @@ export interface FileRoutesByFullPath {
   '/': typeof landingIndexRoute
   '/account-profile': typeof AccountProfileRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
+  '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
@@ -256,8 +304,10 @@ export interface FileRoutesByFullPath {
   '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
+  '/onboarding/setup-org': typeof OnboardingSetupOrgRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/account-profile/': typeof AccountProfileIndexRoute
+  '/onboarding/': typeof OnboardingIndexRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -274,7 +324,10 @@ export interface FileRoutesByFullPath {
   '/account-profile/verify/contact': typeof AccountProfileVerifyContactRoute
   '/account-profile/verify/email': typeof AccountProfileVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
+  '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganization_idRoute
+  '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
   '/subscription': typeof landingSubscriptionIndexRoute
+  '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
@@ -290,9 +343,11 @@ export interface FileRoutesByTo {
   '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
+  '/onboarding/setup-org': typeof OnboardingSetupOrgRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/': typeof landingIndexRoute
   '/account-profile': typeof AccountProfileIndexRoute
+  '/onboarding': typeof OnboardingIndexRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -309,14 +364,19 @@ export interface FileRoutesByTo {
   '/account-profile/verify/contact': typeof AccountProfileVerifyContactRoute
   '/account-profile/verify/email': typeof AccountProfileVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
+  '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganization_idRoute
+  '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
   '/subscription': typeof landingSubscriptionIndexRoute
+  '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(landing)': typeof landingRouteRouteWithChildren
   '/account-profile': typeof AccountProfileRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/(landing)/policy': typeof landingPolicyRouteRouteWithChildren
+  '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/developers': typeof landingDevelopersRoute
@@ -328,9 +388,11 @@ export interface FileRoutesById {
   '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
+  '/onboarding/setup-org': typeof OnboardingSetupOrgRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/(landing)/': typeof landingIndexRoute
   '/account-profile/': typeof AccountProfileIndexRoute
+  '/onboarding/': typeof OnboardingIndexRoute
   '/(landing)/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/(landing)/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/(landing)/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -347,7 +409,10 @@ export interface FileRoutesById {
   '/account-profile/verify/contact': typeof AccountProfileVerifyContactRoute
   '/account-profile/verify/email': typeof AccountProfileVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
+  '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganization_idRoute
+  '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
   '/(landing)/subscription/': typeof landingSubscriptionIndexRoute
+  '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -355,7 +420,9 @@ export interface FileRouteTypes {
     | '/'
     | '/account-profile'
     | '/auth'
+    | '/onboarding'
     | '/policy'
+    | '/onboarding/organization'
     | '/about'
     | '/contact'
     | '/developers'
@@ -367,8 +434,10 @@ export interface FileRouteTypes {
     | '/account-profile/security'
     | '/auth/forgot-password'
     | '/auth/sign-in'
+    | '/onboarding/setup-org'
     | '/auth/sign-up'
     | '/account-profile/'
+    | '/onboarding/'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
@@ -385,7 +454,10 @@ export interface FileRouteTypes {
     | '/account-profile/verify/contact'
     | '/account-profile/verify/email'
     | '/auth/password-reset/$resetId'
+    | '/onboarding/create-branch/$organization_id'
+    | '/onboarding/organization/$organization_id'
     | '/subscription'
+    | '/onboarding/organization/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -401,9 +473,11 @@ export interface FileRouteTypes {
     | '/account-profile/security'
     | '/auth/forgot-password'
     | '/auth/sign-in'
+    | '/onboarding/setup-org'
     | '/auth/sign-up'
     | '/'
     | '/account-profile'
+    | '/onboarding'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
@@ -420,13 +494,18 @@ export interface FileRouteTypes {
     | '/account-profile/verify/contact'
     | '/account-profile/verify/email'
     | '/auth/password-reset/$resetId'
+    | '/onboarding/create-branch/$organization_id'
+    | '/onboarding/organization/$organization_id'
     | '/subscription'
+    | '/onboarding/organization'
   id:
     | '__root__'
     | '/(landing)'
     | '/account-profile'
     | '/auth'
+    | '/onboarding'
     | '/(landing)/policy'
+    | '/onboarding/organization'
     | '/(landing)/about'
     | '/(landing)/contact'
     | '/(landing)/developers'
@@ -438,9 +517,11 @@ export interface FileRouteTypes {
     | '/account-profile/security'
     | '/auth/forgot-password'
     | '/auth/sign-in'
+    | '/onboarding/setup-org'
     | '/auth/sign-up'
     | '/(landing)/'
     | '/account-profile/'
+    | '/onboarding/'
     | '/(landing)/policy/aml-ctf-policy'
     | '/(landing)/policy/code-of-conduct-ethics-policy'
     | '/(landing)/policy/complaint-handling-and-dispute-policy'
@@ -457,17 +538,28 @@ export interface FileRouteTypes {
     | '/account-profile/verify/contact'
     | '/account-profile/verify/email'
     | '/auth/password-reset/$resetId'
+    | '/onboarding/create-branch/$organization_id'
+    | '/onboarding/organization/$organization_id'
     | '/(landing)/subscription/'
+    | '/onboarding/organization/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   landingRouteRoute: typeof landingRouteRouteWithChildren
   AccountProfileRouteRoute: typeof AccountProfileRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  OnboardingRouteRoute: typeof OnboardingRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -489,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding/': {
+      id: '/onboarding/'
+      path: '/'
+      fullPath: '/onboarding/'
+      preLoaderRoute: typeof OnboardingIndexRouteImport
+      parentRoute: typeof OnboardingRouteRoute
+    }
     '/account-profile/': {
       id: '/account-profile/'
       path: '/'
@@ -509,6 +608,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/sign-up'
       preLoaderRoute: typeof AuthSignUpLazyRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/onboarding/setup-org': {
+      id: '/onboarding/setup-org'
+      path: '/setup-org'
+      fullPath: '/onboarding/setup-org'
+      preLoaderRoute: typeof OnboardingSetupOrgRouteImport
+      parentRoute: typeof OnboardingRouteRoute
     }
     '/auth/sign-in': {
       id: '/auth/sign-in'
@@ -587,6 +693,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingAboutRouteImport
       parentRoute: typeof landingRouteRoute
     }
+    '/onboarding/organization': {
+      id: '/onboarding/organization'
+      path: '/organization'
+      fullPath: '/onboarding/organization'
+      preLoaderRoute: typeof OnboardingOrganizationRouteRouteImport
+      parentRoute: typeof OnboardingRouteRoute
+    }
     '/(landing)/policy': {
       id: '/(landing)/policy'
       path: '/policy'
@@ -594,12 +707,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingPolicyRouteRouteImport
       parentRoute: typeof landingRouteRoute
     }
+    '/onboarding/organization/': {
+      id: '/onboarding/organization/'
+      path: '/'
+      fullPath: '/onboarding/organization/'
+      preLoaderRoute: typeof OnboardingOrganizationIndexRouteImport
+      parentRoute: typeof OnboardingOrganizationRouteRoute
+    }
     '/(landing)/subscription/': {
       id: '/(landing)/subscription/'
       path: '/subscription'
       fullPath: '/subscription'
       preLoaderRoute: typeof landingSubscriptionIndexRouteImport
       parentRoute: typeof landingRouteRoute
+    }
+    '/onboarding/organization/$organization_id': {
+      id: '/onboarding/organization/$organization_id'
+      path: '/$organization_id'
+      fullPath: '/onboarding/organization/$organization_id'
+      preLoaderRoute: typeof OnboardingOrganizationOrganization_idRouteImport
+      parentRoute: typeof OnboardingOrganizationRouteRoute
+    }
+    '/onboarding/create-branch/$organization_id': {
+      id: '/onboarding/create-branch/$organization_id'
+      path: '/create-branch/$organization_id'
+      fullPath: '/onboarding/create-branch/$organization_id'
+      preLoaderRoute: typeof OnboardingCreateBranchOrganization_idRouteImport
+      parentRoute: typeof OnboardingRouteRoute
     }
     '/auth/password-reset/$resetId': {
       id: '/auth/password-reset/$resetId'
@@ -822,10 +956,48 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface OnboardingOrganizationRouteRouteChildren {
+  OnboardingOrganizationOrganization_idRoute: typeof OnboardingOrganizationOrganization_idRoute
+  OnboardingOrganizationIndexRoute: typeof OnboardingOrganizationIndexRoute
+}
+
+const OnboardingOrganizationRouteRouteChildren: OnboardingOrganizationRouteRouteChildren =
+  {
+    OnboardingOrganizationOrganization_idRoute:
+      OnboardingOrganizationOrganization_idRoute,
+    OnboardingOrganizationIndexRoute: OnboardingOrganizationIndexRoute,
+  }
+
+const OnboardingOrganizationRouteRouteWithChildren =
+  OnboardingOrganizationRouteRoute._addFileChildren(
+    OnboardingOrganizationRouteRouteChildren,
+  )
+
+interface OnboardingRouteRouteChildren {
+  OnboardingOrganizationRouteRoute: typeof OnboardingOrganizationRouteRouteWithChildren
+  OnboardingSetupOrgRoute: typeof OnboardingSetupOrgRoute
+  OnboardingIndexRoute: typeof OnboardingIndexRoute
+  OnboardingCreateBranchOrganization_idRoute: typeof OnboardingCreateBranchOrganization_idRoute
+}
+
+const OnboardingRouteRouteChildren: OnboardingRouteRouteChildren = {
+  OnboardingOrganizationRouteRoute:
+    OnboardingOrganizationRouteRouteWithChildren,
+  OnboardingSetupOrgRoute: OnboardingSetupOrgRoute,
+  OnboardingIndexRoute: OnboardingIndexRoute,
+  OnboardingCreateBranchOrganization_idRoute:
+    OnboardingCreateBranchOrganization_idRoute,
+}
+
+const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
+  OnboardingRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   landingRouteRoute: landingRouteRouteWithChildren,
   AccountProfileRouteRoute: AccountProfileRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  OnboardingRouteRoute: OnboardingRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

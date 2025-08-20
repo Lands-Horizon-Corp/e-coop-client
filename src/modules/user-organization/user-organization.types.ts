@@ -13,6 +13,13 @@ import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { IUserBase } from '../user/user.types'
 
+export interface IUserOrganizationContext<
+    TUserOrganization = IUserOrganization | undefined,
+> {
+    user_organization?: TUserOrganization | null
+}
+
+
 export type TUserOrganizationApplicationStatus =
     (typeof USER_ORG_APPLICATION_STATUS)[number]
 

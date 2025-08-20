@@ -1,12 +1,11 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
+import { IOrganizationWithPolicies } from '@/modules/organization'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 
 import { Checkbox } from '@/components/ui/checkbox'
 import { Popover } from '@/components/ui/popover'
-
-import { IOrganizationWithPolicies } from '@/types'
 
 import TextEditor from '../text-editor'
 import { Button } from '../ui/button'
