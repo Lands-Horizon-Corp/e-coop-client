@@ -1,46 +1,19 @@
 import { z } from 'zod'
 
 import { PASSWORD_MIN_LENGTH } from '@/constants'
-import { emailSchema, entityIdSchema, passwordSchema } from '@/validation'
-
-import { MediaResponseSchema } from '../media'
-
-// Define the Zod schema for UserResponse
-export const UserResponseSchema = z.object({
-    id: entityIdSchema,
-    media_id: entityIdSchema.optional(),
-    media: MediaResponseSchema.optional(),
-    signature_media_id: entityIdSchema.optional(),
-    signature_media: MediaResponseSchema.optional(),
-    birthdate: z.string().optional(),
-    user_name: z.string(),
-    description: z.string().optional(),
-    first_name: z.string().optional(),
-    middle_name: z.string().optional(),
-    last_name: z.string().optional(),
-    full_name: z.string().optional(),
-    suffix: z.string().optional(),
-    email: z.string().email(),
-    is_email_verified: z.boolean(),
-    contact_number: z.string(),
-    is_contact_verified: z.boolean(),
-    created_at: z.string(),
-    updated_at: z.string(),
-    qr_code: z.any().optional(),
-    footsteps: z.array(z.any()).optional(),
-    generated_reports: z.array(z.any()).optional(),
-    notifications: z.array(z.any()).optional(),
-    user_organizations: z.array(z.any()).optional(),
-})
-
-// Define the Zod schema for CurrentUserResponse
-export const CurrentUserResponseSchema = z.object({
-    user_id: entityIdSchema,
-    user: UserResponseSchema.optional(),
-    user_organization: z.any().optional(),
-    is_logged_in_on_other_device: z.boolean(),
-    users: z.any().optional(),
-})
+import {
+    contactNumberSchema,
+    emailSchema,
+    entityIdSchema,
+    firstNameSchema,
+    lastNameSchema,
+    middleNameSchema,
+    otpCodeSchema,
+    passwordSchema,
+    stringDateSchema,
+    userNameSchema,
+} from '@/validation'
+import { isBefore, startOfDay } from 'date-fns'
 
 // Define the Zod schema for UserLoginRequest
 export const UserLoginRequestSchema = z.object({
@@ -61,6 +34,11 @@ export const UserRegisterRequestSchema = z.object({
     suffix: z.string().optional(),
     contact_number: z.string().min(7).max(20),
     media_id: entityIdSchema.optional(),
+})
+
+// OTP Schema
+export const OtpSchema = z.object({
+    otp: otpCodeSchema,
 })
 
 // Define the Zod schema for UserForgotPasswordRequest
@@ -155,4 +133,40 @@ export const SignInSchema = z.object({
     password: z
         .string({ error: 'Password is required' })
         .min(1, 'Password is empty'),
+})
+
+// For sign up
+
+export const SignUpSchema = z.object({
+    email: emailSchema,
+    user_name: userNameSchema,
+    first_name: firstNameSchema,
+    middle_name: middleNameSchema,
+    last_name: lastNameSchema,
+    full_name: z.string().min(1, 'full name is required'),
+    suffix: z.string().optional(),
+
+    birthdate: stringDateSchema.refine(
+        (val) => {
+            const date = startOfDay(new Date(val))
+            const now = startOfDay(new Date())
+            return isBefore(date, now)
+        },
+        { message: 'Birthdate must be in the past' }
+    ),
+
+    contact_number: contactNumberSchema,
+    password: passwordSchema,
+
+    accept_terms: z
+        .boolean()
+        .default(false)
+        .refine(
+            (val) => {
+                return val === true
+            },
+            {
+                message: 'You must accept the terms and conditions',
+            }
+        ),
 })

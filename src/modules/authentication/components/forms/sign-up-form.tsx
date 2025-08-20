@@ -4,11 +4,11 @@ import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { toReadableDate } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { toReadableDate } from '@/utils'
 import { useForm, useWatch } from 'react-hook-form'
 
-import { PhoneInput } from '@/components/computation-sheet-scheme/contact-input/contact-input'
 import { VerifiedPatchIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
@@ -19,22 +19,23 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
 import PasswordInput from '@/components/ui/password-input'
+import { PhoneInput } from '@/components/ui/phone-input'
+
+import { IClassProps, IForm } from '@/types'
+
+import { useSignUp } from '../../authentication.service'
+import { IAuthContext, ISignUpRequest } from '../../authentication.types'
+import { SignUpSchema } from '../../authentication.validation'
 import {
     ChecklistTemplate,
     ValueChecklistMeter,
-} from '@/components/value-checklist-indicator'
+} from '../value-checklist-indicator'
 
-import { signUpSchema } from '@/validations/form-validation/sign-up-schema'
-
-import { useSignUp } from '@/hooks/api-hooks/use-auth'
-
-import { IAuthContext, IClassProps, IForm, ISignUpRequest } from '@/types'
-
-type TSignUpForm = z.infer<typeof signUpSchema>
+type TSignUpForm = z.infer<typeof SignUpSchema>
 
 interface ISignUpFormProps
     extends IClassProps,
-        IForm<Partial<ISignUpRequest>, IAuthContext, string> {}
+        IForm<Partial<ISignUpRequest>, IAuthContext> {}
 
 const SignUpForm = ({
     readOnly,
@@ -44,7 +45,7 @@ const SignUpForm = ({
     onSuccess,
 }: ISignUpFormProps) => {
     const form = useForm<TSignUpForm>({
-        resolver: zodResolver(signUpSchema),
+        resolver: zodResolver(SignUpSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -76,10 +77,17 @@ const SignUpForm = ({
     }, [first_name, middle_name, last_name, suffix, form])
 
     const {
-        error,
+        error: rawError,
         isPending: isLoading,
         mutate: signUp,
-    } = useSignUp({ onSuccess, onError })
+    } = useSignUp({
+        options: {
+            onSuccess,
+            onError,
+        },
+    })
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>

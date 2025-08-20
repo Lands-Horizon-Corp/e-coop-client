@@ -17,10 +17,12 @@ const NavSignOut = () => {
     } = useAuthStore()
 
     const { mutate: handleSignout, isPending: isSigningOut } = useSignOut({
-        onSuccess: () => {
-            resetAuth()
-            router.navigate({ to: '/auth/sign-in' as string })
-            toast.success('Signed out')
+        options: {
+            onSuccess: () => {
+                resetAuth()
+                router.navigate({ to: '/auth/sign-in' as string })
+                toast.success('Signed out')
+            },
         },
     })
 

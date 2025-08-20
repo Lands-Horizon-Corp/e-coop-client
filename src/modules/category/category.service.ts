@@ -1,10 +1,10 @@
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import type { TCategory, TCategoryRequest } from '../category'
+import type { ICategory } from '../category'
 
 const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
-    TCategory,
-    TCategoryRequest
+    ICategory,
+    void
 >({
     url: '/api/v1/category',
     baseKey: 'category',
@@ -12,15 +12,8 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 
 // Add mo custom crud api service here
 
-export const {
-    useCreate,
-    useDeleteById,
-    useDeleteMany,
-    useGetAll,
-    useGetById,
-    useGetPaginated,
-    useUpdateById,
-} = apiCrudHooks
+export const { useDeleteById, useGetAll, useGetById, useGetPaginated } =
+    apiCrudHooks
 
 // Add mo custom api query hooks here
 

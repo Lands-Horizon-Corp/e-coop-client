@@ -3,6 +3,7 @@ import { IAuditable, ITimeStamps, TEntityId, TUserType } from '@/types/common'
 import { IFootstep } from '../footstep'
 import { IMedia } from '../media/media.types'
 import { INotification } from '../notification'
+import { IQrScanResult } from '../qr-result'
 import { IUserOrganization } from '../user-organization'
 
 // api/v1/authentication/current/user
@@ -24,7 +25,7 @@ export interface IUserBase extends ITimeStamps, IAuditable {
     type?: TUserType
     contact_number: string
     is_contact_verified?: boolean
-    // qr_code: IQrScanResult<string, 'user-qr'>
+    qr_code: IQrScanResult<string, 'user-qr'>
 }
 
 export interface IEmployee extends IUserBase {

@@ -105,7 +105,6 @@ export interface IPaginatedResult<T> {
     totalPage: number
     pageSize: number
     totalSize: number
-    pages: IPages[]
 }
 
 export type TLoanModeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number]

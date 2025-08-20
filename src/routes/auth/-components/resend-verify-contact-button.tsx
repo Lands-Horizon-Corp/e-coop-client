@@ -3,7 +3,7 @@ import { cn } from '@/helpers/tw-utils'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { useOTPVerification } from '@/hooks/api-hooks/use-auth'
+import { useSendOTPVerification } from '@/hooks/api-hooks/use-auth'
 import UseCooldown from '@/hooks/use-cooldown'
 
 interface Props {
@@ -23,7 +23,7 @@ const ResendVerifyContactButton = ({
     })
 
     const { mutate: resendOtpVerification, isPending: isResending } =
-        useOTPVerification({
+        useSendOTPVerification({
             verifyMode,
             onSuccess: () => {
                 startCooldown()

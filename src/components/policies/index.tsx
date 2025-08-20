@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 
 import { Checkbox } from '@/components/ui/checkbox'

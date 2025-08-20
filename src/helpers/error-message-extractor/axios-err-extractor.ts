@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 
-import { axiosErrorMessageExtractor } from '@/helpers/axios-error-extractor'
+import { axiosErrorMessageExtractor } from '@/helpers/axios-helpers/axios-error-extractor'
 import { IErrorResponse } from '@/types/api'
 
 import { TErrorMessageExtractor } from '.'

@@ -1,48 +1,39 @@
 import {
     IAuditable,
-    IOrgBranchIdentity,
+    IPaginatedResult,
     ITimeStamps,
     TEntityId,
+    TUserType,
 } from '@/types/common'
 
-import { IMedia } from '../media/media.types'
-import { IUser } from '../user/user.types'
+import { IBranch } from '../branch'
+import { IOrganization } from '../organization'
+import { IUserBase } from '../user/user.types'
 
-export interface IFootstep extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+export interface IFootstep extends ITimeStamps, IAuditable {
     id: TEntityId
-    user_id?: TEntityId
-    user?: IUser
-    media_id?: TEntityId
-    media?: IMedia
-    description: string
-    activity: string
-    account_type: string
+
+    organization_id?: TEntityId
+    organization?: IOrganization
+
+    branch_id?: TEntityId
+    branch?: IBranch
+
+    user_type: TUserType
+    user_id: TEntityId
+    user: IUserBase
+
     module: string
-    latitude?: number
-    longitude?: number
-    timestamp: string
-    is_deleted: boolean
-    ip_address: string
-    user_agent: string
-    referer: string
-    location: string
-    accept_language: string
+    description: string | null
+    activity: string
+
+    latitude: number | null
+    longitude: number | null
+    ip_address: string | null
+    user_agent: string | null
+    referer: string | null
+    location: string | null
+    accept_language: string | null
 }
 
-export interface IFootstepRequest {
-    organization_id: TEntityId
-    branch_id: TEntityId
-    user_id?: TEntityId
-    media_id?: TEntityId
-    description: string
-    activity: string
-    account_type: string
-    module: string
-    latitude?: number
-    longitude?: number
-    ip_address: string
-    user_agent: string
-    referer: string
-    location: string
-    accept_language: string
-}
+export interface IFootstepPaginated extends IPaginatedResult<IFootstep> {}

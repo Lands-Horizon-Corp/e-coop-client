@@ -6,6 +6,7 @@ import {
     HookQueryOptions,
 } from '@/providers/repositories/data-layer-factory'
 
+import { IUserBase } from '../user'
 import {
     IAuthContext,
     IChangePasswordRequest,
@@ -14,11 +15,14 @@ import {
     ISignUpRequest,
     IVerification,
     IVerificationPasswordRequest,
+    IVerifyContactNumberRequest,
+    IVerifyEmailRequest,
 } from './authentication.types'
 
 const { API, route } = createAPIRepository('/api/v1/authentication')
 
-// API Functions
+// ⚙️🛠️ API SERVICE HERE
+
 export const currentAuth = async () => {
     const endpoint = `${route}/current`
     return (await API.get<IAuthContext>(endpoint)).data
@@ -67,7 +71,38 @@ export const signOut = async () => {
     await API.post(`${route}/logout`)
 }
 
-// API Query Hooks
+// API Functions for OTP Verification
+export const requestContactNumberVerification = async (): Promise<void> => {
+    const endpoint = `${route}/apply-contact-number`
+    await API.post(endpoint)
+}
+
+export const requestEmailVerification = async (): Promise<void> => {
+    const endpoint = `${route}/apply-email`
+    await API.post(endpoint)
+}
+
+// FOR Verifying email and contact
+
+// verify
+export const verifyEmail = async (
+    data: IVerifyEmailRequest
+): Promise<IUserBase> => {
+    const endpoint = `${route}/verify-email`
+    return (await API.post<IVerifyEmailRequest, IUserBase>(endpoint, data)).data
+}
+
+// Verify Contact Number
+export const verifyContactNumber = async (
+    data: IVerifyContactNumberRequest
+): Promise<IUserBase> => {
+    const endpoint = `${route}/verify-contact-number`
+    return (
+        await API.post<IVerifyContactNumberRequest, IUserBase>(endpoint, data)
+    ).data
+}
+
+// 🪝 HOOK STARTS HERE
 
 // Get Auth Context
 export const useAuthContext = ({
@@ -156,9 +191,11 @@ export const useChangePassword = ({
 }
 
 // Sign Out
-export const useSignOut = (
+export const useSignOut = ({
+    options,
+}: {
     options?: HookMutationOptions<void, string, void>
-) => {
+}) => {
     return useMutation<void, string, void>({
         mutationFn: signOut,
         ...options,
@@ -178,6 +215,51 @@ export const useVerifyPassword = ({
 } = {}) => {
     return useMutation<IVerification, Error, IVerificationPasswordRequest>({
         mutationFn: verifyWithPassword,
+        ...options,
+    })
+}
+
+// Hook for sending OTP Verification
+export const useSendOTPVerification = ({
+    verifyMode,
+    options,
+}: {
+    verifyMode: 'email' | 'mobile'
+    options?: HookMutationOptions<void, Error>
+}) => {
+    return useMutation<void, Error>({
+        mutationFn: async () => {
+            if (verifyMode === 'email') {
+                return await requestEmailVerification()
+            } else if (verifyMode === 'mobile') {
+                return await requestContactNumberVerification()
+            }
+
+            throw new Error('Unknown verify mode')
+        },
+        ...options,
+    })
+}
+
+// Hook for Verifying Email or Contact Number
+export const useVerify = ({
+    verifyMode,
+    options,
+}: {
+    verifyMode: 'email' | 'mobile'
+    options?: HookMutationOptions<IUserBase, Error, { otp: string }>
+}) => {
+    return useMutation<IUserBase, Error, { otp: string }>({
+        mutationKey: ['verify', verifyMode],
+        mutationFn: async (data) => {
+            if (verifyMode === 'email') {
+                return await verifyEmail(data)
+            } else if (verifyMode === 'mobile') {
+                return await verifyContactNumber(data)
+            }
+
+            throw new Error('Unknown verify mode')
+        },
         ...options,
     })
 }

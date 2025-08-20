@@ -12,7 +12,7 @@
         }
     ],
     "importOrder": [
-        "^(react|zod|sonner|@tanstack/react-query|@tanstack/react-router|@tanstack/react-router-devtools|query-string|fuse(.)js|axios|react-dnd|react-dnd-html5-backend)$",
+        "^(react|zod|sonner|react-easy-crop|@tanstack/react-query|@tanstack/react-router|@tanstack/react-router-devtools|query-string|fuse(.)js|axios|react-dnd|react-dnd-html5-backend)$",
         "^@hookform/(.*)$",
         "<THIRD_PARTY_MODULES>",
         "^@/components/(.*)$",

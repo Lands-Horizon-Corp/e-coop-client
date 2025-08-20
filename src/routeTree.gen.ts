@@ -12,10 +12,16 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as AccountProfileRouteRouteImport } from './routes/account-profile/route'
 import { Route as landingRouteRouteImport } from './routes/(landing)/route'
+import { Route as AccountProfileIndexRouteImport } from './routes/account-profile/index'
 import { Route as landingIndexRouteImport } from './routes/(landing)/index'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
+import { Route as AccountProfileSecurityRouteImport } from './routes/account-profile/security'
+import { Route as AccountProfileQrRouteImport } from './routes/account-profile/qr'
+import { Route as AccountProfileProfileRouteImport } from './routes/account-profile/profile'
+import { Route as AccountProfileActivityLogsRouteImport } from './routes/account-profile/activity-logs'
 import { Route as landingTestRouteImport } from './routes/(landing)/test'
 import { Route as landingFrequentlyAskedQuestionsRouteImport } from './routes/(landing)/frequently-asked-questions'
 import { Route as landingDevelopersRouteImport } from './routes/(landing)/developers'
@@ -24,6 +30,8 @@ import { Route as landingAboutRouteImport } from './routes/(landing)/about'
 import { Route as landingPolicyRouteRouteImport } from './routes/(landing)/policy/route'
 import { Route as landingSubscriptionIndexRouteImport } from './routes/(landing)/subscription/index'
 import { Route as AuthPasswordResetResetIdRouteImport } from './routes/auth/password-reset.$resetId'
+import { Route as AccountProfileVerifyEmailRouteImport } from './routes/account-profile/verify/email'
+import { Route as AccountProfileVerifyContactRouteImport } from './routes/account-profile/verify/contact'
 import { Route as landingPolicyTermsOfUseRouteImport } from './routes/(landing)/policy/terms-of-use'
 import { Route as landingPolicyTermsAndConditionRouteImport } from './routes/(landing)/policy/terms-and-condition'
 import { Route as landingPolicySecurityPolicyRouteImport } from './routes/(landing)/policy/security-policy'
@@ -45,9 +53,19 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountProfileRouteRoute = AccountProfileRouteRouteImport.update({
+  id: '/account-profile',
+  path: '/account-profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const landingRouteRoute = landingRouteRouteImport.update({
   id: '/(landing)',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AccountProfileIndexRoute = AccountProfileIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AccountProfileRouteRoute,
 } as any)
 const landingIndexRoute = landingIndexRouteImport.update({
   id: '/',
@@ -69,6 +87,27 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AccountProfileSecurityRoute = AccountProfileSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AccountProfileRouteRoute,
+} as any)
+const AccountProfileQrRoute = AccountProfileQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => AccountProfileRouteRoute,
+} as any)
+const AccountProfileProfileRoute = AccountProfileProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AccountProfileRouteRoute,
+} as any)
+const AccountProfileActivityLogsRoute =
+  AccountProfileActivityLogsRouteImport.update({
+    id: '/activity-logs',
+    path: '/activity-logs',
+    getParentRoute: () => AccountProfileRouteRoute,
+  } as any)
 const landingTestRoute = landingTestRouteImport.update({
   id: '/test',
   path: '/test',
@@ -111,6 +150,18 @@ const AuthPasswordResetResetIdRoute =
     id: '/password-reset/$resetId',
     path: '/password-reset/$resetId',
     getParentRoute: () => AuthRouteRoute,
+  } as any)
+const AccountProfileVerifyEmailRoute =
+  AccountProfileVerifyEmailRouteImport.update({
+    id: '/verify/email',
+    path: '/verify/email',
+    getParentRoute: () => AccountProfileRouteRoute,
+  } as any)
+const AccountProfileVerifyContactRoute =
+  AccountProfileVerifyContactRouteImport.update({
+    id: '/verify/contact',
+    path: '/verify/contact',
+    getParentRoute: () => AccountProfileRouteRoute,
   } as any)
 const landingPolicyTermsOfUseRoute = landingPolicyTermsOfUseRouteImport.update({
   id: '/terms-of-use',
@@ -191,6 +242,7 @@ const landingPolicyAmlCtfPolicyRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof landingIndexRoute
+  '/account-profile': typeof AccountProfileRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/about': typeof landingAboutRoute
@@ -198,9 +250,14 @@ export interface FileRoutesByFullPath {
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
+  '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
+  '/account-profile/profile': typeof AccountProfileProfileRoute
+  '/account-profile/qr': typeof AccountProfileQrRoute
+  '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/account-profile/': typeof AccountProfileIndexRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -214,6 +271,8 @@ export interface FileRoutesByFullPath {
   '/policy/security-policy': typeof landingPolicySecurityPolicyRoute
   '/policy/terms-and-condition': typeof landingPolicyTermsAndConditionRoute
   '/policy/terms-of-use': typeof landingPolicyTermsOfUseRoute
+  '/account-profile/verify/contact': typeof AccountProfileVerifyContactRoute
+  '/account-profile/verify/email': typeof AccountProfileVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/subscription': typeof landingSubscriptionIndexRoute
 }
@@ -225,10 +284,15 @@ export interface FileRoutesByTo {
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/test': typeof landingTestRoute
+  '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
+  '/account-profile/profile': typeof AccountProfileProfileRoute
+  '/account-profile/qr': typeof AccountProfileQrRoute
+  '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/': typeof landingIndexRoute
+  '/account-profile': typeof AccountProfileIndexRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -242,12 +306,15 @@ export interface FileRoutesByTo {
   '/policy/security-policy': typeof landingPolicySecurityPolicyRoute
   '/policy/terms-and-condition': typeof landingPolicyTermsAndConditionRoute
   '/policy/terms-of-use': typeof landingPolicyTermsOfUseRoute
+  '/account-profile/verify/contact': typeof AccountProfileVerifyContactRoute
+  '/account-profile/verify/email': typeof AccountProfileVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/subscription': typeof landingSubscriptionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(landing)': typeof landingRouteRouteWithChildren
+  '/account-profile': typeof AccountProfileRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/(landing)/policy': typeof landingPolicyRouteRouteWithChildren
   '/(landing)/about': typeof landingAboutRoute
@@ -255,10 +322,15 @@ export interface FileRoutesById {
   '/(landing)/developers': typeof landingDevelopersRoute
   '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/(landing)/test': typeof landingTestRoute
+  '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
+  '/account-profile/profile': typeof AccountProfileProfileRoute
+  '/account-profile/qr': typeof AccountProfileQrRoute
+  '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/(landing)/': typeof landingIndexRoute
+  '/account-profile/': typeof AccountProfileIndexRoute
   '/(landing)/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/(landing)/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/(landing)/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -272,6 +344,8 @@ export interface FileRoutesById {
   '/(landing)/policy/security-policy': typeof landingPolicySecurityPolicyRoute
   '/(landing)/policy/terms-and-condition': typeof landingPolicyTermsAndConditionRoute
   '/(landing)/policy/terms-of-use': typeof landingPolicyTermsOfUseRoute
+  '/account-profile/verify/contact': typeof AccountProfileVerifyContactRoute
+  '/account-profile/verify/email': typeof AccountProfileVerifyEmailRoute
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/(landing)/subscription/': typeof landingSubscriptionIndexRoute
 }
@@ -279,6 +353,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account-profile'
     | '/auth'
     | '/policy'
     | '/about'
@@ -286,9 +361,14 @@ export interface FileRouteTypes {
     | '/developers'
     | '/frequently-asked-questions'
     | '/test'
+    | '/account-profile/activity-logs'
+    | '/account-profile/profile'
+    | '/account-profile/qr'
+    | '/account-profile/security'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/account-profile/'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
@@ -302,6 +382,8 @@ export interface FileRouteTypes {
     | '/policy/security-policy'
     | '/policy/terms-and-condition'
     | '/policy/terms-of-use'
+    | '/account-profile/verify/contact'
+    | '/account-profile/verify/email'
     | '/auth/password-reset/$resetId'
     | '/subscription'
   fileRoutesByTo: FileRoutesByTo
@@ -313,10 +395,15 @@ export interface FileRouteTypes {
     | '/developers'
     | '/frequently-asked-questions'
     | '/test'
+    | '/account-profile/activity-logs'
+    | '/account-profile/profile'
+    | '/account-profile/qr'
+    | '/account-profile/security'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/'
+    | '/account-profile'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
@@ -330,11 +417,14 @@ export interface FileRouteTypes {
     | '/policy/security-policy'
     | '/policy/terms-and-condition'
     | '/policy/terms-of-use'
+    | '/account-profile/verify/contact'
+    | '/account-profile/verify/email'
     | '/auth/password-reset/$resetId'
     | '/subscription'
   id:
     | '__root__'
     | '/(landing)'
+    | '/account-profile'
     | '/auth'
     | '/(landing)/policy'
     | '/(landing)/about'
@@ -342,10 +432,15 @@ export interface FileRouteTypes {
     | '/(landing)/developers'
     | '/(landing)/frequently-asked-questions'
     | '/(landing)/test'
+    | '/account-profile/activity-logs'
+    | '/account-profile/profile'
+    | '/account-profile/qr'
+    | '/account-profile/security'
     | '/auth/forgot-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/(landing)/'
+    | '/account-profile/'
     | '/(landing)/policy/aml-ctf-policy'
     | '/(landing)/policy/code-of-conduct-ethics-policy'
     | '/(landing)/policy/complaint-handling-and-dispute-policy'
@@ -359,12 +454,15 @@ export interface FileRouteTypes {
     | '/(landing)/policy/security-policy'
     | '/(landing)/policy/terms-and-condition'
     | '/(landing)/policy/terms-of-use'
+    | '/account-profile/verify/contact'
+    | '/account-profile/verify/email'
     | '/auth/password-reset/$resetId'
     | '/(landing)/subscription/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   landingRouteRoute: typeof landingRouteRouteWithChildren
+  AccountProfileRouteRoute: typeof AccountProfileRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
 }
 
@@ -377,12 +475,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account-profile': {
+      id: '/account-profile'
+      path: '/account-profile'
+      fullPath: '/account-profile'
+      preLoaderRoute: typeof AccountProfileRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(landing)': {
       id: '/(landing)'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof landingRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/account-profile/': {
+      id: '/account-profile/'
+      path: '/'
+      fullPath: '/account-profile/'
+      preLoaderRoute: typeof AccountProfileIndexRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
     }
     '/(landing)/': {
       id: '/(landing)/'
@@ -411,6 +523,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/forgot-password'
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/account-profile/security': {
+      id: '/account-profile/security'
+      path: '/security'
+      fullPath: '/account-profile/security'
+      preLoaderRoute: typeof AccountProfileSecurityRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
+    }
+    '/account-profile/qr': {
+      id: '/account-profile/qr'
+      path: '/qr'
+      fullPath: '/account-profile/qr'
+      preLoaderRoute: typeof AccountProfileQrRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
+    }
+    '/account-profile/profile': {
+      id: '/account-profile/profile'
+      path: '/profile'
+      fullPath: '/account-profile/profile'
+      preLoaderRoute: typeof AccountProfileProfileRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
+    }
+    '/account-profile/activity-logs': {
+      id: '/account-profile/activity-logs'
+      path: '/activity-logs'
+      fullPath: '/account-profile/activity-logs'
+      preLoaderRoute: typeof AccountProfileActivityLogsRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
     }
     '/(landing)/test': {
       id: '/(landing)/test'
@@ -467,6 +607,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/password-reset/$resetId'
       preLoaderRoute: typeof AuthPasswordResetResetIdRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/account-profile/verify/email': {
+      id: '/account-profile/verify/email'
+      path: '/verify/email'
+      fullPath: '/account-profile/verify/email'
+      preLoaderRoute: typeof AccountProfileVerifyEmailRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
+    }
+    '/account-profile/verify/contact': {
+      id: '/account-profile/verify/contact'
+      path: '/verify/contact'
+      fullPath: '/account-profile/verify/contact'
+      preLoaderRoute: typeof AccountProfileVerifyContactRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
     }
     '/(landing)/policy/terms-of-use': {
       id: '/(landing)/policy/terms-of-use'
@@ -627,6 +781,29 @@ const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
   landingRouteRouteChildren,
 )
 
+interface AccountProfileRouteRouteChildren {
+  AccountProfileActivityLogsRoute: typeof AccountProfileActivityLogsRoute
+  AccountProfileProfileRoute: typeof AccountProfileProfileRoute
+  AccountProfileQrRoute: typeof AccountProfileQrRoute
+  AccountProfileSecurityRoute: typeof AccountProfileSecurityRoute
+  AccountProfileIndexRoute: typeof AccountProfileIndexRoute
+  AccountProfileVerifyContactRoute: typeof AccountProfileVerifyContactRoute
+  AccountProfileVerifyEmailRoute: typeof AccountProfileVerifyEmailRoute
+}
+
+const AccountProfileRouteRouteChildren: AccountProfileRouteRouteChildren = {
+  AccountProfileActivityLogsRoute: AccountProfileActivityLogsRoute,
+  AccountProfileProfileRoute: AccountProfileProfileRoute,
+  AccountProfileQrRoute: AccountProfileQrRoute,
+  AccountProfileSecurityRoute: AccountProfileSecurityRoute,
+  AccountProfileIndexRoute: AccountProfileIndexRoute,
+  AccountProfileVerifyContactRoute: AccountProfileVerifyContactRoute,
+  AccountProfileVerifyEmailRoute: AccountProfileVerifyEmailRoute,
+}
+
+const AccountProfileRouteRouteWithChildren =
+  AccountProfileRouteRoute._addFileChildren(AccountProfileRouteRouteChildren)
+
 interface AuthRouteRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthSignInRoute: typeof AuthSignInRoute
@@ -647,6 +824,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   landingRouteRoute: landingRouteRouteWithChildren,
+  AccountProfileRouteRoute: AccountProfileRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport

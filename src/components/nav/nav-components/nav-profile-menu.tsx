@@ -1,19 +1,18 @@
-'use client'
-
-import { useQueryClient } from '@tanstack/react-query'
+// import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
-import { switchOrganization } from '@/api-service/user-organization-services/user-organization-service'
+import { useSignOut } from '@/modules/authentication'
+// import { IUserOrganization } from '@/modules/user-organization'
+import UserAvatar from '@/modules/user/components/user-avatar'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useAuthStore } from '@/store/user-auth-store'
-import { getOrgBranchSafeURLNames } from '@/utils'
 
 import {
     ArrowRightIcon,
     BadgeCheckFillIcon,
-    BuildingBranchIcon,
-    BuildingIcon,
+    // BuildingBranchIcon,
+    // BuildingIcon,
     GearIcon,
     LogoutIcon,
     WoodSignsIcon,
@@ -22,92 +21,85 @@ import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+    // AccordionContent,
+    // AccordionItem,
+    // AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Badge } from '@/components/ui/badge'
+// import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import UserAvatar from '@/components/user-avatar'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { useSignOut } from '@/hooks/api-hooks/use-auth'
-import { useGetCurrentUserOrganizations } from '@/hooks/api-hooks/use-user-organization'
-
-import type { IUserOrganization } from '@/types'
+// import { useGetCurrentUserOrganizations } from '@/hooks/api-hooks/use-user-organization'
 
 const NavProfileMenu = () => {
     const router = useRouter()
-    const queryClient = useQueryClient()
+    // const queryClient = useQueryClient()
     const { onOpen } = useConfirmModalStore()
     const {
         currentAuth: { user, user_organization: currentUserOrg },
         authStatus,
         resetAuth,
-        updateCurrentAuth,
+        // updateCurrentAuth,
     } = useAuthStore()
 
     const { mutate: handleSignout, isPending } = useSignOut({
-        onSuccess: () => {
-            router.navigate({ to: '/auth/sign-in' as string })
-            resetAuth()
-            toast.success('Signed out')
+        options: {
+            onSuccess: () => {
+                router.navigate({ to: '/auth/sign-in' as string })
+                resetAuth()
+                toast.success('Signed out')
+            },
         },
     })
 
-    const {
-        data: userOrganizations,
-        isPending: isLoading,
-        refetch,
-    } = useGetCurrentUserOrganizations()
+    // const {
+    //     data: userOrganizations,
+    //     isPending: isLoading,
+    //     refetch,
+    // } = useGetCurrentUserOrganizations()
 
-    const handleSwitch = async (
-        userOrganization: IUserOrganization,
-        branchOverride?: IUserOrganization['branch']
-    ) => {
-        try {
-            const nextUserOrg = branchOverride
-                ? {
-                      ...userOrganization,
-                      branch: branchOverride,
-                      branch_id: branchOverride.id,
-                  }
-                : userOrganization
-
-            const res = await switchOrganization(nextUserOrg.id)
-            if (!res) throw new Error('Failed to switch organization')
-
-            updateCurrentAuth({
-                user_organization: nextUserOrg,
-                user: nextUserOrg.user,
-            })
-
-            const { orgName, branchName } = getOrgBranchSafeURLNames(
-                nextUserOrg.organization.name,
-                nextUserOrg.branch.name
-            )
-
-            router.navigate({
-                to: `/org/${orgName}/branch/${branchName}/dashboard`,
-                params: {
-                    user_organization_id: nextUserOrg.id,
-                    organization_id: nextUserOrg.organization.id,
-                },
-            })
-
-            queryClient.invalidateQueries()
-
-            toast.success(`Switched to ${nextUserOrg.branch.name || 'branch'}`)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-            toast.error("Can't switch Branch")
+    const handleSwitch = async () =>
+        // userOrganization: IUserOrganization,
+        // branchOverride?: IUserOrganization['branch']
+        {
+            try {
+                // TODO: Jervx once rojan finished onboarding
+                // const nextUserOrg = branchOverride
+                //     ? {
+                //           ...userOrganization,
+                //           branch: branchOverride,
+                //           branch_id: branchOverride.id,
+                //       }
+                //     : userOrganization
+                // const res = await switchOrganization(nextUserOrg.id)
+                // if (!res) throw new Error('Failed to switch organization')
+                // updateCurrentAuth({
+                //     user_organization: nextUserOrg,
+                //     user: nextUserOrg.user,
+                // })
+                // const { orgName, branchName } = getOrgBranchSafeURLNames(
+                //     nextUserOrg.organization.name,
+                //     nextUserOrg.branch.name
+                // )
+                // router.navigate({
+                //     to: `/org/${orgName}/branch/${branchName}/dashboard`,
+                //     params: {
+                //         user_organization_id: nextUserOrg.id,
+                //         organization_id: nextUserOrg.organization.id,
+                //     },
+                // })
+                // queryClient.invalidateQueries()
+                // toast.success(`Switched to ${nextUserOrg.branch.name || 'branch'}`)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            } catch (error) {
+                toast.error("Can't switch Branch")
+            }
         }
-    }
 
     if (!user || authStatus !== 'authorized') return null
 
@@ -187,7 +179,7 @@ const NavProfileMenu = () => {
                                 collapsible
                                 className="w-full"
                             >
-                                {userOrganizations.map((orgGroup, index) => {
+                                {/* {userOrganizations.map((orgGroup, index) => {
                                     const orgName = orgGroup.name
 
                                     return (
@@ -343,7 +335,7 @@ const NavProfileMenu = () => {
                                             </AccordionContent>
                                         </AccordionItem>
                                     )
-                                })}
+                                })} */}
                             </Accordion>
                         </div>
                     </div>
