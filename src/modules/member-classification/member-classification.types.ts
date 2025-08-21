@@ -6,10 +6,8 @@ import {
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-} from '@/validation'
+
+import { MemberClassificationSchema } from './member-classification.validation'
 
 export interface IMemberClassification extends ITimeStamps, IAuditable {
     id: TEntityId
@@ -21,17 +19,9 @@ export interface IMemberClassification extends ITimeStamps, IAuditable {
     // history?: IMemberClassificationHistory[]
 }
 
-export interface IMemberClassificationRequest {
-    id?: TEntityId
-
-    name: string
-    description: string
-}
+export type IMemberClassificationRequest = z.infer<
+    typeof MemberClassificationSchema
+>
 
 export interface IMemberClassificationPaginated
     extends IPaginatedResult<IMemberClassification> {}
-
-export const memberClassificationSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-})
