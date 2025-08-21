@@ -8,6 +8,7 @@ import type {
     TFinalFilter,
     TSearchFilter,
 } from '@/contexts/filter-context'
+import { toBase64 } from '@/helpers/encoding-utils'
 
 import useDebounce from '@/hooks/use-debounce'
 
@@ -120,10 +121,13 @@ const useFilterState = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedFilter, filterLogic])
 
+    const finalFilterPayloadBase64 = toBase64(finalFilterPayload)
+
     return {
         filters,
         filterLogic,
         finalFilterPayload,
+        finalFilterPayloadBase64,
         setFilter,
         resetFilter,
         removeFilter,

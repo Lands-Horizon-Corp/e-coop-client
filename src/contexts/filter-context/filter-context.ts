@@ -90,6 +90,7 @@ export type TFilterObject<T = unknown, TValue = T> = {
 }
 
 export interface IFilterState<T = unknown, TField = string, TValue = T> {
+    finalFilterPayloadBase64: string
     filterLogic: TFilterLogic
     filters: TFilterObject<T, TValue>
     finalFilterPayload: TFilterPayload
