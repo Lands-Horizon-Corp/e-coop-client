@@ -20,13 +20,10 @@ const isObject = (value: unknown): boolean => {
 }
 
 type DateRangeProps = {
-    toYear?: number
     modal?: boolean
     value: DateRange
-    fromYear?: number
     withTimePick?: boolean
-    // captionLayout?: CaptionLayout
-    disabled?: (date: Date) => boolean
+    disabled?: boolean
     onChange: (range: { from: Date; to?: Date }) => void
 }
 
@@ -68,7 +65,7 @@ const DateRange = ({
                 </Button>
             </PopoverTrigger>
             <PopoverContent
-                className="w-auto rounded-2xl bg-popover/85 p-0 backdrop-blur"
+                className="w-auto rounded-2xl overflow-clip bg-popover/85 p-0 backdrop-blur"
                 align="start"
             >
                 <DateRangePicker
@@ -76,6 +73,7 @@ const DateRange = ({
                     value={selected}
                     onChange={(range) => setSelected(range)}
                 />
+
                 {withTimePick && (
                     <div className="flex w-full gap-x-2 px-2 pb-2">
                         {selected?.from && (

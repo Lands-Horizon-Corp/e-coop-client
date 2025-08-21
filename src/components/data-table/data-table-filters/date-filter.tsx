@@ -88,8 +88,6 @@ const DateFilter = <T,>({
                 <DateRange
                     modal
                     withTimePick
-                    fromYear={1960}
-                    captionLayout="dropdown-buttons"
                     value={
                         {
                             from: filterVal.from,
