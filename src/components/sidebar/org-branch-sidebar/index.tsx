@@ -85,10 +85,10 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                     <ActionTooltip
                                         tooltipContent={
                                             <>
-                                                <span className="space-y-2 text-xs text-muted-foreground/80">
+                                                <span className="space-y-2 text-xs">
                                                     As{' '}
                                                     <Badge
-                                                        variant="outline"
+                                                        variant="secondary"
                                                         className="capitalize"
                                                     >
                                                         {
