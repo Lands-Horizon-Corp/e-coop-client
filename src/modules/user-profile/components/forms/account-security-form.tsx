@@ -1,4 +1,6 @@
 import { useEffect } from 'react'
+
+import { Path, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
@@ -12,7 +14,6 @@ import {
 } from '@/modules/authentication/components/value-checklist-indicator'
 import { IUserBase } from '@/modules/user/user.types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { Path, useForm } from 'react-hook-form'
 
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'

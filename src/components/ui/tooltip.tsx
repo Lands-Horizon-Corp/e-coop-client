@@ -2,8 +2,9 @@
 
 import * as React from 'react'
 
-import { cn } from '@/helpers/tw-utils'
 import * as TooltipPrimitive from '@radix-ui/react-tooltip'
+
+import { cn } from '@/helpers/tw-utils'
 
 function TooltipProvider({
     delayDuration = 0,

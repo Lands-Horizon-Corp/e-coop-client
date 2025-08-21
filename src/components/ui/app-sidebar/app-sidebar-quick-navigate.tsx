@@ -1,5 +1,6 @@
-import { Link } from '@tanstack/react-router'
 import { Fragment, useEffect, useState } from 'react'
+
+import { Link } from '@tanstack/react-router'
 
 import { ArrowRight } from 'lucide-react'
 

@@ -1,7 +1,9 @@
+import { Path, useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
     GenderSchema,
@@ -10,7 +12,6 @@ import {
     useCreate,
     useUpdateById,
 } from '@/modules/member-gender'
-import { Path, useForm } from 'react-hook-form'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -22,7 +23,6 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 
 type TGenderFormValues = z.infer<typeof GenderSchema>
 

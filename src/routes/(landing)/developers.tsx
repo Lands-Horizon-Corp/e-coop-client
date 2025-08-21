@@ -1,5 +1,6 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
 import { Fragment, ReactNode } from 'react'
+
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 import ARTWORK_EXPERIMENT from '@/assets/artworks/artwork-experiment.svg'
 

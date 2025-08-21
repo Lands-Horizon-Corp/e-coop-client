@@ -1,11 +1,12 @@
 import * as React from 'react'
 
-import { cn } from '@/helpers/tw-utils'
 import {
     DialogDescription,
     type DialogProps,
     DialogTitle,
 } from '@radix-ui/react-dialog'
+
+import { cn } from '@/helpers/tw-utils'
 import { Command as CommandPrimitive } from 'cmdk'
 import { Search } from 'lucide-react'
 

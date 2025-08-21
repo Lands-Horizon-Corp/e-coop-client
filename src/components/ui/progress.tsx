@@ -1,7 +1,8 @@
 import * as React from 'react'
 
-import { cn } from '@/helpers/tw-utils'
 import * as ProgressPrimitive from '@radix-ui/react-progress'
+
+import { cn } from '@/helpers/tw-utils'
 
 interface IProgressProps
     extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {

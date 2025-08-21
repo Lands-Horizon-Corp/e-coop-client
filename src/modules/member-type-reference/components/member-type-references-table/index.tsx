@@ -1,7 +1,8 @@
 'use client'
 
-import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
+
+import { useQueryClient } from '@tanstack/react-query'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'

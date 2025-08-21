@@ -1,7 +1,8 @@
 import * as React from 'react'
 
-import { cn } from '@/helpers/tw-utils'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
+
+import { cn } from '@/helpers/tw-utils'
 import { Check } from 'lucide-react'
 
 import { MinusIcon } from '../icons'

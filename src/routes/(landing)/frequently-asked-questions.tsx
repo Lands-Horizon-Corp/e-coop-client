@@ -1,7 +1,8 @@
+import { useMemo, useState } from 'react'
+
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 import Fuse from 'fuse.js'
-import { useMemo, useState } from 'react'
 
 import ARTWORK_FAQ from '@/assets/artworks/artwork-faq.svg'
 

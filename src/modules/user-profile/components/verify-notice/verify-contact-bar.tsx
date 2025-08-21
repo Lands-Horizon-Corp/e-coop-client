@@ -1,3 +1,4 @@
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
@@ -11,7 +12,6 @@ import {
 } from '@/modules/authentication'
 import { IUserBase } from '@/modules/user/user.types'
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp'
-import { useForm } from 'react-hook-form'
 
 import { BadgeQuestionFillIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'

@@ -1,5 +1,7 @@
-import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import { useNavigate } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,7 +21,6 @@ import SubscriptionPlanPicker from '@/modules/subscription-plan/components/subsc
 import UserAvatar from '@/modules/user/components/user-avatar'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 import { PlusIcon, ReplaceIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {

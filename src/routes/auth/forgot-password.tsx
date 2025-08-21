@@ -1,5 +1,6 @@
-import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 
 import ForgotPasswordEmail, {
     TForgotPasswordEmail,

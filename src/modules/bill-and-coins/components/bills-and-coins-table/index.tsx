@@ -1,32 +1,37 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo } from 'react'
 
-import FilterContext from '@/contexts/filter-context/filter-context';
-import { cn } from '@/helpers/tw-utils';
-import { BillAndCoinsAPI, IBillsAndCoin, useGetPaginated } from '@/modules/bill-and-coins';
+import { useQueryClient } from '@tanstack/react-query'
+
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/helpers/tw-utils'
+import {
+    BillAndCoinsAPI,
+    IBillsAndCoin,
+    useGetPaginated,
+} from '@/modules/bill-and-coins'
 import {
     getCoreRowModel,
     getSortedRowModel,
     useReactTable,
-} from '@tanstack/react-table';
+} from '@tanstack/react-table'
 
-import DataTable from '@/components/data-table';
-import DataTablePagination from '@/components/data-table/data-table-pagination';
+import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
-} from '@/components/data-table/data-table-toolbar';
-import { TableProps } from '@/components/data-table/table.type';
-import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting';
-import useDataTableState from '@/components/data-table/use-datatable-state';
+} from '@/components/data-table/data-table-toolbar'
+import { TableProps } from '@/components/data-table/table.type'
+import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
+import useDataTableState from '@/components/data-table/use-datatable-state'
 
-import useDatableFilterState from '@/hooks/use-filter-state';
-import { usePagination } from '@/hooks/use-pagination';
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
 
 import BillsAndCoinsTableColumns, {
     IBillsAndCoinsTableColumnProps,
     billsAndCoinsGlobalSearchTargets,
-} from './columns';
-import { BillsAndCoinsRowContext } from './row-action-context';
+} from './columns'
+import { BillsAndCoinsRowContext } from './row-action-context'
 
 export interface BillsAndCoinsTableProps
     extends TableProps<IBillsAndCoin>,
@@ -40,7 +45,7 @@ export interface BillsAndCoinsTableProps
         | 'filterLogicProps'
         | 'exportActionProps'
         | 'deleteActionProps'
-    >;
+    >
 }
 
 const BillsAndCoinsTable = ({
@@ -50,13 +55,14 @@ const BillsAndCoinsTable = ({
     onSelectData,
     onRowClick,
     onDoubleClick = (row) => {
-        row.toggleSelected();
+        row.toggleSelected()
     },
     actionComponent,
 }: BillsAndCoinsTableProps) => {
-    const queryClient = useQueryClient();
-    const { pagination, setPagination } = usePagination();
-    const { sortingStateBase64, tableSorting, setTableSorting } = useDataTableSorting();
+    const queryClient = useQueryClient()
+    const { pagination, setPagination } = usePagination()
+    const { sortingStateBase64, tableSorting, setTableSorting } =
+        useDataTableSorting()
 
     const columns = useMemo(
         () =>
@@ -64,7 +70,7 @@ const BillsAndCoinsTable = ({
                 actionComponent,
             }),
         [actionComponent]
-    );
+    )
 
     const {
         getRowIdFn,
@@ -79,12 +85,12 @@ const BillsAndCoinsTable = ({
     } = useDataTableState<IBillsAndCoin>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
-    });
+    })
 
     const filterState = useDatableFilterState({
         defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
-    });
+    })
 
     const {
         isPending,
@@ -97,9 +103,9 @@ const BillsAndCoinsTable = ({
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
-    });
+    })
 
-    const handleRowSelectionChange = createHandleRowSelectionChange(data);
+    const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
@@ -129,7 +135,7 @@ const BillsAndCoinsTable = ({
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
-    });
+    })
 
     return (
         <FilterContext.Provider value={filterState}>
@@ -183,7 +189,7 @@ const BillsAndCoinsTable = ({
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
         </FilterContext.Provider>
-    );
-};
+    )
+}
 
-export default BillsAndCoinsTable;
+export default BillsAndCoinsTable

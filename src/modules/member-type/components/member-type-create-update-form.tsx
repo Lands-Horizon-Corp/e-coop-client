@@ -1,3 +1,4 @@
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,7 +11,6 @@ import {
     useCreate,
     useUpdateById,
 } from '@/modules/member-type'
-import { useForm } from 'react-hook-form'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'

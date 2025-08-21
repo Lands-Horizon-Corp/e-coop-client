@@ -1,6 +1,7 @@
+import { useState } from 'react'
+
 import { useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { useState } from 'react'
 
 import ARTWORK_TIME_IN_OUT from '@/assets/artworks/artwork-time-in-out.svg'
 import ARTWORK_TIMED_IN from '@/assets/artworks/artwork-timed-in.svg'

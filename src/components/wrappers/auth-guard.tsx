@@ -1,6 +1,7 @@
+import { ReactNode, useCallback, useRef } from 'react'
+
 import { Navigate, useLocation, useRouter } from '@tanstack/react-router'
 import { AxiosError } from 'axios'
-import { ReactNode, useCallback, useRef } from 'react'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 import { IAuthContext, useAuthContext } from '@/modules/authentication'

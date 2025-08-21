@@ -1,5 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import { createFileRoute } from '@tanstack/react-router'
 
 import { useSendOTPVerification } from '@/modules/authentication'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'

@@ -1,6 +1,7 @@
+import { useState } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import { useState } from 'react';
 
 import { ThemeProvider } from '@/providers/theme-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

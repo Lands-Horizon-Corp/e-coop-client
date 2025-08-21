@@ -1,7 +1,8 @@
+import { useCallback } from 'react'
+
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter, useSearch } from '@tanstack/react-router'
 import { createFileRoute } from '@tanstack/react-router'
-import { useCallback } from 'react'
 
 import { IAuthContext } from '@/modules/authentication'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'

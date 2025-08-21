@@ -1,4 +1,6 @@
 import { useState } from 'react'
+
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
 import { IMedia } from '@/modules/media/media.types'
-import { useForm } from 'react-hook-form'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {

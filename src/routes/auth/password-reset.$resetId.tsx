@@ -1,5 +1,6 @@
-import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
 import z from 'zod'
 
 import AuthPageWrapper from '@/routes/auth/-components/auth-page-wrapper'

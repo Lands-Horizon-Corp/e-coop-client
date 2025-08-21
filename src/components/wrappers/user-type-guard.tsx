@@ -1,5 +1,6 @@
-import { Navigate, useRouter } from '@tanstack/react-router'
 import { ReactNode } from 'react'
+
+import { Navigate, useRouter } from '@tanstack/react-router'
 
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 

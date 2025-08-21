@@ -1,6 +1,7 @@
+import { useState } from 'react'
+
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
-import { useState } from 'react'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { formatNumber } from '@/helpers/number-utils'
