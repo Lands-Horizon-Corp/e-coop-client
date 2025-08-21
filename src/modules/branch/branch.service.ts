@@ -79,7 +79,7 @@ export const useCreateBranchByOrgId = () => {
         {
             organizationId: TEntityId
             branchData: IBranchRequest
-        } 
+        }
     >({
         mutationKey: ['branch', 'create-by-org'],
         mutationFn: ({ organizationId, branchData }) =>

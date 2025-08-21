@@ -1,7 +1,8 @@
-import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from "@/types"
-import { IMedia } from "../media"
-import { IOrganization } from "../organization"
-import { IBranchSettings } from "../branch-settings"
+import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '@/types'
+
+import { IBranchSettings } from '../branch-settings'
+import { IMedia } from '../media'
+import { IOrganization } from '../organization'
 
 export enum branchTypeEnum {
     CooperativeBranch = 'cooperative branch',

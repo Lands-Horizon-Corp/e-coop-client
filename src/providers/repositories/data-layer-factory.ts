@@ -71,7 +71,7 @@ export const createDataLayerFactory = <TResponse, TRequest>({
         })
     }
 
-    const useGetPaginated = <TData = TRequest, TError = Error>({
+    const useGetPaginated = <TData = TResponse, TError = Error>({
         query,
         options,
     }: {

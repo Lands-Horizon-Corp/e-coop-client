@@ -4,14 +4,7 @@ import type { TAPIQueryOptions } from '@/types/api'
 import type { TEntityId } from '@/types/common'
 
 import API from '../api'
-
-export interface IPaginatedResponse<TData> {
-    data: TData[]
-    pageIndex: number
-    totalPage: number
-    pageSize: number
-    totalSize: number
-}
+import { IPaginatedResponse } from './data-layer-factory'
 
 export interface IAPIRepository<TResponse, TRequest> {
     route: string

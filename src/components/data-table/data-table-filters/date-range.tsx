@@ -1,10 +1,9 @@
 import { useState } from 'react'
 
-import { isObject } from '@/helpers'
 import { cn } from '@/helpers/tw-utils'
 import { format, isAfter } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
-import { CaptionLayout, type DateRange } from 'react-day-picker'
+import { type DateRange } from 'react-day-picker'
 
 import DateRangePicker from '@/components/date-time-pickers/date-range-picker'
 import { Button } from '@/components/ui/button'
@@ -16,13 +15,17 @@ import {
 
 import DateTimeSetter from '../../date-time-pickers/date-time-setter'
 
+const isObject = (value: unknown): boolean => {
+    return typeof value === 'object' && value !== null && value !== undefined
+}
+
 type DateRangeProps = {
     toYear?: number
     modal?: boolean
     value: DateRange
     fromYear?: number
     withTimePick?: boolean
-    captionLayout?: CaptionLayout
+    // captionLayout?: CaptionLayout
     disabled?: (date: Date) => boolean
     onChange: (range: { from: Date; to?: Date }) => void
 }
@@ -70,8 +73,8 @@ const DateRange = ({
             >
                 <DateRangePicker
                     {...other}
-                    onChange={(range) => setSelected(range)}
                     value={selected}
+                    onChange={(range) => setSelected(range)}
                 />
                 {withTimePick && (
                     <div className="flex w-full gap-x-2 px-2 pb-2">

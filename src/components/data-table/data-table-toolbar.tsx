@@ -10,13 +10,11 @@ import DataTableExportButton from '@/components/data-table/data-table-actions/da
 import { type IDataTableExportProps } from '@/components/data-table/data-table-actions/data-table-export'
 import DataTableOptionsMenu from '@/components/data-table/data-table-actions/data-table-options-menu'
 import { type IDataTableScrollableOptionProps } from '@/components/data-table/data-table-actions/data-table-options-menu/scroll-option'
-import DataTableRefreshButton, {
-    IRefreshButtonProps,
-} from '@/components/refresh-button'
 import { Separator } from '@/components/ui/separator'
 
 import { IClassProps } from '@/types'
 
+import RefreshButton, { IRefreshButtonProps } from '../buttons/refresh-button'
 import DatatableColumnVisibility from './data-table-actions/data-table-column-visibility'
 import DataTableCreateAction, {
     IDataTableCreateActionProps,
@@ -88,7 +86,7 @@ const DataTableToolbar = <TData,>({
                         />
                     )}
                     {!hideRefreshButton && (
-                        <DataTableRefreshButton
+                        <RefreshButton
                             {...{
                                 ...refreshActionProps,
                                 className: cn(

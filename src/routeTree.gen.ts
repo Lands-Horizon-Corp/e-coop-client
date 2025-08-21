@@ -56,6 +56,7 @@ import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing
 import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(settings)/settings'
 
 const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
@@ -313,6 +314,12 @@ const OrgOrgnameBranchBranchnamecommonDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport.update({
+    id: '/(maintenance)/maintenance/banks',
+    path: '/maintenance/banks',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute =
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport.update({
     id: '/(common)/(settings)/settings',
@@ -367,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
@@ -411,6 +419,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -461,6 +470,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/(common)/(settings)/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -511,6 +521,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/settings'
+    | '/org/$orgname/branch/$branchname/maintenance/banks'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -555,6 +566,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/settings'
+    | '/org/$orgname/branch/$branchname/maintenance/banks'
   id:
     | '__root__'
     | '/(landing)'
@@ -604,6 +616,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
     | '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -938,6 +951,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
+      path: '/maintenance/banks'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/banks'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(common)/(settings)/settings': {
       id: '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
       path: '/settings'
@@ -1095,6 +1115,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameIndexRoute: typeof OrgOrgnameBranchBranchnameIndexRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
 }
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
@@ -1104,6 +1125,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamecommonDashboardRoute,
     OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute:
       OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute,
   }
 
 const OrgOrgnameBranchBranchnameRouteRouteWithChildren =
