@@ -5,21 +5,10 @@ import {
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IBranch } from '../branch'
-
-export interface IMemberTypeRequest {
-    id?: TEntityId
-    branch_id?: IBranch // IDK if this should be optional and server auto add this?
-
-    name: string
-    prefix: string
-    description: string
-}
+import { MemberTypeSchema } from './member-type.validation'
 
 export interface IMemberType extends ITimeStamps, IAuditable {
     id: TEntityId
@@ -32,11 +21,6 @@ export interface IMemberType extends ITimeStamps, IAuditable {
     description: string
 }
 
-export interface IMemberTypePaginated extends IPaginatedResult<IMemberType> {}
+export type IMemberTypeRequest = z.infer<typeof MemberTypeSchema>
 
-export const createMemberTypeSchema = z.object({
-    id: entityIdSchema.optional(),
-    name: z.string().min(1, 'Name is required'),
-    prefix: z.string().min(1, 'Prefix is required').max(3, 'Max 3 characters'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-})
+export interface IMemberTypePaginated extends IPaginatedResult<IMemberType> {}
