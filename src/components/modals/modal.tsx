@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
 
+import type * as DialogPrimitive from '@radix-ui/react-dialog'
+
 import { cn } from '@/helpers/tw-utils'
 import type {
     IBaseProps,
     IClassProps,
 } from '@/types/component-types/base-component'
-import type * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import {
     Dialog,
@@ -37,8 +38,8 @@ const Modal = ({
     className,
     description,
     titleClassName,
-    hideCloseButton,
     overlayClassName,
+    showCloseButton,
     closeButtonClassName,
     descriptionClassName,
     ...other
@@ -46,11 +47,11 @@ const Modal = ({
     return (
         <Dialog {...other}>
             <DialogContent
-                hideCloseButton={hideCloseButton}
+                showCloseButton={!showCloseButton}
                 closeButtonClassName={closeButtonClassName}
                 overlayClassName={cn('backdrop-blur', overlayClassName)}
                 className={cn(
-                    'shadow-2 ecoop-scroll max-h-[95vh] max-w-xl overflow-y-auto !rounded-2xl border font-inter',
+                    'shadow-2 ecoop-scroll max-h-[95vh] overflow-y-auto !rounded-2xl border font-inter',
                     className
                 )}
             >

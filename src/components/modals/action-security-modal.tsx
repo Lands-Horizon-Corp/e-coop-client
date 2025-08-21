@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,17 +7,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useVerifyPassword } from '@/modules/authentication'
 import useActionSecurityStore from '@/store/action-security-store'
-import { useForm } from 'react-hook-form'
 
+import { ShieldCheckIcon, ShieldLockIcon } from '@/components/icons'
 import Modal from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
-
-import { ShieldCheckIcon, ShieldLockIcon } from '../icons'
-import LoadingSpinner from '../spinners/loading-spinner'
-import { Form } from '../ui/form'
-import FormErrorMessage from '../ui/form-error-message'
-import FormFieldWrapper from '../ui/form-field-wrapper'
-import PasswordInput from '../ui/password-input'
+import { Form } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import PasswordInput from '@/components/ui/password-input'
 
 const actionSecurityFormSchema = z.object({
     password: z.string().min(1, 'Password is required'),
