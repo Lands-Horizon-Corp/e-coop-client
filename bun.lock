@@ -92,7 +92,7 @@
         "react-aria-components": "^1.11.0",
         "react-circle-flags": "^0.0.23",
         "react-colorful": "^5.6.1",
-        "react-day-picker": "^9.8.1",
+        "react-day-picker": "^9.9.0",
         "react-dnd": "^16.0.1",
         "react-dnd-html5-backend": "^16.0.1",
         "react-dom": "^19.1.1",
@@ -2250,7 +2250,7 @@
 
     "react-colorful": ["react-colorful@5.6.1", "", { "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw=="],
 
-    "react-day-picker": ["react-day-picker@9.8.1", "", { "dependencies": { "@date-fns/tz": "^1.2.0", "date-fns": "^4.1.0", "date-fns-jalali": "^4.1.0-0" }, "peerDependencies": { "react": ">=16.8.0" } }, "sha512-kMcLrp3PfN/asVJayVv82IjF3iLOOxuH5TNFWezX6lS/T8iVRFPTETpHl3TUSTH99IDMZLubdNPJr++rQctkEw=="],
+    "react-day-picker": ["react-day-picker@9.9.0", "", { "dependencies": { "@date-fns/tz": "^1.4.1", "date-fns": "^4.1.0", "date-fns-jalali": "^4.1.0-0" }, "peerDependencies": { "react": ">=16.8.0" } }, "sha512-NtkJbuX6cl/VaGNb3sVVhmMA6LSMnL5G3xNL+61IyoZj0mUZFWTg4hmj7PHjIQ8MXN9dHWhUHFoJWG6y60DKSg=="],
 
     "react-devtools": ["react-devtools@6.1.5", "", { "dependencies": { "cross-spawn": "^5.0.1", "electron": "^23.1.2", "internal-ip": "^6.2.0", "minimist": "^1.2.3", "react-devtools-core": "6.1.5", "update-notifier": "^2.1.0" }, "bin": { "react-devtools": "bin.js" } }, "sha512-yp7kADDET5neqMMBtwRIPqJ1tcVXWP88RsSCdOrwYsxGGL/pS5Za4jOCYekiZb0m7nzTbSH158ugGyNnBaDJvQ=="],
 
