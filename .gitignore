@@ -56,6 +56,12 @@ stats.html
 build-errors.log
 bundle-analysis.html
 
+# Package manager lockfiles (only allow bun.lock)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnpm-store/
+
 # DevNotes
 **/temp.md
 **/developer-temporary-dir
