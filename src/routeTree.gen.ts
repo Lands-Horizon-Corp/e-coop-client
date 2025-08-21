@@ -56,8 +56,12 @@ import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing
 import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(settings)/settings'
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types'
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-gender'
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-classification'
 
 const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
 
@@ -314,6 +318,14 @@ const OrgOrgnameBranchBranchnamecommonDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport.update(
+    {
+      id: '/(maintenance)/maintenance/bills-and-coins',
+      path: '/maintenance/bills-and-coins',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport.update({
     id: '/(maintenance)/maintenance/banks',
@@ -326,6 +338,30 @@ const OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute =
     path: '/settings',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute =
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport.update(
+    {
+      id: '/(maintenance)/(members)/members/member-types',
+      path: '/members/member-types',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute =
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRouteImport.update(
+    {
+      id: '/(maintenance)/(members)/members/member-gender',
+      path: '/members/member-gender',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute =
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRouteImport.update(
+    {
+      id: '/(maintenance)/(members)/members/member-classification',
+      path: '/members/member-classification',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof landingIndexRoute
@@ -375,6 +411,10 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
+  '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
+  '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
@@ -420,6 +460,10 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
+  '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
+  '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -471,6 +515,10 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/(common)/(settings)/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -522,6 +570,10 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/settings'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
+    | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/members/member-classification'
+    | '/org/$orgname/branch/$branchname/members/member-gender'
+    | '/org/$orgname/branch/$branchname/members/member-types'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -567,6 +619,10 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/settings'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
+    | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/members/member-classification'
+    | '/org/$orgname/branch/$branchname/members/member-gender'
+    | '/org/$orgname/branch/$branchname/members/member-types'
   id:
     | '__root__'
     | '/(landing)'
@@ -617,6 +673,10 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
     | '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -951,6 +1011,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
+      path: '/maintenance/bills-and-coins'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
       path: '/maintenance/banks'
@@ -963,6 +1030,27 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/org/$orgname/branch/$branchname/settings'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
+      path: '/members/member-types'
+      fullPath: '/org/$orgname/branch/$branchname/members/member-types'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
+      path: '/members/member-gender'
+      fullPath: '/org/$orgname/branch/$branchname/members/member-gender'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
+      path: '/members/member-classification'
+      fullPath: '/org/$orgname/branch/$branchname/members/member-classification'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
   }
@@ -1116,6 +1204,10 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
+  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
 }
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
@@ -1127,6 +1219,14 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute,
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute:
+      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute,
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute:
+      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute,
+    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute:
+      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute,
   }
 
 const OrgOrgnameBranchBranchnameRouteRouteWithChildren =
