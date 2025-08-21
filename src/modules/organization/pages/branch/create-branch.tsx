@@ -118,6 +118,7 @@ function OrganizationHeader({
     const createModal = useModalState()
     const updateModal = useModalState()
     const { countryCode } = useLocationInfo()
+    const queryClient = useQueryClient()
 
     if (isPending) {
         return (
@@ -164,14 +165,20 @@ function OrganizationHeader({
                 }}
             />
             <UpdateOrganizationFormModal
+                {...updateModal}
                 className="w-full min-w-[80rem] max-w-[80rem]"
                 formProps={{
                     organizationId,
                     defaultValues: organization,
                     coverMedia: organization?.cover_media,
                     media: organization?.media,
+                    onSuccess: () => {
+                        updateModal.onOpenChange(false)
+                        queryClient.invalidateQueries({
+                            queryKey: ['organization'],
+                        })
+                    },
                 }}
-                {...updateModal}
             />
             <ImageDisplay
                 className="size-24 rounded-lg"
