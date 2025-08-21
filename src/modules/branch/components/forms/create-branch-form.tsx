@@ -80,6 +80,9 @@ export const CreateUpdateBranchByOrgForm = ({
         mode: 'onSubmit',
         defaultValues: {
             country_code: countryCode,
+            media: defaultValues?.media,
+            description: defaultValues?.description ?? '',
+            type: defaultValues?.type ?? branchTypeEnum.CooperativeBranch,
             ...defaultValues,
         },
     })
@@ -95,15 +98,19 @@ export const CreateUpdateBranchByOrgForm = ({
                 form.reset()
                 onSuccess?.(createdData)
             },
+            onError: (err) => {
+                toast.error(err ? err.message : 'Unknown error')
+            },
         },
     })
 
     const { mutate: updateBranch, isPending: isLoadingUpdateBranch } =
         useUpdateBranch({
             options: {
-                onSuccess: () => {
-                    toast.success('Update Branch successfully')
+                onSuccess: (data) => {
+                    toast.success(`Branch ${data.name} updated successfully`)
                     form.reset()
+                    onSuccess?.(data)
                 },
                 onError: (err) => {
                     toast.error(err ? err.message : 'Unknown error')
@@ -443,8 +450,8 @@ export const CreateUpdateBranchByOrgForm = ({
                                                 <ImageDisplay
                                                     fallbackClassName="!text-3xl"
                                                     src={
-                                                        media.url ??
-                                                        media.download_url
+                                                        media.download_url ??
+                                                        media.url
                                                     }
                                                     className="size-48"
                                                 />
@@ -596,8 +603,8 @@ export const CreateUpdateBranchByOrgForm = ({
 }
 
 export const CreateUpdateBranchFormModal = ({
-    title = 'Create Branch',
-    description = 'Fill out the form to add new branch',
+    title = '',
+    description = '',
     className,
     formProps,
     ...props

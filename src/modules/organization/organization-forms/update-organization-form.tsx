@@ -1,4 +1,7 @@
 import { useState } from 'react'
+
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,7 +15,6 @@ import {
     IOrganizationRequest,
     useUpdateOrganization,
 } from '@/modules/organization'
-import { useForm } from 'react-hook-form'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
@@ -99,8 +101,9 @@ const UpdateOrganizationForm = ({
     } = useUpdateOrganization({
         options: {
             onSuccess: (data) => {
-                onSuccess?.(data.organization)
+                onSuccess?.(data)
                 form.reset()
+                toast.success(`Successfully updated ${data.name} organization`)
                 setSelectedLogoMedia('')
                 setSelectedCoverMedia('')
                 setOpenImagePicker(false)
@@ -170,7 +173,7 @@ const UpdateOrganizationForm = ({
         <Form {...form}>
             <form
                 onSubmit={onSubmit}
-                className={cn('w-full space-y-5 px-5', className)}
+                className={cn('w-full min-w-[50vw] space-y-5 px-5', className)}
             >
                 <div className="w-full col-span-2 flex flex-col gap-y-2">
                     <FormFieldWrapper
@@ -595,7 +598,7 @@ export const UpdateOrganizationFormModal = ({
         <Modal
             title={title}
             description={description}
-            className={cn('max-w-[80rem]', className)}
+            className={cn(' max-w-[80rem]', className)}
             {...props}
         >
             <UpdateOrganizationForm

@@ -16,7 +16,6 @@ import {
 } from '@/modules/organization'
 import { useSeedOrganization } from '@/modules/user-organization/user-organization.service'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { invalidate } from '@react-three/fiber'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
@@ -147,6 +146,9 @@ function OrganizationHeader({
         <div className="flex gap-x-5 px-2 py-5">
             <CreateUpdateBranchFormModal
                 {...createModal}
+                className="w-full min-w-[80rem] max-w-[80rem]"
+                title="Create Branch"
+                description="Fill out the form to add new branch"
                 formProps={{
                     organizationId,
                     defaultValues: {
@@ -162,6 +164,7 @@ function OrganizationHeader({
                 }}
             />
             <UpdateOrganizationFormModal
+                className="w-full min-w-[80rem] max-w-[80rem]"
                 formProps={{
                     organizationId,
                     defaultValues: organization,
@@ -330,12 +333,24 @@ export const BranchBar = ({
         <>
             <CreateUpdateBranchFormModal
                 {...updateModal}
+                title="Update Branch"
+                description="Fill out the form to update branch"
+                className="w-full min-w-[80rem] max-w-[80rem]"
                 formProps={{
                     organizationId,
                     branchId: branch.id,
                     hiddenFields: ['is_main_branch'],
                     defaultValues: {
                         ...branch,
+                    },
+                    onSuccess: () => {
+                        updateModal.onOpenChange(false)
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                'get-branches-by-organization-id',
+                                organizationId,
+                            ],
+                        })
                     },
                 }}
             />
