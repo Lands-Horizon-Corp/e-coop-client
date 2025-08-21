@@ -24,10 +24,7 @@ const statusStyles: Record<
     ban: { label: 'Banned', variant: 'outline' },
 }
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({
-    status,
-    className,
-}) => {
+const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
     const { label, variant } = statusStyles[status]
 
     return (
@@ -36,3 +33,5 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
         </Badge>
     )
 }
+
+export default StatusBadge

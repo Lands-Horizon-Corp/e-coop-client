@@ -5,7 +5,7 @@ import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { cn } from '@/helpers/tw-utils'
 // import { useCategoryStore, useCategoryStore } from '@/store/onboarding/category-store'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
-import { IOrganizationWithPolicies } from '@/modules/organization'
+import { IOrganizationWithPolicies, StatusBadge } from '@/modules/organization'
 import {
     IOrgUserOrganizationGroup,
     IUserOrganization,
@@ -32,7 +32,6 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
-import { StatusBadge } from './org-status-badge'
 
 type WithOrganizationViewProps = {
     organizationsWithBranches: IOrgUserOrganizationGroup[]

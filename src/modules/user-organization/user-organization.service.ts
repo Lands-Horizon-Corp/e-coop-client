@@ -3,8 +3,9 @@ import {
     useMutation,
     useQuery,
 } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
-import { groupBy } from '@/helpers/function-utils'
+import { groupBy, withCatchAsync } from '@/helpers/function-utils'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
@@ -13,6 +14,8 @@ import {
 
 import { TEntityId } from '@/types'
 
+import { IBranch, getBranchesByOrganizationId } from '../branch'
+import { IOrganizationWithPolicies } from '../organization'
 import { IUserBase } from '../user/user.types'
 import {
     IOrgUserOrganizationGroup,
@@ -187,5 +190,40 @@ export const useJoinOrganization = (
         mutationFn: ({ organizationId, branchId }) =>
             joinOrganization(organizationId, branchId),
         ...options,
+    })
+}
+
+export const useCanJoinMember = ({
+    organizationId,
+    options,
+}: {
+    organizationId: TEntityId
+    options?: HookQueryOptions<
+        { branch: IBranch; isUserCanJoin: boolean }[],
+        Error
+    >
+}) => {
+    return useQuery<{ branch: IBranch; isUserCanJoin: boolean }[], Error>({
+        ...options,
+        queryKey: ['user-organization', 'can-join'],
+        queryFn: async () => {
+            const branches = await getBranchesByOrganizationId(organizationId)
+            const [error, results] = await withCatchAsync(
+                Promise.all(
+                    branches.map(async (branch) => {
+                        const isUserCanJoin = await canJoinOrganizationMember(
+                            organizationId,
+                            branch.id
+                        )
+                        return { branch, isUserCanJoin }
+                    })
+                )
+            )
+            if (error) {
+                toast.error(error.message)
+                return []
+            }
+            return results ?? []
+        },
     })
 }

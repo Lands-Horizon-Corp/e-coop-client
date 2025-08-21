@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
+    HookMutationOptions,
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
@@ -31,7 +32,7 @@ export const {
  */
 const { API, route } = createAPIRepository('/api/v1/branch')
 
-export const createBranchByOrgId = async (
+export const createBranchByOrganizationId = async (
     organizationId: TEntityId,
     branchData: IBranchRequest
 ) => {
@@ -56,34 +57,42 @@ export const postBranchByOrganizationId = async (
 /**
  * Hooks
  */
-interface Options<TData = IBranch[]> {
+interface QueryOptions<TData = IBranch[]> {
     options?: HookQueryOptions<TData>
+}
+
+interface MutationOptions<
+    TData = IBranch[],
+    TError = string,
+    TQueryFnData = TData,
+> {
+    options?: HookMutationOptions<TData, TError, TQueryFnData>
 }
 
 export const useGetBranchesByOrganizationId = ({
     organizationId,
     options,
-}: { organizationId: TEntityId } & Options<IBranch[]>) => {
+}: { organizationId: TEntityId } & QueryOptions<IBranch[]>) => {
     return useQuery<IBranch[]>({
-        queryKey: ['branch', 'organization', organizationId],
+        queryKey: ['get-branches-by-organization-id', organizationId],
         queryFn: () => getBranchesByOrganizationId(organizationId),
         ...options,
         enabled: !!organizationId && (options?.enabled ?? true),
     })
 }
 
-export const useCreateBranchByOrgId = () => {
-    return useMutation<
-        IBranch,
-        Error,
-        {
-            organizationId: TEntityId
-            branchData: IBranchRequest
-        }
-    >({
-        mutationKey: ['branch', 'create-by-org'],
+export const useCreateBranchByOrganizationId = ({
+    options,
+}: MutationOptions<
+    IBranch,
+    Error,
+    { organizationId: TEntityId; branchData: IBranchRequest }
+> = {}) => {
+    return useMutation({
+        ...options,
+        mutationKey: ['create-organization', 'create-by-organization-id'],
         mutationFn: ({ organizationId, branchData }) =>
-            createBranchByOrgId(organizationId, branchData),
+            createBranchByOrganizationId(organizationId, branchData),
     })
 }
 

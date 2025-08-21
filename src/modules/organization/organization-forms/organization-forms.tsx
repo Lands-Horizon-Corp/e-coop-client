@@ -1,7 +1,5 @@
-import { useState } from 'react'
-
 import { useNavigate } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,7 +9,7 @@ import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
 import { useUploadMedia } from '@/modules/media'
 import {
-    ICreateOrganizationResponse,
+    IOrganization,
     OrganizationSchema,
     TOrganizationFormValues,
 } from '@/modules/organization'
@@ -21,6 +19,7 @@ import SubscriptionPlanPicker from '@/modules/subscription-plan/components/subsc
 import UserAvatar from '@/modules/user/components/user-avatar'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 import { PlusIcon, ReplaceIcon } from 'lucide-react'
+import { useForm } from 'react-hook-form'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
@@ -54,7 +53,7 @@ import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { TEntityId } from '@/types'
 
-import CategoriesItem from '../category-pickers/categories-item'
+import CategoriesItem from '../components/categories-item'
 
 const steps = [
     {
@@ -104,13 +103,10 @@ const OrganizationForm = () => {
         mutateAsync: createOrganization,
     } = useCreateOrganization({
         options: {
-            onSuccess: (data: ICreateOrganizationResponse) => {
-                const organizationId = data.organization.id
-
+            onSuccess: (data: IOrganization) => {
                 navigate({
-                    to: `/onboarding/create-branch/${organizationId}`,
+                    to: `/onboarding/create-branch/${data.id}`,
                 })
-
                 clearCategories()
             },
             onError: (error) => {
@@ -218,6 +214,7 @@ const OrganizationForm = () => {
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
+    console.log(form.formState.errors)
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>

@@ -10,8 +10,8 @@ import ImageDisplay from '@/components/image-display'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import ErrorPage from '../-common-pages/error-page'
-import NoOrganizationView from './-components/no-organization-view'
-import WithOrganization from './-components/with-organization'
+import NoOrganizationView from '../../modules/organization/components/no-organization-view'
+import WithOrganization from '../../modules/organization/components/with-organization'
 
 export const Route = createFileRoute('/onboarding/')({
     component: RouteComponent,

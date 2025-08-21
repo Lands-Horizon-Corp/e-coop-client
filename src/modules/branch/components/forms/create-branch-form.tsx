@@ -45,7 +45,10 @@ import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { useCreateBranchByOrgId, useUpdateBranch } from '../../branch.service'
+import {
+    useCreateBranchByOrganizationId,
+    useUpdateBranch,
+} from '../../branch.service'
 import { IBranch, branchTypeEnum } from '../../branch.types'
 import { branchSchema } from '../../branch.validation'
 
@@ -80,11 +83,20 @@ export const CreateUpdateBranchByOrgForm = ({
             ...defaultValues,
         },
     })
+
     const {
         mutate: createBranch,
         isPending: isPedingCreateBranch,
         error,
-    } = useCreateBranchByOrgId()
+    } = useCreateBranchByOrganizationId({
+        options: {
+            onSuccess: (createdData) => {
+                toast.success('Branch created successfully')
+                form.reset()
+                onSuccess?.(createdData)
+            },
+        },
+    })
 
     const { mutate: updateBranch, isPending: isLoadingUpdateBranch } =
         useUpdateBranch({

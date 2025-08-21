@@ -1,13 +1,10 @@
-import { useState } from 'react'
-
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import qs from 'query-string'
+import { useState } from 'react'
 import { toast } from 'sonner'
 
-import { cn } from '@/lib'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     AddressCardIcon,
@@ -18,7 +15,6 @@ import {
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import PlainTextEditor from '@/components/plain-text-editor'
 import OrganizationPolicies from '@/components/policies'
 import { QrCodeScannerModal } from '@/components/qrcode-scanner'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -26,11 +22,14 @@ import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { Input } from '@/components/ui/input'
 
-import { useInvitationCodeByCode } from '@/hooks/api-hooks/use-invitation-code'
-import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
+// import { useInvitationCodeByCode } from '@/hooks/api-hooks/use-invitation-cod'
+// import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IOrganizationWithPolicies } from '@/types'
+import { cn } from '@/helpers/tw-utils'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
+import { PlainTextEditor } from '@/components/ui/text-editor'
+import { IOrganizationWithPolicies } from '@/modules/organization'
 
 const JoinBranchWithCodeFormModal = ({
     title,
@@ -106,7 +105,7 @@ const JoinBranchWithCodeFormModal = ({
             onOpenChange={onOpenChange}
             {...props}
         >
-            <QrCodeScannerModal
+            {/* <QrCodeScannerModal
                 {...scanModal}
                 qrScannerProps={{
                     disableDecode: true,
@@ -116,7 +115,7 @@ const JoinBranchWithCodeFormModal = ({
                         handleScanComplete(data[0].rawValue)
                     },
                 }}
-            />
+            /> */}
             <div className="grid grid-cols-1 gap-y-2">
                 <fieldset
                     disabled={isLoading}

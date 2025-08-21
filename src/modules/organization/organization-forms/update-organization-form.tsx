@@ -1,13 +1,18 @@
 import { useState } from 'react'
-
-import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
+import { useUploadMedia } from '@/modules/media'
 import { IMedia } from '@/modules/media/media.types'
+import {
+    EditOrganizationSchema,
+    IOrganizationRequest,
+    useUpdateOrganization,
+} from '@/modules/organization'
+import { useForm } from 'react-hook-form'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
@@ -18,8 +23,10 @@ import {
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import TextEditor from '@/components/text-editor'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import FileUploader from '@/components/ui/file-uploader'
@@ -37,10 +44,6 @@ import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
-
-import { useUpdateOrganization } from '../../organization.service'
-import { IOrganizationRequest } from '../../organization.types'
-import { EditOrganizationSchema } from '../../organization.validation'
 
 type TEditOrganizationFormValues = z.infer<typeof EditOrganizationSchema>
 
@@ -61,7 +64,7 @@ const UpdateOrganizationForm = ({
     organizationId,
     className,
     defaultValues,
-    onError,
+    // onError,
     onSuccess,
     media,
     coverMedia,
@@ -93,49 +96,61 @@ const UpdateOrganizationForm = ({
         error,
         isPending,
         reset,
-    } = useUpdateOrganization({})
+    } = useUpdateOrganization({
+        options: {
+            onSuccess: (data) => {
+                onSuccess?.(data.organization)
+                form.reset()
+                setSelectedLogoMedia('')
+                setSelectedCoverMedia('')
+                setOpenImagePicker(false)
+            },
+        },
+    })
 
-    // const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
-    //     useSinglePictureUpload({})
+    const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
+        useUploadMedia()
 
-    // const onSubmit = form.handleSubmit(async (data) => {
-    //     let logoMedia = ''
-    //     let CoverMedia = ''
+    const handleUploadPhoto = async (media: string) => {
+        const file = base64ImagetoFile(media, `media.jpg`) as File
+        const uploadedPhoto = await uploadPhoto({ file })
+        return uploadedPhoto.id
+    }
 
-    //     if (
-    //         selectedLogoMedia &&
-    //         selectedLogoMedia.startsWith('data:') &&
-    //         data.media_id
-    //     ) {
-    //         const uploadedPhoto = await uploadPhoto(
-    //             base64ImagetoFile(data.media_id, `org-logo.jpg`) as File
-    //         )
-    //         logoMedia = uploadedPhoto.id
-    //     } else {
-    //         logoMedia = data.media_id || ''
-    //     }
-    //     if (
-    //         selectedCoverMedia &&
-    //         selectedCoverMedia.startsWith('data:') &&
-    //         data.cover_media_id
-    //     ) {
-    //         const uploadedCoverPhoto = await uploadPhoto(
-    //             base64ImagetoFile(data.cover_media_id, `org-cover.jpg`) as File
-    //         )
-    //         CoverMedia = uploadedCoverPhoto.id
-    //     } else {
-    //         CoverMedia = data.cover_media_id || ''
-    //     }
+    const onSubmit = form.handleSubmit(async (data) => {
+        let logoMedia = ''
+        let CoverMedia = ''
+        if (
+            selectedLogoMedia &&
+            selectedLogoMedia.startsWith('data:') &&
+            data.media_id
+        ) {
+            const uploadedPhoto = await handleUploadPhoto(selectedLogoMedia)
+            logoMedia = uploadedPhoto
+        } else {
+            logoMedia = data.media_id || ''
+        }
+        if (
+            selectedCoverMedia &&
+            selectedCoverMedia.startsWith('data:') &&
+            data.cover_media_id
+        ) {
+            const uploadedCoverPhoto =
+                await handleUploadPhoto(selectedCoverMedia)
+            CoverMedia = uploadedCoverPhoto
+        } else {
+            CoverMedia = data.cover_media_id || ''
+        }
 
-    //     const requestData = {
-    //         ...data,
-    //         media_id: logoMedia ?? data.media_id,
-    //         cover_media_id: CoverMedia ?? data.cover_media_id,
-    //     }
-    //     if (organizationId) {
-    //         updateMutation({ id: organizationId, payload: requestData })
-    //     }
-    // })
+        const requestData = {
+            ...data,
+            media_id: logoMedia ?? data.media_id,
+            cover_media_id: CoverMedia ?? data.cover_media_id,
+        }
+        if (organizationId) {
+            updateMutation({ id: organizationId, payload: requestData })
+        }
+    })
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
@@ -154,7 +169,7 @@ const UpdateOrganizationForm = ({
     return (
         <Form {...form}>
             <form
-                // onSubmit={onSubmit}
+                onSubmit={onSubmit}
                 className={cn('w-full space-y-5 px-5', className)}
             >
                 <div className="w-full col-span-2 flex flex-col gap-y-2">
@@ -166,7 +181,7 @@ const UpdateOrganizationForm = ({
                         render={({ field }) => {
                             return (
                                 <FormControl>
-                                    {/* <div className="relative mx-auto size-fit">
+                                    <div className="relative mx-auto size-fit">
                                         <SinglePictureUploadModal
                                             open={openImagePicker}
                                             onOpenChange={setOpenImagePicker}
@@ -205,7 +220,7 @@ const UpdateOrganizationForm = ({
                                                 )}
                                             </Button>
                                         </ActionTooltip>
-                                    </div> */}
+                                    </div>
                                 </FormControl>
                             )
                         }}
@@ -548,7 +563,7 @@ const UpdateOrganizationForm = ({
                             <Button
                                 size="sm"
                                 type="submit"
-                                disabled={isPending}
+                                disabled={isPending || isUploadingPhoto}
                                 className="w-full self-end px-8 sm:w-fit"
                             >
                                 {isPending ? (

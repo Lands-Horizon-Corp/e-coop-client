@@ -1,3 +1,6 @@
 export * from './organization.types'
 export * from './organization.service'
 export * from './organization.validation'
+export * from './components'
+export * from './organization-forms'
+export * from './pages'
