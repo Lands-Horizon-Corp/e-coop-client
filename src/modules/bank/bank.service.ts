@@ -12,6 +12,11 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 
 // Add custom CRUD API service here if needed
 
+// ⚙️🛠️ API SERVICE HERE
+export const BankAPI = apiCrudService
+
+// 🪝 HOOK STARTS HERE
+// Add custom API query hooks here if needed
 export const {
     useCreate,
     useDeleteById,
@@ -21,7 +26,3 @@ export const {
     useGetPaginated,
     useUpdateById,
 } = apiCrudHooks
-
-// Add custom API query hooks here if needed
-
-export const BankAPI = apiCrudService

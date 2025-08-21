@@ -115,12 +115,12 @@ export const BankRowContext = ({
             <DataTableRowContext
                 row={row}
                 onDelete={{
-                    text: 'Delete Bank',
+                    text: 'Delete',
                     isAllowed: !isDeletingBank,
                     onClick: handleDelete,
                 }}
                 onEdit={{
-                    text: 'Edit Bank',
+                    text: 'Edit',
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
