@@ -79,9 +79,6 @@ export const CreateUpdateBranchByOrgForm = ({
             ...defaultValues,
         },
     })
-
-    console.log(form.formState.errors)
-
     const {
         mutate: createBranch,
         isPending: isPedingCreateBranch,

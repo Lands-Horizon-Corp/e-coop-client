@@ -38,36 +38,28 @@ function RootLayout() {
             retry: 0,
         },
     })
-
     const handleSuccess = useCallback(
         (authorizationContext: IAuthContext) => {
-            console.log('Loaded Success ', authorizationContext)
             setCurrentAuth(authorizationContext)
             setAuthStatus('authorized')
         },
-        [setCurrentAuth]
+        [setAuthStatus, setCurrentAuth]
     )
-
     const handleError = useCallback(
         (rawError: Error) => {
-            console.log('Erred', rawError)
-
             if (rawError instanceof AxiosError && rawError.status === 401) {
                 resetAuth()
                 setAuthStatus('unauthorized')
                 return null
             }
-
             if (rawError instanceof AxiosError && rawError.status === 500) {
                 setAuthStatus('error')
                 return null
             }
-
             setAuthStatus('error')
         },
         [resetAuth, setAuthStatus]
     )
-
     useQeueryHookCallback({
         data,
         error,
@@ -76,11 +68,7 @@ function RootLayout() {
         onSuccess: handleSuccess,
         onError: handleError,
     })
-
-    console.log('Rereder root')
-
     useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
-
     return (
         <div className="relative">
             <DndProvider backend={HTML5Backend}>

@@ -217,7 +217,6 @@ const OrganizationForm = () => {
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
-    console.log(form.formState.errors)
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>

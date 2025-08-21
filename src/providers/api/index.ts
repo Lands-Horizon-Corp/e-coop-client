@@ -37,26 +37,52 @@ const getDeviceType = (): string => {
     return 'Desktop'
 }
 
-const getGeoHeaders = (): Promise<Record<string, string>> => {
+// Cache for geolocation data to avoid repeated requests
+let geoCache: Record<string, string> | null = null
+let geoPermissionRequested = false
+
+const getGeoHeaders = (): Record<string, string> => {
+    const baseHeaders = {
+        'X-Device-Type': getDeviceType(),
+        Location: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    }
+    if (geoCache) {
+        return { ...baseHeaders, ...geoCache }
+    }
+
+    return baseHeaders
+}
+
+const requestGeolocation = (): Promise<void> => {
     return new Promise((resolve) => {
-        if (typeof window === 'undefined' || !navigator.geolocation) {
-            resolve({})
+        if (
+            typeof window === 'undefined' ||
+            !navigator.geolocation ||
+            geoPermissionRequested
+        ) {
+            resolve()
             return
         }
+
+        geoPermissionRequested = true
         navigator.geolocation.getCurrentPosition(
             (pos) => {
                 const longitude = pos.coords.longitude.toString()
                 const latitude = pos.coords.latitude.toString()
-                const location =
-                    Intl.DateTimeFormat().resolvedOptions().timeZone
-                resolve({
+                geoCache = {
                     'X-Longitude': longitude,
                     'X-Latitude': latitude,
-                    Location: location,
-                    'X-Device-Type': getDeviceType(),
-                })
+                }
+                resolve()
             },
-            () => resolve({})
+            () => {
+                resolve()
+            },
+            {
+                timeout: 5000,
+                maximumAge: 300000, // 5 minutes
+                enableHighAccuracy: false,
+            }
         )
     })
 }
@@ -78,7 +104,7 @@ httpClient.interceptors.request.use(async (config) => {
         config.headers['X-User-Agent'] = navigator.userAgent
     }
 
-    const geoHeaders = await getGeoHeaders()
+    const geoHeaders = getGeoHeaders()
     if (config.headers && typeof config.headers.set === 'function') {
         Object.entries(geoHeaders).forEach(([key, value]) => {
             config.headers.set(key, value)
@@ -91,6 +117,10 @@ httpClient.interceptors.request.use(async (config) => {
 
 const API = {
     getHttpClient: (): AxiosInstance => httpClient,
+
+    // Request geolocation permission and cache the result
+    // Call this in response to user interaction (e.g., button click)
+    requestGeolocation,
 
     addRequestInterceptor(
         onFulfilled?: (
@@ -240,6 +270,11 @@ export default class API {
                             });
                         },
                         () => resolve({}),
+                        {
+                            timeout: 5000,
+                            maximumAge: 300000, // 5 minutes
+                            enableHighAccuracy: false,
+                        }
                     );
                 });
             };

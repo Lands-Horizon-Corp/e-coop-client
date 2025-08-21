@@ -24,9 +24,6 @@ export const uploadMedia = async (
 ): Promise<IMedia> => {
     const formData = new FormData()
     formData.append('file', file)
-
-    console.log('Passed file ', file)
-
     const response = await API.uploadFile<IMedia>(
         `${route}`,
         formData,

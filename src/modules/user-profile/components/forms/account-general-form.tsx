@@ -69,10 +69,6 @@ const AccountGeneralForm = ({
         },
     })
 
-    const descr = form.watch('description')
-
-    console.log('Description changes', descr)
-
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
         Object.values(form.formState.errors)[0]?.message
