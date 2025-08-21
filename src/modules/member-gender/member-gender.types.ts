@@ -1,14 +1,8 @@
 import z from 'zod'
 
-import {
-    IBaseEntityMeta,
-    IPaginatedResult,
-    TEntityId,
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-    mediaSchema,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+
+import { GenderSchema } from './member-gender.validation'
 
 export interface IMemberGender extends IBaseEntityMeta {
     id: TEntityId
@@ -17,29 +11,7 @@ export interface IMemberGender extends IBaseEntityMeta {
     description: string
 }
 
-export interface IMemberGenderRequest {
-    id?: TEntityId
-
-    name: string
-    description: string
-}
+export type IMemberGenderRequest = z.infer<typeof GenderSchema>
 
 export interface IMemberGenderPaginated
     extends IPaginatedResult<IMemberGender> {}
-
-export const createGenderSchema = z.object({
-    name: z.string().min(1, 'Gender name is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-})
-
-export const memberGovernmentBenefitSchema = z.object({
-    id: entityIdSchema.optional(),
-    country: z.string().min(1, 'Country is required'),
-    name: z.string().min(1, 'Name is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-    value: z.string().min(1, 'Value is required'),
-    frontMediaId: entityIdSchema.optional(),
-    frontMediaResource: mediaSchema.optional(),
-    backMediaResource: mediaSchema.optional(),
-    backMediaId: entityIdSchema.optional(),
-})
