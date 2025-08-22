@@ -26,8 +26,8 @@ export default defineConfig({
         sourcemap: false,
         rollupOptions: {
             output: {
-                manualChunks: {
-                    vendor: ["react", "react-dom"],
+                advancedChunks: {
+                    groups: [{ name: 'vendor', test: /\/react(?:-dom)?/ }],
                 },
             },
         },
