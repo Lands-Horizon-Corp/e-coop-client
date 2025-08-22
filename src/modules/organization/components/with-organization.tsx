@@ -17,6 +17,7 @@ import { GradientBackground } from '@/components/gradient-background/gradient-ba
 import {
     BuildingIcon,
     GearIcon,
+    LoadingCircleIcon,
     PinLocationIcon,
     PlusIcon,
 } from '@/components/icons'
@@ -263,11 +264,19 @@ const ListOfBranches = ({
                             size={'sm'}
                             variant={isCurrent ? 'default' : 'outline'}
                         >
-                            {isLoading
-                                ? 'Switching...'
-                                : isCurrent
-                                  ? 'Current'
-                                  : `visit as ${userOrg.user_type}`}
+                            {isLoading ? (
+                                <>
+                                    {isCurrent ? (
+                                        <LoadingCircleIcon className=" animate-spin" />
+                                    ) : (
+                                        'Switching...'
+                                    )}
+                                </>
+                            ) : isCurrent ? (
+                                'Current'
+                            ) : (
+                                `visit as ${userOrg.user_type}`
+                            )}
                         </Button>
                     )}
                 </div>
