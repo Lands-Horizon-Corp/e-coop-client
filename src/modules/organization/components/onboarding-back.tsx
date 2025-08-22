@@ -3,7 +3,7 @@ import { useRouter } from '@tanstack/react-router'
 import { BackIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
-const LocationBack = ({ className }: { className: string }) => {
+const OnboardingBack = ({ className }: { className: string }) => {
     const location = useRouter()
     const handleBack = () => {
         if (location.history) {
@@ -14,11 +14,11 @@ const LocationBack = ({ className }: { className: string }) => {
         <Button
             onClick={handleBack}
             variant="ghost"
-            size="sm"
-            className={`flex w-fit items-center rounded-full ${className}`}
+            size="lg"
+            className={`flex aspect-square h-fit !p-2 items-center rounded-full ${className}`}
         >
-            <BackIcon size={25} />
+            <BackIcon className="size-6" />
         </Button>
     )
 }
-export default LocationBack
+export default OnboardingBack

@@ -28,7 +28,7 @@ const OrganizationItem = ({ organization }: OrganizationItemProps) => {
             to={`/onboarding/organization/$organization_id`}
             params={{ organization_id: organization.id }}
         >
-            <GradientBackground mediaUrl={organization.media?.url}>
+            <GradientBackground mediaUrl={organization.media?.download_url}>
                 <div
                     key={organization.id}
                     className={cn(

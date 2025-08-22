@@ -1,14 +1,16 @@
-import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
+
+import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { IBranch } from '@/modules/branch'
+import { BranchItem } from '@/modules/branch'
 import { IOrganizationWithPolicies } from '@/modules/organization'
 import { useJoinOrganization } from '@/modules/user-organization'
-import { BranchItem } from '@/modules/branch'
+
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { PolicyAcceptanceModal } from './policy-acceptance-modal'
+import { PolicyAcceptanceModal } from '../components/policy-acceptance-modal'
 
 type BranchesProps = {
     branch: IBranch

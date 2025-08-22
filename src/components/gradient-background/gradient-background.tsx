@@ -1,50 +1,22 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo } from 'react'
 import { useMemo } from 'react'
 
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { cn } from '@/helpers/tw-utils'
 
-type SafeImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {
-    fallbackSrc?: string
-}
-
-const SafeImage: React.FC<SafeImageProps> = ({
-    src,
-    fallbackSrc = orgBannerList[7],
-    alt = '',
-    ...props
-}) => {
-    const [imgSrc, setImgSrc] = useState(src)
-
-    useEffect(() => {
-        setImgSrc(src)
-    }, [src])
-
-    return (
-        <img
-            {...props}
-            src={imgSrc}
-            alt={alt}
-            onError={() => {
-                if (imgSrc !== fallbackSrc) {
-                    setImgSrc(fallbackSrc)
-                }
-            }}
-        />
-    )
-}
+import ImageDisplay from '../image-display'
 
 export const useRandomGradient = (colorPalette: string[]) => {
     return useMemo(() => getRandomGradient(colorPalette), [])
 }
 
 export const colorPalette = [
-    '#073B3A', // Midnight green
-    '#0B6E4F', // Dartmouth green
-    '#08A045', // Pigment green
-    '#6BBF59', // Mantis
-    '#21D375', // Emerald
+    '#0A2647', // Oxford Blue (deep base)
+    '#205295', // Denim Blue (primary blue)
+    '#2C74B3', // Steel Blue (accent blue)
+    // '#00A86B', // Jade Green (primary green)
+    // '#3CCF4E', // Malachite (bright accent green)
 ]
+
 interface GradientBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string
     children: React.ReactNode
@@ -54,6 +26,7 @@ interface GradientBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
     gradientOnly?: boolean
     imageBackgroundOpacity?: number
     colorPalettes?: string[]
+    imageBackgroundClassName?: string
 }
 
 export const getRandomGradient = (colors: string[]): string => {
@@ -89,15 +62,18 @@ export const GradientBackground = memo(
     ({
         children,
         gradientColor,
-        opacity = 0.1,
+        opacity = 0.2,
         mediaUrl,
         gradientOnly = false,
         imageBackgroundOpacity = 0.5,
         className,
         colorPalettes = colorPalette,
+        imageBackgroundClassName,
         ...props
     }: GradientBackgroundProps) => {
         const randomGradient = useRandomGradient(colorPalettes)
+        console.log(!gradientOnly, mediaUrl)
+        const showBackgroundImage = !gradientOnly && mediaUrl
         return (
             <div
                 {...props}
@@ -118,15 +94,15 @@ export const GradientBackground = memo(
                         backgroundBlendMode: 'lighten',
                     }}
                 />
-                {!gradientOnly && (
-                    <div className="pointer-events-none absolute -top-12 right-0 rounded-full backdrop-blur-3xl before:absolute before:-left-32 before:top-5 before:size-96 before:overflow-hidden before:bg-gradient-to-l before:from-[#073B3A] before:to-[#2b4b4a00] before:content-['']">
-                        <SafeImage
-                            className="relative size-64 -rotate-45 rounded-3xl"
-                            src={mediaUrl}
-                            fallbackSrc={orgBannerList[7]}
-                            style={{ opacity: imageBackgroundOpacity }}
-                        />
-                    </div>
+                {showBackgroundImage && (
+                    <ImageDisplay
+                        className={cn(
+                            'pointer-events-none absolute top-1/2 -right-[20%] transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-3xl !opacity-30 size-60 -rotate-45 rounded-3xl',
+                            imageBackgroundClassName
+                        )}
+                        src={mediaUrl}
+                        style={{ opacity: imageBackgroundOpacity }}
+                    />
                 )}
             </div>
         )

@@ -35,6 +35,7 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PlainTextEditor } from '@/components/ui/text-editor'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
@@ -144,84 +145,95 @@ function OrganizationHeader({
     if (!organization) return null
 
     return (
-        <div className="flex gap-x-5 px-2 py-5">
-            <CreateUpdateBranchFormModal
-                {...createModal}
-                className="w-full min-w-[80rem] max-w-[80rem]"
-                title="Create Branch"
-                description="Fill out the form to add new branch"
-                formProps={{
-                    organizationId,
-                    defaultValues: {
-                        country_code: countryCode,
-                    },
-                    hiddenFields: ['is_main_branch'],
-                    onSuccess: () => {
-                        createModal.onOpenChange(false)
-                        queryClient.invalidateQueries({
-                            queryKey: ['get-branches-by-organization-id'],
-                        })
-                    },
-                }}
-            />
-            <UpdateOrganizationFormModal
-                {...updateModal}
-                className="w-full min-w-[80rem] max-w-[80rem]"
-                formProps={{
-                    organizationId,
-                    defaultValues: organization,
-                    coverMedia: organization?.cover_media,
-                    media: organization?.media,
-                    onSuccess: () => {
-                        updateModal.onOpenChange(false)
-                        queryClient.invalidateQueries({
-                            queryKey: ['organization'],
-                        })
-                    },
-                }}
-            />
-            <ImageDisplay
-                className="size-24 rounded-lg"
-                src={organization?.media?.url}
-            />
-            <div className="flex grow flex-col gap-y-2">
-                <h1 className="flex items-center gap-x-2 text-xl font-semibold">
-                    <span>
-                        <LandmarkIcon className="z-50" size={24} />
-                    </span>
-                    {organization?.name}
-                </h1>
-                <PlainTextEditor
-                    className="text-sm"
-                    content={organization?.description ?? ''}
+        <GradientBackground
+            imageBackgroundClassName="size-100 !opacity-20 !-z-40"
+            className="p-7  border"
+            mediaUrl={organization?.cover_media?.url}
+        >
+            <div className="flex gap-x-5 z-[999]">
+                <CreateUpdateBranchFormModal
+                    {...createModal}
+                    className="w-full min-w-[80rem] max-w-[80rem]"
+                    title="Create Branch"
+                    description="Fill out the form to add new branch"
+                    formProps={{
+                        organizationId,
+                        defaultValues: {
+                            country_code: countryCode,
+                        },
+                        hiddenFields: ['is_main_branch'],
+                        onSuccess: () => {
+                            createModal.onOpenChange(false)
+                            queryClient.invalidateQueries({
+                                queryKey: ['get-branches-by-organization-id'],
+                            })
+                        },
+                    }}
                 />
-                <div className="flex items-center gap-x-2">
-                    <PushPinIcon className="text-red-400" />
-                    <p className="text-xs">{organization?.address}</p>
+                <UpdateOrganizationFormModal
+                    {...updateModal}
+                    className="w-full min-w-[80rem] max-w-[80rem]"
+                    formProps={{
+                        organizationId,
+                        defaultValues: organization,
+                        coverMedia: organization?.cover_media,
+                        media: organization?.media,
+                        onSuccess: () => {
+                            updateModal.onOpenChange(false)
+                            queryClient.invalidateQueries({
+                                queryKey: ['organization'],
+                            })
+                        },
+                    }}
+                />
+                <PreviewMediaWrapper media={organization?.media?.url}>
+                    <ImageDisplay
+                        className="size-36 rounded-lg"
+                        src={organization?.media?.url}
+                    />
+                </PreviewMediaWrapper>
+
+                <div className="flex grow flex-col gap-y-2">
+                    <h1 className="flex items-center gap-x-2 text-xl font-semibold">
+                        <span>
+                            <LandmarkIcon className="z-50" size={24} />
+                        </span>
+                        {organization?.name}
+                    </h1>
+                    <PlainTextEditor
+                        className="text-sm italic rounded-xl p-2 bg-secondary/20"
+                        content={organization?.description ?? ''}
+                    />
+                    <div className="flex items-center gap-x-2">
+                        <PushPinIcon className="text-red-400" />
+                        <p className="text-xs">{organization?.address}</p>
+                    </div>
+                    <div className="flex items-center gap-x-2">
+                        <PhoneIcon className="text-blue-400" />
+                        <p className="text-xs">
+                            {organization?.contact_number}
+                        </p>
+                    </div>
                 </div>
-                <div className="flex items-center gap-x-2">
-                    <PhoneIcon className="text-blue-400" />
-                    <p className="text-xs">{organization?.contact_number}</p>
+                <div className="flex flex-col items-start space-y-2 z-50">
+                    <Button
+                        className="w-full"
+                        onClick={() => createModal.onOpenChange(true)}
+                    >
+                        <PlusIcon className="mr-2" />
+                        Add Branch
+                    </Button>
+                    <Button
+                        variant={'secondary'}
+                        onClick={() => updateModal.onOpenChange(true)}
+                        className="w-full"
+                    >
+                        <EditPencilIcon className="mr-2" />
+                        Edit Organization
+                    </Button>
                 </div>
             </div>
-            <div className="flex flex-col items-start space-y-2">
-                <Button
-                    variant={'secondary'}
-                    onClick={() => createModal.onOpenChange(true)}
-                >
-                    <PlusIcon className="mr-2" />
-                    Add Branch
-                </Button>
-                <Button
-                    variant={'secondary'}
-                    onClick={() => updateModal.onOpenChange(true)}
-                    className="w-full"
-                >
-                    <EditPencilIcon className="mr-2" />
-                    edit
-                </Button>
-            </div>
-        </div>
+        </GradientBackground>
     )
 }
 
@@ -361,7 +373,10 @@ export const BranchBar = ({
                     },
                 }}
             />
-            <GradientBackground mediaUrl={branch.media?.url ?? ''}>
+            <GradientBackground
+                mediaUrl={branch.media?.url ?? ''}
+                className="border-[0.5px] border-secondary/50"
+            >
                 <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
                     <ImageDisplay
                         className="size-16 rounded-lg"
@@ -379,7 +394,7 @@ export const BranchBar = ({
                             <AddressCardIcon className="mr-2" />
                             {branch.address}
                         </p>
-                        <div className="absolute bottom-7 right-2 z-50 flex gap-1 text-xs">
+                        <div className="absolute bottom-4 right-2 z-50 flex gap-1 text-xs">
                             <Button
                                 size={'sm'}
                                 onClick={() => updateModal.onOpenChange(true)}
