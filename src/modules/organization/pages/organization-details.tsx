@@ -1,8 +1,8 @@
 import { useParams } from '@tanstack/react-router'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { Branch } from '@/modules/branch'
 import {
-    Branch,
     IOrganizationWithPolicies,
     useGetOrganizationById,
 } from '@/modules/organization'
@@ -16,7 +16,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
 const OrganizationDetails = () => {
-
     const { organization_id: organizationId } = useParams({
         from: '/onboarding/organization/$organization_id',
     })

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import z from 'zod'
 
-import { CreateBranch } from '@/modules/organization'
+import { CreateBranch } from '@/modules/branch'
 import { entityIdSchema } from '@/validation'
 
 const routeSchema = z.object({

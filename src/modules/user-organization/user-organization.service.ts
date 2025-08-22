@@ -15,7 +15,6 @@ import {
 import { TEntityId } from '@/types'
 
 import { IBranch, getBranchesByOrganizationId } from '../branch'
-import { IOrganizationWithPolicies } from '../organization'
 import { IUserBase } from '../user/user.types'
 import {
     IOrgUserOrganizationGroup,
@@ -160,7 +159,16 @@ export const useSwitchOrganization = () => {
 export const useSeedOrganization = () => {
     return useMutation<boolean, string, TEntityId>({
         mutationKey: ['user-organization', 'seed'],
-        mutationFn: seedOrganization,
+        mutationFn: async (organizationId) => {
+            const [error, result] = await withCatchAsync(
+                seedOrganization(organizationId)
+            )
+            if (error) {
+                toast.error(error.message)
+                throw error
+            }
+            return result
+        },
     })
 }
 

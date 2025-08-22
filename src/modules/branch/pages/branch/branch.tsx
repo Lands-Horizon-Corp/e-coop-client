@@ -3,9 +3,9 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { IBranch } from '@/modules/branch'
-import { BranchItem, IOrganizationWithPolicies } from '@/modules/organization'
+import { IOrganizationWithPolicies } from '@/modules/organization'
 import { useJoinOrganization } from '@/modules/user-organization'
-
+import { BranchItem } from '@/modules/branch'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { PolicyAcceptanceModal } from './policy-acceptance-modal'

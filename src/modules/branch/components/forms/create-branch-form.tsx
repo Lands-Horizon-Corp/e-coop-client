@@ -94,7 +94,7 @@ export const CreateUpdateBranchByOrgForm = ({
     } = useCreateBranchByOrganizationId({
         options: {
             onSuccess: (createdData) => {
-                toast.success('Branch created successfully')
+                toast.success(`Branch ${createdData.name} created successfully`)
                 form.reset()
                 onSuccess?.(createdData)
             },

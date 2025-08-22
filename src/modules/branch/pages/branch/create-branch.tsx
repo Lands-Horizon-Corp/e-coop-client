@@ -156,11 +156,11 @@ function OrganizationHeader({
                         country_code: countryCode,
                     },
                     hiddenFields: ['is_main_branch'],
-                    onSuccess: (data) => {
-                        toast.success(
-                            `Branch ${data.name} created successfully`
-                        )
+                    onSuccess: () => {
                         createModal.onOpenChange(false)
+                        queryClient.invalidateQueries({
+                            queryKey: ['get-branches-by-organization-id'],
+                        })
                     },
                 }}
             />

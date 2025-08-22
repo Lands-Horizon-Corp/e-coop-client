@@ -1,19 +1,23 @@
-import { orgBannerList } from '@/assets/pre-organization-banner-background';
-import { GradientBackground } from '@/components/gradient-background/gradient-background';
-import ImageDisplay from '@/components/image-display';
-import { Button } from '@/components/ui/button';
-import { PlainTextEditor } from '@/components/ui/text-editor';
-import { IBranch } from '@/modules/branch';
+import { orgBannerList } from '@/assets/pre-organization-banner-background'
+import { IBranch } from '@/modules/branch'
 
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import ImageDisplay from '@/components/image-display'
+import { Button } from '@/components/ui/button'
+import { PlainTextEditor } from '@/components/ui/text-editor'
 
 type BranchProps = {
-    branch: IBranch;
-    isUserCanJoin: boolean;
-    onJoinClick: (branch: IBranch) => void;
-};
+    branch: IBranch
+    isUserCanJoin: boolean
+    onJoinClick: (branch: IBranch) => void
+}
 
-export const BranchItem = ({ branch, isUserCanJoin, onJoinClick }: BranchProps) => {
-    const mediaUrl = branch?.media?.url ?? orgBannerList[0];
+export const BranchItem = ({
+    branch,
+    isUserCanJoin,
+    onJoinClick,
+}: BranchProps) => {
+    const mediaUrl = branch?.media?.url ?? orgBannerList[0]
 
     return (
         <div className="flex max-h-96 flex-col gap-y-2 overflow-y-auto">
@@ -44,7 +48,7 @@ export const BranchItem = ({ branch, isUserCanJoin, onJoinClick }: BranchProps) 
                 </div>
             </GradientBackground>
         </div>
-    );
-};
+    )
+}
 
-export default BranchItem;
+export default BranchItem
