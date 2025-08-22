@@ -1,7 +1,6 @@
 import { cn } from '@/helpers/tw-utils'
+import { TGeneralLedgerSource } from '@/modules/general-ledger'
 import { type VariantProps, cva } from 'class-variance-authority'
-
-import { TGeneralLedgerSource } from '@/types'
 
 import {
     ArrowDownLeftIcon,

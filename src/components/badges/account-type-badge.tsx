@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { AccountTypeEnum } from '@/types/coop-types/accounts/account'
+import { AccountTypeEnum } from '@/modules/account'
 
 import { Badge } from '@/components/ui/badge'
 

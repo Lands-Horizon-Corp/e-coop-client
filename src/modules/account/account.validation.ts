@@ -183,3 +183,4 @@ export const IAccountRequestSchema = z.object({
         .min(0, 'Negative amount is not allowed')
         .default(0), // this is damayan in OLD coop
 })
+export type TAccountFormValues = z.infer<typeof IAccountRequestSchema>

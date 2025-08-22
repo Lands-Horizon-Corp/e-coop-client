@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { ComputationTypeEnum } from '@/types/coop-types/accounts/account'
+import { ComputationTypeEnum } from '@/modules/account'
 
 import { Badge } from '@/components/ui/badge'
 
@@ -11,11 +11,7 @@ interface ComputationTypeBadgeProps {
 
 const computationTypeStyles: Record<
     ComputationTypeEnum,
-    {
-        label: string
-        bgColor: string
-        textColor: string
-    }
+    { label: string; bgColor: string; textColor: string }
 > = {
     [ComputationTypeEnum.Straight]: {
         label: 'Straight',
@@ -54,19 +50,26 @@ export const ComputationTypeBadge = ({
     className,
     description,
 }: ComputationTypeBadgeProps) => {
-    const { label, bgColor, textColor } = computationTypeStyles[type]
+    const { label, bgColor, textColor } = computationTypeStyles[type] ?? {
+        label: 'Uknown',
+        bgColor: 'bg-gray-500',
+        textColor: 'text-white',
+    }
+    if (!label) {
+        return null
+    }
     const hover = `hover:${bgColor}`
     return (
         <Badge
             className={cn(
-                `py-0.1 text-[10.5px]`,
+                `py-0.1 te ?? ""xt-[10.5px]`,
                 bgColor,
                 textColor,
                 hover,
                 className
             )}
         >
-            {label}
+            {label ?? ''}
             {description && (
                 <span className="ml-1 opacity-70">{description}</span>
             )}

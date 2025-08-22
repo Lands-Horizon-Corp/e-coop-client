@@ -1,3 +1,4 @@
+import { TPermissionAction } from '@/constants/permission'
 import { cn } from '@/helpers/tw-utils'
 import { type VariantProps, cva } from 'class-variance-authority'
 import {
@@ -12,8 +13,6 @@ import {
     Trash,
     Trash2,
 } from 'lucide-react'
-
-import { TPermissionAction } from '@/types'
 
 const permissionActionVariants = cva(
     'font-medium transition-colors duration-200 inline-flex items-center border',

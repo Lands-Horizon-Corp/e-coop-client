@@ -21,10 +21,10 @@ export enum AccountTypeEnum {
 export enum ComputationTypeEnum {
     Straight = 'Straight',
     Diminishing = 'Diminishing',
-    DiminishingAddOn = 'Diminishing Add-On',
-    DiminishingYearly = 'Diminishing Yearly',
-    DiminishingStraight = 'Diminishing Straight',
-    DiminishingQuarterly = 'Diminishing Quarterly',
+    DiminishingAddOn = 'DiminishingAddOn',
+    DiminishingYearly = 'DiminishingYearly',
+    DiminishingStraight = 'DiminishingStraight',
+    DiminishingQuarterly = 'DiminishingQuarterly',
 }
 
 export enum FinancialStatementTypeEnum {

@@ -55,10 +55,13 @@ import { Route as landingPolicyCodeOfConductEthicsPolicyRouteImport } from './ro
 import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing)/policy/aml-ctf-policy'
 import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
+import { Route as OrgOrgnameBranchBranchnameAccountingAccountsRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/accounts'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(settings)/settings'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-category'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-gender'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-classification'
@@ -312,6 +315,12 @@ const OrgOrgnameBranchBranchnameIndexRoute =
     path: '/',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameAccountingAccountsRoute =
+  OrgOrgnameBranchBranchnameAccountingAccountsRouteImport.update({
+    id: '/accounting/accounts',
+    path: '/accounting/accounts',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnamecommonDashboardRoute =
   OrgOrgnameBranchBranchnamecommonDashboardRouteImport.update({
     id: '/(common)/dashboard',
@@ -338,6 +347,22 @@ const OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute =
     path: '/settings',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport.update(
+    {
+      id: '/(maintenance)/maintenance/(account-setup)/account-classification',
+      path: '/maintenance/account-classification',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport.update(
+    {
+      id: '/(maintenance)/maintenance/(account-setup)/account-category',
+      path: '/maintenance/account-category',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute =
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport.update(
     {
@@ -409,12 +434,15 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
   '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
+  '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
@@ -458,12 +486,15 @@ export interface FileRoutesByTo {
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
   '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
+  '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -513,12 +544,15 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   '/org/$orgname/branch/$branchname/(common)/(settings)/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -568,12 +602,15 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/accounting/accounts'
     | '/org/$orgname/branch/$branchname/settings'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/members/member-classification'
     | '/org/$orgname/branch/$branchname/members/member-gender'
     | '/org/$orgname/branch/$branchname/members/member-types'
+    | '/org/$orgname/branch/$branchname/maintenance/account-category'
+    | '/org/$orgname/branch/$branchname/maintenance/account-classification'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -617,12 +654,15 @@ export interface FileRouteTypes {
     | '/onboarding/organization'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/accounting/accounts'
     | '/org/$orgname/branch/$branchname/settings'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/members/member-classification'
     | '/org/$orgname/branch/$branchname/members/member-gender'
     | '/org/$orgname/branch/$branchname/members/member-types'
+    | '/org/$orgname/branch/$branchname/maintenance/account-category'
+    | '/org/$orgname/branch/$branchname/maintenance/account-classification'
   id:
     | '__root__'
     | '/(landing)'
@@ -671,12 +711,15 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
+    | '/org/$orgname/branch/$branchname/accounting/accounts'
     | '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1004,6 +1047,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameIndexRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/accounting/accounts': {
+      id: '/org/$orgname/branch/$branchname/accounting/accounts'
+      path: '/accounting/accounts'
+      fullPath: '/org/$orgname/branch/$branchname/accounting/accounts'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameAccountingAccountsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(common)/dashboard': {
       id: '/org/$orgname/branch/$branchname/(common)/dashboard'
       path: '/dashboard'
@@ -1030,6 +1080,20 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/org/$orgname/branch/$branchname/settings'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
+      path: '/maintenance/account-classification'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/account-classification'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
+      path: '/maintenance/account-category'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/account-category'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': {
@@ -1202,12 +1266,15 @@ const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
 interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameIndexRoute: typeof OrgOrgnameBranchBranchnameIndexRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  OrgOrgnameBranchBranchnameAccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
 }
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
@@ -1215,6 +1282,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
     OrgOrgnameBranchBranchnameIndexRoute: OrgOrgnameBranchBranchnameIndexRoute,
     OrgOrgnameBranchBranchnamecommonDashboardRoute:
       OrgOrgnameBranchBranchnamecommonDashboardRoute,
+    OrgOrgnameBranchBranchnameAccountingAccountsRoute:
+      OrgOrgnameBranchBranchnameAccountingAccountsRoute,
     OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute:
       OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
@@ -1227,6 +1296,10 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute,
   }
 
 const OrgOrgnameBranchBranchnameRouteRouteWithChildren =

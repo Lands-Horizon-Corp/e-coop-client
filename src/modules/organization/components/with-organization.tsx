@@ -78,7 +78,7 @@ const UserOrganizationsDashboard = ({
                 toast.error("Can't switch branch")
             }
         } catch (error) {
-            toast.error('Failed to switch branch')
+            toast.error(`Failed to switch branch ${error}`)
         } finally {
             setSwitchingOrgId(null)
         }

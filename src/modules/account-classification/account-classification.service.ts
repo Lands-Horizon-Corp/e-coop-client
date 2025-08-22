@@ -7,16 +7,16 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 import { TEntityId } from '@/types'
 
 import {
-    IAccountCategory,
-    IAccountCategoryRequest,
-} from './account-category.types'
+    IAccountClassification,
+    IAccountClassificationRequest,
+} from './account-classification.types'
 
 const { apiCrudHooks } = createDataLayerFactory<
-    IAccountCategory,
-    IAccountCategoryRequest
+    IAccountClassification,
+    IAccountClassificationRequest
 >({
-    url: '/api/v1/account-category',
-    baseKey: 'account-category',
+    url: '/api/v1/account-classification',
+    baseKey: 'account-classification',
 })
 
 export const {
@@ -29,9 +29,9 @@ export const {
 } = apiCrudHooks
 
 const { API, route } = createAPIRepository<
-    IAccountCategory,
-    IAccountCategoryRequest
->('/api/v1/account-category')
+    IAccountClassification,
+    IAccountClassificationRequest
+>('/api/v1/account-classification')
 export const deleteMany = async (ids: TEntityId[]) => {
     const endpoint = `${route}/bulk-delete`
     await API.delete<void>(endpoint, { ids })
@@ -39,12 +39,12 @@ export const deleteMany = async (ids: TEntityId[]) => {
 
 export const exportAll = async () => {
     const url = `${route}/export`
-    await downloadFile(url, 'all_banks_export.xlsx')
+    await downloadFile(url, 'all_account-classification_export.xlsx')
 }
 
 export const exportAllFiltered = async (filters?: string) => {
     const url = `${route}/export-search?filter=${filters || ''}`
-    await downloadFile(url, 'filtered_account_export.xlsx')
+    await downloadFile(url, 'filtered_account-classification_export.xlsx')
 }
 
 export const exportSelected = async (ids: TEntityId[]) => {
@@ -56,5 +56,5 @@ export const exportSelected = async (ids: TEntityId[]) => {
         { skipNull: true }
     )
 
-    await downloadFile(url, 'selected_banks_export.xlsx')
+    await downloadFile(url, 'selected_account-classification_export.xlsx')
 }

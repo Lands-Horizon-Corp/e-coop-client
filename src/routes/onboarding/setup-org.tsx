@@ -1,5 +1,7 @@
-import {OrganizationForm} from '@/modules/organization'
 import { createFileRoute } from '@tanstack/react-router'
+
+import { OrganizationForm } from '@/modules/organization'
+
 export const Route = createFileRoute('/onboarding/setup-org')({
     component: RouteComponent,
 })

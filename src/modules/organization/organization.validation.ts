@@ -26,9 +26,8 @@ export const OrganizationSchema = z.object({
             message: 'Invalid email',
         }),
     contact_number: z.string().optional(),
-    description: z
-        .string()
-        .max(200, 'Description must be less than 200 characters')
+    description: descriptionSchema
+        .transform(descriptionTransformerSanitizer)
         .optional(),
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
