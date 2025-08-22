@@ -1,12 +1,8 @@
 import z from 'zod'
 
-import {
-    IBaseEntityMeta,
-    IPaginatedResult,
-    TEntityId,
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+
+import { MemberGroupSchema } from './member-group.validation'
 
 export interface IMemberGroup extends IBaseEntityMeta {
     id: TEntityId
@@ -15,25 +11,8 @@ export interface IMemberGroup extends IBaseEntityMeta {
     description: string
 }
 
-export interface IMemberGroupRequest {
-    id?: TEntityId
-
-    name: string
-    description: string
-
-    // organization_id: TEntityId
-    // branch_id: TEntityId
-}
+export type IMemberGroupRequest = z.infer<typeof MemberGroupSchema>
+// organization_id: TEntityId
+// branch_id: TEntityId
 
 export interface IMemberGroupPaginated extends IPaginatedResult<IMemberGroup> {}
-export const createMemberGroupSchema = z.object({
-    id: z.string().optional(),
-    name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
-    description: descriptionSchema
-        .max(500, 'Description is too long')
-        .transform(descriptionTransformerSanitizer),
-    // organization_id: z.string().min(1, 'Organization ID is required'),
-    // branch_id: z.string().min(1, 'Branch ID is required'),
-})
-
-export type TCreateMemberGroupSchema = z.infer<typeof createMemberGroupSchema>

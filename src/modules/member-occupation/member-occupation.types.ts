@@ -1,3 +1,5 @@
+import z from 'zod'
+
 import {
     IAuditable,
     IPaginatedResult,
@@ -6,13 +8,7 @@ import {
 } from '@/types/common'
 
 import { IBranch } from '../branch'
-
-export interface IMemberOccupationRequest {
-    name: string
-    description: string
-
-    // branch_id: TEntityId
-}
+import { MemberOccupationSchema } from './member-occupation.validation'
 
 export interface IMemberOccupation extends ITimeStamps, IAuditable {
     id: TEntityId
@@ -23,6 +19,8 @@ export interface IMemberOccupation extends ITimeStamps, IAuditable {
     name: string
     description: string
 }
+
+export type IMemberOccupationRequest = z.infer<typeof MemberOccupationSchema>
 
 export interface IMemberOccupationPaginated
     extends IPaginatedResult<IMemberOccupation> {}
