@@ -15,6 +15,8 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
+import JoinBranchWithCodeFormModal from '../../organization-forms/join-organization-form'
+
 const Organization = () => {
     const {
         currentAuth: { user },
@@ -50,13 +52,13 @@ const Organization = () => {
 
     return (
         <div className="w-full py-2">
-            {/* <JoinBranchWithCodeFormModal
+            <JoinBranchWithCodeFormModal
                 defaultCode={invitation_code}
                 open={onOpenJoinWithCodeModal}
                 onOpenChange={setOpenJoinWithCodeModal}
                 title="Enter Code to Join a Branch"
                 titleClassName="text-lg font-semibold"
-            /> */}
+            />
             <div className="flex">
                 <div className="my-2 grow">
                     <h1 className="text-2xl font-bold text-muted-foreground"></h1>

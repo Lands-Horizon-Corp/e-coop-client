@@ -235,3 +235,15 @@ export const useCanJoinMember = ({
         },
     })
 }
+
+export const useJoinWithInvitationCode = ({
+    options,
+}: {
+    options?: UseMutationOptions<IUserOrganization, Error, string>
+}) => {
+    return useMutation<IUserOrganization, Error, string>({
+        mutationKey: ['user-organization', 'join-with-code'],
+        mutationFn: (code) => joinWithInvitationCode(code),
+        ...options,
+    })
+}

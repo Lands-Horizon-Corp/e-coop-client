@@ -1,9 +1,14 @@
+import { useState } from 'react'
+
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import qs from 'query-string'
-import { useState } from 'react'
 import { toast } from 'sonner'
 
+import { cn } from '@/helpers/tw-utils'
+import { useVerifyInvitationCode } from '@/modules/invitation-code'
+import { IOrganizationWithPolicies } from '@/modules/organization'
+import { useJoinWithInvitationCode } from '@/modules/user-organization'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
@@ -18,18 +23,13 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import OrganizationPolicies from '@/components/policies'
 import { QrCodeScannerModal } from '@/components/qrcode-scanner'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { Input } from '@/components/ui/input'
-
-// import { useInvitationCodeByCode } from '@/hooks/api-hooks/use-invitation-cod'
-// import { useJoinWithCode } from '@/hooks/api-hooks/use-user-organization'
-import { useModalState } from '@/hooks/use-modal-state'
-
-import { cn } from '@/helpers/tw-utils'
-import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { PlainTextEditor } from '@/components/ui/text-editor'
-import { IOrganizationWithPolicies } from '@/modules/organization'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 const JoinBranchWithCodeFormModal = ({
     title,
@@ -50,21 +50,18 @@ const JoinBranchWithCodeFormModal = ({
         data,
         isPending,
         error: codeSearchError,
-    } = useInvitationCodeByCode({
-        code: code as string,
-        enabled: !!code,
-        retry: 0,
-    })
+    } = useVerifyInvitationCode(code as string)
 
     const {
         mutate: joinWithCode,
         isPending: IsLoadingJoining,
         error: joinError,
-    } = useJoinWithCode({
-        onSuccess: () => {
-            navigate({ to: '/onboarding' as string })
+    } = useJoinWithInvitationCode({
+        options: {
+            onSuccess: () => {
+                navigate({ to: '/onboarding' as string })
+            },
         },
-        showMessage: true,
     })
 
     const handleSubmit = async () => {
@@ -98,14 +95,13 @@ const JoinBranchWithCodeFormModal = ({
     return (
         <Modal
             title={title}
-            hideCloseButton
             description={description}
             titleClassName="text-2xl"
             className={cn('w-[44rem]', className)}
             onOpenChange={onOpenChange}
             {...props}
         >
-            {/* <QrCodeScannerModal
+            <QrCodeScannerModal
                 {...scanModal}
                 qrScannerProps={{
                     disableDecode: true,
@@ -115,7 +111,7 @@ const JoinBranchWithCodeFormModal = ({
                         handleScanComplete(data[0].rawValue)
                     },
                 }}
-            /> */}
+            />
             <div className="grid grid-cols-1 gap-y-2">
                 <fieldset
                     disabled={isLoading}
@@ -264,7 +260,15 @@ const JoinBranchWithCodeFormModal = ({
                         </div>
                     </GradientBackground>
                 )}
-                <FormErrorMessage errorMessage={error} />
+                <FormErrorMessage
+                    errorMessage={
+                        error
+                            ? typeof error === 'string'
+                                ? error
+                                : error.message
+                            : undefined
+                    }
+                />
             </div>
         </Modal>
     )

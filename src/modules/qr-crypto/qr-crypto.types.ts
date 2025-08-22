@@ -1,4 +1,4 @@
-import { TEntityId } from '../types/common'
+import { TEntityId } from '@/types'
 
 // Type of QR content identifier
 export type TQrContentType =
@@ -58,3 +58,11 @@ export interface IQrInvitationCodeDecodedResult
 
 export interface IQRMemberProfileDecodedResult
     extends IQrScanResult<IQRMemberProfile, 'member-qr'> {}
+
+export interface IOperationCallbacks<
+    TDataSuccess = unknown,
+    TRawError = unknown,
+> {
+    onSuccess?: (data: TDataSuccess) => void
+    onError?: (error: string, rawError?: TRawError) => void
+}
