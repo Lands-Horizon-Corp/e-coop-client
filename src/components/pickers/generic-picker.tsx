@@ -89,7 +89,7 @@ const GenericPicker = <T extends { id: TEntityId }>({
                             placeholder={
                                 searchPlaceHolder ?? 'Search anything...'
                             }
-                            className="flex h-11 w-full focus-visible:ring-0 px-0 border-0 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex h-11 w-full  focus-visible:ring-0 px-0 border-0 !bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                         />
                         {otherSearchInputChild}
                     </div>
