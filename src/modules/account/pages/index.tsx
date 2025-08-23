@@ -3,6 +3,7 @@ import {
     AccountTableAction,
     AccountsTable,
 } from '@/modules/account'
+import { AccountTag } from '@/modules/account-tag'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -24,7 +25,7 @@ export const Account = () => {
                         createActionProps: {
                             onClick: () => createModal.onOpenChange(true),
                         },
-                        // otherActionLeft: <AccountTag />,
+                        otherActionLeft: <AccountTag />,
                     }}
                     actionComponent={(prop) => <AccountTableAction {...prop} />}
                 />

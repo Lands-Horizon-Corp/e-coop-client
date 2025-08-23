@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { FinancialStatementTypeEnum } from '@/types/coop-types/financial-statement-definition'
+import { FinancialStatementTypeEnum } from '@/modules/account'
 
 import { Badge } from '@/components/ui/badge'
 

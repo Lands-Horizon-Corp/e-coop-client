@@ -32,6 +32,7 @@ import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgenticati
 
 import AccountCategoryComboBox from '@/components/comboboxes/account-category-combobox'
 import AccountClassificationComboBox from '@/components/comboboxes/account-classification-combobox'
+import IconCombobox from '@/components/comboboxes/icon-combobox'
 // import AccountCategoryComboBox from '@/components/comboboxes/account-category-combobox'
 // import AccountClassificationComboBox from '@/components/comboboxes/account-classification-combobox'
 // import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -45,6 +46,7 @@ import {
     LoadingSpinnerIcon,
     MoneyBagIcon,
     MoneyIcon,
+    TIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import TextEditor from '@/components/text-editor'
@@ -263,7 +265,7 @@ const AccountCreateUpdateForm = ({
                                 />
                             )}
                         />
-                        {/* <FormFieldWrapper
+                        <FormFieldWrapper
                             control={form.control}
                             name="icon"
                             label="Icon"
@@ -275,7 +277,7 @@ const AccountCreateUpdateForm = ({
                                     value={field.value as TIcon}
                                 />
                             )}
-                        /> */}
+                        />
                         <FormFieldWrapper
                             control={form.control}
                             name="account_category_id"

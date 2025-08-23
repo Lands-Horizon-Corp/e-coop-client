@@ -299,3 +299,12 @@ export enum AccountExclusiveSettingTypeEnum {
     CashOnHand = 'Cash on Hand',
     PaidUpShareCapital = 'Paid up share capital',
 }
+
+export type TPaginatedAccountHookMode =
+    | 'withdraw'
+    | 'deposit'
+    | 'journal'
+    | 'payment'
+    | 'adjustment'
+    | 'journal-voucher'
+    | 'check-voucher'

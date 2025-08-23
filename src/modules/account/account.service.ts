@@ -1,15 +1,26 @@
-import { MutationOptions, useMutation } from '@tanstack/react-query'
+import { MutationOptions, useMutation, useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
 import { downloadFile } from '@/helpers/common-helper'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
 
 import { TEntityId, UpdateIndexRequest } from '@/types'
 
-import { IAccount, IAccountRequest } from './account.types'
+import {
+    IAccount,
+    IAccountPaginated,
+    IAccountRequest,
+    TPaginatedAccountHookMode,
+} from './account.types'
 
-const { apiCrudHooks } = createDataLayerFactory<IAccount, IAccountRequest>({
+const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
+    IAccount,
+    IAccountRequest
+>({
     url: '/api/v1/account',
     baseKey: 'account',
 })
@@ -22,7 +33,6 @@ export const {
     useUpdateById,
     useGetPaginated,
 } = apiCrudHooks
-
 const { API, route } = createAPIRepository<IAccount, IAccountRequest>(
     '/api/v1/account'
 )
@@ -90,6 +100,29 @@ export const useDeleteGLAccount = (
     return useMutation<IAccount, Error, TEntityId>({
         mutationFn: deleteGLAccount,
         mutationKey: ['delete-gl-account'],
+        ...options,
+    })
+}
+
+export const useFilteredPaginatedAccount = ({
+    mode,
+    options,
+    query,
+}: {
+    mode?: TPaginatedAccountHookMode
+    query?: Record<string, unknown>
+    options?: HookQueryOptions<IAccountPaginated, Error>
+}) => {
+    return useQuery<IAccountPaginated, Error>({
+        queryKey: ['account', 'resource-query', mode, query],
+        queryFn: async () => {
+            let url: string | undefined
+            const targetUrl = mode ? `${mode}/search` : 'search'
+            return apiCrudService.getPaginated<IAccount>({
+                url: url ? `${apiCrudService.route}/${targetUrl}` : undefined,
+                query,
+            })
+        },
         ...options,
     })
 }

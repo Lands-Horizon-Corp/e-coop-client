@@ -8,8 +8,6 @@ const paramSchema = z.object({
 })
 
 export const Route = createFileRoute('/onboarding/organization/')({
-    component: () => {
-        return <Organization />
-    },
+    component: () => <Organization />,
     validateSearch: (search) => paramSchema.parse(search),
 })
