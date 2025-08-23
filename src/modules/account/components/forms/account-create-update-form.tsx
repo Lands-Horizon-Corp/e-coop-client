@@ -29,6 +29,7 @@ import {
     useUpdateById,
 } from '@/modules/account'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import AccountCategoryComboBox from '@/components/comboboxes/account-category-combobox'
 import AccountClassificationComboBox from '@/components/comboboxes/account-classification-combobox'
@@ -231,7 +232,7 @@ const AccountCreateUpdateForm = ({
                                 />
                             )}
                         />
-                        {/* <FormFieldWrapper
+                        <FormFieldWrapper
                             control={form.control}
                             name="member_type_id"
                             label="Member Type"
@@ -246,7 +247,7 @@ const AccountCreateUpdateForm = ({
                                     }
                                 />
                             )}
-                        /> */}
+                        />
 
                         <FormFieldWrapper
                             control={form.control}
