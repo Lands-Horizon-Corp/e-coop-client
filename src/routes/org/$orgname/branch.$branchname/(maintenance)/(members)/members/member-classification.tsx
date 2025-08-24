@@ -3,8 +3,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { MemberClassificationCreateUpdateFormModal } from '@/modules/member-classification/components/member-classification-create-update-form'
-import MemberClassificationTable from '@/modules/member-classification/components/member-classification-table'
-import MemberClassificationAction from '@/modules/member-classification/components/member-classification-table/row-action-context'
+import MemberClassificationTable from '@/modules/member-classification/components/tables/member-classification-table'
+import MemberClassificationAction from '@/modules/member-classification/components/tables/member-classification-table/row-action-context'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -29,19 +29,19 @@ function RouteComponent() {
 
     useSubscribe(`member_classification.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-classification', 'resource-query'],
+            queryKey: ['member-classification', 'paginated'],
         })
     })
 
     useSubscribe(`member_classification.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-classification', 'resource-query'],
+            queryKey: ['member-classification', 'paginated'],
         })
     })
 
     useSubscribe(`member_classification.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-classification', 'resource-query'],
+            queryKey: ['member-classification', 'paginated'],
         })
     })
 

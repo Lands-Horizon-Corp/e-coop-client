@@ -1,5 +1,3 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IPaginatedResult,
@@ -7,25 +5,9 @@ import {
     TCivilStatus,
     TEntityId,
     TGeneralStatus,
-    civilStatusSchema,
-    generalStatusSchema,
-    stringDateSchema,
-} from '@/types/common'
-import {
-    birthDateSchema,
-    contactNumberSchema,
-    emailSchema,
-    entityIdSchema,
-    firstNameSchema,
-    lastNameSchema,
-    middleNameSchema,
-    passwordSchema,
-    permanentAddressSchema,
-    userNameSchema,
-} from '@/types/common'
-import { isBefore, startOfDay } from 'date-fns'
+} from '@/types'
 
-import { ISignUpRequest } from '../auth'
+import { ISignUpRequest } from '../authentication'
 import { IBranch } from '../branch'
 import { IMedia } from '../media/media.types'
 import {
@@ -59,6 +41,7 @@ import {
     IMemberGovernmentBenefitRequest,
 } from '../member-government-benefit/member-government-benefit.types'
 import { IMemberGroup } from '../member-group/member-group.types'
+import { IMemberIncome } from '../member-income'
 import {
     IMemberJointAccount,
     IMemberJointAccountRequest,
@@ -71,7 +54,7 @@ import {
 } from '../member-relative-account/member-relative-account.types'
 import { IMemberType } from '../member-type/member-type.types'
 import { IOrganization } from '../organization'
-import { IQrScanResult } from '../qr-result'
+import { IQrScanResult } from '../qr-crypto'
 import { IUserBase } from '../user/user.types'
 
 // For creation of member user account
@@ -280,154 +263,53 @@ export interface IMemberIncomeRequest {
     release_date: string
 }
 
-// LATEST FROM ERD
-export interface IMemberIncome extends ITimeStamps {
-    id: TEntityId
+// THIS IS ONLY USE FOR MEMBER PROFILE UPDATE
+// 📌 Identity & Personal Info
+export interface IMemberProfilePersonalInfoRequest {
+    first_name: string
+    middle_name?: string
+    last_name: string
+    full_name?: string
+    suffix?: string
+    member_gender_id?: TEntityId
+    birthdate?: string
+    contact_number?: string
+    business_contact_number?: string
 
-    member_profile_id: TEntityId
-    member_profile: IMemberProfile
+    civil_status: TCivilStatus
 
-    media_id?: TEntityId
-    media?: IMedia
+    occupation_id?: TEntityId
 
-    branch_id?: TEntityId
-    branch?: IBranch
+    business_address?: string
+    business_contact?: string
 
-    name: string
-    amount: number
-    release_date: string
+    notes?: string
+    description?: string
 }
 
-export const baseMemberAccountSchema = z.object({
-    id: entityIdSchema.optional(),
-    email: emailSchema,
-    username: userNameSchema,
-    firstName: firstNameSchema,
-    middleName: middleNameSchema.optional(),
-    lastName: lastNameSchema,
-    birthDate: birthDateSchema,
-    companyId: entityIdSchema,
-    contactNumber: contactNumberSchema,
-    permanentAddress: permanentAddressSchema,
-})
+// 🏛️ Membership Info
+export interface IMemberProfileMembershipInfoRequest {
+    passbook?: string
+    old_reference_id?: string
 
-export const createMemberAccountSchema = baseMemberAccountSchema.extend({
-    mode: z.literal('create'),
-    password: passwordSchema,
-    confirmPassword: passwordSchema,
-})
+    status?: TGeneralStatus
 
-export const updateMemberAccountSchema = baseMemberAccountSchema.extend({
-    mode: z.literal('update'),
-    id: entityIdSchema.optional(),
-    password: passwordSchema.optional(),
-    confirmPassword: passwordSchema.optional(),
-})
+    member_type_id?: TEntityId
+    member_group_id?: TEntityId
+    member_classification_id?: TEntityId
+    member_center_id?: TEntityId
 
-export const memberCreateUpdateAccountSchema = z
-    .discriminatedUnion('mode', [
-        createMemberAccountSchema,
-        updateMemberAccountSchema,
-    ])
-    .superRefine((data, ctx) => {
-        if (data.password || data.confirmPassword) {
-            if (data.password !== data.confirmPassword) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ['confirmPassword'],
-                    message: 'Passwords do not match.',
-                })
-            }
-        }
-    })
+    recruited_by_member_profile_id?: TEntityId
 
-export const withNewUserAccountSchema = z.discriminatedUnion(
-    'create_new_user',
-    [
-        z.object({
-            create_new_user: z.literal(false),
-        }),
-        z.object({
-            create_new_user: z.literal(true),
-            new_user_info: z
-                .object({
-                    user_name: z.string(),
-                    email: emailSchema,
-                    password: passwordSchema,
-                })
-                .optional(),
-        }),
-    ]
-)
+    is_mutual_fund_member?: boolean
+    is_micro_finance_member?: boolean
+}
 
-export const quickCreateMemberProfileSchema = z
-    .object({
-        old_reference_id: z.string().optional(),
-        passbook: z.string().optional(),
+export interface IMemberProfileAccountRequest {
+    user_id?: TEntityId
+}
 
-        organization_id: entityIdSchema.optional(),
-        branch_id: entityIdSchema.optional(),
-
-        first_name: z.string().min(1, 'First name is required'),
-        middle_name: z.string().optional(),
-        last_name: z.string().min(1, 'Last name is required'),
-        full_name: z.string().optional(),
-        suffix: z.string().max(15).optional(),
-        contact_number: z.string().optional(),
-        birthdate: stringDateSchema
-            .refine(
-                (val) => {
-                    const date = startOfDay(new Date(val))
-                    const now = startOfDay(new Date())
-                    return isBefore(date, now)
-                },
-                { message: 'Birthdate must be in the past' }
-            )
-            .transform((val) => new Date(val).toISOString()),
-        member_gender_id: entityIdSchema.optional(),
-
-        civil_status: civilStatusSchema,
-        occupation_id: entityIdSchema.optional(),
-
-        status: generalStatusSchema.default('verified'),
-
-        is_mutual_fund_member: z.boolean().default(false),
-        is_micro_finance_member: z.boolean().default(false),
-
-        member_type_id: entityIdSchema,
-    })
-    .and(withNewUserAccountSchema)
-
-export const withPassword = z.discriminatedUnion('with_password', [
-    z.object({
-        with_password: z.literal(false),
-        password: z.preprocess(
-            (val) =>
-                typeof val === 'string' && val.length === 0 ? undefined : val,
-            passwordSchema.optional()
-        ),
-    }),
-    z.object({ with_password: z.literal(true), password: passwordSchema }),
-])
-
-export const memberProfileUserAccountSchema = z
-    .object({
-        email: emailSchema,
-        user_name: userNameSchema,
-        first_name: firstNameSchema,
-        middle_name: middleNameSchema,
-        last_name: lastNameSchema,
-        full_name: z.string().min(1, 'full name is required'),
-        suffix: z.string().optional(),
-
-        birthdate: stringDateSchema.refine(
-            (val) => {
-                const date = startOfDay(new Date(val))
-                const now = startOfDay(new Date())
-                return isBefore(date, now)
-            },
-            { message: 'Birthdate must be in the past' }
-        ),
-        contact_number: contactNumberSchema,
-    })
-    .and(withPassword)
+export interface IMemberProfileMediasRequest {
+    media_id?: TEntityId
+    signature_media_id?: TEntityId
+}

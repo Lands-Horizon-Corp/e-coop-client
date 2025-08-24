@@ -1,13 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { IPaginatedResponse } from '@/providers/repositories/api-crud-factory'
 import {
     HookMutationOptions,
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
 
-import { TAPIQueryOptions, TEntityId } from '@/types'
+import { IPaginatedResult, TAPIQueryOptions, TEntityId } from '@/types'
 
 import { ITimesheet, ITimesheetInOutRequest } from './timesheet.types'
 
@@ -47,10 +46,10 @@ export const useGetPaginatedFootstep = ({
 }: {
     mode: TTimesheetHookMode
     query?: TAPIQueryOptions
-    options?: HookQueryOptions<IPaginatedResponse<ITimesheet>>
+    options?: HookQueryOptions<IPaginatedResult<ITimesheet>>
     userOrganizationId?: TEntityId
 }) => {
-    return useQuery<IPaginatedResponse<ITimesheet>>({
+    return useQuery<IPaginatedResult<ITimesheet>>({
         ...options,
         queryKey: ['timesheet', 'paginated', query, mode],
         queryFn: async () => {

@@ -159,7 +159,7 @@ const MemberTypeTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['member-type', 'resource-query'],
+                                queryKey: ['member-type', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             MemberTypeAPI.deleteMany({

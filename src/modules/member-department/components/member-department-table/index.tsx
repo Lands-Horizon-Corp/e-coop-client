@@ -160,10 +160,7 @@ const MemberDepartmentTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: [
-                                    'member-department',
-                                    'resource-query',
-                                ],
+                                queryKey: ['member-department', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             MemberDepartmentAPI.deleteMany({

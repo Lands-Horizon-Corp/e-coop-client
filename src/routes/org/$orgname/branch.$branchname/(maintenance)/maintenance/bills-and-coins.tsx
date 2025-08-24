@@ -28,19 +28,19 @@ function RouteComponent() {
 
     useSubscribe(`bills_and_coins.created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['bills-and-coins', 'resource-query'],
+            queryKey: ['bills-and-coins', 'paginated'],
         })
     )
 
     useSubscribe(`bills_and_coins.updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['bills-and-coins', 'resource-query'],
+            queryKey: ['bills-and-coins', 'paginated'],
         })
     )
 
     useSubscribe(`bills_and_coins.deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['bills-and-coins', 'resource-query'],
+            queryKey: ['bills-and-coins', 'paginated'],
         })
     )
 

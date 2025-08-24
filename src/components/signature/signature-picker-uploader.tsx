@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
 
-import { useUploadMedia } from '@/hooks/api-hooks/use-media'
-
-import { IMedia } from '@/types'
+import { calculateUploadProgress } from '@/helpers/axios-helpers/axios-progress-helper'
+import { IMedia, useUploadMedia } from '@/modules/media'
 
 import Signature from '.'
 import ImageDisplay from '../image-display'
@@ -26,11 +25,18 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
     )
 
     const { isPending: isUploading, mutate: uploadSignature } = useUploadMedia({
-        onSuccess: (media) => {
-            onSignatureUpload?.(media)
+        options: {
+            onSuccess: (media) => {
+                onSignatureUpload?.(media)
+            },
         },
-        onUploadProgressChange: (progress) => setProgress(progress),
-        onUploadETAChange: (ETA) => setEta(ETA),
+        onProgress: (progressEvent) => {
+            const calculated = calculateUploadProgress(progressEvent)
+            if (!calculated) return
+
+            setProgress(calculated.progress)
+            setEta(calculated.etaFormatted)
+        },
     })
 
     return (
@@ -51,7 +57,7 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
                     <Button
                         type="button"
                         disabled={isUploading}
-                        onClick={() => uploadSignature(file)}
+                        onClick={() => uploadSignature({ file })}
                         className="w-full"
                     >
                         {isUploading ? <LoadingSpinner /> : 'Upload Signature'}

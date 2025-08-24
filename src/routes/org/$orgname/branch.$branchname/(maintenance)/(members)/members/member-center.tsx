@@ -3,8 +3,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { MemberCenterCreateUpdateFormModal } from '@/modules/member-center/components/member-center-create-update-form'
-import MemberCenterTable from '@/modules/member-center/components/member-center-table'
-import MemberCenterAction from '@/modules/member-center/components/member-center-table/row-action-context'
+import MemberCenterTable from '@/modules/member-center/components/tables/member-center-table'
+import MemberCenterAction from '@/modules/member-center/components/tables/member-center-table/row-action-context'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -29,19 +29,19 @@ function RouteComponent() {
 
     useSubscribe(`member_center.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-center', 'resource-query'],
+            queryKey: ['member-center', 'paginated'],
         })
     })
 
     useSubscribe(`member_center.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-center', 'resource-query'],
+            queryKey: ['member-center', 'paginated'],
         })
     })
 
     useSubscribe(`member_center.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-center', 'resource-query'],
+            queryKey: ['member-center', 'paginated'],
         })
     })
 

@@ -8,7 +8,7 @@ import {
 
 import MultiSelectFilter, {
     IMultiSelectOption,
-} from '@/components/multi-select-filter'
+} from '@/components/filters/multi-select-filter'
 
 type AllowedMode<T extends keyof typeof filterModeMap> =
     (typeof filterModeMap)[T][number]['value']

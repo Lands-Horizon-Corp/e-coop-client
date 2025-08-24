@@ -1,12 +1,4 @@
-import z from 'zod'
-
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-    entityIdSchema,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IMemberGroup } from '../member-group/member-group.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
@@ -16,10 +8,7 @@ export interface IMemberGroupHistoryRequest {
     member_group_id: TEntityId
 }
 
-export interface IMemberGroupHistoryResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+export interface IMemberGroupHistory extends IBaseEntityMeta {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile?: IMemberProfile
@@ -27,7 +16,5 @@ export interface IMemberGroupHistoryResponse
     member_group?: IMemberGroup
 }
 
-export const memberGroupHistoryRequestSchema = z.object({
-    member_profile_id: entityIdSchema,
-    member_group_id: entityIdSchema,
-})
+export interface IMemberGroupHistoryPaginated
+    extends IPaginatedResult<IMemberGroupHistory> {}

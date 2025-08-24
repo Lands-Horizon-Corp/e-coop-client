@@ -155,7 +155,7 @@ const BankTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['bank', 'resource-query'],
+                                queryKey: ['bank', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             BankAPI.deleteMany({

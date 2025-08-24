@@ -1,18 +1,21 @@
 import qs from 'query-string'
 
 import type { TAPIQueryOptions } from '@/types/api'
-import type { TEntityId } from '@/types/common'
+import type { IPaginatedResult, TEntityId } from '@/types/common'
 
 import API from '../api'
-import { IPaginatedResponse } from './data-layer-factory'
 
 export interface IAPIRepository<TResponse, TRequest> {
     route: string
-    create: (args: { payload: TRequest; url?: string }) => Promise<TResponse>
+    create: <TReq = TRequest, TDat = TResponse>(args: {
+        payload: TReq
+        url?: string
+    }) => Promise<TDat>
     updateById: <TUpdateData = TResponse, TUpdatePayload = TRequest>(args: {
         id: TEntityId
         payload: TUpdatePayload
         url?: string
+        targetUrl?: string
     }) => Promise<TUpdateData>
     getById: <TGetResponse = TResponse>(args: {
         id: TEntityId
@@ -30,24 +33,21 @@ export interface IAPIRepository<TResponse, TRequest> {
     getPaginated: <TData = TResponse>(args: {
         query?: TAPIQueryOptions
         url?: string
-    }) => Promise<IPaginatedResponse<TData>>
+    }) => Promise<IPaginatedResult<TData>>
     API: typeof API
 }
 
 export const createAPIRepository = <TResponse, TRequest>(
     route: string
 ): IAPIRepository<TResponse, TRequest> => {
-    const create = async ({
+    const create = async <TDat = TResponse, TReq = TRequest>({
         payload,
         url,
     }: {
-        payload: TRequest
+        payload: TReq
         url?: string
     }) => {
-        const response = await API.post<TRequest, TResponse>(
-            url || route,
-            payload
-        )
+        const response = await API.post<TReq, TDat>(url || route, payload)
         return response.data
     }
 
@@ -58,13 +58,15 @@ export const createAPIRepository = <TResponse, TRequest>(
         id,
         payload,
         url,
+        targetUrl = '',
     }: {
         id: TEntityId
         payload: TUpdatePayload
         url?: string
+        targetUrl?: string
     }) => {
         const response = await API.put<TUpdatePayload, TUpdateData>(
-            url || `${route}/${id}`,
+            url || `${route}/${id}${targetUrl}`,
             payload
         )
         return response.data
@@ -129,7 +131,7 @@ export const createAPIRepository = <TResponse, TRequest>(
             { skipNull: true }
         )
 
-        const response = await API.get<IPaginatedResponse<TData>>(newUrl)
+        const response = await API.get<IPaginatedResult<TData>>(newUrl)
         return response.data
     }
 

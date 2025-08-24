@@ -28,19 +28,19 @@ function RouteComponent() {
 
     useSubscribe(`member_type.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-type', 'resource-query'],
+            queryKey: ['member-type', 'paginated'],
         })
     })
 
     useSubscribe(`member_type.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-type', 'resource-query'],
+            queryKey: ['member-type', 'paginated'],
         })
     })
 
     useSubscribe(`member_type.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-type', 'resource-query'],
+            queryKey: ['member-type', 'paginated'],
         })
     })
 

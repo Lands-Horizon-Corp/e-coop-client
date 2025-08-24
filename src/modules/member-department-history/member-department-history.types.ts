@@ -1,12 +1,4 @@
-import z from 'zod'
-
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-    entityIdSchema,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IMemberDepartment } from '../member-department/member-department.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
@@ -18,10 +10,7 @@ export interface IMemberDepartmentHistoryRequest {
     organization_id: TEntityId
 }
 
-export interface IMemberDepartmentHistoryResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+export interface IMemberDepartmentHistory extends IBaseEntityMeta {
     id: TEntityId
     member_department_id: TEntityId
     member_department?: IMemberDepartment
@@ -29,9 +18,5 @@ export interface IMemberDepartmentHistoryResponse
     member_profile?: IMemberProfile
 }
 
-export const memberDepartmentHistoryRequestSchema = z.object({
-    member_department_id: entityIdSchema,
-    member_profile_id: entityIdSchema,
-    branch_id: entityIdSchema,
-    organization_id: entityIdSchema,
-})
+export interface IMemberDepartmentHistoryPaginated
+    extends IPaginatedResult<IMemberDepartmentHistory> {}

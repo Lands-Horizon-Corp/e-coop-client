@@ -75,7 +75,7 @@ export const useFilteredPaginatedFootsteps = ({
             }
 
             return FootstepAPI.getPaginated<IFootstep>({
-                url: `${FootstepAPI.route}/${url}`,
+                url: `${FootstepAPI.route}/${url}/search`,
                 query,
             })
         },

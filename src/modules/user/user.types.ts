@@ -3,7 +3,7 @@ import { IAuditable, ITimeStamps, TEntityId, TUserType } from '@/types/common'
 import { IFootstep } from '../footstep'
 import { IMedia } from '../media/media.types'
 import { INotification } from '../notification'
-import { IQrScanResult } from '../qr-result'
+import { IQrScanResult } from '../qr-crypto'
 import { IUserOrganization } from '../user-organization'
 
 // api/v1/authentication/current/user

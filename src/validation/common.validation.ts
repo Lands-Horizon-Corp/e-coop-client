@@ -112,5 +112,3 @@ export const civilStatusSchema = z.enum(CIVIL_STATUS) //TODO: MOVE TO member pro
 export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT) // MOVE TO member education attainment module
 
 export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP) // Member profile
-
-export const TEntityId = z.string()

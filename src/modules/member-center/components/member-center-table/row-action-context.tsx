@@ -8,9 +8,9 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { useDeleteById } from '../../member-center.service'
-import { IMemberCenter } from '../../member-center.types'
-import { MemberCenterCreateUpdateFormModal } from '../member-center-create-update-form'
+import { useDeleteById } from '../../../member-center.service'
+import { IMemberCenter } from '../../../member-center.types'
+import { MemberCenterCreateUpdateFormModal } from '../../member-center-create-update-form'
 import { IMemberCenterTableActionComponentProp } from './columns'
 
 interface UseMemberCenterActionsProps {

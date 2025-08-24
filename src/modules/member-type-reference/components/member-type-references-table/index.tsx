@@ -170,7 +170,7 @@ const MemberTypeReferenceTable = ({
                             queryClient.invalidateQueries({
                                 queryKey: [
                                     'member-type-reference',
-                                    'resource-query',
+                                    'paginated',
                                 ],
                             }),
                         onDelete: (selectedData) =>

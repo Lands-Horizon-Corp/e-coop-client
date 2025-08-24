@@ -1,13 +1,8 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IMedia } from '../media/media.types'
@@ -20,7 +15,7 @@ export interface IMemberIncomeRequest {
     release_date?: string
 }
 
-export interface IMemberIncomeResponse
+export interface IMemberIncome
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
@@ -33,18 +28,3 @@ export interface IMemberIncomeResponse
     amount: number
     release_date?: string
 }
-
-export const memberIncomeRequestSchema = z.object({
-    media_id: entityIdSchema.optional(),
-    name: z.string().min(1).max(255),
-    amount: z.number(),
-    release_date: z.string().datetime().optional(),
-})
-
-export const memberIncomeSchema = z.object({
-    id: entityIdSchema.optional(),
-    name: z.string().min(1, 'Name is required'),
-    amount: z.coerce.number().min(0, 'Amount must be non-negative'),
-    date: z.string().min(1, 'Date is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-})

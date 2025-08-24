@@ -159,7 +159,7 @@ const BillsAndCoinsTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['bills-and-coins', 'resource-query'],
+                                queryKey: ['bills-and-coins', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             BillAndCoinsAPI.deleteMany({

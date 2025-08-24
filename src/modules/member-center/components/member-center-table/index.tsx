@@ -22,8 +22,11 @@ import useDataTableState from '@/components/data-table/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { MemberCenterAPI, useGetPaginated } from '../../member-center.service'
-import { IMemberCenter } from '../../member-center.types'
+import {
+    MemberCenterAPI,
+    useGetPaginated,
+} from '../../../member-center.service'
+import { IMemberCenter } from '../../../member-center.types'
 import memberCenterColumns, {
     IMemberCenterTableColumnProps,
     memberCenterGlobalSearchTargets,
@@ -157,7 +160,7 @@ const MemberCenterTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['member-center', 'resource-query'],
+                                queryKey: ['member-center', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             MemberCenterAPI.deleteMany({

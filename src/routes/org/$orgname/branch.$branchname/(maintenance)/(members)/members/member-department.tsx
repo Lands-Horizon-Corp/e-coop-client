@@ -28,19 +28,19 @@ function RouteComponent() {
 
     useSubscribe(`member_department.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-department', 'resource-query'],
+            queryKey: ['member-department', 'paginated'],
         })
     })
 
     useSubscribe(`member_department.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-department', 'resource-query'],
+            queryKey: ['member-department', 'paginated'],
         })
     })
 
     useSubscribe(`member_department.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-department', 'resource-query'],
+            queryKey: ['member-department', 'paginated'],
         })
     })
 

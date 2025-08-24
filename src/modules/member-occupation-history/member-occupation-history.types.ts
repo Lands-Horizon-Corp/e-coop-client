@@ -1,11 +1,9 @@
-import z from 'zod'
-
 import {
     IAuditable,
     IOrgBranchIdentity,
+    IPaginatedResult,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IMemberOccupation } from '../member-occupation/member-occupation.types'
@@ -16,7 +14,7 @@ export interface IMemberOccupationHistoryRequest {
     member_occupation_id: TEntityId
 }
 
-export interface IMemberOccupationHistoryResponse
+export interface IMemberOccupationHistory
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
@@ -27,7 +25,5 @@ export interface IMemberOccupationHistoryResponse
     member_occupation?: IMemberOccupation
 }
 
-export const memberOccupationHistoryRequestSchema = z.object({
-    member_profile_id: entityIdSchema,
-    member_occupation_id: entityIdSchema,
-})
+export interface IMemberOccupationHistoryPaginated
+    extends IPaginatedResult<IMemberOccupationHistory> {}
