@@ -12,11 +12,13 @@ export const withToastCallbacks = <TData, TError>({
     textError = 'Failed',
     onSuccess,
     onError,
-}: ToastCallbackMiddleware<TData, TError>) => {
+}: ToastCallbackMiddleware<TData, TError> = {}) => {
     return {
         onSuccess: (data: TData) => {
             const successMessage =
-                typeof textSuccess === 'function' ? textSuccess(data) : textSuccess
+                typeof textSuccess === 'function'
+                    ? textSuccess(data)
+                    : textSuccess
             toast.success(successMessage)
             onSuccess?.(data)
         },
