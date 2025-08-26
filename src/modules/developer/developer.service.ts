@@ -1,10 +1,15 @@
-import { useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import API from '@/providers/api'
-import { HookMutationOptions } from '@/providers/repositories/data-layer-factory'
+import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
-import { IAPIKey } from './developer.types'
+import { IAPIKey, IAPIList } from './developer.types'
 
+// ⚙️🛠️ API SERVICE HERE
+
+// API function to refresh the API key
 export const refreshAPIKey = async (): Promise<IAPIKey> => {
     const response = await API.post<void, IAPIKey>(
         '/api/v1/user-organization/developer-key-refresh'
@@ -12,13 +17,33 @@ export const refreshAPIKey = async (): Promise<IAPIKey> => {
     return response.data
 }
 
-export const useRefreshAPIKey = ({
+// API function to fetch all API routes
+export const getGroupRoutes = async ({
+    url,
+}: {
+    url?: string
+} = {}): Promise<IAPIList> => {
+    const newUrl = qs.stringifyUrl({ url: url || `/api/routes` })
+    const response = await API.get<IAPIList>(newUrl)
+    return response.data
+}
+
+// 🪝 HOOKS START HERE
+
+// Mutation hook for refreshing the API key
+export const useRefreshAPIKey = createMutationFactory<IAPIKey, Error, void>({
+    mutationFn: async () => await refreshAPIKey(),
+})
+
+// Query hook for fetching all API routes
+export const useGroupRoutes = ({
     options,
 }: {
-    options?: HookMutationOptions<IAPIKey, Error, void>
+    options?: HookQueryOptions<IAPIList, string>
 } = {}) => {
-    return useMutation<IAPIKey, Error, void>({
+    return useQuery<IAPIList, string>({
         ...options,
-        mutationFn: async () => await refreshAPIKey(),
+        queryKey: ['api-list', 'all'],
+        queryFn: async () => await getGroupRoutes(),
     })
 }
