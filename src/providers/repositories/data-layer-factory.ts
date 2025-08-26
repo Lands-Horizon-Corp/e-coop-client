@@ -56,7 +56,10 @@ export const createDataLayerFactory = <
         return useQuery<TData[], TError>({
             ...options,
             queryKey: [baseKey, 'all', query],
-            queryFn: async () => baseAPI.getAll(),
+            queryFn: async () =>
+                baseAPI.getAll({
+                    query,
+                }),
         })
     }
 
