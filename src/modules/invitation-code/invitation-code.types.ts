@@ -23,7 +23,7 @@ export interface IInvitationCode extends ITimeStamps, IAuditable {
 
     permission_name: string
     permission_description: string
-    // permissions: TPermission[];
+    permissions: TPermission[]
 
     description: string
     branch: IBranch

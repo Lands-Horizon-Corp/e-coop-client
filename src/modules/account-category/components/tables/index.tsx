@@ -64,7 +64,8 @@ const AccountCategoryTable = ({
 }: AccountCategoryTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
-    const { tableSorting, setTableSorting } = useDataTableSorting()
+    const { sortingStateBase64, tableSorting, setTableSorting } =
+        useDataTableSorting()
 
     const {
         currentAuth: {
@@ -103,16 +104,16 @@ const AccountCategoryTable = ({
     const {
         isPending,
         isRefetching,
-        data: paginatedData,
+        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginated({})
+    } = useGetPaginated({
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+    })
 
-    const {
-        data = [],
-        totalPage = 0,
-        pageSize = 0,
-        totalSize = 0,
-    } = paginatedData || {}
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
     const table = useReactTable({

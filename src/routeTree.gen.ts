@@ -66,6 +66,7 @@ import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteI
 import { Route as OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(settings)/settings'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-category'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-occupation'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-group'
@@ -398,6 +399,14 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategor
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRouteImport.update(
+    {
+      id: '/(maintenance)/maintenance/(access-and-onboarding)/invitation-code',
+      path: '/maintenance/invitation-code',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute =
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport.update(
     {
@@ -542,6 +551,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
@@ -605,6 +615,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
@@ -674,6 +685,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
@@ -743,6 +755,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
     | '/org/$orgname/branch/$branchname/members/member-types'
+    | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
@@ -806,6 +819,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/members/member-group'
     | '/org/$orgname/branch/$branchname/members/member-occupation'
     | '/org/$orgname/branch/$branchname/members/member-types'
+    | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
@@ -874,6 +888,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/'
@@ -1281,6 +1296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
+      path: '/maintenance/invitation-code'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/invitation-code'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
       path: '/members/member-types'
@@ -1517,6 +1539,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
@@ -1561,6 +1584,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute:

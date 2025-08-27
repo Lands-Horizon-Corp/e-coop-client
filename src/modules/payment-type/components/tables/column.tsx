@@ -1,5 +1,5 @@
 import { toReadableDate } from '@/helpers/date-utils'
-import { IPaymentType, IPaymentTypeRequest } from '@/modules/payment-type'
+import { IPaymentType } from '@/modules/payment-type'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'

@@ -3,13 +3,12 @@ import { useMemo } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
-import { cn } from '@/helpers/tw-utils'
+import { cn } from '@/helpers'
 import {
-    IAccountClassification,
+    IInvitationCode,
     deleteMany,
-} from '@/modules/account-classification'
-import { useGetPaginated } from '@/modules/account-classification'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+    useGetPaginated,
+} from '@/modules/invitation-code'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -27,19 +26,18 @@ import useDataTableState from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
-import { useSubscribe } from '@/hooks/use-pubsub'
 
-import AccountClassificationTableColumns, {
-    AccountClassificationGlobalSearchTargets,
-    IAccountClassificationTableColumnProps,
-} from './column'
-import { AccountClassificationRowContext } from './row-action'
+import InvitationCodeTableColumns, {
+    IInvitationCodeTableColumnProps,
+    InvitationCodeGlobalSearchTargets,
+} from './columns'
+import { InvitationCodeRowContext } from './row-action-context'
 
-export interface AccountClassificationTableProps
-    extends TableProps<IAccountClassification>,
-        IAccountClassificationTableColumnProps {
+export interface InvitationCodeProps
+    extends TableProps<IInvitationCode>,
+        IInvitationCodeTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IAccountClassification>,
+        IDataTableToolbarProps<IInvitationCode>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -50,7 +48,7 @@ export interface AccountClassificationTableProps
     >
 }
 
-const AccountClassificationTable = ({
+const InvitationCodeTable = ({
     className,
     toolbarProps,
     defaultFilter,
@@ -60,22 +58,16 @@ const AccountClassificationTable = ({
         row.toggleSelected()
     },
     actionComponent,
-    RowContextComponent = AccountClassificationRowContext,
-}: AccountClassificationTableProps) => {
+    RowContextComponent = InvitationCodeRowContext,
+}: InvitationCodeProps) => {
     const queryClient = useQueryClient()
-    const {
-        currentAuth: {
-            user_organization: { branch_id },
-        },
-    } = useAuthUserWithOrgBranch()
-
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            AccountClassificationTableColumns({
+            InvitationCodeTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -91,7 +83,7 @@ const AccountClassificationTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IAccountClassification>({
+    } = useDataTableState<IInvitationCode>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -146,10 +138,6 @@ const AccountClassificationTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
-    useSubscribe(`account_classification.update.branch.${branch_id}`, refetch)
-    useSubscribe(`account_classification.create.branch.${branch_id}`, refetch)
-    useSubscribe(`account_classification.delete.branch.${branch_id}`, refetch)
-
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -162,7 +150,7 @@ const AccountClassificationTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: AccountClassificationGlobalSearchTargets,
+                        targets: InvitationCodeGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -170,16 +158,14 @@ const AccountClassificationTable = ({
                         isLoading: isPending || isRefetching,
                     }}
                     deleteActionProps={{
-                        onDeleteSuccess: () => {
+                        onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: [
-                                    'account-classification',
-                                    'resource-query',
-                                ],
-                            })
-                        },
+                                queryKey: ['invitation-code', 'resource-query'],
+                            }),
                         onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
+                            deleteMany({
+                                ids: selectedData.map((data) => data.id),
+                            }),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -220,4 +206,4 @@ const AccountClassificationTable = ({
     )
 }
 
-export default AccountClassificationTable
+export default InvitationCodeTable
