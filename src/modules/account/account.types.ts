@@ -308,3 +308,8 @@ export type TPaginatedAccountHookMode =
     | 'adjustment'
     | 'journal-voucher'
     | 'check-voucher'
+
+export type TDeleteAccountFromGLFSType = {
+    id: TEntityId
+    mode: string
+}

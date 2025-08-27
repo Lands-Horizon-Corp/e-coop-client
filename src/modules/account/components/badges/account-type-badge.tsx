@@ -98,3 +98,4 @@ export const AccountTypeBadge = ({
         </Badge>
     )
 }
+export default AccountTypeBadge

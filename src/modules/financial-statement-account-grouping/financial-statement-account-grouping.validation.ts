@@ -1,24 +1,25 @@
 import { z } from 'zod'
 
-import { descriptionSchema, entityIdSchema } from '@/validation'
+import {
+    descriptionSchema,
+    descriptionTransformerSanitizer,
+} from '@/validation'
 
-const AccountingPrinciple = z.enum([
-    'asset',
-    'liability',
-    'equity',
-    'income',
-    'expense',
-])
 export const financialStatementGroupingSchema = z.object({
-    organization_id: entityIdSchema,
-    branch_id: entityIdSchema,
-    name: z.string().min(1).max(50),
-    description: descriptionSchema,
-    debit: AccountingPrinciple,
-    credit: AccountingPrinciple,
-    code: z.number(),
-    icon_media_id: entityIdSchema.optional().nullable(),
+    name: z.string().min(1, 'Name is required'),
+    description: descriptionSchema
+        .optional()
+        .transform(descriptionTransformerSanitizer),
+    debit: z.enum(['positive', 'negative'], {
+        error: 'Debit is required',
+    }),
+    credit: z.enum(['positive', 'negative'], {
+        error: 'Credit is required',
+    }),
+    from_code: z.coerce.number().optional(),
+    to_code: z.coerce.number().optional(),
 })
+
 export type TFinancialStatementGroupingFormValues = z.infer<
     typeof financialStatementGroupingSchema
 >

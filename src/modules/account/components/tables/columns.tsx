@@ -2,9 +2,9 @@ import { ReactNode } from 'react'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
+import { AccountTypeBadge } from '@/modules/account'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { AccountTypeBadge } from '@/components/badges/account-type-badge'
 import { ComputationTypeBadge } from '@/components/badges/computation-type-badge'
 import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
 import CopyTextButton from '@/components/copy-text-button'

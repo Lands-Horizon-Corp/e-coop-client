@@ -155,7 +155,7 @@ export const generateSidebarGroups = (
 
                         {
                             title: 'Financial Statement',
-                            url: `/financial-statement`,
+                            url: `/financial-statement-definition`,
                             type: 'item',
                             icon: BillIcon,
                             userType: ['employee', 'owner'],

@@ -9,9 +9,7 @@ import { IGeneralLedgerDefinition } from '../general-ledger-definition/general-l
 
 export type AccountingPrincipleType = 'positive' | 'negative'
 
-export interface IGeneralLedgerAccountsGrouping
-    extends IAuditable,
-        ITimeStamps {
+export interface IGeneralLedgerAccountGrouping extends IAuditable, ITimeStamps {
     id: TEntityId
 
     organization_id: TEntityId
@@ -27,7 +25,7 @@ export interface IGeneralLedgerAccountsGrouping
     to_code?: number
 }
 
-export interface IGeneralLedgerAccountsGroupingRequest {
+export interface IGeneralLedgerAccountGroupingRequest {
     name: string
     description?: string
 
@@ -39,4 +37,4 @@ export interface IGeneralLedgerAccountsGroupingRequest {
 }
 
 export interface IPaginatedGeneralLedgerAccountsGroupingRequest
-    extends IPaginatedResult<IGeneralLedgerAccountsGrouping> {}
+    extends IPaginatedResult<IGeneralLedgerAccountGrouping> {}

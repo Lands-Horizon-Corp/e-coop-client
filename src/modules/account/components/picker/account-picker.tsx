@@ -8,10 +8,10 @@ import {
     TPaginatedAccountHookMode,
     useFilteredPaginatedAccount,
 } from '@/modules/account'
+import { AccountTypeBadge } from '@/modules/account'
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
 
-import { AccountTypeBadge } from '@/components/badges/account-type-badge'
 import { FinancialStatementTypeBadge } from '@/components/badges/financial-statement-type-badge'
 import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
 import { ChevronDownIcon, RenderIcon, TIcon } from '@/components/icons'

@@ -3,6 +3,10 @@ import { useEffect, useMemo, useState } from 'react'
 import Fuse from 'fuse.js'
 
 import { API_URL } from '@/constants'
+import { cn } from '@/helpers'
+import APIRequestMethodBadge, {
+    REQUEST_METHOD,
+} from '@/modules/developer/components/api-request-method-badge'
 import { SearchIcon } from 'lucide-react'
 
 import {
@@ -13,6 +17,7 @@ import {
     PaperPlaneIcon,
     RefreshIcon,
 } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     Accordion,
     AccordionContent,
@@ -34,16 +39,14 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet'
 import { Switch } from '@/components/ui/switch'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 import useDebounce from '@/hooks/use-debounce'
 
 import { IClassProps } from '@/types'
-import { IAPIList, IGroupedRoute } from '../developer.types'
-import APIRequestMethodBadge, { REQUEST_METHOD } from '@/modules/developer/components/api-request-method-badge'
-import CopyWrapper from '@/components/wrappers/copy-wrapper'
+
 import { useGroupRoutes } from '../developer.service'
-import { cn } from '@/helpers'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { IAPIList, IGroupedRoute } from '../developer.types'
 
 interface Props extends IClassProps {}
 

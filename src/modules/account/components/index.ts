@@ -2,3 +2,4 @@ export { default as AccountCreateUpdateFormModal } from './forms/account-create-
 export { default as AccountsTable } from './tables'
 export { default as AccountTableAction } from './tables/row-actions'
 export { default as AccountPicker } from './picker/account-picker'
+export { default as AccountTypeBadge } from './badges/account-type-badge'

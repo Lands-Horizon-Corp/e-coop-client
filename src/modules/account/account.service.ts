@@ -1,4 +1,4 @@
-import { MutationOptions, useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
 import { downloadFile } from '@/helpers/common-helper'
@@ -7,6 +7,10 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TEntityId, UpdateIndexRequest } from '@/types'
 
@@ -14,6 +18,7 @@ import {
     IAccount,
     IAccountPaginated,
     IAccountRequest,
+    TDeleteAccountFromGLFSType,
     TPaginatedAccountHookMode,
 } from './account.types'
 
@@ -76,33 +81,34 @@ export const AccountUpdateIndex = async (
     return response[0].data
 }
 
-export const deleteGLAccount = async (accountId: TEntityId) => {
-    return (
-        await API.delete<IAccount>(
-            `${route}/${accountId}/general-ledger-definition/remove`
-        )
-    ).data
+export const deleteAccountFromGLFS = async ({
+    id,
+    mode,
+}: TDeleteAccountFromGLFSType) => {
+    const type = `${mode}-definition`
+    return (await API.put<IAccount, IAccount>(`${route}/${id}/${type}/remove`))
+        .data
 }
 
-export const useUpdateAccountIndex = (
-    options: MutationOptions<IAccount, Error, UpdateIndexRequest[]> = {}
-) => {
-    return useMutation<IAccount, Error, UpdateIndexRequest[]>({
-        mutationFn: AccountUpdateIndex,
-        mutationKey: ['update-account-index'],
-        ...options,
-    })
-}
+export const useUpdateAccountIndex = createMutationFactory<
+    IAccount,
+    Error,
+    UpdateIndexRequest[]
+>({
+    mutationFn: AccountUpdateIndex,
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn('update-account-index', args),
+})
 
-export const useDeleteGLAccount = (
-    options: MutationOptions<IAccount, Error, TEntityId> = {}
-) => {
-    return useMutation<IAccount, Error, TEntityId>({
-        mutationFn: deleteGLAccount,
-        mutationKey: ['delete-gl-account'],
-        ...options,
-    })
-}
+export const useDeleteFromGLAccount = createMutationFactory<
+    IAccount,
+    Error,
+    TDeleteAccountFromGLFSType
+>({
+    mutationFn: deleteAccountFromGLFS,
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn('delete-gl-account', args),
+})
 
 export const useFilteredPaginatedAccount = ({
     mode,
