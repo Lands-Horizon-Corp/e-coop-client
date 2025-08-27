@@ -20,7 +20,7 @@ export interface ITransactionRequest {
     description?: string
 }
 
-export interface ITransactionResponse extends IBaseEntityMeta {
+export interface ITransaction extends IBaseEntityMeta {
     amount: number
     source: TGeneralLedgerSource
     description: string
@@ -51,5 +51,4 @@ export interface ITransactionResponse extends IBaseEntityMeta {
     reference_number: string
 }
 
-export interface ITransactionPaginated
-    extends IPaginatedResult<ITransactionResponse> {}
+export interface ITransactionPaginated extends IPaginatedResult<ITransaction> {}
