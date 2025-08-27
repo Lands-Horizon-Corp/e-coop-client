@@ -1,10 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-import {
-    FinancialStatementDefinitionActions,
-    IFinancialStatementDefinition,
-} from '@/modules/financial-statement-definition'
-import GLFSAccountsCardList from '@/modules/gl-fs/components/gl-account-list'
+import { IGeneralLedgerDefinition } from '@/modules/general-ledger-definition'
+import { GLFSAccountsCardList } from '@/modules/gl-fs'
 import { useGLFSStore } from '@/store/gl-fs-store'
 import {
     DndContext,
@@ -21,7 +18,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-import { FinancialStatementTypeBadge } from '@/components/badges/financial-statement-type-badge'
+import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
 import {
     ArrowChevronDown,
     ArrowChevronRight,
@@ -31,8 +28,10 @@ import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import { TEntityId } from '@/types'
 
-interface FinancialStatementTreeNodeProps {
-    node: IFinancialStatementDefinition
+import GeneralLedgerDefinitionActions from './gl-definition-actions'
+
+interface GeneralLedgerTreeNodeProps {
+    node: IGeneralLedgerDefinition
     handleOpenAccountPicker?: () => void
     parentPath: string[]
     onDragEndNested: (
@@ -43,21 +42,21 @@ interface FinancialStatementTreeNodeProps {
     renderNestedAsSimpleList?: boolean
     depth?: number
     refetch?: () => void
-    isDeletingFSDefinition?: boolean
-    hanldeDeleteFinancialStatemenetDefinition: (id: TEntityId) => void
-    handleRemoveAccountFromFSDefinition: (accountId: TEntityId) => void
+    isDeletingGLDefinition?: boolean
+    hanldeDeleteGeneralLedgerDefinition: (id: TEntityId) => void
+    handleRemoveAccountFromGLDefinition: (accountId: TEntityId) => void
 }
 
-const FinancialStatementDefinitionNode = ({
+const GeneralLedgerDefinitionNode = ({
     node,
     depth = 0,
     handleOpenAccountPicker,
     onDragEndNested,
     parentPath,
-    isDeletingFSDefinition,
-    hanldeDeleteFinancialStatemenetDefinition,
-    handleRemoveAccountFromFSDefinition,
-}: FinancialStatementTreeNodeProps) => {
+    isDeletingGLDefinition,
+    hanldeDeleteGeneralLedgerDefinition,
+    handleRemoveAccountFromGLDefinition,
+}: GeneralLedgerTreeNodeProps) => {
     const ref = useRef<HTMLDivElement>(null)
     const dragHandleRef = useRef<HTMLDivElement>(null)
 
@@ -115,11 +114,11 @@ const FinancialStatementDefinitionNode = ({
     }, [targetNodeId, node.id, clearTargetNodeIdAfterScroll])
 
     const hasChildren =
-        node.financial_statement_definition_entries &&
-        node.financial_statement_definition_entries.length > 0
+        node.general_ledger_definition &&
+        node.general_ledger_definition.length > 0
 
     const isFirstLevel = depth === 0
-    const childLength = node.financial_statement_definition_entries?.length
+    const childLength = node.general_ledger_definition?.length
     const hasAccountNode = node.accounts && node.accounts.length > 0
 
     const firstLevelItemLabel = childLength
@@ -130,7 +129,7 @@ const FinancialStatementDefinitionNode = ({
         ? `${node.accounts?.length ?? 0} account${(node.accounts?.length ?? 0) > 1 ? 's' : ''}`
         : ''
 
-    if (node.financial_statement_definition_entries_id && isFirstLevel) {
+    if (node.general_ledger_definition_entries_id && isFirstLevel) {
         return null
     }
     const showGLFSAccountsCardList =
@@ -140,7 +139,7 @@ const FinancialStatementDefinitionNode = ({
 
     const showGLDefinitionNode = isNodeExpanded && hasChildren
 
-    if (node.financial_statement_definition_entries_id && isFirstLevel) {
+    if (node.general_ledger_definition_entries_id && isFirstLevel) {
         return null
     }
 
@@ -167,7 +166,7 @@ const FinancialStatementDefinitionNode = ({
                         <DragHandleIcon size={16} />
                     </div>
                     {showExpanded && (
-                        <div className="flex h-full  items-center">
+                        <div className="flex h-full items-center">
                             <span className="mr-2">
                                 {isNodeExpanded ? (
                                     <ArrowChevronDown size={16} />
@@ -177,15 +176,15 @@ const FinancialStatementDefinitionNode = ({
                             </span>
                         </div>
                     )}
-                    <FinancialStatementDefinitionActions
+                    <GeneralLedgerDefinitionActions
                         depth={depth}
                         canDelete={hasAccountNode || hasChildren}
                         node={node}
-                        isDeletingFSDefinition={isDeletingFSDefinition}
-                        hanldeDeleteFinancialStatemenetDefinition={(
+                        isDeletingGLDefinition={isDeletingGLDefinition}
+                        hanldeDeleteGeneralLedgerDefinition={(
                             nodeId: TEntityId
                         ) => {
-                            hanldeDeleteFinancialStatemenetDefinition(nodeId)
+                            hanldeDeleteGeneralLedgerDefinition(nodeId)
                         }}
                     />
                 </div>
@@ -199,9 +198,9 @@ const FinancialStatementDefinitionNode = ({
                             </h1>
                             {!isFirstLevel && (
                                 <span className="text-xs text-accent-foreground/50">
-                                    {node?.financial_statement_type && (
-                                        <FinancialStatementTypeBadge
-                                            type={node.financial_statement_type}
+                                    {node?.general_ledger_type && (
+                                        <GeneralLedgerTypeBadge
+                                            type={node.general_ledger_type}
                                         />
                                     )}
                                 </span>
@@ -227,7 +226,7 @@ const FinancialStatementDefinitionNode = ({
             <div className={`w-full ${isNodeExpanded ? 'pl-5 pr-5' : ''}`}>
                 {Array.isArray(showGLFSAccountsCardList) && (
                     <GLFSAccountsCardList
-                        removeAccount={handleRemoveAccountFromFSDefinition}
+                        removeAccount={handleRemoveAccountFromGLDefinition}
                         accounts={showGLFSAccountsCardList}
                     />
                 )}
@@ -239,7 +238,7 @@ const FinancialStatementDefinitionNode = ({
                     {hasChildren && (
                         <SortableContext
                             items={
-                                node.financial_statement_definition_entries?.map(
+                                node.general_ledger_definition?.map(
                                     (gc) => gc.id
                                 ) || []
                             }
@@ -247,9 +246,9 @@ const FinancialStatementDefinitionNode = ({
                         >
                             {showGLDefinitionNode && (
                                 <div className="ml-4">
-                                    {node.financial_statement_definition_entries?.map(
+                                    {node.general_ledger_definition?.map(
                                         (childNode) => (
-                                            <FinancialStatementDefinitionNode
+                                            <GeneralLedgerDefinitionNode
                                                 key={childNode.id}
                                                 handleOpenAccountPicker={
                                                     handleOpenAccountPicker
@@ -261,14 +260,14 @@ const FinancialStatementDefinitionNode = ({
                                                 onDragEndNested={
                                                     onDragEndNested
                                                 }
-                                                hanldeDeleteFinancialStatemenetDefinition={
-                                                    hanldeDeleteFinancialStatemenetDefinition
+                                                hanldeDeleteGeneralLedgerDefinition={
+                                                    hanldeDeleteGeneralLedgerDefinition
                                                 }
-                                                isDeletingFSDefinition={
-                                                    isDeletingFSDefinition
+                                                isDeletingGLDefinition={
+                                                    isDeletingGLDefinition
                                                 }
-                                                handleRemoveAccountFromFSDefinition={
-                                                    handleRemoveAccountFromFSDefinition
+                                                handleRemoveAccountFromGLDefinition={
+                                                    handleRemoveAccountFromGLDefinition
                                                 }
                                                 node={childNode}
                                                 depth={depth + 1}
@@ -285,4 +284,4 @@ const FinancialStatementDefinitionNode = ({
     )
 }
 
-export default FinancialStatementDefinitionNode
+export default GeneralLedgerDefinitionNode

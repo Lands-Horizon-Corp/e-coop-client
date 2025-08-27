@@ -100,7 +100,7 @@ export const useUpdateAccountIndex = createMutationFactory<
         updateMutationInvalidationFn('update-account-index', args),
 })
 
-export const useDeleteFromGLAccount = createMutationFactory<
+export const useDeleteAccountFromGLFS = createMutationFactory<
     IAccount,
     Error,
     TDeleteAccountFromGLFSType

@@ -5,14 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/helpers'
 import {
-    FinancialStatementDefinitionSchema,
-    FinancialStatementTypeEnum,
-    IFinancialStatementDefinition,
-    IFinancialStatementDefinitionFormValues,
-    IFinancialStatementDefinitionRequest,
+    GeneralLedgerDefinitionSchema,
+    GeneralLedgerTypeEnum,
+    IGeneralLedgerDefinition,
+    IGeneralLedgerDefinitionFormValues,
+    IGeneralLedgerDefinitionRequest,
     useCreate,
     useUpdateById,
-} from '@/modules/financial-statement-definition'
+} from '@/modules/general-ledger-definition'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { MoneyBagIcon } from '@/components/icons'
@@ -38,30 +38,30 @@ import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-interface IFinancialStatementCreateUpdateFormProps
+interface IGeneralLedgerDefinitionCreateUpdateFormProps
     extends IClassProps,
         IForm<
-            Partial<IFinancialStatementDefinitionRequest>,
-            IFinancialStatementDefinition,
+            Partial<IGeneralLedgerDefinitionRequest>,
+            IGeneralLedgerDefinition,
             string,
-            IFinancialStatementDefinitionFormValues
+            IGeneralLedgerDefinitionFormValues
         > {
-    financialStatementDefinitionEntriesId?: TEntityId
-    financialStatementId?: TEntityId
-    financialStatementAccountsGroupingId?: TEntityId
+    generalLedgerDefinitionEntriesId?: TEntityId
+    generalLedgerDefinitionId?: TEntityId
+    generalLedgerAccountsGroupingId?: TEntityId
 }
-const FinancialStatementCreateUpdateForm = ({
+const GeneralLedgerDefinitionCreateUpdateForm = ({
     defaultValues,
     className,
     readOnly,
     disabledFields,
-    financialStatementDefinitionEntriesId,
-    financialStatementAccountsGroupingId,
-    financialStatementId,
+    generalLedgerDefinitionEntriesId,
+    generalLedgerAccountsGroupingId,
+    generalLedgerDefinitionId,
     onSuccess,
-}: IFinancialStatementCreateUpdateFormProps) => {
-    const form = useForm<IFinancialStatementDefinitionFormValues>({
-        resolver: zodResolver(FinancialStatementDefinitionSchema),
+}: IGeneralLedgerDefinitionCreateUpdateFormProps) => {
+    const form = useForm<IGeneralLedgerDefinitionFormValues>({
+        resolver: zodResolver(GeneralLedgerDefinitionSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -69,59 +69,55 @@ const FinancialStatementCreateUpdateForm = ({
         },
     })
 
-    const isDisabled = (field: Path<IFinancialStatementDefinitionFormValues>) =>
+    const isDisabled = (field: Path<IGeneralLedgerDefinitionFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
 
-    const {
-        mutate: CreateFinancialStatementDefinition,
-        isPending: isCreating,
-    } = useCreate({
-        options: {
-            onSuccess: (data) => {
-                form.reset()
-                onSuccess?.(data)
-                toast.success('Added Financial Statement Definition')
+    const { mutate: CreateGeneralLedgerDefinition, isPending: isCreating } =
+        useCreate({
+            options: {
+                onSuccess: (data) => {
+                    form.reset()
+                    onSuccess?.(data)
+                    toast.success('Added General Ledger Definition')
+                },
             },
-        },
-    })
-    const {
-        mutate: UpdateFinancialStatementDefinition,
-        isPending: isUpdating,
-    } = useUpdateById({
-        options: { onSuccess: onSuccess },
-    })
+        })
+    const { mutate: UpdateGeneralLedgerDefinition, isPending: isUpdating } =
+        useUpdateById({
+            options: { onSuccess: onSuccess },
+        })
 
+    // Handle form submission
     const handleSubmit = form.handleSubmit((data) => {
-        if (!financialStatementAccountsGroupingId) {
+        if (!generalLedgerAccountsGroupingId) {
             form.setError('root', {
                 type: 'manual',
-                message:
-                    'Please select a FinancialStatement Accounts Grouping.',
+                message: 'Please select a General Ledger Accounts Grouping.',
             })
             return
         }
 
-        if (financialStatementId) {
+        if (generalLedgerDefinitionId) {
             const request = {
                 ...data,
-                financial_statement_definition_entries_id:
-                    defaultValues?.financial_statement_definition_entries_id,
-                financial_statement_grouping_id:
-                    financialStatementAccountsGroupingId,
+                general_ledger_definition_entries_id:
+                    defaultValues?.general_ledger_definition_entries_id,
+                general_ledger_accounts_grouping_id:
+                    generalLedgerAccountsGroupingId,
             }
-            UpdateFinancialStatementDefinition({
-                id: financialStatementId,
+            UpdateGeneralLedgerDefinition({
+                id: generalLedgerDefinitionId,
                 payload: request,
             })
         } else {
             const CreateRequest = {
                 ...data,
-                financial_statement_definition_entries_id:
-                    financialStatementDefinitionEntriesId,
-                financial_statement_grouping_id:
-                    financialStatementAccountsGroupingId,
+                general_ledger_definition_entries_id:
+                    generalLedgerDefinitionEntriesId,
+                general_ledger_accounts_grouping_id:
+                    generalLedgerAccountsGroupingId,
             }
-            CreateFinancialStatementDefinition(CreateRequest)
+            CreateGeneralLedgerDefinition(CreateRequest)
         }
     })
 
@@ -156,7 +152,7 @@ const FinancialStatementCreateUpdateForm = ({
                 <FormFieldWrapper
                     control={form.control}
                     label="Type *"
-                    name="financial_statement_type"
+                    name="general_ledger_type"
                     className="col-span-4"
                     render={({ field }) => (
                         <FormControl>
@@ -168,16 +164,16 @@ const FinancialStatementCreateUpdateForm = ({
                                 defaultValue={field.value}
                             >
                                 <SelectTrigger className="w-full">
-                                    {field.value || 'Select FS Type'}
+                                    {field.value || 'Select GL Type'}
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {Object.values(
-                                        FinancialStatementTypeEnum
-                                    ).map((type) => (
-                                        <SelectItem key={type} value={type}>
-                                            {type}
-                                        </SelectItem>
-                                    ))}
+                                    {Object.values(GeneralLedgerTypeEnum).map(
+                                        (type) => (
+                                            <SelectItem key={type} value={type}>
+                                                {type}
+                                            </SelectItem>
+                                        )
+                                    )}
                                 </SelectContent>
                             </Select>
                         </FormControl>
@@ -273,6 +269,46 @@ const FinancialStatementCreateUpdateForm = ({
                         )
                     }}
                 />
+                <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Beginning Balance (Credit)"
+                        name="beginning_balance_of_the_year_credit"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                value={field.value ?? ''}
+                                pattern="\d*"
+                                onChange={(e) =>
+                                    field.onChange(
+                                        parseFloat(e.target.value) || undefined
+                                    )
+                                }
+                                disabled={isDisabled(field.name)}
+                                placeholder="e.g., 5000.00"
+                            />
+                        )}
+                    />
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Beginning Balance"
+                        name="beginning_balance_of_the_year_debit"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                pattern="\d*"
+                                value={field.value ?? ''}
+                                onChange={(e) =>
+                                    field.onChange(
+                                        parseFloat(e.target.value) || undefined
+                                    )
+                                }
+                                disabled={isDisabled(field.name)}
+                                placeholder="e.g., 5000.00"
+                            />
+                        )}
+                    />
+                </div>
                 {!readOnly && (
                     <>
                         <Separator />
@@ -296,7 +332,7 @@ const FinancialStatementCreateUpdateForm = ({
                                     size="sm"
                                     type="submit"
                                     disabled={
-                                        isLoading || financialStatementId
+                                        isLoading || generalLedgerDefinitionId
                                             ? !isFormChange
                                             : isCreating
                                     }
@@ -304,7 +340,7 @@ const FinancialStatementCreateUpdateForm = ({
                                 >
                                     {isCreating ? (
                                         <LoadingSpinner />
-                                    ) : financialStatementId ? (
+                                    ) : generalLedgerDefinitionId ? (
                                         'Update'
                                     ) : (
                                         'Create'
@@ -319,14 +355,14 @@ const FinancialStatementCreateUpdateForm = ({
     )
 }
 
-export const FinancialStatementCreateUpdateFormModal = ({
+export const GeneralLedgerDefinitionCreateUpdateFormModal = ({
     title,
     description,
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IFinancialStatementCreateUpdateFormProps, 'className'>
+    formProps?: Omit<IGeneralLedgerDefinitionCreateUpdateFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -336,7 +372,7 @@ export const FinancialStatementCreateUpdateFormModal = ({
             overlayClassName="!bg-transparent !backdrop-blur-sm"
             {...props}
         >
-            <FinancialStatementCreateUpdateForm
+            <GeneralLedgerDefinitionCreateUpdateForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -347,4 +383,4 @@ export const FinancialStatementCreateUpdateFormModal = ({
     )
 }
 
-export default FinancialStatementCreateUpdateFormModal
+export default GeneralLedgerDefinitionCreateUpdateFormModal

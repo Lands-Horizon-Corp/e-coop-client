@@ -2,23 +2,23 @@ import { useEffect, useState } from 'react'
 
 import { toast } from 'sonner'
 
-import { sortBy } from '@/helpers/common-helper'
 import {
     AccountCreateUpdateFormModal,
-    FinancialStatementTypeEnum,
+    AccountPicker,
+    GeneralLedgerTypeEnum,
+    IAccount,
     useDeleteAccountFromGLFS,
     useUpdateAccountIndex,
 } from '@/modules/account'
-import { AccountPicker } from '@/modules/account'
-import { IAccount } from '@/modules/account'
 import {
-    IFinancialStatementDefinition,
+    GeneralLedgerDefinitionCreateUpdateFormModal,
+    GeneralLedgerDefinitionNode,
+    IGeneralLedgerDefinition,
     useConnectAccount,
     useDeleteById,
     useUpdateIndex,
-} from '@/modules/financial-statement-definition'
-import { FinancialStatementCreateUpdateFormModal } from '@/modules/financial-statement-definition'
-import { useFinancialStatementAccountsGroupingStore } from '@/store/financial-statement-accounts-grouping-store'
+} from '@/modules/general-ledger-definition'
+import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 import { useGLFSStore } from '@/store/gl-fs-store'
 import {
     DndContext,
@@ -42,16 +42,14 @@ import {
 
 import { TEntityId, UpdateIndexRequest } from '@/types'
 
-import FinancialStatementDefinitionNode from './fs-definition-node'
-
-type FinancialStatementDefinitionTreeViewerProps = {
-    treeData: IFinancialStatementDefinition[]
+type GeneralLedgerTreeViewerProps = {
+    treeData: IGeneralLedgerDefinition[]
     refetch?: () => void
     isRefetchingGeneralLedgerAccountsGrouping?: boolean
 }
 
 const findNodePathByGlIdOnly = (
-    nodes: IFinancialStatementDefinition[],
+    nodes: IGeneralLedgerDefinition[],
     path: string[] = [],
     glId: string
 ): string[] | null => {
@@ -62,9 +60,9 @@ const findNodePathByGlIdOnly = (
             return newPath
         }
 
-        if (node.financial_statement_definition_entries) {
+        if (node.general_ledger_definition) {
             const found = findNodePathByGlIdOnly(
-                node.financial_statement_definition_entries,
+                node.general_ledger_definition,
                 newPath,
                 glId
             )
@@ -76,7 +74,7 @@ const findNodePathByGlIdOnly = (
 }
 
 const findNodePathWithAccounts = (
-    nodes: IFinancialStatementDefinition[],
+    nodes: IGeneralLedgerDefinition[],
     path: string[] = [],
     searchTerm: string
 ): string[] | null => {
@@ -95,9 +93,9 @@ const findNodePathWithAccounts = (
             return newPath
         }
 
-        if (node.financial_statement_definition_entries) {
+        if (node.general_ledger_definition) {
             const foundPath = findNodePathWithAccounts(
-                node.financial_statement_definition_entries,
+                node.general_ledger_definition,
                 newPath,
                 searchTerm
             )
@@ -107,28 +105,27 @@ const findNodePathWithAccounts = (
     return null
 }
 
-const FinancialStatementDefinitionTreeViewer = ({
+const GeneralLedgerDefinitionTreeViewer = ({
     treeData,
     refetch,
     isRefetchingGeneralLedgerAccountsGrouping,
-}: FinancialStatementDefinitionTreeViewerProps) => {
+}: GeneralLedgerTreeViewerProps) => {
     const {
-        // ── finacial statement Definition State ──
-        financialStatementDefinition,
-        setFinancialStatementDefinition,
-        changedFinancialStatementItems,
-        setChangedFinancialStatementItems,
-        selectedFinancialStatementDefinitionId,
-        setSelectedFinancialStatementDefinitionId,
-        selectedFinancialStatementDefinition: node,
-        setSelectedFinancialStatementDefinition,
-        financialStatementDefinitionEntriesId,
-        setFinancialStatementDefinitionEntriesId,
-        selectedFinancialStatementTypes,
+        // ── General Ledger Definition State ──
+        generalLedgerDefinitions,
+        setGeneralLedgerDefinition,
+        changedGeneralLedgerItems,
+        setChangedGeneralLedgerItems,
+        selectedGeneralLedgerDefinitionId,
+        setSelectedGeneralLedgerDefinitionId,
+        selectedGeneralLedgerDefinition: node,
+        setSelectedGeneralLedgerDefinition,
+        generalLedgerDefinitionEntriesId,
+        setGeneralLedgerDefinitionEntriesId,
 
         // ── Modal Controls ──
-        openCreateFinancialStatementModal,
-        setOpenCreateFinancialStatementModal,
+        openCreateGeneralLedgerModal,
+        setOpenCreateGeneralLedgerModal,
 
         // ── View & Interaction State ──
         onCreate,
@@ -136,15 +133,16 @@ const FinancialStatementDefinitionTreeViewer = ({
         isReadOnly,
 
         // ── Accounts Management ──
-        moveFinancialStatementLedgerNode,
-        financialStatementAccountsGroupingId,
-    } = useFinancialStatementAccountsGroupingStore()
+        changedAccounts,
+        moveGeneralLedgerNode,
+        generalLedgerAccountsGroupingId,
+    } = useGeneralLedgerAccountsGroupingStore()
 
     const {
         selectedAccounts,
         openViewAccountModal,
         setViewAccountModalOpen,
-        // // openGeneralLedgerAccountTableModal,
+        // openGeneralLedgerAccountTableModal,
         // setOpenGeneralLedgerAccountTableModal,
         setChangedAccounts,
         expandPath,
@@ -152,7 +150,6 @@ const FinancialStatementDefinitionTreeViewer = ({
         setTargetNodeId,
         openAddAccountPickerModal,
         setAddAccountPickerModalOpen,
-        changedAccounts,
     } = useGLFSStore()
 
     const [searchTerm, setSearchTerm] = useState('')
@@ -160,9 +157,9 @@ const FinancialStatementDefinitionTreeViewer = ({
         options: {
             onSuccess: () => {
                 refetch?.()
-                setChangedFinancialStatementItems([])
+                setChangedGeneralLedgerItems([])
                 toast.success(
-                    'Financial Statement Definition Accounts Grouping Index Updated'
+                    'General Ledger Definition Accounts Grouping Index Updated'
                 )
             },
         },
@@ -170,7 +167,7 @@ const FinancialStatementDefinitionTreeViewer = ({
 
     const hanldeFoundPath = (glId: TEntityId) => {
         const foundPath = findNodePathByGlIdOnly(
-            financialStatementDefinition,
+            generalLedgerDefinitions,
             [],
             glId
         )
@@ -181,28 +178,23 @@ const FinancialStatementDefinitionTreeViewer = ({
         }
     }
 
-    const { mutateAsync: addAccountsToFinancialStatementDefinition } =
-        useConnectAccount({
-            options: {
-                onSuccess: (financialstatemnt) => {
-                    refetch?.()
-                    setAddAccountPickerModalOpen?.(false)
-                    hanldeFoundPath(financialstatemnt.id)
-                    toast.success(
-                        'Account added to Financial Statement Definition'
-                    )
-                },
+    const { mutateAsync: addAccountsToGeneralDefinition } = useConnectAccount({
+        options: {
+            onSuccess: (generalLedgerDefinition) => {
+                refetch?.()
+                setAddAccountPickerModalOpen?.(false)
+                hanldeFoundPath(generalLedgerDefinition.id)
             },
-        })
+        },
+    })
 
-    const { mutate: deletefinancialStatementDefinition } = useDeleteById({
+    const { mutate: deleteGeneralLedgerDefinition } = useDeleteById({
         options: {
             onSuccess: () => {
                 refetch?.()
-                toast.success('Financial Statement Definition Deleted')
-                setSelectedFinancialStatementDefinitionId?.(null)
-                setSelectedFinancialStatementDefinition?.(null)
-                setOpenCreateFinancialStatementModal?.(false)
+                setSelectedGeneralLedgerDefinitionId?.(null)
+                setSelectedGeneralLedgerDefinition?.(null)
+                setOpenCreateGeneralLedgerModal?.(false)
             },
         },
     })
@@ -212,33 +204,28 @@ const FinancialStatementDefinitionTreeViewer = ({
             onSuccess: () => {
                 refetch?.()
                 setChangedAccounts?.([])
-                toast.success('Account Index Updated')
             },
         },
     })
 
     const { mutate: removeGLAccount } = useDeleteAccountFromGLFS({
         options: {
-            onSuccess: () => {
+            onSuccess: (account) => {
                 refetch?.()
                 setAddAccountPickerModalOpen?.(false)
-                toast.success(
-                    'Account removed from Financial Statement Definition'
-                )
+                toast.success(`${account.name} account removed.`)
             },
         },
     })
 
-    const handleRemoveAccountFromFSDefinition = (accountId: TEntityId) => {
+    const handleRemoveAccountFromGLDefinition = (accountId: TEntityId) => {
         if (accountId) {
-            removeGLAccount({ id: accountId, mode: 'financial-statement' })
+            removeGLAccount({ id: accountId, mode: 'general-ledger' })
         }
     }
 
-    const hanldeDeletefinancialStatementDefinitionEntriesId = (
-        nodeId: TEntityId
-    ) => {
-        deletefinancialStatementDefinition(nodeId)
+    const hanldeDeleteGeneralLedgerDefinition = (nodeId: TEntityId) => {
+        deleteGeneralLedgerDefinition(nodeId)
     }
 
     const topLevelSensors = useSensors(useSensor(PointerSensor))
@@ -250,7 +237,7 @@ const FinancialStatementDefinitionTreeViewer = ({
         }
 
         const path = findNodePathWithAccounts(
-            financialStatementDefinition,
+            generalLedgerDefinitions,
             [],
             searchTerm
         )
@@ -265,9 +252,9 @@ const FinancialStatementDefinitionTreeViewer = ({
     }
 
     const handleAccountSelection = async (account: IAccount) => {
-        if (account && selectedFinancialStatementDefinitionId) {
-            await addAccountsToFinancialStatementDefinition({
-                id: selectedFinancialStatementDefinitionId,
+        if (account && selectedGeneralLedgerDefinitionId) {
+            await addAccountsToGeneralDefinition({
+                id: selectedGeneralLedgerDefinitionId,
                 accountId: account.id,
             })
         } else {
@@ -277,69 +264,71 @@ const FinancialStatementDefinitionTreeViewer = ({
 
     useEffect(() => {
         if (treeData ?? false) {
-            setFinancialStatementDefinition(treeData.sort(sortBy('index')))
+            setGeneralLedgerDefinition(treeData)
         }
-    }, [treeData, setFinancialStatementDefinition])
+    }, [treeData, setGeneralLedgerDefinition])
 
-    const OnSuccessCreateUpdateFSModal = (
-        financialStatementDefinition: IFinancialStatementDefinition
+    const OnSuccessCreateUpdateGLModal = (
+        generalLedgerDefinitions: IGeneralLedgerDefinition
     ) => {
         refetch?.()
-        setOpenCreateFinancialStatementModal?.(false)
-        setSelectedFinancialStatementDefinition?.(null)
-        setSelectedFinancialStatementDefinitionId?.(null)
-        setFinancialStatementDefinitionEntriesId?.(undefined)
+        setOpenCreateGeneralLedgerModal?.(false)
+        setSelectedGeneralLedgerDefinition?.(null)
+        setSelectedGeneralLedgerDefinitionId?.(null)
+        setGeneralLedgerDefinitionEntriesId?.(undefined)
 
-        hanldeFoundPath(financialStatementDefinition.id)
+        hanldeFoundPath(generalLedgerDefinitions.id)
     }
 
-    const addfinancialStatementDefinitionEntriesId = () => {
-        setSelectedFinancialStatementDefinitionId?.(null)
-        setOpenCreateFinancialStatementModal?.(true)
+    const addGeneralLedgerDefinition = () => {
+        setSelectedGeneralLedgerDefinitionId?.(null)
+        setOpenCreateGeneralLedgerModal?.(true)
         resetExpansion()
         setSearchTerm('')
         setAddAccountPickerModalOpen?.(false)
         setTargetNodeId?.('')
-        setSelectedFinancialStatementDefinition?.(null)
+        setSelectedGeneralLedgerDefinition?.(null)
         setTimeout(() => {
             setOnCreate?.(true)
         }, 100)
-        setFinancialStatementDefinitionEntriesId?.(undefined)
+        setGeneralLedgerDefinitionEntriesId?.(undefined)
     }
 
     const handleUpdateOrder = (
-        changedFinancialStatementItems: UpdateIndexRequest[],
+        changedGeneralLedgerItems: UpdateIndexRequest[],
         changedAccounts: UpdateIndexRequest[]
     ) => {
         if (changedAccounts.length > 0) {
             updateAccountIndex(changedAccounts)
         }
-        if (changedFinancialStatementItems.length > 0) {
-            updateIndex(changedFinancialStatementItems)
+        if (changedGeneralLedgerItems.length > 0) {
+            updateIndex(changedGeneralLedgerItems)
         }
     }
 
+    const { selectedGeneralLedgerTypes } =
+        useGeneralLedgerAccountsGroupingStore()
+
     const isSearchOnChanged = searchTerm.length > 0
 
-    const createOrUpdateTitle = `${onCreate ? 'Create' : 'Update'} Financial Statement Definition`
+    const createOrUpdateTitle = `${onCreate ? 'Create' : 'Update'} General Ledger Definition`
     const createOrUpdateDescription = `Fill out the form to ${onCreate ? 'add a new' : 'edit'} General Ledger Definition.`
 
     const formDefaultValues = onCreate
         ? {
-              financial_statement_type:
-                  selectedFinancialStatementTypes ||
-                  FinancialStatementTypeEnum.Assets,
+              general_ledger_type:
+                  selectedGeneralLedgerTypes || GeneralLedgerTypeEnum.Assets,
           }
         : {
               ...node,
           }
 
-    const financialStatementDefinitionId = onCreate
+    const generalLedgerDefinitionId = onCreate
         ? undefined
         : (node?.id ?? undefined)
 
     const hasAnyOrderChanged = Boolean(
-        changedFinancialStatementItems.length || changedAccounts.length
+        changedGeneralLedgerItems.length || changedAccounts.length
     )
 
     const isHandleOrderDisabled =
@@ -349,16 +338,17 @@ const FinancialStatementDefinitionTreeViewer = ({
 
     const hasChildren =
         (treeData?.length ?? 0) > 0 ||
-        (financialStatementDefinition?.length ?? 0) > 0
+        (generalLedgerDefinitions?.length ?? 0) > 0
 
     return (
-        <div className="w-full rounded-lg p-4 shadow-md">
+        <div className="w-full rounded-lg p-4">
+            {/* to do once jerbee done to general ledger Table */}
             {/* {selectedAccounts?.id && (
                 <GeneralLedgerAccountsModal
                     open={openGeneralLedgerAccountTableModal}
                     onOpenChange={setOpenGeneralLedgerAccountTableModal}
-                    title="Financial Statement Accounts"
-                    description="This is the financial statement based on selected account"
+                    title="General Ledger Accounts"
+                    description="This is the general ledger based on selected account"
                     className="max-w-3xl"
                     accountId={selectedAccounts.id}
                 />
@@ -373,21 +363,21 @@ const FinancialStatementDefinitionTreeViewer = ({
                     readOnly: true,
                 }}
             />
-            {financialStatementAccountsGroupingId && (
-                <FinancialStatementCreateUpdateFormModal
-                    onOpenChange={setOpenCreateFinancialStatementModal}
-                    open={openCreateFinancialStatementModal}
+            {generalLedgerAccountsGroupingId && (
+                <GeneralLedgerDefinitionCreateUpdateFormModal
+                    onOpenChange={setOpenCreateGeneralLedgerModal}
+                    open={openCreateGeneralLedgerModal}
                     title={createOrUpdateTitle}
                     description={createOrUpdateDescription}
                     formProps={{
                         defaultValues: formDefaultValues,
-                        financialStatementDefinitionEntriesId:
-                            financialStatementDefinitionEntriesId,
-                        financialStatementAccountsGroupingId:
-                            financialStatementAccountsGroupingId,
-                        financialStatementId: financialStatementDefinitionId,
+                        generalLedgerDefinitionEntriesId:
+                            generalLedgerDefinitionEntriesId,
+                        generalLedgerAccountsGroupingId:
+                            generalLedgerAccountsGroupingId,
+                        generalLedgerDefinitionId: generalLedgerDefinitionId,
                         readOnly: isReadOnly,
-                        onSuccess: OnSuccessCreateUpdateFSModal,
+                        onSuccess: OnSuccessCreateUpdateGLModal,
                     }}
                 />
             )}
@@ -404,18 +394,20 @@ const FinancialStatementDefinitionTreeViewer = ({
                 <Button
                     size="sm"
                     className="rounded-xl"
-                    onClick={addfinancialStatementDefinitionEntriesId}
+                    onClick={() => {
+                        addGeneralLedgerDefinition()
+                    }}
                     disabled={isReadOnly || isPending}
                 >
                     <PlusIcon size={15} className="mr-2" />
-                    Add FS
+                    Add GL
                 </Button>
                 <Input
                     type="text"
                     className="rounded-2xl"
                     placeholder="Search General Ledger..."
+                    disabled={isReadOnly || !hasChildren || isPending}
                     value={searchTerm}
-                    disabled={isReadOnly || isPending || !hasChildren}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && isSearchOnChanged) {
@@ -427,12 +419,7 @@ const FinancialStatementDefinitionTreeViewer = ({
                     onClick={handleSearch}
                     variant={'secondary'}
                     className="flex items-center rounded-2xl space-x-2"
-                    disabled={
-                        !isSearchOnChanged ||
-                        !hasChildren ||
-                        isReadOnly ||
-                        isPending
-                    }
+                    disabled={!isSearchOnChanged || isReadOnly || isPending}
                 >
                     <MagnifyingGlassIcon className="mr-2" />
                     Search
@@ -440,18 +427,13 @@ const FinancialStatementDefinitionTreeViewer = ({
             </div>
             <div className="w-full flex items-center gap-x-2 justify-start">
                 <Tooltip>
-                    <TooltipTrigger>
-                        <Button
-                            size={'sm'}
-                            variant={'outline'}
-                            className="rounded-xl text-xs"
-                            disabled={isReadOnly || isPending || !treeData}
-                            onClick={() => {
-                                resetExpansion()
-                            }}
-                        >
-                            <CollapseIcon />
-                        </Button>
+                    <TooltipTrigger
+                        onClick={() => {
+                            resetExpansion()
+                        }}
+                        className="rounded-sm p-1 hover:bg-secondary/50 text-xs"
+                    >
+                        <CollapseIcon size={15} />
                     </TooltipTrigger>
                     <TooltipContent>Collapse All</TooltipContent>
                 </Tooltip>
@@ -462,7 +444,7 @@ const FinancialStatementDefinitionTreeViewer = ({
                     size="sm"
                     onClick={() =>
                         handleUpdateOrder(
-                            changedFinancialStatementItems,
+                            changedGeneralLedgerItems,
                             changedAccounts
                         )
                     }
@@ -477,7 +459,7 @@ const FinancialStatementDefinitionTreeViewer = ({
             <DndContext
                 sensors={topLevelSensors}
                 onDragEnd={(event) =>
-                    moveFinancialStatementLedgerNode(
+                    moveGeneralLedgerNode(
                         [],
                         event.active.id,
                         event.over?.id || ''
@@ -486,47 +468,40 @@ const FinancialStatementDefinitionTreeViewer = ({
                 collisionDetection={closestCorners}
             >
                 <SortableContext
-                    items={financialStatementDefinition.map(
-                        (ledger) => ledger.id
-                    )}
+                    items={generalLedgerDefinitions.map((ledger) => ledger.id)}
                     strategy={verticalListSortingStrategy}
                 >
                     {treeData ? (
-                        financialStatementDefinition
-                            .sort(sortBy('index', 'asc'))
-                            ?.map((node) => {
+                        <>
+                            {generalLedgerDefinitions?.map((node) => {
                                 return (
-                                    <FinancialStatementDefinitionNode
+                                    <GeneralLedgerDefinitionNode
                                         key={node.id}
                                         node={node}
                                         depth={0}
                                         parentPath={[]}
                                         refetch={refetch}
-                                        onDragEndNested={
-                                            moveFinancialStatementLedgerNode
+                                        onDragEndNested={moveGeneralLedgerNode}
+                                        hanldeDeleteGeneralLedgerDefinition={
+                                            hanldeDeleteGeneralLedgerDefinition
                                         }
-                                        hanldeDeleteFinancialStatemenetDefinition={
-                                            hanldeDeletefinancialStatementDefinitionEntriesId
-                                        }
-                                        handleRemoveAccountFromFSDefinition={
-                                            handleRemoveAccountFromFSDefinition
+                                        handleRemoveAccountFromGLDefinition={
+                                            handleRemoveAccountFromGLDefinition
                                         }
                                     />
                                 )
-                            })
+                            })}
+                        </>
                     ) : (
                         <div className="flex flex-col gap-y-5 items-center justify-center h-64">
                             <p>No Financial Statement Definitions found.</p>
                             <Button
                                 variant="outline"
-                                className="ml-4"
-                                onClick={
-                                    addfinancialStatementDefinitionEntriesId
-                                }
-                                disabled={isReadOnly}
+                                className="ml-4 z-10"
+                                onClick={addGeneralLedgerDefinition}
                             >
                                 <PlusIcon size={15} className="mr-2" />
-                                Add Financial Statement Definition
+                                Add General Ledger Definition
                             </Button>
                         </div>
                     )}
@@ -536,4 +511,4 @@ const FinancialStatementDefinitionTreeViewer = ({
     )
 }
 
-export default FinancialStatementDefinitionTreeViewer
+export default GeneralLedgerDefinitionTreeViewer

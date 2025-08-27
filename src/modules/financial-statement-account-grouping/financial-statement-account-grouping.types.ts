@@ -1,7 +1,7 @@
 import { IAuditable, ITimeStamps, TEntityId } from '@/types'
 
 import { IFinancialStatementDefinition } from '../financial-statement-definition'
-import { AccountingPrincipleType } from '../general-ledger-accounts-grouping'
+import { AccountingPrincipleType } from '../general-ledger-account-grouping'
 
 export interface IFinancialStatementAccountGrouping
     extends IAuditable,

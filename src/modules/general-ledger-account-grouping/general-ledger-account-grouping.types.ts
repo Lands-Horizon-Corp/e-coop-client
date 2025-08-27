@@ -7,7 +7,7 @@ import {
 
 import { IGeneralLedgerDefinition } from '../general-ledger-definition/general-ledger-definition.types'
 
-export type AccountingPrincipleType = 'positive' | 'negative'
+export type TAccountingPrincipleType = 'positive' | 'negative'
 
 export interface IGeneralLedgerAccountGrouping extends IAuditable, ITimeStamps {
     id: TEntityId
@@ -15,8 +15,8 @@ export interface IGeneralLedgerAccountGrouping extends IAuditable, ITimeStamps {
     organization_id: TEntityId
     branch_id: TEntityId
 
-    debit: AccountingPrincipleType
-    credit: AccountingPrincipleType
+    debit: TAccountingPrincipleType
+    credit: TAccountingPrincipleType
     name: string
     description: string
     general_ledger_definition: IGeneralLedgerDefinition[]
@@ -29,12 +29,12 @@ export interface IGeneralLedgerAccountGroupingRequest {
     name: string
     description?: string
 
-    debit: AccountingPrincipleType
-    credit: AccountingPrincipleType
+    debit: TAccountingPrincipleType
+    credit: TAccountingPrincipleType
 
     from_code?: number
     to_code?: number
 }
 
-export interface IPaginatedGeneralLedgerAccountsGroupingRequest
+export interface IPaginatedGeneralLedgerAccountGroupingRequest
     extends IPaginatedResult<IGeneralLedgerAccountGrouping> {}

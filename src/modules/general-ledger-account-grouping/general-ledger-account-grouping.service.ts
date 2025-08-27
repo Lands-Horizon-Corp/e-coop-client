@@ -1,7 +1,7 @@
 import {
     IGeneralLedgerAccountGrouping,
     IGeneralLedgerAccountGroupingRequest,
-} from '@/modules/general-ledger-accounts-grouping'
+} from '@/modules/general-ledger-account-grouping'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 const { apiCrudHooks } = createDataLayerFactory<
