@@ -160,7 +160,7 @@ const InvitationCodeTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['invitation-code', 'resource-query'],
+                                queryKey: ['invitation-code'],
                             }),
                         onDelete: (selectedData) =>
                             deleteMany({
