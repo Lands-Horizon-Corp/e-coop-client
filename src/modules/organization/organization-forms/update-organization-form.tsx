@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
@@ -83,7 +83,7 @@ const UpdateOrganizationForm = ({
     )
 
     const form = useForm<TEditOrganizationFormValues>({
-        resolver: zodResolver(EditOrganizationSchema),
+        resolver: standardSchemaResolver(EditOrganizationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {

@@ -1,6 +1,6 @@
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
@@ -61,7 +61,7 @@ const InvitationCodeCreateUpdateForm = ({
     const permissionTemplate = useModalState()
 
     const form = useForm<TInvitationCodeFormValues>({
-        resolver: zodResolver(InviationCodeSchema),
+        resolver: standardSchemaResolver(InviationCodeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {

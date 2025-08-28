@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
@@ -83,7 +83,7 @@ const OrganizationForm = () => {
     const navigate = useNavigate()
 
     const form = useForm<TOrganizationFormValues>({
-        resolver: zodResolver(OrganizationSchema),
+        resolver: standardSchemaResolver(OrganizationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {

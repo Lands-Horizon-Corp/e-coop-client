@@ -1,6 +1,6 @@
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
@@ -56,7 +56,7 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
     const branchId = user?.user_organization?.branch?.id
 
     const form = useForm<TFinancialStatementGroupingFormValues>({
-        resolver: zodResolver(financialStatementGroupingSchema),
+        resolver: standardSchemaResolver(financialStatementGroupingSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {

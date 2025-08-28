@@ -1,7 +1,7 @@
 import { Path, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import {
@@ -61,7 +61,7 @@ const FinancialStatementCreateUpdateForm = ({
     onSuccess,
 }: IFinancialStatementCreateUpdateFormProps) => {
     const form = useForm<IFinancialStatementDefinitionFormValues>({
-        resolver: zodResolver(FinancialStatementDefinitionSchema),
+        resolver: standardSchemaResolver(FinancialStatementDefinitionSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
