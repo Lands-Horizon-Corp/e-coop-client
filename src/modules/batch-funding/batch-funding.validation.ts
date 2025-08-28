@@ -1,15 +1,12 @@
 import z from 'zod'
 
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const batchFundingSchema = z.object({
+export const BatchFundingSchema = z.object({
     name: z.string().min(1, 'Name is required'),
     amount: z.coerce.number().min(0, 'Amount is required'),
-    description: descriptionSchema
+    description: z
+        .string()
         .optional()
         .transform(descriptionTransformerSanitizer),
     organization_id: z.string().optional(),
@@ -20,5 +17,3 @@ export const batchFundingSchema = z.object({
     signature_media_id: z.string().optional(),
     signature_media: z.any(),
 })
-
-export type TBatchFundingFormValues = z.infer<typeof batchFundingSchema>

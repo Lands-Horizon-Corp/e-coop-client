@@ -1,30 +1,15 @@
-import {
-    IAuditable,
-    IPaginatedResult,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import z from 'zod'
+
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IBranch } from '../branch/branch.types'
 import { IMedia } from '../media/media.types'
 import { IOrganization } from '../organization/organization.types'
+import { ITransactionBatch } from '../transaction-batch'
+import { IUserBase } from '../user'
+import { BatchFundingSchema } from './batch-funding.validation'
 
-export interface IBatchFundingRequest {
-    id?: TEntityId
-
-    organization_id?: TEntityId
-    branch_id?: TEntityId
-
-    transaction_batch_id?: TEntityId
-    provided_by_user_id: TEntityId
-    signature_media_id?: TEntityId
-
-    name: string
-    amount: number
-    description?: string
-}
-
-export interface IBatchFunding extends ITimeStamps, IAuditable {
+export interface IBatchFunding extends IBaseEntityMeta {
     id: TEntityId
 
     organization_id: TEntityId
@@ -34,10 +19,10 @@ export interface IBatchFunding extends ITimeStamps, IAuditable {
     branch: IBranch
 
     transaction_batch_id: TEntityId
-    // transaction_batch?: ITransactionBatch
+    transaction_batch?: ITransactionBatch
 
     provided_by_user_id: TEntityId
-    // provided_by_user: IUserBase
+    provided_by_user: IUserBase
 
     signature_media_id?: TEntityId
     signature_media?: IMedia
@@ -46,6 +31,8 @@ export interface IBatchFunding extends ITimeStamps, IAuditable {
     amount: number
     description?: string
 }
+
+export type IBatchFundingRequest = z.infer<typeof BatchFundingSchema>
 
 export interface IBatchFundingPaginated
     extends IPaginatedResult<IBatchFunding> {}
