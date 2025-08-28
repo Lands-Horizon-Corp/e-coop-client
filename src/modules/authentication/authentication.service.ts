@@ -2,7 +2,6 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
-    HookMutationOptions,
     HookQueryOptions,
 } from '@/providers/repositories/data-layer-factory'
 
@@ -19,6 +18,7 @@ import {
     IVerifyContactNumberRequest,
     IVerifyEmailRequest,
 } from './authentication.types'
+import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
 const { API, route } = createAPIRepository('/api/v1/authentication')
 

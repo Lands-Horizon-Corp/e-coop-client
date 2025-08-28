@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
@@ -41,7 +41,7 @@ const ForgotPasswordEmail = ({
     onSuccess,
 }: IForgotPasswordEmailFormProps) => {
     const form = useForm<TForgotPasswordEmail>({
-        resolver: zodResolver(forgotPasswordFormSchema),
+        resolver: standardSchemaResolver(forgotPasswordFormSchema),
         reValidateMode: 'onChange',
         mode: 'onChange',
         defaultValues: {

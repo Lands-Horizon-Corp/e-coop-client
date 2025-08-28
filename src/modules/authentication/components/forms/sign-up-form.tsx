@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { useForm, useWatch } from 'react-hook-form'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
@@ -46,7 +46,7 @@ const SignUpForm = ({
     onSuccess,
 }: ISignUpFormProps) => {
     const form = useForm<TSignUpForm>({
-        resolver: zodResolver(SignUpSchema),
+        resolver: standardSchemaResolver(SignUpSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {

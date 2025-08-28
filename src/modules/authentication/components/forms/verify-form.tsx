@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
@@ -48,7 +48,7 @@ const VerifyForm = ({
     onSuccess,
 }: Props) => {
     const form = useForm({
-        resolver: zodResolver(OtpSchema),
+        resolver: standardSchemaResolver(OtpSchema),
         reValidateMode: 'onChange',
         defaultValues,
     })
