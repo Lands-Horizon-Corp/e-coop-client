@@ -91,19 +91,11 @@ export const createDataLayerFactory = <
         { id: TEntityId; payload: TRequest }
     >({
         mutationFn: (variables) => baseAPI.updateById(variables),
-        // defaultInvalidates: [ // experimentuhan ko pa to
-        //     [baseKey, 'paginated'],
-        //     [baseKey, 'all'],
-        // ],
         invalidationFn: (args) => updateMutationInvalidationFn(baseKey, args),
     })
 
     const useDeleteById = createMutationFactory<void, Error, TEntityId>({
         mutationFn: (id) => baseAPI.deleteById({ id }),
-        // defaultInvalidates: [ // experimentuhan ko pa to
-        //     [baseKey, 'paginated'],
-        //     [baseKey, 'all'],
-        // ],
         invalidationFn: (args) => deleteMutationInvalidationFn(baseKey, args),
     })
 
@@ -113,15 +105,13 @@ export const createDataLayerFactory = <
         { ids: TEntityId[] }
     >({
         mutationFn: (payload) => baseAPI.deleteMany(payload),
-        // defaultInvalidates: [ // experimentuhan ko pa to
-        //     [baseKey, 'paginated'],
-        //     [baseKey, 'all'],
-        // ],
         invalidationFn: (args) => deleteMutationInvalidationFn(baseKey, args),
     })
 
     return {
         baseQueryKey: baseKey,
+        // Base/Typical na CRUD endpoint
+        apiCrudService: baseAPI,
 
         // Query Hooks
         apiCrudHooks: {
@@ -135,8 +125,5 @@ export const createDataLayerFactory = <
             useDeleteById,
             useDeleteMany,
         },
-
-        // Base/Typical na CRUD endpoint
-        apiCrudService: baseAPI,
     }
 }
