@@ -15,6 +15,7 @@ import {
     LOAN_TYPE,
     WEEKDAYS,
 } from '@/constants/loan'
+import { IBranch } from '@/modules/branch'
 
 import { IOrganization } from '../modules/organization'
 import { IUserBase } from '../modules/user/user.types'
@@ -65,7 +66,7 @@ export interface IOrgBranchIdentity {
     organization: IOrganization
 
     branch_id: TEntityId
-    // branch: IBranch
+    branch: IBranch
 }
 
 /* Use this only if entity has timestamps, auditable, and has org and branch */
@@ -85,7 +86,6 @@ export interface ITimeStamps {
 export type TCivilStatus = (typeof CIVIL_STATUS)[number] // move to member profile
 
 export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number] // member profile
-
 
 export interface UpdateIndexRequest {
     id: TEntityId

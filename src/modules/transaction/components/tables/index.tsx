@@ -214,7 +214,7 @@ const TransactionTable = ({
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
-                    RowContextContent={RowContextComponent}
+                    RowContextComponent={RowContextComponent}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
