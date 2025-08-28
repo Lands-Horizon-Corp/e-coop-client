@@ -66,6 +66,7 @@ import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/test'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/disbursement'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/withdraw-entry'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/payment-entry'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/online-entry'
@@ -413,6 +414,12 @@ const OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute =
     path: '/transaction/payment-type',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport.update({
+    id: '/(employee)/transaction/disbursement',
+    path: '/transaction/disbursement',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute =
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRouteImport.update(
     {
@@ -682,6 +689,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
@@ -762,6 +770,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
@@ -848,6 +857,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
@@ -934,6 +944,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger/online-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/payment-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry'
+    | '/org/$orgname/branch/$branchname/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
@@ -1014,6 +1025,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger/online-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/payment-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry'
+    | '/org/$orgname/branch/$branchname/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
@@ -1099,6 +1111,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry'
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry'
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/test'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
@@ -1526,6 +1539,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement'
+      path: '/transaction/disbursement'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/disbursement'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry': {
       id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry'
       path: '/general-ledger/withdraw-entry'
@@ -1878,6 +1898,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTestRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
@@ -1936,6 +1957,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute,
     OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute:
       OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionTestRoute:
