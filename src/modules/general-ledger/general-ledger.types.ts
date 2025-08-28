@@ -1,4 +1,3 @@
-import { GENERAL_LEDGER_SOURCES } from '@/constants'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account'
@@ -10,6 +9,7 @@ import { IPaymentType } from '../payment-type/payment-type.types'
 import { ITransactionBatch } from '../transaction-batch/transaction-batch.types'
 import { ITransaction } from '../transaction/transaction.types'
 import { IUserBase } from '../user/user.types'
+import { GENERAL_LEDGER_SOURCES } from './constants'
 
 export type TEntryType =
     | ''
