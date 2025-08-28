@@ -12,8 +12,8 @@ export const useQeueryHookCallback = <TData = unknown, TError = unknown>({
 }: {
     error: TError | null
     data?: TData
-    isError?: boolean
-    isSuccess?: boolean
+    isError: boolean
+    isSuccess: boolean
     onError?: (error: TError) => void
     onSuccess?: (data: TData) => void
 }) => {
