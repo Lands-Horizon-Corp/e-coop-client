@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import {
@@ -45,7 +45,7 @@ const VerifyContactBar = ({
     onSuccess,
 }: Props) => {
     const form = useForm<z.infer<typeof OtpSchema>>({
-        resolver: zodResolver(OtpSchema),
+        resolver: standardSchemaResolver(OtpSchema),
         reValidateMode: 'onChange',
         defaultValues: {
             otp: '',

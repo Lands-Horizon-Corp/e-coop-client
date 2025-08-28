@@ -4,7 +4,7 @@ import { Path, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
@@ -46,7 +46,7 @@ const AccountSecurityForm = ({
     const { onOpen } = useConfirmModalStore()
 
     const form = useForm<TAccountSecurityFormValues>({
-        resolver: zodResolver(UserProfileSecuritySchema),
+        resolver: standardSchemaResolver(UserProfileSecuritySchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
