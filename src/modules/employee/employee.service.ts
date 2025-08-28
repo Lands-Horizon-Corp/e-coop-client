@@ -21,7 +21,7 @@ const getPaginatedEmployees = async ({
 }) => {
     const newUrl = qs.stringifyUrl(
         {
-            url: url || `${apiCrudService.route}/search`,
+            url: url || `${apiCrudService.route}/employee/search`,
             query,
         },
         { skipNull: true }
