@@ -26,7 +26,11 @@ const WorkTimer = ({ className }: Props) => {
     const queryClient = useQueryClient()
     const { onOpenSecurityAction } = useActionSecurityStore()
     const [showTimeInOut, setShowTimeInOut] = useState(false)
-    const { data: timesheet, isPending } = useCurrentTimesheet()
+    const { data: timesheet, isPending } = useCurrentTimesheet({
+        options: {
+            retry: 0,
+        },
+    })
     const [canTimeOut, setCanTimeOut] = useState(false)
 
     return (
@@ -138,7 +142,7 @@ const WorkTimer = ({ className }: Props) => {
                     )}
                 </Button>
             )}
-            {isPending && <LoadingSpinner />}
+            {isPending && <LoadingSpinner className="mx-auto !my-8" />}
             <p className="mx-auto max-w-72 text-center text-xs text-muted-foreground">
                 You can view your past timesheet/work time histories in{' '}
                 <Link

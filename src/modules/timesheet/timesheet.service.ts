@@ -1,16 +1,16 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import {
-    HookMutationOptions,
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import { IPaginatedResult, TAPIQueryOptions, TEntityId } from '@/types'
 
 import { ITimesheet, ITimesheetInOutRequest } from './timesheet.types'
 
-const { apiCrudHooks, apiCrudService } = createDataLayerFactory({
+const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory({
     url: '/api/v1/timesheet',
     baseKey: 'timesheet',
 })
@@ -20,7 +20,7 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory({
 const { API, route } = apiCrudService
 
 export const getCurrentTimesheet = async () => {
-    const response = await API.get<ITimesheet>(`${route}, current`)
+    const response = await API.get<ITimesheet>(`${route}/current`)
     return response.data
 }
 
@@ -92,13 +92,11 @@ export const useCurrentTimesheet = ({
     })
 }
 
-export const useTimeInOut = ({
-    options,
-}: {
-    options?: HookMutationOptions<ITimesheet, Error, ITimesheetInOutRequest>
-} = {}) => {
-    return useMutation<ITimesheet, Error, ITimesheetInOutRequest>({
-        ...options,
-        mutationFn: async (data) => await timeInOut(data),
-    })
-}
+export const useTimeInOut = createMutationFactory<
+    ITimesheet,
+    Error,
+    ITimesheetInOutRequest
+>({
+    mutationFn: async (variables) => await timeInOut(variables),
+    defaultInvalidates: [[baseQueryKey]],
+})

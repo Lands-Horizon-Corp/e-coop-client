@@ -68,7 +68,7 @@ const TimeInOut = ({
         if (!image) {
             toast.warning('Failed to capture image')
         } else if (!imageId) {
-            const uploadedImage = await uploadMediaAsync(image)
+            const uploadedImage = await uploadMediaAsync({ file: image })
             uploaded = uploadedImage.id
             setImageId(uploaded)
         }
@@ -89,8 +89,8 @@ const TimeInOut = ({
             <div className="flex w-full items-center gap-x-2">
                 <Button
                     size="sm"
-                    variant="ghost"
-                    className="w-full border hover:bg-background/40 hover:text-foreground dark:border-none"
+                    variant="secondary"
+                    className="flex-1 border hover:bg-background/40 hover:text-foreground dark:border-none"
                     onClick={() => onCancel?.()}
                     disabled={isSaving || isUploading}
                 >
@@ -98,7 +98,7 @@ const TimeInOut = ({
                 </Button>
                 <Button
                     size="sm"
-                    className="w-full gap-x-2"
+                    className="flex-1 gap-x-2"
                     onClick={() => handleSave()}
                     disabled={isSaving || isUploading}
                 >
