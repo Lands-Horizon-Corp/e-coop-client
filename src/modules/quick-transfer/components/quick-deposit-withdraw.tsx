@@ -36,34 +36,29 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
 
     return (
         <PageContainer className="flex w-full">
-            <TransactionNoFoundBatch />
-            <div className="flex w-full flex-col space-y-2">
-                <div className="flex justify-start w-full px-5">
+            {/* <TransactionNoFoundBatch /> */}
+            <div className="flex w-full flex-col space-y-1">
+                <div className="flex justify-start items-center space-x-2 w-full px-5">
+                    {mode === 'deposit' ? (
+                        <HandDepositIcon size={25} />
+                    ) : (
+                        <HandWithdrawIcon size={25} />
+                    )}
                     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
                         {` Quick Transfer ${mode?.charAt(0).toUpperCase()}${mode?.slice(1)}`}
                     </h4>
-                    {mode === 'deposit' ? (
-                        <HandDepositIcon />
-                    ) : (
-                        <HandWithdrawIcon />
-                    )}
                 </div>
                 <div
-                    className={cn(
-                        'm-5 w-16 h-2 rounded-xl',
-                        mode == 'withdraw' ? 'bg-red-400' : 'bg-blue-400'
-                    )}
-                >
-                    {' '}
-                </div>
-                <div
-                    className={cn(
-                        'm-5 w-16 h-2 rounded-xl blur-md',
-                        mode == 'withdraw' ? 'bg-red-400' : 'bg-blue-400'
-                    )}
-                >
-                    {' '}
-                </div>
+                    className={`
+        mx-5 my-3 w-16 h-2 relative rounded-xl
+        ${
+            mode === 'withdraw'
+                ? 'bg-red-400 before:bg-red-400 before:content-[""]'
+                : 'bg-blue-400 before:bg-blue-400 before:content-[""]'
+        }
+           before:absolute before:w-16 before:h-2 before:blur-sm before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2
+      `}
+                />
             </div>
 
             <ResizablePanelGroup direction="horizontal" className="">

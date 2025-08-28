@@ -62,8 +62,21 @@ import { Route as OrgOrgnameBranchBranchnameemployeeTransactionIndexRouteImport 
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transactions'
+import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/test'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/withdraw-entry'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/payment-entry'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/online-entry'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/journal-voucher'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/journal-entry'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/general-ledger'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/deposit-entry'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/check-voucher'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/check-entry'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/cash-entry'
+import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/adjustment-entry'
 import { Route as OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(settings)/settings'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-category'
@@ -374,6 +387,20 @@ const OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute =
     path: '/view-members',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport.update({
+    id: '/(employee)/transaction/transactions',
+    path: '/transaction/transactions',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute =
+  OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport.update(
+    {
+      id: '/(employee)/transaction/transaction-batch',
+      path: '/transaction/transaction-batch',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnameemployeeTransactionTestRoute =
   OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport.update({
     id: '/(employee)/transaction/test',
@@ -386,6 +413,88 @@ const OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute =
     path: '/transaction/payment-type',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/withdraw-entry',
+      path: '/general-ledger/withdraw-entry',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/payment-entry',
+      path: '/general-ledger/payment-entry',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRouteImport.update({
+    id: '/(employee)/general-ledger/online-entry',
+    path: '/general-ledger/online-entry',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/journal-voucher',
+      path: '/general-ledger/journal-voucher',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/journal-entry',
+      path: '/general-ledger/journal-entry',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/general-ledger',
+      path: '/general-ledger/general-ledger',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/deposit-entry',
+      path: '/general-ledger/deposit-entry',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/check-voucher',
+      path: '/general-ledger/check-voucher',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRouteImport.update({
+    id: '/(employee)/general-ledger/check-entry',
+    path: '/general-ledger/check-entry',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRouteImport.update({
+    id: '/(employee)/general-ledger/cash-entry',
+    path: '/general-ledger/cash-entry',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute =
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRouteImport.update(
+    {
+      id: '/(employee)/general-ledger/adjustment-entry',
+      path: '/general-ledger/adjustment-entry',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute =
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport.update({
     id: '/(common)/(settings)/settings',
@@ -562,8 +671,21 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  '/org/$orgname/branch/$branchname/general-ledger/adjustment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/cash-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/check-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/check-voucher': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute
+  '/org/$orgname/branch/$branchname/general-ledger/deposit-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute
+  '/org/$orgname/branch/$branchname/general-ledger/journal-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/journal-voucher': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
+  '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -629,8 +751,21 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  '/org/$orgname/branch/$branchname/general-ledger/adjustment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/cash-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/check-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/check-voucher': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute
+  '/org/$orgname/branch/$branchname/general-ledger/deposit-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute
+  '/org/$orgname/branch/$branchname/general-ledger/journal-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/journal-voucher': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
+  '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
+  '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -702,8 +837,21 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/(common)/(settings)/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/adjustment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/cash-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-voucher': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/deposit-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-voucher': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -775,8 +923,21 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/accounting/accounts'
     | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/settings'
+    | '/org/$orgname/branch/$branchname/general-ledger/adjustment-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/cash-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/check-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/check-voucher'
+    | '/org/$orgname/branch/$branchname/general-ledger/deposit-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/general-ledger'
+    | '/org/$orgname/branch/$branchname/general-ledger/journal-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/journal-voucher'
+    | '/org/$orgname/branch/$branchname/general-ledger/online-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/payment-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/test'
+    | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
+    | '/org/$orgname/branch/$branchname/transaction/transactions'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
@@ -842,8 +1003,21 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/accounting/accounts'
     | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/settings'
+    | '/org/$orgname/branch/$branchname/general-ledger/adjustment-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/cash-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/check-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/check-voucher'
+    | '/org/$orgname/branch/$branchname/general-ledger/deposit-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/general-ledger'
+    | '/org/$orgname/branch/$branchname/general-ledger/journal-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/journal-voucher'
+    | '/org/$orgname/branch/$branchname/general-ledger/online-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/payment-entry'
+    | '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/test'
+    | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
+    | '/org/$orgname/branch/$branchname/transaction/transactions'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
@@ -914,8 +1088,21 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/accounting/accounts'
     | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/adjustment-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/cash-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-voucher'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/deposit-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/general-ledger'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-voucher'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/test'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
+    | '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
@@ -1311,6 +1498,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
+      path: '/transaction/transactions'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/transactions'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': {
+      id: '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
+      path: '/transaction/transaction-batch'
+      fullPath: '/org/$orgname/branch/$branchname/transaction/transaction-batch'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(employee)/transaction/test': {
       id: '/org/$orgname/branch/$branchname/(employee)/transaction/test'
       path: '/transaction/test'
@@ -1323,6 +1524,83 @@ declare module '@tanstack/react-router' {
       path: '/transaction/payment-type'
       fullPath: '/org/$orgname/branch/$branchname/transaction/payment-type'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry'
+      path: '/general-ledger/withdraw-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry'
+      path: '/general-ledger/payment-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/payment-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry'
+      path: '/general-ledger/online-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/online-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-voucher': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-voucher'
+      path: '/general-ledger/journal-voucher'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/journal-voucher'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/journal-entry'
+      path: '/general-ledger/journal-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/journal-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/general-ledger': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/general-ledger'
+      path: '/general-ledger/general-ledger'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/general-ledger'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/deposit-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/deposit-entry'
+      path: '/general-ledger/deposit-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/deposit-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-voucher': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-voucher'
+      path: '/general-ledger/check-voucher'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/check-voucher'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-entry'
+      path: '/general-ledger/check-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/check-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/cash-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/cash-entry'
+      path: '/general-ledger/cash-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/cash-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/general-ledger/adjustment-entry': {
+      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger/adjustment-entry'
+      path: '/general-ledger/adjustment-entry'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger/adjustment-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(common)/(settings)/settings': {
@@ -1589,8 +1867,21 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameAccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
   OrgOrgnameBranchBranchnameDevDocumentationRoute: typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
+  OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
   OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTestRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
+  OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
@@ -1623,10 +1914,36 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameDevDocumentationRoute,
     OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute:
       OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckVoucherRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerDepositEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerGeneralLedgerRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerJournalVoucherRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute:
+      OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionTestRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionTestRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute,
+    OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute:
+      OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
