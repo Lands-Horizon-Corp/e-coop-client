@@ -3,7 +3,6 @@ import z from 'zod'
 
 import {
     CIVIL_STATUS,
-    EDUCATIONAL_ATTAINMENT,
     FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
     LETTERS_REGEX,
@@ -109,8 +108,6 @@ export const contactNumberSchema = z.string().min(1, 'Contact Number is empty')
 export const generalStatusSchema = z.enum(GENERAL_STATUS)
 
 export const civilStatusSchema = z.enum(CIVIL_STATUS) //TODO: MOVE TO member profile constant.ts
-
-export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT) // MOVE TO member education attainment module
 
 export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP) // Member profile
 

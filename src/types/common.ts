@@ -1,7 +1,6 @@
 import {
     AccountClosureReasons,
     CIVIL_STATUS,
-    EDUCATIONAL_ATTAINMENT,
     FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
     TAG_CATEGORY,
@@ -87,7 +86,6 @@ export type TCivilStatus = (typeof CIVIL_STATUS)[number] // move to member profi
 
 export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number] // member profile
 
-export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number] // move to member educ attainment
 
 export interface UpdateIndexRequest {
     id: TEntityId

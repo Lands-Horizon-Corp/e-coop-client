@@ -7,3 +7,6 @@ export const descriptionTransformerSanitizer = <T>(val: T) => {
     }
     return val
 }
+
+export const dateToISOTransformer = (val: string | Date | number) =>
+    new Date(val).toISOString()
