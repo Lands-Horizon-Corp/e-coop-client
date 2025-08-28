@@ -1,6 +1,6 @@
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { TAG_CATEGORY } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
@@ -57,7 +57,7 @@ const AccountTagCreateUpdateForm = ({
     readOnly,
 }: AccountTagFormProps) => {
     const form = useForm<AccountTagFormValues>({
-        resolver: zodResolver(AccountTagSchema),
+        resolver: standardSchemaResolver(AccountTagSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: { ...defaultValues },
