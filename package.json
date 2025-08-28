@@ -19,7 +19,8 @@
         "fw": "prettier . -w",
         "fwf": "prettier -w",
         "build": "tsc -b && vite build",
-        "vc": "eslint . && prettier . -c && vitest run && tsc -b && vite build"
+        "vc": "eslint . && prettier . -c && vitest run && tsc -b && vite build",
+        "gen-mod": "bunx plop module-gen"
     },
     "dependencies": {
         "@dnd-kit/core": "^6.3.1",

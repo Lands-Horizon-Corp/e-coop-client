@@ -2,7 +2,7 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { I{{pascalCase name}}, I{{pascalCase name}}Request } from '../{{kebabCase name}}'
 
-const { apiCrudHooks, apiCrudService, {{camelCase name}}BaseKey } = createDataLayerFactory<
+const { apiCrudHooks, apiCrudService, baseQueryKey : {{camelCase name}}BaseKey } = createDataLayerFactory<
     I{{pascalCase name}},
     I{{pascalCase name}}Request
 >({
