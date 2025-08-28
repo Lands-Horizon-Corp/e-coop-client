@@ -2,11 +2,11 @@ import { useMutation } from '@tanstack/react-query'
 import { AxiosProgressEvent } from 'axios'
 
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
-import { HookMutationOptions } from '@/providers/repositories/data-layer-factory'
 
 import { TEntityId } from '@/types'
 
 import { IMedia } from './media.types'
+import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
 const { apiCrudService } = createDataLayerFactory({
     url: '/api/v1/media',
@@ -49,7 +49,6 @@ export const useUploadMedia = ({
     onProgress,
 }: {
     options?: HookMutationOptions<IMedia, Error, { file: File }>
-
     onProgress?: (progressEvent: AxiosProgressEvent) => void
 } = {}) => {
     return useMutation<IMedia, Error, { file: File }>({
