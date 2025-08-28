@@ -225,7 +225,7 @@ const Signature = ({
                 className
             )}
         >
-            <div className={cn('flex h-14 min-h-[50px] w-full')}>
+            <div className={cn('flex h-14 min-h-[50px] w-[183.5px]')}>
                 <div
                     className={cn(
                         'flex  w-full justify-between items-center',

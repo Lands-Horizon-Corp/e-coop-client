@@ -26,6 +26,7 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                 <SignaturePickerUploaderModal
                     open={open}
                     title="Upload"
+                    className='!max-w-[38rem]'
                     onOpenChange={setOpen}
                     signatureUploadProps={{
                         onSignatureUpload: (media) => {
