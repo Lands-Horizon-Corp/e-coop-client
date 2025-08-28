@@ -7,23 +7,35 @@ import {
     entityIdSchema,
 } from '@/validation'
 
+const quickTransferEntityIdSchema = (fieldName: string) =>
+    z.uuidv4({ error: `${fieldName} is required` })
+
 export const QuickWithdrawSchema = z.object({
-    amount: amount,
+    amount: z
+        .number({ error: 'Amount is required' })
+        .min(0.01)
+        .max(1000000000, {
+            message: 'Amount must be less than or equal to 1,000,000,000',
+        }),
     signature_media_id: entityIdSchema.optional(),
     proof_of_payment_media_id: entityIdSchema.optional(),
     bank_id: entityIdSchema.optional(),
     bank_reference_number: z.string().optional(),
-    entry_date: z.string().optional(),
-    account_id: entityIdSchema.min(1, 'Account is required'),
-    payment_type_id: entityIdSchema.min(1, 'Payment type is required'),
+    entry_date: z
+        .string({ error: 'Entry date mus be a valid date' })
+        .optional(),
+    account_id: quickTransferEntityIdSchema('Account').min(1),
+    payment_type_id: quickTransferEntityIdSchema('Payment type').min(1),
 
     description: descriptionSchema
         .transform(descriptionTransformerSanitizer)
         .optional(),
-    member_profile_id: entityIdSchema.min(1, 'Member is required'),
+    member_profile_id: quickTransferEntityIdSchema('Account').min(1),
     member_joint_account_id: entityIdSchema.optional(),
-    reference_number: z.string().min(1, 'Reference number is required'),
-    or_auto_generated: z.boolean().default(false),
+    reference_number: z
+        .string({ error: 'Reference number is required' })
+        .min(1),
+    or_auto_generated: z.boolean().default(false).optional(),
 
     //for viewing
     signature: z.any().optional(),

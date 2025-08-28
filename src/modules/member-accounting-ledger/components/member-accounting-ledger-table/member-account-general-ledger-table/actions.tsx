@@ -1,4 +1,7 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers'
+import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
+import MemberAccountGeneralLedger from '@/modules/member-profile/components/member-infos/member-accounts-loans/member-account-general-ledger'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
@@ -8,14 +11,9 @@ import {
     HandCoinsIcon,
     MoneyCheckIcon,
 } from '@/components/icons'
-import MemberAccountGeneralLedger from '@/components/member-infos/member-accounts-loans/member-account-general-ledger'
 import Modal from '@/components/modals/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-
-import { IMemberAccountingLedger } from '@/types'
-
-import GeneralLedgerTable from '../../general-ledger-table'
 
 interface IMemberAccountGeneralLedgerActionProps {
     memberAccountLedger: IMemberAccountingLedger

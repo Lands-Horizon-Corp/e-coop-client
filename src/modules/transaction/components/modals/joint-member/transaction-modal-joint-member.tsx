@@ -59,7 +59,7 @@ const TransactionModalJointMember = ({
                 title="Joint Accounts"
                 description="Co-owners of this account that have the access and share financial responsibility of this account (Select a one joint member)"
                 {...rest}
-                className="max-w-[1200px]"
+                className="!max-w-7xl"
             >
                 <div className="grid grid-cols-2 gap-4">
                     {hasSelectedMember && (

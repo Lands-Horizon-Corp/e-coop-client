@@ -61,7 +61,7 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                                     value && 'dark:bg-background/75'
                                 )}
                             />
-                            <Button
+                            <Button asChild
                                 size="icon"
                                 type="button"
                                 variant="secondary"

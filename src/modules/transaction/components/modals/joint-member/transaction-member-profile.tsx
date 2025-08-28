@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { IMedia } from '@/modules/media'
 import { IMemberJointAccount } from '@/modules/member-joint-account'
 import { IMemberProfile } from '@/modules/member-profile'
+import MemberOverallInfo from '@/modules/member-profile/components/member-infos/view-member-info'
 import HoveruserInfo from '@/modules/user/components/hover-user-info'
 import { useImagePreview } from '@/store/image-preview-store'
 
@@ -95,7 +96,7 @@ const TransactionMemberProfile = ({
             <GradientBackground
                 gradientOnly
                 opacity={0}
-                className="w-full ecoop-scroll overflow-x-auto  h-fit flex-col space-y-2 border-[0.5px] min-w-[300px] overscroll-contain bg-sidebar/20 p-5"
+                className="w-full ecoop-scroll overflow-x-auto h-fit flex-col space-y-2 border-[0.5px] min-w-[300px] overscroll-contain bg-sidebar p-5"
             >
                 <div className="flex w-full  space-x-5 items-center h-fit ">
                     <div className="flex items-center h-fit gap-y-1 flex-col min-w-[6vw] max-w-[5vw]">
@@ -131,10 +132,10 @@ const TransactionMemberProfile = ({
                                 </Button>
                             )}
                             <DrawerContent className="h-full w-full">
-                                {/* <MemberOverallInfo
+                                <MemberOverallInfo
                                     className="overflow-y-auto px-5"
                                     memberProfileId={memberInfo?.id}
-                                /> */}
+                                />
                             </DrawerContent>
                         </Drawer>
                     </div>

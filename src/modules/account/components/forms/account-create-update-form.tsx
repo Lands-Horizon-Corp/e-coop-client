@@ -1987,7 +1987,7 @@ export const AccountCreateUpdateFormModal = ({
         <Modal
             title={title}
             description={description}
-            className={cn('max-w-[80rem]', className)}
+            className={cn('', className)}
             {...props}
         >
             <AccountCreateUpdateForm

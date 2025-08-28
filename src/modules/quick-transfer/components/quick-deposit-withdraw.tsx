@@ -1,5 +1,6 @@
-import { cn } from '@/helpers'
 import { useGetById } from '@/modules/account'
+import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
+import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
 import {
     QuickTransferTransactionForm,
     TPaymentMode,
@@ -19,6 +20,8 @@ import {
     ResizablePanelGroup,
 } from '@/components/ui/resizable'
 
+import { TEntityId } from '@/types'
+
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
     const { selectedMember, setOpenMemberPicker, setSelectedAccount } =
         useDepositWithdrawStore()
@@ -35,8 +38,8 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
     const { data: account } = useGetById({ id: accountDefaultValue ?? '' })
 
     return (
-        <PageContainer className="flex w-full">
-            {/* <TransactionNoFoundBatch /> */}
+        <PageContainer className="flex w-full !overflow-hidden">
+            <TransactionNoFoundBatch />
             <div className="flex w-full flex-col space-y-1">
                 <div className="flex justify-start items-center space-x-2 w-full px-5">
                     {mode === 'deposit' ? (
@@ -60,12 +63,12 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
       `}
                 />
             </div>
-
-            <ResizablePanelGroup direction="horizontal" className="">
+            <ResizablePanelGroup direction="horizontal" className="!h-[80vh]">
                 <ResizablePanel
-                    defaultSize={40}
-                    maxSize={40}
-                    className="!min-w-1/3 w-1/3 !overflow-x-auto p-5 ecoop-scroll"
+                    defaultSize={30}
+                    maxSize={30}
+                    minSize={0}
+                    className=" !overflow-auto p-5 ecoop-scroll  "
                 >
                     <QuickTransferTransactionForm
                         account={account}
@@ -76,18 +79,23 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={70} className="w-1/3 px-5">
+                <ResizablePanel
+                    defaultSize={70}
+                    className="!overflow-y-auto px-5 ecoop-scroll !relative"
+                >
                     <div className="w-full flex items-center justify-end">
                         {/* <CurrentTransactionWithdrawHistory mode={mode} /> */}
                     </div>
-                    <TransactionMemberProfile
-                        memberInfo={selectedMember}
-                        onSelectMember={() => {
-                            setOpenMemberPicker(true)
-                        }}
-                        viewOnly
-                    />
-                    {/* <MemberAccountingLedgerTable
+                    <div className="sticky top-0 z-50">
+                        <TransactionMemberProfile
+                            memberInfo={selectedMember}
+                            onSelectMember={() => {
+                                setOpenMemberPicker(true)
+                            }}
+                            viewOnly
+                        />
+                    </div>
+                    <MemberAccountingLedgerTable
                         mode="member"
                         memberProfileId={
                             (selectedMember?.id ?? undefined) as TEntityId
@@ -103,7 +111,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                             )
                         }}
                         className="w-full mt-2"
-                    /> */}
+                    />
                 </ResizablePanel>
             </ResizablePanelGroup>
         </PageContainer>

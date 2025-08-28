@@ -26,8 +26,9 @@ import { useGetUserSettings } from '@/modules/user-profile'
 import { useImagePreview } from '@/store/image-preview-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+// import LoadingSpinner from '@/components/spinners/loading-spinner'
+// import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
@@ -155,10 +156,10 @@ export const QuickTransferTransactionForm = ({
     })
 
     const isFormIsDirty = form.formState.isDirty
-
+    console.log(form.control)
     return (
         <Form {...form}>
-            <form onSubmit={handleSubmit} className="min-w-[300px]">
+            <form onSubmit={handleSubmit} className="min-w-[300px] ">
                 <div className="flex flex-end">
                     <CommandShortcut className="rounded-md bg-secondary p-1">
                         <div className="text-[min(10px,1rem)] text-muted-foreground/80">
@@ -176,6 +177,7 @@ export const QuickTransferTransactionForm = ({
                             : null
                     }
                 />
+
                 <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
                     <FormFieldWrapper
                         control={form.control}
@@ -280,6 +282,7 @@ export const QuickTransferTransactionForm = ({
                                     })
                                 }}
                                 placeholder="Select an account"
+                                hideDescription
                                 value={
                                     form.getValues('account') || selectedAccount
                                 }
@@ -441,30 +444,17 @@ export const QuickTransferTransactionForm = ({
                     />
                 </div>
                 <Separator className="my-2 sm:my-4" />
-                <div className="flex items-center justify-end gap-x-2">
-                    <Button
-                        size="sm"
-                        type="button"
-                        variant="ghost"
-                        onClick={() => handleReset()}
-                        className="w-full self-end px-8 sm:w-fit"
-                    >
-                        reset
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="submit"
-                        disabled={isQuickTransactionPending || !isFormIsDirty}
-                        className="w-full self-end px-8 sm:w-fit"
-                    >
-                        {isQuickTransactionPending ||
-                        isQuickTransactionPending ? (
-                            <LoadingSpinner />
-                        ) : (
-                            mode
-                        )}
-                    </Button>
-                </div>
+                    <FormFooterResetSubmit
+                        error={quickTransactionError}
+                        // readOnly={readOnly}
+                        isLoading={isQuickTransactionPending || !isFormIsDirty}
+                        disableSubmit={!form.formState.isDirty}
+                        submitText={mode}
+                        className="sticky bottom-0"
+                        onReset={() => {
+                            form.reset()
+                        }}
+                    />
             </form>
         </Form>
     )

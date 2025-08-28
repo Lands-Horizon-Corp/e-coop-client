@@ -1,5 +1,5 @@
 // This handles all common validations that are handles everywhere
-import z from 'zod'
+import z, { coerce } from 'zod'
 
 import {
     CIVIL_STATUS,
@@ -131,7 +131,7 @@ export const amount = z.preprocess(
             ? val
             : undefined
     },
-    z
+    z.coerce
         .number({
             error: 'Amount must be a number',
         })

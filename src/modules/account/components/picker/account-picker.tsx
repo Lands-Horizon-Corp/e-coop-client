@@ -29,6 +29,7 @@ interface Props extends IPickerBaseProps<IAccount> {
     defaultOpen?: boolean
     onOpenChange?(open: boolean): void
     mode?: TPaginatedAccountHookMode
+    hideDescription?: boolean
 }
 
 const AccountPicker = ({
@@ -41,6 +42,7 @@ const AccountPicker = ({
     modalOnly = false,
     onOpenChange,
     open,
+    hideDescription = false,
 }: Props) => {
     const queryClient = useQueryClient()
     const [state, setState] = useState(false)
@@ -92,7 +94,7 @@ const AccountPicker = ({
     //     },
     //     { disableTextInputs: true }
     // )
-
+    console.log('value', value)
     return (
         <>
             <GenericPicker
@@ -203,9 +205,11 @@ const AccountPicker = ({
                             ) : (
                                 <span className="inline-flex gap-x-4 items-center">
                                     <span>{value.name}</span>
-                                    <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
-                                        {value.description}
-                                    </span>
+                                    {!hideDescription && (
+                                        <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
+                                            {value.description}
+                                        </span>
+                                    )}
                                 </span>
                             )}
                         </span>

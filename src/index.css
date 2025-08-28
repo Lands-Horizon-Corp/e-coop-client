@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
-@tailwind base;
+/* @tailwind base; */
 
 @font-face {
     font-family: 'Inter';
@@ -229,16 +229,23 @@ html {
     }
 }
 
+:root {
+  --scrollbar-thumb-color: rgba(168, 172, 190, 0.4); /* Tailwind's stone-800 with opacity */
+}
+
+.dark {
+  --scrollbar-thumb-color: rgba(59, 61, 80, 0.4); /* Tailwind's stone-400 with opacity */
+}
+
+/* Your original scrollbar styles */
 .ecoop-scroll::-webkit-scrollbar {
     @apply h-2 w-[.5vw];
 }
 
-/* .ecoop-scroll::-webkit-scrollbar-track {
-     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); 
-} */
-
 .ecoop-scroll::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-stone-800/40 dark:bg-stone-400/40;
+    /* Use the CSS variable here */
+    background-color: var(--scrollbar-thumb-color);
+    @apply rounded-full;
 }
 
 .scale-effects {
