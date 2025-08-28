@@ -1,6 +1,6 @@
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import {
@@ -53,7 +53,7 @@ const AccountClassificationCreateUpdateForm = ({
     const organizationId = user.user_organization.organization_id
 
     const form = useForm<AccountClassificationFormValues>({
-        resolver: zodResolver(AccountClassificationSchema),
+        resolver: standardSchemaResolver(AccountClassificationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: defaultValues || {

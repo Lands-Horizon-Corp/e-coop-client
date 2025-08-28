@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import '@/modules/feedback'
@@ -39,7 +39,7 @@ const FeedbackForm = () => {
     }
 
     const feedbackForm = useForm<TFeedBack>({
-        resolver: zodResolver(feedbackSchema),
+        resolver: standardSchemaResolver(feedbackSchema),
         reValidateMode: 'onChange',
         mode: 'onChange',
         defaultValues,
