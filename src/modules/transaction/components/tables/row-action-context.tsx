@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react'
 
 import { TEntryType } from '@/modules/general-ledger'
-import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+// import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
@@ -108,12 +108,12 @@ export const TransactionAction = ({
                     title={getModalTitle()}
                     description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle().toLowerCase()}`}
                 >
-                    <GeneralLedgerTable
+                    {/* <GeneralLedgerTable
                         mode="transaction"
                         TEntryType={selectedEntryType}
                         transactionId={transaction.id}
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    />
+                    /> */}
                 </Modal>
             </div>
 
@@ -298,12 +298,12 @@ export const TransactionRowContext = ({
                 title={getModalTitle()}
                 description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle().toLowerCase()}`}
             >
-                <GeneralLedgerTable
+                {/* <GeneralLedgerTable
                     mode="transaction"
                     TEntryType={selectedEntryType}
                     transactionId={transaction.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                />
+                /> */}
             </Modal>
             <DataTableRowContext
                 row={row}

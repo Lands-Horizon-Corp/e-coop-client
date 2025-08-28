@@ -7,7 +7,7 @@ import {
     TEntityId,
 } from '@/types/common'
 
-import { ITransactionResponse } from '../transaction'
+import { ITransaction } from '../transaction'
 import { IUser } from '../user/user.types'
 
 export interface IDisbursementRequest {
@@ -51,7 +51,7 @@ export interface IDisbursementTransactionResponse
     disbursement_id: TEntityId
     disbursement?: IDisbursementResponse
     transaction_batch_id: TEntityId
-    transaction_batch?: ITransactionResponse
+    transaction_batch?: ITransaction
     employee_user_id: TEntityId
     employee_user?: IUser
     transaction_reference_number: string

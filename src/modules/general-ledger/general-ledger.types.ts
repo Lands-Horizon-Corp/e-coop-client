@@ -8,7 +8,7 @@ import { IMemberJointAccount } from '../member-joint-account'
 import { IMemberProfile } from '../member-profile'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { ITransactionBatch } from '../transaction-batch/transaction-batch.types'
-import { ITransactionResponse } from '../transaction/transaction.types'
+import { ITransaction } from '../transaction/transaction.types'
 import { IUserBase } from '../user/user.types'
 
 export type TEntryType =
@@ -31,7 +31,7 @@ export interface IGeneralLedger extends IBaseEntityMeta {
     account: IAccount | null
 
     transaction_id: TEntityId
-    transaction: ITransactionResponse | null
+    transaction: ITransaction | null
 
     transaction_batch_id: TEntityId
     transaction_batch: ITransactionBatch | null
@@ -81,7 +81,7 @@ export interface IGeneralLedgerResponse extends IBaseEntityMeta {
     account: IAccount | null
 
     transaction_id: TEntityId
-    transaction: ITransactionResponse | null
+    transaction: ITransaction | null
 
     transaction_batch_id: TEntityId
     transaction_batch: ITransactionBatch | null

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -26,7 +25,7 @@ const {
     useGetAll,
 } = apiCrudHooks
 
-const { getById: getOrganizationById } = apiCrudService
+const { getById: getOrganizationById, route, API } = apiCrudService
 
 export {
     useCreateOrganization,
@@ -35,12 +34,6 @@ export {
     useGetAll,
     apiCrudHooks,
     apiCrudService,
-}
-
-const { API, route } = createAPIRepository('/api/v1/organization')
-
-export const getAllOrganizations = async () => {
-    return (await API.get<IOrganization[]>(route)).data
 }
 
 interface Options<TData = IOrganization[]> {
@@ -52,7 +45,9 @@ export const useGetAllOrganizations = ({
 }: Options<IOrganization[]> = {}) => {
     return useQuery<IOrganization[]>({
         queryKey: ['organization', 'resource', 'all'],
-        queryFn: getAllOrganizations,
+        queryFn: async () => {
+            return API.get<IOrganization[]>(route).then((res) => res.data)
+        },
         ...options,
     })
 }

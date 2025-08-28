@@ -8,6 +8,8 @@ import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUserBase } from '../user/user.types'
 
+export type TPaymentMode = 'payment' | 'withdraw' | 'deposit'
+
 export interface ITransactionRequest {
     signature_media_id?: TEntityId
 
@@ -52,3 +54,47 @@ export interface ITransaction extends IBaseEntityMeta {
 }
 
 export interface ITransactionPaginated extends IPaginatedResult<ITransaction> {}
+
+export interface IPaymentRequest {
+    amount: number
+
+    signature_media_id?: TEntityId
+    proof_of_payment_media_id?: TEntityId
+    bank_id?: TEntityId
+    bank_reference_number?: string
+    entry_date?: string
+    account_id?: TEntityId
+    payment_type_id?: TEntityId
+
+    description?: string
+}
+
+export interface IPaymentQuickRequest {
+    amount: number
+
+    signature_media_id?: TEntityId
+    proof_of_payment_media_id?: TEntityId
+    bank_id?: TEntityId
+    bank_reference_number?: string
+    entry_date?: string
+    account_id?: TEntityId
+    payment_type_id?: TEntityId
+
+    /** Validation: max=255 */
+    description?: string
+    member_profile_id?: TEntityId
+    member_joint_account_id?: TEntityId
+    reference_number: string
+    or_auto_generated?: boolean
+}
+
+export type TUpdateReferenceNumberProps = {
+    transactionId: string
+    reference_number: string
+    description: string
+}
+
+export type TCreateTransactionPaymentProps = {
+    data: IPaymentRequest
+    transactionId: string
+}

@@ -1,22 +1,36 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
-import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
+import {
+    createMutationFactory,
+    createMutationInvalidateFn,
+} from '@/providers/repositories/mutation-factory'
 
-import { TAPIQueryOptions } from '@/types'
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
-import { ITransactionPaginated } from './transaction.types'
+import { IGeneralLedger, IGeneralLedgerResponse } from '../general-ledger'
+import {
+    IPaymentQuickRequest,
+    IPaymentRequest,
+    ITransaction,
+    ITransactionPaginated,
+    ITransactionRequest,
+    TCreateTransactionPaymentProps,
+    TPaymentMode,
+    TUpdateReferenceNumberProps,
+} from './transaction.types'
 
-// Create the API repository for transactions
-export const { getPaginated, API, route } = createAPIRepository(
-    '/api/v1/transaction'
-)
+export const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
+    ITransaction,
+    ITransactionRequest
+>({ url: '/api/v1/transaction', baseKey: 'transaction' })
 
-// ⚙️🛠️ API SERVICE
-// Custom service
+export const { useGetById, useGetAll, useCreate } = apiCrudHooks
 
-// 🪝 HOOK START HERECE HERE
-// Hook for fetching filtered and paginated transactions
+const { route, API, getPaginated, create } = apiCrudService
 
 export type TTransactionHookMode =
     | 'current-branch'
@@ -98,3 +112,116 @@ export const useFilteredPaginatedTransaction = ({
         },
     })
 }
+
+export const useGetCurrentPaymentTransaction = ({
+    options,
+}: {
+    options?: HookQueryOptions<ITransaction, Error>
+} = {}) => {
+    return useQuery<ITransaction, Error>({
+        ...options,
+        queryKey: ['current-payment-transaction'],
+        queryFn: async () =>
+            (await API.get<ITransaction>(`${route}/current`)).data,
+    })
+}
+
+type TPaymentTransactionProps = {
+    data: IPaymentRequest
+    mode: TPaymentMode
+    transactionId?: TEntityId
+    transactionPayload?: ITransactionRequest
+}
+
+export const createPaymentTransaction = async ({
+    data,
+    mode,
+    transactionId,
+}: TPaymentTransactionProps) => {
+    return (
+        await API.post<IPaymentRequest, IGeneralLedger>(
+            `${route}/${transactionId}/${mode}`,
+            data
+        )
+    ).data
+}
+
+export const useCreateTransactionPaymentByMode = createMutationFactory<
+    IGeneralLedger,
+    Error,
+    TPaymentTransactionProps
+>({
+    mutationFn: async ({ data, mode, transactionId, transactionPayload }) => {
+        if (transactionId) {
+            return createPaymentTransaction({ data, mode, transactionId })
+        } else {
+            return create({ payload: transactionPayload })
+        }
+    },
+    invalidationFn: (args) =>
+        createMutationInvalidateFn('create-transaction-payment-by-mode', args),
+})
+
+export const useCreateQuickTransactionPayment = createMutationFactory<
+    IGeneralLedger,
+    Error,
+    { data: IPaymentQuickRequest; mode: TPaymentMode }
+>({
+    mutationFn: async ({ data, mode }) =>
+        (
+            await API.post<IPaymentQuickRequest, IGeneralLedger>(
+                `${route}/${mode}`,
+                data
+            )
+        ).data,
+    invalidationFn: (args) =>
+        createMutationInvalidateFn('general-ledger', args),
+})
+
+export const usePrintGeneralLedgerTransaction = createMutationFactory<
+    IGeneralLedgerResponse,
+    Error,
+    { id: string }
+>({
+    mutationFn: async ({ id }) =>
+        (
+            await API.get<IGeneralLedgerResponse>(
+                `${route}/general-ledger/${id}/print`
+            )
+        ).data,
+})
+
+export const useCreateTransactionPayment = createMutationFactory<
+    IGeneralLedger,
+    Error,
+    TCreateTransactionPaymentProps
+>({
+    mutationFn: async ({ data, transactionId }) =>
+        (
+            await API.post<IPaymentRequest, IGeneralLedger>(
+                `${route}/${transactionId}/payment`,
+                data
+            )
+        ).data,
+    invalidationFn: (args) =>
+        createMutationInvalidateFn('create-transaction-payment', args),
+})
+
+export const useUpdateReferenceNumber = createMutationFactory<
+    ITransaction,
+    Error,
+    TUpdateReferenceNumberProps
+>({
+    mutationFn: async ({ transactionId, reference_number, description }) =>
+        (
+            await API.put<
+                { reference_number: string; description: string },
+                ITransaction
+            >(`${route}/${transactionId}`, {
+                reference_number,
+                description,
+            })
+        ).data,
+    invalidationFn: (args) =>
+        createMutationInvalidateFn('update-reference-number-transaction', args),
+})

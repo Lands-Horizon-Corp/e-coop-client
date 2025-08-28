@@ -11,6 +11,7 @@ import {
     PASSWORD_MIN_LENGTH,
     USER_TYPE,
 } from '@/constants'
+import { sanitizeNumberInput } from '@/helpers/common-helper'
 
 export const entityIdSchema = z.uuidv4()
 
@@ -112,3 +113,30 @@ export const civilStatusSchema = z.enum(CIVIL_STATUS) //TODO: MOVE TO member pro
 export const educationalAttainmentSchema = z.enum(EDUCATIONAL_ATTAINMENT) // MOVE TO member education attainment module
 
 export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP) // Member profile
+
+export const amount = z.preprocess(
+    (val) => {
+        if (typeof val === 'string') {
+            const sanitized = sanitizeNumberInput(val)
+
+            if ((sanitized.match(/\./g)?.length ?? 0) > 1) {
+                return undefined
+            }
+
+            const parsed = parseFloat(sanitized)
+
+            return sanitized === '' || isNaN(parsed) || parsed === 0
+                ? undefined
+                : parsed
+        }
+
+        return typeof val === 'number' && !isNaN(val) && val !== 0
+            ? val
+            : undefined
+    },
+    z
+        .number({
+            error: 'Amount must be a number',
+        })
+        .max(500000000, 'Amount cannot exceed Five Million (500,000,000)')
+)

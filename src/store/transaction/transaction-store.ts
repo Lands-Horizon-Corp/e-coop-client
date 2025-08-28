@@ -1,15 +1,13 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { IAccount } from '@/types/coop-types/accounts/account'
+import { IAccount } from '@/modules/account'
+import { IGeneralLedger } from '@/modules/general-ledger'
+import { IMemberJointAccount } from '@/modules/member-joint-account'
+import { IMemberProfile } from '@/modules/member-profile'
+import { TPaymentMode } from '@/modules/transaction'
 import { create } from 'zustand'
 
-import {
-    IGeneralLedger,
-    IMemberJointAccount,
-    IMemberProfile,
-    TEntityId,
-    TPaymentMode,
-} from '@/types'
+import { TEntityId } from '@/types'
 
 export interface TransactionPropsStore {
     openMemberPicker: boolean

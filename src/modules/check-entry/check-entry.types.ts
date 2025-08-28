@@ -16,7 +16,7 @@ import { IGeneralLedgerResponse } from '../general-ledger'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account'
 import { IMemberProfile } from '../member-profile'
-import { ITransactionResponse } from '../transaction'
+import { ITransaction } from '../transaction'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user/user.types'
 
@@ -139,7 +139,7 @@ export interface ICheckEntryResponse
     employee_user_id?: TEntityId
     employee_user?: IUser
     transaction_id?: TEntityId
-    transaction?: ITransactionResponse
+    transaction?: ITransaction
     transaction_batch_id?: TEntityId
     transaction_batch?: ITransactionBatch
     general_ledger_id?: TEntityId
