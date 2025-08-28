@@ -2,9 +2,12 @@ import { useCallback } from 'react'
 
 import { useNavigate } from '@tanstack/react-router'
 
+import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
+import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
 import {
     ITransaction,
     TransactionActions,
+    TransactionCurrentPaymentEntry,
     // TransactionCurrentPaymentEntry,
     TransactionForm,
     TransactionHistory,
@@ -49,13 +52,13 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         setOpenSuccessModal,
         setFocusTypePayment,
         setOpenMemberPicker,
-        // setSelectedAccountId,
+        setSelectedAccountId,
         setTransactionFormSuccess,
-        // setOpenPaymentWithTransactionModal,
-        // setSelectedAccount,
+        setOpenPaymentWithTransactionModal,
+        setSelectedAccount,
     } = useTransactionStore()
 
-    const { data: transaction } = useGetById({
+    const { data: transaction, isError } = useGetById({
         id: transactionId,
         options: {
             enabled: !!transactionId,
@@ -71,6 +74,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     useQeueryHookCallback({
         data: transaction,
         error: undefined,
+        isError: isError,
+        isSuccess: !!transaction,
         onSuccess: handleGetTransactionByIdSuccess,
     })
 
@@ -104,7 +109,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const hasSelectedTransactionId = !!transactionId
 
     const disAbledActionButtons = !hasSelectedMember || !hasTransactionBatch
-
+    
     return (
         <PageContainer className="flex h-[90vh] items-center w-full !overflow-y-hidden">
             <TransactionNoFoundBatch />
@@ -154,7 +159,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     <ResizableHandle withHandle />
                     <ResizablePanel className="p-2 h-full !overflow-y-auto ecoop-scroll">
                         <div className="w-full p-2">
-                            {/* <MemberAccountingLedgerTable
+                            <MemberAccountingLedgerTable
                                 mode="member"
                                 memberProfileId={
                                     (selectedMember?.id ??
@@ -168,7 +173,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     setSelectedAccount(data.original.account)
                                     setFocusTypePayment('payment')
                                 }}
-                                actionComponent={() => {
+                                actionComponent={(props) => {
                                     return (
                                         <MemberAccountGeneralLedgerAction
                                             memberAccountLedger={
@@ -178,7 +183,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     )
                                 }}
                                 className="w-full min-h-[40vh] h-full"
-                            /> */}
+                            />
                         </div>
                     </ResizablePanel>
                 </ResizablePanelGroup>
@@ -220,10 +225,10 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             reset current transaction
                         </Button>
                     )}
-                    {/* <TransactionCurrentPaymentEntry
+                    <TransactionCurrentPaymentEntry
                         totalAmount={transaction?.amount}
                         transactionId={transactionId}
-                    /> */}
+                    />
                 </div>
             </div>
         </PageContainer>

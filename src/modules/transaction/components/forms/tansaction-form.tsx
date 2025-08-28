@@ -98,12 +98,17 @@ const TransactionForm = ({
         isPending: isLoadingUpdateReferenceNumber,
     } = useUpdateReferenceNumber()
 
-    const { data: transaction } = useGetById({
+    const {
+        data: transaction,
+        isSuccess: isSuccessGetTransaction,
+        isError: isErrorGetTransaction,
+        error: errorGetTransaction,
+    } = useGetById({
         id: transactionId,
         options: { enabled: !!transactionId },
     })
 
-    const handleSuccess = useCallback(() => {
+    const handleSuccessGetTransaction = useCallback(() => {
         form.setValue('reference_number', transaction?.reference_number || '')
         form.setValue('description', transaction?.description || '')
         setSelectedMember?.(transaction?.member_profile ?? null)
@@ -111,8 +116,10 @@ const TransactionForm = ({
 
     useQeueryHookCallback({
         data: transaction,
-        onSuccess: handleSuccess,
-        error: undefined,
+        onSuccess: handleSuccessGetTransaction,
+        error: errorGetTransaction,
+        isError: isErrorGetTransaction,
+        isSuccess: isSuccessGetTransaction,
     })
 
     const referenceNumber = transaction?.reference_number || ''

@@ -21,6 +21,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
 import useFilterState from '@/hooks/use-filter-state'
+import { useShortcut } from '@/hooks/use-shorcuts'
 
 interface Props extends IPickerBaseProps<IAccount> {
     allowShorcutCommand?: boolean
@@ -77,24 +78,24 @@ const AccountPicker = ({
     })
     const { data = [], totalPage = 0, totalSize = 0 } = AccountData || {}
 
-    // useShortcut(
-    //     'Enter',
-    //     (event) => {
-    //         event?.preventDefault()
-    //         if (
-    //             !value &&
-    //             !disabled &&
-    //             !isPending &&
-    //             !isLoading &&
-    //             !isFetching &&
-    //             allowShorcutCommand
-    //         ) {
-    //             setState((prev) => !prev)
-    //         }
-    //     },
-    //     { disableTextInputs: true }
-    // )
-    console.log('value', value)
+    useShortcut(
+        'Enter',
+        (event) => {
+            event?.preventDefault()
+            if (
+                !value &&
+                !disabled &&
+                !isPending &&
+                !isLoading &&
+                !isFetching &&
+                allowShorcutCommand
+            ) {
+                setState((prev) => !prev)
+            }
+        },
+        { disableTextInputs: true }
+    )
+
     return (
         <>
             <GenericPicker

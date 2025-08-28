@@ -1,21 +1,21 @@
 import { Link } from '@tanstack/react-router'
 
-// import { IEmployee } from '@/modules/user'
-// import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import { toReadableDate } from '@/helpers/date-utils'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { ITransactionBatchMinimal } from '@/modules/transaction-batch'
+import { TransactionBatchCreateFormModal } from '@/modules/transaction-batch/components/forms/transaction-batch-create-form'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+import { IEmployee } from '@/modules/user'
 
 import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-// import { toReadableDate } from '@/helpers/date-utils'
-
 const TransactionNoFoundBatch = () => {
-    // const {
-    //     currentAuth: { user, user_organization },
-    // } = useAuthUserWithOrgBranch<IEmployee>()
+    const {
+        currentAuth: { user, user_organization },
+    } = useAuthUserWithOrgBranch<IEmployee>()
 
     const createBatchModalState = useModalState()
     const { data: transactionBatch, setData } = useTransactionBatchStore()
@@ -29,7 +29,7 @@ const TransactionNoFoundBatch = () => {
 
     return (
         <>
-            {/* <TransactionBatchCreateFormModal
+            <TransactionBatchCreateFormModal
                 {...createBatchModalState}
                 formProps={{
                     defaultValues: {
@@ -39,7 +39,7 @@ const TransactionNoFoundBatch = () => {
                     },
                     onSuccess: handleSuccess,
                 }}
-            /> */}
+            />
             <Modal
                 title="No Transaction Batch Found"
                 description="Please create a new transaction batch to proceed."

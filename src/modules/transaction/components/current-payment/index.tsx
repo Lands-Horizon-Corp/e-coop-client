@@ -4,10 +4,12 @@ import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { cn } from '@/helpers'
 import { commaSeparators } from '@/helpers/common-helper'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { useFilteredPaginatedGeneralLedger } from '@/modules/general-ledger'
 import { PaginationState } from '@tanstack/react-table'
 
 import { LedgerSourceBadge } from '@/components/badges/ledger-source-badge'
 import CopyTextButton from '@/components/copy-text-button'
+import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import {
@@ -55,6 +57,7 @@ const TransactionCurrentPaymentEntry = ({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 50,
     })
+    const { sortingStateBase64 } = useDataTableSorting()
 
     const { finalFilterPayload } = useFilterState({
         defaultFilterMode: 'OR',
@@ -64,15 +67,19 @@ const TransactionCurrentPaymentEntry = ({
                 pageIndex: PAGINATION_INITIAL_INDEX,
             })),
     })
+
     const {
         data: generalLedgerBasedTransaction,
         isLoading,
         isFetching,
     } = useFilteredPaginatedGeneralLedger({
-        filterPayload: finalFilterPayload,
         transactionId,
-        pagination: pagination,
         mode: 'transaction',
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: JSON.stringify(finalFilterPayload.filters),
+        },
     })
 
     if (isLoading) {
@@ -288,8 +295,8 @@ const TransactionCurrentPaymentEntry = ({
                 pagination={{
                     pageIndex: pagination.pageIndex,
                     pageSize: pagination.pageSize,
-                    totalPage: generalLedgerBasedTransaction.totalPage,
-                    totalSize: generalLedgerBasedTransaction.totalSize,
+                    totalPage: generalLedgerBasedTransaction?.totalPage || 0,
+                    totalSize: generalLedgerBasedTransaction?.totalSize || 0,
                 }}
                 disablePageMove={isFetching}
                 onNext={({ pageIndex }) =>

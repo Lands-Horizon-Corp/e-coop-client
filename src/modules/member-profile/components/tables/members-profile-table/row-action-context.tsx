@@ -7,7 +7,7 @@ import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import { MemberProfileCloseFormModal } from '@/modules/member-close-remark/components/forms/member-profile-close-form'
-import { TransactionTable } from '@/modules/transaction'
+import { TransactionsTable } from '@/modules/transaction'
 import { useInfoModalStore } from '@/store/info-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -257,7 +257,7 @@ export const MemberProfileAction = ({
                             title="Transactions"
                             description={`You are viewing ${member.full_name}'s transactions`}
                         >
-                            <TransactionTable
+                            <TransactionsTable
                                 mode="member-profile"
                                 onRowClick={() => {}}
                                 memberProfileId={member.id}
@@ -610,7 +610,7 @@ export const MemberProfileRowContext = ({
                         title="Transactions"
                         description={`You are viewing ${member.full_name}'s transactions`}
                     >
-                        <TransactionTable
+                        <TransactionsTable
                             mode="member-profile"
                             onRowClick={() => {}}
                             memberProfileId={member.id}

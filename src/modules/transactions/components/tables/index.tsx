@@ -2,6 +2,11 @@ import { useMemo } from 'react'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
+import { ITransaction } from '@/modules/transaction'
+import {
+    TTransactionHookMode,
+    useFilteredPaginatedTransaction,
+} from '@/modules/transactions'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -22,11 +27,6 @@ import { usePagination } from '@/hooks/use-pagination'
 
 import { TEntityId } from '@/types'
 
-import {
-    TTransactionHookMode,
-    useFilteredPaginatedTransaction,
-} from '../../transaction.service'
-import { ITransaction } from '../../transaction.types'
 import TransactionTableColumns, {
     ITransactionTableColumnProps,
     transactionGlobalSearchTargets,
@@ -70,7 +70,7 @@ export type TTransactionProps = TransactionTableProps &
           }
     )
 
-const TransactionTable = ({
+const TransactionsTable = ({
     mode,
     className,
     toolbarProps,
@@ -222,4 +222,4 @@ const TransactionTable = ({
     )
 }
 
-export default TransactionTable
+export default TransactionsTable

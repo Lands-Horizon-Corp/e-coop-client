@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 import { toReadableDate } from '@/helpers/date-utils'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
@@ -24,7 +26,13 @@ const TransactionModalSuccessPayment = ({
     ...props
 }: PaymentSuccessModalProps) => {
     const { mutate: printGeneralLedgerTransaction } =
-        usePrintGeneralLedgerTransaction()
+        usePrintGeneralLedgerTransaction({
+            options: {
+                onSuccess: () => {
+                    toast.success('Printing transaction...')
+                },
+            },
+        })
 
     const { focusTypePayment } = useTransactionStore()
 

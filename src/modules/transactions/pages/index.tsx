@@ -6,7 +6,7 @@ import PageContainer from '@/components/containers/page-container'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import TransactionTable from '../transaction-table'
+import TransactionsTable from '../components/tables'
 
 export default function TransactionPage() {
     const {
@@ -36,7 +36,7 @@ export default function TransactionPage() {
 
     return (
         <PageContainer>
-            <TransactionTable
+            <TransactionsTable
                 mode="current-branch"
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />

@@ -8,8 +8,8 @@ import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { IGeneralLedger, TGeneralLedgerSource } from '@/modules/general-ledger'
 import { IMedia } from '@/modules/media'
 import { useGetAll } from '@/modules/payment-type'
+import { IPaymentRequest } from '@/modules/quick-transfer'
 import {
-    IPaymentRequest,
     ITransactionRequest,
     PaymentWithTransactionSchema,
     TPaymentWithTransactionFormValues,
@@ -162,6 +162,7 @@ const PaymentWithTransactionForm = ({
                                             shouldDirty: true,
                                         })
                                     }}
+                                    hideDescription
                                     placeholder="Select an account"
                                 />
                             )}

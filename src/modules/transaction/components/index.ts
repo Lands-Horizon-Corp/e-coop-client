@@ -29,9 +29,9 @@ export { default as PaymentsEntryListSkeleton } from './skeleton/transaction-pay
 export { default as TransactionSkeletonCard } from './skeleton/transaction-skeleton-card'
 
 //exort tables
-export { default as TransactionTable } from './tables'
-export { default as TransactionTableColumns } from './tables/columns'
-export { default as TransactionTableAction } from './tables/row-action-context'
+export { default as TransactionsTable } from '../../transactions/components/tables'
+export { default as TransactionTableColumns } from '../../transactions/components/tables/columns'
+export { default as TransactionTableAction } from '../../transactions/components/tables/row-action-context'
 
 //export view
 export { default as TransactionViewNoMemberSelected } from './view/transaction-view-no-member-selected'

@@ -43,7 +43,9 @@ const MemberQrScanner = ({
     const {
         data,
         isPending,
+        isError,
         error: rawError,
+        isSuccess,
     } = useGetById({
         id: focusedId as TEntityId,
         options: {
@@ -62,6 +64,8 @@ const MemberQrScanner = ({
         data,
         onSuccess: handleSuccess,
         error: rawError,
+        isError,
+        isSuccess,
     })
 
     const error = serverRequestErrExtractor({ error: rawError })

@@ -13,6 +13,8 @@ import {
 import { sanitizeNumberInput } from '@/helpers/common-helper'
 
 export const entityIdSchema = z.uuidv4()
+export const EntityIdSchema = (fieldName?: string) =>
+    z.uuidv4({ error: `${fieldName ? fieldName : 'Field'} is required` })
 
 export const descriptionSchema = z
     .string({ error: 'Description is required' })

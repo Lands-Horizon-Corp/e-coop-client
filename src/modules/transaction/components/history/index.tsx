@@ -3,21 +3,19 @@ import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
-import {
-    TransactionCardItem,
-    TransactionDetails,
-    useFilteredPaginatedTransaction,
-} from '@/modules/transaction'
+import { TransactionDetails } from '@/modules/transaction'
+import { useFilteredPaginatedTransaction } from '@/modules/transactions'
 import { PaginationState } from '@tanstack/react-table'
 
 import RefreshButton from '@/components/buttons/refresh-button'
+import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import { HistoryIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
-import useFilterState from '@/hooks/use-filter-state'
+import useDatableFilterState from '@/hooks/use-filter-state'
 import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
@@ -32,13 +30,10 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 10,
     })
-    const { finalFilterPayload } = useFilterState({
-        defaultFilterMode: 'OR',
-        onFilterChange: () =>
-            setPagination((prev) => ({
-                ...prev,
-                pageIndex: PAGINATION_INITIAL_INDEX,
-            })),
+    const { sortingStateBase64 } = useDataTableSorting()
+
+    const filterState = useDatableFilterState({
+        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
 
     const {
@@ -48,6 +43,11 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
         refetch: refetchCurrentTransaction,
     } = useFilteredPaginatedTransaction({
         mode: 'current-user',
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
     })
 
     const handleNavigate = (transactionId: TEntityId, fullPath: string) => {

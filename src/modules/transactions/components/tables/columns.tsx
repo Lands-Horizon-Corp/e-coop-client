@@ -13,7 +13,7 @@ import { PushPinSlashIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
-import { ITransaction } from '../../transaction.types'
+import { ITransaction } from '../../../transaction/transaction.types'
 
 export const transactionGlobalSearchTargets: IGlobalSearchTargets<ITransaction>[] =
     [
