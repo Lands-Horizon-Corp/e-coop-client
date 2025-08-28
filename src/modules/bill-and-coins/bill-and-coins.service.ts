@@ -5,7 +5,7 @@ import type {
     IBillsAndCoinRequest,
 } from './bill-and-coins.types'
 
-const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
+const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
     IBillsAndCoin,
     IBillsAndCoinRequest
 >({
@@ -13,18 +13,31 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
     baseKey: 'bills-and-coins',
 })
 
-// Add custom CRUD API service here if needed
+// ⚙️🛠️ API SERVICE HERE
+export const {
+    API: billsAndCoinsAPI,
+    route: billsAndCoinsAPIRoute,
+
+    create: createBillsAndCoins,
+    updateById: updateBillsAndCoinsById,
+
+    deleteById: deleteBillsAndCoinsById,
+    deleteMany: deleteManyBillsAndCoins,
+
+    getById: getBillsAndCoinsById,
+    getAll: getAllBillsAndCoins,
+    getPaginated: getPaginatedBillsAndCoins,
+} = apiCrudService
+
+// 🪝 HOOK STARTS HERE
+export { baseQueryKey } // Exported in case it's needed outside
 
 export const {
-    useCreate,
-    useDeleteById,
-    useDeleteMany,
-    useGetAll,
-    useGetById,
-    useGetPaginated,
-    useUpdateById,
+    useCreate: useCreateBillsAndCoins,
+    useDeleteById: useDeleteBillsAndCoinsById,
+    useDeleteMany: useDeleteManyBillsAndCoins,
+    useGetAll: useGetAllBillsAndCoins,
+    useGetById: useGetBillsAndCoinsById,
+    useGetPaginated: useGetPaginatedBillsAndCoins,
+    useUpdateById: useUpdateBillsAndCoinsById,
 } = apiCrudHooks
-
-// Add custom API query hooks here if needed
-
-export const BillAndCoinsAPI = apiCrudService
