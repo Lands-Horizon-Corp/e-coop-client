@@ -26,7 +26,7 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                 <SignaturePickerUploaderModal
                     open={open}
                     title="Upload"
-                    className='!max-w-[38rem]'
+                    className="!max-w-[38rem]"
                     onOpenChange={setOpen}
                     signatureUploadProps={{
                         onSignatureUpload: (media) => {
@@ -61,18 +61,15 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                                     value && 'dark:bg-background/75'
                                 )}
                             />
-                            <Button asChild
-                                size="icon"
-                                type="button"
-                                variant="secondary"
+                            <span
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     onChange?.(undefined)
                                 }}
-                                className="absolute right-2 top-2 size-fit rounded-full p-1.5"
+                                className="absolute hover:cursor-pointer bg-secondary right-2 top-2 size-fit rounded-full p-1 ease-in-out duration-200 hover:bg-destructive hover:text-destructive-foreground"
                             >
                                 <XIcon className="size-4" />
-                            </Button>
+                            </span>
                         </div>
                     ) : (
                         <div className="flex flex-1 flex-col items-center justify-center">

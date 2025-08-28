@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 // import { IEmployee } from '@/modules/user'
 // import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { ITransactionBatchMinimal } from '@/modules/transaction-batch'
-import { useTransactionBatchStore } from '@/store/transaction-batch-store'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
 import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'

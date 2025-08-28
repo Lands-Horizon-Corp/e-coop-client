@@ -1,15 +1,10 @@
-import {
-    IAuditable,
-    IPaginatedResult,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '@/types'
 
-import { IBatchFundingRequest } from '../batch-funding/batch-funding.types'
+import { IBatchFundingRequest } from '../batch-funding'
 import { IBranch } from '../branch'
-import { IMedia } from '../media/media.types'
+import { IMedia } from '../media'
 import { IOrganization } from '../organization'
-import { IUserBase } from '../user/user.types'
+import { IUserBase } from '../user'
 
 export type TBatchBalanceStatus =
     | 'balanced'

@@ -14,7 +14,7 @@ import {
     TransactionViewNoMemberSelected,
     useGetById,
 } from '@/modules/transaction'
-import { useTransactionBatchStore } from '@/store/transaction-batch-store'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 
 import PageContainer from '@/components/containers/page-container'

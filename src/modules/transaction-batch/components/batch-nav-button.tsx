@@ -1,21 +1,32 @@
+import { useCallback } from 'react'
+
 import { toast } from 'sonner'
 
+import { toReadableDate } from '@/helpers/date-utils'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import { useTransactionBatchStore } from '@/store/transaction-batch-store'
-import { toReadableDate } from '@/utils'
+import {
+    TTransactionBatchFullorMin,
+    useCurrentTransactionBatch,
+} from '@/modules/transaction-batch'
+import { IEmployee } from '@/modules/user'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
-import { TransactionBatchCreateFormModal } from '@/components/forms/transaction-batch-forms/transaction-batch-create-form'
+import { LayersIcon, LayersSharpDotIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
 
-import { useCurrentTransactionBatch } from '@/hooks/api-hooks/use-transaction-batch'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
+import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
-import { IClassProps, IEmployee, TTransactionBatchFullorMin } from '@/types'
+import { IClassProps } from '@/types'
 
-import { LayersIcon, LayersSharpDotIcon } from '../../icons'
-import TransactionBatch from '../../transaction-batch'
-import { Button } from '../../ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover'
+import { TransactionBatchCreateFormModal } from './forms/transaction-batch-create-form'
+import TransactionBatch from './transaction-batch'
 
 interface Props extends IClassProps {}
 
@@ -31,11 +42,21 @@ const TransactionBatchNavButton = (_props: Props) => {
         reset,
     } = useTransactionBatchStore()
 
-    useCurrentTransactionBatch({
-        onSuccess(data) {
+    const { data, error, isSuccess, isError } = useCurrentTransactionBatch()
+
+    const handleSuccess = useCallback(
+        (data: TTransactionBatchFullorMin) => {
             setData(data)
         },
-        showMessage: false,
+        [setData]
+    )
+
+    useQeueryHookCallback({
+        isSuccess,
+        data,
+        isError,
+        error: error,
+        onSuccess: handleSuccess,
     })
 
     useSubscribe<TTransactionBatchFullorMin>(

@@ -2,7 +2,7 @@ import { useRouter } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-// import TransactionBatchNavButton from '@/components/nav/nav-components/batch-nav-button'
+import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 
 import { BadgeCheckFillIcon } from '@/components/icons'
@@ -59,7 +59,7 @@ const UserNav = ({
                         Approvals
                     </Button>
                 )}
-                {/* {user && <TransactionBatchNavButton />} */}
+                {user && <TransactionBatchNavButton />}
                 {user && user_organization?.user_type === 'employee' && (
                     <NavTimeInBar />
                 )}
