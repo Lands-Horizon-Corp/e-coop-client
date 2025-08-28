@@ -107,6 +107,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     return (
         <PageContainer className="flex h-[90vh] items-center w-full !overflow-y-hidden">
+            <TransactionNoFoundBatch />
             <TransactionModalSuccessPayment
                 open={openSuccessModal}
                 onOpenChange={setOpenSuccessModal}
@@ -114,7 +115,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 onClose={handleCloseSuccessModal}
                 isOpen={openSuccessModal}
             />
-            <TransactionNoFoundBatch />
             <div className="flex h-full w-full over-flow-y-auto ">
                 <ResizablePanelGroup
                     direction="vertical"
