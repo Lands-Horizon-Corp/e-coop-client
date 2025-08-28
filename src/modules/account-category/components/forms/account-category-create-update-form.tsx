@@ -1,6 +1,6 @@
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import {
@@ -55,7 +55,7 @@ const AccountCategoryCreateUpdateForm = ({
     const userType = user.user_organization.user_type
 
     const form = useForm<AccountCategoryFormValues>({
-        resolver: zodResolver(AccountCategorySchema),
+        resolver: standardSchemaResolver(AccountCategorySchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: defaultValues || {

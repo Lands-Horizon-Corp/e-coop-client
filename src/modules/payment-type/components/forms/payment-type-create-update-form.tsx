@@ -1,6 +1,6 @@
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
@@ -58,7 +58,7 @@ const PaymentTypeCreateUpdateForm = ({
     const organizationId = user.user_organization.organization_id
 
     const form = useForm<PaymentTypeFormValues>({
-        resolver: zodResolver(PaymentTypeSchema),
+        resolver: standardSchemaResolver(PaymentTypeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: defaultValues || {
