@@ -1,7 +1,7 @@
 import { Path, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import {
@@ -61,7 +61,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
     onSuccess,
 }: IGeneralLedgerDefinitionCreateUpdateFormProps) => {
     const form = useForm<IGeneralLedgerDefinitionFormValues>({
-        resolver: zodResolver(GeneralLedgerDefinitionSchema),
+        resolver: standardSchemaResolver(GeneralLedgerDefinitionSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {

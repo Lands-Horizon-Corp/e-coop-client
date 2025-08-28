@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import { contactUsSchema, useCreate } from '@/modules/contact-us'
@@ -51,7 +51,7 @@ const ContactPage = () => {
     }
 
     const form = useForm<TContact>({
-        resolver: zodResolver(contactUsSchema),
+        resolver: standardSchemaResolver(contactUsSchema),
         reValidateMode: 'onChange',
         mode: 'onChange',
         defaultValues,
