@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { IBank, useGetAll } from '@/modules/bank'
+import { IBank, useGetAllBanks } from '@/modules/bank'
 
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -55,7 +55,7 @@ const BankCombobox = ({
     const [open, setOpen] = React.useState(false)
     const [createModal, setCreateModal] = React.useState(false)
 
-    const { data, isLoading } = useGetAll({
+    const { data, isLoading } = useGetAllBanks({
         options: {
             enabled: !disabled,
         },

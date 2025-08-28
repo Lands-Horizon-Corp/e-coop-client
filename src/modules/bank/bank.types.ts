@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IMedia } from '../media/media.types'
 import { BankSchema } from './bank.validation'

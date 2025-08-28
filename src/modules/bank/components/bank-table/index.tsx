@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
-import { BankAPI, IBank, useGetPaginated } from '@/modules/bank'
+import { IBank, deleteManyBanks, useGetPaginatedBanks } from '@/modules/bank'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -93,7 +93,7 @@ const BankTable = ({
         isRefetching,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginated({
+    } = useGetPaginatedBanks({
         query: {
             ...pagination,
             sort: sortingStateBase64,
@@ -158,7 +158,7 @@ const BankTable = ({
                                 queryKey: ['bank', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
-                            BankAPI.deleteMany({
+                            deleteManyBanks({
                                 ids: selectedData.map((data) => data.id),
                             }),
                     }}

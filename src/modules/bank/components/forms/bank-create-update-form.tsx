@@ -1,28 +1,25 @@
 import { Path, useForm } from 'react-hook-form'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { IMedia } from '@/modules/media/media.types'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { useCreate, useUpdateById } from '../..'
+import { useCreateBank, useUpdateBankById } from '../..'
 import { IBank, IBankRequest } from '../../bank.types'
 import { BankSchema } from '../../bank.validation'
 
@@ -44,7 +41,7 @@ const BankCreateUpdateForm = ({
     onSuccess,
 }: IBankFormProps) => {
     const form = useForm<TBankFormValues>({
-        resolver: zodResolver(BankSchema),
+        resolver: standardSchemaResolver(BankSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -54,13 +51,13 @@ const BankCreateUpdateForm = ({
         },
     })
 
-    const createMutation = useCreate({
+    const createMutation = useCreateBank({
         options: {
             onSuccess,
             onError,
         },
     })
-    const updateMutation = useUpdateById({
+    const updateMutation = useUpdateBankById({
         options: {
             onSuccess,
             onError,
@@ -158,38 +155,17 @@ const BankCreateUpdateForm = ({
                         />
                     </fieldset>
                 </fieldset>
-                <Separator />
-                <div className="space-y-2">
-                    <FormErrorMessage errorMessage={error} />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            onClick={() => {
-                                form.reset()
-                                reset()
-                            }}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            disabled={isPending}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {isPending ? (
-                                <LoadingSpinner />
-                            ) : bankId ? (
-                                'Update'
-                            ) : (
-                                'Create'
-                            )}
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={bankId ? 'Update' : 'Create'}
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

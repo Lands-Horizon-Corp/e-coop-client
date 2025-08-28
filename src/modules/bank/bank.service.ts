@@ -2,7 +2,7 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { IBank, IBankRequest } from '../bank'
 
-const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
+const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
     IBank,
     IBankRequest
 >({
@@ -10,19 +10,38 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
     baseKey: 'bank',
 })
 
-// Add custom CRUD API service here if needed
-
 // ⚙️🛠️ API SERVICE HERE
-export const BankAPI = apiCrudService
+export const {
+    API, // most of time di to nagagamit, pag nag raw lang tlga
+    route: bankAPIRoute, // same sa url na prinovide mo sa createDataLayerFactory
+
+    create: createBank,
+    updateById: updateBankById,
+
+    deleteById: deleteBankById,
+    deleteMany: deleteManyBanks,
+
+    getById: getBankById,
+    getAll: getAllBanks,
+    getPaginated: getPaginatedBanks,
+} = apiCrudService
+
+// write ur custom api service here and export it
 
 // 🪝 HOOK STARTS HERE
-// Add custom API query hooks here if needed
+export { baseQueryKey } // Exported in case it's needed outside
+
 export const {
-    useCreate,
-    useDeleteById,
-    useDeleteMany,
-    useGetAll,
-    useGetById,
-    useGetPaginated,
-    useUpdateById,
+    useCreate: useCreateBank,
+    useUpdateById: useUpdateBankById,
+
+    useGetAll: useGetAllBanks,
+    useGetById: useGetBankById,
+    useGetPaginated: useGetPaginatedBanks,
+
+    useDeleteById: useDeleteBankById,
+    useDeleteMany: useDeleteManyBanks,
 } = apiCrudHooks
+
+// write ur custom hook here and export it
+
