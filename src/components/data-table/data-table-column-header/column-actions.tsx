@@ -37,7 +37,7 @@ const ColumnActions = <TData, TValue>({
             <DropdownMenuTrigger asChild>
                 <Button
                     variant="ghost"
-                    size="sm"
+                    size="icon"
                     className="group-hover size-fit gap-x-2 p-1 data-[state=open]:bg-accent"
                 >
                     {column.getCanSort() && (

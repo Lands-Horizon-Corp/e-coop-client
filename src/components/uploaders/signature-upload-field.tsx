@@ -3,6 +3,7 @@ import { forwardRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
+import { IMedia } from '@/modules/media'
 import { IconType } from 'react-icons/lib'
 
 import { ImageIcon, TrashIcon } from '@/components/icons'
@@ -10,7 +11,7 @@ import ImageDisplay from '@/components/image-display'
 import { SignaturePickerUploaderModal } from '@/components/signature/signature-picker-uploader'
 import { Button } from '@/components/ui/button'
 
-import { IClassProps, IMedia, TEntityId } from '@/types'
+import { IClassProps, TEntityId } from '@/types'
 
 export interface SignatureUploadField extends IClassProps {
     id?: string
