@@ -1,17 +1,20 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const disbursementTransactiontSchema = z.object({
-    organization_id: entityIdSchema,
-    branch_id: entityIdSchema,
-    disbursement_id: entityIdSchema,
-    transaction_batch_id: entityIdSchema,
-    employee_user_id: entityIdSchema,
-    transaction_reference_number: z.string().optional(),
-    reference_number: z.string().optional(),
-    amount: z.number().optional(),
+export const DisbursementTransactionSchema = z.object({
+    disbursement_id: entityIdSchema.optional(),
+    transaction_batch_id: entityIdSchema.optional(),
+    disbursement: z.any(),
+    description: z
+        .string()
+        .optional()
+        .transform(descriptionTransformerSanitizer),
+    is_reference_number_checked: z.boolean(),
+    reference_number: z.coerce.string(),
+    amount: z.coerce.number(),
 })
-export type TDisbursementTransaction = z.infer<
-    typeof disbursementTransactiontSchema
+
+export type TDisbursementTransactionFormValue = z.infer<
+    typeof DisbursementTransactionSchema
 >

@@ -1,60 +1,43 @@
-import z from 'zod'
-
 import {
     IAuditable,
-    IOrgBranchIdentity,
+    IPaginatedResult,
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
+import { IEmployee } from '../user'
+import { ITransactionBatch } from '../transaction-batch'
+import { IDisbursement } from '../disbursement/disbursement.types'
 
-import { ITransaction } from '../transaction'
-import { IUser } from '../user/user.types'
-
-export interface IDisbursementRequest {
-    name: string
-    icon?: string
-    description?: string
-}
-
-export interface IDisbursementResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+export interface IDisbursementTransaction extends ITimeStamps, IAuditable {
     id: TEntityId
-    name: string
-    icon: string
-    description: string
-}
 
-export const disbursementRequestSchema = z.object({
-    name: z.string().min(1).max(50),
-    icon: z.string().optional(),
-    description: z.string().optional(),
-})
-
-export interface IDisbursementTransactionRequest {
     organization_id: TEntityId
     branch_id: TEntityId
-    disbursement_id: TEntityId
-    transaction_batch_id: TEntityId
-    employee_user_id: TEntityId
+
+    disbursement_id?: TEntityId
+    disbursement?: IDisbursement
+
+    transaction_batch_id?: TEntityId
+    transaction_batch?: ITransactionBatch
+
+    employee_user_id?: TEntityId
+    employee_user?: IEmployee
+
     transaction_reference_number?: string
     reference_number?: string
-    amount?: number
+
+    amount: number
 }
 
-export interface IDisbursementTransactionResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    disbursement_id: TEntityId
-    disbursement?: IDisbursementResponse
-    transaction_batch_id: TEntityId
-    transaction_batch?: ITransaction
-    employee_user_id: TEntityId
-    employee_user?: IUser
-    transaction_reference_number: string
+export interface IDisbursementTransactionRequest {
+    id?: TEntityId
+    transaction_batch_id?: TEntityId
+    disbursement_id?: TEntityId
+    description?: string
+    is_reference_number_checked: boolean
     reference_number: string
     amount: number
 }
+
+export interface IDisbursementTransactionPaginated
+    extends IPaginatedResult<IDisbursementTransaction> {}
