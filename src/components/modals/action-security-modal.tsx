@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useVerifyPassword } from '@/modules/authentication'
@@ -33,7 +33,7 @@ const ActionSecurityModal = () => {
     } = useActionSecurityStore()
 
     const form = useForm<TFormType>({
-        resolver: zodResolver(actionSecurityFormSchema),
+        resolver: standardSchemaResolver(actionSecurityFormSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {

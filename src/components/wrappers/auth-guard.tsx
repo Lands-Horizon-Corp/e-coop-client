@@ -93,11 +93,6 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
         refetch
     )
 
-    useSubscribe(
-        `organization.update.${currentAuth.user_organization?.organization_id}`,
-        refetch
-    )
-
     const originalPathnameRef = useRef<string | null>(null)
 
     if (originalPathnameRef.current === null && !pathname.startsWith('/auth')) {
