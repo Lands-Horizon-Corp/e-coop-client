@@ -1,22 +1,17 @@
 import z from 'zod'
 
 import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
+    dateToISOTransformer,
     entityIdSchema,
+    stringDateSchema,
 } from '@/validation'
 
-export const memberIncomeRequestSchema = z.object({
-    media_id: entityIdSchema.optional(),
-    name: z.string().min(1).max(255),
-    amount: z.number(),
-    release_date: z.string().datetime().optional(),
-})
-
-export const memberIncomeSchema = z.object({
-    id: entityIdSchema.optional(),
+export const MemberIncomeSchema = z.object({
+    id: z.string().optional(),
     name: z.string().min(1, 'Name is required'),
-    amount: z.coerce.number().min(0, 'Amount must be non-negative'),
-    date: z.string().min(1, 'Date is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+    source: z.string().min(1, 'Income source is required'),
+    amount: z.coerce.number(),
+    release_date: stringDateSchema.transform(dateToISOTransformer),
+    media_id: entityIdSchema.optional(),
+    media: z.any(),
 })

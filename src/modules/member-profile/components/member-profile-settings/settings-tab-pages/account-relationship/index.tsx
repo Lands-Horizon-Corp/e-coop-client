@@ -1,8 +1,8 @@
 import { forwardRef } from 'react'
 
-import { Separator } from '@/components/ui/separator'
+import { IMemberProfile } from '@/modules/member-profile'
 
-import { IMemberProfile } from '@/types'
+import { Separator } from '@/components/ui/separator'
 
 import MemberJointAccounts from './joint-accounts'
 import MemberRelativeAccounts from './member-relative-accounts'

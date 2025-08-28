@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers'
 
 import { IClassProps, IMemberProfile } from '@/types'
 

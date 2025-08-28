@@ -5,7 +5,15 @@ import { useQueryClient } from '@tanstack/react-query'
 import { cn } from '@/helpers'
 import { IconType } from 'react-icons/lib'
 
-import { UserIcon, UserTagIcon } from '@/components/icons'
+import {
+    GraduationCapIcon,
+    HandCoinsIcon,
+    IdCardIcon,
+    MapMarkedIcon,
+    UserIcon,
+    UserTagIcon,
+    Users3Icon,
+} from '@/components/icons'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -19,13 +27,13 @@ import MemberCloseAccountBanner from '../member-closed-account-banner'
 import MemberProfileMiniInfoCard, {
     MemberProfileMiniInfoCardSkeleton,
 } from '../member-profile-mini-info-card'
-// import MemberAccountRelationship from './settings-tab-pages/account-relationship'
-// import MemberAddressContact from './settings-tab-pages/member-address-contact'
-// import MemberEducationalAttainment from './settings-tab-pages/member-educational-attainment'
-// import MemberFinancial from './settings-tab-pages/member-financial-info'
-// import MemberGovernmentBenefits from './settings-tab-pages/member-government-benefits'
+import MemberAccountRelationship from './settings-tab-pages/account-relationship'
+import MemberAddressContact from './settings-tab-pages/member-address-contact'
+import MemberEducationalAttainment from './settings-tab-pages/member-educational-attainment'
+import MemberFinancial from './settings-tab-pages/member-financial-info'
+import MemberGovernmentBenefits from './settings-tab-pages/member-government-benefits'
 import MemberProfilePersonalInfo from './settings-tab-pages/member-profile-personal-info'
-// import MemberUserAccount from './settings-tab-pages/member-user-account'
+import MemberUserAccount from './settings-tab-pages/member-user-account'
 import MembershipInfo from './settings-tab-pages/membership-info'
 
 const SettingsTabs: {
@@ -50,42 +58,42 @@ const SettingsTabs: {
         Icon: UserIcon,
         Component: (props) => <MembershipInfo {...props} />,
     },
-    // {
-    //     value: 'education',
-    //     title: 'Education',
-    //     Icon: GraduationCapIcon,
-    //     Component: (props) => <MemberEducationalAttainment {...props} />,
-    // },
-    // {
-    //     value: 'government-benefits',
-    //     title: 'Government Benefits / IDs',
-    //     Icon: IdCardIcon,
-    //     Component: (props) => <MemberGovernmentBenefits {...props} />,
-    // },
-    // {
-    //     value: 'financial',
-    //     title: 'Financial Info',
-    //     Icon: HandCoinsIcon,
-    //     Component: (props) => <MemberFinancial {...props} />,
-    // },
-    // {
-    //     value: 'addresses-contacts',
-    //     title: 'Addresses & Contacts',
-    //     Icon: MapMarkedIcon,
-    //     Component: (props) => <MemberAddressContact {...props} />,
-    // },
-    // {
-    //     value: 'account-relationships',
-    //     title: 'Account Relationships',
-    //     Icon: Users3Icon,
-    //     Component: (props) => <MemberAccountRelationship {...props} />,
-    // },
-    // {
-    //     value: 'user-account',
-    //     title: 'User Account',
-    //     Icon: UserIcon,
-    //     Component: (props) => <MemberUserAccount {...props} />,
-    // },
+    {
+        value: 'education',
+        title: 'Education',
+        Icon: GraduationCapIcon,
+        Component: (props) => <MemberEducationalAttainment {...props} />,
+    },
+    {
+        value: 'government-benefits',
+        title: 'Government Benefits / IDs',
+        Icon: IdCardIcon,
+        Component: (props) => <MemberGovernmentBenefits {...props} />,
+    },
+    {
+        value: 'financial',
+        title: 'Financial Info',
+        Icon: HandCoinsIcon,
+        Component: (props) => <MemberFinancial {...props} />,
+    },
+    {
+        value: 'addresses-contacts',
+        title: 'Addresses & Contacts',
+        Icon: MapMarkedIcon,
+        Component: (props) => <MemberAddressContact {...props} />,
+    },
+    {
+        value: 'account-relationships',
+        title: 'Account Relationships',
+        Icon: Users3Icon,
+        Component: (props) => <MemberAccountRelationship {...props} />,
+    },
+    {
+        value: 'user-account',
+        title: 'User Account',
+        Icon: UserIcon,
+        Component: (props) => <MemberUserAccount {...props} />,
+    },
 ]
 
 interface Props extends IClassProps {

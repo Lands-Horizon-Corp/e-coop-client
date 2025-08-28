@@ -1,7 +1,15 @@
 import { useState } from 'react'
 
+import { toast } from 'sonner'
+
+import { toReadableDate } from '@/helpers/date-utils'
+import { formatNumber } from '@/helpers/number-utils'
+import {
+    IMemberAsset,
+    useDeleteMemberProfileAsset,
+} from '@/modules/member-asset'
+import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { formatNumber, toReadableDate } from '@/utils'
 
 import {
     CalendarDotsIcon,
@@ -12,25 +20,26 @@ import {
     WoodSignsIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import RawDescription from '@/components/raw-description'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextRenderer from '@/components/text-renderer'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { useDeleteMemberProfileAsset } from '@/hooks/api-hooks/member/use-member-profile-settings'
-
-import { IMemberAsset, IMemberProfile } from '@/types'
-
+import { MemberAssetCreateUpdateFormModal } from '../../../../../member-asset/components/forms/member-asset-create-update-form'
 import EmptyListIndicator from '../empty-list-indicator'
-import { MemberAssetCreateUpdateFormModal } from './member-asset-create-update-form'
 
 const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: deleteAsset, isPending: isDeleting } =
-        useDeleteMemberProfileAsset()
+        useDeleteMemberProfileAsset({
+            options: {
+                onSuccess: () => toast.success('Deleted'),
+                onError: () => toast.error('Failed to delete'),
+            },
+        })
 
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
@@ -110,7 +119,7 @@ const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
                 <div className="!mt-5 space-y-2">
                     <p className="text-muted-foreground/70">Description</p>
                     {asset?.description ? (
-                        <RawDescription
+                        <TextRenderer
                             content={asset.description ?? 'no description'}
                         />
                     ) : (

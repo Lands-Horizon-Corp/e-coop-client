@@ -25,8 +25,8 @@ import { usePagination } from '@/hooks/use-pagination'
 import {
     MemberClassificationAPI,
     useGetPaginated,
-} from '../../member-classification.service'
-import { IMemberClassification } from '../../member-classification.types'
+} from '../../../member-classification.service'
+import { IMemberClassification } from '../../../member-classification.types'
 import memberClassificationColumns, {
     IMemberClassificationTableColumnProps,
     memberClassificationGlobalSearchTargets,
@@ -199,9 +199,7 @@ const MemberClassificationTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

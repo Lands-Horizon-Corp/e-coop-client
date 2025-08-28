@@ -1,7 +1,11 @@
 import { forwardRef, useState } from 'react'
 
+import { toReadableDate } from '@/helpers/date-utils'
+import {
+    IMemberGovernmentBenefit,
+    useDeleteMemberGovernmentBenefit,
+} from '@/modules/member-government-benefit'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { toReadableDate } from '@/utils'
 
 import {
     IdCardIcon,
@@ -11,18 +15,15 @@ import {
     WoodSignsIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import RawDescription from '@/components/raw-description'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextRenderer from '@/components/text-renderer'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { useDeleteMemberGovernmentBenefit } from '@/hooks/api-hooks/member/use-member-profile-settings'
-
-import { IMemberGovernmentBenefit, IMemberProfile } from '@/types'
-
+import { MemberGovernmentBenefitCreateUpdateFormModal } from '../../../../../member-government-benefit/components/forms/member-government-benefits-create-update-form'
 import EmptyListIndicator from '../empty-list-indicator'
-import { MemberGovernmentBenefitCreateUpdateFormModal } from './member-government-benefits-create-update-form'
+import { IMemberProfile } from '@/modules/member-profile'
 
 const MemberGovernmentBenefitCard = ({
     benefit,
@@ -142,7 +143,7 @@ const MemberGovernmentBenefitCard = ({
                 <div className="col-span-full space-y-2">
                     <p className="text-muted-foreground/70">Description</p>
                     {benefit?.description ? (
-                        <RawDescription
+                        <TextRenderer
                             content={benefit.description ?? 'no description'}
                         />
                     ) : (

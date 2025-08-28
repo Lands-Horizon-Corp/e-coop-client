@@ -1,31 +1,13 @@
 import z from 'zod'
 
-import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/validation'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IBranch } from '../branch'
 import { IMedia } from '../media/media.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { MemberAssetSchema } from './member-asset-validation'
 
-export interface IMemberAssetRequest {
-    id?: TEntityId
-    media_id?: TEntityId
-
-    member_profile_id: TEntityId
-
-    branch_id?: TEntityId
-
-    name: string
-    entry_date: string
-    description: string
-    cost: number
-}
-
-export interface IMemberAsset extends ITimeStamps, IAuditable {
+export interface IMemberAsset extends IBaseEntityMeta {
     id: TEntityId
     media_id?: TEntityId
     media?: IMedia
@@ -38,13 +20,8 @@ export interface IMemberAsset extends ITimeStamps, IAuditable {
 
     name: string
     entry_date: string
-    description: string
+    description?: string
     cost: number
 }
 
-export const memberAssetsSchema = z.object({
-    id: entityIdSchema.optional(),
-    entryDate: z.string().min(1, 'Entry Date is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-    name: z.string().min(1, 'Name is required'),
-})
+export type IMemberAssetRequest = z.infer<typeof MemberAssetSchema>

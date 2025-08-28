@@ -28,7 +28,7 @@ import MemberGroupTableColumns, {
     IMemberGroupTableColumnProps,
     groupGlobalSearchTargets,
 } from './columns'
-import { MemberGroupRowContext } from './row-action-context'
+import MemberGroupAction, { MemberGroupRowContext } from './row-action-context'
 
 export interface MemberGroupTableProps
     extends TableProps<IMemberGroup>,
@@ -54,7 +54,7 @@ const MemberGroupTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = MemberGroupAction,
     RowContextComponent = MemberGroupRowContext,
 }: MemberGroupTableProps) => {
     const queryClient = useQueryClient()
@@ -194,9 +194,7 @@ const MemberGroupTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

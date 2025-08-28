@@ -1,5 +1,9 @@
 import { ReactNode } from 'react'
 
+import {
+    IMemberClassification,
+    useDeleteById,
+} from '@/modules/member-classification'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -8,9 +12,7 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { useDeleteById } from '../../member-classification.service'
-import { IMemberClassification } from '../../member-classification.types'
-import { MemberClassificationCreateUpdateFormModal } from '../member-classification-create-update-form'
+import { MemberClassificationCreateUpdateFormModal } from '../../member-classification-create-update-form'
 import { IMemberClassificationTableActionComponentProp } from './columns'
 
 interface UseMemberClassificationActionsProps {

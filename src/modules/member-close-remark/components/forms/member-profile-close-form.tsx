@@ -5,8 +5,8 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
     CommentDashedIcon,
     HeartBreakFillIcon,
@@ -14,11 +14,9 @@ import {
     XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import TextEditor from '@/components/text-editor'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormItem } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Separator } from '@/components/ui/separator'
 
@@ -42,14 +40,16 @@ const MemberProfileCloseForm = ({
     profileId,
     hiddenFields,
     disabledFields,
-    defaultValues = { remarks: [] },
+    defaultValues,
     onSuccess,
 }: IMemberProfileCloseFormProps) => {
-    const { onOpen } = useConfirmModalStore()
     const form = useForm<TMemberCloseForm>({
         mode: 'onChange',
         reValidateMode: 'onChange',
-        defaultValues: defaultValues,
+        defaultValues: {
+            remarks: [],
+            ...defaultValues,
+        },
         resolver: standardSchemaResolver(MemberCreateCloseRemarksSchema),
     })
 
@@ -58,6 +58,7 @@ const MemberProfileCloseForm = ({
         error: rawError,
         mutate: closeAccount,
         isPending: isClosingAccount,
+        reset,
     } = useCloseMemberProfile({
         options: {
             onSuccess,
@@ -81,6 +82,8 @@ const MemberProfileCloseForm = ({
         name: 'remarks',
         keyName: 'fieldKey',
     })
+
+    form.watch('remarks')
 
     const handleSubmit = ({ remarks }: TMemberCloseForm) => {
         closeAccount({ profileId, data: remarks })
@@ -202,44 +205,19 @@ const MemberProfileCloseForm = ({
                             </FormItem>
                         )}
                     />
-                    <FormErrorMessage errorMessage={error} />
                 </fieldset>
-                <div>
-                    <Separator className="my-2 sm:my-4" />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            disabled={readOnly || isClosingAccount}
-                            onClick={() => {
-                                onOpen({
-                                    title: 'Reset Form',
-                                    description:
-                                        'Are you sure to reset the form fields? Any changes will be lost.',
-                                    onConfirm: () => {
-                                        form.reset()
-                                    },
-                                })
-                            }}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            variant="destructive"
-                            disabled={isClosingAccount || !!data}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {isClosingAccount && (
-                                <LoadingSpinner className="mr-2 inline" />
-                            )}
-                            Close Account
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={readOnly}
+                    isLoading={isClosingAccount}
+                    disableSubmit={isClosingAccount || !!data}
+                    submitText="Close Account"
+                    className="sticky bottom-0"
+                    onReset={() => {
+                        form.reset(defaultValues)
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

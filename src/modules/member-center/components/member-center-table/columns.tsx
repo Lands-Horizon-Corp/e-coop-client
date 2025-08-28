@@ -10,8 +10,8 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
+import { IMemberCenter } from '../../member-center.types'
 
-import { IMemberCenter } from '../../../member-center.types'
 
 export const memberCenterGlobalSearchTargets: IGlobalSearchTargets<IMemberCenter>[] =
     [

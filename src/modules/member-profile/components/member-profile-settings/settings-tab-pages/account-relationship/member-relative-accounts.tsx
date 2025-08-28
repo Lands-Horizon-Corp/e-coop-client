@@ -1,8 +1,10 @@
 import { useState } from 'react'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toReadableDate } from '@/helpers/date-utils'
 import { IMemberProfile } from '@/modules/member-profile'
 import { IMemberRelativeAccount } from '@/modules/member-relative-account'
+import { useDeleteMemberRelativeAccount } from '@/modules/member-relative-account/member-relative-account.service'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -17,7 +19,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { MemberRelativeAccountCreateUpdateFormModal } from './member-relative-account-create-update-form'
+import { MemberRelativeAccountCreateUpdateFormModal } from '../../../../../member-relative-account/components/forms/member-relative-account-create-update-form'
 
 const MemberRelativeAccountCard = ({
     relative,
@@ -29,7 +31,14 @@ const MemberRelativeAccountCard = ({
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
     const { mutate: deleteRelative, isPending: isDeleting } =
-        useDeleteMemberRelativeAccount()
+        useDeleteMemberRelativeAccount({
+            options: {
+                ...withToastCallbacks({
+                    textSuccess: 'Deleted',
+                    textError: 'Failed to Deleted',
+                }),
+            },
+        })
 
     const relProfile = relative.relative_member_profile
 

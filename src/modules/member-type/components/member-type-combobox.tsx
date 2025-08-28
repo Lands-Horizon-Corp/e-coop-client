@@ -28,7 +28,7 @@ import { IMemberType } from '../member-type.types'
 import {
     MemberTypeCreateUpdateFormModal,
     TMemberTypeForm,
-} from './member-type-create-update-form'
+} from './forms/member-type-create-update-form'
 
 export interface IMemberTypeComboboxCreateProps
     extends Pick<TMemberTypeForm, 'name' | 'prefix' | 'description'> {}

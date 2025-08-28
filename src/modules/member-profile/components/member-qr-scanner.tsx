@@ -51,7 +51,6 @@ const MemberQrScanner = ({
         },
     })
 
-    // useCallback to memoize the onSuccess function
     const handleSuccess = useCallback(
         (data: IMemberProfile) => {
             onResultFound?.(data)

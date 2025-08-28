@@ -1,4 +1,5 @@
 import { Path, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -11,12 +12,10 @@ import MemberGenderCombobox from '@/modules/member-gender/components/member-gend
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import TextEditor from '@/components/text-editor'
-import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
@@ -76,6 +75,7 @@ const MemberPersonalInfoForm = ({
         mutate,
         error: rawError,
         isPending,
+        reset,
     } = useUpdateMemberProfilePersonalInfo({
         options: {
             onSuccess,
@@ -100,7 +100,17 @@ const MemberPersonalInfoForm = ({
                     full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
                 },
             },
-            { onSuccess: (data) => form.reset(data) }
+            {
+                onSuccess: (data) => {
+                    toast.success('Saved')
+                    form.reset({
+                        ...data,
+                        birthdate: toInputDateString(
+                            data?.birthdate ?? new Date()
+                        ),
+                    })
+                },
+            }
         )
     })
 
@@ -328,7 +338,7 @@ const MemberPersonalInfoForm = ({
                                     <div className="relative flex flex-1 items-center gap-x-2">
                                         <VerifiedPatchIcon
                                             className={cn(
-                                                'absolute right-2 top-1/2 z-20 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
+                                                'absolute right-2 top-1/2 z-0 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
                                                 (invalid || error) &&
                                                     'text-destructive'
                                             )}
@@ -429,31 +439,19 @@ const MemberPersonalInfoForm = ({
                         </div>
                     </div>
                 </fieldset>
-                {form.formState.isDirty && (
-                    <div className="space-y-2">
-                        <Separator className="my-2 sm:my-4" />
-                        <FormErrorMessage errorMessage={error} />
-                        <div className="flex items-center justify-end gap-x-2">
-                            <Button
-                                size="sm"
-                                type="button"
-                                variant="ghost"
-                                onClick={() => form.reset()}
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                Reset
-                            </Button>
-                            <Button
-                                size="sm"
-                                type="submit"
-                                disabled={isPending}
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                {isPending ? <LoadingSpinner /> : 'Update'}
-                            </Button>
-                        </div>
-                    </div>
-                )}
+
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText="Update"
+                    className="sticky bottom-4"
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

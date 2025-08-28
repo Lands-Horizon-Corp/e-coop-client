@@ -16,13 +16,11 @@ import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormItem } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
@@ -493,32 +491,17 @@ const MemberProfileQuickCreateForm = ({
                     You can setup other member profile information later after
                     creation
                 </span>
-                <Separator className="my-2 sm:my-4" />
-                <div className="space-y-2 bg-background">
-                    <FormErrorMessage errorMessage={error} />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            onClick={() => {
-                                form.reset()
-                                reset()
-                            }}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            disabled={isPending}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {isPending ? <LoadingSpinner /> : 'Create'}
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText="Create"
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

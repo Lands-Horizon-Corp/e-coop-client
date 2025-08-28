@@ -1,8 +1,8 @@
-import CopyWrapper from '@/components/elements/copy-wrapper'
-import ImageDisplay from '@/components/image-display'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+import { IUserBase } from '@/modules/user'
 
-import { IUserBase } from '@/types'
+import ImageDisplay from '@/components/image-display'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 type Props = {
     user: IUserBase

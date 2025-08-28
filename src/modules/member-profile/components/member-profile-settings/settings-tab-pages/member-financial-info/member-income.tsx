@@ -1,7 +1,14 @@
 import { useState } from 'react'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toReadableDate } from '@/helpers/date-utils'
+import { formatNumber } from '@/helpers/number-utils'
+import {
+    IMemberIncome,
+    useDeleteMemberProfileIncome,
+} from '@/modules/member-income'
+import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { formatNumber, toReadableDate } from '@/utils'
 
 import {
     CalendarDotsIcon,
@@ -16,18 +23,18 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { useDeleteMemberProfileIncome } from '@/hooks/api-hooks/member/use-member-profile-settings'
-
-import { IMemberIncome, IMemberProfile } from '@/types'
-
+import { MemberIncomeCreateUpdateFormModal } from '../../../../../member-income/components/forms/member-income-create-update-form'
 import EmptyListIndicator from '../empty-list-indicator'
-import { MemberIncomeCreateUpdateFormModal } from './member-income-create-update-form'
 
 const MemberIncomeCard = ({ income }: { income: IMemberIncome }) => {
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
     const { mutate: deleteIncome, isPending: isDeleting } =
-        useDeleteMemberProfileIncome()
+        useDeleteMemberProfileIncome({
+            options: {
+                ...withToastCallbacks(),
+            },
+        })
 
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">

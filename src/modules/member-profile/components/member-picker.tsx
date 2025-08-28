@@ -199,7 +199,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     variant="secondary"
                     disabled={disabled}
                     onClick={() => setState(true)}
-                    className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
+                    className="w-full items-center justify-between rounded-md border p-0 px-2"
                 >
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">

@@ -2,12 +2,14 @@ import {
     IAuditable,
     IPaginatedResult,
     ITimeStamps,
-    TEducationalAttainment,
     TEntityId,
 } from '@/types/common'
 
 import { IBranch } from '../branch'
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { EDUCATIONAL_ATTAINMENT } from './constants'
+
+export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number] // move to member educ attainment
 
 // FROM LATEST ERD
 export interface IMemberEducationalAttainmentRequest {
@@ -23,7 +25,6 @@ export interface IMemberEducationalAttainmentRequest {
     description?: string
 }
 
-// THIS IS NOT A MAINTENANCE
 // FROM LATEST ERD
 export interface IMemberEducationalAttainment extends ITimeStamps, IAuditable {
     id: TEntityId

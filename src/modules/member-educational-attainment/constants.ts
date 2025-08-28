@@ -1,0 +1,16 @@
+export const EDUCATIONAL_ATTAINMENT = [
+    'elementary (incomplete)',
+    'elementary graduate',
+    'high school (incomplete)',
+    'high school graduate',
+    'senior high school (incomplete)',
+    'senior high school graduate',
+    'vocational / technical',
+    'college (incomplete)',
+    'college graduate',
+    "master's (incomplete)",
+    "master's graduate",
+    'doctorate (incomplete)',
+    'doctorate graduate',
+    'others',
+] as const

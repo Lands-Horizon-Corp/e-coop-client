@@ -1,35 +1,19 @@
 import z from 'zod'
 
-import {
-    IAuditable,
-    ITimeStamps,
-    TEntityId,
-    TRelationship,
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/types/common'
+import { IBaseEntityMeta, TEntityId, TRelationship } from '@/types/common'
 
 import { IBranch } from '../branch'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 import { IOrganization } from '../organization'
+import { MemberRelativeAccountSchema } from './member-relative-account.validation'
 
 // FROM LATEST ERD
-export interface IMemberRelativeAccountRequest {
-    id?: TEntityId
-
-    branch_id?: TEntityId
-    organization_id?: TEntityId
-
-    member_profile_id: TEntityId
-    relative_member_profile_id: TEntityId
-
-    family_relationship: TRelationship
-    description?: string
-}
+export type IMemberRelativeAccountRequest = z.infer<
+    typeof MemberRelativeAccountSchema
+>
 
 // FROM LATEST ERD
-export interface IMemberRelativeAccount extends ITimeStamps, IAuditable {
+export interface IMemberRelativeAccount extends IBaseEntityMeta {
     id: TEntityId
 
     organization_id: TEntityId
@@ -47,10 +31,3 @@ export interface IMemberRelativeAccount extends ITimeStamps, IAuditable {
     family_relationship: TRelationship
     description: string
 }
-
-export const memberRelativeAccountsSchema = z.object({
-    membersProfileId: entityIdSchema.optional(),
-    relativeProfileMemberId: entityIdSchema,
-    familyRelationship: z.string().min(1, 'Family relationship is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-})

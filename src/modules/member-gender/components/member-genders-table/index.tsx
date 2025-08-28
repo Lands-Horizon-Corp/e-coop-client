@@ -28,7 +28,9 @@ import MemberGenderTableColumns, {
     IMemberGenderTableColumnProps,
     genderGlobalSearchTargets,
 } from './columns'
-import { MemberGenderRowContext } from './row-action-context'
+import MemberGenderAction, {
+    MemberGenderRowContext,
+} from './row-action-context'
 
 export interface MemberGenderTableProps
     extends TableProps<IMemberGender>,
@@ -54,7 +56,7 @@ const MemberGenderTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = MemberGenderAction,
     RowContextComponent = MemberGenderRowContext,
 }: MemberGenderTableProps) => {
     const queryClient = useQueryClient()
@@ -185,9 +187,7 @@ const MemberGenderTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

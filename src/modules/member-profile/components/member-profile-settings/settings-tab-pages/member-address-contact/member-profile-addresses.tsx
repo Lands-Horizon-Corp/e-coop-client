@@ -1,5 +1,10 @@
 import { useState } from 'react'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
+import { IMemberAddress } from '@/modules/member-address'
+import { MemberAddressCreateUpdateFormModal } from '@/modules/member-address/components/forms/member-address-create-update-form'
+import { useDeleteMemberProfileAddress } from '@/modules/member-address/member-address.service'
+import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -18,19 +23,20 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
-import { useDeleteMemberProfileAddress } from '@/hooks/api-hooks/member/use-member-profile-settings'
-
-import { IMemberAddress, IMemberProfile } from '@/types'
-
 import EmptyListIndicator from '../empty-list-indicator'
-import { MemberAddressCreateUpdateFormModal } from './member-address-create-update-form'
 
 const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: deleteMemberAddress, isPending: isDeleting } =
-        useDeleteMemberProfileAddress({ showMessage: true })
+        useDeleteMemberProfileAddress({
+            options: {
+                ...withToastCallbacks({
+                    textSuccess: 'Deleted',
+                }),
+            },
+        })
 
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
@@ -41,6 +47,7 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
                 description="Modify / Update this educational attainment information."
                 formProps={{
                     memberProfileId: address.member_profile_id,
+                    memberAddressId: address.id,
                     defaultValues: address,
                 }}
             />

@@ -5,6 +5,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
+    MemberOccupationAPI,
+    useGetPaginated,
+} from '@/modules/member-occupation/member-occupation.service'
+import { IMemberOccupation } from '@/modules/member-occupation/member-occupation.types'
+import {
     getCoreRowModel,
     getSortedRowModel,
     useReactTable,
@@ -22,16 +27,13 @@ import useDataTableState from '@/components/data-table/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import {
-    MemberOccupationAPI,
-    useGetPaginated,
-} from '../../member-occupation.service'
-import { IMemberOccupation } from '../../member-occupation.types'
 import memberOccupationColumns, {
     IMemberOccupationTableColumnProps,
     memberOccupationGlobalSearchTargets,
 } from './columns'
-import { MemberOccupationRowContext } from './row-action-context'
+import MemberOccupationAction, {
+    MemberOccupationRowContext,
+} from './row-action-context'
 
 export interface MemberOccupationTableProps
     extends TableProps<IMemberOccupation>,
@@ -57,7 +59,7 @@ const MemberOccupationTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = MemberOccupationAction,
     RowContextComponent = MemberOccupationRowContext,
 }: MemberOccupationTableProps) => {
     const queryClient = useQueryClient()
@@ -194,9 +196,7 @@ const MemberOccupationTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

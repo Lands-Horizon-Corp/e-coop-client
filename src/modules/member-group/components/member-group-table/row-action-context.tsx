@@ -4,7 +4,6 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
-import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -12,6 +11,7 @@ import { useDeleteById } from '../../member-group.service'
 import { IMemberGroup } from '../../member-group.types'
 import { MemberGroupCreateUpdateFormModal } from '../member-group-create-update-form'
 import { IMemberGroupTableActionComponentProp } from './columns'
+import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
 interface UseMemberGroupActionsProps {
     row: Row<IMemberGroup>

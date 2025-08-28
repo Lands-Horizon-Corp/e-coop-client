@@ -57,13 +57,6 @@ import { IOrganization } from '../organization'
 import { IQrScanResult } from '../qr-crypto'
 import { IUserBase } from '../user/user.types'
 
-// For creation of member user account
-export interface IMemberProfileUserAccountRequest
-    extends Omit<ISignUpRequest, 'password'> {
-    id?: TEntityId
-    password?: string
-}
-
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
 // Should Only use by employee

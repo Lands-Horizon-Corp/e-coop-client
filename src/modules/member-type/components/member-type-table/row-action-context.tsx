@@ -17,7 +17,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { useDeleteById } from '../../member-type.service'
 import { IMemberType } from '../../member-type.types'
-import { MemberTypeCreateUpdateFormModal } from '../member-type-create-update-form'
+import { MemberTypeCreateUpdateFormModal } from '../forms/member-type-create-update-form'
 import { IMemberTypeTableActionComponentProp } from './columns'
 
 interface UseMemberTypeActionsProps {

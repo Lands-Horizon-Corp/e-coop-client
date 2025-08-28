@@ -1,7 +1,14 @@
 import { useState } from 'react'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toReadableDate } from '@/helpers/date-utils'
+import {
+    IMemberJointAccount,
+    useDeleteMemberJointAccount,
+} from '@/modules/member-joint-account'
+import { MemberJointAccountCreateUpdateFormModal } from '@/modules/member-joint-account/components/forms/member-joint-account-create-update-form'
+import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { toReadableDate } from '@/utils'
 
 import {
     CalendarIcon,
@@ -12,24 +19,26 @@ import {
     WoodSignsIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import RawDescription from '@/components/raw-description'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import TextRenderer from '@/components/text-renderer'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { useDeleteMemberJointAccount } from '@/hooks/api-hooks/member/use-member-profile-settings'
-
-import { IMemberJointAccount, IMemberProfile } from '@/types'
-
 import EmptyListIndicator from '../empty-list-indicator'
-import { MemberJointAccountCreateUpdateFormModal } from './member-joint-account-create-update-form'
 
 const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
     const { mutate: deleteJoint, isPending: isDeleting } =
-        useDeleteMemberJointAccount()
+        useDeleteMemberJointAccount({
+            options: {
+                ...withToastCallbacks({
+                    textSuccess: 'Deleted',
+                    textError: 'Failed to delete',
+                }),
+            },
+        })
 
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
@@ -156,7 +165,7 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
             <div className="col-span-full !mt-4 space-y-2">
                 <p className="text-muted-foreground/70">Description</p>
                 {joint?.description ? (
-                    <RawDescription
+                    <TextRenderer
                         content={joint.description ?? 'no description'}
                     />
                 ) : (

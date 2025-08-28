@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
@@ -12,18 +12,16 @@ import {
     useUpdateById,
 } from '@/modules/member-classification'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { MemberClassificationSchema } from '../member-classification.validation'
+import { Textarea } from '@/components/ui/textarea'
 
 type TMemberClassificationForm = z.infer<typeof MemberClassificationSchema>
 
@@ -44,7 +42,7 @@ const MemberClassificationCreateUpdateForm = ({
     const isUpdateMode = Boolean(memberClassificationId)
 
     const form = useForm<TMemberClassificationForm>({
-        resolver: zodResolver(MemberClassificationSchema),
+        resolver: standardSchemaResolver(MemberClassificationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -58,6 +56,7 @@ const MemberClassificationCreateUpdateForm = ({
         error: createError,
         isPending: isCreating,
         mutate: createMemberClassification,
+        reset: createReset,
     } = useCreate({
         options: {
             onSuccess,
@@ -69,6 +68,7 @@ const MemberClassificationCreateUpdateForm = ({
         error: updateError,
         isPending: isUpdating,
         mutate: updateMemberClassification,
+        reset: updateReset,
     } = useUpdateById({
         options: {
             onSuccess,
@@ -122,7 +122,7 @@ const MemberClassificationCreateUpdateForm = ({
                             name="description"
                             label="Description"
                             render={({ field }) => (
-                                <Input
+                                <Textarea
                                     {...field}
                                     id={field.name}
                                     placeholder="Description *"
@@ -134,36 +134,18 @@ const MemberClassificationCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
 
-                <FormErrorMessage errorMessage={combinedError} />
-
-                <div>
-                    <Separator className="my-2 sm:my-4" />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            onClick={() => form.reset()}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            disabled={isCreating || isUpdating}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {isCreating || isUpdating ? (
-                                <LoadingSpinner />
-                            ) : isUpdateMode ? (
-                                'Update'
-                            ) : (
-                                'Create'
-                            )}
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={combinedError}
+                    readOnly={readOnly}
+                    isLoading={isCreating || isUpdating}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={isUpdateMode ? 'Update' : 'Create'}
+                    onReset={() => {
+                        form.reset()
+                        createReset()
+                        updateReset()
+                    }}
+                />
             </form>
         </Form>
     )

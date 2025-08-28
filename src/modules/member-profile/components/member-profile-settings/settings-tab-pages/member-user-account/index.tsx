@@ -1,11 +1,13 @@
 import { forwardRef } from 'react'
 
 import { cn } from '@/helpers'
+import { withToastCallbacks } from '@/helpers/callback-helper'
+import { IMemberProfile } from '@/modules/member-profile'
+import { MemberUserAccountCreateUpdateFormModal } from '@/modules/member-user-account/components/forms/member-account-create-update-form'
 import {
-    IMemberProfile,
     useConnectMemberProfileToUserAccount,
     useDisconnectMemberProfileUserAccount,
-} from '@/modules/member-profile'
+} from '@/modules/member-user-account/member-user-account.service'
 import { IMember } from '@/modules/user'
 import { IUserOrganization } from '@/modules/user-organization'
 import UserOrganizationPicker from '@/modules/user-organization/components/user-organization-picker'
@@ -25,7 +27,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import ProfileConnectUserModalDisplay from '../../../profile-connect-user-content'
 import UserAccountCardMini from './member-account-card-mini'
-import { MemberUserAccountCreateUpdateFormModal } from './member-account-create-update-form'
 
 interface Props {
     memberProfile: IMemberProfile
@@ -40,9 +41,17 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
         const { onOpenSecurityAction } = useActionSecurityStore()
 
         const { mutate: connect, isPending: isConnecting } =
-            useConnectMemberProfileToUserAccount()
+            useConnectMemberProfileToUserAccount({
+                options: {
+                    ...withToastCallbacks({ textSuccess: 'Connected' }),
+                },
+            })
         const { mutate: disconnect, isPending: isDisconnecting } =
-            useDisconnectMemberProfileUserAccount()
+            useDisconnectMemberProfileUserAccount({
+                options: {
+                    ...withToastCallbacks({ textSuccess: 'Disconnected' }),
+                },
+            })
 
         return (
             <div ref={ref}>
@@ -66,10 +75,16 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             hoverVariant="destructive"
                             disabled={isDisconnecting}
                             onClick={() => {
-                                onOpenSecurityAction({
-                                    title: 'Disconnect User Account',
-                                    onSuccess: () =>
-                                        disconnect(memberProfile.id),
+                                onOpen({
+                                    title: 'Disconnect Account',
+                                    description:
+                                        'You are about to disconnect this account from member profile. Are you sure to do this?',
+                                    onConfirm: () =>
+                                        onOpenSecurityAction({
+                                            title: 'Disconnect User Account',
+                                            onSuccess: () =>
+                                                disconnect(memberProfile.id),
+                                        }),
                                 })
                             }}
                         >
@@ -161,12 +176,12 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 className="group !h-auto w-1/2 flex-col items-start space-y-2 rounded-xl from-primary/40 to-transparent to-80% py-4 hover:bg-gradient-to-tr"
                             >
                                 <div className="flex w-full items-center justify-between">
-                                    <p className="shrink truncate">
+                                    <p className="shrink truncate group-hover:text-primary">
                                         Create New User Profile
                                     </p>
                                     <UserPlusIcon className="size-4 shrink-0 text-muted-foreground/60 duration-200 ease-out group-hover:text-primary" />
                                 </div>
-                                <p className="text-wrap text-left text-xs text-muted-foreground/90">
+                                <p className="text-wrap text-left text-xs text-muted-foreground group-hover:text-primary">
                                     Create a new user profile for this member
                                     profile.
                                 </p>
@@ -182,7 +197,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 )}
                             >
                                 <div className="flex w-full items-center justify-between">
-                                    <p className="shrink truncate">
+                                    <p className="shrink truncate group-hover:text-primary">
                                         Connect to existing User Profile
                                     </p>
                                     {!isConnecting ? (
@@ -193,7 +208,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 </div>
                                 <p
                                     className={cn(
-                                        'text-wrap text-left text-xs text-muted-foreground/80',
+                                        'text-wrap text-left text-xs text-muted-foreground group-hover:text-primary',
                                         isConnecting && 'animate-pulse'
                                     )}
                                 >

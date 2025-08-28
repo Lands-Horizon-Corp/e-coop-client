@@ -1,5 +1,12 @@
 import { useState } from 'react'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
+import {
+    IMemberContactReference,
+    useDeleteMemberProfileContactReference,
+} from '@/modules/member-contact-reference'
+import { MemberContactCreateUpdateFormModal } from '@/modules/member-contact-reference/components/forms/member-contact-create-update-form'
+import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -12,12 +19,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
-import { useDeleteMemberProfileContactReference } from '@/hooks/api-hooks/member/use-member-profile-settings'
-
-import { IMemberContactReference, IMemberProfile } from '@/types'
-
 import EmptyListIndicator from '../empty-list-indicator'
-import { MemberContactCreateUpdateFormModal } from './member-contact-create-update-form'
 
 const MemberContactReferenceCard = ({
     reference,
@@ -31,7 +33,13 @@ const MemberContactReferenceCard = ({
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
     const { mutate: deleteContactReference, isPending: isDeleting } =
-        useDeleteMemberProfileContactReference({ showMessage: true })
+        useDeleteMemberProfileContactReference({
+            options: {
+                ...withToastCallbacks({
+                    textSuccess: 'Deleted',
+                }),
+            },
+        })
 
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">

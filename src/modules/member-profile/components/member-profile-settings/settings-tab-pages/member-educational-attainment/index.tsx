@@ -1,5 +1,13 @@
 import { forwardRef, useState } from 'react'
 
+import { toast } from 'sonner'
+
+import {
+    IMemberEducationalAttainment,
+    useDeleteEducationalAttainment,
+} from '@/modules/member-educational-attainment'
+import { MemberEducationalAttainmentCreateUpdateFormModal } from '@/modules/member-educational-attainment/components/forms/member-educational-attainment-create-update-form'
+import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -11,19 +19,12 @@ import {
     TrashIcon,
     WoodSignsIcon,
 } from '@/components/icons'
-import RawDescription from '@/components/raw-description'
+import TextRenderer from '@/components/text-renderer'
 import { Button } from '@/components/ui/button'
 
-import { useDeleteEducationalAttainment } from '@/hooks/api-hooks/member/use-member-profile-settings'
-
-import {
-    IClassProps,
-    IMemberEducationalAttainment,
-    IMemberProfile,
-} from '@/types'
+import { IClassProps } from '@/types'
 
 import EmptyListIndicator from '../empty-list-indicator'
-import { MemberEducationalAttainmentCreateUpdateFormModal } from './member-educational-attainment-create-update-form'
 
 interface MemberEducationalAttainmentCard {
     educationalAttainment: IMemberEducationalAttainment
@@ -35,7 +36,12 @@ const MemberEducationalAttainmentCard = ({
     const [edit, setEdit] = useState(false)
     const { onOpen } = useConfirmModalStore()
     const { mutate: deleteEducationalAttainment, isPending: isDeleting } =
-        useDeleteEducationalAttainment({ showMessage: true })
+        useDeleteEducationalAttainment({
+            options: {
+                onSettled: () =>
+                    toast.success('Educational Attainment Deleted'),
+            },
+        })
 
     return (
         <div className="space-y-1 rounded-lg border bg-background">
@@ -121,7 +127,7 @@ const MemberEducationalAttainmentCard = ({
                 <div className="space-y-2">
                     <p className="text-muted-foreground/70">Description</p>
                     {educationalAttainment?.description ? (
-                        <RawDescription
+                        <TextRenderer
                             content={
                                 educationalAttainment.description ??
                                 'no description'

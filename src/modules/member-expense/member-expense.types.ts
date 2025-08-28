@@ -1,27 +1,16 @@
 import z from 'zod'
 
-import {
-    IAuditable,
-    ITimeStamps,
-    TEntityId,
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/types/common'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IBranch } from '../branch'
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { MemberExpenseSchema } from './member-expense.validation'
 
 // LATEST FROM ERD
-export interface IMemberExpenseRequest {
-    id?: TEntityId
-    name: string
-    amount: number
-    description: string
-}
+export type IMemberExpenseRequest = z.infer<typeof MemberExpenseSchema>
 
 // LATEST FROM ERD
-export interface IMemberExpense extends ITimeStamps, IAuditable {
+export interface IMemberExpense extends IBaseEntityMeta {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile: IMemberProfile
@@ -33,11 +22,3 @@ export interface IMemberExpense extends ITimeStamps, IAuditable {
     amount: number
     description: string
 }
-
-export const memberExpenseSchema = z.object({
-    id: entityIdSchema.optional(),
-    name: z.string().min(1, 'Name is required'),
-    date: z.string().min(1, 'Date is required'),
-    amount: z.coerce.number().min(0, 'Amount must be non-negative'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
-})

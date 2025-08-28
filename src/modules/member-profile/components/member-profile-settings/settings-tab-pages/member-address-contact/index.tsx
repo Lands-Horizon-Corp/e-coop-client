@@ -1,8 +1,8 @@
 import { forwardRef } from 'react'
 
-import { Separator } from '@/components/ui/separator'
+import { IMemberProfile } from '@/modules/member-profile'
 
-import { IMemberProfile } from '@/types'
+import { Separator } from '@/components/ui/separator'
 
 import MemberContactReferences from './member-contact-references'
 import MemberProfileAddress from './member-profile-addresses'

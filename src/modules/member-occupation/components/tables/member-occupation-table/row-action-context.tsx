@@ -4,14 +4,14 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
-import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { useDeleteById } from '../../member-occupation.service'
-import { IMemberOccupation } from '../../member-occupation.types'
-import { MemberOccupationCreateUpdateFormModal } from '../member-occupation-create-update-form'
 import { IMemberOccupationTableActionComponentProp } from './columns'
+import { IMemberOccupation } from '@/modules/member-occupation/member-occupation.types'
+import { useDeleteById } from '@/modules/member-occupation/member-occupation.service'
+import { MemberOccupationCreateUpdateFormModal } from '../../member-occupation-create-update-form'
+import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
 interface UseMemberOccupationActionsProps {
     row: Row<IMemberOccupation>

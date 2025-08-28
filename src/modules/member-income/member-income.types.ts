@@ -1,9 +1,4 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IMedia } from '../media/media.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
@@ -15,10 +10,7 @@ export interface IMemberIncomeRequest {
     release_date?: string
 }
 
-export interface IMemberIncome
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+export interface IMemberIncome extends IBaseEntityMeta {
     id: TEntityId
     media_id?: TEntityId
     media?: IMedia

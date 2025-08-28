@@ -12,7 +12,7 @@ import { PushPinSlashIcon } from '@/components/icons'
 import TextRenderer from '@/components/text-renderer'
 import { Checkbox } from '@/components/ui/checkbox'
 
-import { IMemberClassification } from '../../member-classification.types'
+import { IMemberClassification } from '../../../member-classification.types'
 
 export const memberClassificationGlobalSearchTargets: IGlobalSearchTargets<IMemberClassification>[] =
     [

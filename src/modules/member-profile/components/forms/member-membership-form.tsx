@@ -13,16 +13,13 @@ import MemberGroupCombobox from '@/modules/member-group/components/member-group-
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { HandCoinsIcon, PieChartIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -73,6 +70,7 @@ const MemberMembershipForm = ({
         mutate,
         error: rawError,
         isPending,
+        reset,
     } = useUpdateMemberProfileMembershipInfo({
         options: {
             onSuccess,
@@ -89,7 +87,12 @@ const MemberMembershipForm = ({
     const onSubmit = form.handleSubmit((formData) => {
         mutate(
             { memberId: memberProfileId, data: formData },
-            { onSuccess: (data) => form.reset(data) }
+            {
+                onSuccess: (data) => {
+                    form.reset(data)
+                    reset()
+                },
+            }
         )
     })
 
@@ -355,31 +358,17 @@ const MemberMembershipForm = ({
                         </div>
                     </div>
                 </fieldset>
-                {form.formState.isDirty && (
-                    <div className="space-y-2">
-                        <Separator className="my-2 sm:my-4" />
-                        <FormErrorMessage errorMessage={error} />
-                        <div className="flex items-center justify-end gap-x-2">
-                            <Button
-                                size="sm"
-                                type="button"
-                                variant="ghost"
-                                onClick={() => form.reset()}
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                Reset
-                            </Button>
-                            <Button
-                                size="sm"
-                                type="submit"
-                                disabled={isPending}
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                {isPending ? <LoadingSpinner /> : 'Update'}
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText="Create"
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

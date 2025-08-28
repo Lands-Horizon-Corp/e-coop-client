@@ -2,8 +2,10 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { MemberProfileQuickCreateFormModal } from '@/modules/member-profile/components/forms/member-profile-quick-create-form'
-import MemberProfileTable from '@/modules/member-profile/components/members-profile-table'
-import MemberProfileAction from '@/modules/member-profile/components/members-profile-table/row-action-context'
+import MemberProfileTable from '@/modules/member-profile/components/tables/members-profile-table'
+import MemberProfileAction, {
+    MemberProfileRowContext,
+} from '@/modules/member-profile/components/tables/members-profile-table/row-action-context'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -50,6 +52,9 @@ function ViewMemberProfilePage() {
                 }}
             />
             <MemberProfileTable
+                RowContextComponent={(props) => {
+                    return <MemberProfileRowContext {...props} />
+                }}
                 actionComponent={(props) => <MemberProfileAction {...props} />}
                 toolbarProps={{
                     createActionProps: {

@@ -1,10 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import {
-    HookMutationOptions,
-    createDataLayerFactory,
-} from '@/providers/repositories/data-layer-factory'
+    createMutationFactory,
+    createMutationInvalidateFn,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
@@ -16,7 +17,7 @@ import type {
     IMemberProfileRequest,
 } from './member-profile.types'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
+export const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
     IMemberProfile,
     IMemberProfileRequest
 >({
@@ -45,29 +46,6 @@ export const updateMemberProfileMembershipInfo = async (
     return response.data
 }
 
-// Connect Member Profile to User Account
-export const connectMemberProfileToUserAccount = async (
-    memberProfileId: TEntityId,
-    userId: TEntityId
-) => {
-    const response = await API.put<void, IMemberProfile>(
-        `${route}/${memberProfileId}/connect-user-account/${userId}`
-    )
-    return response.data
-}
-
-// Disconenct Member Profile to User Account
-export const disconnectMemberProfileUserAccount = async ({
-    id,
-}: {
-    id: TEntityId
-}) => {
-    const response = await API.put<void, IMemberProfile>(
-        `${route}/${id}/disconnect`
-    )
-    return response.data
-}
-
 // 🪝 HOOK STARTS HERE
 export const {
     useCreate,
@@ -80,146 +58,45 @@ export const {
 } = apiCrudHooks
 
 // 🪝 Custom Hook for Quick Create Member Profile
-export const useQuickCreateMemberProfile = ({
-    options,
-}: {
-    options?: HookMutationOptions<
-        IMemberProfile,
-        Error,
-        IMemberProfileQuickCreateRequest
-    >
-} = {}) => {
-    return useMutation<IMemberProfile, Error, IMemberProfileQuickCreateRequest>(
-        {
-            ...options,
-            meta: options?.meta
-                ? options.meta
-                : {
-                      invalidates: [
-                          [baseQueryKey, 'paginated'],
-                          [baseQueryKey, 'all'],
-                      ],
-                  },
-            mutationFn: async (data) => {
-                const fullName = `${data.first_name ?? ''} ${data.middle_name ?? ''} ${data.last_name ?? ''} ${data.suffix ?? ''}`
-                return await MemberProfileAPI.create<
-                    IMemberProfileQuickCreateRequest,
-                    IMemberProfile
-                >({
-                    url: `${route}/quick-create`,
-                    payload: {
-                        ...data,
-                        full_name: fullName,
-                    },
-                })
-            },
-        }
-    )
-}
+export const useQuickCreateMemberProfile = createMutationFactory<
+    IMemberProfile,
+    Error,
+    IMemberProfileQuickCreateRequest
+>({
+    mutationFn: async (data) => {
+        return await MemberProfileAPI.create<
+            IMemberProfileQuickCreateRequest,
+            IMemberProfile
+        >({
+            url: `${route}/quick-create`,
+            payload: data,
+        })
+    },
+    invalidationFn: (args) => createMutationInvalidateFn(baseQueryKey, args),
+})
 
 // 🪝 Custom Hook for Updating Membership Info
-export const useUpdateMemberProfileMembershipInfo = ({
-    options,
-}: {
-    options?: HookMutationOptions<
-        IMemberProfile,
-        Error,
-        { memberId: TEntityId; data: IMemberProfileMembershipInfoRequest }
-    >
-} = {}) => {
-    const queryClient = useQueryClient()
-    return useMutation<
-        IMemberProfile,
-        Error,
-        { memberId: TEntityId; data: IMemberProfileMembershipInfoRequest }
-    >({
-        ...options,
-        mutationFn: async ({ memberId, data }) =>
-            await updateMemberProfileMembershipInfo(memberId, data),
-        onSuccess: (data, variables, context) => {
-            queryClient.invalidateQueries({
-                queryKey: [baseQueryKey, variables.memberId],
-            })
-            queryClient.invalidateQueries({
-                queryKey: [baseQueryKey, 'member-profile', variables.memberId],
-            })
-            options?.onSuccess?.(data, variables, context)
-        },
-    })
-}
+export const useUpdateMemberProfileMembershipInfo = createMutationFactory<
+    IMemberProfile,
+    Error,
+    { memberId: TEntityId; data: IMemberProfileMembershipInfoRequest }
+>({
+    mutationFn: async ({ memberId, data }) =>
+        await updateMemberProfileMembershipInfo(memberId, data),
+    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+})
 
 // 🪝 Custom Hook for Updating Personal Info
-export const useUpdateMemberProfilePersonalInfo = ({
-    options,
-}: {
-    options?: HookMutationOptions<
-        IMemberProfile,
-        Error,
-        { memberId: TEntityId; data: IMemberProfilePersonalInfoRequest }
-    >
-} = {}) => {
-    const queryClient = useQueryClient()
-
-    return useMutation<
-        IMemberProfile,
-        Error,
-        { memberId: TEntityId; data: IMemberProfilePersonalInfoRequest }
-    >({
-        ...options,
-        mutationFn: async ({ memberId, data }) =>
-            await MemberProfileAPI.updateById({
-                id: memberId,
-                payload: data,
-                targetUrl: `/personal-info`,
-            }),
-        onSuccess: (data, variables, context) => {
-            queryClient.invalidateQueries({
-                queryKey: [baseQueryKey, variables.memberId],
-            })
-            queryClient.invalidateQueries({
-                queryKey: [baseQueryKey, 'member-profile', variables.memberId],
-            })
-            options?.onSuccess?.(data, variables, context)
-        },
-    })
-}
-
-// 🪝 Custom Hook for Connecting Member Profile to User Account
-export const useConnectMemberProfileToUserAccount = ({
-    options,
-}: {
-    options?: HookMutationOptions<
-        IMemberProfile,
-        string,
-        { memberProfileId: TEntityId; userId: TEntityId }
-    >
-} = {}) => {
-    return useMutation<
-        IMemberProfile,
-        string,
-        { memberProfileId: TEntityId; userId: TEntityId }
-    >({
-        ...options,
-        mutationFn: async ({ memberProfileId, userId }) =>
-            await connectMemberProfileToUserAccount(memberProfileId, userId),
-        onSuccess: (data, variables, context) => {
-            options?.onSuccess?.(data, variables, context)
-        },
-    })
-}
-
-// 🪝 Custom Hook for disconnecting Member Profile User Account
-export const useDisconnectMemberProfileUserAccount = ({
-    options,
-}: {
-    options?: HookMutationOptions<IMemberProfile, string, TEntityId>
-} = {}) => {
-    return useMutation<IMemberProfile, string, TEntityId>({
-        ...options,
-        mutationFn: async (id) =>
-            await disconnectMemberProfileUserAccount({ id }),
-        onSuccess: (data, variables, context) => {
-            options?.onSuccess?.(data, variables, context)
-        },
-    })
-}
+export const useUpdateMemberProfilePersonalInfo = createMutationFactory<
+    IMemberProfile,
+    Error,
+    { memberId: TEntityId; data: IMemberProfilePersonalInfoRequest }
+>({
+    mutationFn: async ({ memberId, data }) =>
+        await MemberProfileAPI.updateById({
+            id: memberId,
+            payload: data,
+            targetUrl: `/personal-info`,
+        }),
+    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+})

@@ -22,11 +22,8 @@ import useDataTableState from '@/components/data-table/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import {
-    MemberCenterAPI,
-    useGetPaginated,
-} from '../../../member-center.service'
-import { IMemberCenter } from '../../../member-center.types'
+import { MemberCenterAPI, useGetPaginated } from '../../member-center.service'
+import { IMemberCenter } from '../../member-center.types'
 import memberCenterColumns, {
     IMemberCenterTableColumnProps,
     memberCenterGlobalSearchTargets,
@@ -196,10 +193,8 @@ const MemberCenterTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
                     setColumnOrder={setColumnOrder}
+                    RowContextComponent={RowContextComponent}
                     className={cn('mb-2', isScrollable && 'flex-1')}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
