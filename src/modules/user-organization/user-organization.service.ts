@@ -6,7 +6,6 @@ import {
 import { toast } from 'sonner'
 
 import { groupBy, withCatchAsync } from '@/helpers/function-utils'
-import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -19,16 +18,18 @@ import { IUserBase } from '../user/user.types'
 import {
     IOrgUserOrganizationGroup,
     IUserOrganization,
+    IUserOrganizationPaginated,
 } from './user-organization.types'
 
-const { apiCrudHooks } = createDataLayerFactory<IUserOrganization, void>({
-    url: '/api/v1/user-organization',
-    baseKey: 'user-organization',
-})
+export const { apiCrudHooks, apiCrudService, baseQueryKey } =
+    createDataLayerFactory<IUserOrganization, void>({
+        url: '/api/v1/user-organization',
+        baseKey: 'user-organization',
+    })
 export const { useGetAll, useGetById, useDeleteById, useUpdateById } =
     apiCrudHooks
 
-const { API, route } = createAPIRepository('/api/v1/user-organization')
+const { API, route } = apiCrudService
 
 const groupByOrganization = (result: IUserOrganization<IUserBase>[]) => {
     const grouped = groupBy(result, (item) => item.organization_id)
@@ -245,5 +246,46 @@ export const useJoinWithInvitationCode = ({
         mutationKey: ['user-organization', 'join-with-code'],
         mutationFn: (code) => joinWithInvitationCode(code),
         ...options,
+    })
+}
+
+export type TUserOrganizationHookMode =
+    | 'all' // all user organizations
+    | 'none-member-profile'
+
+export const useFilteredPaginatedUserOrganization = ({
+    mode = 'all',
+    userOrgId,
+    memberProfileId,
+    query,
+    options,
+}: {
+    mode?: TUserOrganizationHookMode
+    userOrgId?: TEntityId
+    memberProfileId?: TEntityId
+    query?: Record<string, unknown>
+    options?: HookQueryOptions<IUserOrganizationPaginated, Error>
+}) => {
+    return useQuery<IUserOrganizationPaginated, Error>({
+        ...options,
+        queryKey: [
+            'user-organization',
+            'filtered-paginated',
+            mode,
+            userOrgId,
+            memberProfileId,
+            query,
+        ],
+        queryFn: async () => {
+            let url = '/api/v1/user-organization/search'
+
+            if (mode === 'none-member-profile')
+                url = '/api/v1/user-organization/none-member-profile/search'
+
+            return apiCrudService.getPaginated({
+                url,
+                query,
+            })
+        },
     })
 }

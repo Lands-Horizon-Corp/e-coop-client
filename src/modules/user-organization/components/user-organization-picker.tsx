@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { TFilterObject } from '@/contexts/filter-context'
+import { cn } from '@/helpers'
 import { IUserBase } from '@/modules/user/user.types'
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
@@ -11,11 +12,14 @@ import { PaginationState } from '@tanstack/react-table'
 import { BadgeCheckFillIcon, ChevronDownIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import GenericPicker from '@/components/pickers/generic-picker'
 import { Button } from '@/components/ui/button'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
 
+import { useFilteredPaginatedUserOrganization } from '../user-organization.service'
 import { IUserOrganization } from '../user-organization.types'
 
 interface Props<T = IUserBase> extends IPickerBaseProps<IUserOrganization<T>> {
@@ -50,7 +54,7 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
             pageSize: PICKERS_SELECT_PAGE_SIZE,
         })
 
-        const { finalFilterPayload, bulkSetFilter } = useFilterState({
+        const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
             defaultFilter,
             defaultFilterMode: 'OR',
             onFilterChange: () =>
@@ -60,14 +64,28 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                 })),
         })
 
-        const { data, isPending, isLoading, isFetching } =
-            useFilteredPaginatedUserOrganization({
-                mode: userOrgSearchMode,
-                pagination,
+        const {
+            data = {
+                data: [],
+                pageIndex: 1,
+                pageSize: 10,
+                totalPage: 1,
+                totalSize: 0,
+            },
+            isPending,
+            isLoading,
+            isFetching,
+        } = useFilteredPaginatedUserOrganization({
+            mode: userOrgSearchMode,
+            options: {
                 enabled: !disabled && state,
+            },
+            query: {
+                pagination,
                 showMessage: false,
-                filterPayload: finalFilterPayload,
-            })
+                filter: finalFilterPayloadBase64,
+            },
+        })
 
         return (
             <>
