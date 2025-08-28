@@ -209,9 +209,7 @@ const AccountsTable = ({
                     isScrollable={isScrollable}
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                     className="mb-2"
                 />

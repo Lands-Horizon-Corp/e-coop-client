@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Path, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import {
@@ -90,7 +90,7 @@ const AccountCreateUpdateForm = ({
     type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
     const form = useForm<TAccountFormValues>({
-        resolver: zodResolver(IAccountRequestSchema),
+        resolver: standardSchemaResolver(IAccountRequestSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
