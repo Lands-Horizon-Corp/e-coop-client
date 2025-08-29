@@ -1,7 +1,10 @@
+import { toast } from 'sonner'
+
 import { useGetById } from '@/modules/account'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
 import {
+    CurrentTransactionWithdrawHistory,
     QuickTransferTransactionForm,
     TPaymentMode,
 } from '@/modules/quick-transfer'
@@ -76,6 +79,10 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                             account_id: accountDefaultValue ?? undefined,
                         }}
                         mode={mode}
+                        onSuccess={() => {
+                            setSelectedAccount(undefined)
+                            toast.success('Transaction completed successfully')
+                        }}
                     />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
@@ -84,7 +91,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     className="!overflow-y-auto px-5 ecoop-scroll !relative"
                 >
                     <div className="w-full flex items-center justify-end">
-                        {/* <CurrentTransactionWithdrawHistory mode={mode} /> */}
+                        <CurrentTransactionWithdrawHistory mode={mode} />
                     </div>
                     <div className="sticky top-0 z-50">
                         <TransactionMemberProfile

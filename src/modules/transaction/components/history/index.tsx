@@ -129,7 +129,7 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                                 )}
                             </div>
                         </ScrollArea>
-                        <div className="bg-red-500 sticky bottom-0 left-0 right-0">
+                        <div className="sticky bottom-0 left-0 right-0">
                             <MiniPaginationBar
                                 pagination={{
                                     pageIndex: pagination.pageIndex,
