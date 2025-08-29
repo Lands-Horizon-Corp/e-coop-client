@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
     permissionArrayToMap,
     permissionMapToPermissionArray,
-} from './permission-utils'
+} from './permission.utils'
 import { TPermissionAction } from './permission.types'
 
 describe('permissionArrayToMap', () => {

@@ -1,11 +1,10 @@
 import z from 'zod'
 
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
 import { {{pascalCase name}}Schema } from './{{dashCase name}}.validation'
 
 export interface I{{pascalCase name}} extends IBaseEntityMeta {
-    id: TEntityId
     //add here
 }
 

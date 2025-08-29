@@ -57,12 +57,15 @@ export const updateMemberProfileMembershipInfo = async (
     return response.data
 }
 
-export const getAllPendingMemberProfile = async () => {
-    const response = await API.get<IMemberProfile[]>(
-        `${memberProfileAPIRoute}/pending`
-    )
-    return response.data
-}
+export const getAllPendingMemberProfile = async ({
+    query,
+}: {
+    query?: TAPIQueryOptions
+} = {}) =>
+    getAllMemberProfile({
+        query,
+        url: `${memberProfileAPIRoute}/pending`,
+    })
 
 export const approveMemberProfile = async (id: TEntityId) => {
     const response = await API.put<void, IMemberProfile>(
@@ -169,9 +172,8 @@ export const useAllPendingMemberProfiles = ({
         ...options,
         queryKey: [memberProfileBaseKey, 'all', 'pending', query],
         queryFn: async () =>
-            getAllMemberProfile({
+            getAllPendingMemberProfile({
                 query,
-                url: '',
             }),
     })
 }

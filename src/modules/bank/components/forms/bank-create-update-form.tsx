@@ -3,6 +3,7 @@ import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { IMedia } from '@/modules/media/media.types'
@@ -53,14 +54,20 @@ const BankCreateUpdateForm = ({
 
     const createMutation = useCreateBank({
         options: {
-            onSuccess,
-            onError,
+            ...withToastCallbacks({
+                textSuccess: 'Bank Created',
+                onSuccess,
+                onError,
+            }),
         },
     })
     const updateMutation = useUpdateBankById({
         options: {
-            onSuccess,
-            onError,
+            ...withToastCallbacks({
+                textSuccess: 'Bank updated',
+                onSuccess,
+                onError,
+            }),
         },
     })
 
