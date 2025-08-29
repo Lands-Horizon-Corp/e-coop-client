@@ -12,6 +12,7 @@ import {
     useCreate,
     useUpdateById,
 } from '@/modules/invitation-code'
+import PermissionPicker from '@/modules/permission-template/components/permission-template-picker'
 import PermissionMatrix from '@/modules/permission/components/permission-matrix'
 import {
     permissionArrayToMap,
@@ -318,7 +319,7 @@ const InvitationCodeCreateUpdateForm = ({
                                 Viewer
                             </p>
                         </div>
-                        {/* <PermissionPicker
+                        <PermissionPicker
                             triggerClassName="hidden"
                             modalState={permissionTemplate}
                             onSelect={(picked) => {
@@ -329,7 +330,7 @@ const InvitationCodeCreateUpdateForm = ({
                                 )
                                 form.setValue('permissions', picked.permissions)
                             }}
-                        /> */}
+                        />
                         <Button
                             size="sm"
                             type="button"
