@@ -60,6 +60,7 @@ import { Route as OrgOrgnameBranchBranchnameAccountingAccountsRouteImport } from
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/index'
 import { Route as OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/approvals/index'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/collateral'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
@@ -383,6 +384,12 @@ const OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute =
   OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport.update({
     id: '/(employee)/approvals/',
     path: '/approvals/',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport.update({
+    id: '/(maintenance)/maintenance/holidays',
+    path: '/maintenance/holidays',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute =
@@ -794,6 +801,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
@@ -886,6 +894,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
@@ -984,6 +993,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   '/org/$orgname/branch/$branchname/(employee)/approvals/': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
@@ -1082,6 +1092,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/maintenance/collateral'
+    | '/org/$orgname/branch/$branchname/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/transaction'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
@@ -1174,6 +1185,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/maintenance/collateral'
+    | '/org/$orgname/branch/$branchname/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/transaction'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
@@ -1271,6 +1283,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/(employee)/approvals/'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count'
@@ -1650,6 +1663,13 @@ declare module '@tanstack/react-router' {
       path: '/approvals'
       fullPath: '/org/$orgname/branch/$branchname/approvals'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
+      path: '/maintenance/holidays'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/holidays'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': {
@@ -2146,6 +2166,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
@@ -2232,6 +2253,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute,
     OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute:
       OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute:
