@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate";
 /* @tailwind base; */
 
 @font-face {
@@ -230,11 +231,21 @@ html {
 }
 
 :root {
-  --scrollbar-thumb-color: rgba(168, 172, 190, 0.4); /* Tailwind's stone-800 with opacity */
+    --scrollbar-thumb-color: rgba(
+        168,
+        172,
+        190,
+        0.4
+    ); /* Tailwind's stone-800 with opacity */
 }
 
 .dark {
-  --scrollbar-thumb-color: rgba(59, 61, 80, 0.4); /* Tailwind's stone-400 with opacity */
+    --scrollbar-thumb-color: rgba(
+        59,
+        61,
+        80,
+        0.4
+    ); /* Tailwind's stone-400 with opacity */
 }
 
 /* Your original scrollbar styles */
