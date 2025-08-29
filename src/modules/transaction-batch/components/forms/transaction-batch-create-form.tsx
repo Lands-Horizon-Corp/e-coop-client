@@ -18,7 +18,7 @@ import SignatureField from '@/components/ui/signature-field'
 
 import { IClassProps, IForm } from '@/types'
 
-import { useCreate } from '../../transaction-batch.service'
+import { useCreateTransactionBatch } from '../../transaction-batch.service'
 import { ITransactionBatchMinimal } from '../../transaction-batch.types'
 import { TransactionBatchCreateSchema } from '../../transaction-batch.validation'
 
@@ -61,7 +61,7 @@ const TransactionBatchCreateForm = ({
         error,
         isPending,
         reset,
-    } = useCreate({
+    } = useCreateTransactionBatch({
         options: {
             onSuccess,
             onError,

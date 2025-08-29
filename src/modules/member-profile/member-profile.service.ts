@@ -1,13 +1,17 @@
+import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
     createMutationInvalidateFn,
     updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
-import { TEntityId } from '@/types'
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
     IMemberProfile,
@@ -17,18 +21,25 @@ import type {
     IMemberProfileRequest,
 } from './member-profile.types'
 
-export const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
-    IMemberProfile,
-    IMemberProfileRequest
->({
+export const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: memberProfileBaseKey,
+} = createDataLayerFactory<IMemberProfile, IMemberProfileRequest>({
     url: '/api/v1/member-profile',
     baseKey: 'member-profile',
 })
 
 // ⚙️🛠️ API SERVICE HERE
-export const MemberProfileAPI = apiCrudService
 
-const { API, route } = MemberProfileAPI
+export const {
+    API,
+    route: memberProfileAPIRoute,
+    create: createMemberProfile,
+    updateById: updateMemberProfileById,
+    deleteMany: deleteManyMemberProfiles,
+    getAll: getAllMemberProfile,
+} = apiCrudService
 
 // Update Member Profile Membership Info API
 export const updateMemberProfileMembershipInfo = async (
@@ -36,7 +47,7 @@ export const updateMemberProfileMembershipInfo = async (
     data: IMemberProfileMembershipInfoRequest
 ) => {
     const url = qs.stringifyUrl({
-        url: `${route}/${id}/membership-info`,
+        url: `${memberProfileAPIRoute}/${id}/membership-info`,
     })
 
     const response = await API.put<
@@ -46,15 +57,36 @@ export const updateMemberProfileMembershipInfo = async (
     return response.data
 }
 
+export const getAllPendingMemberProfile = async () => {
+    const response = await API.get<IMemberProfile[]>(
+        `${memberProfileAPIRoute}/pending`
+    )
+    return response.data
+}
+
+export const approveMemberProfile = async (id: TEntityId) => {
+    const response = await API.put<void, IMemberProfile>(
+        `${memberProfileAPIRoute}/${id}/approve`
+    )
+    return response.data
+}
+
+export const declineMemberProfile = async (id: TEntityId) => {
+    const response = await API.put<void, IMemberProfile>(
+        `${memberProfileAPIRoute}/${id}/reject`
+    )
+    return response.data
+}
+
 // 🪝 HOOK STARTS HERE
 export const {
-    useCreate,
-    useDeleteById,
-    useDeleteMany,
-    useGetAll,
-    useGetById,
-    useGetPaginated,
-    useUpdateById,
+    useCreate: useCreateMemberProfile,
+    useDeleteById: useDeleteMemberProfileById,
+    useDeleteMany: useDeleteManyMemberProfiles,
+    useGetAll: useGetAllMemberProfiles,
+    useGetById: useGetMemberProfileById,
+    useGetPaginated: useGetPaginatedMemberProfiles,
+    useUpdateById: useUpdateMemberProfileById,
 } = apiCrudHooks
 
 // 🪝 Custom Hook for Quick Create Member Profile
@@ -64,15 +96,16 @@ export const useQuickCreateMemberProfile = createMutationFactory<
     IMemberProfileQuickCreateRequest
 >({
     mutationFn: async (data) => {
-        return await MemberProfileAPI.create<
+        return await createMemberProfile<
             IMemberProfileQuickCreateRequest,
             IMemberProfile
         >({
-            url: `${route}/quick-create`,
+            url: `${memberProfileAPIRoute}/quick-create`,
             payload: data,
         })
     },
-    invalidationFn: (args) => createMutationInvalidateFn(baseQueryKey, args),
+    invalidationFn: (args) =>
+        createMutationInvalidateFn(memberProfileBaseKey, args),
 })
 
 // 🪝 Custom Hook for Updating Membership Info
@@ -83,7 +116,8 @@ export const useUpdateMemberProfileMembershipInfo = createMutationFactory<
 >({
     mutationFn: async ({ memberId, data }) =>
         await updateMemberProfileMembershipInfo(memberId, data),
-    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(memberProfileBaseKey, args),
 })
 
 // 🪝 Custom Hook for Updating Personal Info
@@ -93,10 +127,51 @@ export const useUpdateMemberProfilePersonalInfo = createMutationFactory<
     { memberId: TEntityId; data: IMemberProfilePersonalInfoRequest }
 >({
     mutationFn: async ({ memberId, data }) =>
-        await MemberProfileAPI.updateById({
+        await updateMemberProfileById({
             id: memberId,
             payload: data,
             targetUrl: `/personal-info`,
         }),
-    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(memberProfileBaseKey, args),
 })
+
+export const useApproveMemberProfile = createMutationFactory<
+    IMemberProfile,
+    Error,
+    TEntityId
+>({
+    mutationFn: (id) => approveMemberProfile(id),
+    invalidationFn: (args) => {
+        updateMutationInvalidationFn(memberProfileBaseKey, args)
+    },
+})
+
+export const useDeclineMemberProfile = createMutationFactory<
+    IMemberProfile,
+    Error,
+    TEntityId
+>({
+    mutationFn: (id) => declineMemberProfile(id),
+    invalidationFn: (args) => {
+        updateMutationInvalidationFn(memberProfileBaseKey, args)
+    },
+})
+
+export const useAllPendingMemberProfiles = ({
+    query,
+    options,
+}: {
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IMemberProfile[], Error>
+} = {}) => {
+    return useQuery<IMemberProfile[], Error>({
+        ...options,
+        queryKey: [memberProfileBaseKey, 'all', 'pending', query],
+        queryFn: async () =>
+            getAllMemberProfile({
+                query,
+                url: '',
+            }),
+    })
+}

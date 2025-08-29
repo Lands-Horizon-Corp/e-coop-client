@@ -10,8 +10,9 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
-import { TEntityId } from '@/types'
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import { IBranch, getBranchesByOrganizationId } from '../branch'
 import { IUserBase } from '../user/user.types'
@@ -289,3 +290,33 @@ export const useFilteredPaginatedUserOrganization = ({
         },
     })
 }
+
+export const useUserOrgJoinRequests = ({
+    query,
+    options,
+}: {
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IUserOrganization[], Error>
+} = {}) => {
+    return useQuery<IUserOrganization[], Error>({
+        ...options,
+        queryKey: [baseQueryKey, 'join-request', 'all', query],
+        queryFn: async () => getAllJoinRequests(),
+    })
+}
+
+export const useUserOrgAcceptJoinRequest = createMutationFactory<
+    IUserOrganization,
+    Error,
+    TEntityId
+>({
+    mutationFn: (id) => acceptJoinRequest(id),
+})
+
+export const useUserOrgRejectJoinRequest = createMutationFactory<
+    IUserOrganization,
+    Error,
+    TEntityId
+>({
+    mutationFn: (id) => rejectJoinRequest(id),
+})

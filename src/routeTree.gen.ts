@@ -59,9 +59,11 @@ import { Route as OrgOrgnameBranchBranchnameDevDocumentationRouteImport } from '
 import { Route as OrgOrgnameBranchBranchnameAccountingAccountsRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/accounts'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/index'
+import { Route as OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/approvals/index'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
+import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-accounting-ledger'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transactions'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/test'
@@ -370,6 +372,12 @@ const OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute =
     path: '/transaction/',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute =
+  OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport.update({
+    id: '/(employee)/approvals/',
+    path: '/approvals/',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport.update(
     {
@@ -390,6 +398,14 @@ const OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute =
     path: '/view-members',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute =
+  OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport.update(
+    {
+      id: '/(maintenance)/(members)/member-accounting-ledger',
+      path: '/member-accounting-ledger',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute =
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport.update({
     id: '/(employee)/transaction/transactions',
@@ -713,9 +729,11 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
@@ -796,9 +814,11 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
@@ -885,9 +905,11 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/(employee)/approvals/': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
@@ -974,9 +996,11 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/transaction'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition'
@@ -1057,9 +1081,11 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/approvals'
     | '/org/$orgname/branch/$branchname/transaction'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition'
@@ -1145,9 +1171,11 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/transaction/test'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/(employee)/approvals/'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement-definition'
@@ -1520,6 +1548,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(employee)/approvals/': {
+      id: '/org/$orgname/branch/$branchname/(employee)/approvals/'
+      path: '/approvals'
+      fullPath: '/org/$orgname/branch/$branchname/approvals'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
       path: '/maintenance/bills-and-coins'
@@ -1539,6 +1574,13 @@ declare module '@tanstack/react-router' {
       path: '/view-members'
       fullPath: '/org/$orgname/branch/$branchname/view-members'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
+      path: '/member-accounting-ledger'
+      fullPath: '/org/$orgname/branch/$branchname/member-accounting-ledger'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': {
@@ -1948,9 +1990,11 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeTransactionTestRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
+  OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
   OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
   OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
@@ -2015,12 +2059,16 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute,
+    OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute:
+      OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute,
+    OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute:
+      OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute:

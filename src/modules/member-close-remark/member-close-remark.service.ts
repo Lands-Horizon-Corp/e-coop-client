@@ -1,13 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
 
-import {
-    HookMutationOptions,
-    createDataLayerFactory,
-} from '@/providers/repositories/data-layer-factory'
+import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
-import { MemberProfileAPI } from '../member-profile/member-profile.service'
+import { updateMemberProfileById } from '../member-profile/member-profile.service'
 import type { IMemberProfile } from '../member-profile/member-profile.types'
 import type {
     IMemberCloseRemark,
@@ -30,7 +28,7 @@ export const closeMemberProfileAccount = async (
     id: TEntityId,
     closeRemark: IMemberCloseRemarkRequest[]
 ) => {
-    return await MemberProfileAPI.updateById<
+    return await updateMemberProfileById<
         IMemberProfile,
         IMemberCloseRemarkRequest[]
     >({

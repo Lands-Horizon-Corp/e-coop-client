@@ -12,7 +12,7 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import { IBaseProps, TEntityId } from '@/types'
 
 import { IMemberProfile } from '../..'
-import { useGetById } from '../../member-profile.service'
+import { useGetMemberProfileById } from '../../member-profile.service'
 import AddressesDisplay from './displays/addresses-display'
 import ContactNumbersDisplay from './displays/contact-numbers-display'
 import SectionTitle from './section-title'
@@ -24,7 +24,7 @@ interface Props extends IBaseProps {
 
 const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
     ({ profileId, className, defaultData }, ref) => {
-        const { data } = useGetById({
+        const { data } = useGetMemberProfileById({
             id: profileId,
             options: {
                 initialData: defaultData,

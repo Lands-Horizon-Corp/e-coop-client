@@ -18,7 +18,7 @@ import {
 
 import { IBaseProps, TEntityId } from '@/types'
 
-import { IMemberProfile, useGetById } from '../..'
+import { IMemberProfile, useGetMemberProfileById } from '../..'
 import SectionTitle from './section-title'
 
 interface Props extends IBaseProps {
@@ -28,7 +28,7 @@ interface Props extends IBaseProps {
 
 const RecruitedMembers = forwardRef<HTMLDivElement, Props>(
     ({ className, profileId, defaultData }, ref) => {
-        const { data, isPending } = useGetById({
+        const { data, isPending } = useGetMemberProfileById({
             id: profileId,
             options: {
                 initialData: defaultData,

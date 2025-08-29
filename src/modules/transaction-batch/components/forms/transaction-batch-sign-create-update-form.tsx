@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import z from 'zod'
-
-import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Path, useForm } from 'react-hook-form'
+import z from 'zod'
+
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+
+import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { IMedia } from '@/modules/media'
 
 import {
     CheckFillIcon,
@@ -12,7 +16,6 @@ import {
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import TransactionBatchMiniViewCard from '@/components/transaction-batch/transaction-batch-mini-card'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -30,25 +33,19 @@ import {
     StepperTrigger,
 } from '@/components/ui/stepper'
 
-import { cn } from '@/lib/utils'
-
-import { batchSignSchema } from '@/validations/form-validation/transaction-batch'
-
-import {
-    useTransBatchUpdateSignApproval,
-    useTransactionBatch,
-} from '@/hooks/api-hooks/use-transaction-batch'
 import { useFormHelper } from '@/hooks/use-form-helper'
 
-import {
-    IClassProps,
-    IForm,
-    IMedia,
-    ITransactionBatchSignatures,
-    TEntityId,
-} from '@/types'
+import { IClassProps, IForm, TEntityId } from '@/types'
 
-type TBatchSignFormValues = z.infer<typeof batchSignSchema>
+import {
+    ITransactionBatchSignatures,
+    useGetTransactionBatchById,
+    useTransBatchUpdateSignApproval,
+} from '../..'
+import { BatchSignSchema } from '../../transaction-batch.validation'
+import TransactionBatchMiniViewCard from '../transaction-batch/transaction-batch-mini-card'
+
+type TBatchSignFormValues = z.infer<typeof BatchSignSchema>
 
 type Step = {
     title: string
@@ -164,7 +161,7 @@ export interface ITransactionBatchSignFormProps
         IForm<
             Partial<ITransactionBatchSignatures>,
             ITransactionBatchSignatures,
-            string,
+            Error,
             TBatchSignFormValues
         > {
     batchId: TEntityId
@@ -185,7 +182,7 @@ const TransactionBatchSignCreateUpdateForm = ({
     const [step, setStep] = useState(defaultStep)
 
     const form = useForm<TBatchSignFormValues>({
-        resolver: zodResolver(batchSignSchema),
+        resolver: standardSchemaResolver(BatchSignSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -193,18 +190,25 @@ const TransactionBatchSignCreateUpdateForm = ({
         },
     })
 
-    const { error, isPending, mutate, reset } = useTransBatchUpdateSignApproval(
-        {
+    const {
+        error: rawError,
+        isPending,
+        mutate,
+        reset,
+    } = useTransBatchUpdateSignApproval({
+        options: {
             onSuccess: (data) => {
                 form.reset(data)
                 onSuccess?.(data)
             },
             onError,
-        }
-    )
+        },
+    })
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     const { data: transactionBatch, isPending: isLoadingBatchInfo } =
-        useTransactionBatch({
+        useGetTransactionBatchById({
             id: batchId,
         })
 
@@ -226,8 +230,8 @@ const TransactionBatchSignCreateUpdateForm = ({
         if (triggerValidation) setStep((prev) => prev + 1)
     }
 
-    const onSubmit = form.handleSubmit((formData) => {
-        mutate({ id: batchId, data: formData })
+    const onSubmit = form.handleSubmit((payload) => {
+        mutate({ id: batchId, payload })
     })
 
     useFormHelper({
@@ -274,9 +278,9 @@ const TransactionBatchSignCreateUpdateForm = ({
                                         </StepperIndicator>
                                         <div className="mt-0.5 space-y-1 px-2 text-left">
                                             <StepperTitle
-                                                ref={(el) =>
-                                                    (stepRefs.current[i] = el)
-                                                }
+                                                ref={(el) => {
+                                                    stepRefs.current[i] = el
+                                                }}
                                             >
                                                 {title}{' '}
                                                 {!!form.getValues(
@@ -452,7 +456,7 @@ export const TransactionBatchSignCreateUpdateFormModal = ({
             titleClassName="pb-4 hidden"
             descriptionClassName="hidden"
             closeButtonClassName="hidden"
-            className={cn('max-w-5xl', className)}
+            className={cn('!max-w-5xl', className)}
             {...props}
         >
             <TransactionBatchSignCreateUpdateForm

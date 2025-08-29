@@ -22,7 +22,7 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import { IBaseProps, TEntityId } from '@/types'
 
 import { IMemberProfile } from '../..'
-import { useGetById } from '../../member-profile.service'
+import { useGetMemberProfileById } from '../../member-profile.service'
 import OrganizationBranchDisplay from './banners/company-branch-display'
 import JointAccountsDisplay from './displays/joint-accounts-display'
 import MemberRecruitsDisplay from './displays/member-recruits-display'
@@ -36,7 +36,7 @@ interface Props extends IBaseProps {
 
 const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
     ({ profileId, className, defaultData }, ref) => {
-        const { data } = useGetById({
+        const { data } = useGetMemberProfileById({
             id: profileId,
             options: { initialData: defaultData },
         })

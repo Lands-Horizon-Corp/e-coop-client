@@ -18,6 +18,7 @@ import type {
     ITransactionBatchMinimal,
     ITransactionBatchPaginated,
     ITransactionBatchRequest,
+    ITransactionBatchSignatures,
     TTransactionBatchFullorMin,
 } from './transaction-batch.types'
 
@@ -102,16 +103,45 @@ export const setDepositInBank = async (
     return response.data
 }
 
+export const getAllTransactionBatchViewRequest = async () => {
+    const response = await API.get<ITransactionBatch[]>(
+        `${transactionBatchAPIRoute}/view-request`
+    )
+    return response.data
+}
+
+export const getAllEndedBatchViewRequest = async () => {
+    const response = await API.get<ITransactionBatch[]>(
+        `${transactionBatchAPIRoute}/ended-batch`
+    )
+    return response.data
+}
+
+// for signing ended batches
+export const updateEndedBatchApprovalsSignature = async ({
+    id,
+    payload,
+}: {
+    id: TEntityId
+    payload: ITransactionBatchSignatures
+}) => {
+    const response = await API.put<
+        ITransactionBatchSignatures,
+        ITransactionBatch
+    >(`${transactionBatchAPIRoute}/${id}/signature`, payload)
+    return response.data
+}
+
 // 🪝 HOOK STARTS HERE
 export { transactionBatchQueryKey }
 
 export const {
-    useCreate,
-    useDeleteById,
-    useDeleteMany,
-    useGetAll,
-    useGetById,
-    useUpdateById,
+    useCreate: useCreateTransactionBatch,
+    useDeleteById: useDeleteTransactionBatchById,
+    useDeleteMany: useDeleteManyTransactionBatches,
+    useGetAll: useGetAllTransactionBatches,
+    useGetById: useGetTransactionBatchById,
+    useUpdateById: useUpdateTransactionBatchById,
 } = apiCrudHooks
 
 // get current transaction batch cash count
@@ -229,6 +259,7 @@ export const useUpdateBatchCashCounts = createMutationFactory<
     mutationFn: (data) => updateBatchCashCount(data),
 })
 
+// set current transaction batch deposit in bank
 export const useTransactionBatchSetDepositInBank = createMutationFactory<
     ITransactionBatchMinimal | ITransactionBatch,
     Error,
@@ -243,4 +274,43 @@ export const useTransactionBatchSetDepositInBank = createMutationFactory<
             queryKey: [transactionBatchQueryKey, 'current'],
         })
     },
+})
+
+// get all blotter view request
+export const useTransactionBatchBlotterViewRequests = ({
+    query,
+    options,
+}: {
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<ITransactionBatch[], Error>
+} = {}) => {
+    return useQuery<ITransactionBatch[], Error>({
+        ...options,
+        queryKey: [transactionBatchQueryKey, 'view-requests', query],
+        queryFn: async () => getAllTransactionBatchViewRequest(),
+    })
+}
+
+// get all ended transaction batches
+// GET ALL ENDED BATCH THAT CAN BE SIGNED BY OTHER
+export const useTransactionBatchEndApprovals = ({
+    query,
+    options,
+}: {
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<ITransactionBatch[], Error>
+} = {}) => {
+    return useQuery<ITransactionBatch[], Error>({
+        ...options,
+        queryKey: [transactionBatchQueryKey, 'end-approvals', query],
+        queryFn: async () => getAllEndedBatchViewRequest(),
+    })
+}
+
+export const useTransBatchUpdateSignApproval = createMutationFactory<
+    ITransactionBatch,
+    Error,
+    { id: TEntityId; payload: ITransactionBatchSignatures }
+>({
+    mutationFn: (data) => updateEndedBatchApprovalsSignature(data),
 })

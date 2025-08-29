@@ -4,7 +4,7 @@ import { cn } from '@/helpers'
 
 import { IBaseProps, TEntityId } from '@/types'
 
-import { IMemberProfile, useGetById } from '../..'
+import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberFileMediaDisplay from './displays/member-file-medias-display'
 
 interface Props extends IBaseProps {
@@ -14,7 +14,7 @@ interface Props extends IBaseProps {
 
 const MemberMediasInfo = forwardRef<HTMLDivElement, Props>(
     ({ profileId, className, defaultData }, ref) => {
-        const { data } = useGetById({
+        const { data } = useGetMemberProfileById({
             id: profileId,
             options: { initialData: defaultData },
         })

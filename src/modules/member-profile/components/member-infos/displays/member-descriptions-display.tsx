@@ -1,12 +1,11 @@
-import { toReadableDate } from '@/utils'
-import { abbreviateUUID } from '@/utils/formatting-utils'
+import { toReadableDate } from '@/helpers/date-utils'
+import { abbreviateUUID } from '@/helpers/formatting-utils'
+import { IMemberDescription } from '@/modules/member-description-schema'
 
 import CopyTextButton from '@/components/copy-text-button'
 import { DetailsIcon } from '@/components/icons'
+import TextRenderer from '@/components/text-renderer'
 
-import { IMemberDescription } from '@/types'
-
-import RawDescription from '../../raw-description'
 import SectionTitle from '../section-title'
 
 interface Props {
@@ -47,7 +46,7 @@ const MemberDescriptionDisplays = ({ descriptions }: Props) => {
                                 )}
                             </p>
                         </div>
-                        <RawDescription
+                        <TextRenderer
                             className="rounded-xl bg-popover/80 p-4"
                             content={description.description}
                         />

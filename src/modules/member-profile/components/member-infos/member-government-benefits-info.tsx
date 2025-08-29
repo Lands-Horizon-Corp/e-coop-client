@@ -7,7 +7,7 @@ import { BankDuoToneIcon } from '@/components/icons'
 import { IClassProps, TEntityId } from '@/types'
 
 import { IMemberProfile } from '../..'
-import { useGetById } from '../../member-profile.service'
+import { useGetMemberProfileById } from '../../member-profile.service'
 import MemberGovernmentBenefitsDisplay from './displays/member-government-benefits-display'
 import SectionTitle from './section-title'
 
@@ -18,7 +18,7 @@ interface Props extends IClassProps {
 
 const MemberGovernmentBenefits = forwardRef<HTMLDivElement, Props>(
     ({ profileId, className, defaultData }, ref) => {
-        const { data } = useGetById({
+        const { data } = useGetMemberProfileById({
             id: profileId,
             options: { initialData: defaultData },
         })

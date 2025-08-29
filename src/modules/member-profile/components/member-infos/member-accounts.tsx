@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { IMemberProfile, useGetById } from '../..'
+import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberAssetsDisplay from './displays/member-assets-display'
 import MemberIncomeDisplay from './displays/member-income-display'
 
@@ -14,7 +14,7 @@ interface Props extends IClassProps {
 }
 
 const MemberFinancialInfo = ({ profileId, className, defaultData }: Props) => {
-    const { data } = useGetById({
+    const { data } = useGetMemberProfileById({
         id: profileId,
         options: { initialData: defaultData },
     })

@@ -22,7 +22,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { IMemberProfile, useGetById } from '../..'
+import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 import MemberInfoBanner from './banners/member-info-banner'
 import MemberAccountsLoans from './member-accounts-loans'
@@ -102,7 +102,7 @@ const MemberOverallInfo = ({
 }: MemberOverallInfoProps) => {
     const queryClient = useQueryClient()
 
-    const { data: memberProfile } = useGetById({
+    const { data: memberProfile } = useGetMemberProfileById({
         id: memberProfileId,
     })
 
