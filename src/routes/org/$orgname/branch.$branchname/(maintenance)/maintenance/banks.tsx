@@ -1,61 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import BankTable from '@/modules/bank/components/bank-table'
-import BankAction from '@/modules/bank/components/bank-table/row-action-context'
-import { BankCreateUpdateFormModal } from '@/modules/bank/components/forms/bank-create-update-form'
-
-import PageContainer from '@/components/containers/page-container'
-
-import { useModalState } from '@/hooks/use-modal-state'
-import { useSubscribe } from '@/hooks/use-pubsub'
+import BankPage from '@/modules/bank/components/pages/banks'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
 )({
-    component: RouteComponent,
+    component: BankPage,
 })
-
-function RouteComponent() {
-    const queryClient = useQueryClient()
-    const createModal = useModalState(false)
-    const {
-        currentAuth: {
-            user_organization: { branch_id },
-        },
-    } = useAuthUserWithOrgBranch()
-
-    useSubscribe(`bank.created.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['bank', 'paginated'],
-        })
-    )
-
-    useSubscribe(`bills_and_coins.updated.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['bank', 'paginated'],
-        })
-    )
-
-    useSubscribe(`bills_and_coins.deleted.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['bank', 'paginated'],
-        })
-    )
-
-    return (
-        <PageContainer>
-            <BankCreateUpdateFormModal {...createModal} />
-            <BankTable
-                actionComponent={(props) => <BankAction {...props} />}
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-            />
-        </PageContainer>
-    )
-}

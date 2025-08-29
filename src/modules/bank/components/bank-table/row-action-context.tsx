@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -8,7 +9,7 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IBank, useDeleteById } from '../..'
+import { IBank, useDeleteBankById } from '../..'
 import { BankCreateUpdateFormModal } from '../forms/bank-create-update-form'
 import { IBankTableActionComponentProp } from './columns'
 
@@ -24,11 +25,16 @@ const useBankActions = ({ row, onDeleteSuccess }: UseBankActionsProps) => {
 
     const { onOpen } = useConfirmModalStore()
 
-    const { isPending: isDeletingBank, mutate: deleteBank } = useDeleteById({
-        options: {
-            onSuccess: onDeleteSuccess,
-        },
-    })
+    const { isPending: isDeletingBank, mutate: deleteBank } = useDeleteBankById(
+        {
+            options: {
+                ...withToastCallbacks({
+                    textSuccess: 'Deleted bank',
+                    onSuccess: onDeleteSuccess,
+                }),
+            },
+        }
+    )
 
     const handleEdit = () => updateModal.onOpenChange(true)
 
