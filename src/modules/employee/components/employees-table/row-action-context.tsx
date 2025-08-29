@@ -4,10 +4,12 @@ import DisbursementTransactionTable from '@/modules/disbursement-transaction/com
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import TimesheetTable from '@/modules/timesheet/components/timesheet-table'
 import TransactionBatchTable from '@/modules/transaction-batch/components/transaction-batch-table'
 import TransactionBatchAction from '@/modules/transaction-batch/components/transaction-batch-table/row-action-context'
 import { TransactionsTable } from '@/modules/transactions'
 import { IUserOrganization } from '@/modules/user-organization'
+import { UserOrgPermissionUpdateFormModal } from '@/modules/user-organization/components/forms/user-org-permission-update-form'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -194,13 +196,13 @@ export const EmployeesAction = ({
                         defaultValues: employee,
                     }}
                 /> */}
-                {/* <UserOrgPermissionUpdateFormModal
+                <UserOrgPermissionUpdateFormModal
                     {...permissionModal}
                     formProps={{
                         defaultValues: employee,
                         userOrganizatrionId: employee.id,
                     }}
-                /> */}
+                />
                 <Modal
                     {...footstepModal}
                     className="!max-w-[95vw]"
@@ -232,12 +234,12 @@ export const EmployeesAction = ({
                     title="Timesheet"
                     description={`You are viewing ${employee.user.full_name}'s timesheet`}
                 >
-                    {/* <TimesheetTable
+                    <TimesheetTable
                         mode="employee"
                         onRowClick={() => {}}
                         userOrganizationId={employee.id}
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    /> */}
+                    />
                 </Modal>
                 <Modal
                     {...transactionBatchModal}
@@ -554,14 +556,15 @@ export const EmployeesRowContext = ({
                     mode: 'specific',
                     defaultValues: employee,
                 }}
-            />
+            /> */}
+
             <UserOrgPermissionUpdateFormModal
                 {...permissionModal}
                 formProps={{
                     defaultValues: employee,
                     userOrganizatrionId: employee.id,
                 }}
-            /> */}
+            />
 
             <Modal
                 {...footstepModal}
@@ -595,12 +598,12 @@ export const EmployeesRowContext = ({
                 title="Timesheet"
                 description={`You are viewing ${employee.user.full_name}'s timesheet`}
             >
-                {/* <TimesheetTable
+                <TimesheetTable
                     mode="employee"
                     onRowClick={() => {}}
                     userOrganizationId={employee.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                /> */}
+                />
             </Modal>
 
             <Modal
