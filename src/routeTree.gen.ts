@@ -64,6 +64,7 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsR
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-accounting-ledger'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transactions'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/test'
@@ -407,6 +408,14 @@ const OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute =
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
+const OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute =
+  OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport.update(
+    {
+      id: '/(maintenance)/(employees)/permission-template',
+      path: '/permission-template',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute =
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport.update({
     id: '/(employee)/transaction/transactions',
@@ -738,6 +747,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
@@ -824,6 +834,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
@@ -916,6 +927,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
@@ -1008,6 +1020,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
@@ -1094,6 +1107,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
@@ -1185,6 +1199,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/transaction/test'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
@@ -1596,6 +1611,13 @@ declare module '@tanstack/react-router' {
       path: '/member-accounting-ledger'
       fullPath: '/org/$orgname/branch/$branchname/member-accounting-ledger'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
+      path: '/permission-template'
+      fullPath: '/org/$orgname/branch/$branchname/permission-template'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': {
@@ -2012,6 +2034,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeTransactionTestRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
@@ -2082,6 +2105,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute,
+    OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute:
+      OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:

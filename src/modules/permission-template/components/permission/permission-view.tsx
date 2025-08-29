@@ -2,26 +2,29 @@ import { useMemo, useState } from 'react'
 
 import Fuse from 'fuse.js'
 
+import { cn } from '@/helpers'
+import { PermissionActionBadge } from '@/modules/permission/components/permission-action-badge'
 import {
     PERMISSION_ALL_ACTIONS,
     PERMISSION_ALL_RESOURCE_ACTION,
+} from '@/modules/permission/permission.constants'
+import {
     TPermission,
     TPermissionResource,
-} from '@/constants/permission'
-import { cn } from '@/helpers'
-import { permissionArrayToMap } from '@/helpers/permission-utils'
+} from '@/modules/permission/permission.types'
+import { permissionArrayToMap } from '@/modules/permission/permission.utils'
+
+import { MagnifyingGlassIcon } from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
 
 import useDebounce from '@/hooks/use-debounce'
 
 import { IBaseProps } from '@/types'
 
 import { PERMISSION_RESOURCE_ICON_MAP } from '.'
-import { PermissionActionBadge } from '../badges/permission-action-badge'
-import { MagnifyingGlassIcon } from '../icons'
-import Modal, { IModalProps } from '../modals/modal'
-import { Badge } from '../ui/badge'
-import { Input } from '../ui/input'
-import { Separator } from '../ui/separator'
 
 interface Props extends IBaseProps {
     permissions: TPermission[]

@@ -5,10 +5,6 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
 import {
-    permissionArrayToMap,
-    permissionMapToPermissionArray,
-} from '@/helpers/permission-utils'
-import {
     IInvitationCode,
     IInvitationCodeRequest,
     InviationCodeSchema,
@@ -16,16 +12,19 @@ import {
     useCreate,
     useUpdateById,
 } from '@/modules/invitation-code'
+import PermissionMatrix from '@/modules/permission/components/permission-matrix'
+import {
+    permissionArrayToMap,
+    permissionMapToPermissionArray,
+} from '@/modules/permission/permission.utils'
 import { setHours } from 'date-fns'
 import { ShieldCheckIcon, UserIcon } from 'lucide-react'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { UsersAddIcon } from '@/components/icons/index'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import PermissionMatrix from '@/components/permission/permission-matrix'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
@@ -118,9 +117,6 @@ const InvitationCodeCreateUpdateForm = ({
 
     const isDisabled = (field: Path<TInvitationCodeFormValues>) =>
         readOnly || disabledFields?.includes(field) || false
-
-    const isInvitationOnChanged =
-        JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
@@ -400,46 +396,18 @@ const InvitationCodeCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <Separator />
-                <div className="space-y-2">
-                    <FormErrorMessage
-                        errorMessage={
-                            error
-                                ? typeof error === 'string'
-                                    ? error
-                                    : error.message
-                                : null
-                        }
-                    />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            onClick={() => {
-                                form.reset()
-                                resetCreate()
-                                resetUpdate()
-                            }}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            disabled={isPending || !isInvitationOnChanged}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {isPending ? (
-                                <LoadingSpinner />
-                            ) : invitationCodeId ? (
-                                'Update'
-                            ) : (
-                                'Create'
-                            )}
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={invitationCodeId ? 'Update' : 'Create'}
+                    onReset={() => {
+                        form.reset()
+                        resetCreate()
+                        resetUpdate()
+                    }}
+                />
             </form>
         </Form>
     )
@@ -458,7 +426,7 @@ const InvitationCodeCreateUpdateFormModal = ({
         <Modal
             title={title}
             description={description}
-            className={cn('max-w-[90vw] max-h-[95vh]', className)}
+            className={cn('!max-w-[90vw] max-h-[95vh]', className)}
             {...props}
         >
             <InvitationCodeCreateUpdateForm

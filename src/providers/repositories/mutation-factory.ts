@@ -153,6 +153,6 @@ export const deleteMutationInvalidationFn = <
 
     // Invalidate resource-query to ensure consistency
     queryClient.invalidateQueries({
-        queryKey: [rootKey, 'resource-query'],
+        queryKey: [rootKey, 'paginated'],
     })
 }

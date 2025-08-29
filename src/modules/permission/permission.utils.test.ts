@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { TPermissionAction } from '@/types'
-
 import {
     permissionArrayToMap,
     permissionMapToPermissionArray,
 } from './permission-utils'
+import { TPermissionAction } from './permission.types'
 
 describe('permissionArrayToMap', () => {
     it('["User:Read", "User:Update", "Bank:Read", "User:Delete"] → {User: ["Read", "Update", "Delete"], Bank: ["Read"]}', () => {

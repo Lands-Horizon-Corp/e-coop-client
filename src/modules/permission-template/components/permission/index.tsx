@@ -9,7 +9,7 @@ import {
     CalendarDotsIcon,
     HandWithdrawIcon,
     Users3Icon,
-} from '../icons'
+} from '../../../../components/icons'
 
 export const PERMISSION_RESOURCE_ICON_MAP: Partial<
     Record<TPermissionResource, IconType>
