@@ -1,20 +1,14 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import z from 'zod'
 
-export interface ILoanPurposeRequest {
-    description?: string
-    icon?: string
-}
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
-export interface ILoanPurposeResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
+import { LoanPurposeSchema } from './loan-purpose.validation'
+
+export interface ILoanPurpose extends IBaseEntityMeta {
     description: string
     icon: string
 }
+
+export type ILoanPurposeRequest = z.infer<typeof LoanPurposeSchema>
+
+export interface ILoanPurposePaginated extends IPaginatedResult<ILoanPurpose> {}
