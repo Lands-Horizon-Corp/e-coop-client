@@ -1,22 +1,14 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
-export interface ICollateralRequest {
-    icon?: string
-    name: string
-    description?: string
-}
+import { TCollateralSchema } from './collateral.validation'
 
-export interface ICollateralResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
+export interface ICollateral extends IBaseEntityMeta {
     icon: string
+
     name: string
     description: string
 }
+
+export type ICollateralRequest = TCollateralSchema
+
+export interface ICollateralPaginated extends IPaginatedResult<ICollateral> {}
