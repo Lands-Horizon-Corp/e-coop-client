@@ -1,5 +1,4 @@
 import { USER_ORG_APPLICATION_STATUS } from '@/constants'
-import { TPermission } from '@/constants/permission'
 import {
     IBaseEntityMeta,
     IPaginatedResult,
@@ -11,6 +10,7 @@ import { IAccount } from '../account'
 import { IBranch } from '../branch'
 import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
+import { TPermission } from '../permission'
 import { IUserBase } from '../user/user.types'
 
 export interface IUserOrganizationContext<

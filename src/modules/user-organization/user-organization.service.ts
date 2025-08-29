@@ -10,7 +10,10 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
-import { createMutationFactory } from '@/providers/repositories/mutation-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
@@ -20,6 +23,7 @@ import {
     IOrgUserOrganizationGroup,
     IUserOrganization,
     IUserOrganizationPaginated,
+    IUserOrganizationPermissionRequest,
 } from './user-organization.types'
 
 export const { apiCrudHooks, apiCrudService, baseQueryKey } =
@@ -134,6 +138,17 @@ export const acceptJoinRequest = async (userOrganizationId: TEntityId) => {
 export const rejectJoinRequest = async (userOrganizationId: TEntityId) => {
     const endpoint = `${userOrganizationAPIRoute}/${userOrganizationId}/reject`
     return (await API.delete<IUserOrganization>(endpoint)).data
+}
+
+export const updateUserOrganizationPermission = async (
+    userOrgId: TEntityId,
+    data: IUserOrganizationPermissionRequest
+) => {
+    const response = await API.put<
+        IUserOrganizationPermissionRequest,
+        IUserOrganization
+    >(`${userOrganizationAPIRoute}/${userOrgId}/permission`, data)
+    return response.data
 }
 
 //hooks
@@ -329,4 +344,20 @@ export const useUserOrgRejectJoinRequest = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => rejectJoinRequest(id),
+    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+})
+
+export const useUpdateUserOrganizationPermission = createMutationFactory<
+    IUserOrganization,
+    Error,
+    { id: TEntityId; data: IUserOrganizationPermissionRequest }
+>({
+    mutationFn: ({ id, data }) => updateUserOrganizationPermission(id, data),
+    invalidationFn: (args) => {
+        updateMutationInvalidationFn(baseQueryKey, args)
+
+        // special ocasion since both of them need each other, I hardcoded this here
+        // instead of importing employee service base key because it will circular depndency
+        updateMutationInvalidationFn('employee', args)
+    },
 })
