@@ -10,3 +10,5 @@ export const {{pascalCase name}}Schema = z.object({
         .optional()
         .transform(descriptionTransformerSanitizer),
 })
+
+export type T{{pascalCase name}}Schema = z.infer<typeof {{pascalCase name}}Schema>
