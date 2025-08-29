@@ -1,24 +1,16 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import z from 'zod'
 
-export interface ILoanStatusRequest {
-    name: string
-    icon?: string
-    color?: string
-    description?: string
-}
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
-export interface ILoanStatusResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
+import { LoanStatusSchema } from './loan-status.validation'
+
+export interface ILoanStatus extends IBaseEntityMeta {
     name: string
     icon: string
     color: string
     description: string
 }
+
+export type ILoanStatusRequest = z.infer<typeof LoanStatusSchema>
+
+export interface ILoanStatusPaginated extends IPaginatedResult<ILoanStatus> {}
