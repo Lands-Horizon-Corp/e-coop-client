@@ -38,7 +38,7 @@ export const { useGetById } = apiCrudHooks
 
 export type TTimesheetHookMode = 'all' | 'me' | 'employee'
 
-export const useGetPaginatedFootstep = ({
+export const useGetPaginatedTimesheet = ({
     mode,
     query,
     options,
