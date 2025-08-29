@@ -26,7 +26,7 @@ import { TEntityId } from '@/types'
 
 import {
     TTransactionBatchHookMode,
-    apiCrudService,
+    deleteManyTransactionBatches,
     useFilteredPaginatedTransactionBatch,
 } from '../../transaction-batch.service'
 import { ITransactionBatch } from '../../transaction-batch.types'
@@ -188,7 +188,7 @@ const TransactionBatchTable = ({
                                 ],
                             }),
                         onDelete: (selectedData) =>
-                            apiCrudService.deleteMany({
+                            deleteManyTransactionBatches({
                                 ids: selectedData.map((data) => data.id),
                             }),
                     }}

@@ -11,8 +11,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 
-import { ITransactionBatch } from '../..'
-import { TransactionBatchHistoriesModal } from '../transaction-batch/transaction-batch-histories'
+import { ITransactionBatch } from '..'
+import { TransactionBatchHistoriesModal } from './transaction-batch/transaction-batch-histories'
 
 interface Props extends IClassProps {
     transBatch: ITransactionBatch

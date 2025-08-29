@@ -1,7 +1,9 @@
 import { ReactNode, useState } from 'react'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import DisbursementTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table'
 import { TEntryType } from '@/modules/general-ledger'
+import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -21,8 +23,6 @@ import {
 } from '@/components/icons'
 import Modal from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-// import { TransactionBatchHistoriesModal } from '@/components/transaction-batch/transaction-batch-histories'
-// import { BatchBlotterQuickViewModal } from '@/components/transaction-batch/transaction-batch-quick-view'
 import {
     ContextMenuItem,
     ContextMenuLabel,
@@ -44,8 +44,13 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { useDeleteById, useTransactionBatchAcceptBlotterView } from '../../transaction-batch.service'
+import {
+    useDeleteById,
+    useTransactionBatchAcceptBlotterView,
+} from '../../transaction-batch.service'
 import { ITransactionBatch } from '../../transaction-batch.types'
+import { TransactionBatchHistoriesModal } from '../transaction-batch/transaction-batch-histories'
+import { BatchBlotterQuickViewModal } from '../transaction-batch/transaction-batch-quick-view'
 // import DisbursementTransactionTable from '../disbursement-transaction-table'
 // import GeneralLedgerTable from '../ledgers-tables/general-ledger-table'
 import { ITransactionBatchTableActionComponentProp } from './columns'
@@ -173,31 +178,31 @@ export const TransactionBatchAction = ({
         <>
             <div onClick={(e) => e.stopPropagation()}>
                 <Modal
-                    className="max-w-[95vw]"
+                    className="!max-w-[95vw]"
                     title="Disbursement Transactions"
                     {...disbursementTransactionsModal}
                     description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
                 >
-                    {/* <DisbursementTransactionTable
+                    <DisbursementTransactionTable
                         mode="transaction-batch"
                         transactionBatchId={batch.id}
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    /> */}
+                    />
                 </Modal>
                 <Modal
                     {...ledgerTableModal}
-                    className="max-w-[95vw]"
+                    className="!max-w-[95vw]"
                     title={getModalTitle()}
                 >
-                    {/* <GeneralLedgerTable
+                    <GeneralLedgerTable
                         mode="transaction-batch"
                         TEntryType={selectedEntryType}
                         transactionBatchId={batch.id}
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    /> */}
+                    />
                 </Modal>
 
-                {/* <TransactionBatchHistoriesModal
+                <TransactionBatchHistoriesModal
                     {...viewHistoryModal}
                     transactionBatchHistoryProps={{
                         transactionBatchId: batch.id,
@@ -208,7 +213,7 @@ export const TransactionBatchAction = ({
                     batchBlotterProps={{
                         transBatch: batch,
                     }}
-                /> */}
+                />
             </div>
             <RowActionsGroup
                 canSelect
@@ -439,31 +444,31 @@ export const TransactionBatchRowContext = ({
     return (
         <>
             <Modal
-                className="max-w-[95vw]"
+                className="!max-w-[95vw]"
                 title="Disbursement Transactions"
                 {...disbursementTransactionsModal}
                 description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
             >
-                {/* <DisbursementTransactionTable
+                <DisbursementTransactionTable
                     mode="transaction-batch"
                     transactionBatchId={batch.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                /> */}
+                />
             </Modal>
             <Modal
                 {...ledgerTableModal}
-                className="max-w-[95vw]"
+                className="!max-w-[95vw]"
                 title={getModalTitle()}
             >
-                {/* <GeneralLedgerTable
+                <GeneralLedgerTable
                     mode="transaction-batch"
                     TEntryType={selectedEntryType}
                     transactionBatchId={batch.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                /> */}
+                />
             </Modal>
 
-            {/* <TransactionBatchHistoriesModal
+            <TransactionBatchHistoriesModal
                 {...viewHistoryModal}
                 transactionBatchHistoryProps={{
                     transactionBatchId: batch.id,
@@ -474,7 +479,7 @@ export const TransactionBatchRowContext = ({
                 batchBlotterProps={{
                     transBatch: batch,
                 }}
-            /> */}
+            />
             <DataTableRowContext
                 row={row}
                 onDelete={{
