@@ -6,10 +6,11 @@ import type {
     ICashCountRequest,
 } from './cash-count.types'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
-    ICashCount,
-    ICashCountRequest
->({
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: cashCountBaseKey,
+} = createDataLayerFactory<ICashCount, ICashCountRequest>({
     url: '/api/v1/cash-count',
     baseKey: 'cash-count',
 })
@@ -44,7 +45,7 @@ export const updateBatchCashCount = async (data: ICashCountBatchRequest) => {
 }
 
 // 🪝 HOOK STARTS HERE
-export { baseQueryKey } // Exported in case it's needed outside
+export { cashCountBaseKey } // Exported in case it's needed outside
 
 export const {
     useCreate: useCreateCashCount,
