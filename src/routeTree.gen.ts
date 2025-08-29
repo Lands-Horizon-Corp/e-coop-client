@@ -65,12 +65,16 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImpo
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-accounting-ledger'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employee-footsteps'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transactions'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/test'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/disbursement-transaction'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/disbursement'
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-status'
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-purpose'
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-application'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/withdraw-entry'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/payment-entry'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/online-entry'
@@ -416,6 +420,14 @@ const OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute =
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
+const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute =
+  OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRouteImport.update(
+    {
+      id: '/(maintenance)/(employees)/employee-footsteps',
+      path: '/employee-footsteps',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute =
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport.update({
     id: '/(employee)/transaction/transactions',
@@ -454,6 +466,24 @@ const OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute =
   OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport.update({
     id: '/(employee)/transaction/disbursement',
     path: '/transaction/disbursement',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute =
+  OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport.update({
+    id: '/(employee)/loan/loan-status',
+    path: '/loan/loan-status',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute =
+  OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRouteImport.update({
+    id: '/(employee)/loan/loan-purpose',
+    path: '/loan/loan-purpose',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute =
+  OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRouteImport.update({
+    id: '/(employee)/loan/loan-application',
+    path: '/loan/loan-application',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute =
@@ -741,12 +771,16 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
+  '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
+  '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
@@ -828,12 +862,16 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
+  '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
+  '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
@@ -921,12 +959,16 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
+  '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
+  '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
@@ -1014,12 +1056,16 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger/online-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/payment-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry'
+    | '/org/$orgname/branch/$branchname/loan/loan-application'
+    | '/org/$orgname/branch/$branchname/loan/loan-purpose'
+    | '/org/$orgname/branch/$branchname/loan/loan-status'
     | '/org/$orgname/branch/$branchname/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/transaction/disbursement-transaction'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
@@ -1101,12 +1147,16 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger/online-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/payment-entry'
     | '/org/$orgname/branch/$branchname/general-ledger/withdraw-entry'
+    | '/org/$orgname/branch/$branchname/loan/loan-application'
+    | '/org/$orgname/branch/$branchname/loan/loan-purpose'
+    | '/org/$orgname/branch/$branchname/loan/loan-status'
     | '/org/$orgname/branch/$branchname/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/transaction/disbursement-transaction'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/transaction/test'
     | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
@@ -1193,12 +1243,16 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger/online-entry'
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger/payment-entry'
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry'
+    | '/org/$orgname/branch/$branchname/(employee)/loan/loan-application'
+    | '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose'
+    | '/org/$orgname/branch/$branchname/(employee)/loan/loan-status'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/test'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
+    | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
@@ -1620,6 +1674,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
+      path: '/employee-footsteps'
+      fullPath: '/org/$orgname/branch/$branchname/employee-footsteps'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': {
       id: '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
       path: '/transaction/transactions'
@@ -1660,6 +1721,27 @@ declare module '@tanstack/react-router' {
       path: '/transaction/disbursement'
       fullPath: '/org/$orgname/branch/$branchname/transaction/disbursement'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': {
+      id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-status'
+      path: '/loan/loan-status'
+      fullPath: '/org/$orgname/branch/$branchname/loan/loan-status'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose': {
+      id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose'
+      path: '/loan/loan-purpose'
+      fullPath: '/org/$orgname/branch/$branchname/loan/loan-purpose'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': {
+      id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-application'
+      path: '/loan/loan-application'
+      fullPath: '/org/$orgname/branch/$branchname/loan/loan-application'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(employee)/general-ledger/withdraw-entry': {
@@ -2028,12 +2110,16 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerOnlineEntryRoute
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute
+  OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
+  OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
+  OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
   OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTestRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
   OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
+  OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
@@ -2093,6 +2179,12 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeGeneralLedgerPaymentEntryRoute,
     OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute:
       OrgOrgnameBranchBranchnameemployeeGeneralLedgerWithdrawEntryRoute,
+    OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute:
+      OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute,
+    OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute:
+      OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute,
+    OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute:
+      OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute:
@@ -2105,6 +2197,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute,
+    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute:
+      OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute,
     OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute:
       OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute:
