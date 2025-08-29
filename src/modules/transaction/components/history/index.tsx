@@ -83,7 +83,7 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
         !CurrentTransaction || CurrentTransaction.data.length === 0
 
     return (
-        <div className="flex w-full flex-row items-center justify-between ">
+        <div className="flex w-full flex-row items-center justify-between">
             <Sheet open={onOpen} onOpenChange={setOnOpen}>
                 <SheetTrigger asChild className="">
                     <Button
@@ -96,8 +96,8 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                         History
                     </Button>
                 </SheetTrigger>
-                <SheetContent className=" min-w-full max-w-[500px] md:min-w-[600px]">
-                    <div className="overflow-y-auto ecoop-scroll">
+                <SheetContent className=" min-w-full h-full max-w-[500px] md:min-w-[600px] overflow-hidden ">
+                    <div className=" ecoop-scroll m-5">
                         <h1 className="text-lg font-bold mb-2">
                             Transaction History
                             <RefreshButton
@@ -108,26 +108,28 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                         </h1>
                         <ScrollArea>
                             <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
-                                {(isNoCurrentTransaction ||
-                                    CurrentTransaction) && (
+                                {isNoCurrentTransaction ? (
                                     <TransactionNoFound />
+                                ) : (
+                                    CurrentTransaction?.data.map(
+                                        (transaction) => (
+                                            <div key={transaction.id}>
+                                                <TransactionDetails
+                                                    item={transaction}
+                                                    onClick={() =>
+                                                        handleNavigate(
+                                                            transaction.id,
+                                                            fullPath
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        )
+                                    )
                                 )}
-                                {CurrentTransaction?.data.map((transaction) => (
-                                    <div key={transaction.id}>
-                                        <TransactionDetails
-                                            item={transaction}
-                                            onClick={() =>
-                                                handleNavigate(
-                                                    transaction.id,
-                                                    fullPath
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                ))}
                             </div>
                         </ScrollArea>
-                        <div>
+                        <div className="bg-red-500 sticky bottom-0 left-0 right-0">
                             <MiniPaginationBar
                                 pagination={{
                                     pageIndex: pagination.pageIndex,

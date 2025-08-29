@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+
+import { toast } from 'sonner'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { cn } from '@/helpers'
@@ -25,6 +27,7 @@ import { Separator } from '@/components/ui/separator'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import useFilterState from '@/hooks/use-filter-state'
+import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
 
@@ -59,7 +62,7 @@ const TransactionCurrentPaymentEntry = ({
     })
     const { sortingStateBase64 } = useDataTableSorting()
 
-    const { finalFilterPayload } = useFilterState({
+    const { finalFilterPayloadBase64 } = useFilterState({
         defaultFilterMode: 'OR',
         onFilterChange: () =>
             setPagination((prev) => ({
@@ -72,14 +75,31 @@ const TransactionCurrentPaymentEntry = ({
         data: generalLedgerBasedTransaction,
         isLoading,
         isFetching,
+        isError,
+        error,
+        isSuccess,
     } = useFilteredPaginatedGeneralLedger({
         transactionId,
         mode: 'transaction',
         query: {
             ...pagination,
             sort: sortingStateBase64,
-            filter: JSON.stringify(finalFilterPayload.filters),
+            filter: finalFilterPayloadBase64,
         },
+    })
+
+    const handleError = useCallback(
+        (error: Error) => {
+            toast.error(error?.message || 'Something went wrong')
+        },
+        [error]
+    )
+
+    useQeueryHookCallback({
+        data: generalLedgerBasedTransaction,
+        error: handleError,
+        isError: isError,
+        isSuccess: isSuccess,
     })
 
     if (isLoading) {

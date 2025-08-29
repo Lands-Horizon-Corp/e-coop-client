@@ -101,9 +101,16 @@ const TransactionModalSuccessPayment = ({
                         Successful!
                     </p>
                     <p className="text-muted-foreground text-sm">
-                        Successfully added {paymentType} to{' '}
-                        <span className=" font-extrabold italic">
+                        <span className="text-primary font-extrabold ">
                             {memberName}
+                        </span>
+                        Successfully added {paymentType}
+                        <span>
+                            {' '}
+                            {paymentType === 'withdraw' ? 'from' : 'for'}{' '}
+                        </span>
+                        <span className="text-primary italic">
+                            {transaction.account?.name}
                         </span>
                     </p>
                     <p className="text-muted-foreground text-sm">

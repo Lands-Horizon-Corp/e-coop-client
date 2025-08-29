@@ -27,8 +27,6 @@ import { useImagePreview } from '@/store/image-preview-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-// import LoadingSpinner from '@/components/spinners/loading-spinner'
-// import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
@@ -156,7 +154,6 @@ export const QuickTransferTransactionForm = ({
     })
 
     const isFormIsDirty = form.formState.isDirty
-    console.log(form.control)
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit} className="min-w-[300px] ">
@@ -444,17 +441,17 @@ export const QuickTransferTransactionForm = ({
                     />
                 </div>
                 <Separator className="my-2 sm:my-4" />
-                    <FormFooterResetSubmit
-                        error={quickTransactionError}
-                        // readOnly={readOnly}
-                        isLoading={isQuickTransactionPending || !isFormIsDirty}
-                        disableSubmit={!form.formState.isDirty}
-                        submitText={mode}
-                        className="sticky bottom-0"
-                        onReset={() => {
-                            form.reset()
-                        }}
-                    />
+                <FormFooterResetSubmit
+                    error={quickTransactionError}
+                    // readOnly={readOnly}
+                    isLoading={isQuickTransactionPending || !isFormIsDirty}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={mode}
+                    className="sticky bottom-0"
+                    onReset={() => {
+                        form.reset()
+                    }}
+                />
             </form>
         </Form>
     )

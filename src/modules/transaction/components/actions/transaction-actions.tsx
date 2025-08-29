@@ -1,4 +1,6 @@
 import { payment_bg } from '@/assets/transactions'
+import { withdraw_bg } from '@/assets/transactions'
+import { deposit_bg } from '@/assets/transactions'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
@@ -13,6 +15,9 @@ interface actionItemsProps {
     label?: string
     icon?: React.ReactNode
     buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
+    backgroundImage?: string
+    className?: string
+    variant?: 'default' | 'destructive' | 'outline' | 'ghost' | 'link' | 'secondary' | 'nostyle'
 }
 
 const ActionTransactionItem = ({
@@ -20,25 +25,32 @@ const ActionTransactionItem = ({
     label,
     icon,
     buttonProps,
+    backgroundImage,
+    className,
+    variant = 'default',
 }: actionItemsProps) => {
     return (
-        <GradientBackground gradientOnly className="w-full rounded-xl">
+        <GradientBackground
+            opacity={0.0}
+            gradientOnly
+            className="w-full rounded-xl "
+        >
             <Button
-                variant={'outline'}
-                className="relative h-14 w-full overflow-hidden rounded-xl !border-primary/20 hover:bg-primary/10"
+                variant={variant}
+                className={`relative h-14 w-full overflow-hidden rounded-xl dark!border-blue-400/20 dark:border-0  ' ${className}`}
                 {...buttonProps}
                 onClick={onClick}
             >
                 <span className="mr-2">{icon}</span>
                 {label}
                 <span
-                    className="absolute -right-5 -top-16 size-52 -rotate-45"
+                    className="absolute top-1/2 left-[80%] -translate-x-1/2 -translate-y-1/2 size-25"
                     style={{
-                        backgroundImage: `url(${payment_bg})`,
+                        backgroundImage: `url(${backgroundImage})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
-                        opacity: 0.2,
+                        opacity: 0.1,
                     }}
                 />
             </Button>
@@ -76,18 +88,24 @@ const TransactionActions = ({
                 label={paymentLabel}
                 icon={<OutlinePaymentIcon />}
                 buttonProps={PaymentButtonProps}
+                backgroundImage={payment_bg}
             />
             <ActionTransactionItem
                 onClick={depositOnClick}
                 label={depositLabel}
                 icon={<PiHandDepositIcon />}
                 buttonProps={DepositButtonProps}
+                backgroundImage={deposit_bg}
+                variant='secondary'
             />
             <ActionTransactionItem
                 onClick={withdrawOnClick}
                 label={widthdrawLabel}
                 icon={<PiHandWithdrawIcon />}
+                backgroundImage={withdraw_bg}
                 buttonProps={withdrawButtonProps}
+                variant='destructive'
+                className='opacity-80 hover:opacity-100'
             />
         </div>
     )

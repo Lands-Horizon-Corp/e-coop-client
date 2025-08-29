@@ -72,7 +72,6 @@ export const GradientBackground = memo(
         ...props
     }: GradientBackgroundProps) => {
         const randomGradient = useRandomGradient(colorPalettes)
-        console.log(!gradientOnly, mediaUrl)
         const showBackgroundImage = !gradientOnly && mediaUrl
         return (
             <div

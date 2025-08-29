@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -96,7 +97,19 @@ const TransactionForm = ({
     const {
         mutate: updateReferenceNumber,
         isPending: isLoadingUpdateReferenceNumber,
-    } = useUpdateReferenceNumber()
+    } = useUpdateReferenceNumber({
+        options: {
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: ['get-transaction-by-id', transactionId],
+                })
+                queryClient.invalidateQueries({
+                    queryKey: ['current-transaction-list'],
+                })
+                toast.success('Transaction updated successfully')
+            },
+        },
+    })
 
     const {
         data: transaction,
@@ -165,12 +178,11 @@ const TransactionForm = ({
         id: accountDefaultValue,
     })
 
-    const quickPaymentTitle = (
-        <div className="flex items-center">
-            <MoneyIcon className="mr-2" />
-            <span className="font-bold">{`${focusTypePayment?.charAt(0).toUpperCase()}${focusTypePayment?.slice(1)}`}</span>
-        </div>
-    )
+    const resetAll = () => {
+        handleResetAll()
+        handleSetTransactionId(undefined)
+        form.reset()
+    }
 
     useTransactionShortcuts({
         hasSelectedMember: hasSelectedMember,
@@ -180,9 +192,7 @@ const TransactionForm = ({
         setOpenPaymentWithTransactionModal,
         setFocusTypePayment,
         handleResetAll: () => {
-            handleResetAll()
-            handleSetTransactionId(undefined)
-            form.reset()
+            resetAll()
         },
         setOpenMemberPicker,
         setSelectedMember: () => {
@@ -192,6 +202,12 @@ const TransactionForm = ({
         hasFocusedGeneralLedger: focusedLedger !== undefined,
     })
 
+    const quickPaymentTitle = (
+        <div className="flex items-center">
+            <MoneyIcon className="mr-2" />
+            <span className="font-bold">{`${focusTypePayment?.charAt(0).toUpperCase()}${focusTypePayment?.slice(1)}`}</span>
+        </div>
+    )
     return (
         <Form {...form}>
             <div className="hidden">
@@ -239,11 +255,9 @@ const TransactionForm = ({
                         })
 
                         queryClient.invalidateQueries({
-                            queryKey: ['get-transaction-by-id', transactionId],
+                            queryKey: ['general-ledger', 'filtered-paginated'],
                         })
-                        queryClient.invalidateQueries({
-                            queryKey: ['current-transaction-list'],
-                        })
+
                         form.setValue('reference_number', userSettingOR)
                         setOpenPaymentWithTransactionModal(false)
                         setSelectedMember(transaction.member_profile)

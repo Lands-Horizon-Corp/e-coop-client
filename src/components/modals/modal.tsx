@@ -47,6 +47,7 @@ const Modal = ({
     return (
         <Dialog {...other}>
             <DialogContent
+                id='dialog-modal'
                 showCloseButton={!showCloseButton}
                 closeButtonClassName={closeButtonClassName}
                 overlayClassName={cn('backdrop-blur', overlayClassName)}

@@ -11,6 +11,8 @@ export const QuickWithdrawSchema = PaymentWithTransactionSchema.extend({
         .string({ error: 'Reference number is required' })
         .min(1),
     or_auto_generated: z.boolean().default(false).optional(),
+
+    member_joint_account: z.any().optional(),
 })
 
 export type TQuickWithdrawSchemaFormValues = z.infer<typeof QuickWithdrawSchema>

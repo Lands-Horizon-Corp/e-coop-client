@@ -45,16 +45,16 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
             setFocusTypePayment,
         ]
     )
-
     const canResetAll = useCallback(() => {
-        if (
-            hasSelectedTransactionId &&
-            openSuccessModal &&
-            openPaymentWithTransactionModal &&
-            isMediaOpen &&
-            hasFocusedGeneralLedger
-        )
-            return
+        // if (
+        //     hasSelectedTransactionId &&
+        //     openSuccessModal &&
+        //     openPaymentWithTransactionModal &&
+        //     isMediaOpen &&
+        //     hasFocusedGeneralLedger
+        // )
+        //     return
+        if (openPaymentWithTransactionModal) return
         handleResetAll()
     }, [
         hasSelectedTransactionId,
@@ -117,6 +117,7 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
     useShortcut('Escape', canResetAll, {
         disableActiveButton: true,
         disableTextInputs: true,
+        disabledDialog: true,
     })
     useShortcut(
         'd',

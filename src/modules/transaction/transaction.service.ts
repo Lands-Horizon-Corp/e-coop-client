@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { withCatchAsync } from '@/helpers/function-utils'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -75,11 +78,23 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
         if (transactionId) {
             return createPaymentTransaction({ data, mode, transactionId })
         } else {
-            return create({ payload: transactionPayload })
+            const [error, result] = await withCatchAsync(
+                create({ payload: transactionPayload })
+            )
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage)
+                throw new Error(errorMessage)
+            }
+            return createPaymentTransaction({
+                data,
+                mode,
+                transactionId: result.id,
+            })
         }
     },
     invalidationFn: (args) =>
-        createMutationInvalidateFn('create-transaction-payment-by-mode', args),
+        createMutationInvalidateFn('general-ledger', args),
 })
 
 export const useCreateQuickTransactionPayment = createMutationFactory<

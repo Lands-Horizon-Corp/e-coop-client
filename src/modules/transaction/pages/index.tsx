@@ -58,7 +58,12 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         setSelectedAccount,
     } = useTransactionStore()
 
-    const { data: transaction, isError } = useGetById({
+    const {
+        data: transaction,
+        isError,
+        isSuccess,
+        error,
+    } = useGetById({
         id: transactionId,
         options: {
             enabled: !!transactionId,
@@ -73,9 +78,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     useQeueryHookCallback({
         data: transaction,
-        error: undefined,
+        error: error,
         isError: isError,
-        isSuccess: !!transaction,
+        isSuccess: isSuccess,
         onSuccess: handleGetTransactionByIdSuccess,
     })
 
@@ -109,7 +114,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const hasSelectedTransactionId = !!transactionId
 
     const disAbledActionButtons = !hasSelectedMember || !hasTransactionBatch
-    
+
     return (
         <PageContainer className="flex h-[90vh] items-center w-full !overflow-y-hidden">
             <TransactionNoFoundBatch />
@@ -213,7 +218,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     {hasSelectedTransactionId && (
                         <Button
                             size="sm"
-                            variant={'secondary'}
+                            variant={'outline'}
                             onClick={(e) => {
                                 e.preventDefault()
                                 handleResetAll()
