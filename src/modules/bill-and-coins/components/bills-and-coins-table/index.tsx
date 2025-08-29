@@ -5,9 +5,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
-    BillAndCoinsAPI,
     IBillsAndCoin,
-    useGetPaginated,
+    deleteManyBillsAndCoins,
+    useGetPaginatedBillsAndCoins,
 } from '@/modules/bill-and-coins'
 import {
     getCoreRowModel,
@@ -31,7 +31,9 @@ import BillsAndCoinsTableColumns, {
     IBillsAndCoinsTableColumnProps,
     billsAndCoinsGlobalSearchTargets,
 } from './columns'
-import BillsAndCoinsAction, { BillsAndCoinsRowContext } from './row-action-context'
+import BillsAndCoinsAction, {
+    BillsAndCoinsRowContext,
+} from './row-action-context'
 
 export interface BillsAndCoinsTableProps
     extends TableProps<IBillsAndCoin>,
@@ -98,7 +100,7 @@ const BillsAndCoinsTable = ({
         isRefetching,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginated({
+    } = useGetPaginatedBillsAndCoins({
         query: {
             ...pagination,
             sort: sortingStateBase64,
@@ -163,7 +165,7 @@ const BillsAndCoinsTable = ({
                                 queryKey: ['bills-and-coins', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
-                            BillAndCoinsAPI.deleteMany({
+                            deleteManyBillsAndCoins({
                                 ids: selectedData.map((data) => data.id),
                             }),
                     }}

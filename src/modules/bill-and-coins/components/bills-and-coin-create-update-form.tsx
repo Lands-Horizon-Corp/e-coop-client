@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { useCreate, useUpdateById } from '../bill-and-coins.service'
+import { useCreateBillsAndCoins, useUpdateBillsAndCoinsById } from '../bill-and-coins.service'
 import { IBillsAndCoin, IBillsAndCoinRequest } from '../bill-and-coins.types'
 
 const billsAndCoinSchema = z.object({
@@ -64,13 +64,13 @@ const BillsAndCoinCreateUpdateForm = ({
         },
     })
 
-    const createMutation = useCreate({
+    const createMutation = useCreateBillsAndCoins({
         options: {
             onSuccess,
             onError,
         },
     })
-    const updateMutation = useUpdateById({
+    const updateMutation = useUpdateBillsAndCoinsById({
         options: {
             onSuccess,
             onError,
