@@ -1,37 +1,36 @@
 import { ReactNode, useState } from 'react'
 
-import { useRouter } from '@tanstack/react-router'
-
+import DisbursementTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table'
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
-import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
-import { MemberProfileCloseFormModal } from '@/modules/member-close-remark/components/forms/member-profile-close-form'
-import { TransactionsTable } from '@/modules/transaction'
-import { useInfoModalStore } from '@/store/info-modal-store'
+import TransactionBatchTable from '@/modules/transaction-batch/components/transaction-batch-table'
+import TransactionBatchAction from '@/modules/transaction-batch/components/transaction-batch-table/row-action-context'
+import { TransactionsTable } from '@/modules/transactions'
+import { IUserOrganization } from '@/modules/user-organization'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import {
     BillIcon,
-    BookIcon,
     BookOpenIcon,
     BookStackIcon,
     BookThickIcon,
-    EyeIcon,
+    BriefCaseClockIcon,
     FootstepsIcon,
+    GearIcon,
     HandCoinsIcon,
-    HeartBreakFillIcon,
+    HandDropCoinsIcon,
+    LayersIcon,
     MoneyCheckIcon,
-    QrCodeIcon,
     ReceiptIcon,
     SettingsIcon,
-    UserClockFillIcon,
+    UserShieldIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Modal from '@/components/modals/modal'
-import { QrCodeDownloadable } from '@/components/qr-code'
 import {
     ContextMenuItem,
     ContextMenuPortal,
@@ -49,48 +48,36 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IMemberProfile, useDeleteMemberProfileById } from '../../..'
-import { MemberHistoriesModal } from '../../member-histories'
-import { MemberOverallInfoModal } from '../../member-infos/view-member-info'
-import { IMemberProfileTableActionComponentProp } from './columns'
+import { useDeleteEmployeeById } from '../../employee.service'
+import { IEmployeesTableActionComponentProp } from './columns'
 
-interface UseMemberProfileActionsProps {
-    row: Row<IMemberProfile>
+interface UseEmployeeActionsProps {
+    row: Row<IUserOrganization>
     onDeleteSuccess?: () => void
 }
 
-const useMemberProfileActions = ({
+const useEmployeeActions = ({
     row,
     onDeleteSuccess,
-}: UseMemberProfileActionsProps) => {
-    const member = row.original
-    const router = useRouter()
-    const { onOpen } = useInfoModalStore()
-
-    const infoModal = useModalState(false)
-    const closeModal = useModalState(false)
-    const historyModal = useModalState(false)
-    const footstepModal = useModalState(false)
-    const transactionModal = useModalState(false)
+}: UseEmployeeActionsProps) => {
+    const employee = row.original
+    const footstepModal = useModalState()
+    const timesheetModal = useModalState()
+    const permissionModal = useModalState()
+    const transactionBatchModal = useModalState()
+    const transactionsModal = useModalState()
+    const userSettingsModal = useModalState()
+    const disbursementTransactionsModal = useModalState()
     const ledgerTableModal = useModalState()
-    const accountingLedgerModal = useModalState()
-
     const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
 
-    const { mutate: deleteProfile, isPending: isDeleting } =
-        useDeleteMemberProfileById({
+    const { onOpen } = useConfirmModalStore()
+    const { isPending: isDeletingEmployee, mutate: deleteEmployee } =
+        useDeleteEmployeeById({
             options: {
                 onSuccess: onDeleteSuccess,
             },
         })
-
-    const handleEdit = () => {
-        router.navigate({
-            to: `../member-profile/${member.id}/personal-info`,
-        })
-    }
-
-    const handleDelete = () => deleteProfile(member.id)
 
     const openLedgerModal = (entryType: TEntryType) => {
         setSelectedEntryType(entryType)
@@ -117,220 +104,235 @@ const useMemberProfileActions = ({
         return entryTypeNames[selectedEntryType] || 'General Ledger'
     }
 
-    const handleShowQR = () => {
+    const handleDelete = () => {
         onOpen({
-            title: 'Member Profile QR',
-            description: 'Share this member profile QR Code.',
-            classNames: {
-                className: 'w-fit',
-            },
-            hideConfirm: true,
-            component: (
-                <div className="space-y-2">
-                    <QrCodeDownloadable
-                        className="size-80 p-3"
-                        containerClassName="mx-auto"
-                        fileName={`member_profile_${member.passbook}`}
-                        value={JSON.stringify(member.qr_code)}
-                    />
-                </div>
-            ),
+            title: 'Delete Employee',
+            description: 'Are you sure you want to delete this employee?',
+            onConfirm: () => deleteEmployee(employee.id),
         })
     }
 
     return {
-        member,
-        infoModal,
-        closeModal,
-        historyModal,
+        employee,
         footstepModal,
-        transactionModal,
+        timesheetModal,
+        permissionModal,
+        transactionBatchModal,
+        transactionsModal,
+        userSettingsModal,
+        disbursementTransactionsModal,
         ledgerTableModal,
-        accountingLedgerModal,
         selectedEntryType,
-        isDeleting,
-        handleEdit,
-        handleDelete,
+        isDeletingEmployee,
         openLedgerModal,
         getModalTitle,
-        handleShowQR,
+        handleDelete,
     }
 }
 
-interface IMemberProfileTableActionProps
-    extends IMemberProfileTableActionComponentProp {
-    onMemberUpdate?: () => void
+interface IEmployeesTableActionProps
+    extends IEmployeesTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
-export const MemberProfileAction = ({
+export const EmployeesAction = ({
     row,
     onDeleteSuccess,
-}: IMemberProfileTableActionProps) => {
+}: IEmployeesTableActionProps) => {
     const {
-        member,
-        infoModal,
-        closeModal,
-        historyModal,
+        employee,
         footstepModal,
-        transactionModal,
+        timesheetModal,
+        permissionModal,
+        transactionBatchModal,
+        transactionsModal,
+        userSettingsModal,
+        disbursementTransactionsModal,
         ledgerTableModal,
         selectedEntryType,
-        accountingLedgerModal,
-        isDeleting,
-        handleEdit,
-        handleDelete,
+        isDeletingEmployee,
         openLedgerModal,
         getModalTitle,
-        handleShowQR,
-    } = useMemberProfileActions({ row, onDeleteSuccess })
+        handleDelete,
+    } = useEmployeeActions({ row, onDeleteSuccess })
 
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                {member && (
-                    <>
-                        <Modal
-                            {...ledgerTableModal}
-                            className="!max-w-[95vw]"
-                            title={getModalTitle()}
-                            description={`You are viewing ${member.full_name}'s ${getModalTitle().toLowerCase()}`}
-                        >
-                            <GeneralLedgerTable
-                                mode="member"
-                                memberProfileId={member.id}
-                                TEntryType={selectedEntryType}
-                                excludeColumnIds={['balance']}
-                                className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                            />
-                        </Modal>
+                <Modal
+                    {...ledgerTableModal}
+                    className="!max-w-[95vw]"
+                    title={getModalTitle()}
+                    description={`You are viewing ${employee.user.full_name}'s ${getModalTitle().toLowerCase()}`}
+                >
+                    <GeneralLedgerTable
+                        mode="employee"
+                        TEntryType={selectedEntryType}
+                        userOrganizationId={employee.id}
+                        excludeColumnIds={['balance']}
+                        className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                    />
+                </Modal>
 
-                        <MemberHistoriesModal
-                            {...historyModal}
-                            memberHistoryProps={{
-                                profileId: member.id,
-                            }}
-                        />
-                        <MemberOverallInfoModal
-                            {...infoModal}
-                            overallInfoProps={{
-                                memberProfileId: member.id,
-                            }}
-                        />
-                        <MemberProfileCloseFormModal
-                            {...closeModal}
-                            formProps={{
-                                profileId: member.id,
-                                defaultValues: {
-                                    remarks: member.member_close_remarks ?? [],
-                                },
-                            }}
-                        />
-                        <Modal
-                            {...footstepModal}
-                            className="!max-w-[95vw]"
-                            title={
-                                <div className="flex gap-x-2 items-center">
-                                    <ImageDisplay
-                                        src={member.media?.download_url}
-                                        className="rounded-xl size-12"
-                                    />
-                                    <div className="space-y-1">
-                                        <p>{member.full_name}</p>
-                                        <p className="text-sm text-muted-foreground/80">
-                                            Member
-                                        </p>
-                                    </div>
-                                </div>
-                            }
-                            description={`You are viewing ${member.full_name}'s footstep`}
-                        >
-                            <FootstepTable
-                                mode="member-profile"
-                                memberProfileId={member.id}
-                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                            />
-                        </Modal>
+                <Modal
+                    className="!max-w-[95vw]"
+                    title="Disbursement Transactions"
+                    {...disbursementTransactionsModal}
+                    description={`You are viewing ${employee.user.full_name || 'unknown'}'s disbursement transactions`}
+                >
+                    <DisbursementTransactionTable
+                        mode="employee"
+                        userOrganizationId={employee.id}
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    />
+                </Modal>
 
-                        <Modal
-                            {...transactionModal}
-                            className="!max-w-[95vw]"
-                            title="Transactions"
-                            description={`You are viewing ${member.full_name}'s transactions`}
-                        >
-                            <TransactionsTable
-                                mode="member-profile"
-                                onRowClick={() => {}}
-                                memberProfileId={member.id}
-                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                {/* <UserOrgSettingsFormModal
+                    {...userSettingsModal}
+                    formProps={{
+                        mode: 'specific',
+                        defaultValues: employee,
+                    }}
+                /> */}
+                {/* <UserOrgPermissionUpdateFormModal
+                    {...permissionModal}
+                    formProps={{
+                        defaultValues: employee,
+                        userOrganizatrionId: employee.id,
+                    }}
+                /> */}
+                <Modal
+                    {...footstepModal}
+                    className="!max-w-[95vw]"
+                    title={
+                        <div className="flex gap-x-2 items-center">
+                            <ImageDisplay
+                                src={employee.user.media?.download_url}
+                                className="rounded-xl size-12"
                             />
-                        </Modal>
+                            <div className="space-y-1">
+                                <p>{employee.user.full_name}</p>
+                                <p className="text-sm text-muted-foreground/80">
+                                    Employee
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    description={`You are viewing ${employee.user.full_name}'s footstep`}
+                >
+                    <FootstepTable
+                        userOrgId={employee.id}
+                        mode="user-organization"
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    />
+                </Modal>
+                <Modal
+                    {...timesheetModal}
+                    className="!max-w-[95vw]"
+                    title="Timesheet"
+                    description={`You are viewing ${employee.user.full_name}'s timesheet`}
+                >
+                    {/* <TimesheetTable
+                        mode="employee"
+                        onRowClick={() => {}}
+                        userOrganizationId={employee.id}
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    /> */}
+                </Modal>
+                <Modal
+                    {...transactionBatchModal}
+                    className="!max-w-[95vw]"
+                    title="Transaction Batch"
+                    description={`You are viewing ${employee.user.full_name}'s transaction batch`}
+                >
+                    <TransactionBatchTable
+                        mode="employee"
+                        actionComponent={(props) => (
+                            <TransactionBatchAction {...props} />
+                        )}
+                        onRowClick={() => {}}
+                        userOrganizationId={employee.id}
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    />
+                </Modal>
 
-                        <Modal
-                            {...accountingLedgerModal}
-                            title={`${member.first_name}'s Accounting Ledger`}
-                            className="!max-w-[95vw]"
-                        >
-                            <MemberAccountingLedgerTable
-                                mode="member"
-                                memberProfileId={member.id}
-                                className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                            />
-                        </Modal>
-                    </>
-                )}
+                <Modal
+                    {...transactionsModal}
+                    className="!max-w-[95vw]"
+                    title="Transactions"
+                    description={`You are viewing ${employee.user.full_name}'s transactions`}
+                >
+                    <TransactionsTable
+                        mode="employee"
+                        onRowClick={() => {}}
+                        userId={employee.user_id}
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    />
+                </Modal>
             </div>
             <RowActionsGroup
                 canSelect
                 row={row}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeleting,
+                    isAllowed: !isDeletingEmployee,
                     onClick: handleDelete,
                 }}
                 otherActions={
                     <>
                         <DropdownMenuItem
-                            onClick={() => infoModal.onOpenChange(true)}
+                            onClick={() => permissionModal.onOpenChange(true)}
                         >
-                            <EyeIcon className="mr-2" strokeWidth={1.5} />
-                            View Member&apos;s Info
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => historyModal.onOpenChange(true)}
-                        >
-                            <UserClockFillIcon
+                            <UserShieldIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
                             />
-                            Member History
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => transactionModal.onOpenChange(true)}
-                        >
-                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
-                            View Transactions
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={!member.user_id}
-                            onClick={() => footstepModal.onOpenChange(true)}
-                        >
-                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
-                            See Footstep
+                            Edit permission
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
                             onClick={() =>
-                                accountingLedgerModal.onOpenChange(true)
+                                transactionBatchModal.onOpenChange(true)
                             }
                         >
-                            <BookIcon className="mr-2" strokeWidth={1.5} />
-                            View Accounting Ledger
+                            <LayersIcon className="mr-2" strokeWidth={1.5} />
+                            View Transaction Batch
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => transactionsModal.onOpenChange(true)}
+                        >
+                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
+                            View Transactions
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => timesheetModal.onOpenChange(true)}
+                        >
+                            <BriefCaseClockIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            View Timesheets
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => footstepModal.onOpenChange(true)}
+                        >
+                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
+                            View Footsteps
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() =>
+                                disbursementTransactionsModal.onOpenChange(true)
+                            }
+                        >
+                            <HandDropCoinsIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Disbursement Transactions
                         </DropdownMenuItem>
 
                         <DropdownMenuSub>
@@ -476,20 +478,11 @@ export const MemberProfileAction = ({
                             </DropdownMenuPortal>
                         </DropdownMenuSub>
 
-                        <DropdownMenuItem onClick={handleShowQR}>
-                            <QrCodeIcon className="mr-2" />
-                            Member Profile QR
-                        </DropdownMenuItem>
-
                         <DropdownMenuItem
-                            className="focus:bg-destructive focus:text-destructive-foreground"
-                            onClick={() => closeModal.onOpenChange(true)}
+                            onClick={() => userSettingsModal.onOpenChange(true)}
                         >
-                            <HeartBreakFillIcon
-                                className="mr-2 text-rose-500 duration-200 group-focus:text-destructive-foreground"
-                                strokeWidth={1.5}
-                            />
-                            Close Profile/Account
+                            <GearIcon className="mr-2" strokeWidth={1.5} />
+                            Settings
                         </DropdownMenuItem>
                     </>
                 }
@@ -498,178 +491,211 @@ export const MemberProfileAction = ({
     )
 }
 
-interface IMemberProfileRowContextProps
-    extends IMemberProfileTableActionComponentProp {
+interface IEmployeesRowContextProps extends IEmployeesTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
 
-export const MemberProfileRowContext = ({
+export const EmployeesRowContext = ({
     row,
     children,
     onDeleteSuccess,
-}: IMemberProfileRowContextProps) => {
+}: IEmployeesRowContextProps) => {
     const {
-        member,
-        infoModal,
-        closeModal,
-        historyModal,
+        employee,
         footstepModal,
-        transactionModal,
+        timesheetModal,
+        permissionModal,
+        transactionBatchModal,
+        transactionsModal,
+        userSettingsModal,
+        disbursementTransactionsModal,
         ledgerTableModal,
         selectedEntryType,
-        accountingLedgerModal,
-        isDeleting,
-        handleEdit,
-        handleDelete,
+        isDeletingEmployee,
         openLedgerModal,
         getModalTitle,
-        handleShowQR,
-    } = useMemberProfileActions({ row, onDeleteSuccess })
+        handleDelete,
+    } = useEmployeeActions({ row, onDeleteSuccess })
 
     return (
         <>
-            {member && (
-                <>
-                    <Modal
-                        {...ledgerTableModal}
-                        className="!max-w-[95vw]"
-                        title={getModalTitle()}
-                        description={`You are viewing ${member.full_name}'s ${getModalTitle().toLowerCase()}`}
-                    >
-                        <GeneralLedgerTable
-                            mode="member"
-                            memberProfileId={member.id}
-                            TEntryType={selectedEntryType}
-                            excludeColumnIds={['balance']}
-                            className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                        />
-                    </Modal>
+            <Modal
+                {...ledgerTableModal}
+                className="!max-w-[95vw]"
+                title={getModalTitle()}
+                description={`You are viewing ${employee.user.full_name}'s ${getModalTitle().toLowerCase()}`}
+            >
+                <GeneralLedgerTable
+                    mode="employee"
+                    TEntryType={selectedEntryType}
+                    userOrganizationId={employee.id}
+                    excludeColumnIds={['balance']}
+                    className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                />
+            </Modal>
 
-                    <Modal
-                        {...accountingLedgerModal}
-                        title={`${member.first_name}'s Accounting Ledger`}
-                        className="!max-w-[95vw]"
-                    >
-                        <MemberAccountingLedgerTable
-                            mode="member"
-                            memberProfileId={member.id}
-                            className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                        />
-                    </Modal>
+            <Modal
+                className="!max-w-[95vw]"
+                title="Disbursement Transactions"
+                {...disbursementTransactionsModal}
+                description={`You are viewing ${employee.user.full_name || 'unknown'}'s disbursement transactions`}
+            >
+                <DisbursementTransactionTable
+                    mode="employee"
+                    userOrganizationId={employee.id}
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                />
+            </Modal>
 
-                    <MemberHistoriesModal
-                        {...historyModal}
-                        memberHistoryProps={{
-                            profileId: member.id,
-                        }}
-                    />
-                    <MemberOverallInfoModal
-                        {...infoModal}
-                        overallInfoProps={{
-                            memberProfileId: member.id,
-                        }}
-                    />
-                    <MemberProfileCloseFormModal
-                        {...closeModal}
-                        formProps={{
-                            profileId: member.id,
-                            defaultValues: {
-                                remarks: member.member_close_remarks ?? [],
-                            },
-                        }}
-                    />
-                    <Modal
-                        {...footstepModal}
-                        className="!max-w-[95vw]"
-                        title={
-                            <div className="flex gap-x-2 items-center">
-                                <ImageDisplay
-                                    src={member.media?.download_url}
-                                    className="rounded-xl size-12"
-                                />
-                                <div className="space-y-1">
-                                    <p>{member.full_name}</p>
-                                    <p className="text-sm text-muted-foreground/80">
-                                        Member
-                                    </p>
-                                </div>
-                            </div>
-                        }
-                        description={`You are viewing ${member.full_name}'s footstep`}
-                    >
-                        <FootstepTable
-                            mode="member-profile"
-                            memberProfileId={member.id}
-                            className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                        />
-                    </Modal>
+            {/* <UserOrgSettingsFormModal
+                {...userSettingsModal}
+                formProps={{
+                    mode: 'specific',
+                    defaultValues: employee,
+                }}
+            />
+            <UserOrgPermissionUpdateFormModal
+                {...permissionModal}
+                formProps={{
+                    defaultValues: employee,
+                    userOrganizatrionId: employee.id,
+                }}
+            /> */}
 
-                    <Modal
-                        {...transactionModal}
-                        className="!max-w-[95vw]"
-                        title="Transactions"
-                        description={`You are viewing ${member.full_name}'s transactions`}
-                    >
-                        <TransactionsTable
-                            mode="member-profile"
-                            onRowClick={() => {}}
-                            memberProfileId={member.id}
-                            className="min-h-[90vh] min-w-0 max-h-[90vh]"
+            <Modal
+                {...footstepModal}
+                className="!max-w-[95vw]"
+                title={
+                    <div className="flex gap-x-2 items-center">
+                        <ImageDisplay
+                            src={employee.user.media?.download_url}
+                            className="rounded-xl size-12"
                         />
-                    </Modal>
-                </>
-            )}
+                        <div className="space-y-1">
+                            <p>{employee.user.full_name}</p>
+                            <p className="text-sm text-muted-foreground/80">
+                                Employee
+                            </p>
+                        </div>
+                    </div>
+                }
+                description={`You are viewing ${employee.user.full_name}'s footstep`}
+            >
+                <FootstepTable
+                    userOrgId={employee.id}
+                    mode="user-organization"
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                />
+            </Modal>
+
+            <Modal
+                {...timesheetModal}
+                className="!max-w-[95vw]"
+                title="Timesheet"
+                description={`You are viewing ${employee.user.full_name}'s timesheet`}
+            >
+                {/* <TimesheetTable
+                    mode="employee"
+                    onRowClick={() => {}}
+                    userOrganizationId={employee.id}
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                /> */}
+            </Modal>
+
+            <Modal
+                {...transactionBatchModal}
+                className="!max-w-[95vw]"
+                title="Transaction Batch"
+                description={`You are viewing ${employee.user.full_name}'s transaction batch`}
+            >
+                <TransactionBatchTable
+                    mode="employee"
+                    actionComponent={(props) => (
+                        <TransactionBatchAction {...props} />
+                    )}
+                    onRowClick={() => {}}
+                    userOrganizationId={employee.id}
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                />
+            </Modal>
+
+            <Modal
+                {...transactionsModal}
+                className="!max-w-[95vw]"
+                title="Transactions"
+                description={`You are viewing ${employee.user.full_name}'s transactions`}
+            >
+                <TransactionsTable
+                    mode="employee"
+                    onRowClick={() => {}}
+                    userId={employee.user_id}
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                />
+            </Modal>
+
             <DataTableRowContext
                 row={row}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeleting,
+                    isAllowed: !isDeletingEmployee,
                     onClick: handleDelete,
                 }}
                 otherActions={
                     <>
                         <ContextMenuItem
-                            onClick={() => infoModal.onOpenChange(true)}
+                            onClick={() => permissionModal.onOpenChange(true)}
                         >
-                            <EyeIcon className="mr-2" strokeWidth={1.5} />
-                            View Member&apos;s Info
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            onClick={() => historyModal.onOpenChange(true)}
-                        >
-                            <UserClockFillIcon
+                            <UserShieldIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
                             />
-                            Member History
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            onClick={() => transactionModal.onOpenChange(true)}
-                        >
-                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
-                            View Transactions
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={!member.user_id}
-                            onClick={() => footstepModal.onOpenChange(true)}
-                        >
-                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
-                            See Footstep
+                            Edit permission
                         </ContextMenuItem>
 
                         <ContextMenuItem
                             onClick={() =>
-                                accountingLedgerModal.onOpenChange(true)
+                                transactionBatchModal.onOpenChange(true)
                             }
                         >
-                            <BookIcon className="mr-2" strokeWidth={1.5} />
-                            View Accounting Ledger
+                            <LayersIcon className="mr-2" strokeWidth={1.5} />
+                            View Transaction Batch
+                        </ContextMenuItem>
+
+                        <ContextMenuItem
+                            onClick={() => transactionsModal.onOpenChange(true)}
+                        >
+                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
+                            View Transactions
+                        </ContextMenuItem>
+
+                        <ContextMenuItem
+                            onClick={() => timesheetModal.onOpenChange(true)}
+                        >
+                            <BriefCaseClockIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            View Timesheets
+                        </ContextMenuItem>
+
+                        <ContextMenuItem
+                            onClick={() => footstepModal.onOpenChange(true)}
+                        >
+                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
+                            View Footsteps
+                        </ContextMenuItem>
+
+                        <ContextMenuItem
+                            onClick={() =>
+                                disbursementTransactionsModal.onOpenChange(true)
+                            }
+                        >
+                            <HandDropCoinsIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Disbursement Transactions
                         </ContextMenuItem>
 
                         <ContextMenuSub>
@@ -815,20 +841,11 @@ export const MemberProfileRowContext = ({
                             </ContextMenuPortal>
                         </ContextMenuSub>
 
-                        <ContextMenuItem onClick={handleShowQR}>
-                            <QrCodeIcon className="mr-2" />
-                            Member Profile QR
-                        </ContextMenuItem>
-
                         <ContextMenuItem
-                            className="focus:bg-destructive focus:text-destructive-foreground"
-                            onClick={() => closeModal.onOpenChange(true)}
+                            onClick={() => userSettingsModal.onOpenChange(true)}
                         >
-                            <HeartBreakFillIcon
-                                className="mr-2 text-rose-500 duration-200 group-focus:text-destructive-foreground"
-                                strokeWidth={1.5}
-                            />
-                            Close Profile/Account
+                            <GearIcon className="mr-2" strokeWidth={1.5} />
+                            Settings
                         </ContextMenuItem>
                     </>
                 }
@@ -839,4 +856,4 @@ export const MemberProfileRowContext = ({
     )
 }
 
-export default MemberProfileAction
+export default EmployeesAction

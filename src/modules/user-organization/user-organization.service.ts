@@ -30,7 +30,17 @@ export const { apiCrudHooks, apiCrudService, baseQueryKey } =
 export const { useGetAll, useGetById, useDeleteById, useUpdateById } =
     apiCrudHooks
 
-const { API, route } = apiCrudService
+export const {
+    API,
+    route: userOrganizationAPIRoute,
+    create: createUserOrganization,
+    deleteById: deleteUserOrganizationById,
+    deleteMany: deleteManyUserOrganization,
+    getAll: getAllUserOrganization,
+    getById: getUserOrganizationById,
+    getPaginated: getPaginatedUserOrganization,
+    updateById: updateUserOrganizationById,
+} = apiCrudService
 
 const groupByOrganization = (result: IUserOrganization<IUserBase>[]) => {
     const grouped = groupBy(result, (item) => item.organization_id)
@@ -52,33 +62,33 @@ const groupByOrganization = (result: IUserOrganization<IUserBase>[]) => {
 }
 
 export const getUserOrganizationUserById = async (userId: TEntityId) => {
-    const endpoint = `${route}/user/${userId}`
+    const endpoint = `${userOrganizationAPIRoute}/user/${userId}`
     return groupByOrganization(
         (await API.get<IUserOrganization<IUserBase>[]>(endpoint)).data
     )
 }
 
 export const getCurrentUserOrganizations = async () => {
-    const endpoint = `${route}/current`
+    const endpoint = `${userOrganizationAPIRoute}/current`
     return groupByOrganization(
         (await API.get<IUserOrganization<IUserBase>[]>(endpoint)).data
     )
 }
 
 export const getAllUserOrganizations = async () => {
-    return (await API.get<IUserOrganization[]>(route)).data
+    return (await API.get<IUserOrganization[]>(userOrganizationAPIRoute)).data
 }
 
 export const joinOrganization = async (
     organizationId: TEntityId,
     branchId: TEntityId
 ) => {
-    const endpoint = `${route}/organization/${organizationId}/branch/${branchId}/join`
+    const endpoint = `${userOrganizationAPIRoute}/organization/${organizationId}/branch/${branchId}/join`
     return (await API.post<IUserOrganization, IUserOrganization>(endpoint)).data
 }
 
 export const joinWithInvitationCode = async (code: string) => {
-    const endpoint = `${route}/invitation-code/${code}/join`
+    const endpoint = `${userOrganizationAPIRoute}/invitation-code/${code}/join`
     return (await API.post<IUserOrganization, IUserOrganization>(endpoint)).data
 }
 
@@ -86,7 +96,7 @@ export const canJoinOrganizationMember = async (
     organizationId: TEntityId,
     branchId: TEntityId
 ): Promise<boolean> => {
-    const endpoint = `${route}/organization/${organizationId}/branch/${branchId}/can-join-employee`
+    const endpoint = `${userOrganizationAPIRoute}/organization/${organizationId}/branch/${branchId}/can-join-employee`
     try {
         const response = await API.get(endpoint)
         return response.status === 200
@@ -96,13 +106,13 @@ export const canJoinOrganizationMember = async (
 }
 
 export const seedOrganization = async (organizationId: TEntityId) => {
-    const endpoint = `${route}/${organizationId}/seed`
+    const endpoint = `${userOrganizationAPIRoute}/${organizationId}/seed`
     const response = await API.post(endpoint)
     return response.status === 200
 }
 
 export const switchOrganization = async (userOrganizationId: TEntityId) => {
-    const endpoint = `${route}/${userOrganizationId}/switch`
+    const endpoint = `${userOrganizationAPIRoute}/${userOrganizationId}/switch`
     try {
         const response = await API.get(endpoint)
         return response.status === 200
@@ -112,17 +122,17 @@ export const switchOrganization = async (userOrganizationId: TEntityId) => {
 }
 
 export const getAllJoinRequests = async () => {
-    const endpoint = `${route}/join-request`
+    const endpoint = `${userOrganizationAPIRoute}/join-request`
     return (await API.get<IUserOrganization[]>(endpoint)).data
 }
 
 export const acceptJoinRequest = async (userOrganizationId: TEntityId) => {
-    const endpoint = `${route}/${userOrganizationId}/accept`
+    const endpoint = `${userOrganizationAPIRoute}/${userOrganizationId}/accept`
     return (await API.post<void, IUserOrganization>(endpoint)).data
 }
 
 export const rejectJoinRequest = async (userOrganizationId: TEntityId) => {
-    const endpoint = `${route}/${userOrganizationId}/reject`
+    const endpoint = `${userOrganizationAPIRoute}/${userOrganizationId}/reject`
     return (await API.delete<IUserOrganization>(endpoint)).data
 }
 

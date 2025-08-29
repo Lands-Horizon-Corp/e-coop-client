@@ -24,7 +24,7 @@ import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IMemberProfile, useGetPaginated } from '..'
+import { IMemberProfile, useGetPaginatedMemberProfiles } from '..'
 
 interface Props extends IPickerBaseProps<IMemberProfile> {
     defaultFilter?: TFilterObject
@@ -70,7 +70,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             isPending,
             isLoading,
             isFetching,
-        } = useGetPaginated({
+        } = useGetPaginatedMemberProfiles({
             query: {
                 filter: finalFilterPayloadBase64,
                 ...pagination,

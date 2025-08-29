@@ -20,7 +20,7 @@ import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { IBaseProps, TEntityId } from '@/types'
 
-import { IMemberProfile, useGetById } from '..'
+import { IMemberProfile, useGetMemberProfileById } from '..'
 import QrCodeScanner from '../../../components/qrcode-scanner'
 import MemberProfileQrResultCard from './member-profile-qr-result-card'
 
@@ -46,7 +46,7 @@ const MemberQrScanner = ({
         isError,
         error: rawError,
         isSuccess,
-    } = useGetById({
+    } = useGetMemberProfileById({
         id: focusedId as TEntityId,
         options: {
             enabled: focusedId !== undefined && focusedId !== null,

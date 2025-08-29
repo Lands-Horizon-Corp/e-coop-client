@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 
-import { keepPreviousData, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
+import { IUserOrganization } from '@/modules/user-organization'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -23,22 +24,20 @@ import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
 import {
-    IMemberProfile,
-    deleteManyMemberProfiles,
-    useGetPaginatedMemberProfiles,
-} from '../../..'
-import membersColumns, {
-    IMemberProfilesTableColumnProps,
-    memberGlobalSearchTargets,
+    deleteManyEmployees,
+    useFilteredPaginatedEmployees,
+} from '../../employee.service'
+import EmployeesTableColumns, {
+    IEmployeesTableColumnProps,
+    employeesGlobalSearchTargets,
 } from './columns'
+import { EmployeesRowContext } from './row-action-context'
 
-// import { MemberProfileRowContext } from './row-action-context'
-
-export interface MemberProfileTableProps
-    extends TableProps<IMemberProfile>,
-        IMemberProfilesTableColumnProps {
+export interface EmployeesTableProps
+    extends TableProps<IUserOrganization>,
+        IEmployeesTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IMemberProfile>,
+        IDataTableToolbarProps<IUserOrganization>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -49,18 +48,18 @@ export interface MemberProfileTableProps
     >
 }
 
-const MemberProfileTable = ({
+const EmployeesTable = ({
     className,
     toolbarProps,
     defaultFilter,
+    onSelectData,
     onRowClick,
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    onSelectData,
     actionComponent,
-    RowContextComponent,
-}: MemberProfileTableProps) => {
+    RowContextComponent = EmployeesRowContext,
+}: EmployeesTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
@@ -68,7 +67,7 @@ const MemberProfileTable = ({
 
     const columns = useMemo(
         () =>
-            membersColumns({
+            EmployeesTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -84,11 +83,7 @@ const MemberProfileTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IMemberProfile>({
-        defaultColumnVisibility: {
-            isEmailVerified: false,
-            isContactVerified: false,
-        },
+    } = useDataTableState<IUserOrganization>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -103,14 +98,11 @@ const MemberProfileTable = ({
         isRefetching,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginatedMemberProfiles({
+    } = useFilteredPaginatedEmployees({
         query: {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
-        },
-        options: {
-            placeholderData: keepPreviousData,
         },
     })
 
@@ -132,11 +124,11 @@ const MemberProfileTable = ({
         rowCount: pageSize,
         manualSorting: true,
         pageCount: totalPage,
-        getRowId: getRowIdFn,
-        manualFiltering: true,
         enableMultiSort: false,
+        manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
+        getRowId: getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
@@ -158,7 +150,7 @@ const MemberProfileTable = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: memberGlobalSearchTargets,
+                        targets: employeesGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -168,31 +160,14 @@ const MemberProfileTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['member-profile', 'paginated'],
+                                queryKey: ['employee', 'resource-query'],
                             }),
                         onDelete: (selectedData) =>
-                            deleteManyMemberProfiles({
+                            deleteManyEmployees({
                                 ids: selectedData.map((data) => data.id),
                             }),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        // exportAll: MemberProfileService.exportAll,
-                        // exportAllFiltered:
-                        //     MemberProfileService.exportAllFiltered,
-                        // exportCurrentPage: (ids) =>
-                        //     MemberProfileService.exportSelected(
-                        //         ids.map((data) => data.id)
-                        //     ),
-                        // exportSelected: (ids) =>
-                        //     MemberProfileService.exportSelected(
-                        //         ids.map((data) => data.id)
-                        //     ),
-                    }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
@@ -203,12 +178,12 @@ const MemberProfileTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
+                    className="mb-2"
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
-                    className={cn('mb-2', isScrollable && 'flex-1')}
+                    RowContextComponent={RowContextComponent}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
@@ -216,4 +191,4 @@ const MemberProfileTable = ({
     )
 }
 
-export default MemberProfileTable
+export default EmployeesTable

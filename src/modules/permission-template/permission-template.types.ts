@@ -1,22 +1,14 @@
-import { TPermission } from '@/constants/permission'
+import z from 'zod'
 
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
+import { PermissionTemplateSchema } from './permission-template.validation'
+
 export interface IPermissionTemplate extends IBaseEntityMeta {
-    name: string
-    description: string
-    permissions: TPermission[]
-}
-export interface IPermissionTemplateRequest {
-    id?: TEntityId
-
-    organization_id?: TEntityId
-    branch_id?: TEntityId
-
-    name: string
-    description: string
-    permissions: TPermission[]
+    id: TEntityId
+    //add here
 }
 
-export interface IPermissionTemplatePaginated
-    extends IPaginatedResult<IPermissionTemplate> {}
+export type IPermissionTemplateRequest = z.infer<typeof PermissionTemplateSchema>
+
+export interface IPermissionTemplatePaginated extends IPaginatedResult<IPermissionTemplate> {}

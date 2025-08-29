@@ -45,7 +45,7 @@ import {
 import { useModalState } from '@/hooks/use-modal-state'
 
 import {
-    useDeleteById,
+    useDeleteTransactionBatchById,
     useTransactionBatchAcceptBlotterView,
 } from '../../transaction-batch.service'
 import { ITransactionBatch } from '../../transaction-batch.types'
@@ -78,11 +78,12 @@ const useTransactionBatchActions = ({
         currentAuth: { user },
     } = useAuthUser()
 
-    const { isPending: isDeletingBatch, mutate: deleteBatch } = useDeleteById({
-        options: {
-            onSuccess: onDeleteSuccess,
-        },
-    })
+    const { isPending: isDeletingBatch, mutate: deleteBatch } =
+        useDeleteTransactionBatchById({
+            options: {
+                onSuccess: onDeleteSuccess,
+            },
+        })
 
     const { mutate: approve, isPending: isAproving } =
         useTransactionBatchAcceptBlotterView()
