@@ -1,28 +1,24 @@
-import { TAG_CATEGORY } from '@/constants'
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+import z from 'zod'
 
-export type TTagCategory = (typeof TAG_CATEGORY)[number]
+import {
+    IBaseEntityMeta,
+    IPaginatedResult,
+    TEntityId,
+    TTagCategory,
+} from '@/types'
+
+import { TagTemplateSchema } from './tag-template.validation'
 
 export interface ITagTemplate extends IBaseEntityMeta {
-    name: string
-    description?: string
-
-    category: TTagCategory
-
-    color: string
-    icon: string // when using this interface please type cast nlng to TIcon
-}
-
-export interface ITagTemplateRequest {
-    id?: TEntityId
+    account_id: TEntityId
 
     name: string
-    description?: string
-
+    description: string
     category: TTagCategory
-
     color: string
     icon: string
 }
+
+export type ITagTemplateRequest = z.infer<typeof TagTemplateSchema>
 
 export interface ITagTemplatePaginated extends IPaginatedResult<ITagTemplate> {}

@@ -2,10 +2,10 @@ import { Path, useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { TAG_CATEGORY } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { useCreate, useUpdateById } from '@/modules/account-tag'
+import { TAG_CATEGORY } from '@/modules/tag-template/tag.constnats'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
 import { TIcon } from '@/components/icons'
