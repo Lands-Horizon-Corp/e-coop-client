@@ -9,7 +9,6 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
 import { IMedia, useUploadMedia } from '@/modules/media'
-import { LatLngLiteral } from 'leaflet'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
@@ -20,7 +19,7 @@ import {
     ReplaceIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import MapPicker from '@/components/map/map-picker'
+import MapPicker from '@/components/map/map-picker/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import TextEditor from '@/components/text-editor'
@@ -72,7 +71,6 @@ export const CreateUpdateBranchByOrgForm = ({
     const { countryCode } = useLocationInfo()
 
     const [openImagePicker, setOpenImagePicker] = useState(false)
-    const [onOpenMap, setOnOpenMapPicker] = useState(false)
 
     const form = useForm<TBranchSchema>({
         resolver: standardSchemaResolver(branchSchema),
@@ -121,7 +119,7 @@ export const CreateUpdateBranchByOrgForm = ({
     const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
         useUploadMedia()
 
-    const handleUploadPhoto = async (mediaId: TEntityId): Promise<string> => {
+    const handleUploadPhoto = async (mediaId: TEntityId) => {
         const uploadedMedia = await uploadPhoto({
             file: base64ImagetoFile(mediaId, `bg-banner.jpg`) as File,
         })
@@ -129,30 +127,30 @@ export const CreateUpdateBranchByOrgForm = ({
     }
 
     const handleSubmit = form.handleSubmit(async (data) => {
-        if (organizationId) {
-            if (branchId) {
-                const isMediaFromDB =
-                    data.media.download_url?.startsWith('http')
-                const media = isMediaFromDB
-                    ? data.media.id
-                    : await handleUploadPhoto(data.media.download_url ?? '')
-                const request = { ...data, media_id: media }
-                updateBranch({ id: branchId, payload: request })
+        try {
+            if (organizationId && branchId) {
+                const mediaFormDB = await handleUploadPhoto(
+                    data.media.download_url ?? ''
+                )
+                const dataWithMedia = { ...data, media_id: mediaFormDB }
+                updateBranch({ id: branchId, payload: dataWithMedia })
+                return
             } else {
-                const mediaId = await handleUploadPhoto(
+                console.log(data.media.download_url)
+                const media = await handleUploadPhoto(
                     data.media.download_url ?? ''
                 )
                 const request = {
                     ...data,
-                    media_id: mediaId,
+                    media_id: media,
                 }
                 createBranch(
-                    { branchData: request, organizationId },
+                    { payload: request, organizationId },
                     { onSuccess }
                 )
             }
-        } else {
-            console.error('Organization ID is missing.')
+        } catch (error) {
+            console.error(error)
         }
     })
 
@@ -171,21 +169,9 @@ export const CreateUpdateBranchByOrgForm = ({
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
-
+    console.log(form.watch())
     return (
         <div className="mt-10">
-            <MapPicker
-                open={onOpenMap}
-                mapProps={{
-                    hideControls: true,
-                }}
-                onOpenChange={setOnOpenMapPicker}
-                onChange={(coordinates) => {
-                    const { lat, lng }: LatLngLiteral = coordinates
-                    form.setValue('latitude', lat, { shouldDirty: true })
-                    form.setValue('longitude', lng, { shouldDirty: true })
-                }}
-            />
             <Form {...form}>
                 <form onSubmit={handleSubmit} className="w-full">
                     <div className="flex w-full gap-x-5">
@@ -509,54 +495,81 @@ export const CreateUpdateBranchByOrgForm = ({
                                     )
                                 }}
                             />
-                            <div className="flex gap-x-2">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Latitude"
-                                    name="latitude"
-                                    className="grow"
-                                    render={({ field }) => (
-                                        <div className="flex grow flex-col gap-y-2">
-                                            <Input
-                                                {...field}
-                                                value={field.value || ''}
-                                                disabled={isLoading}
-                                                onChange={field.onChange}
-                                                placeholder="latitude"
-                                            />
-                                        </div>
-                                    )}
-                                />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Longitude"
-                                    name="longitude"
-                                    className="grow"
-                                    render={({ field }) => (
-                                        <div className="flex grow flex-col gap-y-2">
-                                            <Input
-                                                {...field}
-                                                value={field.value || ''}
-                                                disabled={isLoading}
-                                                onChange={field.onChange}
-                                                placeholder="Longitude"
-                                            />
-                                        </div>
-                                    )}
-                                />
-                                <div className="flex -translate-y-2 flex-col justify-center">
-                                    <Button
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            setOnOpenMapPicker(true)
+                            <div>
+                                <div className="flex flex-col space-y-2">
+                                    <div className="flex gap-x-2 items-center ">
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            label="Latitude"
+                                            name="latitude"
+                                            className="grow"
+                                            render={({ field }) => (
+                                                <div className="flex grow flex-col gap-y-2">
+                                                    <Input
+                                                        {...field}
+                                                        value={
+                                                            field.value || ''
+                                                        }
+                                                        disabled={isLoading}
+                                                        onChange={
+                                                            field.onChange
+                                                        }
+                                                        placeholder="latitude"
+                                                    />
+                                                </div>
+                                            )}
+                                        />
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            label="Longitude"
+                                            name="longitude"
+                                            className="grow"
+                                            render={({ field }) => (
+                                                <div className="flex grow flex-col gap-y-2">
+                                                    <Input
+                                                        {...field}
+                                                        value={
+                                                            field.value || ''
+                                                        }
+                                                        disabled={isLoading}
+                                                        onChange={
+                                                            field.onChange
+                                                        }
+                                                        placeholder="Longitude"
+                                                    />
+                                                </div>
+                                            )}
+                                        />
+                                    </div>
+                                    <MapPicker
+                                        placeholder="Click to select branch location"
+                                        title="Select Branch Location"
+                                        value={{
+                                            lat:
+                                                form.watch('latitude') ||
+                                                14.780043,
+                                            lng:
+                                                form.watch('longitude') ||
+                                                121.046351,
                                         }}
                                         disabled={isLoading}
-                                        className="translate-y-2.5"
-                                        variant={'ghost'}
-                                    >
-                                        <PlusIcon className="mr-2" />
-                                        Coordinates
-                                    </Button>
+                                        variant="outline"
+                                        onChange={(location) => {
+                                            if (location) {
+                                                form.setValue(
+                                                    'latitude',
+                                                    location.lat
+                                                )
+                                                form.setValue(
+                                                    'longitude',
+                                                    location.lng
+                                                )
+                                            } else {
+                                                form.setValue('latitude', 0)
+                                                form.setValue('longitude', 0)
+                                            }
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>

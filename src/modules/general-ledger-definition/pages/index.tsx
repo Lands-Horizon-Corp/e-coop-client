@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { toast } from 'sonner'
+
 import { AccordionContent, AccordionItem } from '@radix-ui/react-accordion'
 
 import { payment_bg } from '@/assets/transactions'
@@ -7,6 +9,7 @@ import { GeneralLedgerTypeEnum } from '@/modules/account'
 import FinancialStatementSkeleton from '@/modules/financial-statement-definition/pages/components/financial-statement-skeleton'
 import { useGetAll } from '@/modules/general-ledger-account-grouping'
 import { IGeneralLedgerAccountGrouping } from '@/modules/general-ledger-account-grouping'
+import { GLAccountsGroupingUpdateFormModal } from '@/modules/general-ledger-account-grouping'
 import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -107,12 +110,12 @@ const GeneralLedgerDefinition = () => {
     return (
         <PageContainer className="w-full relative min-h-[100vh] p-5 ">
             {grouping && (
-                <GLAccountsGroupingUpdateModal
+                <GLAccountsGroupingUpdateFormModal
                     title={
                         <p>
                             {financialStatementGrouping
                                 ? ''
-                                : 'Edit  Financial Statement Grouping'}{' '}
+                                : 'Edit  General Ledger Account Grouping'}{' '}
                             <span className="font-bold italic">
                                 {' '}
                                 {financialStatementGrouping
@@ -129,15 +132,18 @@ const GeneralLedgerDefinition = () => {
                     description={
                         financialStatementGrouping
                             ? `${grouping.description}`
-                            : 'Edit the financial statement grouping details.'
+                            : 'Edit the General Ledger Definition grouping details.'
                     }
                     open={onOpenEditGLGrouping}
                     onOpenChange={setOnOpenEditGLGrouping}
                     formProps={{
                         defaultValues: grouping,
                         groupingId: grouping.id,
-                        onSuccess: () => {
+                        onSuccess: (data) => {
                             setOnOpenEditGLGrouping(false)
+                            toast.success(
+                                `Successfully updated the ${data.name} grouping.`
+                            )
                             refetch()
                         },
                         readOnly: financialStatementGrouping,

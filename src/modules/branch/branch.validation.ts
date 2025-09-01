@@ -8,7 +8,6 @@ import {
 import { branchTypeEnum } from './branch.types'
 
 export const branchSchema = z.object({
-    media: z.any(),
     type: z.enum(branchTypeEnum),
     name: z.string({ error: 'Name is Required' }).min(1),
     email: z.string({ error: 'Email is Required' }).email(),
@@ -26,6 +25,8 @@ export const branchSchema = z.object({
     latitude: z.number().optional(),
     longitude: z.number().optional(),
     is_main_branch: z.boolean().catch(false),
+    media_id: z.string().min(1, 'Branch Image is required'),
+    media: z.any(),
 })
 
 export type TBranchSchema = z.infer<typeof branchSchema>

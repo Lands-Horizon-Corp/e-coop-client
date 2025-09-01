@@ -107,7 +107,7 @@ const TransactionModalSuccessPayment = ({
                         Successfully added {paymentType}
                         <span>
                             {' '}
-                            {paymentType === 'withdraw' ? 'from' : 'for'}{' '}
+                            {paymentType === 'Withdrawal' ? 'from' : 'for'}{' '}
                         </span>
                         <span className="text-primary italic">
                             {transaction.account?.name}

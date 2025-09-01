@@ -1,16 +1,16 @@
 import { Path, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/helpers'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import {
-    IFinancialStatementAccountGrouping,
-    IFinancialStatementAccountGroupingRequest,
-    TFinancialStatementGroupingFormValues,
-    financialStatementGroupingSchema,
+    GeneralLedgerAccountsGroupingSchema,
+    IGeneralLedgerAccountGrouping,
+    IGeneralLedgerAccountGroupingRequest,
+    TGeneralLedgerAccountsGroupingFormValues,
     useUpdateById,
-} from '@/modules/financial-statement-account-grouping'
+} from '@/modules/general-ledger-account-grouping'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -25,31 +25,27 @@ import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-export interface IFinancialStatementGroupingFormProps
+export interface IGLGroupingFormProps
     extends IClassProps,
         IForm<
-            Partial<IFinancialStatementAccountGroupingRequest>,
-            IFinancialStatementAccountGrouping,
+            Partial<IGeneralLedgerAccountGroupingRequest>,
+            IGeneralLedgerAccountGrouping,
             string,
-            TFinancialStatementGroupingFormValues
+            TGeneralLedgerAccountsGroupingFormValues
         > {
     groupingId?: TEntityId
 }
 
-const FinancialStatementAccountsGroupingUpdateForm = ({
+const GLAccountsGroupingUpdateFormModal = ({
     groupingId,
     readOnly,
     className,
     defaultValues,
     disabledFields,
     onSuccess,
-}: IFinancialStatementGroupingFormProps) => {
-    const { currentAuth: user } = useAuthUserWithOrgBranch()
-    const organizationId = user?.user_organization?.organization?.id
-    const branchId = user?.user_organization?.branch?.id
-
-    const form = useForm<TFinancialStatementGroupingFormValues>({
-        resolver: standardSchemaResolver(financialStatementGroupingSchema),
+}: IGLGroupingFormProps) => {
+    const form = useForm<TGeneralLedgerAccountsGroupingFormValues>({
+        resolver: zodResolver(GeneralLedgerAccountsGroupingSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -57,40 +53,37 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
         },
     })
 
-    console.log(defaultValues)
+    console.log('defaultValues', defaultValues)
 
     const updateMutation = useUpdateById({
         options: {
-            onSuccess: (data) => {
-                onSuccess?.(data)
+            onSuccess,
+            onError: (e) => {
+                form.setError('root', { message: e.message })
+                toast.error(e.message)
             },
         },
     })
 
-    const onSubmit = form.handleSubmit(
-        (formData: TFinancialStatementGroupingFormValues) => {
-            if (groupingId) {
-                updateMutation.mutate({
-                    id: groupingId,
-                    payload: {
-                        organization_id: organizationId,
-                        branch_id: branchId,
-                        ...formData,
-                    },
-                })
-            }
+    const onSubmit = form.handleSubmit((formData) => {
+        if (groupingId) {
+            updateMutation.mutate({
+                id: groupingId,
+                payload: formData,
+            })
+            console.log('Update not implemented yet', formData)
         }
-    )
+    })
 
     const { error, isPending, reset } = updateMutation
 
-    const isDisabled = (field: Path<TFinancialStatementGroupingFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const isDisabled = (
+        field: Path<TGeneralLedgerAccountsGroupingFormValues>
+    ) => readOnly || disabledFields?.includes(field) || false
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
-
     return (
         <Form {...form}>
             <form
@@ -232,20 +225,20 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
     )
 }
 
-const FinancialStatementAccountGroupingUpdateModal = ({
+export const GLAccountsGroupingUpdateModal = ({
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IFinancialStatementGroupingFormProps, 'className'>
+    formProps?: Omit<IGLGroupingFormProps, 'className'>
 }) => {
     return (
         <Modal
-            className={cn('shadow-none', className)}
+            className={cn(' shadow-none', className)}
             overlayClassName="!bg-transparent backdrop-blur-sm"
             {...props}
         >
-            <FinancialStatementAccountsGroupingUpdateForm
+            <GLAccountsGroupingUpdateFormModal
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -256,4 +249,4 @@ const FinancialStatementAccountGroupingUpdateModal = ({
     )
 }
 
-export default FinancialStatementAccountGroupingUpdateModal
+export default GLAccountsGroupingUpdateModal

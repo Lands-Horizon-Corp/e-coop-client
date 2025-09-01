@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 import {
     GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
-} from '@/types/coop-types/general-ledger-definitions'
+} from '@/modules/general-ledger-definition'
 import { arrayMove } from '@dnd-kit/sortable'
 import { create } from 'zustand'
 

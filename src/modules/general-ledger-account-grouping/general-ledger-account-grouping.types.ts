@@ -15,8 +15,8 @@ export interface IGeneralLedgerAccountGrouping extends IAuditable, ITimeStamps {
     organization_id: TEntityId
     branch_id: TEntityId
 
-    debit: TAccountingPrincipleType
-    credit: TAccountingPrincipleType
+    debit: number
+    credit: number
     name: string
     description: string
     general_ledger_definition: IGeneralLedgerDefinition[]
@@ -29,8 +29,8 @@ export interface IGeneralLedgerAccountGroupingRequest {
     name: string
     description?: string
 
-    debit: TAccountingPrincipleType
-    credit: TAccountingPrincipleType
+    debit?: number
+    credit?: number
 
     from_code?: number
     to_code?: number

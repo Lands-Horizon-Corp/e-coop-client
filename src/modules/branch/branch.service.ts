@@ -1,11 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
-import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
@@ -15,10 +14,15 @@ import { IBranch, IBranchRequest } from './branch.types'
 /**
  * CRUD Factory
  */
-const { apiCrudHooks } = createDataLayerFactory<IBranch, IBranchRequest>({
+const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
+    IBranch,
+    IBranchRequest
+>({
     url: '/api/v1/branch',
     baseKey: 'branch',
 })
+
+const { route, API } = apiCrudService
 
 export const {
     useGetAll: useGetAllBranches,
@@ -26,19 +30,6 @@ export const {
     useDeleteById: useDeleteBranch,
     useUpdateById: useUpdateBranch,
 } = apiCrudHooks
-
-/**
- * Repository
- */
-const { API, route } = createAPIRepository('/api/v1/branch')
-
-export const createBranchByOrganizationId = async (
-    organizationId: TEntityId,
-    branchData: IBranchRequest
-) => {
-    const endpoint = `${route}/organization/${organizationId}`
-    return (await API.post<IBranchRequest, IBranch>(endpoint, branchData)).data
-}
 
 export const getBranchesByOrganizationId = async (
     organizationId: TEntityId
@@ -61,13 +52,16 @@ interface QueryOptions<TData = IBranch[]> {
     options?: HookQueryOptions<TData>
 }
 
-interface MutationOptions<
-    TData = IBranch[],
-    TError = string,
-    TQueryFnData = TData,
-> {
-    options?: HookMutationOptions<TData, TError, TQueryFnData>
-}
+export const useCreateBranchByOrganizationId = createMutationFactory<
+    IBranch,
+    Error,
+    { organizationId: TEntityId; payload: IBranchRequest }
+>({
+    mutationFn: async ({ organizationId, payload }) => {
+        const endpoint = `${route}/organization/${organizationId}`
+        return (await API.post<IBranchRequest, IBranch>(endpoint, payload)).data
+    },
+})
 
 export const useGetBranchesByOrganizationId = ({
     organizationId,
@@ -78,21 +72,6 @@ export const useGetBranchesByOrganizationId = ({
         queryFn: () => getBranchesByOrganizationId(organizationId),
         ...options,
         enabled: !!organizationId && (options?.enabled ?? true),
-    })
-}
-
-export const useCreateBranchByOrganizationId = ({
-    options,
-}: MutationOptions<
-    IBranch,
-    Error,
-    { organizationId: TEntityId; branchData: IBranchRequest }
-> = {}) => {
-    return useMutation({
-        ...options,
-        mutationKey: ['create-organization', 'create-by-organization-id'],
-        mutationFn: ({ organizationId, branchData }) =>
-            createBranchByOrganizationId(organizationId, branchData),
     })
 }
 

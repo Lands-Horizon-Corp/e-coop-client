@@ -141,8 +141,6 @@ const PaymentWithTransactionForm = ({
                                 return (
                                     <TransactionAmountField
                                         {...field}
-                                        value={field.value}
-                                        onChange={field.onChange}
                                     />
                                 )
                             }}

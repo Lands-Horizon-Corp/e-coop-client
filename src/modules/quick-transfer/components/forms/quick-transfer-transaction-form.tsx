@@ -292,16 +292,7 @@ export const QuickTransferTransactionForm = ({
                         name="amount"
                         label="Amount"
                         className="col-span-2"
-                        render={({ field }) => {
-                            return (
-                                <TransactionAmountField
-                                    {...field}
-                                    ref={field.ref}
-                                    value={field.value}
-                                    onChange={field.onChange}
-                                />
-                            )
-                        }}
+                        render={({ field }) => <TransactionAmountField {...field} />}
                     />
                     <FormFieldWrapper
                         control={form.control}

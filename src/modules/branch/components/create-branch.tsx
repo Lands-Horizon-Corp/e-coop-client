@@ -186,7 +186,7 @@ function OrganizationHeader({
                         },
                     }}
                 />
-                <PreviewMediaWrapper media={organization?.media?.url}>
+                <PreviewMediaWrapper media={organization?.media}>
                     <ImageDisplay
                         className="size-36 rounded-lg"
                         src={organization?.media?.url}

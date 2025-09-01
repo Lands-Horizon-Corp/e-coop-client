@@ -17,7 +17,7 @@ export interface IBranch extends ITimeStamps, IAuditable {
     organization_id: TEntityId
     organization: IOrganization
 
-    media_id: string | null
+    media_id?: string
     media: IMedia
 
     type: branchTypeEnum

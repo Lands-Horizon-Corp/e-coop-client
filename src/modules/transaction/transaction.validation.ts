@@ -8,12 +8,7 @@ import {
 } from '@/validation'
 
 export const PaymentWithTransactionSchema = z.object({
-    amount: z
-        .number({ error: 'Amount is required' })
-        .min(0.01)
-        .max(1000000000, {
-            message: 'Amount must be less than or equal to 1,000,000,000',
-        }),
+    amount: z.coerce.number<number>({ error: 'Amount is required' }).min(0.01),
     signature_media_id: entityIdSchema.optional(),
     proof_of_payment_media_id: entityIdSchema.optional(),
     bank_id: entityIdSchema.optional(),

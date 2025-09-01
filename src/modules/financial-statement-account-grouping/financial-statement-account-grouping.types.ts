@@ -1,7 +1,6 @@
 import { IAuditable, ITimeStamps, TEntityId } from '@/types'
 
 import { IFinancialStatementDefinition } from '../financial-statement-definition'
-import { AccountingPrincipleType } from '../general-ledger-account-grouping'
 
 export interface IFinancialStatementAccountGrouping
     extends IAuditable,
@@ -11,8 +10,8 @@ export interface IFinancialStatementAccountGrouping
     organization_id: TEntityId
     branch_id: TEntityId
 
-    debit: AccountingPrincipleType
-    credit: AccountingPrincipleType
+    debit: number
+    credit: number
     name: string
     description: string
     financial_statement_definition_entries: IFinancialStatementDefinition[]
@@ -22,8 +21,8 @@ export interface IFinancialStatementAccountGrouping
 }
 
 export interface IFinancialStatementAccountGroupingRequest {
-    debit: AccountingPrincipleType
-    credit: AccountingPrincipleType
+    debit?: number
+    credit?: number
 
     name: string
     description?: string
