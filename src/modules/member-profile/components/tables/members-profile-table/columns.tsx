@@ -1,11 +1,11 @@
 import { ReactNode } from 'react'
 
 import { CIVIL_STATUS, GENERAL_STATUS } from '@/constants'
+import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
+import CivilStatusBadge from '@/modules/member-profile/components/civil-status-badge'
 import { useInfoModalStore } from '@/store/info-modal-store'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import CivilStatusBadge from '@/components/badges/civil-status-badge'
-import GeneralStatusBadge from '@/components/badges/general-status-badge'
 import YesNoBadge from '@/components/badges/yes-no-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'

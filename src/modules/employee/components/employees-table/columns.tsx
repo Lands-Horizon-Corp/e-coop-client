@@ -1,10 +1,10 @@
+import { UserTypeBadge } from '@/modules/authentication/components/user-type-badge'
 import { TPermission } from '@/modules/permission'
 import { PermissionViewModal } from '@/modules/permission-template/components/permission/permission-view'
 import { IUserOrganization } from '@/modules/user-organization'
+import { UserOrganizationApplicationStatusBadge } from '@/modules/user-organization/components/user-organization-application-status-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { UserOrganizationApplicationStatusBadge } from '@/components/badges/user-organization-application-status-badge'
-import { UserTypeBadge } from '@/components/badges/user-type-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'

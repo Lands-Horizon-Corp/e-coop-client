@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { formatNumber } from '@/helpers/number-utils'
+import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
 import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/constants'
 import {
     IGeneralLedger,
@@ -8,7 +9,6 @@ import {
 } from '@/modules/general-ledger/general-ledger.types'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { LedgerSourceBadge } from '@/components/badges/ledger-source-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'

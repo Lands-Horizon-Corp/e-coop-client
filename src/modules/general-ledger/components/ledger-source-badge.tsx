@@ -10,7 +10,7 @@ import {
     FileFillIcon,
     ReceiptIcon,
     SettingsIcon,
-} from '../icons'
+} from '../../../components/icons'
 
 const ledgerSourceVariants = cva(
     'font-medium transition-colors duration-200 inline-flex items-center border',

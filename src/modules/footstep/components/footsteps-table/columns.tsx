@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 
 import { toReadableDateTime } from '@/helpers/date-utils'
+import { UserTypeBadge } from '@/modules/authentication/components/user-type-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { UserTypeBadge } from '@/components/badges/user-type-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'

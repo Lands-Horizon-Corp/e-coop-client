@@ -1,8 +1,8 @@
 import { ReactNode } from 'react'
 
+import { TagTemplateCategoryBadge } from '@/modules/tag-template/components/tag-template-category-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import { TagTemplateCategoryBadge } from '@/components/badges/tag-template-category-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'

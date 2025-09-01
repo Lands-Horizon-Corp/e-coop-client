@@ -4,6 +4,7 @@ import {
     FinancialStatementDefinitionActions,
     IFinancialStatementDefinition,
 } from '@/modules/financial-statement-definition'
+import { FinancialStatementTypeBadge } from '@/modules/financial-statement-definition/components/financial-statement-type-badge'
 import GLFSAccountsCardList from '@/modules/gl-fs/components/gl-account-list'
 import { useGLFSStore } from '@/store/gl-fs-store'
 import {
@@ -21,7 +22,6 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-import { FinancialStatementTypeBadge } from '@/components/badges/financial-statement-type-badge'
 import {
     ArrowChevronDown,
     ArrowChevronRight,

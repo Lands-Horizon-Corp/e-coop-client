@@ -1,7 +1,7 @@
 import { toReadableDateTime } from '@/helpers/date-utils'
+import { UserTypeBadge } from '@/modules/authentication/components/user-type-badge'
 import { FootprintsIcon } from 'lucide-react'
 
-import { UserTypeBadge } from '@/components/badges/user-type-badge'
 import { RunningIcon, TextFileFillIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Map from '@/components/map'

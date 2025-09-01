@@ -7,7 +7,7 @@ import {
     NotAllowedIcon,
     QuestionIcon,
     UserIcon,
-} from '../icons'
+} from '../../../components/icons'
 
 export type TUserType = 'ban' | 'owner' | 'employee' | 'member'
 

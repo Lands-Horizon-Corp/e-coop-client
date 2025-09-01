@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 import { IGeneralLedgerDefinition } from '@/modules/general-ledger-definition'
+import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { GLFSAccountsCardList } from '@/modules/gl-fs'
 import { useGLFSStore } from '@/store/gl-fs-store'
 import {
@@ -18,7 +19,6 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
 import {
     ArrowChevronDown,
     ArrowChevronRight,

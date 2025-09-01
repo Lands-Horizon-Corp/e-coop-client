@@ -1,7 +1,7 @@
 import { toReadableDate } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
+import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
 
-import GeneralStatusBadge from '@/components/badges/general-status-badge'
 import { EyeIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import { Button } from '@/components/ui/button'

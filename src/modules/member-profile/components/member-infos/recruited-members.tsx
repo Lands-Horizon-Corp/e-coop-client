@@ -2,8 +2,8 @@ import { forwardRef } from 'react'
 
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
+import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
 
-import GeneralStatusBadge from '@/components/badges/general-status-badge'
 import { UserPlusIcon } from '@/components/icons'
 import ImageNameDisplay from '@/components/image-name-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'

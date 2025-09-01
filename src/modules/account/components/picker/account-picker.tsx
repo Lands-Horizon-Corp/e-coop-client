@@ -9,11 +9,11 @@ import {
     useFilteredPaginatedAccount,
 } from '@/modules/account'
 import { AccountTypeBadge } from '@/modules/account'
+import { FinancialStatementTypeBadge } from '@/modules/financial-statement-definition/components/financial-statement-type-badge'
+import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
 
-import { FinancialStatementTypeBadge } from '@/components/badges/financial-statement-type-badge'
-import { GeneralLedgerTypeBadge } from '@/components/badges/general-ledger-type-badge'
 import { ChevronDownIcon, RenderIcon, TIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import GenericPicker from '@/components/pickers/generic-picker'

@@ -12,8 +12,8 @@ import {
     MoneyCheckIcon,
     ReceiptIcon,
     SigiBookIcon,
-} from '../icons'
-import ActionTooltip from '../tooltips/action-tooltip'
+} from '../../../components/icons'
+import ActionTooltip from '../../../components/tooltips/action-tooltip'
 
 const tagTemplateBadgeVariants = cva(
     'font-medium transition-colors duration-200 inline-flex items-center border',

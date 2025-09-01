@@ -2,7 +2,7 @@ import { cn } from '@/helpers/tw-utils'
 import { type VariantProps, cva } from 'class-variance-authority'
 import { IconType } from 'react-icons/lib'
 
-import { CheckIcon, ClockIcon, NotAllowedIcon } from '../icons'
+import { CheckIcon, ClockIcon, NotAllowedIcon } from '../../../components/icons'
 
 export type TUserOrganizationApplicationStatus =
     | 'pending'
