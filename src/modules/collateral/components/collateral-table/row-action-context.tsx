@@ -10,8 +10,8 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { ICollateral, useDeleteCollateralById } from '../..'
-import { ICollateralTableActionComponentProp } from './columns'
 import { CollateralCreateUpdateFormModal } from '../forms/collateral-create-update-form'
+import { ICollateralTableActionComponentProp } from './columns'
 
 interface UseCollateralActionsProps {
     row: Row<ICollateral>
@@ -31,7 +31,7 @@ const useCollateralActions = ({
         useDeleteCollateralById({
             options: {
                 ...withToastCallbacks({
-                    textSuccess : 'Collateral deleted',
+                    textSuccess: 'Collateral deleted',
                     onSuccess: onDeleteSuccess,
                 }),
             },

@@ -29,6 +29,7 @@ import {
     UnavailableIcon,
     VerifiedPatchIcon,
 } from '@/components/icons'
+import Image from '@/components/image'
 import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import TextEditor from '@/components/text-editor'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
@@ -314,7 +315,7 @@ const OrganizationForm = () => {
                                                     mediaUrl={field.value}
                                                 >
                                                     <div className="flex min-h-32 cursor-pointer items-center justify-between gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                                        <img
+                                                        <Image
                                                             style={{
                                                                 opacity:
                                                                     hasNoImageSelected

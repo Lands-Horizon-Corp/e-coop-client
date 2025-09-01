@@ -23,6 +23,8 @@ import remarkGfm from 'remark-gfm'
 
 import { Button } from '@/components/ui/button'
 
+import Image from '../image'
+
 // Define remark and rehype plugins
 const remarkPlugins = [remarkGfm]
 const rehypePlugins = [rehypeRaw]
@@ -310,9 +312,9 @@ const staticComponents: Components = {
         </a>
     ),
     img: ({ src, alt, ...props }) => (
-        <img
+        <Image
             src={src || '/placeholder.svg'}
-            alt={alt}
+            alt={alt || 'placeholder image'}
             className="max-w-full h-auto rounded-lg my-4 shadow-sm"
             loading="lazy"
             {...props}

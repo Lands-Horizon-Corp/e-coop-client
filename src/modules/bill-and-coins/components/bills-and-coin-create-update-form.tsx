@@ -17,7 +17,10 @@ import { Input } from '@/components/ui/input'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { useCreateBillsAndCoins, useUpdateBillsAndCoinsById } from '../bill-and-coins.service'
+import {
+    useCreateBillsAndCoins,
+    useUpdateBillsAndCoinsById,
+} from '../bill-and-coins.service'
 import { IBillsAndCoin, IBillsAndCoinRequest } from '../bill-and-coins.types'
 
 const billsAndCoinSchema = z.object({

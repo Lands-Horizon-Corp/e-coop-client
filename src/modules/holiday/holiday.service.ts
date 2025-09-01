@@ -2,10 +2,11 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { IHoliday, IHolidayRequest } from '../holiday'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey : holidayBaseKey } = createDataLayerFactory<
-    IHoliday,
-    IHolidayRequest
->({
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: holidayBaseKey,
+} = createDataLayerFactory<IHoliday, IHolidayRequest>({
     url: '/api/v1/holiday',
     baseKey: 'holiday',
 })

@@ -4,14 +4,14 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon, ShieldExclamationIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
-import { IPermissionTemplate } from '../../permission-template.types'
-import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 
+import { IPermissionTemplate } from '../../permission-template.types'
 
 export const permissionTemplateGlobalSearchTargets: IGlobalSearchTargets<IPermissionTemplate>[] =
     [

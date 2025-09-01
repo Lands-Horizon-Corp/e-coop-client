@@ -6,14 +6,15 @@ import attachmentTxt from '@/assets/images/file-thumbnails/attachment-txt.svg'
 import attachmentVideo from '@/assets/images/file-thumbnails/attachment-video.svg'
 
 import { FileXIcon, ImageIcon } from '../icons'
+import Image from '../image'
 
 export const FileTypeIcons = {
-    audio: <img src={attachmentAudio} loading="lazy" alt="attachment-audio" />,
-    video: <img src={attachmentVideo} loading="lazy" alt="attachment-video" />,
-    doc: <img src={attachmentDoc} loading="lazy" alt="attachment-doc" />,
-    pdf: <img src={attachmentpdf} loading="lazy" alt="attachment-pdf" />,
-    sheet: <img src={attachmentSheet} loading="lazy" alt="attachment-sheet" />,
-    text: <img src={attachmentTxt} loading="lazy" alt="attachment-text" />,
+    audio: <Image src={attachmentAudio} alt="attachment-audio" />,
+    video: <Image src={attachmentVideo} alt="attachment-video" />,
+    doc: <Image src={attachmentDoc} alt="attachment-doc" />,
+    pdf: <Image src={attachmentpdf} alt="attachment-pdf" />,
+    sheet: <Image src={attachmentSheet} alt="attachment-sheet" />,
+    text: <Image src={attachmentTxt} alt="attachment-text" />,
     image: (
         <div className="flex size-8 items-center justify-center rounded-sm bg-green-100">
             <ImageIcon className="size-5 text-green-800" />

@@ -31,7 +31,9 @@ import BillsAndCoinsTableColumns, {
     IBillsAndCoinsTableColumnProps,
     billsAndCoinsGlobalSearchTargets,
 } from './columns'
-import BillsAndCoinsAction, { BillsAndCoinsRowContext } from './row-action-context'
+import BillsAndCoinsAction, {
+    BillsAndCoinsRowContext,
+} from './row-action-context'
 
 export interface BillsAndCoinsTableProps
     extends TableProps<IBillsAndCoin>,

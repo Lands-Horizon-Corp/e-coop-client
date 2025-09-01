@@ -2,10 +2,11 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { ILoanStatus, ILoanStatusRequest } from '../loan-status'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey : loanStatusBaseKey } = createDataLayerFactory<
-    ILoanStatus,
-    ILoanStatusRequest
->({
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: loanStatusBaseKey,
+} = createDataLayerFactory<ILoanStatus, ILoanStatusRequest>({
     url: '/api/v1/loan-status',
     baseKey: 'loan-status',
 })

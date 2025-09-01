@@ -237,7 +237,8 @@ function StepperIndicator({
 function StepperTitle({
     className,
     ...props
-}: React.HTMLAttributes<HTMLHeadingElement> &  React.ComponentPropsWithRef<'h3'>) {
+}: React.HTMLAttributes<HTMLHeadingElement> &
+    React.ComponentPropsWithRef<'h3'>) {
     return (
         <h3
             data-slot="stepper-title"

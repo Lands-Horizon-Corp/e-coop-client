@@ -2,10 +2,11 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { ICollateral, ICollateralRequest } from '../collateral'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey : collateralBaseKey } = createDataLayerFactory<
-    ICollateral,
-    ICollateralRequest
->({
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: collateralBaseKey,
+} = createDataLayerFactory<ICollateral, ICollateralRequest>({
     url: '/api/v1/collateral',
     baseKey: 'collateral',
 })

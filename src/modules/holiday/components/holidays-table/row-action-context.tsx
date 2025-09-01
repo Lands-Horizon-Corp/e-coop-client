@@ -10,8 +10,8 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IHoliday, useDeleteHolidayById } from '../..'
-import { IHolidayTableActionComponentProp } from './columns'
 import { HolidayCreateUpdateFormModal } from '../forms/holiday-create-update-form'
+import { IHolidayTableActionComponentProp } from './columns'
 
 interface UseHolidayActionsProps {
     row: Row<IHoliday>

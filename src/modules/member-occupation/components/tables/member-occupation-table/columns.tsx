@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { IMemberOccupation } from '@/modules/member-occupation/member-occupation.types'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -10,8 +11,6 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
-import { IMemberOccupation } from '@/modules/member-occupation/member-occupation.types'
-
 
 export const memberOccupationGlobalSearchTargets: IGlobalSearchTargets<IMemberOccupation>[] =
     [

@@ -7,11 +7,11 @@ import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { IMemberGeneralLedgerTotal } from '../general-ledger'
 import {
     IMemberAccountingLedgerPaginated,
     IMemberAccountingLedgerTotal,
 } from '../member-account-ledger'
-import { IMemberGeneralLedgerTotal } from '../general-ledger'
 
 // ⚙️🛠️ API SERVICE HERE
 

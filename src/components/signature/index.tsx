@@ -27,6 +27,7 @@ import {
     HardDriveUploadIcon,
     SmallBrushIcon,
 } from '../icons'
+import Image from '../image'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 import CaptureSignature from './capture-signature'
@@ -360,12 +361,12 @@ const Signature = ({
             <Separator className="" />
             {trimmedData && (
                 <div className="my-2 w-fit rounded-lg border-[3px] border-primary p-2">
-                    <img
+                    <Image
                         ref={imageRef}
                         src={trimmedData ?? ''}
                         alt="signature"
                         className="h-auto w-16"
-                    ></img>
+                    />
                 </div>
             )}
             <div className="flex space-x-2 py-2">

@@ -4,6 +4,7 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
@@ -11,7 +12,6 @@ import { PushPinSlashIcon, RenderIcon, TIcon } from '@/components/icons'
 import TextRenderer from '@/components/text-renderer'
 import { Checkbox } from '@/components/ui/checkbox'
 
-import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { ILoanStatus } from '../../loan-status.types'
 
 export const loanStatusGlobalSearchTargets: IGlobalSearchTargets<ILoanStatus>[] =

@@ -1,9 +1,11 @@
-import {
-    TEntityId,
+import { TEntityId } from '@/types'
 
-} from '@/types'
-import { TPermission, TPermissionAction, TPermissionResource } from './permission.types'
 import { IUserOrganization } from '../user-organization'
+import {
+    TPermission,
+    TPermissionAction,
+    TPermissionResource,
+} from './permission.types'
 
 export function hasPermission<TResourceData extends { id: TEntityId }>(
     userOrg: IUserOrganization,

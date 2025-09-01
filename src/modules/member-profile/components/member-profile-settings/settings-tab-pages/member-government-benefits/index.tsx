@@ -5,6 +5,7 @@ import {
     IMemberGovernmentBenefit,
     useDeleteMemberGovernmentBenefit,
 } from '@/modules/member-government-benefit'
+import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -23,7 +24,6 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { MemberGovernmentBenefitCreateUpdateFormModal } from '../../../../../member-government-benefit/components/forms/member-government-benefits-create-update-form'
 import EmptyListIndicator from '../empty-list-indicator'
-import { IMemberProfile } from '@/modules/member-profile'
 
 const MemberGovernmentBenefitCard = ({
     benefit,

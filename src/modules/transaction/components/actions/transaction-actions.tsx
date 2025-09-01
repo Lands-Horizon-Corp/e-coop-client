@@ -17,7 +17,14 @@ interface actionItemsProps {
     buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
     backgroundImage?: string
     className?: string
-    variant?: 'default' | 'destructive' | 'outline' | 'ghost' | 'link' | 'secondary' | 'nostyle'
+    variant?:
+        | 'default'
+        | 'destructive'
+        | 'outline'
+        | 'ghost'
+        | 'link'
+        | 'secondary'
+        | 'nostyle'
 }
 
 const ActionTransactionItem = ({
@@ -96,7 +103,7 @@ const TransactionActions = ({
                 icon={<PiHandDepositIcon />}
                 buttonProps={DepositButtonProps}
                 backgroundImage={deposit_bg}
-                variant='secondary'
+                variant="secondary"
             />
             <ActionTransactionItem
                 onClick={withdrawOnClick}
@@ -104,8 +111,8 @@ const TransactionActions = ({
                 icon={<PiHandWithdrawIcon />}
                 backgroundImage={withdraw_bg}
                 buttonProps={withdrawButtonProps}
-                variant='destructive'
-                className='opacity-80 hover:opacity-100'
+                variant="destructive"
+                className="opacity-80 hover:opacity-100"
             />
         </div>
     )

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/helpers'
 import {
     TGeneralLedgerMode,
     useFilteredPaginatedGeneralLedger,
@@ -33,7 +34,6 @@ import GeneralLedgerTableColumns, {
     IGeneralLedgerTableColumnProps,
     generalLedgerGlobalSearchTargets,
 } from './columns'
-import { cn } from '@/helpers'
 
 export interface GeneralLedgerTableProps
     extends TableProps<IGeneralLedger>,

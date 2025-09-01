@@ -3,12 +3,12 @@ import { formatNumber } from '@/helpers/number-utils'
 
 import { Separator } from '@/components/ui/separator'
 
+import { ITransactionBatch } from '../..'
 import {
     getCollectionTotal,
     getLessTotal,
     getTransactionStatus,
 } from './transaction-batch-utils'
-import { ITransactionBatch } from '../..'
 
 export interface BatchBlotterSummaryViewProps {
     transBatch: ITransactionBatch

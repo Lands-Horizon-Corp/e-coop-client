@@ -2,10 +2,11 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { ITagTemplate, ITagTemplateRequest } from '../tag-template'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey : tagTemplateBaseKey } = createDataLayerFactory<
-    ITagTemplate,
-    ITagTemplateRequest
->({
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: tagTemplateBaseKey,
+} = createDataLayerFactory<ITagTemplate, ITagTemplateRequest>({
     url: '/api/v1/tag-template',
     baseKey: 'tag-template',
 })

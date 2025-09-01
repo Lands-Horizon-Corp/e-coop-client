@@ -1,11 +1,15 @@
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import type { IPermissionTemplate, IPermissionTemplateRequest } from '../permission-template'
-
-const { apiCrudHooks, apiCrudService, baseQueryKey : permissionTemplateBaseKey } = createDataLayerFactory<
+import type {
     IPermissionTemplate,
-    IPermissionTemplateRequest
->({
+    IPermissionTemplateRequest,
+} from '../permission-template'
+
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: permissionTemplateBaseKey,
+} = createDataLayerFactory<IPermissionTemplate, IPermissionTemplateRequest>({
     url: '/api/v1/permission-template',
     baseKey: 'permission-template',
 })

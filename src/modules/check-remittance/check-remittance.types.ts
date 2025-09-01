@@ -2,11 +2,11 @@ import z from 'zod'
 
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-import { CheckRemittanceSchema } from './check-remittance.validation'
 import { IBank } from '../bank'
 import { IMedia } from '../media'
-import { IUserBase } from '../user'
 import { ITransactionBatch } from '../transaction-batch'
+import { IUserBase } from '../user'
+import { CheckRemittanceSchema } from './check-remittance.validation'
 
 export interface ICheckRemittance extends IBaseEntityMeta {
     id: TEntityId
@@ -33,4 +33,5 @@ export interface ICheckRemittance extends IBaseEntityMeta {
 
 export type ICheckRemittanceRequest = z.infer<typeof CheckRemittanceSchema>
 
-export interface ICheckRemittancePaginated extends IPaginatedResult<ICheckRemittance> {}
+export interface ICheckRemittancePaginated
+    extends IPaginatedResult<ICheckRemittance> {}

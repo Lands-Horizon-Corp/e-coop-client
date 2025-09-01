@@ -8,8 +8,8 @@ import {
     TTransactionBatchFullorMin,
     useCurrentTransactionBatch,
 } from '@/modules/transaction-batch'
-import { IEmployee } from '@/modules/user'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+import { IEmployee } from '@/modules/user'
 
 import { LayersIcon, LayersSharpDotIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'

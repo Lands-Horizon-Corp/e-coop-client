@@ -114,7 +114,7 @@ const TransactionBatchCashCount = ({
             <p className="text-lg">Cash Count</p>
             <div>
                 {mergedCashCountBillsAndCoins.length === 0 && isLoading && (
-                    <LoadingSpinner className="mx-auto my-4"/>
+                    <LoadingSpinner className="mx-auto my-4" />
                 )}
                 <BatchCashCount
                     resetOnDefaultChange

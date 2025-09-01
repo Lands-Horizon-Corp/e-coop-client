@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
+import { formatNumber } from '@/helpers/number-utils'
+import { BatchFundingCreateFormModal } from '@/modules/batch-funding/components/batch-funding-create-form'
 import { TTransactionBatchFullorMin } from '@/modules/transaction-batch/transaction-batch.types'
 
 import { PlusIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { IClassProps } from '@/types'
-import { BatchFundingCreateFormModal } from '@/modules/batch-funding/components/batch-funding-create-form'
-import { formatNumber } from '@/helpers/number-utils'
 
 interface Props extends IClassProps {
     transactionBatch: TTransactionBatchFullorMin

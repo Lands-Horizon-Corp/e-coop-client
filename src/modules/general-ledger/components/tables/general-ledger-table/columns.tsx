@@ -1,7 +1,11 @@
 import { ReactNode } from 'react'
 
 import { formatNumber } from '@/helpers/number-utils'
-import { IGeneralLedger, TGeneralLedgerSource } from '@/modules/general-ledger/general-ledger.types'
+import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/constants'
+import {
+    IGeneralLedger,
+    TGeneralLedgerSource,
+} from '@/modules/general-ledger/general-ledger.types'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import { LedgerSourceBadge } from '@/components/badges/ledger-source-badge'
@@ -18,7 +22,6 @@ import ImageNameDisplay from '@/components/image-name-display'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
-import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/constants'
 
 export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedger>[] =
     [

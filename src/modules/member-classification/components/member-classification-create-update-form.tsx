@@ -17,11 +17,11 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { MemberClassificationSchema } from '../member-classification.validation'
-import { Textarea } from '@/components/ui/textarea'
 
 type TMemberClassificationForm = z.infer<typeof MemberClassificationSchema>
 

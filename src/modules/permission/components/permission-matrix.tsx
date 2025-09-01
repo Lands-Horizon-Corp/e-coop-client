@@ -1,6 +1,5 @@
 import { forwardRef, useState } from 'react'
 
-
 import { cn } from '@/helpers'
 
 import { MagnifyingGlassIcon } from '@/components/icons'
@@ -20,8 +19,12 @@ import {
 import { useInternalState } from '@/hooks/use-internal-state'
 
 import { IClassProps } from '@/types'
+
+import {
+    PERMISSION_ALL_ACTIONS,
+    PERMISSION_ALL_RESOURCE_ACTION,
+} from '../permission.constants'
 import { TPermissionAction, TPermissionResource } from '../permission.types'
-import { PERMISSION_ALL_ACTIONS, PERMISSION_ALL_RESOURCE_ACTION } from '../permission.constants'
 
 interface IPermissionMatrixProps extends IClassProps {
     defaultValues?: Record<string, TPermissionAction[]>

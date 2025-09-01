@@ -1,6 +1,9 @@
 import z from 'zod'
 
-import { PERMISSION_BASE_ACTIONS, PERMISSION_BASE_RESOURCE } from './permission.constants'
+import {
+    PERMISSION_BASE_ACTIONS,
+    PERMISSION_BASE_RESOURCE,
+} from './permission.constants'
 import { TPermissionAction, TPermissionResource } from './permission.types'
 
 export const PermissionSchema = z.string().refine(

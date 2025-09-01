@@ -11,8 +11,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { useDeleteLoanStatusById } from '../../loan-status.service'
 import { ILoanStatus } from '../../loan-status.types'
-import { ILoanStatusTableActionComponentProp } from './columns'
 import { LoanStatusCreateUpdateFormModal } from '../forms/loan-status-create-update-form'
+import { ILoanStatusTableActionComponentProp } from './columns'
 
 interface UseLoanStatusActionsProps {
     row: Row<ILoanStatus>

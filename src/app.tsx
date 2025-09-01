@@ -13,6 +13,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import SpySvg from '../src/assets/spy.svg';
 import PageContainer from './components/containers/page-container';
+import Image from './components/image';
 import LoadingSpinner from './components/spinners/loading-spinner';
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
 import { routeTree } from './routeTree.gen';
@@ -65,7 +66,7 @@ const App = () => {
                     <LoadingSpinner />
                 ) : (
                     <>
-                        <img src={SpySvg} alt="Spy" className="size-36" />
+                        <Image src={SpySvg} alt="Spy" className="size-36" />
                         <p className="text-4xl text-foreground/60">Forbidden</p>
                         <p>
                             We cannot allow you to use this app on

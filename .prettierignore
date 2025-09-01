@@ -12,3 +12,9 @@ src/routeTree.gen.ts
 
 # Ignore node_modules
 node_modules/
+
+*.hbs
+*.handlebars
+*.mustache
+templates/**/*.hbs
+views/**/*.hbs

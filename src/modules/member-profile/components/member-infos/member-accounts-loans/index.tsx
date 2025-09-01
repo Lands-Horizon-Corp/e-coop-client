@@ -1,11 +1,11 @@
 import { cn } from '@/helpers'
+import { IMemberProfile } from '@/modules/member-profile'
 
 import { WalletIcon } from '@/components/icons'
 
 import { IBaseProps, TEntityId } from '@/types'
 
 import SectionTitle from '../section-title'
-import { IMemberProfile } from '@/modules/member-profile'
 import MemberAccountingLedger from './member-accounting-ledger'
 
 interface Props extends IBaseProps {
