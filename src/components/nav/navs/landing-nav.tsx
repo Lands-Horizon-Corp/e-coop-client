@@ -1,4 +1,6 @@
-import { Link, ReactNode, useLocation } from '@tanstack/react-router'
+import { ReactNode } from 'react'
+
+import { Link, useLocation } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 

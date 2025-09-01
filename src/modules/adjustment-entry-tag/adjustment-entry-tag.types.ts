@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { entityIdSchema } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 export type IAdjustmentEntryTag = {
     id: string
