@@ -8,12 +8,12 @@ import { TEntityId } from '@/types'
 
 import {
     IMemberProfile,
-    MemberProfileAPI,
-    baseQueryKey,
+    apiCrudService,
+    memberProfileBaseKey,
 } from '../member-profile'
 import { IMemberProfileUserAccountRequest } from './member-user-account.types'
 
-const { API, route } = MemberProfileAPI
+const { API, route } = apiCrudService
 
 // ⚙️🛠️ API SERVICE HERE
 // Connect Member Profile to User Account
@@ -72,7 +72,8 @@ export const useConnectMemberProfileToUserAccount = createMutationFactory<
 >({
     mutationFn: async ({ memberProfileId, userId }) =>
         await connectMemberProfileToUserAccount(memberProfileId, userId),
-    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(memberProfileBaseKey, args),
 })
 
 // 🪝 Custom Hook for Disconnecting Member Profile User Account
@@ -82,7 +83,8 @@ export const useDisconnectMemberProfileUserAccount = createMutationFactory<
     TEntityId
 >({
     mutationFn: async (id) => await disconnectMemberProfileUserAccount({ id }),
-    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(memberProfileBaseKey, args),
 })
 
 // 🪝 Custom Hook for Creating Member Profile User Account
@@ -97,7 +99,7 @@ export const useCreateMemberProfileUserAccount = createMutationFactory<
     mutationFn: ({ memberProfileId, data }) =>
         createMemberProfileUserAccount(memberProfileId, data),
     invalidationFn: (args) =>
-        createMutationInvalidateFn('member-profile', args),
+        createMutationInvalidateFn(memberProfileBaseKey, args),
 })
 
 // 🪝 Custom Hook for Updating Member Profile User Account
@@ -113,5 +115,5 @@ export const useUpdateMemberProfileUserAccount = createMutationFactory<
     mutationFn: ({ userId, data }) =>
         updateMemberProfileUserAccount(userId, data),
     invalidationFn: (args) =>
-        updateMutationInvalidationFn('member-profile', args),
+        updateMutationInvalidationFn(memberProfileBaseKey, args),
 })

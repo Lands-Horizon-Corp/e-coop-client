@@ -1,7 +1,6 @@
+import { TPermissionResource } from '@/modules/permission/permission.types'
 import { UserIcon } from 'lucide-react'
 import { IconType } from 'react-icons/lib'
-
-import { TPermissionResource } from '@/types'
 
 import {
     BankIcon,
@@ -9,7 +8,7 @@ import {
     CalendarDotsIcon,
     HandWithdrawIcon,
     Users3Icon,
-} from '../../../../components/icons'
+} from '@/components/icons'
 
 export const PERMISSION_RESOURCE_ICON_MAP: Partial<
     Record<TPermissionResource, IconType>

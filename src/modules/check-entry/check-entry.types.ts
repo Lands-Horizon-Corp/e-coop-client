@@ -11,7 +11,7 @@ import { descriptionSchema, entityIdSchema } from '@/validation'
 import { IAccount } from '../account'
 import { IBank } from '../bank'
 import { ChargesRateByTermHeaderRequest } from '../charges-rate-by-term-header'
-import { IDisbursementResponse } from '../disbursement'
+import { IDisbursement } from '../disbursement'
 import { IGeneralLedgerResponse } from '../general-ledger'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account'
@@ -145,7 +145,7 @@ export interface ICheckEntryResponse
     general_ledger_id?: TEntityId
     general_ledger?: IGeneralLedgerResponse
     disbursement_transaction_id?: TEntityId
-    disbursement_transaction?: IDisbursementResponse
+    disbursement_transaction?: IDisbursement
     credit: number
     debit: number
     check_number: string

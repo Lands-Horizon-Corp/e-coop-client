@@ -5,8 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { IInterestRateByTermsHeaderResponse } from '../interest-rate-by-terms-header'
 import { IInterestRateSchemeResponse } from '../interest-rate-scheme'

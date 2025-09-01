@@ -6,7 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import {
-    OtpSchema,
+    OTPSchema,
     useSendOTPVerification,
     useVerify,
 } from '@/modules/authentication'
@@ -44,8 +44,8 @@ const VerifyContactBar = ({
     verifyMode,
     onSuccess,
 }: Props) => {
-    const form = useForm<z.infer<typeof OtpSchema>>({
-        resolver: standardSchemaResolver(OtpSchema),
+    const form = useForm<z.infer<typeof OTPSchema>>({
+        resolver: standardSchemaResolver(OTPSchema),
         reValidateMode: 'onChange',
         defaultValues: {
             otp: '',
@@ -53,7 +53,6 @@ const VerifyContactBar = ({
     })
 
     const { mutate: handleVerify, isPending } = useVerify({
-        verifyMode,
         options: {
             onSuccess,
         },
@@ -77,7 +76,9 @@ const VerifyContactBar = ({
             </div>
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit((data) => handleVerify(data))}
+                    onSubmit={form.handleSubmit((data) =>
+                        handleVerify({ ...data, verifyMode })
+                    )}
                 >
                     <fieldset
                         disabled={isPending}
@@ -99,7 +100,10 @@ const VerifyContactBar = ({
                                             containerClassName="mx-auto capitalize w-fit"
                                             onComplete={() =>
                                                 form.handleSubmit((data) =>
-                                                    handleVerify(data)
+                                                    handleVerify({
+                                                        ...data,
+                                                        verifyMode,
+                                                    })
                                                 )()
                                             }
                                         >

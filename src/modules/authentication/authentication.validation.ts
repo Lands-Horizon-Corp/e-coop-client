@@ -37,9 +37,11 @@ export const UserRegisterRequestSchema = z.object({
 })
 
 // OTP Schema
-export const OtpSchema = z.object({
+export const OTPSchema = z.object({
     otp: otpCodeSchema,
 })
+
+export type TOTPSchema = z.infer<typeof OTPSchema>
 
 // Define the Zod schema for UserForgotPasswordRequest
 export const UserForgotPasswordRequestSchema = z.object({

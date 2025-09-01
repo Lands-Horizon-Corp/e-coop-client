@@ -5,8 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { ILoanTransaction } from '../loan-transaction/loan-transaction.types'
 

@@ -5,10 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
 } from '@/types/common'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 import { IAccount } from '../account'
 import { IMemberProfile } from '../member-profile/member-profile.types'
@@ -46,7 +44,8 @@ export const memberDeductionEntryRequestSchema = z.object({
 export const TMemberDepartmentSchema = z.object({
     id: entityIdSchema.optional(),
     name: z.string().min(1, 'Department name is required'),
-    description: descriptionSchema
+    description: z.coerce
+        .string()
         .min(15, 'Department Description is required')
         .optional()
         .transform(descriptionTransformerSanitizer),

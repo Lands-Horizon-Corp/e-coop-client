@@ -5,8 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 export interface IMemberTypeReferenceByAmountRequest {
     member_type_reference_id: TEntityId

@@ -1,12 +1,10 @@
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import type { IPermission, IPermissionRequest } from '../permission'
-
 const {
     apiCrudHooks,
     apiCrudService,
     baseQueryKey: permissionBaseKey,
-} = createDataLayerFactory<IPermission, IPermissionRequest>({
+} = createDataLayerFactory<{ id: string }, unknown>({ // NO CRUD HERE
     url: '/api/v1/permission',
     baseKey: 'permission',
 })

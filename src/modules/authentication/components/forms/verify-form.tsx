@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form'
-import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -28,10 +27,10 @@ import {
 import { IForm } from '@/types'
 
 import { useVerify } from '../../authentication.service'
-import { OtpSchema } from '../../authentication.validation'
+import { OTPSchema, TOTPSchema } from '../../authentication.validation'
 import ResendVerifyContactButton from '../resend-verify-button'
 
-type TVerifyForm = z.infer<typeof OtpSchema>
+type TVerifyForm = TOTPSchema
 
 interface Props extends IForm<TVerifyForm, IUserBase> {
     verifyMode: 'mobile' | 'email'
@@ -47,8 +46,8 @@ const VerifyForm = ({
     onError,
     onSuccess,
 }: Props) => {
-    const form = useForm({
-        resolver: standardSchemaResolver(OtpSchema),
+    const form = useForm<TVerifyForm>({
+        resolver: standardSchemaResolver(OTPSchema),
         reValidateMode: 'onChange',
         defaultValues,
     })
@@ -58,7 +57,6 @@ const VerifyForm = ({
         isPending,
         error: rawError,
     } = useVerify({
-        verifyMode,
         options: {
             onSuccess,
             onError,
@@ -71,7 +69,9 @@ const VerifyForm = ({
         <>
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit((data) => handleVerify(data))}
+                    onSubmit={form.handleSubmit((data) =>
+                        handleVerify({ ...data, verifyMode })
+                    )}
                     className={cn(
                         'flex min-w-[380px] flex-col gap-y-4',
                         className
@@ -106,7 +106,10 @@ const VerifyForm = ({
                                             maxLength={6}
                                             onComplete={() =>
                                                 form.handleSubmit((data) =>
-                                                    handleVerify(data)
+                                                    handleVerify({
+                                                        ...data,
+                                                        verifyMode,
+                                                    })
                                                 )()
                                             }
                                             pattern={

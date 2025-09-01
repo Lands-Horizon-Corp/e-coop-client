@@ -1,6 +1,6 @@
-import { TPermission } from '@/constants/permission'
 import { toReadableDateShort } from '@/helpers/date-utils'
 import { IInvitationCode } from '@/modules/invitation-code'
+import { TPermission } from '@/modules/permission'
 import { PermissionViewModal } from '@/modules/permission-template/components/permission/permission-view'
 import { ColumnDef, Row } from '@tanstack/react-table'
 

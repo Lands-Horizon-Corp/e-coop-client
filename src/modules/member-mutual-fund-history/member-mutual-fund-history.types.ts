@@ -1,11 +1,7 @@
 import z from 'zod'
 
-import {
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-    entityIdSchema,
-} from '@/types/common'
+import { IOrgBranchIdentity, ITimeStamps, TEntityId } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { IMemberProfile } from '../member-profile/member-profile.types'
 

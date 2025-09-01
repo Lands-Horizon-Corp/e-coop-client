@@ -5,8 +5,8 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { IMemberProfile } from '../member-profile/member-profile.types'
 import { IUser } from '../user/user.types'

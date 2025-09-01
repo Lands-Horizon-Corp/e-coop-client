@@ -2,7 +2,10 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
-import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
+import {
+    HookMutationOptions,
+    createMutationFactory,
+} from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
@@ -280,27 +283,24 @@ export const useSendOTPVerification = ({
 }
 
 // Hook for Verifying Email or Contact Number
-export const useVerify = ({
-    verifyMode,
-    options,
-}: {
-    verifyMode: 'email' | 'mobile'
-    options?: HookMutationOptions<IUserBase, Error, { otp: string }>
-}) => {
-    return useMutation<IUserBase, Error, { otp: string }>({
-        mutationKey: ['verify', verifyMode],
-        mutationFn: async (data) => {
-            if (verifyMode === 'email') {
-                return await verifyEmail(data)
-            } else if (verifyMode === 'mobile') {
-                return await verifyContactNumber(data)
-            }
+export const useVerify = createMutationFactory<
+    IUserBase,
+    Error,
+    {
+        otp: string
+        verifyMode: 'email' | 'mobile'
+    }
+>({
+    mutationFn: async (data) => {
+        if (data.verifyMode === 'email') {
+            return await verifyEmail(data)
+        } else if (data.verifyMode === 'mobile') {
+            return await verifyContactNumber(data)
+        }
 
-            throw new Error('Unknown verify mode')
-        },
-        ...options,
-    })
-}
+        throw new Error('Unknown verify mode')
+    },
+})
 
 // Get Current Logged In User
 export const useCurrentLoggedInUser = ({

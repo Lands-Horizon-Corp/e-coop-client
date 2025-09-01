@@ -1,4 +1,3 @@
-import { TPermission } from '@/constants/permission'
 import {
     IAuditable,
     IPaginatedResult,
@@ -9,6 +8,7 @@ import {
 
 import { IBranch } from '../branch/branch.types'
 import { IOrganization } from '../organization'
+import { TPermission } from '../permission'
 
 // Invitation Code Resource
 export interface IInvitationCode extends ITimeStamps, IAuditable {

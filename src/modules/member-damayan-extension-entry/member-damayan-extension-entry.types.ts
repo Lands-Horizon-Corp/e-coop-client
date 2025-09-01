@@ -5,10 +5,10 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { entityIdSchema } from '@/validation'
 
 export interface IMemberDamayanExtensionEntryRequest {
     member_profile_id: TEntityId

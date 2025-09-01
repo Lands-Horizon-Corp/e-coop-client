@@ -1,11 +1,7 @@
 import z from 'zod'
 
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/types/common'
 import { ITimeStamps, TEntityId } from '@/types/common'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
@@ -25,6 +21,9 @@ export const memberRecruitsSchema = z.object({
     membersProfileId: entityIdSchema.optional(),
     membersProfileRecruitedId: entityIdSchema,
     dateRecruited: z.string().min(1, 'Date recruited is required'),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+    description: z
+        .string()
+        .optional()
+        .transform(descriptionTransformerSanitizer),
     name: z.string().min(1, 'Name is required'),
 })

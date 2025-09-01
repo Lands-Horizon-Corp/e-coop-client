@@ -1,7 +1,10 @@
-import { IGeneralLedger, TEntityId, TableProps } from '@/types'
+import { IGeneralLedger } from '@/modules/general-ledger'
+import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import { IGeneralLedgerTableColumnProps } from '@/modules/general-ledger/components/tables/general-ledger-table/columns'
 
-import { IGeneralLedgerTableColumnProps } from '../../general-ledger-accounts-table/columns'
-import GeneralLedgerTable from '../../general-ledger-table'
+import { TableProps } from '@/components/data-table/table.type'
+
+import { TEntityId } from '@/types'
 
 export interface MemberAccountGeneralLedgerTableProps
     extends TableProps<IGeneralLedger>,

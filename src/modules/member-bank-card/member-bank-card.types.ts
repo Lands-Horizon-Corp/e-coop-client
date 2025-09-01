@@ -5,11 +5,11 @@ import {
     IOrgBranchIdentity,
     ITimeStamps,
     TEntityId,
-    entityIdSchema,
 } from '@/types/common'
 
 import { IBank } from '../bank'
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { entityIdSchema } from '@/validation'
 
 export interface IMemberBankCardRequest {
     account_number: string

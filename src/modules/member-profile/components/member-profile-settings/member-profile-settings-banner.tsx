@@ -1,8 +1,5 @@
 import { cn } from '@/helpers'
 
-import { IClassProps, IMemberProfile } from '@/types'
-
-import CopyWrapper from '../elements/copy-wrapper'
 import {
     CheckIcon,
     ClockIcon,
@@ -10,12 +7,17 @@ import {
     PhoneIcon,
     UserIcon,
     XIcon,
-} from '../icons'
-import ImageDisplay from '../image-display'
-import { Badge } from '../ui/badge'
-import { Card, CardContent } from '../ui/card'
-import { Skeleton } from '../ui/skeleton'
-import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
+} from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
+
+import { IClassProps } from '@/types'
+
+import { IMemberProfile } from '../..'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile

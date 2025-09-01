@@ -2,10 +2,10 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
-    HookMutationOptions,
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 

@@ -5,8 +5,7 @@ import { Row } from '@tanstack/react-table'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 
-import { IBatchFunding } from '@/types'
-
+import { IBatchFunding } from '../../batch-funding.types'
 import { IBatchFundingTableActionComponentProp } from './columns'
 
 interface UseBatchFundingActionsProps {

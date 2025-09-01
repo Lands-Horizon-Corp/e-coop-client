@@ -22,7 +22,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { IMemberProfile, useGetById } from '../..'
+import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberCloseAccountBanner from '../member-closed-account-banner'
 import MemberProfileMiniInfoCard, {
     MemberProfileMiniInfoCardSkeleton,
@@ -110,7 +110,7 @@ const MemberProfileSettings = ({
 }: Props) => {
     const queryClient = useQueryClient()
 
-    const { data: memberProfile, isPending } = useGetById({
+    const { data: memberProfile, isPending } = useGetMemberProfileById({
         id: memberProfileId,
         options: {
             refetchOnWindowFocus: false,
