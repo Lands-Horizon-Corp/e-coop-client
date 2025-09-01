@@ -8,10 +8,12 @@ import {
 } from '@/types/common'
 
 import { IAccount } from '../account'
+import { ICollateral } from '../collateral'
 import { ILoanPurpose } from '../loan-purpose'
 import { ILoanStatus } from '../loan-status'
 import { ILoanTagResponse } from '../loan-tag'
 import { IMedia } from '../media/media.types'
+import { IMemberAccountingLedger } from '../member-account-ledger'
 import { IMemberJointAccount } from '../member-joint-account/member-joint-account.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 
@@ -37,10 +39,10 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     mode_of_payment_semi_monthly_pay_2: number
 
     comaker_deposit_member_accounting_ledger_id: TEntityId
-    comaker_deposit_member_accounting_ledger: any // TODO: Finalize
+    comaker_deposit_member_accounting_ledger: IMemberAccountingLedger
 
     comaker_collateral_id?: TEntityId
-    comaker_collateral?: any // TODO:
+    comaker_collateral?: ICollateral
 
     comaker_collateral_description?: string
 
@@ -48,7 +50,7 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     loan_type: TLoanType
 
     previous_loan_id?: TEntityId
-    previous_loan?: any // TODO
+    previous_loan?: ILoanTransaction
 
     terms: number
 
