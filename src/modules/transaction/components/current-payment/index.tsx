@@ -76,7 +76,6 @@ const TransactionCurrentPaymentEntry = ({
         isLoading,
         isFetching,
         isError,
-        error,
         isSuccess,
     } = useFilteredPaginatedGeneralLedger({
         transactionId,
@@ -88,12 +87,9 @@ const TransactionCurrentPaymentEntry = ({
         },
     })
 
-    const handleError = useCallback(
-        (error: Error) => {
-            toast.error(error?.message || 'Something went wrong')
-        },
-        [error]
-    )
+    const handleError = useCallback((error: Error) => {
+        toast.error(error?.message || 'Something went wrong')
+    }, [])
 
     useQeueryHookCallback({
         data: generalLedgerBasedTransaction,

@@ -1,5 +1,5 @@
 // This handles all common validations that are handles everywhere
-import z, { coerce } from 'zod'
+import z from 'zod'
 
 import {
     CIVIL_STATUS,

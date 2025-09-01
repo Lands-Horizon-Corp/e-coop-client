@@ -5,7 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { useCreate, useUpdateById } from '@/modules/account-tag'
-import { TAG_CATEGORY } from '@/modules/tag-template/tag.constnats'
+import { TAG_CATEGORY } from '@/modules/tag-template/tag.constants'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
 import { TIcon } from '@/components/icons'

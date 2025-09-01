@@ -35,8 +35,6 @@ import {
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { TEntityId } from '@/types'
 
 import TransactionModalJointMember from './transaction-modal-joint-member'

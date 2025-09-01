@@ -17,7 +17,7 @@ const useCountDown = ({
 
     useEffect(() => {
         if (trigger) setCountDown(duration)
-    }, [trigger])
+    }, [duration, trigger])
 
     useEffect(() => {
         if (!trigger) return
@@ -33,7 +33,7 @@ const useCountDown = ({
         return () => {
             clearInterval(counter)
         }
-    }, [countDown])
+    }, [countDown, interval, onComplete, step, trigger])
 
     return countDown
 }

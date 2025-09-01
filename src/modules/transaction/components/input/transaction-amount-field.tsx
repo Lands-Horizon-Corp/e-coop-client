@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 
 type AmountFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
     value?: string | number
-    onChange?: (e: any) => void
+    onChange?: (e: string) => void
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
     InputClassName?: string
     className?: string
@@ -34,7 +34,10 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
 
         const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
             if (onChange) {
-                formatNumberOnBlur(e.target.value, onChange)
+                formatNumberOnBlur(
+                    e.target.value,
+                    onChange as (val: number | undefined | string) => void
+                )
             }
         }
 

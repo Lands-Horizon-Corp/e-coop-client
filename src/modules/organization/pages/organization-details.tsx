@@ -41,7 +41,7 @@ const OrganizationDetails = () => {
 }
 
 type OrganizationHeaderProps = {
-    organization: any
+    organization?: IOrganizationWithPolicies
     isPending: boolean
 }
 

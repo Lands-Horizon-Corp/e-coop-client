@@ -145,9 +145,10 @@ export const isValidDecimalInput = (value: string) => {
 
 export const formatNumberOnBlur = (
     value: string,
-    onChange: (val: number | undefined) => void,
+    onChange: (val: number | undefined | string) => void,
     isFixed = true
 ) => {
+    value = parseFloat(value).toString()
     const sanitized = sanitizeNumberInput(value)
     if (!sanitized || sanitized === '-') {
         onChange(undefined)

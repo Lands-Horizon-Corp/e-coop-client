@@ -6,7 +6,7 @@ import { cn } from '@/helpers/tw-utils'
 import ImageDisplay from '../image-display'
 
 export const useRandomGradient = (colorPalette: string[]) => {
-    return useMemo(() => getRandomGradient(colorPalette), [])
+    return useMemo(() => getRandomGradient(colorPalette), [colorPalette])
 }
 
 export const colorPalette = [

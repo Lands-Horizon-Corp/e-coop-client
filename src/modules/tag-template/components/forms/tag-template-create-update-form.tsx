@@ -31,7 +31,7 @@ import {
 } from '../../tag-template.service'
 import { ITagTemplate } from '../../tag-template.types'
 import { TagTemplateSchema } from '../../tag-template.validation'
-import { TAG_CATEGORY } from '../../tag.constnats'
+import { TAG_CATEGORY } from '../../tag.constants'
 
 type TTagTemplateFormValues = z.infer<typeof TagTemplateSchema>
 

@@ -2,7 +2,7 @@ import z from 'zod'
 
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-import { TAG_CATEGORY } from './tag.constnats'
+import { TAG_CATEGORY } from './tag.constants'
 
 export const TagTemplateSchema = z.object({
     name: z.string().min(1, 'Name is required'),

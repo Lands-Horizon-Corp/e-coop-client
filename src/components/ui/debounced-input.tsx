@@ -21,7 +21,7 @@ const DebouncedInput = <T,>({
         if (initialValue !== internalValue) {
             setInternalValue(initialValue)
         }
-    }, [initialValue, setInternalValue])
+    }, [initialValue, internalValue, setInternalValue])
 
     useEffect(() => {
         const handler = setTimeout(() => {
