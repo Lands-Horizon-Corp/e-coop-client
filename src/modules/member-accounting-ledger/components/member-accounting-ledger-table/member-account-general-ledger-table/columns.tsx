@@ -1,18 +1,17 @@
-import { formatNumber } from '@/utils'
+import { formatNumber } from '@/helpers'
+import { IGeneralLedger } from '@/modules/general-ledger'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import CopyWrapper from '@/components/elements/copy-wrapper'
-import ImageNameDisplay from '@/components/elements/image-name-display'
 import { PushPinSlashIcon } from '@/components/icons'
-import { createUpdateColumns } from '@/components/tables/common-columns'
+import ImageNameDisplay from '@/components/image-name-display'
 import { Checkbox } from '@/components/ui/checkbox'
-
-import { IGeneralLedger } from '@/types'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedger>[] =
     [
