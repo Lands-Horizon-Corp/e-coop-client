@@ -32,7 +32,7 @@ const ConnectionProvider = ({ interval = 10_000 }: { interval?: number }) => {
     return (
         <Dialog open={!isConnected}>
             <DialogContent
-                hideCloseButton
+                showCloseButton={false}
                 overlayClassName={cn(
                     'backdrop-blur ease-in-out ![animation-duration:1s]',
                     isConnected && 'backdrop-blur-none'

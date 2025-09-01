@@ -95,7 +95,7 @@ const NavProfileMenu = () => {
             router.navigate({
                 to: `/org/${orgName}/branch/${branchName}/dashboard`,
                 params: {
-                    user_organization_id: nextUserOrg.id,
+                    // user_organization_id: nextUserOrg.id,
                     organization_id: nextUserOrg.organization.id,
                 },
             })

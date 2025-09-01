@@ -1,9 +1,9 @@
 import { cn } from '@/helpers/tw-utils'
+import { useSendOTPVerification } from '@/modules/authentication'
 
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { useSendOTPVerification } from '@/hooks/api-hooks/use-auth'
 import UseCooldown from '@/hooks/use-cooldown'
 
 interface Props {
@@ -25,8 +25,10 @@ const ResendVerifyContactButton = ({
     const { mutate: resendOtpVerification, isPending: isResending } =
         useSendOTPVerification({
             verifyMode,
-            onSuccess: () => {
-                startCooldown()
+            options: {
+                onSuccess: () => {
+                    startCooldown()
+                },
             },
         })
 

@@ -1,7 +1,5 @@
-import { useMutation } from '@tanstack/react-query'
-
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
-import { HookMutationOptions } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import { IUserBase } from '../user/user.types'
 import {
@@ -66,53 +64,37 @@ export const updateUserProfilePhoto = async (
 // 🪝 HOOK STARTS HERE
 
 // Update general user profile settings
-export const useUpdateUserProfileGeneral = ({
-    options,
-}: {
-    options?: HookMutationOptions<IUserBase, Error, IUserProfileGeneralRequest>
-} = {}) => {
-    return useMutation<IUserBase, Error, IUserProfileGeneralRequest>({
-        mutationFn: updateUserProfileGeneral,
-        ...options,
-    })
-}
+export const useUpdateUserProfileGeneral = createMutationFactory<
+    IUserBase,
+    Error,
+    IUserProfileGeneralRequest
+>({
+    mutationFn: updateUserProfileGeneral,
+})
 
 // Update user profile details
-export const useUpdateUserProfile = ({
-    options,
-}: {
-    options?: HookMutationOptions<IUserBase, Error, IUserProfileRequest>
-} = {}) => {
-    return useMutation<IUserBase, Error, IUserProfileRequest>({
-        mutationFn: updateUserProfile,
-        ...options,
-    })
-}
+export const useUpdateUserProfile = createMutationFactory<
+    IUserBase,
+    Error,
+    IUserProfileRequest
+>({
+    mutationFn: updateUserProfile,
+})
 
 // Update user security settings
-export const useUpdateUserProfileSecurity = ({
-    options,
-}: {
-    options?: HookMutationOptions<IUserBase, Error, IUserProfileSecurityRequest>
-} = {}) => {
-    return useMutation<IUserBase, Error, IUserProfileSecurityRequest>({
-        mutationFn: updateUserProfileSecurity,
-        ...options,
-    })
-}
+export const useUpdateUserProfileSecurity = createMutationFactory<
+    IUserBase,
+    Error,
+    IUserProfileSecurityRequest
+>({
+    mutationFn: updateUserProfileSecurity,
+})
 
 // Update user profile photo
-export const useUpdateUserProfilePhoto = ({
-    options,
-}: {
-    options?: HookMutationOptions<
-        IUserBase,
-        Error,
-        IUserProfilePhotoUpdateRequest
-    >
-} = {}) => {
-    return useMutation<IUserBase, Error, IUserProfilePhotoUpdateRequest>({
-        mutationFn: updateUserProfilePhoto,
-        ...options,
-    })
-}
+export const useUpdateUserProfilePhoto = createMutationFactory<
+    IUserBase,
+    Error,
+    IUserProfilePhotoUpdateRequest
+>({
+    mutationFn: updateUserProfilePhoto,
+})
