@@ -2,10 +2,12 @@ import { DateRange } from 'react-day-picker'
 
 import { Calendar } from '@/components/ui/calendar'
 
+import { CaptionLayout } from './date-time-picker'
+
 type DateRangePickerProps = {
     value: DateRange | undefined
     modal?: boolean
-    captionLayout?: 'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years'
+    captionLayout?: CaptionLayout
     disabled?: boolean
     onChange: (range: DateRange | undefined) => void
 }

@@ -1,7 +1,6 @@
 import { cn } from '@/helpers/tw-utils'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
-import { CaptionLayout } from 'react-day-picker'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -10,7 +9,7 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-import DateTimePicker from './date-time-picker'
+import DateTimePicker, { CaptionLayout } from './date-time-picker'
 
 type InputDatePickerProps = {
     id?: string
