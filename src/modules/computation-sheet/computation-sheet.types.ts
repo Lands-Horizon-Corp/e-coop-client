@@ -21,4 +21,5 @@ export interface IComputationSheet extends IBaseEntityMeta {
 
 export type IComputationSheetRequest = z.infer<typeof ComputationSheetSchema>
 
-export interface IComputationSheetPaginated extends IPaginatedResult<IComputationSheet> {}
+export interface IComputationSheetPaginated
+    extends IPaginatedResult<IComputationSheet> {}

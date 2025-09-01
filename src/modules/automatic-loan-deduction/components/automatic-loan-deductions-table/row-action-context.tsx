@@ -12,8 +12,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { useDeleteAutomaticLoanDeductionById } from '../..'
 import { IAutomaticLoanDeduction } from '../../automatic-loan-deduction.types'
-import { IAutomaticLoanDeductionTableActionComponentProp } from './columns'
 import { AutomaticLoanDeductionCreateUpdateFormModal } from '../forms/automatic-loan-deduction-entry-create-update-form'
+import { IAutomaticLoanDeductionTableActionComponentProp } from './columns'
 
 interface UseAutomaticLoanDeductionActionsProps {
     row: Row<IAutomaticLoanDeduction>

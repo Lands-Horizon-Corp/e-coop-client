@@ -23,20 +23,26 @@ export const UserOrganizationSettingsSchema = z.object({
     user_setting_description: z
         .string()
         .min(1, 'Setting description is required'),
-    user_setting_start_or: z.coerce.number().min(0, 'Start OR must be non-negative'),
-    user_setting_end_or: z.coerce.number().min(0, 'End OR must be non-negative'),
-    user_setting_used_or: z.coerce.number().min(0, 'Used OR must be non-negative'),
-    user_setting_start_voucher: z
-        .coerce.number()
+    user_setting_start_or: z.coerce
+        .number()
+        .min(0, 'Start OR must be non-negative'),
+    user_setting_end_or: z.coerce
+        .number()
+        .min(0, 'End OR must be non-negative'),
+    user_setting_used_or: z.coerce
+        .number()
+        .min(0, 'Used OR must be non-negative'),
+    user_setting_start_voucher: z.coerce
+        .number()
         .min(0, 'Start voucher must be non-negative'),
-    user_setting_end_voucher: z
-        .coerce.number()
+    user_setting_end_voucher: z.coerce
+        .number()
         .min(0, 'End voucher must be non-negative'),
-    user_setting_used_voucher: z
-        .coerce.number()
+    user_setting_used_voucher: z.coerce
+        .number()
         .min(0, 'Used voucher must be non-negative'),
-    user_setting_number_padding: z
-        .coerce.number()
+    user_setting_number_padding: z.coerce
+        .number()
         .min(0, 'Number padding must be non-negative'),
     allow_withdraw_negative_balance: z.boolean(),
     allow_withdraw_exact_balance: z.boolean(),

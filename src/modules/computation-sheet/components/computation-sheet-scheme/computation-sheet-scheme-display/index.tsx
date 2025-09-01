@@ -1,4 +1,5 @@
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useGetComputationSheetById } from '@/modules/computation-sheet'
 import { IComputationSheet } from '@/modules/computation-sheet/computation-sheet.types'
 
@@ -8,10 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { IClassProps, TEntityId } from '@/types'
 
+import ComputationSheetSchemeCard from '../../computation-sheet-scheme-card'
 import ComputationSheetSchemeDeductionEntries from './scheme-deduction-entries'
 import NegativeIncludeExclude from './scheme-negative-include-exclude'
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import ComputationSheetSchemeCard from '../../computation-sheet-scheme-card'
 
 interface Props extends IClassProps {
     selectedId?: TEntityId
@@ -21,7 +21,7 @@ interface Props extends IClassProps {
 const LoanSchemeDisplay = ({ selectedId, defaultData, className }: Props) => {
     const {
         data: computationSheet,
-        error : rawError,
+        error: rawError,
         isPending,
         isFetching,
     } = useGetComputationSheetById({
@@ -33,7 +33,7 @@ const LoanSchemeDisplay = ({ selectedId, defaultData, className }: Props) => {
         },
     })
 
-    const error = serverRequestErrExtractor({ error : rawError })
+    const error = serverRequestErrExtractor({ error: rawError })
 
     // TODO: Realtime delete listener
 

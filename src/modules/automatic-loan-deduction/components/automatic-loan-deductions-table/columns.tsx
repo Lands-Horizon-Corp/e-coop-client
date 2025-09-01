@@ -1,22 +1,23 @@
 // columns.tsx
 import { ReactNode } from 'react'
 
+import { formatNumber } from '@/helpers/number-utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import YesNoBadge from '@/components/badges/yes-no-badge'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
-import { Checkbox } from '@/components/ui/checkbox'
-import { IAutomaticLoanDeduction } from '../../automatic-loan-deduction.types'
 import TextRenderer from '@/components/text-renderer'
-import { formatNumber } from '@/helpers/number-utils'
-import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
+import { Checkbox } from '@/components/ui/checkbox'
+
+import { IAutomaticLoanDeduction } from '../../automatic-loan-deduction.types'
 
 export const automaticLoanDeductionGlobalSearchTargets: IGlobalSearchTargets<IAutomaticLoanDeduction>[] =
     [
