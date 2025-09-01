@@ -3,15 +3,14 @@ import { useState } from 'react'
 import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
 import z from 'zod'
 
+import { useCheckResetId } from '@/modules/authentication'
+import ResetPasswordForm from '@/modules/authentication/components/forms/reset-password-form'
 import AuthPageWrapper from '@/routes/auth/-components/auth-page-wrapper'
 
-import ResetPasswordForm from '@/components/forms/auth-forms/reset-password-form'
 import { ArrowLeftIcon, KeyIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import GuestGuard from '@/components/wrappers/guest-guard'
-
-import { useCheckResetId } from '@/hooks/api-hooks/use-auth'
 
 export const PasswordResetPagePathSchema = z.object({
     resetId: z.string({ error: 'Missing Reset Link' }),

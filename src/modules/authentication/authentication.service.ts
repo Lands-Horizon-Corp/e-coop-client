@@ -4,6 +4,8 @@ import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
+import { TEntityId } from '@/types'
+
 import { IUserBase } from '../user'
 import {
     IAuthContext,
@@ -18,32 +20,34 @@ import {
     IVerifyEmailRequest,
 } from './authentication.types'
 
-const { API, route } = createAPIRepository('/api/v1/authentication')
+const { API, route: authenticationAPIRoute } = createAPIRepository(
+    '/api/v1/authentication'
+)
 
 // ⚙️🛠️ API SERVICE HERE
 
 export const currentAuth = async () => {
-    const endpoint = `${route}/current`
+    const endpoint = `${authenticationAPIRoute}/current`
     return (await API.get<IAuthContext>(endpoint)).data
 }
 
 export const currentUser = async () => {
-    const endpoint = `${route}/current/user`
+    const endpoint = `${authenticationAPIRoute}/current/user`
     return (await API.get<IAuthContext>(endpoint)).data
 }
 
 export const signIn = async (data: ISignInRequest) => {
-    const endpoint = `${route}/login`
+    const endpoint = `${authenticationAPIRoute}/login`
     return (await API.post<ISignInRequest, IAuthContext>(endpoint, data)).data
 }
 
 export const signUp = async (data: ISignUpRequest) => {
-    const endpoint = `${route}/register`
+    const endpoint = `${authenticationAPIRoute}/register`
     return (await API.post<ISignUpRequest, IAuthContext>(endpoint, data)).data
 }
 
 export const forgotPassword = async (data: IForgotPasswordRequest) => {
-    const endpoint = `${route}/forgot-password`
+    const endpoint = `${authenticationAPIRoute}/forgot-password`
     await API.post<IForgotPasswordRequest, { key: string }>(endpoint, data)
     return data
 }
@@ -52,7 +56,7 @@ export const changePassword = async (
     resetId: string,
     data: IChangePasswordRequest
 ) => {
-    const endpoint = `${route}/change-password/${resetId}`
+    const endpoint = `${authenticationAPIRoute}/change-password/${resetId}`
     await API.post<IChangePasswordRequest, void>(endpoint, data)
 }
 
@@ -62,22 +66,22 @@ export const verifyWithPassword = async (
     const response = await API.post<
         IVerificationPasswordRequest,
         IVerification
-    >(`${route}/verify-with-password`, verificationData)
+    >(`${authenticationAPIRoute}/verify-with-password`, verificationData)
     return response.data
 }
 
 export const signOut = async () => {
-    await API.post(`${route}/logout`)
+    await API.post(`${authenticationAPIRoute}/logout`)
 }
 
 // API Functions for OTP Verification
 export const requestContactNumberVerification = async (): Promise<void> => {
-    const endpoint = `${route}/apply-contact-number`
+    const endpoint = `${authenticationAPIRoute}/apply-contact-number`
     await API.post(endpoint)
 }
 
 export const requestEmailVerification = async (): Promise<void> => {
-    const endpoint = `${route}/apply-email`
+    const endpoint = `${authenticationAPIRoute}/apply-email`
     await API.post(endpoint)
 }
 
@@ -87,7 +91,7 @@ export const requestEmailVerification = async (): Promise<void> => {
 export const verifyEmail = async (
     data: IVerifyEmailRequest
 ): Promise<IUserBase> => {
-    const endpoint = `${route}/verify-email`
+    const endpoint = `${authenticationAPIRoute}/verify-email`
     return (await API.post<IVerifyEmailRequest, IUserBase>(endpoint, data)).data
 }
 
@@ -95,7 +99,7 @@ export const verifyEmail = async (
 export const verifyContactNumber = async (
     data: IVerifyContactNumberRequest
 ): Promise<IUserBase> => {
-    const endpoint = `${route}/verify-contact-number`
+    const endpoint = `${authenticationAPIRoute}/verify-contact-number`
     return (
         await API.post<IVerifyContactNumberRequest, IUserBase>(endpoint, data)
     ).data
@@ -104,14 +108,19 @@ export const verifyContactNumber = async (
 // Current Logged in user
 export const currentLoggedInUsers = async () => {
     // /authentication/current-logged-in-accounts
-    const endpoint = `${route}/current-logged-in-accounts`
+    const endpoint = `${authenticationAPIRoute}/current-logged-in-accounts`
     return (await API.get<ILoggedInUser[]>(endpoint)).data
 }
 
 // Sign out all logged in session of current user
 export const signOutLoggedInUsers = async () => {
-    const endpoint = `${route}/current-logged-in-accounts/logout`
+    const endpoint = `${authenticationAPIRoute}/current-logged-in-accounts/logout`
     await API.post<void>(endpoint)
+}
+
+export const checkResetLink = async (resetId: string) => {
+    const endpoint = `${authenticationAPIRoute}/verify-reset-link/${resetId}`
+    await API.get<void>(endpoint)
 }
 
 // 🪝 HOOK STARTS HERE
@@ -228,6 +237,23 @@ export const useVerifyPassword = ({
     return useMutation<IVerification, Error, IVerificationPasswordRequest>({
         mutationFn: verifyWithPassword,
         ...options,
+    })
+}
+
+export const useCheckResetId = ({
+    resetId,
+    options,
+}: {
+    resetId: TEntityId
+    options?: HookQueryOptions<boolean, Error>
+}) => {
+    return useQuery<boolean, Error>({
+        ...options,
+        queryKey: ['reset-id', resetId],
+        queryFn: async () => {
+            await checkResetLink(resetId)
+            return true
+        },
     })
 }
 
