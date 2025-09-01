@@ -3,7 +3,7 @@ import { SearchParamError } from '@tanstack/react-router'
 import { TErrorMessageExtractor } from '.'
 
 export const searchParamErrExtractor: TErrorMessageExtractor = [
-    SearchParamError,
+    SearchParamError as unknown as new (...args: unknown[]) => Error,
     (err: Error) => {
         const castedError = err as SearchParamError
 
