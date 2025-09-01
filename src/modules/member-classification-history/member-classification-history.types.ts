@@ -29,4 +29,3 @@ export interface IMemberClassificationHistory
 
 export interface IMemberClassificationHistoryPaginated
     extends IPaginatedResult<IMemberClassificationHistory> {}
-e

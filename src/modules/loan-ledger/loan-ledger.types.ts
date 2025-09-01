@@ -26,7 +26,7 @@ export const loanGuaranteedFundPerMonthRequestSchema = z.object({
     loan_guaranteed_fund: z.number().optional(),
 })
 
-export interface ILoanLedgerRequest {}
+export type ILoanLedgerRequest = object
 
 export interface ILoanLedgerResponse
     extends ITimeStamps,

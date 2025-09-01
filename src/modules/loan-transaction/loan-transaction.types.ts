@@ -8,8 +8,8 @@ import {
 } from '@/types/common'
 
 import { IAccount } from '../account'
-import { ILoanPurposeResponse } from '../loan-purpose'
-import { ILoanStatusResponse } from '../loan-status'
+import { ILoanPurpose } from '../loan-purpose'
+import { ILoanStatus } from '../loan-status'
 import { ILoanTagResponse } from '../loan-tag'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account/member-joint-account.types'
@@ -24,10 +24,10 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     official_receipt_number: string
 
     loan_purpose_id: TEntityId
-    loan_purpose: ILoanPurposeResponse
+    loan_purpose: ILoanPurpose
 
     loan_status_id: TEntityId
-    loan_status: ILoanStatusResponse
+    loan_status: ILoanStatus
 
     loan_tags: ILoanTagResponse[]
 
