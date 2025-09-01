@@ -3,7 +3,7 @@ import { searchParamErrExtractor } from './path-params-err-extractor'
 import { zodErrExtractor } from './zod-err-extractor'
 
 export type TErrorMessageExtractor = [
-    new (...args: any[]) => Error, // Error, AxiosError, or any other error
+    new (...args: unknown[]) => Error, // Error, AxiosError, or any other error
     (error: Error) => string,
 ]
 
@@ -46,7 +46,7 @@ export const allErrorMessageExtractor = ({
         // add your own error extractor here
     ],
     ...other
-}: TExtractErrorMessageParams): any => {
+}: TExtractErrorMessageParams): unknown => {
     // Error, AxiosError, or any other error
     return extractErrorMessage({ ...other, errorMessageExtractors })
 }
