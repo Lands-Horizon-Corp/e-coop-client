@@ -12,7 +12,7 @@ import UnheadVite from '@unhead/addons/vite'
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
-         UnheadVite(),
+        UnheadVite(),
         manifestSRI(),
         tanstackRouter({ target: 'react', autoCodeSplitting: true }),
         react(),

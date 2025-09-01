@@ -137,6 +137,7 @@
         "tailwindcss-animate": "^1.0.7",
         "three": "^0.179.1",
         "tw-animate-css": "^1.3.7",
+        "unhead": "^2.0.14",
         "vaul": "^1.1.2",
         "vite-plugin-imagemin": "^0.6.1",
         "vitest": "^3.2.4",
