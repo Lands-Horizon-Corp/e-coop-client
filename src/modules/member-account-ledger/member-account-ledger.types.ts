@@ -30,7 +30,7 @@ export interface IMemberAccountingLedgerPaginated
     extends IPaginatedResult<IMemberAccountingLedger> {}
 
 export interface IMemberAccountingLedgerTotal {
-    total_share_capital_plus_savings: number
+    total_share_capital_plus_fixed_savings: number
     total_deposits: number
     total_loans: number
 }

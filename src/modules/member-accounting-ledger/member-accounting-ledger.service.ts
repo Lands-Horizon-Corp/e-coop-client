@@ -121,7 +121,7 @@ export const useMemberAccountingLedgerTotal = ({
         initialData: {
             total_deposits: 0,
             total_loans: 0,
-            total_share_capital_plus_savings: 0,
+            total_share_capital_plus_fixed_savings: 0,
         },
         enabled,
     })
