@@ -24,6 +24,7 @@ import {
     IUserOrganization,
     IUserOrganizationPaginated,
     IUserOrganizationPermissionRequest,
+    IUserOrganizationSettingsRequest,
 } from './user-organization.types'
 
 export const { apiCrudHooks, apiCrudService, baseQueryKey } =
@@ -150,6 +151,30 @@ export const updateUserOrganizationPermission = async (
     >(`${userOrganizationAPIRoute}/${userOrgId}/permission`, data)
     return response.data
 }
+
+export const updateUserOrganizationSettings = async ({
+    id,
+    url,
+    data,
+}: {
+    id?: TEntityId
+    url?: string
+    data: IUserOrganizationSettingsRequest
+}) => {
+    const response = await API.put<
+        IUserOrganizationSettingsRequest,
+        IUserOrganization
+    >(
+        url ??
+            (id
+                ? `${userOrganizationAPIRoute}/settings/${id}`
+                : `${userOrganizationAPIRoute}/settings/current`),
+        data
+    )
+    return response.data
+}
+
+export const { useGetById: useUserOrganizationById } = apiCrudHooks
 
 //hooks
 interface Options<TData = IOrgUserOrganizationGroup[]> {
@@ -359,5 +384,22 @@ export const useUpdateUserOrganizationPermission = createMutationFactory<
         // special ocasion since both of them need each other, I hardcoded this here
         // instead of importing employee service base key because it will circular depndency
         updateMutationInvalidationFn('employee', args)
+    },
+})
+
+export const useUpdateUserOrganizationSettings = createMutationFactory<
+    IUserOrganization,
+    Error,
+    { id?: TEntityId; url?: string; data: IUserOrganizationSettingsRequest }
+>({
+    mutationFn: (args) => updateUserOrganizationSettings(args),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['employee', 'resource-query'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['user-organization', args.resultData.id],
+        })
+        updateMutationInvalidationFn('user-organization', args)
     },
 })

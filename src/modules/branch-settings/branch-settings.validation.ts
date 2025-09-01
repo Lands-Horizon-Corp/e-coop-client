@@ -2,7 +2,7 @@ import z from 'zod'
 
 import { entityIdSchema } from '@/validation'
 
-export const branchSettingsSchema = z.object({
+export const BranchSettingsSchema = z.object({
     id: entityIdSchema,
     branch_id: entityIdSchema,
 
@@ -48,5 +48,7 @@ export const branchSettingsSchema = z.object({
     check_voucher_or_unique: z.boolean(),
     check_voucher_use_date_or: z.boolean(),
 
-    default_member_type_id: z.uuid('Invalid member type'),
+    default_member_type_id: entityIdSchema,
 })
+
+export type TBranchSettingsSchema = z.infer<typeof BranchSettingsSchema>

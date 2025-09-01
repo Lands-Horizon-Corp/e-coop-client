@@ -69,6 +69,8 @@ const UserOrgPermissionUpdateForm = ({
     const updateMutation = useUpdateUserOrganizationPermission({
         options: {
             ...withToastCallbacks({
+                textSuccess: 'User permission saved',
+                textError: 'Failed to update user permission',
                 onSuccess,
                 onError,
             }),

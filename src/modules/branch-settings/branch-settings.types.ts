@@ -1,8 +1,11 @@
-import { IOrgIdentity, TEntityId } from '@/types'
+import z from 'zod'
 
-import { IMemberType } from '../member-type/member-type.types'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-export interface IBranchSettings extends IOrgIdentity {
+import { IMemberType } from '../member-type'
+import { BranchSettingsSchema } from './branch-settings.validation'
+
+export interface IBranchSettings extends IBaseEntityMeta {
     id: TEntityId
 
     branch_id: TEntityId
@@ -64,8 +67,7 @@ export interface IBranchSettings extends IOrgIdentity {
     default_member_type: IMemberType
 }
 
-export interface IBranchSettingsRequest
-    extends Omit<
-        IBranchSettings,
-        'default_member_type' | 'organization' | 'organization_id'
-    > {}
+export type IBranchSettingsRequest = z.infer<typeof BranchSettingsSchema>
+
+export interface IBranchSettingsPaginated
+    extends IPaginatedResult<IBranchSettings> {}
