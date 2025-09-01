@@ -62,10 +62,11 @@ export const MemberAccountingLedgerTotal = ({
             </Button>
             <div className="p-2 space-y-1">
                 <p className="text-primary text-xl font-bold">
-                    {formatNumber(
-                        data.total_share_capital_plus_fixed_savings,
-                        2
-                    )}
+                    {data.total_share_capital_plus_fixed_savings &&
+                        formatNumber(
+                            data.total_share_capital_plus_fixed_savings,
+                            2
+                        )}
                 </p>
 
                 <p className="text-xs text-muted-foreground shrink truncate">
