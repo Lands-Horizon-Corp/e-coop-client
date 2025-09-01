@@ -106,6 +106,7 @@ import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerCheckEntryRoute
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerCashEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/cash-entry'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerAdjustmentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/adjustment-entry'
 import { Route as OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(settings)/settings'
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/computation-sheet-scheme/index'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-category'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
@@ -731,6 +732,14 @@ const OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute =
     path: '/settings',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute =
+  OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRouteImport.update(
+    {
+      id: '/(employee)/loan/computation-sheet-scheme/',
+      path: '/loan/computation-sheet-scheme/',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport.update(
     {
@@ -980,6 +989,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
+  '/org/$orgname/branch/$branchname/loan/computation-sheet-scheme': typeof OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute
   '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -1090,6 +1100,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
+  '/org/$orgname/branch/$branchname/loan/computation-sheet-scheme': typeof OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute
   '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -1206,6 +1217,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
+  '/org/$orgname/branch/$branchname/(employee)/loan/computation-sheet-scheme/': typeof OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -1322,6 +1334,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
+    | '/org/$orgname/branch/$branchname/loan/computation-sheet-scheme'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -1432,6 +1445,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
     | '/org/$orgname/branch/$branchname/maintenance/account-category'
     | '/org/$orgname/branch/$branchname/maintenance/account-classification'
+    | '/org/$orgname/branch/$branchname/loan/computation-sheet-scheme'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
   id:
     | '__root__'
@@ -1547,6 +1561,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
+    | '/org/$orgname/branch/$branchname/(employee)/loan/computation-sheet-scheme/'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/'
   fileRoutesById: FileRoutesById
 }
@@ -2232,6 +2247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(employee)/loan/computation-sheet-scheme/': {
+      id: '/org/$orgname/branch/$branchname/(employee)/loan/computation-sheet-scheme/'
+      path: '/loan/computation-sheet-scheme'
+      fullPath: '/org/$orgname/branch/$branchname/loan/computation-sheet-scheme'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
       path: '/maintenance/account-classification'
@@ -2566,6 +2588,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
+  OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
 }
 
@@ -2706,6 +2729,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute,
+    OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute:
+      OrgOrgnameBranchBranchnameemployeeLoanComputationSheetSchemeIndexRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute,
   }
