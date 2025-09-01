@@ -3,7 +3,6 @@ import {
     CIVIL_STATUS,
     FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
-    TAG_CATEGORY,
     USER_TYPE,
 } from '@/constants'
 import {
@@ -16,6 +15,7 @@ import {
     WEEKDAYS,
 } from '@/constants/loan'
 import { IBranch } from '@/modules/branch'
+import { TAG_CATEGORY } from '@/modules/tag-template/tag.constants'
 
 import { IOrganization } from '../modules/organization'
 import { IUserBase } from '../modules/user/user.types'
