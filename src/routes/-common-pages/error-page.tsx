@@ -38,7 +38,9 @@ const ErrorPage = ({ className, error }: Props) => {
             <div className="z-10 flex h-full w-full flex-col items-center justify-center gap-y-4">
                 <BracketErrorIcon className="size-24 text-muted-foreground" />
                 <p className="text-foreground">Something went wrong</p>
-                <p className="text-muted-foreground">{errorMessage}</p>
+                <p className="text-muted-foreground">
+                    {JSON.stringify(errorMessage)}
+                </p>
                 <div className="z-10 flex items-center gap-x-2">
                     <Button
                         // variant="secondary"
