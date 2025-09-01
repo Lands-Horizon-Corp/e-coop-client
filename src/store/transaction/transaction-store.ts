@@ -4,7 +4,7 @@ import { IAccount } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { IMemberJointAccount } from '@/modules/member-joint-account'
 import { IMemberProfile } from '@/modules/member-profile'
-import { TPaymentMode } from '@/modules/transaction'
+import { TPaymentMode } from '@/modules/quick-transfer'
 import { create } from 'zustand'
 
 import { TEntityId } from '@/types'
