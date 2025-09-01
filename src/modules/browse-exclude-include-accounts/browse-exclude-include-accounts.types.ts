@@ -1,11 +1,14 @@
-import { IBaseEntityMeta, TEntityId } from '@/types/common'
+import z from 'zod'
 
-import { IAccount } from '../account/account.types'
-import { IComputationSheetResponse } from '../computation-sheet'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
+
+import { IAccount } from '../account'
+import { IComputationSheet } from '../computation-sheet'
+import { BrowseExcludeIncludeAccountsSchema } from './browse-exclude-include-accounts.validation'
 
 export interface IBrowseExcludeIncludeAccounts extends IBaseEntityMeta {
     computation_sheet_id: TEntityId
-    computation_sheet: IComputationSheetResponse
+    computation_sheet: IComputationSheet
 
     fines_account_id: TEntityId
     fines_account: IAccount
@@ -23,13 +26,9 @@ export interface IBrowseExcludeIncludeAccounts extends IBaseEntityMeta {
     include_existing_loan_account: IAccount
 }
 
-export interface IBrowseExcludeIncludeAccountsRequest {
-    id?: TEntityId
+export type IBrowseExcludeIncludeAccountsRequest = z.infer<
+    typeof BrowseExcludeIncludeAccountsSchema
+>
 
-    computation_sheet_id?: TEntityId
-    fines_account_id?: TEntityId
-    comaker_account_id?: TEntityId
-    interest_account_id?: TEntityId
-    deliquent_account_id?: TEntityId
-    include_existing_loan_account_id?: TEntityId
-}
+export interface IBrowseExcludeIncludeAccountsPaginated
+    extends IPaginatedResult<IBrowseExcludeIncludeAccounts> {}
