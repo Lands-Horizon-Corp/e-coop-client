@@ -246,12 +246,7 @@ const TransactionForm = ({
                     },
                     onSuccess(transaction) {
                         queryClient.invalidateQueries({
-                            queryKey: [
-                                'member-accounting-ledger',
-                                //'paginated',
-                                'member',
-                                transaction.member_profile_id,
-                            ],
+                            queryKey: ['member-accounting-ledger'],
                         })
 
                         queryClient.invalidateQueries({

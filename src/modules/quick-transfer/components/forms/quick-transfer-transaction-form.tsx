@@ -30,7 +30,6 @@ import FormFooterResetSubmit from '@/components/form-components/form-footer-rese
 import { Checkbox } from '@/components/ui/checkbox'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
@@ -106,9 +105,8 @@ export const QuickTransferTransactionForm = ({
                 queryClient.invalidateQueries({
                     queryKey: [
                         'member-accounting-ledger',
-                        'paginated',
-                        'member',
-                        transaction.member_profile_id,
+                        // 'filtered-paginated',
+                        // transaction.member_profile_id,
                     ],
                 })
             },
@@ -164,17 +162,6 @@ export const QuickTransferTransactionForm = ({
                         </div>
                     </CommandShortcut>
                 </div>
-                <FormErrorMessage
-                    className="mb-2"
-                    errorMessage={
-                        quickTransactionError
-                            ? typeof quickTransactionError === 'string'
-                                ? quickTransactionError
-                                : quickTransactionError.message
-                            : null
-                    }
-                />
-
                 <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
                     <FormFieldWrapper
                         control={form.control}
@@ -441,7 +428,7 @@ export const QuickTransferTransactionForm = ({
                     isLoading={isQuickTransactionPending || !isFormIsDirty}
                     disableSubmit={!form.formState.isDirty}
                     submitText={mode}
-                    className="sticky bottom-0"
+                    className="sticky bottom-0 bg-background/80 pt-2"
                     onReset={() => {
                         form.reset()
                     }}

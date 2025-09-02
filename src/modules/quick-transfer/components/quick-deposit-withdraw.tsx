@@ -96,6 +96,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     <div className="sticky top-0 z-50">
                         <TransactionMemberProfile
                             memberInfo={selectedMember}
+                            className="!bg-secondary"
                             onSelectMember={() => {
                                 setOpenMemberPicker(true)
                             }}

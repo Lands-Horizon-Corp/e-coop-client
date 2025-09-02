@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { toast } from 'sonner'
 
+import { cn } from '@/helpers'
 import { IMedia } from '@/modules/media'
 import { IMemberJointAccount } from '@/modules/member-joint-account'
 import { IMemberProfile } from '@/modules/member-profile'
@@ -49,6 +50,7 @@ export type MemberProfileTransactionViewProps = {
     onSelectedJointMember?: (jointMemberId: TEntityId | undefined) => void
     hasTransaction?: boolean
     viewOnly?: boolean
+    className?: string
 }
 
 const TransactionMemberProfile = ({
@@ -57,6 +59,7 @@ const TransactionMemberProfile = ({
     onSelectedJointMember,
     hasTransaction,
     viewOnly = false,
+    className,
 }: MemberProfileTransactionViewProps) => {
     const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
@@ -92,7 +95,10 @@ const TransactionMemberProfile = ({
             <GradientBackground
                 gradientOnly
                 opacity={0}
-                className="w-full ecoop-scroll overflow-x-auto h-fit flex-col space-y-2 min-w-[300px] overscroll-contain bg-background p-5"
+                className={cn(
+                    'w-full ecoop-scroll overflow-x-auto h-fit flex-col space-y-2 min-w-[300px] overscroll-contain bg-background p-5',
+                    className
+                )}
             >
                 <div className="flex w-full  space-x-5 items-center h-fit ">
                     <div className="flex items-center h-fit gap-y-1 flex-col min-w-[6vw] max-w-[5vw]">
@@ -111,9 +117,9 @@ const TransactionMemberProfile = ({
                         <Drawer>
                             <DrawerTrigger asChild className="">
                                 <Button
-                                    variant={'secondary'}
+                                    variant={'outline'}
                                     size="sm"
-                                    className="text-xs w-full h-7 min-w-24"
+                                    className="text-xs w-full h-7 min-w-24 cursor-pointer"
                                 >
                                     View Profile
                                 </Button>
