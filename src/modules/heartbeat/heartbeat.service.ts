@@ -1,10 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import API from '@/providers/api'
-import {
-    HookMutationOptions,
-    HookQueryOptions,
-} from '@/providers/repositories/data-layer-factory'
+import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
+import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
 import { HeartbeatResponse, HeartbeatStatusChange } from './heartbeat.types'
 
