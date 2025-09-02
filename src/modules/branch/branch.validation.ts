@@ -22,10 +22,10 @@ export const branchSchema = z.object({
     barangay: z.string({ error: 'Barangay is required' }).min(1),
     region: z.string({ error: 'Region is required' }).min(1),
     postal_code: z.string({ error: 'Postal code is required' }).min(4),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
+    latitude: z.coerce.number<number>().optional(),
+    longitude: z.coerce.number<number>().optional(),
     is_main_branch: z.boolean().catch(false),
-    media_id: z.string().min(1, 'Branch Image is required'),
+    media_id: z.string('Branch Photo is Required').min(1),
     media: z.any(),
 })
 
