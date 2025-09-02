@@ -22,19 +22,19 @@ const CollateralPage = () => {
 
     useSubscribe(`collateral.created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['collateral', 'resource-query'],
+            queryKey: ['collateral', paginated],
         })
     )
 
     useSubscribe(`collateral.updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['collateral', 'resource-query'],
+            queryKey: ['collateral', paginated],
         })
     )
 
     useSubscribe(`collateral.deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['collateral', 'resource-query'],
+            queryKey: ['collateral', paginated],
         })
     )
 

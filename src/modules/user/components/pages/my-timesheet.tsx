@@ -16,19 +16,19 @@ const MyTimesheetPage = () => {
 
     useSubscribe(`timesheet.create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'me'],
+            queryKey: ['timesheet', paginated, 'me'],
         })
     })
 
     useSubscribe(`timesheet.update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'me'],
+            queryKey: ['timesheet', paginated, 'me'],
         })
     })
 
     useSubscribe(`timesheet.delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'me'],
+            queryKey: ['timesheet', paginated, 'me'],
         })
     })
 

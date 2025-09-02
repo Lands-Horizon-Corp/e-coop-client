@@ -33,10 +33,7 @@ export const AccountClassificationPage = () => {
                             'Account classification created successfully'
                         )
                         invalidateQueries.invalidateQueries({
-                            queryKey: [
-                                'account-classification',
-                                'resource-query',
-                            ],
+                            queryKey: ['account-classification', paginated],
                         })
                     },
                 }}
@@ -52,7 +49,7 @@ export const AccountClassificationPage = () => {
                             invalidateQueries.invalidateQueries({
                                 queryKey: [
                                     'account-classification',
-                                    'resource-query',
+                                    paginated,
                                     branchId,
                                     organizationId,
                                 ],

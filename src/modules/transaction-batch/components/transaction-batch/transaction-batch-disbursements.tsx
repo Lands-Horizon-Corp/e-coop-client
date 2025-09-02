@@ -40,7 +40,7 @@ const TransactionBatchDisbursementTransaction = ({
         `disbursement-transaction.transaction-batch.${transactionBatchId}.create`,
         () => {
             queryClient.invalidateQueries({
-                queryKey: ['disbursement-transaction', 'resource-query'],
+                queryKey: ['disbursement-transaction', paginated],
             })
         }
     )
@@ -49,7 +49,7 @@ const TransactionBatchDisbursementTransaction = ({
         `disbursement-transaction.transaction-batch.${transactionBatchId}.update`,
         () => {
             queryClient.invalidateQueries({
-                queryKey: ['disbursement-transaction', 'resource-query'],
+                queryKey: ['disbursement-transaction', paginated],
             })
         }
     )

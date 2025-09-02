@@ -22,19 +22,19 @@ const TransactionBatchPage = () => {
 
     useSubscribe(`transaction_batch.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['transaction-batch', 'resource-query'],
+            queryKey: ['transaction-batch', paginated],
         })
     })
 
     useSubscribe(`transaction_batch.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['transaction-batch', 'resource-query'],
+            queryKey: ['transaction-batch', paginated],
         })
     })
 
     useSubscribe(`transaction_batch.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['transaction-batch', 'resource-query'],
+            queryKey: ['transaction-batch', paginated],
         })
     })
 

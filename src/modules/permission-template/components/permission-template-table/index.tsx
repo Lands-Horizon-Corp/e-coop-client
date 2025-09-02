@@ -160,10 +160,7 @@ const PermissionTemplateTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: [
-                                    'permission-template',
-                                    'resource-query',
-                                ],
+                                queryKey: ['permission-template', paginated],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyPermissionTemplates({

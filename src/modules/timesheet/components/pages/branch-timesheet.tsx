@@ -20,19 +20,19 @@ const BranchTimesheetPage = () => {
 
     useSubscribe(`timesheet.create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'all'],
+            queryKey: ['timesheet', paginated, 'all'],
         })
     })
 
     useSubscribe(`timesheet.update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'all'],
+            queryKey: ['timesheet', paginated, 'all'],
         })
     })
 
     useSubscribe(`timesheet.delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['timesheet', 'resource-query', 'me'],
+            queryKey: ['timesheet', paginated, 'me'],
         })
     })
 

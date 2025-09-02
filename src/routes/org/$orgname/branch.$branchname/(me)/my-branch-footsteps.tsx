@@ -23,19 +23,19 @@ function RouteComponent() {
 
     useSubscribe(`footstep.create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me-branch'],
+            queryKey: ['footstep', paginated, 'me-branch'],
         })
     })
 
     useSubscribe(`footstep.update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me-branch'],
+            queryKey: ['footstep', paginated, 'me-branch'],
         })
     })
 
     useSubscribe(`footstep.delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me-branch'],
+            queryKey: ['footstep', paginated, 'me-branch'],
         })
     })
 

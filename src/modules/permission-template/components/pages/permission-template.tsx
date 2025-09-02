@@ -23,19 +23,19 @@ const PermissionTemplatePage = () => {
 
     useSubscribe(`permission_template.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['permission-template', 'resource-query'],
+            queryKey: ['permission-template', paginated],
         })
     })
 
     useSubscribe(`permission_template.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['permission-template', 'resource-query'],
+            queryKey: ['permission-template', paginated],
         })
     })
 
     useSubscribe(`permission_template.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['permission-template', 'resource-query'],
+            queryKey: ['permission-template', paginated],
         })
     })
 

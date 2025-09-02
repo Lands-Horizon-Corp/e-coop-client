@@ -106,7 +106,7 @@ export const QuickTransferTransactionForm = ({
                 queryClient.invalidateQueries({
                     queryKey: [
                         'member-accounting-ledger',
-                        'resource-query',
+                        paginated,
                         'member',
                         transaction.member_profile_id,
                     ],

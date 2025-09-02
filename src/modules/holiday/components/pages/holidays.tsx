@@ -22,19 +22,19 @@ const HolidayPage = () => {
 
     useSubscribe(`holiday.created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['holiday', 'resource-query'],
+            queryKey: ['holiday', paginated],
         })
     )
 
     useSubscribe(`bills_and_coins.updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['holiday', 'resource-query'],
+            queryKey: ['holiday', paginated],
         })
     )
 
     useSubscribe(`bills_and_coins.deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['holiday', 'resource-query'],
+            queryKey: ['holiday', paginated],
         })
     )
 

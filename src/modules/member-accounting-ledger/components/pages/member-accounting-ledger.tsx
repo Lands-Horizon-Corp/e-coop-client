@@ -18,19 +18,19 @@ const MemberAccountingLedgerPage = () => {
 
     useSubscribe(`member_accounting_ledger.created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-profile', 'resource-query'],
+            queryKey: ['member-profile', paginated],
         })
     })
 
     useSubscribe(`member_profile.updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-profile', 'resource-query'],
+            queryKey: ['member-profile', paginated],
         })
     })
 
     useSubscribe(`member_profile.deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['member-profile', 'resource-query'],
+            queryKey: ['member-profile', paginated],
         })
     })
 

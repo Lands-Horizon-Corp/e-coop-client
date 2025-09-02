@@ -120,7 +120,7 @@ export const useFilteredPaginatedAccount = ({
     options?: HookQueryOptions<IAccountPaginated, Error>
 }) => {
     return useQuery<IAccountPaginated, Error>({
-        queryKey: ['account', 'resource-query', mode, query],
+        queryKey: ['account', paginated, mode, query],
         queryFn: async () => {
             let url: string | undefined
             const targetUrl = mode ? `${mode}/search` : 'search'

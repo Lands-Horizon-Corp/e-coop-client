@@ -51,7 +51,7 @@ const NewMemberProfileKanban = (_props: Props) => {
             queryKey: ['member-profile', 'all', 'pending'],
         })
         queryClient.invalidateQueries({
-            queryKey: ['member-profile', 'resource-query'],
+            queryKey: ['member-profile', paginated],
         })
     })
 

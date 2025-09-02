@@ -22,19 +22,19 @@ const DisbursementPage = () => {
 
     useSubscribe(`disbursement.create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['dibursement', 'resource-query'],
+            queryKey: ['dibursement', paginated],
         })
     )
 
     useSubscribe(`disbursement.update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['dibursement', 'resource-query'],
+            queryKey: ['dibursement', paginated],
         })
     )
 
     useSubscribe(`disbursement.delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['dibursement', 'resource-query'],
+            queryKey: ['dibursement', paginated],
         })
     )
 

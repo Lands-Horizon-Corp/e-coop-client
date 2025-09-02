@@ -18,19 +18,19 @@ const EmployeeFootstepPage = () => {
 
     useSubscribe(`footstep.create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'branch'],
+            queryKey: ['footstep', paginated, 'branch'],
         })
     })
 
     useSubscribe(`footstep.update.user.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'branch'],
+            queryKey: ['footstep', paginated, 'branch'],
         })
     })
 
     useSubscribe(`footstep.delete.user.${branch_id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'branch'],
+            queryKey: ['footstep', paginated, 'branch'],
         })
     })
 

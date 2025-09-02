@@ -160,7 +160,7 @@ const DisbursementTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['disbursement', 'resource-query'],
+                                queryKey: ['disbursement', paginated],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyDisbursements({
