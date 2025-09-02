@@ -173,5 +173,19 @@
         "vite-plugin-dts": "^4.5.4",
         "vite-plugin-manifest-sri": "^0.2.0",
         "vite-tsconfig-paths": "^5.1.4"
+    },
+    "overrides": {
+        "cross-spawn": "^7.0.3",
+        "tmp": "^0.2.4",
+        "electron": "^32.0.0",
+        "prismjs": "^1.30.0",
+        "got": "^11.8.5"
+    },
+    "resolutions": {
+        "cross-spawn": "^7.0.3",
+        "tmp": "^0.2.4",
+        "electron": "^32.0.0",
+        "prismjs": "^1.30.0",
+        "got": "^11.8.5"
     }
 }
