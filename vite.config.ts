@@ -7,7 +7,8 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { compression } from 'vite-plugin-compression2'
 import UnheadVite from '@unhead/addons/vite'
-
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -25,10 +26,21 @@ export default defineConfig({
             gzipSize: true,
             brotliSize: true,
         }) as PluginOption,
-       compression(),
+        compression(),
+        NodeGlobalsPolyfillPlugin({
+          buffer: true,
+          process: true,
+        }),
     ],
+    resolve: {
+      alias: {
+        stream: "stream-browserify",
+        crypto: "crypto-browserify",
+      },
+    },
     build: {
       rollupOptions: {
+        plugins: [rollupNodePolyFill()],
         output: {
           manualChunks(id) {
             if (id.includes("node_modules")) {
@@ -37,7 +49,7 @@ export default defineConfig({
           }
         }
       }
-    }
+    },
     // define: {
     //     "process.env": process.env,
     // },
