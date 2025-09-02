@@ -368,6 +368,17 @@ export function Galaxy() {
                             <bufferGeometry>
                                 <bufferAttribute
                                     attach="attributes-position"
+                                    args={[
+                                        new Float32Array([
+                                            line.point1.x,
+                                            line.point1.y,
+                                            line.point1.z,
+                                            line.point2.x,
+                                            line.point2.y,
+                                            line.point2.z,
+                                        ]),
+                                        3,
+                                    ]}
                                     count={2}
                                     array={
                                         new Float32Array([

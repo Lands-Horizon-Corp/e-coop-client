@@ -5,7 +5,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, type PluginOption } from "vite";
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import tailwindcss from '@tailwindcss/vite'
-import viteImagemin from 'vite-plugin-imagemin'
+import { compression } from 'vite-plugin-compression2'
 import UnheadVite from '@unhead/addons/vite'
 
 
@@ -25,44 +25,19 @@ export default defineConfig({
             gzipSize: true,
             brotliSize: true,
         }) as PluginOption,
-        viteImagemin({
-        gifsicle: {
-          optimizationLevel: 7,
-          interlaced: false,
-        },
-        optipng: {
-          optimizationLevel: 7,
-        },
-        mozjpeg: {
-          quality: 20,
-        },
-        pngquant: {
-          quality: [0.8, 0.9],
-          speed: 4,
-        },
-        svgo: {
-          plugins: [
-            {
-              name: 'removeViewBox',
-            },
-            {
-              name: 'removeEmptyAttrs',
-              active: false,
-            },
-          ],
-        },
-      }),
+       compression(),
     ],
     build: {
-        sourcemap: false,
-        rollupOptions: {
-            output: {
-                advancedChunks: {
-                    groups: [{ name: 'vendor', test: /\/react(?:-dom)?/ }],
-                },
-            },
-        },
-    },
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              return "vendor";
+            }
+          }
+        }
+      }
+    }
     // define: {
     //     "process.env": process.env,
     // },
