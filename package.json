@@ -82,6 +82,7 @@
         "@typescript-eslint/parser": "^8.41.0",
         "@yudiel/react-qr-scanner": "^2.3.1",
         "axios": "^1.11.0",
+        "browser-image-compression": "^2.0.2",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",

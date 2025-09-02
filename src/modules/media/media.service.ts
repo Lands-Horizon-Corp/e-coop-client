@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { AxiosProgressEvent } from 'axios'
 
+import { imageCompressed } from '@/helpers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
@@ -22,8 +23,10 @@ export const uploadMedia = async (
     file: File,
     onProgress?: (progressEvent: AxiosProgressEvent) => void
 ): Promise<IMedia> => {
+    // Check if file is an image and compress it
+
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('file', await imageCompressed(file))
     const response = await API.uploadFile<IMedia>(
         `${route}`,
         formData,
