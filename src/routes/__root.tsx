@@ -13,7 +13,7 @@ import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
 
 import CookieConsent from '@/components/cookie-consent'
-// import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
+import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
 import ConfirmModal from '@/components/modals/confirm-modal'
 import InfoModal from '@/components/modals/info-modal'
 import { Toaster } from '@/components/ui/sonner'
@@ -83,9 +83,7 @@ function RootLayout() {
                 <Outlet />
                 <ConnectionProvider />
                 <CookieConsent />
-
-                {/*
-                <ImagePreviewModal /> */}
+                <ImagePreviewModal />
                 <ConfirmModal />
                 <InfoModal />
                 <TanStackRouterDevtools />

@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
 import { Navigate } from '@tanstack/react-router'
-import { toast } from 'sonner'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import {

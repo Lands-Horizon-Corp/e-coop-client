@@ -96,6 +96,7 @@ const Signature = ({
 
     const handleGetSignatureTrimmedData = () => {
         if (signatureRef.current) {
+            console.log(signatureRef.current.getCanvas().toDataURL())
             if (signatureRef.current.isEmpty()) {
                 toast.warning(
                     'Drawing required: Please create a drawing before rendering.'
@@ -103,7 +104,7 @@ const Signature = ({
                 return
             }
             const trimmedData = signatureRef.current
-                .getTrimmedCanvas()
+                .getCanvas()
                 .toDataURL('image/png')
 
             const convertedData = dataUrlToFile(

@@ -131,11 +131,11 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     className="grow px-5 flex !overflow-y-auto"
                 >
                     <ResizablePanel
-                        defaultSize={50}
-                        maxSize={50}
+                        defaultSize={57}
+                        maxSize={70}
                         className="p-2 !h-fit !overflow-y-auto ecoop-scroll"
                     >
-                        <div className="flex w-full bg-secondary/10 p-5 rounded-2xl flex-col gap-y-2">
+                        <div className="flex w-full !h-full bg-secondary/10 p-5 rounded-2xl  flex-col gap-y-2">
                             <TransactionViewNoMemberSelected
                                 onClick={(e) => {
                                     e.preventDefault()

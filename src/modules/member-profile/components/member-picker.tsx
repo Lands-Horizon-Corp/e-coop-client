@@ -23,6 +23,7 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
 import { useModalState } from '@/hooks/use-modal-state'
+import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { IMemberProfile, useGetPaginatedMemberProfiles } from '..'
 
@@ -80,23 +81,23 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             },
         })
 
-        // useShortcut(
-        //     'Enter',
-        //     (event) => {
-        //         event?.preventDefault()
-        //         if (
-        //             !value &&
-        //             !disabled &&
-        //             !isPending &&
-        //             !isLoading &&
-        //             !isFetching &&
-        //             allowShorcutCommand
-        //         ) {
-        //             setState(true)
-        //         }
-        //     },
-        //     { disableTextInputs: true }
-        // )
+        useShortcut(
+            'Enter',
+            (event) => {
+                event?.preventDefault()
+                if (
+                    !value &&
+                    !disabled &&
+                    !isPending &&
+                    !isLoading &&
+                    !isFetching &&
+                    allowShorcutCommand
+                ) {
+                    setState(true)
+                }
+            },
+            { disableTextInputs: true }
+        )
 
         return (
             <>

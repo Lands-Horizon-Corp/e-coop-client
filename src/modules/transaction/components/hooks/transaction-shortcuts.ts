@@ -30,7 +30,7 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
         setOpenMemberPicker,
         setSelectedMember,
         isMediaOpen,
-        // hasFocusedGeneralLedger,
+        hasFocusedGeneralLedger,
     } = props
 
     const canOpenPaymentModal = useCallback(
@@ -46,15 +46,14 @@ export const useTransactionShortcuts = (props: UsePaymentsShortcutsTypes) => {
         ]
     )
     const canResetAll = useCallback(() => {
-        // if (
-        //     hasSelectedTransactionId &&
-        //     openSuccessModal &&
-        //     openPaymentWithTransactionModal &&
-        //     isMediaOpen &&
-        //     hasFocusedGeneralLedger
-        // )
-        //     return
-        if (openPaymentWithTransactionModal) return
+        if (
+            hasSelectedTransactionId &&
+            openSuccessModal &&
+            openPaymentWithTransactionModal &&
+            isMediaOpen &&
+            hasFocusedGeneralLedger
+        )
+            return
         handleResetAll()
     }, [openPaymentWithTransactionModal, handleResetAll])
 

@@ -106,14 +106,14 @@ const TransactionCurrentPaymentEntry = ({
         generalLedgerBasedTransaction &&
         generalLedgerBasedTransaction.data.length > 0
     return (
-        <div className="h-full flex flex-col gap-y-2 shadow-md">
+        <div className="h-full flex flex-col gap-y-2">
             <div className="flex items-center gap-x-2">
-                <div className="to-indigo-background/10 flex-grow rounded-xl border-[0.1px] border-primary/30 bg-gradient-to-br from-primary/10 p-2">
+                <div className=" flex-grow rounded-xl py-2">
                     <div className="flex items-center justify-between gap-x-2">
                         <label className="text-sm font-bold uppercase text-muted-foreground">
                             Total Amount
                         </label>
-                        <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                        <p className="text-lg font-bold text-primary dark:text-primary">
                             ₱{' '}
                             {totalAmount
                                 ? commaSeparators(totalAmount.toString())

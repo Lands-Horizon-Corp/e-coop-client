@@ -5,7 +5,9 @@ import { toast } from 'sonner'
 import { IMedia } from '@/modules/media'
 import { IMemberJointAccount } from '@/modules/member-joint-account'
 import { IMemberProfile } from '@/modules/member-profile'
-import MemberOverallInfo from '@/modules/member-profile/components/member-infos/view-member-info'
+import MemberOverallInfo, {
+    MemberOverallInfoModal,
+} from '@/modules/member-profile/components/member-infos/view-member-info'
 import HoveruserInfo from '@/modules/user/components/hover-user-info'
 import { useImagePreview } from '@/store/image-preview-store'
 
@@ -35,6 +37,8 @@ import {
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
+import { useModalState } from '@/hooks/use-modal-state'
+
 import { TEntityId } from '@/types'
 
 import TransactionModalJointMember from './transaction-modal-joint-member'
@@ -54,7 +58,7 @@ const TransactionMemberProfile = ({
     hasTransaction,
     viewOnly = false,
 }: MemberProfileTransactionViewProps) => {
-    // const infoModal = useModalState(false)
+    const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
 
     const [selectedJointMember, setSelectedJointMember] =
@@ -62,39 +66,33 @@ const TransactionMemberProfile = ({
 
     onSelectedJointMember?.(selectedJointMember?.id)
 
-    const handleMedia = (media: IMedia | undefined) => {
+    const handleMedia = (media: IMedia[] | undefined) => {
+        console.log('media', media)
         if (media) {
             onOpen({
-                Images: [media],
+                Images: media,
             })
         } else {
             toast.warning('No media available for preview.')
         }
     }
 
-    const handleImageClick = (media: IMedia | undefined, type: string) => {
-        if (type === 'profile') {
-            handleMedia(media)
-        }
-        if (type === 'signature') {
-            handleMedia(media)
-        }
-    }
-
     if (!memberInfo) return null
-
+    const memberMedias = [memberInfo.media, memberInfo.signature_media].filter(
+        (media): media is IMedia => !!media
+    )
     return (
         <>
-            {/* <MemberOverallInfoModal
+            <MemberOverallInfoModal
                 {...infoModal}
                 overallInfoProps={{
                     memberProfileId: memberInfo.id,
                 }}
-            /> */}
+            />
             <GradientBackground
                 gradientOnly
                 opacity={0}
-                className="w-full ecoop-scroll overflow-x-auto h-fit flex-col space-y-2 border-[0.5px] min-w-[300px] overscroll-contain bg-sidebar p-5"
+                className="w-full ecoop-scroll overflow-x-auto h-fit flex-col space-y-2 min-w-[300px] overscroll-contain bg-background p-5"
             >
                 <div className="flex w-full  space-x-5 items-center h-fit ">
                     <div className="flex items-center h-fit gap-y-1 flex-col min-w-[6vw] max-w-[5vw]">
@@ -102,6 +100,7 @@ const TransactionMemberProfile = ({
                             <PreviewMediaWrapper media={memberInfo.media}>
                                 <ImageDisplay
                                     className="size-24"
+                                    onClick={() => handleMedia(memberMedias)}
                                     src={memberInfo.media?.download_url}
                                     fallback={
                                         memberInfo.first_name.charAt(0) ?? '-'
@@ -156,10 +155,7 @@ const TransactionMemberProfile = ({
                                             onClick={(e) => {
                                                 e.preventDefault()
                                                 e.stopPropagation()
-                                                handleImageClick(
-                                                    memberInfo.signature_media,
-                                                    'signature'
-                                                )
+                                                handleMedia(memberMedias)
                                             }}
                                         >
                                             <SignatureLightIcon size={25} />
