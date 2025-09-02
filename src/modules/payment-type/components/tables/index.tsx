@@ -159,7 +159,7 @@ export const PaymentTypeTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['payment_type', paginated],
+                                queryKey: ['payment_type', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteMany({

@@ -157,7 +157,7 @@ const CollateralTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['collateral', paginated],
+                                queryKey: ['collateral', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyCollateral({

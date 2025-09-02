@@ -31,6 +31,8 @@ export const OrganizationSchema = z.object({
         .optional(),
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
+    media: z.any().optional(),
+    cover_media: z.any().optional(),
 })
 
 export const EditOrganizationSchema = OrganizationSchema.extend({

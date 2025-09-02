@@ -395,7 +395,7 @@ export const useUpdateUserOrganizationSettings = createMutationFactory<
     mutationFn: (args) => updateUserOrganizationSettings(args),
     invalidationFn: (args) => {
         args.queryClient.invalidateQueries({
-            queryKey: ['employee', paginated],
+            queryKey: ['employee', 'paginated'],
         })
         args.queryClient.invalidateQueries({
             queryKey: ['user-organization', args.resultData.id],

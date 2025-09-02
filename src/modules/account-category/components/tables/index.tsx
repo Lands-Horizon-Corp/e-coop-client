@@ -171,7 +171,7 @@ const AccountCategoryTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['account-category', paginated],
+                                queryKey: ['account-category', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteMany(selectedData.map((data) => data.id)),

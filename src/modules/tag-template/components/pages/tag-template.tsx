@@ -22,19 +22,19 @@ const TagTemplatePage = () => {
 
     useSubscribe(`tag_template.created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['tag-template', paginated],
+            queryKey: ['tag-template', 'paginated'],
         })
     )
 
     useSubscribe(`tag_template.updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['tag-template', paginated],
+            queryKey: ['tag-template', 'paginated'],
         })
     )
 
     useSubscribe(`tag_template.deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: ['tag-template', paginated],
+            queryKey: ['tag-template', 'paginated'],
         })
     )
 

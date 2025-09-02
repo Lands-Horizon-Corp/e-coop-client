@@ -160,7 +160,7 @@ const TagTemplateTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['tag-template', paginated],
+                                queryKey: ['tag-template', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyTagTemplate({

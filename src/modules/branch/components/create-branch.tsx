@@ -146,8 +146,8 @@ function OrganizationHeader({
 
     return (
         <GradientBackground
-            imageBackgroundClassName="size-100 !opacity-20 !-z-40"
-            className="p-7  border"
+            imageBackgroundClassName="size-100 !opacity-20 !-z-40 "
+            className="p-7 "
             mediaUrl={organization?.cover_media?.url}
         >
             <div className="flex gap-x-5 z-[999]">

@@ -25,7 +25,7 @@ const PaymentType = () => {
                     defaultValues: {},
                     onSuccess: () => {
                         // invalidateQueries.invalidateQueries({
-                        //     queryKey: ['payment-type', paginated],
+                        //     queryKey: ['payment-type', 'paginated'],
                         // })
                         toast.success('Payment type created successfully')
                     },

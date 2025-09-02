@@ -53,7 +53,7 @@ const historyTabs: {
                     queryClient.invalidateQueries({
                         queryKey: [
                             'member-occupation-history',
-                            paginated,
+                            'paginated',
                             profileId,
                         ],
                     })
@@ -84,7 +84,7 @@ const historyTabs: {
                     queryClient.invalidateQueries({
                         queryKey: [
                             'member-center-history',
-                            paginated,
+                            'paginated',
                             profileId,
                         ],
                     })
@@ -115,7 +115,7 @@ const historyTabs: {
                     queryClient.invalidateQueries({
                         queryKey: [
                             'member-classification-history',
-                            paginated,
+                            'paginated',
                             profileId,
                         ],
                     })
@@ -146,7 +146,7 @@ const historyTabs: {
                     queryClient.invalidateQueries({
                         queryKey: [
                             'member-department-history',
-                            paginated,
+                            'paginated',
                             profileId,
                         ],
                     })
@@ -175,7 +175,11 @@ const historyTabs: {
                 `member_type_history.create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
-                        queryKey: ['member-type-history', paginated, profileId],
+                        queryKey: [
+                            'member-type-history',
+                            'paginated',
+                            profileId,
+                        ],
                     })
             )
 
@@ -204,7 +208,7 @@ const historyTabs: {
                     queryClient.invalidateQueries({
                         queryKey: [
                             'member-group-history',
-                            paginated,
+                            'paginated',
                             profileId,
                         ],
                     })
@@ -234,7 +238,7 @@ const historyTabs: {
                     queryClient.invalidateQueries({
                         queryKey: [
                             'member-gender-history',
-                            paginated,
+                            'paginated',
                             profileId,
                         ],
                     })
@@ -264,7 +268,7 @@ const historyTabs: {
     //                 queryClient.invalidateQueries({
     //                     queryKey: [
     //                         'member-mutualfunds-history',
-    //                         paginated,
+    //                        'paginated',
     //                         profileId,
     //                     ],
     //                 })

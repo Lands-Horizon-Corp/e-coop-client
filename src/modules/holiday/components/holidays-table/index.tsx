@@ -157,7 +157,7 @@ const HolidaysTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['holiday', paginated],
+                                queryKey: ['holiday', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyHoliday({

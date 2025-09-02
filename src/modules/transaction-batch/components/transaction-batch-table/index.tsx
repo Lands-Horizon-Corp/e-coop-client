@@ -182,7 +182,7 @@ const TransactionBatchTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['transaction-batch', paginated],
+                                queryKey: ['transaction-batch', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyTransactionBatches({

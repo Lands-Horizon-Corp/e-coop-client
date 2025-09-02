@@ -154,7 +154,7 @@ const LoanStatusTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['loan-status', paginated],
+                                queryKey: ['loan-status', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyLoanStatus({

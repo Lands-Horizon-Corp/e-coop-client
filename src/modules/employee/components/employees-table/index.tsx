@@ -160,7 +160,7 @@ const EmployeesTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['employee', paginated],
+                                queryKey: ['employee', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyEmployees({

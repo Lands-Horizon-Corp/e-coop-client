@@ -172,7 +172,10 @@ const AccountClassificationTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () => {
                             queryClient.invalidateQueries({
-                                queryKey: ['account-classification', paginated],
+                                queryKey: [
+                                    'account-classification',
+                                    'paginated',
+                                ],
                             })
                         },
                         onDelete: (selectedData) =>

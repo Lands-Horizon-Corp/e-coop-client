@@ -160,7 +160,7 @@ const LoanPurposeTable = ({
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['loan-purpose', paginated],
+                                queryKey: ['loan-purpose', 'paginated'],
                             }),
                         onDelete: (selectedData) =>
                             deleteManyLoanPurpose({

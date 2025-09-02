@@ -20,19 +20,19 @@ const CashCountPage = () => {
 
     useSubscribe(`cash_count.create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: [cashCountBaseKey, paginated],
+            queryKey: [cashCountBaseKey, 'paginated'],
         })
     )
 
     useSubscribe(`cash_count.update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: [cashCountBaseKey, paginated],
+            queryKey: [cashCountBaseKey, 'paginated'],
         })
     )
 
     useSubscribe(`cash_count.delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
-            queryKey: [cashCountBaseKey, paginated],
+            queryKey: [cashCountBaseKey, 'paginated'],
         })
     )
 

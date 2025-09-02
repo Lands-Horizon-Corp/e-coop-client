@@ -6,33 +6,25 @@ import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { orgBannerList } from '@/assets/pre-organization-banner-background'
-import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
-import { useUploadMedia } from '@/modules/media'
+import { IMedia } from '@/modules/media'
 import {
-    IOrganization,
+    ICreateOrganizationResponse,
     OrganizationSchema,
     TOrganizationFormValues,
 } from '@/modules/organization'
 import { useCreateOrganization } from '@/modules/organization'
 import { IOrganizationCategoryRequest } from '@/modules/organization-category'
 import SubscriptionPlanPicker from '@/modules/subscription-plan/components/subscription-plan/subscription'
-import UserAvatar from '@/modules/user/components/user-avatar'
 import { useCategoryStore } from '@/store/onboarding/category-store'
-import { PlusIcon, ReplaceIcon } from 'lucide-react'
 
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     LoadingSpinnerIcon,
     NextIcon,
     UnavailableIcon,
     VerifiedPatchIcon,
 } from '@/components/icons'
-import Image from '@/components/image'
-import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import TextEditor from '@/components/text-editor'
-import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -42,13 +34,12 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
-import FileUploader from '@/components/ui/file-uploader'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import { PhoneInput } from '@/components/ui/phone-input'
-import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useLocationInfo } from '@/hooks/use-location-info'
@@ -76,8 +67,6 @@ const OrganizationForm = () => {
     const { countryCode } = useLocationInfo()
 
     const [activeStep, setActiveStep] = useState(0)
-    const [openImagePicker, setOpenImagePicker] = useState(false)
-
     const { selectedCategories, clearCategories, setOnOpenCategoryPicker } =
         useCategoryStore()
 
@@ -105,10 +94,12 @@ const OrganizationForm = () => {
         mutateAsync: createOrganization,
     } = useCreateOrganization({
         options: {
-            onSuccess: (data: IOrganization) => {
+            onSuccess: (data) => {
+                const value = data as unknown as ICreateOrganizationResponse
                 navigate({
-                    to: `/onboarding/create-branch/${data.id}`,
+                    to: `/onboarding/create-branch/${value.organization.id}`,
                 })
+                toast.success('Organization created successfully')
                 clearCategories()
             },
             onError: (error) => {
@@ -118,47 +109,10 @@ const OrganizationForm = () => {
         },
     })
 
-    const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
-        useUploadMedia({
-            options: {
-                onError: (error) => {
-                    console.error('Error uploading photo:', error)
-                    toast.error('Failed to upload photo. Please try again.')
-                },
-                onSuccess: (data) => {
-                    toast.success('Photo uploaded successfully!')
-                    return data
-                },
-            },
-        })
-
     const handleSubmit = async (data: TOrganizationFormValues) => {
-        let logoMedia = ''
-        let CoverMedia = ''
-
-        if (data.media_id || data.cover_media_id) {
-            const media = base64ImagetoFile(
-                data.media_id,
-                `bg-banner.jpg`
-            ) as File
-            const uploadedPhoto = await uploadPhoto({ file: media })
-            if (data.cover_media_id) {
-                const coverMeddia = base64ImagetoFile(
-                    data.cover_media_id,
-                    `bg-banner.jpg`
-                ) as File
-                const uploadedCoverPhoto = await uploadPhoto({
-                    file: coverMeddia,
-                })
-                CoverMedia = uploadedCoverPhoto.id
-            }
-            logoMedia = uploadedPhoto.id
-        }
-
+        console.log('Form Data:', data)
         const requestData = {
             ...data,
-            media_id: logoMedia,
-            cover_media_id: CoverMedia,
             organization_categories: selectedCategories.map((catItem) => ({
                 category_id: catItem.id,
             })) as IOrganizationCategoryRequest[],
@@ -203,25 +157,26 @@ const OrganizationForm = () => {
         setActiveStep((prev) => prev + 1)
     }
 
-    const HeaderTitleDisplay =
-        form.watch('name') === ''
-            ? 'Sample Organization Title'
-            : form.watch('name')
+    // const HeaderTitleDisplay =
+    //     form.watch('name') === ''
+    //         ? 'Sample Organization Title'
+    //         : form.watch('name')
 
-    const DescriptionDisplay =
-        form.watch('description') === ''
-            ? 'This is sample description for your banner'
-            : form.watch('description')
+    // const DescriptionDisplay =
+    //     form.watch('description') === ''
+    //         ? 'This is sample description for your banner'
+    //         : form.watch('description')
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>
                 <Card
                     className={cn(
-                        'min-h-full w-full min-w-full rounded-none border-none bg-transparent'
+                        'min-h-full w-full min-w-full shadow-none rounded-none border-none bg-transparent'
                     )}
                 >
                     <CardHeader className="text-lg">
@@ -235,142 +190,81 @@ const OrganizationForm = () => {
                     >
                         {activeStep === 0 && (
                             <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Upload Organization Logo"
-                                    name="media_id"
-                                    className="col-span-4"
-                                    render={({ field }) => {
-                                        return (
-                                            <FormControl>
-                                                <div className="relative mx-auto size-fit">
-                                                    <SinglePictureUploadModal
-                                                        open={openImagePicker}
-                                                        onOpenChange={
-                                                            setOpenImagePicker
-                                                        }
-                                                        onPhotoChoose={(
-                                                            newImage
-                                                        ) => {
+                                <div className="md:col-span-4 flex gap-2 w-full">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="media_id"
+                                        label="Organization Photo"
+                                        className=" "
+                                        render={({ field }) => {
+                                            const value = form.watch('media')
+                                            return (
+                                                <ImageField
+                                                    {...field}
+                                                    placeholder="Upload Organization Photo"
+                                                    className=""
+                                                    value={
+                                                        value
+                                                            ? (value as IMedia)
+                                                                  .download_url
+                                                            : value
+                                                    }
+                                                    onChange={(newImage) => {
+                                                        if (newImage)
                                                             field.onChange(
-                                                                newImage
+                                                                newImage.id
                                                             )
-                                                        }}
-                                                        defaultImage={
-                                                            field.value ?? ''
-                                                        }
-                                                    />
+                                                        else
+                                                            field.onChange(
+                                                                undefined
+                                                            )
 
-                                                    <UserAvatar
-                                                        fallback={`-`}
-                                                        fallbackClassName="!text-3xl"
-                                                        src={field.value ?? ''}
-                                                        className={cn(
-                                                            'size-36 !rounded-none'
-                                                        )}
-                                                    />
-                                                    <ActionTooltip
-                                                        tooltipContent={
-                                                            field.value
-                                                                ? 'Replace'
-                                                                : 'Insert'
-                                                        }
-                                                        align="center"
-                                                        side="right"
-                                                    >
-                                                        <Button
-                                                            variant="secondary"
-                                                            onClick={(e) => {
-                                                                e.preventDefault()
-                                                                setOpenImagePicker(
-                                                                    true
-                                                                )
-                                                            }}
-                                                            className="absolute bottom-2 right-2 size-fit w-fit rounded-full border border-transparent p-1"
-                                                        >
-                                                            {field.value ? (
-                                                                <ReplaceIcon />
-                                                            ) : (
-                                                                <PlusIcon />
-                                                            )}
-                                                        </Button>
-                                                    </ActionTooltip>
-                                                </div>
-                                            </FormControl>
-                                        )
-                                    }}
-                                />
-                                <FormFieldWrapper
-                                    className="md:col-span-4"
-                                    control={form.control}
-                                    name="cover_media_id"
-                                    label="Upload Banner Background"
-                                    render={({ field }) => {
-                                        const hasNoImageSelected =
-                                            form.watch('media_id') === ''
-                                        return (
-                                            <div>
-                                                <GradientBackground
-                                                    className="w-full"
-                                                    mediaUrl={field.value}
-                                                >
-                                                    <div className="flex min-h-32 cursor-pointer items-center justify-between gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                                        <Image
-                                                            style={{
-                                                                opacity:
-                                                                    hasNoImageSelected
-                                                                        ? 0.1
-                                                                        : 1,
-                                                            }}
-                                                            className={`size-24 rounded-lg`}
-                                                            src={
-                                                                form.watch(
-                                                                    'media_id'
-                                                                ) ||
-                                                                orgBannerList[0]
-                                                            }
-                                                        />
-                                                        <div className="flex grow flex-col">
-                                                            <p className="touch-pan-up text-start text-2xl font-bold">
-                                                                {
-                                                                    HeaderTitleDisplay
-                                                                }
-                                                            </p>
-                                                            <PlainTextEditor
-                                                                className="overflow max-h-7 min-w-96 max-w-[30rem] overflow-y-hidden"
-                                                                content={
-                                                                    DescriptionDisplay
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </GradientBackground>
-                                                <div className="flex w-full justify-end py-2">
-                                                    <FileUploader
-                                                        maxFiles={1}
-                                                        buttonOnly
-                                                        accept={{
-                                                            'image/png': [
-                                                                '.png',
-                                                            ],
-                                                            'image/jpeg': [
-                                                                '.jpg',
-                                                                '.jpeg',
-                                                            ],
-                                                        }}
-                                                        selectedPhotos={(
-                                                            selectedPhoto
-                                                        ) => {
+                                                        form.setValue(
+                                                            'media',
+                                                            newImage
+                                                        )
+                                                    }}
+                                                />
+                                            )
+                                        }}
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="cover_media_id"
+                                        label="Organization Cover Photo"
+                                        render={({ field }) => {
+                                            const value =
+                                                form.watch('cover_media')
+                                            return (
+                                                <ImageField
+                                                    {...field}
+                                                    placeholder="Upload Organization Photo"
+                                                    value={
+                                                        value
+                                                            ? (value as IMedia)
+                                                                  .download_url
+                                                            : value
+                                                    }
+                                                    onChange={(newImage) => {
+                                                        if (newImage)
                                                             field.onChange(
-                                                                selectedPhoto
+                                                                newImage.id
                                                             )
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )
-                                    }}
-                                />
+                                                        else
+                                                            field.onChange(
+                                                                undefined
+                                                            )
+
+                                                        form.setValue(
+                                                            'cover_media',
+                                                            newImage
+                                                        )
+                                                    }}
+                                                />
+                                            )
+                                        }}
+                                    />
+                                </div>
                                 <div className="col-span-4 flex w-full items-center gap-x-2">
                                     <CategoriesItem className="grow" />
                                     <Button
@@ -555,11 +449,7 @@ const OrganizationForm = () => {
                         {isFinalStep && (
                             <Button
                                 type="submit"
-                                disabled={
-                                    !isFinalStep ||
-                                    isCreating ||
-                                    isUploadingPhoto
-                                }
+                                disabled={!isFinalStep || isCreating}
                                 variant={isFinalStep ? 'default' : 'outline'}
                                 className="w-full"
                             >

@@ -33,7 +33,7 @@ export const AccountCategoryPage = () => {
                         invalidateQueries.invalidateQueries({
                             queryKey: [
                                 'account-category',
-                                paginated,
+                                'paginated',
                                 organizationId,
                                 branchId,
                             ],
@@ -52,7 +52,7 @@ export const AccountCategoryPage = () => {
                             invalidateQueries.invalidateQueries({
                                 queryKey: [
                                     'account-category',
-                                    paginated,
+                                    'paginated',
                                     organizationId,
                                     branchId,
                                 ],
