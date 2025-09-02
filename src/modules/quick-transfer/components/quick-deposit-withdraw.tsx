@@ -68,8 +68,8 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
             </div>
             <ResizablePanelGroup direction="horizontal" className="!h-[80vh]">
                 <ResizablePanel
-                    defaultSize={30}
-                    maxSize={30}
+                    defaultSize={40}
+                    maxSize={40}
                     minSize={0}
                     className=" !overflow-auto p-5 ecoop-scroll  "
                 >
