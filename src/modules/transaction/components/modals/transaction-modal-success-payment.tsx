@@ -94,7 +94,7 @@ const TransactionModalSuccessPayment = ({
                     <span className="size-16 bg-primary/20 flex items-center justify-center rounded-full">
                         <CheckFillIcon size={25} className=" text-primary" />
                     </span>
-                    <p className="font-bold text-2xl text-white">
+                    <p className="font-bold text-2xl dark:text-white">
                         {paymentType.charAt(0).toUpperCase() +
                             paymentType.slice(1)}{' '}
                         {focusTypePayment === 'payment' ? '' : 'payment'}{' '}

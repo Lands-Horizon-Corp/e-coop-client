@@ -1,7 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { useTheme } from '@/providers/theme-provider'
+// import { useTheme } from '@/providers/theme-provider'
 import ReactSignatureCanvas from 'react-signature-canvas'
 
 interface DrawSignatureProps {
@@ -13,7 +13,7 @@ const DrawSignature = ({
     signatureRef,
     isFullScreenMode,
 }: DrawSignatureProps) => {
-    const { resolvedTheme: theme } = useTheme()
+    // const { resolvedTheme: theme } = useTheme()
     const SignaturePadParent = useRef<HTMLDivElement | null>(null)
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
@@ -32,7 +32,7 @@ const DrawSignature = ({
         return () => window.removeEventListener('resize', updateDimensions)
     }, [isFullScreenMode])
 
-    const penColor = theme === 'dark' ? 'white' : 'black'
+    // const penColor = theme === 'dark' ? 'white' : 'black'
 
     return (
         <div
@@ -40,13 +40,13 @@ const DrawSignature = ({
             className={cn('w-full', isFullScreenMode ? 'h-full' : 'h-[300px]')}
         >
             <ReactSignatureCanvas
-                penColor={penColor}
+                // penColor={theme === 'dark' ? 'white' : 'black'}
                 ref={signatureRef}
                 clearOnResize={true}
                 velocityFilterWeight={isFullScreenMode ? 0 : 0.9}
                 canvasProps={{
                     className:
-                        'sigCanvas w-full h-full rounded-lg border dark:bg-secondary',
+                        'sigCanvas w-full h-full rounded-lg border dark:bg-white',
                     width: dimensions.width,
                     height: dimensions.height,
                 }}
