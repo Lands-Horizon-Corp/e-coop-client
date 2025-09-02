@@ -1,34 +1,24 @@
-import { useState } from 'react'
-
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
-import { IMedia, useUploadMedia } from '@/modules/media'
+import { IMedia } from '@/modules/media'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import {
-    HouseIcon,
-    LoadingSpinnerIcon,
-    PlusIcon,
-    ReplaceIcon,
-} from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
+import { HouseIcon, LoadingSpinnerIcon } from '@/components/icons'
 import MapPicker from '@/components/map/map-picker/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import TextEditor from '@/components/text-editor'
-import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PhoneInput } from '@/components/ui/phone-input'
@@ -69,9 +59,6 @@ export const CreateUpdateBranchByOrgForm = ({
     onSuccess,
 }: ICreateBranchFormProps) => {
     const { countryCode } = useLocationInfo()
-
-    const [openImagePicker, setOpenImagePicker] = useState(false)
-
     const form = useForm<TBranchSchema>({
         resolver: standardSchemaResolver(branchSchema),
         reValidateMode: 'onChange',
@@ -116,38 +103,13 @@ export const CreateUpdateBranchByOrgForm = ({
             },
         })
 
-    const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
-        useUploadMedia()
-
-    const handleUploadPhoto = async (mediaId: TEntityId) => {
-        const uploadedMedia = await uploadPhoto({
-            file: base64ImagetoFile(mediaId, `bg-banner.jpg`) as File,
-        })
-        return uploadedMedia.id
-    }
-
     const handleSubmit = form.handleSubmit(async (data) => {
         try {
             if (organizationId && branchId) {
-                const mediaFormDB = await handleUploadPhoto(
-                    data.media.download_url ?? ''
-                )
-                const dataWithMedia = { ...data, media_id: mediaFormDB }
-                updateBranch({ id: branchId, payload: dataWithMedia })
+                updateBranch({ id: branchId, payload: data })
                 return
             } else {
-                console.log(data.media.download_url)
-                const media = await handleUploadPhoto(
-                    data.media.download_url ?? ''
-                )
-                const request = {
-                    ...data,
-                    media_id: media,
-                }
-                createBranch(
-                    { payload: request, organizationId },
-                    { onSuccess }
-                )
+                createBranch({ payload: data, organizationId }, { onSuccess })
             }
         } catch (error) {
             console.error(error)
@@ -156,13 +118,11 @@ export const CreateUpdateBranchByOrgForm = ({
 
     const isBranchOnChanged = form.formState.isDirty
 
-    const isLoading =
-        isPedingCreateBranch || isLoadingUpdateBranch || isUploadingPhoto
+    const isLoading = isPedingCreateBranch || isLoadingUpdateBranch
 
-    const updateDisabled =
-        isLoadingUpdateBranch || isUploadingPhoto || !isBranchOnChanged
+    const updateDisabled = isLoadingUpdateBranch || !isBranchOnChanged
 
-    const createDisabled = isPedingCreateBranch || isUploadingPhoto
+    const createDisabled = isPedingCreateBranch
 
     const combinedError = error
 
@@ -399,77 +359,29 @@ export const CreateUpdateBranchByOrgForm = ({
                         <div className="grid grid-cols-1">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Branch Logo"
-                                name="media"
-                                className="col-span-4"
+                                name="media_id"
+                                label="Branch Photo"
                                 render={({ field }) => {
-                                    const media =
-                                        (form.getValues('media') as IMedia) ??
-                                        ''
-                                    return (
-                                        <FormControl>
-                                            <div className="relative mx-auto size-fit">
-                                                <SinglePictureUploadModal
-                                                    open={openImagePicker}
-                                                    onOpenChange={
-                                                        setOpenImagePicker
-                                                    }
-                                                    onPhotoChoose={(
-                                                        newImage
-                                                    ) => {
-                                                        form.setValue(
-                                                            'media',
-                                                            {
-                                                                download_url:
-                                                                    newImage,
-                                                            },
-                                                            {
-                                                                shouldDirty: true,
-                                                            }
-                                                        )
-                                                    }}
-                                                    defaultImage={
-                                                        media.download_url
-                                                    }
-                                                />
+                                    const value = form.watch('media')
 
-                                                <ImageDisplay
-                                                    fallbackClassName="!text-3xl"
-                                                    src={
-                                                        media.download_url ??
-                                                        media.url
-                                                    }
-                                                    className="size-48"
-                                                />
-                                                <ActionTooltip
-                                                    tooltipContent={
-                                                        field.value
-                                                            ? 'Replace'
-                                                            : 'Insert'
-                                                    }
-                                                    align="center"
-                                                    side="right"
-                                                >
-                                                    <Button
-                                                        variant="secondary"
-                                                        disabled={isLoading}
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
-                                                            setOpenImagePicker(
-                                                                true
-                                                            )
-                                                        }}
-                                                        className="absolute bottom-2 right-2 size-fit w-fit rounded-full border border-transparent p-1"
-                                                    >
-                                                        {field.value ? (
-                                                            <ReplaceIcon />
-                                                        ) : (
-                                                            <PlusIcon />
-                                                        )}
-                                                    </Button>
-                                                </ActionTooltip>
-                                            </div>
-                                        </FormControl>
+                                    return (
+                                        <ImageField
+                                            {...field}
+                                            placeholder="Upload Branch Photo"
+                                            value={
+                                                value
+                                                    ? (value as IMedia)
+                                                          .download_url
+                                                    : value
+                                            }
+                                            onChange={(newImage) => {
+                                                if (newImage)
+                                                    field.onChange(newImage.id)
+                                                else field.onChange(undefined)
+
+                                                form.setValue('media', newImage)
+                                            }}
+                                        />
                                     )
                                 }}
                             />
