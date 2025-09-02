@@ -6,10 +6,10 @@ import {
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { IBank } from '../bank'
 import { IMemberProfile } from '../member-profile/member-profile.types'
-import { entityIdSchema } from '@/validation'
 
 export interface IMemberBankCardRequest {
     account_number: string

@@ -138,11 +138,7 @@ const PaymentWithTransactionForm = ({
                             label="Amount"
                             className="col-span-2"
                             render={({ field }) => {
-                                return (
-                                    <TransactionAmountField
-                                        {...field}
-                                    />
-                                )
+                                return <TransactionAmountField {...field} />
                             }}
                         />
                         <FormFieldWrapper

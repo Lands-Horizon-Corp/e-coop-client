@@ -6,9 +6,9 @@ import {
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { IMemberProfile } from '../member-profile/member-profile.types'
-import { entityIdSchema } from '@/validation'
 
 export interface IMemberDamayanExtensionEntryRequest {
     member_profile_id: TEntityId

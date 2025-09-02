@@ -6,9 +6,9 @@ import {
     ITimeStamps,
     TEntityId,
 } from '@/types/common'
+import { entityIdSchema } from '@/validation'
 
 import { IMemberTypeReference } from '../member-type-reference/member-type-reference.types'
-import { entityIdSchema } from '@/validation'
 
 export interface IMemberTypeReferenceInterestRateByUltimaMembershipDatePerYearRequest {
     member_type_reference_id: TEntityId

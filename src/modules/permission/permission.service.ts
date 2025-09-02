@@ -4,7 +4,8 @@ const {
     apiCrudHooks,
     apiCrudService,
     baseQueryKey: permissionBaseKey,
-} = createDataLayerFactory<{ id: string }, unknown>({ // NO CRUD HERE
+} = createDataLayerFactory<{ id: string }, unknown>({
+    // NO CRUD HERE
     url: '/api/v1/permission',
     baseKey: 'permission',
 })
