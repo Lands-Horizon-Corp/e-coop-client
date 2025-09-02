@@ -20,11 +20,11 @@ export const { useCreate, useUpdateById, useDeleteById, useGetPaginated } =
     apiCrudHooks
 export const { deleteMany } = apiCrudService
 
-const { API } = createAPIRepository('/api/v1/invitation-code')
+const { API, route } = createAPIRepository('/api/v1/invitation-code')
 
 // API Functions
 export const verifyInvitationCode = async (code: string) => {
-    const response = await API.get<IInvitationCode>(`/code/${code}`)
+    const response = await API.get<IInvitationCode>(`${route}/code/${code}`)
     return response.data
 }
 export const useVerifyInvitationCode = (code: string) => {
