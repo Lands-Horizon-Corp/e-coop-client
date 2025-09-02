@@ -26,10 +26,4 @@ export interface IFinancialStatementAccountGroupingRequest {
 
     name: string
     description?: string
-
-    from_code?: number
-    to_code?: number
-
-    branch_id: TEntityId
-    organization_id: TEntityId
 }

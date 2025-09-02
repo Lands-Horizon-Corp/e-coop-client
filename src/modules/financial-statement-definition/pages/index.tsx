@@ -166,6 +166,7 @@ const FinancialStatementDefinition = () => {
                     Financial Statement Definition
                 </h1>
             </div>
+
             <span
                 className="absolute left-1/2 top-[30%] size-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{
@@ -176,6 +177,13 @@ const FinancialStatementDefinition = () => {
                     opacity: 0.02,
                 }}
             />
+            {!hasFinancialGropings &&
+                !isLoadingGeneralLedgerAccountsGrouping && (
+                    <p className="text-center italic text-sm text-secondary-foreground/80 w-full p-25">
+                        No Financial Statement Definition found.
+                    </p>
+                )}
+
             {isLoadingGeneralLedgerAccountsGrouping ? (
                 <div className="flex flex-col gap-2 mb-5 w-full">
                     {Array.from({ length: 4 }).map((_, index) => (

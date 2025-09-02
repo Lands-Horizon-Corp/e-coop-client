@@ -1,9 +1,9 @@
 import { Path, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import {
     IFinancialStatementAccountGrouping,
     IFinancialStatementAccountGroupingRequest,
@@ -44,10 +44,6 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
     disabledFields,
     onSuccess,
 }: IFinancialStatementGroupingFormProps) => {
-    const { currentAuth: user } = useAuthUserWithOrgBranch()
-    const organizationId = user?.user_organization?.organization?.id
-    const branchId = user?.user_organization?.branch?.id
-
     const form = useForm<TFinancialStatementGroupingFormValues>({
         resolver: standardSchemaResolver(financialStatementGroupingSchema),
         reValidateMode: 'onChange',
@@ -57,12 +53,13 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
         },
     })
 
-    console.log(defaultValues)
-
     const updateMutation = useUpdateById({
         options: {
             onSuccess: (data) => {
                 onSuccess?.(data)
+                toast.success(
+                    'Financial statement grouping updated successfully'
+                )
             },
         },
     })
@@ -72,11 +69,7 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
             if (groupingId) {
                 updateMutation.mutate({
                     id: groupingId,
-                    payload: {
-                        organization_id: organizationId,
-                        branch_id: branchId,
-                        ...formData,
-                    },
+                    payload: formData,
                 })
             }
         }
@@ -162,32 +155,6 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
                             )}
                         />
                     </div>
-                    <FormFieldWrapper
-                        control={form.control}
-                        name="from_code"
-                        label="From Code"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                id={field.name}
-                                placeholder="From Code"
-                                disabled={isDisabled(field.name)}
-                            />
-                        )}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        name="to_code"
-                        label="To Code"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                id={field.name}
-                                placeholder="To Code"
-                                disabled={isDisabled(field.name)}
-                            />
-                        )}
-                    />
                 </fieldset>
                 {!readOnly && (
                     <>

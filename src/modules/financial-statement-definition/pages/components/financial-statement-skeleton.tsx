@@ -7,7 +7,6 @@ export const FinancialStatementSkeleton = () => {
                 <Skeleton className="h-5 w-1/2" />
                 <Skeleton className="h-5 w-3/4" />
             </div>
-            <Skeleton className="size-5" />
         </Skeleton>
     )
 }

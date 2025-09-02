@@ -16,12 +16,6 @@ export const financialStatementGroupingSchema = z.object({
     credit: z.coerce
         .number<number>({ error: 'Credit must be a number' })
         .optional(),
-    from_code: z.coerce
-        .number<number>({ error: 'From Code must be a number' })
-        .optional(),
-    to_code: z.coerce
-        .number<number>({ error: 'To Code must be a number' })
-        .optional(),
 })
 
 export type TFinancialStatementGroupingFormValues = z.infer<
