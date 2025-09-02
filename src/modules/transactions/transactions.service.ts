@@ -31,7 +31,7 @@ export const useFilteredPaginatedTransaction = ({
         ...options,
         queryKey: [
             'transaction',
-            paginated,
+            getPaginated,
             mode,
             memberProfileId,
             userId,
