@@ -195,7 +195,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 <div className="ecoop-scroll w-[40%] py-2">
                     <TransactionHistory fullPath={fullPath} />
                     <TransactionActions
-                        paymentLabel="Add Payment"
+                        paymentLabel="Payment"
                         paymentOnClick={() => {
                             setFocusTypePayment('payment')
                         }}
