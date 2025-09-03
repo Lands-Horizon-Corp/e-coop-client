@@ -13,6 +13,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { useCreate, useUpdateById } from '../member-center.service'
@@ -29,14 +31,9 @@ export interface IMemberCenterCreateUpdateFormProps
 
 const MemberCenterCreateUpdateForm = ({
     memberCenterId,
-    readOnly,
     className,
-    defaultValues,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberCenterCreateUpdateFormProps) => {
-    const isUpdateMode = Boolean(memberCenterId)
-
     const form = useForm<TMemberCenterForm>({
         resolver: standardSchemaResolver(MemberCenterSchema),
         reValidateMode: 'onChange',
@@ -44,54 +41,56 @@ const MemberCenterCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const {
-        error: createError,
-        isPending: isCreating,
-        mutate: createMemberCenter,
-        reset: createReset,
-    } = useCreate({
+    const createMutation = useCreate({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
-    const {
-        error: updateError,
-        isPending: isUpdating,
-        mutate: updateMemberCenter,
-        reset: updateReset,
-    } = useUpdateById({
+    const updateMutation = useUpdateById({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
-    const onSubmit = (formData: TMemberCenterForm) => {
-        if (isUpdateMode && memberCenterId) {
-            updateMemberCenter({ id: memberCenterId, payload: formData })
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberCenterForm>({
+            form,
+            ...formProps,
+            autoSave: !!memberCenterId,
+        })
+
+    const onSubmit = form.handleSubmit((formData) => {
+        if (memberCenterId) {
+            updateMutation.mutate({ id: memberCenterId, payload: formData })
         } else {
-            createMemberCenter(formData)
+            createMutation.mutate(formData)
         }
-    }
+    }, handleFocusError)
 
-    const combinedError = serverRequestErrExtractor({
-        error: createError || updateError,
-    })
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = memberCenterId ? updateMutation : createMutation
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isCreating || isUpdating || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -105,9 +104,7 @@ const MemberCenterCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Member Center Name"
                                     autoComplete="member-center-name"
-                                    disabled={
-                                        isCreating || isUpdating || readOnly
-                                    }
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -122,9 +119,7 @@ const MemberCenterCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Description"
                                     autoComplete="member-center-description"
-                                    disabled={
-                                        isCreating || isUpdating || readOnly
-                                    }
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -132,15 +127,14 @@ const MemberCenterCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={combinedError}
-                    readOnly={readOnly}
-                    isLoading={isCreating || isUpdating}
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={isUpdateMode ? 'Update' : 'Create'}
+                    submitText={memberCenterId ? 'Update' : 'Create'}
                     onReset={() => {
                         form.reset()
-                        createReset()
-                        updateReset()
+                        reset()
                     }}
                 />
             </form>

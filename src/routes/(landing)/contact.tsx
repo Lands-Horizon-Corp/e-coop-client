@@ -87,7 +87,7 @@ const ContactPage = () => {
                 </h1>
                 <h2 className="max-w-[1100px] text-center text-[min(24px,3.5vw)] font-medium">
                     Got any questions about the product or scaling on our
-                    platform? We’re here to help. Chat our friendly team 24/7
+                    platform? We're here to help. Chat our friendly team 24/7
                     and get onboard in less than 5 minutes.
                 </h2>
                 <div className="flex w-full flex-col justify-evenly md:flex-row">

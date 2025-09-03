@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -59,6 +59,7 @@ const FinancialStatementCreateUpdateForm = ({
     financialStatementAccountsGroupingId,
     financialStatementId,
     onSuccess,
+    ...formProps
 }: IFinancialStatementCreateUpdateFormProps) => {
     const form = useForm<IFinancialStatementDefinitionFormValues>({
         resolver: standardSchemaResolver(FinancialStatementDefinitionSchema),
@@ -68,9 +69,6 @@ const FinancialStatementCreateUpdateForm = ({
             ...defaultValues,
         },
     })
-
-    const isDisabled = (field: Path<IFinancialStatementDefinitionFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
 
     const {
         mutate: CreateFinancialStatementDefinition,
@@ -91,7 +89,16 @@ const FinancialStatementCreateUpdateForm = ({
         options: { onSuccess: onSuccess },
     })
 
-    const handleSubmit = form.handleSubmit((data) => {
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<IFinancialStatementDefinitionFormValues>({
+            form,
+            ...formProps,
+            readOnly,
+            disabledFields,
+            autoSave: !!financialStatementId,
+        })
+
+    const onSubmit = form.handleSubmit((data) => {
         if (!financialStatementAccountsGroupingId) {
             form.setError('root', {
                 type: 'manual',
@@ -123,20 +130,15 @@ const FinancialStatementCreateUpdateForm = ({
             }
             CreateFinancialStatementDefinition(CreateRequest)
         }
-    })
+    }, handleFocusError)
 
     const isLoading = isCreating || isUpdating
-
-    const isFormChange = form.formState.isDirty
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>
             <form
-                onSubmit={handleSubmit}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn('w-full space-y-4', className)}
             >
                 <FormFieldWrapper
@@ -296,13 +298,11 @@ const FinancialStatementCreateUpdateForm = ({
                                     size="sm"
                                     type="submit"
                                     disabled={
-                                        isLoading || financialStatementId
-                                            ? !isFormChange
-                                            : isCreating
+                                        isLoading || !form.formState.isDirty
                                     }
                                     className="w-full self-end px-8 sm:w-fit"
                                 >
-                                    {isCreating ? (
+                                    {isLoading ? (
                                         <LoadingSpinner />
                                     ) : financialStatementId ? (
                                         'Update'

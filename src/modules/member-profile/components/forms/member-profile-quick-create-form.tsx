@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -30,6 +30,8 @@ import { PhoneInput } from '@/components/ui/phone-input'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm } from '@/types'
 
 import { IMemberProfile } from '../..'
@@ -45,13 +47,8 @@ export interface IMemberProfileQuickCreateFormProps
         IForm<Partial<TMemberProfileQuickFormValues>, IMemberProfile> {}
 
 const MemberProfileQuickCreateForm = ({
-    readOnly,
     className,
-    hiddenFields,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberProfileQuickCreateFormProps) => {
     const form = useForm<TMemberProfileQuickFormValues>({
         resolver: standardSchemaResolver(QuickCreateMemberProfileSchema),
@@ -65,9 +62,9 @@ const MemberProfileQuickCreateForm = ({
             is_mutual_fund_member: false,
             is_micro_finance_member: false,
             create_new_user: false,
-            ...defaultValues,
+            ...formProps.defaultValues,
             birthdate: toInputDateString(
-                defaultValues?.birthdate ?? new Date()
+                formProps.defaultValues?.birthdate ?? new Date()
             ),
         },
     })
@@ -76,11 +73,11 @@ const MemberProfileQuickCreateForm = ({
         mutate,
         error: rawError,
         isPending,
-        reset: reset,
+        reset,
     } = useQuickCreateMemberProfile({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
             meta: {
                 invalidates: [['member-profile']],
             },
@@ -88,6 +85,14 @@ const MemberProfileQuickCreateForm = ({
     })
 
     const error = serverRequestErrExtractor({ error: rawError })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberProfileQuickFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+            preventExitOnDirty: true,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         mutate(
@@ -97,21 +102,19 @@ const MemberProfileQuickCreateForm = ({
             },
             { onSuccess: (data) => form.reset(data) }
         )
-    })
+    }, handleFocusError)
 
     const createNewUser = form.watch('create_new_user')
-
-    const isDisabled = (field: Path<TMemberProfileQuickFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4"
                 >
                     <div className="space-y-4">
@@ -122,7 +125,7 @@ const MemberProfileQuickCreateForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 name="member_type_id"
-                                label="Member Type *"
+                                label="Member Type"
                                 className="col-span-1"
                                 render={({ field }) => (
                                     <MemberTypeCombobox
@@ -326,7 +329,7 @@ const MemberProfileQuickCreateForm = ({
                             <FormFieldWrapper
                                 name="is_mutual_fund_member"
                                 control={form.control}
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 className="col-span-1"
                                 render={({ field }) => (
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
@@ -361,7 +364,7 @@ const MemberProfileQuickCreateForm = ({
                             <FormFieldWrapper
                                 name="is_micro_finance_member"
                                 control={form.control}
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 className="col-span-1"
                                 render={({ field }) => (
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
@@ -400,7 +403,7 @@ const MemberProfileQuickCreateForm = ({
                 <Separator />
 
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
                 >
                     <FormFieldWrapper
@@ -493,7 +496,7 @@ const MemberProfileQuickCreateForm = ({
                 </span>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Create"

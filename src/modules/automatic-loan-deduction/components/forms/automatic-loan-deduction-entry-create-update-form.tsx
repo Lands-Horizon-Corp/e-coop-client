@@ -1,5 +1,4 @@
-// src/forms/automatic-loan-deduction-form.tsx
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -8,18 +7,17 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { MoonIcon, NotAllowedIcon, PlusIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IForm, TEntityId } from '@/types'
 
@@ -40,19 +38,13 @@ export interface IAutomaticLoanDeductionFormProps
         Error
     > {
     automaticLoanDeductionId?: TEntityId
-    readOnly?: boolean
     className?: string
-    disabledFields?: Path<TAutomaticLoanDeductionSchema>[]
 }
 
 export const AutomaticLoanDeductionCreateUpdateForm = ({
-    readOnly,
     className,
     automaticLoanDeductionId,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IAutomaticLoanDeductionFormProps) => {
     const form = useForm<TAutomaticLoanDeductionSchema>({
         resolver: standardSchemaResolver(AutomaticLoanDeductionSchema),
@@ -67,26 +59,33 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
             max_amount: 0,
             anum: 1,
             ct: 0,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateAutomaticLoanDeduction({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
     const updateMutation = useUpdateAutomaticLoanDeductionById({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TAutomaticLoanDeductionSchema>({
+            form,
+            ...formProps,
+            autoSave: automaticLoanDeductionId !== undefined,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (automaticLoanDeductionId) {
@@ -97,24 +96,25 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
-    const { error: rawError, isPending } =
-        automaticLoanDeductionId !== undefined ? updateMutation : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = automaticLoanDeductionId !== undefined ? updateMutation : createMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
-
-    const isDisabled = (field: Path<TAutomaticLoanDeductionSchema>) =>
-        readOnly || disabledFields?.includes(field) || false
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="gap-4 grid grid-cols-1 sm:grid-cols-2"
                 >
                     <div className="space-y-2">
@@ -172,6 +172,7 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                     { shouldDirty: true }
                                                 )
                                             }}
+                                            disabled={isDisabled(field.name)}
                                         />
                                     )}
                                 />
@@ -194,6 +195,7 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                     { shouldDirty: true }
                                                 )
                                             }}
+                                            disabled={isDisabled(field.name)}
                                         />
                                     )}
                                 />
@@ -363,6 +365,9 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                 onCheckedChange={field.onChange}
                                                 className="order-1 after:absolute after:inset-0"
                                                 aria-describedby={`${field.name}-desc`}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-2">
@@ -397,6 +402,9 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                 onCheckedChange={field.onChange}
                                                 className="order-1 after:absolute after:inset-0"
                                                 aria-describedby={`${field.name}-desc`}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-2">
@@ -431,6 +439,9 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                 onCheckedChange={field.onChange}
                                                 className="order-1 after:absolute after:inset-0"
                                                 aria-describedby={`${field.name}-desc`}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-2">
@@ -459,28 +470,17 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                     </div>
                 </fieldset>
 
-                <FormErrorMessage errorMessage={error} />
-
-                <Separator className="my-4" />
-                <div className="flex justify-end gap-x-2">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => form.reset()}
-                        className="px-6"
-                    >
-                        Reset
-                    </Button>
-                    <Button type="submit" disabled={isPending} className="px-6">
-                        {isPending ? (
-                            <LoadingSpinner />
-                        ) : automaticLoanDeductionId ? (
-                            'Update'
-                        ) : (
-                            'Create'
-                        )}
-                    </Button>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={automaticLoanDeductionId ? 'Update' : 'Create'}
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

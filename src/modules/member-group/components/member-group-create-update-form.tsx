@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -6,14 +6,13 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IForm } from '@/types'
 import { IClassProps } from '@/types'
@@ -33,12 +32,8 @@ export interface IMemberGroupFormProps
 
 const MemberGroupCreateUpdateForm = ({
     groupId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberGroupFormProps) => {
     const form = useForm<TGroupFormValues>({
         resolver: standardSchemaResolver(MemberGroupSchema),
@@ -47,14 +42,23 @@ const MemberGroupCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            // organization_id: '',
-            // branch_id: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const createMutation = useCreate({ options: { onSuccess, onError } })
-    const updateMutation = useUpdateById({ options: { onSuccess, onError } })
+    const createMutation = useCreate({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
+    const updateMutation = useUpdateById({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TGroupFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!groupId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (groupId) {
@@ -62,25 +66,25 @@ const MemberGroupCreateUpdateForm = ({
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
-    const { error: rawError, isPending } = groupId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = groupId ? updateMutation : createMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
-
-    const isDisabled = (field: Path<TGroupFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -115,35 +119,17 @@ const MemberGroupCreateUpdateForm = ({
                         />
                     </fieldset>
                 </fieldset>
-                <FormErrorMessage errorMessage={error} />
-                <div>
-                    <Separator className="my-2 sm:my-4" />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            onClick={() => form.reset()}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            disabled={isPending}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {isPending ? (
-                                <LoadingSpinner />
-                            ) : groupId ? (
-                                'Update'
-                            ) : (
-                                'Create'
-                            )}
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={groupId ? 'Update' : 'Create'}
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -15,6 +15,8 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import SignatureField from '@/components/ui/signature-field'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -36,13 +38,9 @@ export interface IBatchFundingCreateFormProps
 }
 
 const BatchFundingCreateForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
     transactionBatchId,
-    onError,
-    onSuccess,
+    ...formProps
 }: IBatchFundingCreateFormProps) => {
     const form = useForm<TBatchFundingFormValues>({
         resolver: standardSchemaResolver(BatchFundingSchema),
@@ -54,12 +52,9 @@ const BatchFundingCreateForm = ({
             description: '',
             provided_by_user_id: '',
             transaction_batch_id: transactionBatchId,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
-
-    const isDisabled = (field: Path<TBatchFundingFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
 
     const {
         mutate: createBatchFunding,
@@ -68,28 +63,36 @@ const BatchFundingCreateForm = ({
         isPending,
     } = useCreateBatchFunding({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TBatchFundingFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit(async (formData) => {
         createBatchFunding({
             ...formData,
             transaction_batch_id: transactionBatchId,
         })
-    })
+    }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -193,7 +196,7 @@ const BatchFundingCreateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Create"

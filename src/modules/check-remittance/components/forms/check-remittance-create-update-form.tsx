@@ -1,10 +1,11 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { toInputDateString } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { IMedia } from '@/modules/media'
 
@@ -17,6 +18,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -42,12 +45,8 @@ export interface ICheckRemittanceFormProps
 
 const CheckRemittanceCreateUpdateForm = ({
     checkRemittanceId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onSuccess,
-    onError,
+    ...formProps
 }: ICheckRemittanceFormProps) => {
     const form = useForm<TFormValues>({
         resolver: standardSchemaResolver(CheckRemittanceSchema),
@@ -59,19 +58,32 @@ const CheckRemittanceCreateUpdateForm = ({
             account_name: '',
             amount: 1,
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
             date_entry: toInputDateString(
-                defaultValues?.date_entry ?? new Date()
+                formProps.defaultValues?.date_entry ?? new Date()
             ),
         },
     })
 
     const createMutation = useCreateCheckRemittance({
-        options: { onSuccess, onError },
+        options: {
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
+        },
     })
     const updateMutation = useUpdateCheckRemittanceById({
-        options: { onSuccess, onError },
+        options: {
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
+        },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TFormValues>({
+            form,
+            ...formProps,
+            autoSave: checkRemittanceId !== undefined,
+        })
 
     const onSubmit = form.handleSubmit((payload) => {
         if (checkRemittanceId) {
@@ -79,23 +91,25 @@ const CheckRemittanceCreateUpdateForm = ({
         } else {
             createMutation.mutate(payload)
         }
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = checkRemittanceId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = checkRemittanceId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -184,6 +198,7 @@ const CheckRemittanceCreateUpdateForm = ({
                             <CountryCombobox
                                 {...field}
                                 defaultValue={field.value}
+                                disabled={isDisabled(field.name)}
                                 onChange={(country) =>
                                     field.onChange(country.alpha2)
                                 }
@@ -200,6 +215,7 @@ const CheckRemittanceCreateUpdateForm = ({
                                 <ImageField
                                     {...field}
                                     placeholder="Upload Check Photo"
+                                    disabled={isDisabled(field.name)}
                                     value={
                                         value
                                             ? (value as IMedia).download_url
@@ -234,7 +250,7 @@ const CheckRemittanceCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={checkRemittanceId ? 'Update' : 'Create'}

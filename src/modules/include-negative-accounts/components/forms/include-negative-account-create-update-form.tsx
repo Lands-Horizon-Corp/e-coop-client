@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -12,6 +12,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IForm, TEntityId } from '@/types'
 
@@ -34,19 +36,13 @@ export interface IIncludeNegativeAccountFormProps
         Error
     > {
     includeNegativeAccountId?: TEntityId
-    readOnly?: boolean
     className?: string
-    disabledFields?: Path<TFormValues>[]
 }
 
 const IncludeNegativeAccountCreateUpdateForm = ({
     includeNegativeAccountId,
-    defaultValues,
-    onError,
-    onSuccess,
-    readOnly,
     className,
-    disabledFields,
+    ...formProps
 }: IIncludeNegativeAccountFormProps) => {
     const form = useForm<TFormValues>({
         resolver: standardSchemaResolver(IncludeNegativeAccountsSchema),
@@ -54,15 +50,15 @@ const IncludeNegativeAccountCreateUpdateForm = ({
             computation_sheet_id: '',
             account_id: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateIncludeNegativeAccounts({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -70,11 +66,18 @@ const IncludeNegativeAccountCreateUpdateForm = ({
     const updateMutation = useUpdateIncludeNegativeAccountsById({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!includeNegativeAccountId,
+        })
 
     const onSubmit = form.handleSubmit((data) => {
         if (includeNegativeAccountId) {
@@ -85,7 +88,7 @@ const IncludeNegativeAccountCreateUpdateForm = ({
         } else {
             createMutation.mutate(data)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -95,17 +98,15 @@ const IncludeNegativeAccountCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
                 >
                     <FormFieldWrapper
@@ -123,6 +124,7 @@ const IncludeNegativeAccountCreateUpdateForm = ({
                                         shouldDirty: true,
                                     })
                                 }}
+                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
@@ -144,7 +146,7 @@ const IncludeNegativeAccountCreateUpdateForm = ({
 
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={includeNegativeAccountId ? 'Update' : 'Create'}

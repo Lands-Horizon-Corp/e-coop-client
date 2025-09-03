@@ -1,9 +1,10 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IBatchFundingRequest } from '@/modules/batch-funding'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
 import { IMedia } from '@/modules/media'
@@ -15,6 +16,8 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import SignatureField from '@/components/ui/signature-field'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm } from '@/types'
 
@@ -34,12 +37,8 @@ export interface ITransactionBatchCreateFormProps
         > {}
 
 const TransactionBatchCreateForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: ITransactionBatchCreateFormProps) => {
     const form = useForm<TTransactionBatchFormValues>({
         resolver: standardSchemaResolver(TransactionBatchCreateSchema),
@@ -49,37 +48,44 @@ const TransactionBatchCreateForm = ({
             name: '',
             amount: 0,
             provided_by_user_id: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const isDisabled = (field: Path<TTransactionBatchFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     const {
         mutate: createBatch,
-        error,
+        error: rawError,
         isPending,
         reset,
     } = useCreateTransactionBatch({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TTransactionBatchFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
+
     const onSubmit = form.handleSubmit(async (formData) => {
         createBatch(formData)
-    })
+    }, handleFocusError)
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -170,6 +176,9 @@ const TransactionBatchCreateForm = ({
                                                         newImage
                                                     )
                                                 }}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                         )
                                     }}
@@ -195,7 +204,7 @@ const TransactionBatchCreateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Create"

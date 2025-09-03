@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -21,7 +21,7 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -43,6 +43,7 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
     defaultValues,
     disabledFields,
     onSuccess,
+    ...formProps
 }: IFinancialStatementGroupingFormProps) => {
     const form = useForm<TFinancialStatementGroupingFormValues>({
         resolver: standardSchemaResolver(financialStatementGroupingSchema),
@@ -64,6 +65,14 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
         },
     })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TFinancialStatementGroupingFormValues>({
+            form,
+            ...formProps,
+            readOnly,
+            disabledFields,
+        })
+
     const onSubmit = form.handleSubmit(
         (formData: TFinancialStatementGroupingFormValues) => {
             if (groupingId) {
@@ -72,21 +81,16 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
                     payload: formData,
                 })
             }
-        }
+        },
+        handleFocusError
     )
 
     const { error, isPending, reset } = updateMutation
 
-    const isDisabled = (field: Path<TFinancialStatementGroupingFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >

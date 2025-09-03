@@ -1,9 +1,10 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -14,7 +15,7 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -40,12 +41,8 @@ export interface IDisbursementFormProps
 
 const DisbursementCreateUpdateForm = ({
     disbursementId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IDisbursementFormProps) => {
     const form = useForm<TDisbursementFormValues>({
         resolver: standardSchemaResolver(DisbursementSchema),
@@ -55,16 +52,29 @@ const DisbursementCreateUpdateForm = ({
             name: '',
             icon: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateDisbursement({
-        options: { onSuccess, onError },
+        options: {
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
+        },
     })
     const updateMutation = useUpdateDisbursementById({
-        options: { onSuccess, onError },
+        options: {
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
+        },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TDisbursementFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!disbursementId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (disbursementId) {
@@ -72,27 +82,25 @@ const DisbursementCreateUpdateForm = ({
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = disbursementId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = disbursementId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TDisbursementFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -120,6 +128,7 @@ const DisbursementCreateUpdateForm = ({
                                 <IconCombobox
                                     {...field}
                                     value={field.value as TIcon}
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -143,7 +152,7 @@ const DisbursementCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={disbursementId ? 'Update' : 'Create'}

@@ -1,8 +1,9 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import DisbursementCombobox from '@/modules/disbursement/components/disbursement-combobox'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -15,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm } from '@/types'
 
@@ -36,12 +37,8 @@ export interface IDisbursementTransactionFormProps
         > {}
 
 const DisbursementTransactionCreateForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IDisbursementTransactionFormProps) => {
     const form = useForm<TDisbursementTransactionFormValue>({
         resolver: standardSchemaResolver(DisbursementTransactionSchema),
@@ -52,38 +49,41 @@ const DisbursementTransactionCreateForm = ({
             is_reference_number_checked: false,
             reference_number: '',
             amount: 0,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateDisbursementTransaction({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TDisbursementTransactionFormValue>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
+
     const onSubmit = form.handleSubmit((formData) => {
         createMutation.mutate(formData)
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = createMutation
+    const { error: rawError, isPending, reset } = createMutation
 
-    const isDisabled = (field: Path<TDisbursementTransactionFormValue>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -185,7 +185,7 @@ const DisbursementTransactionCreateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Create"

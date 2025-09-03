@@ -1,12 +1,12 @@
-'use client'
-
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { IMedia } from '@/modules/media'
 
@@ -19,6 +19,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -47,12 +49,8 @@ export interface IOnlineRemittanceFormProps
 
 const OnlineRemittanceCreateUpdateForm = ({
     onlineRemittanceId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onSuccess,
-    onError,
+    ...formProps
 }: IOnlineRemittanceFormProps) => {
     const form = useForm<TFormValues>({
         resolver: standardSchemaResolver(OnlineRemittanceSchema),
@@ -64,19 +62,38 @@ const OnlineRemittanceCreateUpdateForm = ({
             account_name: '',
             amount: 1,
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
             date_entry: toInputDateString(
-                defaultValues?.date_entry ?? new Date()
+                formProps.defaultValues?.date_entry ?? new Date()
             ),
         },
     })
 
     const createMutation = useCreateOnlineRemittance({
-        options: { onSuccess, onError },
+        options: {
+            ...withToastCallbacks({
+                textSuccess: 'Created',
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
+            }),
+        },
     })
     const updateMutation = useUpdateOnlineRemittanceById({
-        options: { onSuccess, onError },
+        options: {
+            ...withToastCallbacks({
+                textSuccess: 'Updated',
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
+            }),
+        },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!onlineRemittanceId,
+        })
 
     const onSubmit = form.handleSubmit((data) => {
         if (onlineRemittanceId) {
@@ -84,23 +101,25 @@ const OnlineRemittanceCreateUpdateForm = ({
         } else {
             createMutation.mutate(data)
         }
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = onlineRemittanceId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = onlineRemittanceId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -186,6 +205,7 @@ const OnlineRemittanceCreateUpdateForm = ({
                                 onChange={(country) =>
                                     field.onChange(country.alpha2)
                                 }
+                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
@@ -235,7 +255,7 @@ const OnlineRemittanceCreateUpdateForm = ({
 
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={onlineRemittanceId ? 'Update' : 'Create'}

@@ -115,9 +115,13 @@ export const QuickCreateMemberProfileSchema = z
         is_mutual_fund_member: z.boolean().default(false),
         is_micro_finance_member: z.boolean().default(false),
 
-        member_type_id: entityIdSchema,
+        member_type_id: entityIdSchema.optional(),
     })
     .and(WithNewUserAccountSchema)
+
+export type TQuickCreateMemberProfileSchema = z.infer<
+    typeof QuickCreateMemberProfileSchema
+>
 
 // 📌 Identity & Personal Info
 export const MemberProfilePersonalInfoSchema = z.object({
@@ -168,6 +172,10 @@ export const MemberProfileMembershipInfoSchema = z.object({
     is_mutual_fund_member: z.boolean().optional(),
     is_micro_finance_member: z.boolean().optional(),
 })
+
+export type TMemberProfileMembershipInfoSchema = z.infer<
+    typeof MemberProfileMembershipInfoSchema
+>
 
 // 👤 Account Info
 export const MemberProfileAccountSchema = z.object({

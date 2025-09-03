@@ -1,21 +1,18 @@
-import { useEffect } from 'react'
-
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { cn } from '@/helpers/tw-utils'
 import useActionSecurityStore from '@/store/action-security-store'
 
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm } from '@/types'
 
@@ -30,12 +27,8 @@ export interface IAccountProfileFormProps
         IForm<Partial<TAccountProfileFormValues>, IUserBase> {}
 
 const AccountProfileForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IAccountProfileFormProps) => {
     const form = useForm<TAccountProfileFormValues>({
         resolver: standardSchemaResolver(UserProfileSchema),
@@ -46,7 +39,7 @@ const AccountProfileForm = ({
             middle_name: '',
             last_name: '',
             suffix: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -54,16 +47,25 @@ const AccountProfileForm = ({
         isPending,
         error: rawError,
         mutate,
+        reset,
     } = useUpdateUserProfile({
         options: {
-            onError,
+            onError: formProps.onError,
             onSuccess: (newData) => {
-                onSuccess?.(newData)
+                form.reset(newData)
+                formProps.onSuccess?.(newData)
             },
         },
     })
 
     const { onOpenSecurityAction } = useActionSecurityStore()
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TAccountProfileFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         onOpenSecurityAction({
@@ -72,25 +74,19 @@ const AccountProfileForm = ({
                 'This action carries significant impact and requires your password for verification.',
             onSuccess: () => mutate(formData),
         })
-    })
+    }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })
-
-    const isDisabled = (field: Path<TAccountProfileFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    useEffect(() => {
-        form.reset(defaultValues)
-    }, [defaultValues, form])
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-4">
@@ -148,33 +144,17 @@ const AccountProfileForm = ({
                         />
                     </fieldset>
                 </fieldset>
-                <FormErrorMessage errorMessage={error} />
-                <div>
-                    {form.formState.isDirty && (
-                        <div>
-                            <Separator className="my-2 sm:my-4" />
-                            <div className="flex items-center justify-end gap-x-2">
-                                <Button
-                                    size="sm"
-                                    type="button"
-                                    variant="ghost"
-                                    onClick={() => form.reset()}
-                                    className="w-full self-end px-4 sm:w-fit"
-                                >
-                                    Reset
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    type="submit"
-                                    disabled={isPending}
-                                    className="w-full self-end px-4 sm:w-fit"
-                                >
-                                    {isPending ? <LoadingSpinner /> : 'Update'}
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText="Update"
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

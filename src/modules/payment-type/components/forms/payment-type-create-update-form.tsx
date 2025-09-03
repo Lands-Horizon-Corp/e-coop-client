@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -31,6 +31,7 @@ import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -47,11 +48,9 @@ export interface PaymentTypeFormProps
 
 const PaymentTypeCreateUpdateForm = ({
     paymentTypeId,
-    readOnly,
     className,
-    disabledFields,
     onSuccess,
-    defaultValues,
+    ...formProps
 }: PaymentTypeFormProps) => {
     const { currentAuth: user } = useAuthUserWithOrg()
     const branchId = user.user_organization.branch_id
@@ -61,7 +60,7 @@ const PaymentTypeCreateUpdateForm = ({
         resolver: standardSchemaResolver(PaymentTypeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: defaultValues || {
+        defaultValues: formProps.defaultValues || {
             name: '',
             description: '',
             number_of_days: undefined,
@@ -83,6 +82,13 @@ const PaymentTypeCreateUpdateForm = ({
         mutate: updatePaymentType,
     } = useUpdateById({ options: { onSuccess } })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<PaymentTypeFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!paymentTypeId,
+        })
+
     const onSubmit = form.handleSubmit((formData) => {
         if (paymentTypeId) {
             updatePaymentType({
@@ -97,16 +103,13 @@ const PaymentTypeCreateUpdateForm = ({
             }
             createPaymentTypeMutate(requestData)
         }
-    })
+    }, handleFocusError)
 
     const isPending = isCreating || isUpdating
     const error = createError || updateError
 
-    const isDisabled = (field: Path<PaymentTypeFormValues>) =>
-        readOnly || disabledFields?.includes(field) || isPending || false
-
     const isPaymentTypeOnChanged =
-        JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+        JSON.stringify(form.watch()) !== JSON.stringify(formProps.defaultValues)
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
@@ -115,11 +118,12 @@ const PaymentTypeCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -215,7 +219,7 @@ const PaymentTypeCreateUpdateForm = ({
                             type="button"
                             variant="ghost"
                             onClick={() => {
-                                form.reset(defaultValues)
+                                form.reset(formProps.defaultValues)
                                 resetCreate()
                                 resetUpdate()
                             }}

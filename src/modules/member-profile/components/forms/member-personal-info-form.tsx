@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { Path, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
@@ -23,6 +25,8 @@ import InputDate from '@/components/ui/input-date'
 import { PhoneInput } from '@/components/ui/phone-input'
 import { Separator } from '@/components/ui/separator'
 import SignatureField from '@/components/ui/signature-field'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps } from '@/types'
 import { IForm, TEntityId } from '@/types'
@@ -91,27 +95,35 @@ const MemberPersonalInfoForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const onSubmit = form.handleSubmit((formData) => {
-        mutate(
-            {
-                memberId: memberProfileId,
-                data: {
-                    ...formData,
-                    full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+    const handleSubmit = useCallback(
+        (formData: TMemberProfilePersonalInfoFormValues) => {
+            mutate(
+                {
+                    memberId: memberProfileId,
+                    data: {
+                        ...formData,
+                        full_name: `${formData.first_name ?? ''} ${formData.middle_name ?? ''} ${formData.last_name ?? ''} ${formData.suffix ?? ''}`,
+                    },
                 },
-            },
-            {
-                onSuccess: (data) => {
-                    toast.success('Saved')
-                    form.reset({
-                        ...data,
-                        birthdate: toInputDateString(
-                            data?.birthdate ?? new Date()
-                        ),
-                    })
-                },
-            }
-        )
+                {
+                    onSuccess: (data) => {
+                        toast.success('Saved')
+                        form.reset({
+                            ...data,
+                            birthdate: toInputDateString(
+                                data?.birthdate ?? new Date()
+                            ),
+                        })
+                    },
+                }
+            )
+        },
+        [form, memberProfileId, mutate]
+    )
+
+    const { formRef } = useFormHelper<TMemberProfilePersonalInfoFormValues>({
+        form,
+        autoSave: true,
     })
 
     const isDisabled = (field: Path<TMemberProfilePersonalInfoFormValues>) =>
@@ -120,7 +132,8 @@ const MemberPersonalInfoForm = ({
     return (
         <Form {...form}>
             <form
-                onSubmit={onSubmit}
+                ref={formRef}
+                onSubmit={form.handleSubmit(handleSubmit)}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset disabled={readOnly} className="grid gap-x-6 gap-y-4">

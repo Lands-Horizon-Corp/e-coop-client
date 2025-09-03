@@ -110,7 +110,6 @@ const OrganizationForm = () => {
     })
 
     const handleSubmit = async (data: TOrganizationFormValues) => {
-        console.log('Form Data:', data)
         const requestData = {
             ...data,
             organization_categories: selectedCategories.map((catItem) => ({

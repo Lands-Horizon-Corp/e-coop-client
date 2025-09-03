@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -22,6 +22,8 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import {
@@ -43,13 +45,9 @@ export interface IComputationSheetFormProps
 }
 
 const ComputationSheetCreateUpdateForm = ({
-    readOnly,
     className,
     computationSheetId,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IComputationSheetFormProps) => {
     const form = useForm<TFormValues>({
         resolver: standardSchemaResolver(ComputationSheetSchema),
@@ -63,26 +61,33 @@ const ComputationSheetCreateUpdateForm = ({
             interest_account: false,
             comaker_account: 0,
             exist_account: false,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateComputationSheet({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
     const updateMutation = useUpdateComputationSheetById({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!computationSheetId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (computationSheetId) {
@@ -90,7 +95,7 @@ const ComputationSheetCreateUpdateForm = ({
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -100,17 +105,15 @@ const ComputationSheetCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-4 sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -165,6 +168,7 @@ const ComputationSheetCreateUpdateForm = ({
                                     onCheckedChange={field.onChange}
                                     className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    disabled={isDisabled(field.name)}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -200,6 +204,7 @@ const ComputationSheetCreateUpdateForm = ({
                                     onCheckedChange={field.onChange}
                                     className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    disabled={isDisabled(field.name)}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -234,6 +239,7 @@ const ComputationSheetCreateUpdateForm = ({
                                     onCheckedChange={field.onChange}
                                     className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    disabled={isDisabled(field.name)}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -268,6 +274,7 @@ const ComputationSheetCreateUpdateForm = ({
                                     onCheckedChange={field.onChange}
                                     className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    disabled={isDisabled(field.name)}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2 ">
@@ -295,7 +302,7 @@ const ComputationSheetCreateUpdateForm = ({
 
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={computationSheetId ? 'Update' : 'Create'}
@@ -310,13 +317,9 @@ const ComputationSheetCreateUpdateForm = ({
 }
 
 export const ComputationSheetUpdateMiniForm = ({
-    readOnly,
     className,
     computationSheetId,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IComputationSheetFormProps & { computationSheetId: TEntityId }) => {
     const form = useForm<TFormValues>({
         resolver: standardSchemaResolver(ComputationSheetSchema),
@@ -330,7 +333,7 @@ export const ComputationSheetUpdateMiniForm = ({
             interest_account: false,
             comaker_account: 0,
             exist_account: false,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -342,29 +345,34 @@ export const ComputationSheetUpdateMiniForm = ({
     } = useUpdateComputationSheetById({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TFormValues>({
+            form,
+            ...formProps,
+            autoSave: true, // Always true since we have computationSheetId
+        })
 
     const error = serverRequestErrExtractor({ error: rawError })
 
     const onSubmit = form.handleSubmit((formData) => {
         mutate({ id: computationSheetId, payload: formData })
-    })
-
-    const isDisabled = (field: Path<TFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    }, handleFocusError)
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="flex justify-between gap-x-4"
                 >
                     <div className="w-8/12 space-y-4">
@@ -422,6 +430,7 @@ export const ComputationSheetUpdateMiniForm = ({
                                         onCheckedChange={field.onChange}
                                         className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        disabled={isDisabled(field.name)}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -449,6 +458,7 @@ export const ComputationSheetUpdateMiniForm = ({
                                         onCheckedChange={field.onChange}
                                         className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        disabled={isDisabled(field.name)}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -475,6 +485,7 @@ export const ComputationSheetUpdateMiniForm = ({
                                         onCheckedChange={field.onChange}
                                         className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        disabled={isDisabled(field.name)}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -501,6 +512,7 @@ export const ComputationSheetUpdateMiniForm = ({
                                         onCheckedChange={field.onChange}
                                         className="order-1"
                                         aria-describedby={`${field.name}`}
+                                        disabled={isDisabled(field.name)}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2 ">
@@ -520,7 +532,7 @@ export const ComputationSheetUpdateMiniForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Update"

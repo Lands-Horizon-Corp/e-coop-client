@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IMedia } from '@/modules/media'
 
 import RelationshipCombobox from '@/components/comboboxes/relationship-combobox'
@@ -18,6 +19,8 @@ import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
 import SignatureField from '@/components/ui/signature-field'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -45,13 +48,8 @@ export interface IMemberJointAccountFormProps
 const MemberJointAccountCreateUpdateForm = ({
     memberProfileId,
     jointAccountId,
-    readOnly,
     className,
-    hiddenFields,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberJointAccountFormProps) => {
     const form = useForm<TMemberJointAccountFormValues>({
         resolver: standardSchemaResolver(MemberJointAccountSchema),
@@ -60,8 +58,10 @@ const MemberJointAccountCreateUpdateForm = ({
         defaultValues: {
             first_name: '',
             last_name: '',
-            ...defaultValues,
-            birthday: toInputDateString(defaultValues?.birthday ?? new Date()),
+            ...formProps.defaultValues,
+            birthday: toInputDateString(
+                formProps.defaultValues?.birthday ?? new Date()
+            ),
         },
     })
 
@@ -69,8 +69,8 @@ const MemberJointAccountCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Created',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -78,11 +78,18 @@ const MemberJointAccountCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Updated',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberJointAccountFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!jointAccountId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (jointAccountId) {
@@ -103,23 +110,25 @@ const MemberJointAccountCreateUpdateForm = ({
                 },
             })
         }
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = jointAccountId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = jointAccountId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TMemberJointAccountFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <div className="grid grid-cols-2 gap-2">
@@ -127,7 +136,7 @@ const MemberJointAccountCreateUpdateForm = ({
                             control={form.control}
                             name="picture_media_id"
                             label="Photo"
-                            hiddenFields={hiddenFields}
+                            hiddenFields={formProps.hiddenFields}
                             render={({ field }) => {
                                 const value = form.watch('picture_media')
 
@@ -158,7 +167,7 @@ const MemberJointAccountCreateUpdateForm = ({
                             control={form.control}
                             name="signature_media_id"
                             label="Signature"
-                            hiddenFields={hiddenFields}
+                            hiddenFields={formProps.hiddenFields}
                             render={({ field }) => {
                                 const value = form.watch('signature_media')
                                 return (
@@ -194,7 +203,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                     name="first_name"
                                     label="First Name *"
                                     className="col-span-3"
-                                    hiddenFields={hiddenFields}
+                                    hiddenFields={formProps.hiddenFields}
                                     render={({ field }) => (
                                         <Input
                                             {...field}
@@ -211,7 +220,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                     name="middle_name"
                                     label="Middle Name"
                                     className="col-span-3"
-                                    hiddenFields={hiddenFields}
+                                    hiddenFields={formProps.hiddenFields}
                                     render={({ field }) => (
                                         <Input
                                             {...field}
@@ -228,7 +237,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                     name="last_name"
                                     label="Last Name *"
                                     className="col-span-3"
-                                    hiddenFields={hiddenFields}
+                                    hiddenFields={formProps.hiddenFields}
                                     render={({ field }) => (
                                         <Input
                                             {...field}
@@ -245,7 +254,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                     name="suffix"
                                     label="Suffix"
                                     className="col-span-1"
-                                    hiddenFields={hiddenFields}
+                                    hiddenFields={formProps.hiddenFields}
                                     render={({ field }) => (
                                         <Input
                                             {...field}
@@ -308,7 +317,7 @@ const MemberJointAccountCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={jointAccountId ? 'Update' : 'Create'}

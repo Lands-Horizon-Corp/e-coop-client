@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -53,7 +53,6 @@ const UserOrgSettingsForm = ({
     className,
     userOrganizationId,
     defaultValues,
-    disabledFields,
     resetOnDefaultChange,
     onError,
     onSuccess,
@@ -98,29 +97,29 @@ const UserOrgSettingsForm = ({
         },
     })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TUserOrgSettingsFormValues>({
+            form,
+            defaultValues,
+            resetOnDefaultChange: resetOnDefaultChange,
+            autoSave: true,
+        })
+
     const onSubmit = form.handleSubmit(async (formData) => {
         await updateMutation.mutateAsync({
             id: userOrganizationId,
             data: formData,
         })
-    })
+    }, handleFocusError)
 
     const { error: rawError, isPending, reset } = updateMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TUserOrgSettingsFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    useFormHelper<TUserOrgSettingsFormValues>({
-        form,
-        defaultValues,
-        resetOnDefaultChange: resetOnDefaultChange,
-    })
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >

@@ -20,6 +20,8 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import PasswordInput from '@/components/ui/password-input'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IForm } from '@/types'
 
 import { useChangePassword } from '../../authentication.service'
@@ -35,19 +37,16 @@ interface Props extends IForm<TResetPasswordForm, void> {
     resetId: string
 }
 
-const ResetPasswordForm = ({
-    resetId,
-    readOnly,
-    className,
-    defaultValues = { new_password: '', confirm_password: '' },
-    onError,
-    onSuccess,
-}: Props) => {
+const ResetPasswordForm = ({ resetId, className, ...formProps }: Props) => {
     const form = useForm<TResetPasswordForm>({
         resolver: standardSchemaResolver(ResetPasswordSchema),
         reValidateMode: 'onChange',
         mode: 'onChange',
-        defaultValues,
+        defaultValues: {
+            new_password: '',
+            confirm_password: '',
+            ...formProps.defaultValues,
+        },
     })
 
     const {
@@ -56,10 +55,23 @@ const ResetPasswordForm = ({
         error: responseError,
     } = useChangePassword({
         options: {
-            onError,
-            onSuccess,
+            onError: formProps.onError,
+            onSuccess: formProps.onSuccess,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TResetPasswordForm>({
+            form,
+            ...formProps,
+            autoSave: false,
+            preventExitOnDirty: true,
+        })
+
+    const onSubmit = form.handleSubmit(
+        (data) => changePassword({ ...data, resetId: resetId }),
+        handleFocusError
+    )
 
     const firstError = Object.values(form.formState.errors)[0]?.message
     const error = serverRequestErrExtractor({ error: responseError })
@@ -67,9 +79,8 @@ const ResetPasswordForm = ({
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((data) =>
-                    changePassword({ ...data, resetId: resetId })
-                )}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full flex-col gap-y-4 sm:w-[390px]',
                     className
@@ -89,7 +100,7 @@ const ResetPasswordForm = ({
                     </p>
                 </div>
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
                 >
                     <FormFieldWrapper
@@ -101,6 +112,7 @@ const ResetPasswordForm = ({
                                     {...field}
                                     id={field.name}
                                     placeholder="+8 Character Password"
+                                    disabled={isDisabled(field.name)}
                                 />
                                 <ValueChecklistMeter
                                     value={field.value}
@@ -133,6 +145,7 @@ const ResetPasswordForm = ({
                                         {...field}
                                         id={field.name}
                                         placeholder="Confirm Password"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 </FormControl>
                             </FormItem>
@@ -145,7 +158,7 @@ const ResetPasswordForm = ({
                     <Button
                         size="sm"
                         type="submit"
-                        disabled={isPending || readOnly}
+                        disabled={isPending || formProps.readOnly}
                     >
                         {isPending ? <LoadingSpinner /> : 'Save Password'}
                     </Button>

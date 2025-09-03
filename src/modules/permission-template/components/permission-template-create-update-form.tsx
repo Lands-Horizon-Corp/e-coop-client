@@ -1,9 +1,10 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import PermissionMatrix from '@/modules/permission/components/permission-matrix'
 import { TPermission } from '@/modules/permission/permission.types'
 import {
@@ -17,6 +18,8 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -40,13 +43,9 @@ export interface IPermissionTemplateFormProps
 }
 
 const PermissionTemplateCreateUpdateForm = ({
-    readOnly,
     className,
     permissionTemplateId,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IPermissionTemplateFormProps) => {
     const form = useForm<TPermissionTemplateSchema>({
         resolver: standardSchemaResolver(PermissionTemplateSchema),
@@ -56,7 +55,7 @@ const PermissionTemplateCreateUpdateForm = ({
             name: '',
             description: '',
             permissions: [],
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -65,8 +64,8 @@ const PermissionTemplateCreateUpdateForm = ({
             ...withToastCallbacks({
                 textError: 'Failed to create',
                 textSuccess: 'Permission created',
-                onError,
-                onSuccess,
+                onError: formProps.onError,
+                onSuccess: formProps.onSuccess,
             }),
         },
     })
@@ -75,11 +74,18 @@ const PermissionTemplateCreateUpdateForm = ({
             ...withToastCallbacks({
                 textError: 'Failed to update',
                 textSuccess: 'Permission updated',
-                onError,
-                onSuccess,
+                onError: formProps.onError,
+                onSuccess: formProps.onSuccess,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TPermissionTemplateSchema>({
+            form,
+            ...formProps,
+            autoSave: !!permissionTemplateId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (permissionTemplateId) {
@@ -96,23 +102,25 @@ const PermissionTemplateCreateUpdateForm = ({
                 permissions: formData.permissions as TPermission[],
             })
         }
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = permissionTemplateId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = permissionTemplateId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TPermissionTemplateSchema>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('w-full max-w-full min-w-0 space-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-4 sm:space-y-3 w-full min-w-0 max-w-full "
                 >
                     <FormFieldWrapper
@@ -138,7 +146,6 @@ const PermissionTemplateCreateUpdateForm = ({
                                 placeholder="Short Description"
                                 disabled={isDisabled(field.name)}
                                 className="textarea"
-                                // textEditorClassName="bg-background !max-w-none"
                             />
                         )}
                     />
@@ -164,7 +171,7 @@ const PermissionTemplateCreateUpdateForm = ({
                 <FormFooterResetSubmit
                     className="sticky bottom-2"
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={permissionTemplateId ? 'Update' : 'Create'}

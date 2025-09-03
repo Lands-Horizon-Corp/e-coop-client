@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/select'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
@@ -53,10 +54,8 @@ export interface ICreateBranchFormProps
 
 export const CreateUpdateBranchByOrgForm = ({
     branchId,
-    defaultValues,
     organizationId,
-    hiddenFields,
-    onSuccess,
+    ...formProps
 }: ICreateBranchFormProps) => {
     const { countryCode } = useLocationInfo()
     const form = useForm<TBranchSchema>({
@@ -65,10 +64,12 @@ export const CreateUpdateBranchByOrgForm = ({
         mode: 'onSubmit',
         defaultValues: {
             country_code: countryCode,
-            media: defaultValues?.media,
-            description: defaultValues?.description ?? '',
-            type: defaultValues?.type ?? branchTypeEnum.CooperativeBranch,
-            ...defaultValues,
+            media: formProps.defaultValues?.media,
+            description: formProps.defaultValues?.description ?? '',
+            type:
+                formProps.defaultValues?.type ??
+                branchTypeEnum.CooperativeBranch,
+            ...formProps.defaultValues,
         },
     })
 
@@ -81,7 +82,7 @@ export const CreateUpdateBranchByOrgForm = ({
             onSuccess: (createdData) => {
                 toast.success(`Branch ${createdData.name} created successfully`)
                 form.reset()
-                onSuccess?.(createdData)
+                formProps.onSuccess?.(createdData)
             },
             onError: (err) => {
                 toast.error(err ? err.message : 'Unknown error')
@@ -95,7 +96,7 @@ export const CreateUpdateBranchByOrgForm = ({
                 onSuccess: (data) => {
                     toast.success(`Branch ${data.name} updated successfully`)
                     form.reset()
-                    onSuccess?.(data)
+                    formProps.onSuccess?.(data)
                 },
                 onError: (err) => {
                     toast.error(err ? err.message : 'Unknown error')
@@ -103,18 +104,27 @@ export const CreateUpdateBranchByOrgForm = ({
             },
         })
 
+    const { formRef, handleFocusError } = useFormHelper<TBranchSchema>({
+        form,
+        ...formProps,
+        autoSave: false,
+    })
+
     const handleSubmit = form.handleSubmit(async (data) => {
         try {
             if (organizationId && branchId) {
                 updateBranch({ id: branchId, payload: data })
                 return
             } else {
-                createBranch({ payload: data, organizationId }, { onSuccess })
+                createBranch(
+                    { payload: data, organizationId },
+                    { onSuccess: formProps.onSuccess }
+                )
             }
         } catch (error) {
             console.error(error)
         }
-    })
+    }, handleFocusError)
 
     const isBranchOnChanged = form.formState.isDirty
 
@@ -129,11 +139,10 @@ export const CreateUpdateBranchByOrgForm = ({
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
-    console.log(form.watch())
     return (
         <div className="mt-10">
             <Form {...form}>
-                <form onSubmit={handleSubmit} className="w-full">
+                <form ref={formRef} onSubmit={handleSubmit} className="w-full">
                     <div className="flex w-full gap-x-5">
                         <div className="grid w-1/2 grow grid-cols-2 gap-5">
                             <FormFieldWrapper
@@ -311,7 +320,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 name="is_main_branch"
                                 className="col-span-2 bg-red-500"
                                 label="Set as Main Branch"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {
                                     return (
                                         <GradientBackground gradientOnly>

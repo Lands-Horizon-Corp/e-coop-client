@@ -170,14 +170,9 @@ export interface ITransactionBatchSignFormProps
 
 const TransactionBatchSignCreateUpdateForm = ({
     batchId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
     defaultStep = 0,
-    onError,
-    onSuccess,
-    resetOnDefaultChange,
+    ...formProps
 }: ITransactionBatchSignFormProps) => {
     const [step, setStep] = useState(defaultStep)
 
@@ -186,7 +181,7 @@ const TransactionBatchSignCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -199,11 +194,20 @@ const TransactionBatchSignCreateUpdateForm = ({
         options: {
             onSuccess: (data) => {
                 form.reset(data)
-                onSuccess?.(data)
+                formProps.onSuccess?.(data)
             },
-            onError,
+            onError: formProps.onError,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TBatchSignFormValues>({
+            form,
+            ...formProps,
+            autoSave: true,
+            autoSaveDelay: 2000,
+            resetOnDefaultChange: formProps.resetOnDefaultChange,
+        })
 
     const error = serverRequestErrExtractor({ error: rawError })
 
@@ -232,16 +236,7 @@ const TransactionBatchSignCreateUpdateForm = ({
 
     const onSubmit = form.handleSubmit((payload) => {
         mutate({ id: batchId, payload })
-    })
-
-    useFormHelper({
-        form,
-        defaultValues,
-        resetOnDefaultChange: resetOnDefaultChange,
-    })
-
-    const isDisabled = (field: Path<TBatchSignFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    }, handleFocusError)
 
     const onReset = () => {
         form.reset()
@@ -252,6 +247,7 @@ const TransactionBatchSignCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
@@ -270,7 +266,9 @@ const TransactionBatchSignCreateUpdateForm = ({
                                 >
                                     <StepperTrigger
                                         type="button"
-                                        disabled={readOnly || isPending}
+                                        disabled={
+                                            formProps.readOnly || isPending
+                                        }
                                         className="items-start rounded pb-8 last:pb-0"
                                     >
                                         <StepperIndicator asChild>
@@ -302,7 +300,7 @@ const TransactionBatchSignCreateUpdateForm = ({
                         </Stepper>
                     </div>
                     <fieldset
-                        disabled={isPending || readOnly}
+                        disabled={isPending || formProps.readOnly}
                         className="ecoop-scroll max-h-[90vh] flex-1 space-y-4 overflow-auto px-2 sm:max-h-[73vh] sm:space-y-3"
                     >
                         <div className="space-y-1">
@@ -387,6 +385,7 @@ const TransactionBatchSignCreateUpdateForm = ({
                                                     newImage
                                                 )
                                             }}
+                                            disabled={isDisabled(field.name)}
                                         />
                                     )
                                 }}
@@ -404,6 +403,7 @@ const TransactionBatchSignCreateUpdateForm = ({
                             variant="ghost"
                             onClick={() => onReset()}
                             className="w-full self-end px-8 sm:w-fit"
+                            disabled={isPending || formProps.readOnly}
                         >
                             Reset
                         </Button>
@@ -432,7 +432,11 @@ const TransactionBatchSignCreateUpdateForm = ({
                         <Button
                             size="sm"
                             type="submit"
-                            disabled={isPending}
+                            disabled={
+                                isPending ||
+                                !form.formState.isDirty ||
+                                formProps.readOnly
+                            }
                             className="w-full self-end px-8 sm:w-fit"
                         >
                             {isPending ? <LoadingSpinner /> : 'Save'}

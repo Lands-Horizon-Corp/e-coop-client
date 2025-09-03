@@ -1,20 +1,19 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 import { useCreate, useUpdateById } from '@/modules/account-tag'
 import { TAG_CATEGORY } from '@/modules/tag-template/tag.constants'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { TIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import ColorPicker from '@/components/pickers/color-picker'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Form, FormControl } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import {
@@ -23,10 +22,9 @@ import {
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -50,17 +48,17 @@ export interface AccountTagFormProps
 const AccountTagCreateUpdateForm = ({
     accountTagId,
     className,
-    disabledFields,
-    // onError,
-    onSuccess,
-    defaultValues,
-    readOnly,
+    ...formProps
 }: AccountTagFormProps) => {
     const form = useForm<AccountTagFormValues>({
         resolver: standardSchemaResolver(AccountTagSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: { ...defaultValues },
+        defaultValues: {
+            name: '',
+            description: '',
+            ...formProps.defaultValues,
+        },
     })
 
     const {
@@ -68,14 +66,21 @@ const AccountTagCreateUpdateForm = ({
         isPending: isCreating,
         reset: resetCreate,
         mutate: createAccountTag,
-    } = useCreate({ options: { onSuccess } })
+    } = useCreate({ options: { onSuccess: formProps.onSuccess } })
 
     const {
         error: updateError,
         isPending: isUpdating,
         reset: resetUpdate,
         mutate: updateAccountTag,
-    } = useUpdateById({ options: { onSuccess } })
+    } = useUpdateById({ options: { onSuccess: formProps.onSuccess } })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<AccountTagFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit((data) => {
         if (accountTagId) {
@@ -83,29 +88,22 @@ const AccountTagCreateUpdateForm = ({
         } else {
             createAccountTag(data)
         }
-    })
+    }, handleFocusError)
 
     const isPending = isCreating || isUpdating
-    const error = createError || updateError
-
-    const isDisabled = (field: Path<AccountTagFormValues>) =>
-        readOnly || disabledFields?.includes(field) || isPending || false
-
-    const isAccountTagChanged =
-        JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
+    const error = serverRequestErrExtractor({
+        error: createError || updateError,
+    })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4"
                 >
                     <FormFieldWrapper
@@ -166,6 +164,7 @@ const AccountTagCreateUpdateForm = ({
                                         field.onChange(selectedValue)
                                     }}
                                     defaultValue={field.value}
+                                    disabled={isDisabled(field.name)}
                                 >
                                     <SelectTrigger className="w-full">
                                         {field.value || 'select Account Type'}
@@ -199,7 +198,7 @@ const AccountTagCreateUpdateForm = ({
                                 onChange={field.onChange}
                                 alpha={true}
                                 className="mt-0 w-full"
-                                inputClassName="h-10 w-full "
+                                inputClassName="h-10 w-full"
                             />
                         )}
                     />
@@ -220,40 +219,18 @@ const AccountTagCreateUpdateForm = ({
                     />
                 </fieldset>
 
-                <Separator />
-
-                <div className="space-y-2">
-                    <FormErrorMessage
-                        errorMessage={error ? error?.message : null}
-                    />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => {
-                                form.reset(defaultValues)
-                                resetCreate()
-                                resetUpdate()
-                            }}
-                            className="w-full sm:w-fit px-8"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            type="submit"
-                            disabled={isPending || !isAccountTagChanged}
-                            className="w-full sm:w-fit px-8"
-                        >
-                            {isPending ? (
-                                <LoadingSpinner />
-                            ) : accountTagId ? (
-                                'Save'
-                            ) : (
-                                'Create'
-                            )}
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={accountTagId ? 'Update' : 'Create'}
+                    onReset={() => {
+                        form.reset()
+                        resetCreate()
+                        resetUpdate()
+                    }}
+                />
             </form>
         </Form>
     )

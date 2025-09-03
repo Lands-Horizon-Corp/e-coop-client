@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -16,6 +16,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -43,14 +45,10 @@ export interface IMemberGovernmentBenefitFormProps
 }
 
 const MemberGovernmentBenefitCreateUpdateForm = ({
-    readOnly,
     className,
     benefitId,
-    defaultValues,
-    disabledFields,
     memberProfileId,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberGovernmentBenefitFormProps) => {
     const form = useForm<TMemberGovernmentBenefitFormValues>({
         resolver: standardSchemaResolver(MemberGovernmentBenefitSchema),
@@ -61,23 +59,30 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
             country_code: '',
             value: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateMemberGovernmentBenefit({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
     const updateMutation = useUpdateMemberGovernmentBenefit({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberGovernmentBenefitFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!benefitId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (benefitId) {
@@ -92,7 +97,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                 data: formData,
             })
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -102,17 +107,15 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TMemberGovernmentBenefitFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -261,7 +264,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={benefitId ? 'Update' : 'Create'}

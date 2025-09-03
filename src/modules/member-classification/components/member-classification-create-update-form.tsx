@@ -19,6 +19,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { MemberClassificationSchema } from '../member-classification.validation'
@@ -32,15 +34,10 @@ export interface IMemberClassificationCreateUpdateFormProps
 }
 
 const MemberClassificationCreateUpdateForm = ({
-    readOnly,
-    className,
-    defaultValues,
     memberClassificationId,
-    onError,
-    onSuccess,
+    className,
+    ...formProps
 }: IMemberClassificationCreateUpdateFormProps) => {
-    const isUpdateMode = Boolean(memberClassificationId)
-
     const form = useForm<TMemberClassificationForm>({
         resolver: standardSchemaResolver(MemberClassificationSchema),
         reValidateMode: 'onChange',
@@ -48,57 +45,59 @@ const MemberClassificationCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const {
-        error: createError,
-        isPending: isCreating,
-        mutate: createMemberClassification,
-        reset: createReset,
-    } = useCreate({
+    const createMutation = useCreate({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
-    const {
-        error: updateError,
-        isPending: isUpdating,
-        mutate: updateMemberClassification,
-        reset: updateReset,
-    } = useUpdateById({
+    const updateMutation = useUpdateById({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
-    const onSubmit = (formData: TMemberClassificationForm) => {
-        if (isUpdateMode && memberClassificationId) {
-            updateMemberClassification({
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberClassificationForm>({
+            form,
+            ...formProps,
+            autoSave: !!memberClassificationId,
+        })
+
+    const onSubmit = form.handleSubmit((formData) => {
+        if (memberClassificationId) {
+            updateMutation.mutate({
                 id: memberClassificationId,
                 payload: formData,
             })
         } else {
-            createMemberClassification(formData)
+            createMutation.mutate(formData)
         }
-    }
+    }, handleFocusError)
 
-    const combinedError = serverRequestErrExtractor({
-        error: createError || updateError,
-    })
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = memberClassificationId ? updateMutation : createMutation
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isCreating || isUpdating || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -112,7 +111,7 @@ const MemberClassificationCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Member Classification Name"
                                     autoComplete="member-classification-name"
-                                    disabled={isCreating || isUpdating}
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -127,7 +126,7 @@ const MemberClassificationCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Description *"
                                     autoComplete="member-classification-description"
-                                    disabled={isCreating || isUpdating}
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -135,15 +134,14 @@ const MemberClassificationCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={combinedError}
-                    readOnly={readOnly}
-                    isLoading={isCreating || isUpdating}
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={isUpdateMode ? 'Update' : 'Create'}
+                    submitText={memberClassificationId ? 'Update' : 'Create'}
                     onReset={() => {
                         form.reset()
-                        createReset()
-                        updateReset()
+                        reset()
                     }}
                 />
             </form>

@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -24,6 +24,7 @@ import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -44,12 +45,8 @@ const AccountCategoryCreateUpdateForm = ({
     accountCategoryId,
     branchId,
     organizationId,
-    readOnly,
     className,
-    disabledFields,
-    onError,
-    onSuccess,
-    defaultValues,
+    ...formProps
 }: AccountCategoryFormProps) => {
     const { currentAuth: user } = useAuthUserWithOrg()
     const userType = user.user_organization.user_type
@@ -58,7 +55,7 @@ const AccountCategoryCreateUpdateForm = ({
         resolver: standardSchemaResolver(AccountCategorySchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: defaultValues || {
+        defaultValues: formProps.defaultValues || {
             name: '',
             description: '',
         },
@@ -69,18 +66,25 @@ const AccountCategoryCreateUpdateForm = ({
         isPending: isCreating,
         reset: resetCreate,
         mutate: createAccountCategoryMutate,
-    } = useCreate({ options: { onSuccess } })
+    } = useCreate({ options: { onSuccess: formProps.onSuccess } })
 
     const {
         error: updateError,
         isPending: isUpdating,
         reset: resetUpdate,
         mutate: updateAccountCategory,
-    } = useUpdateById({ options: { onSuccess } })
+    } = useUpdateById({ options: { onSuccess: formProps.onSuccess } })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<AccountCategoryFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (!userType) {
-            onError?.('User type is not defined')
+            formProps?.onError?.('User type is not defined')
             return
         }
         if (accountCategoryId) {
@@ -96,16 +100,13 @@ const AccountCategoryCreateUpdateForm = ({
             }
             createAccountCategoryMutate(requestData)
         }
-    })
+    }, handleFocusError)
 
     const isPending = isCreating || isUpdating
     const error = createError || updateError
 
-    const isDisabled = (field: Path<AccountCategoryFormValues>) =>
-        readOnly || disabledFields?.includes(field) || isPending || false
-
     const isAccountCategoryOnChanged =
-        JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+        JSON.stringify(form.watch()) !== JSON.stringify(formProps.defaultValues)
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
@@ -114,11 +115,12 @@ const AccountCategoryCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -163,7 +165,7 @@ const AccountCategoryCreateUpdateForm = ({
                             type="button"
                             variant="ghost"
                             onClick={() => {
-                                form.reset(defaultValues)
+                                form.reset(formProps.defaultValues)
                                 resetCreate()
                                 resetUpdate()
                             }}

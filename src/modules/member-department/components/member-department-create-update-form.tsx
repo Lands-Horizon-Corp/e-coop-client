@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -15,7 +15,7 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -41,12 +41,8 @@ export interface IMemberDepartmentFormProps
 
 const MemberDepartmentCreateUpdateForm = ({
     memberDepartmentId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberDepartmentFormProps) => {
     const form = useForm<TMemberDepartmentFormValues>({
         resolver: standardSchemaResolver(MemberDepartmentSchema),
@@ -55,12 +51,23 @@ const MemberDepartmentCreateUpdateForm = ({
         defaultValues: {
             name: '',
             icon: undefined,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const createMutation = useCreate({ options: { onSuccess, onError } })
-    const updateMutation = useUpdateById({ options: { onSuccess, onError } })
+    const createMutation = useCreate({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
+    const updateMutation = useUpdateById({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberDepartmentFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!memberDepartmentId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (memberDepartmentId) {
@@ -68,7 +75,7 @@ const MemberDepartmentCreateUpdateForm = ({
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -78,21 +85,15 @@ const MemberDepartmentCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TMemberDepartmentFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -144,7 +145,7 @@ const MemberDepartmentCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={memberDepartmentId ? 'Update' : 'Create'}

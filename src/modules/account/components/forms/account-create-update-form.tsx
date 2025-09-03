@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-import { Path, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
     AccountExclusiveSettingTypeEnum,
@@ -62,7 +62,7 @@ import {
     SelectTrigger,
 } from '@/components/ui/select'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -73,28 +73,23 @@ export interface IAccountCreateUpdateFormProps
 }
 
 const AccountCreateUpdateForm = ({
-    defaultValues,
     className,
-    readOnly,
-    disabledFields,
     accountId,
-    onSuccess,
+    ...formProps
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
     const organizationId = currentAuth.user_organization.organization_id
     const branchId = currentAuth.user_organization.branch_id
 
     const [selectedItem, setSelectedItem] = useState<string>(
-        defaultValues?.type || ''
+        formProps.defaultValues?.type || ''
     )
-    type TAccountFormValues = z.infer<typeof IAccountRequestSchema>
 
     const form = useForm<TAccountFormValues>({
         resolver: standardSchemaResolver(IAccountRequestSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            // type: AccountTypeEnum.Deposit,
             show_in_general_ledger_source_withdraw: true,
             show_in_general_ledger_source_deposit: true,
             show_in_general_ledger_source_journal: true,
@@ -105,61 +100,61 @@ const AccountCreateUpdateForm = ({
             compassion_fund: false,
             compassion_fund_amount: 0,
             icon: 'Money Bag',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const isDisabled = (field: Path<TAccountFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const {
-        mutate: createAccount,
-        isPending: isPendingCreateAccount,
-        error: createAccountError,
-    } = useCreate({
+    const createMutation = useCreate({
         options: {
-            onSuccess: onSuccess,
+            onSuccess: formProps.onSuccess,
         },
     })
 
-    const {
-        mutate: updateAccount,
-        isPending: isPendingUpdateAccount,
-        error: updateAccountError,
-    } = useUpdateById({ options: { onSuccess: onSuccess } })
+    const updateMutation = useUpdateById({
+        options: { onSuccess: formProps.onSuccess },
+    })
 
-    const isLoading = isPendingCreateAccount || isPendingUpdateAccount
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TAccountFormValues>({
+            form,
+            ...formProps,
+            autoSave: accountId !== undefined, // No autosave for accounts
+        })
 
-    const handleSubmit = form.handleSubmit((data: TAccountFormValues) => {
+    const onSubmit = form.handleSubmit((data: TAccountFormValues) => {
         const request = {
             branch_id: branchId,
             organization_id: organizationId,
             ...data,
         }
         if (accountId) {
-            updateAccount({ id: accountId, payload: request })
+            updateMutation.mutate({ id: accountId, payload: request })
         } else {
-            createAccount(request)
+            createMutation.mutate(request)
         }
-    })
+    }, handleFocusError)
 
-    const errorMessage = createAccountError || updateAccountError
+    const { error: errorResponse, isPending: isLoading } = accountId
+        ? updateMutation
+        : createMutation
 
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
+    const error = serverRequestErrExtractor({ error: errorResponse })
 
     const isCompassionFundEnabled = form.watch('compassion_fund')
 
-    useAlertBeforeClosing(isDirty)
-
     return (
         <Form {...form}>
-            <form onSubmit={handleSubmit} className={cn('w-full', className)}>
+            <form
+                ref={formRef}
+                onSubmit={onSubmit}
+                className={cn('w-full', className)}
+            >
                 <FormErrorMessage
-                    errorMessage={errorMessage ? errorMessage.toString() : null}
+                    errorMessage={error ? error.toString() : null}
                 />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
-                        disabled={readOnly}
+                        disabled={formProps.readOnly}
                         className="space-y-3 md:w-[80%]"
                     >
                         <FormFieldWrapper
@@ -1934,7 +1929,7 @@ const AccountCreateUpdateForm = ({
                     </div>
                 </div>
 
-                {!readOnly && (
+                {!formProps.readOnly && (
                     <div className="space-y-2">
                         <div className="flex items-center justify-end gap-x-2">
                             <Button

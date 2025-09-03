@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -24,6 +24,7 @@ import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -40,12 +41,8 @@ export interface AccountClassificationFormProps
 
 const AccountClassificationCreateUpdateForm = ({
     accountClassificationId,
-    readOnly,
     className,
-    disabledFields,
-    onError,
-    onSuccess,
-    defaultValues,
+    ...formProps
 }: AccountClassificationFormProps) => {
     const { currentAuth: user } = useAuthUserWithOrg()
     const userType = user.user_organization.user_type
@@ -56,7 +53,7 @@ const AccountClassificationCreateUpdateForm = ({
         resolver: standardSchemaResolver(AccountClassificationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: defaultValues || {
+        defaultValues: formProps.defaultValues || {
             name: '',
             description: '',
         },
@@ -68,7 +65,7 @@ const AccountClassificationCreateUpdateForm = ({
         reset: resetCreate,
         mutate: createAccountClassificationMutate,
     } = useCreate({
-        options: { onSuccess },
+        options: { onSuccess: formProps.onSuccess },
     })
 
     const {
@@ -76,11 +73,18 @@ const AccountClassificationCreateUpdateForm = ({
         isPending: isUpdating,
         reset: resetUpdate,
         mutate: updateAccountClassification,
-    } = useUpdateById({ options: { onSuccess } })
+    } = useUpdateById({ options: { onSuccess: formProps.onSuccess } })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<AccountClassificationFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (!userType) {
-            onError?.('User type is not defined')
+            formProps.onError?.('User type is not defined')
             return
         }
         if (accountClassificationId) {
@@ -96,16 +100,13 @@ const AccountClassificationCreateUpdateForm = ({
             }
             createAccountClassificationMutate(requestData)
         }
-    })
+    }, handleFocusError)
 
     const isPending = isCreating || isUpdating
     const error = createError || updateError
 
-    const isDisabled = (field: Path<AccountClassificationFormValues>) =>
-        readOnly || disabledFields?.includes(field) || isPending || false
-
     const isAccountClassificationOnChanged =
-        JSON.stringify(form.watch()) !== JSON.stringify(defaultValues)
+        JSON.stringify(form.watch()) !== JSON.stringify(formProps.defaultValues)
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
@@ -114,11 +115,12 @@ const AccountClassificationCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -163,7 +165,7 @@ const AccountClassificationCreateUpdateForm = ({
                             type="button"
                             variant="ghost"
                             onClick={() => {
-                                form.reset(defaultValues)
+                                form.reset(formProps.defaultValues)
                                 resetCreate()
                                 resetUpdate()
                             }}

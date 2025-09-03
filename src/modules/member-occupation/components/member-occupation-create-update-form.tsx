@@ -9,10 +9,11 @@ import { cn } from '@/helpers/tw-utils'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -33,14 +34,9 @@ export interface IMemberOccupationCreateUpdateFormProps
 
 const MemberOccupationCreateUpdateForm = ({
     memberOccupationId,
-    readOnly,
     className,
-    defaultValues,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberOccupationCreateUpdateFormProps) => {
-    const isUpdateMode = Boolean(memberOccupationId)
-
     const form = useForm<TMemberOccupationForm>({
         resolver: standardSchemaResolver(MemberOccupationSchema),
         reValidateMode: 'onChange',
@@ -48,47 +44,52 @@ const MemberOccupationCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const {
-        error: createError,
-        isPending: isCreating,
-        mutate: createMemberOccupation,
-        reset: createReset,
-    } = useCreate({ options: { onSuccess, onError } })
+    const createMutation = useCreate({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
+    const updateMutation = useUpdateById({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
 
-    const {
-        error: updateError,
-        isPending: isUpdating,
-        mutate: updateMemberOccupation,
-        reset: updateReset,
-    } = useUpdateById({ options: { onSuccess, onError } })
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberOccupationForm>({
+            form,
+            ...formProps,
+            autoSave: !!memberOccupationId,
+        })
 
-    const onSubmit = (formData: TMemberOccupationForm) => {
-        if (isUpdateMode && memberOccupationId) {
-            updateMemberOccupation({
+    const onSubmit = form.handleSubmit((formData) => {
+        if (memberOccupationId) {
+            updateMutation.mutate({
                 id: memberOccupationId,
                 payload: formData,
             })
         } else {
-            createMemberOccupation(formData)
+            createMutation.mutate(formData)
         }
-    }
+    }, handleFocusError)
 
-    const combinedError = serverRequestErrExtractor({
-        error: createError || updateError,
-    })
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = memberOccupationId ? updateMutation : createMutation
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isCreating || isUpdating || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -102,9 +103,7 @@ const MemberOccupationCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Member Occupation Name"
                                     autoComplete="member-occupation-name"
-                                    disabled={
-                                        isCreating || isUpdating || readOnly
-                                    }
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -119,27 +118,22 @@ const MemberOccupationCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Description"
                                     autoComplete="member-occupation-description"
-                                    disabled={
-                                        isCreating || isUpdating || readOnly
-                                    }
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
 
-                <FormErrorMessage errorMessage={combinedError} />
-
                 <FormFooterResetSubmit
-                    error={combinedError}
-                    readOnly={readOnly}
-                    isLoading={isCreating || isUpdating}
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={isUpdateMode ? 'Update' : 'Create'}
+                    submitText={memberOccupationId ? 'Update' : 'Create'}
                     onReset={() => {
                         form.reset()
-                        createReset()
-                        updateReset()
+                        reset()
                     }}
                 />
             </form>

@@ -1,22 +1,20 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { AccountPicker } from '@/modules/account'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
-// TODO: Once account module is migrated
-// import AccountPicker from '@/components/pickers/account-picker'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
-import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -39,12 +37,8 @@ export interface IMemberTypeReferenceFormProps
 
 const MemberTypeReferenceCreateUpdateForm = ({
     className,
-    defaultValues,
-    readOnly,
-    disabledFields,
     memberTypeReferenceId,
-    onSuccess,
-    onError,
+    ...formProps
 }: IMemberTypeReferenceFormProps) => {
     const form = useForm<TMemberTypeReferenceFormValues>({
         resolver: standardSchemaResolver(MemberTypeReferenceSchema),
@@ -63,18 +57,23 @@ const MemberTypeReferenceCreateUpdateForm = ({
             active_member_minimum_balance: 0,
             other_interest_on_saving_computation_minimum_balance: 0,
             other_interest_on_saving_computation_interest_rate: 0,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const createMutation = useCreate({ options: { onSuccess, onError } })
-    const updateMutation = useUpdateById({ options: { onSuccess, onError } })
+    const createMutation = useCreate({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
+    const updateMutation = useUpdateById({
+        options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
+    })
 
-    const { error: rawError, isPending } = memberTypeReferenceId
-        ? updateMutation
-        : createMutation
-
-    const error = serverRequestErrExtractor({ error: rawError })
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberTypeReferenceFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!memberTypeReferenceId,
+        })
 
     const onSubmit = form.handleSubmit((data) => {
         if (memberTypeReferenceId) {
@@ -85,23 +84,28 @@ const MemberTypeReferenceCreateUpdateForm = ({
         } else {
             createMutation.mutate(data)
         }
-    })
+    }, handleFocusError)
 
-    const isDisabled = (field: Path<TMemberTypeReferenceFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = memberTypeReferenceId ? updateMutation : createMutation
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
-                    {/* TODO: Add account picker once implemented */}
-                    {/* <FormFieldWrapper
+                    <FormFieldWrapper
                         control={form.control}
                         name="account_id"
                         label="Account *"
@@ -117,7 +121,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                 }}
                             />
                         )}
-                    /> */}
+                    />
                     <FormFieldWrapper
                         control={form.control}
                         name="description"
@@ -142,6 +146,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Interest Rate (%)"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -155,6 +160,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Minimum Balance"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -167,6 +173,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Charges"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -179,6 +186,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Maintaining Balance"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -194,6 +202,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Active Member Ratio"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -206,6 +215,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Maintaining Balance"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -222,6 +232,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Maintaining Balance"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -234,40 +245,23 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     type="number"
                                     placeholder="Maintaining Balance"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
-                <FormErrorMessage errorMessage={error} />
-                <div>
-                    <Separator className="my-2 sm:my-4" />
-                    <div className="flex items-center justify-end gap-x-2">
-                        <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
-                            onClick={() => form.reset()}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            Reset
-                        </Button>
-                        <Button
-                            size="sm"
-                            type="submit"
-                            disabled={isPending}
-                            className="w-full self-end px-8 sm:w-fit"
-                        >
-                            {isPending ? (
-                                <LoadingSpinner />
-                            ) : memberTypeReferenceId ? (
-                                'Update'
-                            ) : (
-                                'Create'
-                            )}
-                        </Button>
-                    </div>
-                </div>
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={memberTypeReferenceId ? 'Update' : 'Create'}
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

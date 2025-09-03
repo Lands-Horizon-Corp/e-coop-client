@@ -1,7 +1,7 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import {
@@ -21,7 +21,7 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -43,17 +43,16 @@ const GLAccountsGroupingUpdateFormModal = ({
     defaultValues,
     disabledFields,
     onSuccess,
+    ...formProps
 }: IGLGroupingFormProps) => {
     const form = useForm<TGeneralLedgerAccountsGroupingFormValues>({
-        resolver: zodResolver(GeneralLedgerAccountsGroupingSchema),
+        resolver: standardSchemaResolver(GeneralLedgerAccountsGroupingSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
         },
     })
-
-    console.log('defaultValues', defaultValues)
 
     const updateMutation = useUpdateById({
         options: {
@@ -65,28 +64,31 @@ const GLAccountsGroupingUpdateFormModal = ({
         },
     })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TGeneralLedgerAccountsGroupingFormValues>({
+            form,
+            ...formProps,
+            readOnly,
+            disabledFields,
+            autoSave: false,
+            preventExitOnDirty: false,
+        })
+
     const onSubmit = form.handleSubmit((formData) => {
         if (groupingId) {
             updateMutation.mutate({
                 id: groupingId,
                 payload: formData,
             })
-            console.log('Update not implemented yet', formData)
         }
-    })
+    }, handleFocusError)
 
     const { error, isPending, reset } = updateMutation
 
-    const isDisabled = (
-        field: Path<TGeneralLedgerAccountsGroupingFormValues>
-    ) => readOnly || disabledFields?.includes(field) || false
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >

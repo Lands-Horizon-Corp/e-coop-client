@@ -22,6 +22,8 @@ import InputDate from '@/components/ui/input-date'
 import PasswordInput from '@/components/ui/password-input'
 import { PhoneInput } from '@/components/ui/phone-input'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm } from '@/types'
 
 import { useSignUp } from '../../authentication.service'
@@ -38,13 +40,7 @@ interface ISignUpFormProps
     extends IClassProps,
         IForm<Partial<ISignUpRequest>, IAuthContext> {}
 
-const SignUpForm = ({
-    readOnly,
-    className,
-    defaultValues,
-    onError,
-    onSuccess,
-}: ISignUpFormProps) => {
+const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
     const form = useForm<TSignUpForm>({
         resolver: standardSchemaResolver(SignUpSchema),
         reValidateMode: 'onChange',
@@ -61,9 +57,17 @@ const SignUpForm = ({
             accept_terms: false,
             middle_name: '',
             suffix: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TSignUpForm>({
+            form,
+            ...formProps,
+            autoSave: false,
+            preventExitOnDirty: true,
+        })
 
     const first_name = useWatch({ control: form.control, name: 'first_name' })
     const middle_name = useWatch({ control: form.control, name: 'middle_name' })
@@ -83,29 +87,34 @@ const SignUpForm = ({
         mutate: signUp,
     } = useSignUp({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
+
+    const onSubmit = form.handleSubmit(
+        (formData) =>
+            signUp({
+                ...formData,
+                birthdate: new Date(formData.birthdate).toISOString(),
+            }),
+        handleFocusError
+    )
 
     const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((formData) =>
-                    signUp({
-                        ...formData,
-                        birthdate: new Date(formData.birthdate).toISOString(),
-                    })
-                )}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <div className="flex items-center gap-x-2 pt-2 font-medium sm:pb-4">
                     <p className="text-2xl md:text-5xl">Sign Up</p>
                 </div>
                 <fieldset
-                    disabled={isLoading || readOnly}
+                    disabled={isLoading || formProps.readOnly}
                     className="grid grid-cols-1 gap-x-6 gap-y-8"
                 >
                     <fieldset className="space-y-3">
@@ -121,6 +130,7 @@ const SignUpForm = ({
                                         id={field.name}
                                         autoComplete="given-name"
                                         placeholder="First Name"
+                                        disabled={isDisabled(field.name)}
                                         onKeyDown={(e) => {
                                             const allowed = /^[a-zA-Z\s]$/
                                             if (
@@ -143,6 +153,7 @@ const SignUpForm = ({
                                         id={field.name}
                                         placeholder="Middle Name"
                                         autoComplete="additional-name"
+                                        disabled={isDisabled(field.name)}
                                         onKeyDown={(e) => {
                                             const allowed = /^[a-zA-Z\s]$/
                                             if (
@@ -165,6 +176,7 @@ const SignUpForm = ({
                                         id={field.name}
                                         placeholder="Last Name"
                                         autoComplete="family-name"
+                                        disabled={isDisabled(field.name)}
                                         onKeyDown={(e) => {
                                             const allowed = /^[a-zA-Z\s]$/
                                             if (
@@ -203,6 +215,7 @@ const SignUpForm = ({
                                 <InputDate
                                     {...field}
                                     value={field.value ?? ''}
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -227,6 +240,7 @@ const SignUpForm = ({
                                         {...field}
                                         className="w-full"
                                         defaultCountry="PH"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 </div>
                             )}
@@ -245,6 +259,7 @@ const SignUpForm = ({
                                     id={field.name}
                                     autoComplete="username"
                                     placeholder="Username"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -257,6 +272,7 @@ const SignUpForm = ({
                                     id={field.name}
                                     autoComplete="email"
                                     placeholder="example@email.com"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -271,6 +287,7 @@ const SignUpForm = ({
                                         defaultVisibility
                                         placeholder="+8 Character Password"
                                         autoComplete="new-password"
+                                        disabled={isDisabled(field.name)}
                                     />
                                     <ValueChecklistMeter
                                         value={field.value}
@@ -299,7 +316,11 @@ const SignUpForm = ({
                                     id={field.name}
                                     name={field.name}
                                     checked={field.value}
-                                    disabled={isLoading || readOnly}
+                                    disabled={
+                                        isLoading ||
+                                        formProps.readOnly ||
+                                        isDisabled(field.name)
+                                    }
                                     onCheckedChange={field.onChange}
                                     className="order-0 z-0 after:absolute after:inset-0"
                                 />
@@ -342,7 +363,7 @@ const SignUpForm = ({
                         size="sm"
                         type="submit"
                         className="w-full max-w-xl rounded-3xl"
-                        disabled={isLoading || readOnly}
+                        disabled={isLoading || formProps.readOnly}
                     >
                         {isLoading ? <LoadingSpinner /> : 'Submit'}
                     </Button>

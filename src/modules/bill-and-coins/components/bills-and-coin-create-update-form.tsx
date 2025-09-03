@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -14,6 +14,8 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -48,12 +50,8 @@ export interface IBillsAndCoinFormProps
 
 const BillsAndCoinCreateUpdateForm = ({
     billsAndCoinId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IBillsAndCoinFormProps) => {
     const form = useForm<TBillsAndCoinFormValues>({
         resolver: standardSchemaResolver(billsAndCoinSchema),
@@ -63,22 +61,29 @@ const BillsAndCoinCreateUpdateForm = ({
             name: '',
             value: 0,
             country_code: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateBillsAndCoins({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
     const updateMutation = useUpdateBillsAndCoinsById({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TBillsAndCoinFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!billsAndCoinId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (billsAndCoinId) {
@@ -86,25 +91,25 @@ const BillsAndCoinCreateUpdateForm = ({
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
-    const { error: rawError, isPending } = billsAndCoinId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = billsAndCoinId ? updateMutation : createMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
-
-    const isDisabled = (field: Path<TBillsAndCoinFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -183,15 +188,14 @@ const BillsAndCoinCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error} // Extracted from rawError
-                    readOnly={readOnly}
+                    error={error}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={billsAndCoinId ? 'Update' : 'Create'}
                     onReset={() => {
-                        form.reset() // Resets the form fields
-                        createMutation.reset() // Resets the create mutation state
-                        updateMutation.reset() // Resets the update mutation state
+                        form.reset()
+                        reset()
                     }}
                 />
             </form>

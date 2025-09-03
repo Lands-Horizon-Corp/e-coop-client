@@ -1,7 +1,9 @@
-import { useFieldArray, useForm } from 'react-hook-form'
+import { Path, useFieldArray, useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { formatNumber } from '@/helpers/number-utils'
 import {
     CashCountBatchFormValues,
@@ -41,10 +43,8 @@ export interface IBatchCashCountFormProps
         > {}
 
 const BatchCashCount = ({
-    defaultValues,
-    onSuccess,
-    onError,
-    ...other
+    className,
+    ...formProps
 }: IBatchCashCountFormProps) => {
     const form = useForm<TFormValues>({
         resolver: standardSchemaResolver(CashCountBatchSchema),
@@ -53,17 +53,22 @@ const BatchCashCount = ({
         defaultValues: {
             cash_counts: [],
             deleted_cash_counts: [],
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const { mutate, isPending, error, reset } = useUpdateBatchCashCounts({
+    const {
+        mutate,
+        isPending,
+        error: rawError,
+        reset,
+    } = useUpdateBatchCashCounts({
         options: {
             onSuccess: (data) => {
-                form.reset(defaultValues)
-                onSuccess?.(data)
+                form.reset(formProps.defaultValues)
+                formProps.onSuccess?.(data)
             },
-            onError,
+            onError: formProps.onError,
         },
     })
 
@@ -84,6 +89,13 @@ const BatchCashCount = ({
     const grandTotal =
         cashCountTotal + Number(form.getValues('deposit_in_bank') || 0)
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
+
     const onSubmit = form.handleSubmit((data) => {
         mutate({
             cash_counts: data.cash_counts.filter((entry) => entry.quantity > 0),
@@ -96,15 +108,19 @@ const BatchCashCount = ({
             cash_count_total: cashCountTotal,
             grand_total: grandTotal,
         })
-    })
+    }, handleFocusError)
 
-    useFormHelper<ICashCountBatchRequest>({ form, defaultValues, ...other })
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
-            <form onSubmit={onSubmit} className="space-y-1">
+            <form
+                ref={formRef}
+                onSubmit={onSubmit}
+                className={cn('space-y-1', className)}
+            >
                 <fieldset
-                    disabled={isPending || other.readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 rounded-xl overflow-clip bg-secondary dark:bg-popover sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -192,9 +208,9 @@ const BatchCashCount = ({
                                                                                   .value
                                                                     )
                                                                 }}
-                                                                disabled={
-                                                                    other.readOnly
-                                                                }
+                                                                disabled={isDisabled(
+                                                                    `cash_counts.${index}.quantity` as Path<TFormValues>
+                                                                )}
                                                                 min={0}
                                                                 step={1}
                                                                 type="number"
@@ -275,7 +291,7 @@ const BatchCashCount = ({
                 {form.formState.isDirty && (
                     <FormFooterResetSubmit
                         error={error}
-                        readOnly={other.readOnly}
+                        readOnly={formProps.readOnly}
                         isLoading={isPending}
                         disableSubmit={!form.formState.isDirty}
                         submitText="Save Cashcount"

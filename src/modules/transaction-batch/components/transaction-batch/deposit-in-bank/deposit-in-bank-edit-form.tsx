@@ -1,9 +1,10 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     ITransactionBatch,
     ITransactionBatchDepositInBankRequest,
@@ -16,6 +17,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -37,13 +40,9 @@ export interface IDepositInBankCreateFormProps
 }
 
 const DepositInBankCreateForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
     transactionBatchId,
+    ...formProps
 }: IDepositInBankCreateFormProps) => {
     const form = useForm<TDepositInBankFormValues>({
         resolver: standardSchemaResolver(depositInBankSchema),
@@ -51,40 +50,47 @@ const DepositInBankCreateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             deposit_in_bank: 0,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const isDisabled = (field: Path<TDepositInBankFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     const {
         mutate: setDepositInBank,
-        error,
+        error: rawError,
         isPending,
         reset,
     } = useTransactionBatchSetDepositInBank({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TDepositInBankFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit(async (formData) => {
         setDepositInBank({
             id: transactionBatchId,
             payload: { deposit_in_bank: formData.deposit_in_bank },
         })
-    })
+    }, handleFocusError)
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -106,7 +112,7 @@ const DepositInBankCreateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Save"

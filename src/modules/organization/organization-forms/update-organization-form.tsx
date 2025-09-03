@@ -42,7 +42,7 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
@@ -65,11 +65,9 @@ export interface IEditOrganizationFormProps
 const UpdateOrganizationForm = ({
     organizationId,
     className,
-    defaultValues,
-    // onError,
-    onSuccess,
-    media,
     coverMedia,
+    media,
+    ...formProps
 }: IEditOrganizationFormProps) => {
     const { countryCode } = useLocationInfo()
     const [openImagePicker, setOpenImagePicker] = useState(false)
@@ -87,7 +85,7 @@ const UpdateOrganizationForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            ...defaultValues,
+            ...formProps.defaultValues,
             cover_media_id: coverMedia?.id,
             media_id: media?.id,
         },
@@ -101,7 +99,7 @@ const UpdateOrganizationForm = ({
     } = useUpdateOrganization({
         options: {
             onSuccess: (data) => {
-                onSuccess?.(data)
+                formProps.onSuccess?.(data)
                 form.reset()
                 toast.success(`Successfully updated ${data.name} organization`)
                 setSelectedLogoMedia('')
@@ -113,6 +111,13 @@ const UpdateOrganizationForm = ({
 
     const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
         useUploadMedia()
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TEditOrganizationFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const handleUploadPhoto = async (media: string) => {
         const file = base64ImagetoFile(media, `media.jpg`) as File
@@ -153,11 +158,7 @@ const UpdateOrganizationForm = ({
         if (organizationId) {
             updateMutation({ id: organizationId, payload: requestData })
         }
-    })
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
+    }, handleFocusError)
 
     const HeaderTitleDisplay =
         form.watch('name') === ''
@@ -172,6 +173,7 @@ const UpdateOrganizationForm = ({
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('w-full min-w-[50vw] space-y-5 px-5', className)}
             >
@@ -181,6 +183,7 @@ const UpdateOrganizationForm = ({
                         label="Organization Photo"
                         name="media_id"
                         className="col-span-4"
+                        hiddenFields={formProps.hiddenFields}
                         render={({ field }) => {
                             return (
                                 <FormControl>
@@ -215,6 +218,9 @@ const UpdateOrganizationForm = ({
                                                     setOpenImagePicker(true)
                                                 }}
                                                 className="absolute bottom-2 right-2  size-fit  rounded-full border border-transparent p-2"
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             >
                                                 {field.value ? (
                                                     <ReplaceIcon size={20} />
@@ -233,6 +239,7 @@ const UpdateOrganizationForm = ({
                         control={form.control}
                         name="cover_media_id"
                         label="Banner Background"
+                        hiddenFields={formProps.hiddenFields}
                         render={({ field }) => {
                             const hasNoImageSelected =
                                 form.watch('media_id') === ''
@@ -280,6 +287,7 @@ const UpdateOrganizationForm = ({
                                                     selectedPhoto
                                                 )
                                             }}
+                                            disabled={isDisabled(field.name)}
                                         />
                                     </div>
                                 </div>
@@ -293,12 +301,14 @@ const UpdateOrganizationForm = ({
                             control={form.control}
                             name="name"
                             label="Organization Name"
+                            hiddenFields={formProps.hiddenFields}
                             render={({ field }) => (
                                 <Input
                                     {...field}
                                     id={field.name}
                                     autoComplete="org-name"
                                     placeholder="enter organization name"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -307,6 +317,7 @@ const UpdateOrganizationForm = ({
                             name="contact_number"
                             label="Organization Contact Number"
                             className="col-span-2"
+                            hiddenFields={formProps.hiddenFields}
                             render={({
                                 field,
                                 fieldState: { invalid, error },
@@ -323,6 +334,7 @@ const UpdateOrganizationForm = ({
                                         {...field}
                                         className="w-full"
                                         defaultCountry={countryCode}
+                                        disabled={isDisabled(field.name)}
                                     />
                                 </div>
                             )}
@@ -332,6 +344,7 @@ const UpdateOrganizationForm = ({
                             name="address"
                             label="Organization Address"
                             className="col-span-2"
+                            hiddenFields={formProps.hiddenFields}
                             render={({ field }) => (
                                 <Input
                                     {...field}
@@ -339,12 +352,14 @@ const UpdateOrganizationForm = ({
                                     autoComplete="organization address"
                                     placeholder="enter organization address"
                                     className=""
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
                             name="is_private"
+                            hiddenFields={formProps.hiddenFields}
                             render={({ field }) => {
                                 return (
                                     <GradientBackground gradientOnly>
@@ -355,6 +370,9 @@ const UpdateOrganizationForm = ({
                                                 onCheckedChange={field.onChange}
                                                 name={field.name}
                                                 className="order-1 after:absolute after:inset-0"
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-sm bg-secondary p-2">
@@ -379,6 +397,7 @@ const UpdateOrganizationForm = ({
                             label="Organization Description"
                             name="description"
                             className="col-span-4"
+                            hiddenFields={formProps.hiddenFields}
                             render={({ field }) => {
                                 const { ref: _ref, ...rest } = field
                                 return (
@@ -390,6 +409,7 @@ const UpdateOrganizationForm = ({
                                             className="w-full "
                                             textEditorClassName=" !max-w-none"
                                             placeholder="Write some description about your Organization..."
+                                            disabled={isDisabled(field.name)}
                                         />
                                     </FormControl>
                                 )
@@ -430,6 +450,7 @@ const UpdateOrganizationForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 name="terms_and_conditions"
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {
                                     const { ref: _ref, ...rest } = field
                                     return (
@@ -443,6 +464,9 @@ const UpdateOrganizationForm = ({
                                                 textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
                                                 placeholder="Write your terms and conditions..."
                                                 isAllowedHorizontalRule
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                         </FormControl>
                                     )
@@ -454,6 +478,7 @@ const UpdateOrganizationForm = ({
                                 control={form.control}
                                 name="privacy_policy"
                                 className="col-span-4"
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {
                                     const { ref: _ref, ...rest } = field
                                     return (
@@ -467,6 +492,9 @@ const UpdateOrganizationForm = ({
                                                 textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
                                                 placeholder="Write your privacy policy..."
                                                 isAllowedHorizontalRule
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                         </FormControl>
                                     )
@@ -478,6 +506,7 @@ const UpdateOrganizationForm = ({
                                 control={form.control}
                                 name="refund_policy"
                                 className="col-span-4"
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {
                                     const { ref: _ref, ...rest } = field
                                     return (
@@ -491,6 +520,9 @@ const UpdateOrganizationForm = ({
                                                 textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
                                                 placeholder="Write your refund policy..."
                                                 isAllowedHorizontalRule
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                         </FormControl>
                                     )
@@ -502,6 +534,7 @@ const UpdateOrganizationForm = ({
                                 control={form.control}
                                 name="cookie_policy"
                                 className="col-span-4"
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {
                                     const { ref: _ref, ...rest } = field
                                     return (
@@ -515,6 +548,9 @@ const UpdateOrganizationForm = ({
                                                 textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
                                                 placeholder="Write your cookie policy..."
                                                 isAllowedHorizontalRule
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                         </FormControl>
                                     )
@@ -526,6 +562,7 @@ const UpdateOrganizationForm = ({
                                 control={form.control}
                                 name="user_agreement"
                                 className="col-span-4"
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {
                                     const { ref: _ref, ...rest } = field
                                     return (
@@ -539,6 +576,9 @@ const UpdateOrganizationForm = ({
                                                 textEditorClassName="!h-[25rem] max-h-[30rem] !max-w-none"
                                                 placeholder="Write your user agreement..."
                                                 isAllowedHorizontalRule
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                             />
                                         </FormControl>
                                     )
@@ -560,13 +600,19 @@ const UpdateOrganizationForm = ({
                                     reset()
                                 }}
                                 className="w-full self-end px-8 sm:w-fit"
+                                disabled={isPending || formProps.readOnly}
                             >
                                 Reset
                             </Button>
                             <Button
                                 size="sm"
                                 type="submit"
-                                disabled={isPending || isUploadingPhoto}
+                                disabled={
+                                    isPending ||
+                                    isUploadingPhoto ||
+                                    !form.formState.isDirty ||
+                                    formProps.readOnly
+                                }
                                 className="w-full self-end px-8 sm:w-fit"
                             >
                                 {isPending ? (

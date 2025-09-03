@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
@@ -40,6 +41,7 @@ type UserOrganizationsDashboardProps = {
 const UserOrganizationsDashboard = ({
     organizationsWithBranches,
 }: UserOrganizationsDashboardProps) => {
+    const queryClient = useQueryClient()
     const navigate = useNavigate()
     const {
         updateCurrentAuth,
@@ -56,6 +58,10 @@ const UserOrganizationsDashboard = ({
             const response = await switchOrganization(userOrganization.id)
 
             if (response) {
+                await queryClient.invalidateQueries({
+                    queryKey: ['auth', 'context'],
+                })
+
                 updateCurrentAuth({
                     user_organization: userOrganization,
                     user: userOrganization.user,

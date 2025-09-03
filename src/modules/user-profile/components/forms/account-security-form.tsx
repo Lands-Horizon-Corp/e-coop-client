@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
-
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
@@ -15,14 +13,13 @@ import {
 import { IUserBase } from '@/modules/user/user.types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { Form, FormItem } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password-input'
-import { Separator } from '@/components/ui/separator'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm } from '@/types'
 
@@ -36,12 +33,8 @@ export interface IAccountSecurityFormProps
         IForm<Partial<TAccountSecurityFormValues>, IUserBase> {}
 
 const AccountSecurityForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IAccountSecurityFormProps) => {
     const { onOpen } = useConfirmModalStore()
 
@@ -53,7 +46,7 @@ const AccountSecurityForm = ({
             old_password: '',
             new_password: '',
             confirm_password: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -61,16 +54,24 @@ const AccountSecurityForm = ({
         error: rawError,
         mutate,
         isPending,
+        reset,
     } = useUpdateUserProfileSecurity({
         options: {
-            onError,
+            onError: formProps.onError,
             onSuccess: (newUserData) => {
-                onSuccess?.(newUserData)
+                formProps.onSuccess?.(newUserData)
                 toast.success('Your password has been changed!')
                 form.reset()
             },
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TAccountSecurityFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         onOpen({
@@ -79,25 +80,19 @@ const AccountSecurityForm = ({
                 'Are you sure to change your password? You will be signed out after saving. Continue?',
             onConfirm: () => mutate(formData),
         })
-    })
+    }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })
-
-    const isDisabled = (field: Path<TAccountSecurityFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    useEffect(() => {
-        form.reset(defaultValues)
-    }, [defaultValues, form])
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-4">
@@ -110,6 +105,7 @@ const AccountSecurityForm = ({
                                     {...field}
                                     id={field.name}
                                     placeholder="Old Password"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -123,6 +119,7 @@ const AccountSecurityForm = ({
                                         id={field.name}
                                         placeholder="+8 Character Password"
                                         autoComplete="new-password"
+                                        disabled={isDisabled(field.name)}
                                     />
                                     <ValueChecklistMeter
                                         value={field.value}
@@ -155,31 +152,17 @@ const AccountSecurityForm = ({
                         />
                     </fieldset>
                 </fieldset>
-                <FormErrorMessage errorMessage={error} />
-                {form.formState.isDirty && ( // Only show buttons when the form is dirty
-                    <div>
-                        <Separator className="my-2 sm:my-4" />
-                        <div className="flex items-center justify-end gap-x-2">
-                            <Button
-                                size="sm"
-                                type="button"
-                                variant="ghost"
-                                onClick={() => form.reset()}
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                Reset
-                            </Button>
-                            <Button
-                                size="sm"
-                                type="submit"
-                                disabled={isPending}
-                                className="w-full self-end px-8 sm:w-fit"
-                            >
-                                {isPending ? <LoadingSpinner /> : 'Update'}
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                <FormFooterResetSubmit
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
+                    disableSubmit={!form.formState.isDirty}
+                    submitText="Update"
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                />
             </form>
         </Form>
     )

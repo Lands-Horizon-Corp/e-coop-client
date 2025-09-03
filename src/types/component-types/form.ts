@@ -13,8 +13,11 @@ export interface IForm<
     resetOnDefaultChange?: boolean
     hiddenFields?: Array<Path<THidisable>>
     disabledFields?: Array<Path<THidisable>>
+    autoSave?: boolean
+    onErrorFocus?: boolean
     onSuccess?: (data: IData) => void
     onError?: (e: IErr) => void
     onLoading?: (loadingState: boolean) => void
     onSubmit?: (formDatas: Required<TDefaultVals>) => void
+    onFormDirty?: (isDirty: boolean) => void
 }

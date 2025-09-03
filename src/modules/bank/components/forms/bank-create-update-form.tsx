@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -16,7 +16,7 @@ import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -32,15 +32,7 @@ export interface IBankFormProps
     bankId?: TEntityId
 }
 
-const BankCreateUpdateForm = ({
-    bankId,
-    readOnly,
-    className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
-}: IBankFormProps) => {
+const BankCreateUpdateForm = ({ className, ...formProps }: IBankFormProps) => {
     const form = useForm<TBankFormValues>({
         resolver: standardSchemaResolver(BankSchema),
         reValidateMode: 'onChange',
@@ -48,7 +40,7 @@ const BankCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -56,8 +48,8 @@ const BankCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Bank Created',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -65,43 +57,47 @@ const BankCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Bank updated',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TBankFormValues>({
+            form,
+            readOnly: formProps.readOnly,
+            hiddenFields: formProps.hiddenFields,
+            disabledFields: formProps.disabledFields,
+            defaultValues: formProps.defaultValues,
+            autoSave: false,
+        })
+
     const onSubmit = form.handleSubmit((formData) => {
-        if (bankId) {
-            updateMutation.mutate({ id: bankId, payload: formData })
+        if (formProps.bankId) {
+            updateMutation.mutate({ id: formProps.bankId, payload: formData })
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: errorResponse,
         isPending,
         reset,
-    } = bankId ? updateMutation : createMutation
+    } = formProps.bankId ? updateMutation : createMutation
 
     const error = serverRequestErrExtractor({ error: errorResponse })
-
-    const isDisabled = (field: Path<TBankFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -164,10 +160,10 @@ const BankCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={bankId ? 'Update' : 'Create'}
+                    submitText={formProps.bankId ? 'Update' : 'Create'}
                     onReset={() => {
                         form.reset()
                         reset()

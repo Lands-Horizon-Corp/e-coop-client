@@ -19,6 +19,8 @@ import {
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { Input } from '@/components/ui/input'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm } from '@/types'
 
 import { useForgotPassword } from '../../authentication.service'
@@ -34,11 +36,8 @@ interface IForgotPasswordEmailFormProps
         IForm<Partial<TForgotPasswordEmail>, TForgotPasswordEmail> {}
 
 const ForgotPasswordEmail = ({
-    readOnly,
     className,
-    defaultValues,
-    onError,
-    onSuccess,
+    ...formProps
 }: IForgotPasswordEmailFormProps) => {
     const form = useForm<TForgotPasswordEmail>({
         resolver: standardSchemaResolver(forgotPasswordFormSchema),
@@ -46,7 +45,7 @@ const ForgotPasswordEmail = ({
         mode: 'onChange',
         defaultValues: {
             key: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -56,19 +55,31 @@ const ForgotPasswordEmail = ({
         isPending: isLoading,
     } = useForgotPassword({
         options: {
-            onError,
-            onSuccess,
+            onError: formProps.onError,
+            onSuccess: formProps.onSuccess,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TForgotPasswordEmail>({
+            form,
+            ...formProps,
+            autoSave: false,
+            preventExitOnDirty: false,
+        })
+
+    const onSubmit = form.handleSubmit(
+        (formData) => onFormSubmit(formData),
+        handleFocusError
+    )
 
     const error = serverRequestErrExtractor({ error: responseError })
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((formData) =>
-                    onFormSubmit(formData)
-                )}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full flex-col gap-y-4 sm:w-[390px]',
                     className
@@ -87,7 +98,7 @@ const ForgotPasswordEmail = ({
                     </p>
                 </div>
                 <fieldset
-                    disabled={isLoading || readOnly}
+                    disabled={isLoading || formProps.readOnly}
                     className="space-y-4"
                 >
                     <FormField
@@ -102,6 +113,7 @@ const ForgotPasswordEmail = ({
                                             id={field.name}
                                             autoComplete="off"
                                             placeholder="Email address"
+                                            disabled={isDisabled(field.name)}
                                         />
                                     </div>
                                 </FormControl>
@@ -116,7 +128,7 @@ const ForgotPasswordEmail = ({
                     <Button
                         size="sm"
                         type="submit"
-                        disabled={isLoading || readOnly}
+                        disabled={isLoading || formProps.readOnly}
                         className="w-full max-w-xl rounded-3xl"
                     >
                         {isLoading ? <LoadingSpinner /> : 'Send Code to Email'}

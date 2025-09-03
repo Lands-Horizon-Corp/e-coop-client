@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -21,6 +21,7 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
@@ -41,17 +42,12 @@ export interface IUserOrgPermissionUpdateFormProps
             TUserOrgPermissionSchema
         > {
     userOrganizatrionId: TEntityId
-    readOnly?: boolean
 }
 
 const UserOrgPermissionUpdateForm = ({
     userOrganizatrionId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IUserOrgPermissionUpdateFormProps) => {
     const permissionTemplate = useModalState()
     const form = useForm<TUserOrgPermissionSchema>({
@@ -62,7 +58,7 @@ const UserOrgPermissionUpdateForm = ({
             permission_name: '',
             permission_description: '',
             permissions: [],
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -71,34 +67,39 @@ const UserOrgPermissionUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'User permission saved',
                 textError: 'Failed to update user permission',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TUserOrgPermissionSchema>({
+            form,
+            ...formProps,
+            autoSave: false,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         updateMutation.mutate({
             id: userOrganizatrionId,
             data: formData as IUserOrganizationPermissionRequest,
         })
-    })
+    }, handleFocusError)
 
     const { error: rawError, isPending, reset } = updateMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TUserOrgPermissionSchema>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <div className="border p-2 rounded-xl flex items-center justify-between bg-card">
@@ -188,7 +189,7 @@ const UserOrgPermissionUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Update"

@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -32,10 +32,7 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm } from '@/types'
 
 import { useUpdateCurrentBranchSettings } from '../../branch-settings.service'
-import {
-    IBranchSettings,
-    IBranchSettingsRequest,
-} from '../../branch-settings.types'
+import { IBranchSettings } from '../../branch-settings.types'
 import {
     BranchSettingsSchema,
     TBranchSettingsSchema,
@@ -48,13 +45,8 @@ export interface IBranchSettingsFormProps
         IForm<Partial<TBranchSettingsFormValues>, IBranchSettings, Error> {}
 
 const BranchSettingsForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    resetOnDefaultChange,
-    onError,
-    onSuccess,
+    ...formProps
 }: IBranchSettingsFormProps) => {
     const form = useForm<TBranchSettingsFormValues>({
         resolver: standardSchemaResolver(BranchSettingsSchema),
@@ -100,7 +92,7 @@ const BranchSettingsForm = ({
             check_voucher_or_iteration: 0,
             check_voucher_or_unique: false,
             check_voucher_use_date_or: false,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -111,38 +103,38 @@ const BranchSettingsForm = ({
                 textError: 'Failed to save branch settings.',
                 onSuccess: (data) => {
                     form.reset(data)
-                    onSuccess?.(data)
+                    formProps.onSuccess?.(data)
                 },
-                onError,
+                onError: formProps.onError,
             }),
         },
     })
 
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TBranchSettingsFormValues>({
+            form,
+            ...formProps,
+            autoSave: true,
+        })
+
     const onSubmit = form.handleSubmit(
-        async (formData) => await updateMutation.mutateAsync(formData)
+        async (formData) => await updateMutation.mutateAsync(formData),
+        handleFocusError
     )
 
     const { error: rawError, isPending, reset } = updateMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TBranchSettingsFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const { firstError } = useFormHelper<IBranchSettingsRequest>({
-        form,
-        defaultValues,
-        resetOnDefaultChange: resetOnDefaultChange,
-    })
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-6', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-6"
                 >
                     {/* Default Member Creation Settings */}
@@ -1010,8 +1002,8 @@ const BranchSettingsForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error || firstError}
-                    readOnly={readOnly}
+                    error={error}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText="Update Branch Settings"

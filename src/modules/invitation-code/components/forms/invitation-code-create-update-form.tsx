@@ -1,9 +1,10 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     IInvitationCode,
     IInvitationCodeRequest,
@@ -34,7 +35,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
-import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
@@ -52,11 +53,8 @@ export interface InvitationCodeFormProps
 
 const InvitationCodeCreateUpdateForm = ({
     invitationCodeId,
-    readOnly,
     className,
-    disabledFields,
-    onSuccess,
-    defaultValues,
+    ...formProps
 }: InvitationCodeFormProps) => {
     const permissionTemplate = useModalState()
 
@@ -72,10 +70,10 @@ const InvitationCodeCreateUpdateForm = ({
             description: '',
             permission_name: '',
             permission_description: '',
-            ...defaultValues,
-            permissions: defaultValues?.permissions ?? [],
+            ...formProps.defaultValues,
+            permissions: formProps.defaultValues?.permissions ?? [],
             expiration_date: toReadableDate(
-                defaultValues?.expiration_date ?? new Date(),
+                formProps.defaultValues?.expiration_date ?? new Date(),
                 'yyyy-MM-dd'
             ),
         },
@@ -86,14 +84,21 @@ const InvitationCodeCreateUpdateForm = ({
         isPending: isCreating,
         error: createError,
         reset: resetCreate,
-    } = useCreate({ options: { onSuccess: onSuccess } })
+    } = useCreate({ options: { onSuccess: formProps.onSuccess } })
 
     const {
         mutate: updateInvitationCode,
         isPending: isUpdating,
         error: updateError,
         reset: resetUpdate,
-    } = useUpdateById({ options: { onSuccess: onSuccess } })
+    } = useUpdateById({ options: { onSuccess: formProps.onSuccess } })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TInvitationCodeFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!invitationCodeId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         const requestData = {
@@ -111,21 +116,16 @@ const InvitationCodeCreateUpdateForm = ({
         } else {
             createInvitationCode(requestData as IInvitationCodeRequest)
         }
-    })
+    }, handleFocusError)
 
     const isPending = isCreating || isUpdating
-    const error = createError || updateError
-
-    const isDisabled = (field: Path<TInvitationCodeFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
-    const isDirty = Object.keys(form.formState.dirtyFields).length > 0
-
-    useAlertBeforeClosing(isDirty)
+    const rawError = createError || updateError
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn(
                     'flex w-full flex-col gap-y-4  max-w-full min-w-0',
@@ -133,7 +133,7 @@ const InvitationCodeCreateUpdateForm = ({
                 )}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3  max-w-full min-w-0"
                 >
                     <fieldset className="space-y-3">
@@ -249,6 +249,7 @@ const InvitationCodeCreateUpdateForm = ({
                                         {...field}
                                         value={field.value ?? ''}
                                         className="block"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -273,14 +274,14 @@ const InvitationCodeCreateUpdateForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 name="current_use"
-                                label="curent Use"
+                                label="Current Use"
                                 hiddenFields={
                                     invitationCodeId ? ['max_use'] : []
                                 }
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        placeholder="Max Use"
+                                        placeholder="Current Use"
                                         type="number"
                                         onChange={(e) => {
                                             field.onChange(
@@ -399,7 +400,7 @@ const InvitationCodeCreateUpdateForm = ({
                 <Separator />
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={invitationCodeId ? 'Update' : 'Create'}

@@ -1,4 +1,4 @@
-import { Path, useFieldArray, useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -20,6 +20,8 @@ import { Form, FormControl, FormItem } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Separator } from '@/components/ui/separator'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { useCloseMemberProfile } from '../../member-close-remark.service'
@@ -35,20 +37,16 @@ interface IMemberProfileCloseFormProps
 }
 
 const MemberProfileCloseForm = ({
-    readOnly,
     className,
     profileId,
-    hiddenFields,
-    disabledFields,
-    defaultValues,
-    onSuccess,
+    ...formProps
 }: IMemberProfileCloseFormProps) => {
     const form = useForm<TMemberCloseForm>({
         mode: 'onChange',
         reValidateMode: 'onChange',
         defaultValues: {
             remarks: [],
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
         resolver: standardSchemaResolver(MemberCreateCloseRemarksSchema),
     })
@@ -61,17 +59,22 @@ const MemberProfileCloseForm = ({
         reset,
     } = useCloseMemberProfile({
         options: {
-            onSuccess,
+            onSuccess: formProps.onSuccess,
             meta: {
                 invalidates: [['member-profile', profileId]],
             },
         },
     })
 
-    const error = serverRequestErrExtractor({ error: rawError })
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberCloseForm>({
+            form,
+            ...formProps,
+            autoSave: false,
+            preventExitOnDirty: false,
+        })
 
-    const isDisabled = (field: Path<TMemberCloseForm>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const error = serverRequestErrExtractor({ error: rawError })
 
     const {
         remove: removeRemark,
@@ -85,25 +88,26 @@ const MemberProfileCloseForm = ({
 
     form.watch('remarks')
 
-    const handleSubmit = ({ remarks }: TMemberCloseForm) => {
+    const handleSubmit = form.handleSubmit(({ remarks }: TMemberCloseForm) => {
         closeAccount({ profileId, data: remarks })
-    }
+    }, handleFocusError)
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(handleSubmit)}
+                ref={formRef}
+                onSubmit={handleSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
                     className="min-h-[60vh] gap-x-4 gap-y-4 space-y-5"
-                    disabled={isClosingAccount || readOnly}
+                    disabled={isClosingAccount || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         name="remarks"
                         control={form.control}
                         label="Add Close Remark"
-                        hiddenFields={hiddenFields}
+                        hiddenFields={formProps.hiddenFields}
                         render={() => (
                             <FormItem className="col-span-1 space-y-2">
                                 <Separator />
@@ -123,7 +127,9 @@ const MemberProfileCloseForm = ({
                                         >
                                             <FormFieldWrapper
                                                 control={form.control}
-                                                hiddenFields={hiddenFields}
+                                                hiddenFields={
+                                                    formProps.hiddenFields
+                                                }
                                                 label="Reason"
                                                 name={`remarks.${index}.reason`}
                                                 render={({ field }) => (
@@ -141,7 +147,9 @@ const MemberProfileCloseForm = ({
                                             />
                                             <FormFieldWrapper
                                                 control={form.control}
-                                                hiddenFields={hiddenFields}
+                                                hiddenFields={
+                                                    formProps.hiddenFields
+                                                }
                                                 label="Closure Detailed Description"
                                                 name={`remarks.${index}.description`}
                                                 render={({ field }) => (
@@ -208,13 +216,13 @@ const MemberProfileCloseForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isClosingAccount}
                     disableSubmit={isClosingAccount || !!data}
                     submitText="Close Account"
                     className="sticky bottom-0"
                     onReset={() => {
-                        form.reset(defaultValues)
+                        form.reset(formProps.defaultValues)
                         reset()
                     }}
                 />

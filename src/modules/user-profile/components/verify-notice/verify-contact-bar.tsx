@@ -30,8 +30,10 @@ import {
 } from '@/components/ui/input-otp'
 
 import UseCooldown from '@/hooks/use-cooldown'
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 type TVerifyMode = 'email' | 'mobile'
+type TVerifyFormValues = z.infer<typeof OTPSchema>
 
 interface Props {
     autoFocus?: boolean
@@ -44,7 +46,7 @@ const VerifyContactBar = ({
     verifyMode,
     onSuccess,
 }: Props) => {
-    const form = useForm<z.infer<typeof OTPSchema>>({
+    const form = useForm<TVerifyFormValues>({
         resolver: standardSchemaResolver(OTPSchema),
         reValidateMode: 'onChange',
         defaultValues: {
@@ -57,6 +59,13 @@ const VerifyContactBar = ({
             onSuccess,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TVerifyFormValues>({
+            form,
+            autoSave: false,
+            preventExitOnDirty: false,
+        })
 
     return (
         <div className="flex flex-col justify-between gap-y-4 rounded-xl border border-border bg-secondary/70 p-3 lg:flex-row">
@@ -76,8 +85,10 @@ const VerifyContactBar = ({
             </div>
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit((data) =>
-                        handleVerify({ ...data, verifyMode })
+                    ref={formRef}
+                    onSubmit={form.handleSubmit(
+                        (data) => handleVerify({ ...data, verifyMode }),
+                        handleFocusError
                     )}
                 >
                     <fieldset
@@ -98,6 +109,7 @@ const VerifyContactBar = ({
                                                 REGEXP_ONLY_DIGITS_AND_CHARS
                                             }
                                             containerClassName="mx-auto capitalize w-fit"
+                                            disabled={isDisabled(field.name)}
                                             onComplete={() =>
                                                 form.handleSubmit((data) =>
                                                     handleVerify({

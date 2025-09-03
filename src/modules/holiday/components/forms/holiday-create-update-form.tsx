@@ -32,10 +32,7 @@ export interface IHolidayFormProps
 const HolidayCreateUpdateForm = ({
     holidayId,
     className,
-    defaultValues,
-    onError,
-    onSuccess,
-    ...props
+    ...formProps
 }: IHolidayFormProps) => {
     const form = useForm<THolidaySchema>({
         resolver: standardSchemaResolver(HolidaySchema),
@@ -44,9 +41,9 @@ const HolidayCreateUpdateForm = ({
         defaultValues: {
             name: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
             entry_date: toInputDateString(
-                defaultValues?.entry_date ?? new Date()
+                formProps.defaultValues?.entry_date ?? new Date()
             ),
         },
     })
@@ -56,8 +53,8 @@ const HolidayCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Holiday created',
                 textError: 'Failed to create holiday',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -66,11 +63,18 @@ const HolidayCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Holiday updated',
                 textError: 'Failed to update holiday',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<THolidaySchema>({
+            form,
+            ...formProps,
+            autoSave: !!holidayId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         const data = {
@@ -86,7 +90,7 @@ const HolidayCreateUpdateForm = ({
         } else {
             createMutation.mutate(data)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -94,21 +98,17 @@ const HolidayCreateUpdateForm = ({
         reset,
     } = holidayId ? updateMutation : createMutation
 
-    const { getDisableHideFieldProps } = useFormHelper<THolidaySchema>({
-        form,
-        ...props,
-    })
-
     const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || props.readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -122,7 +122,7 @@ const HolidayCreateUpdateForm = ({
                                     id={field.name}
                                     autoComplete="off"
                                     placeholder="Holiday Name"
-                                    {...getDisableHideFieldProps(field.name)}
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -138,7 +138,7 @@ const HolidayCreateUpdateForm = ({
                                     type="date"
                                     {...field}
                                     value={field.value ?? ''}
-                                    {...getDisableHideFieldProps(field.name)}
+                                    disabled={isDisabled(field.name)}
                                     className="block"
                                 />
                             )}
@@ -153,7 +153,7 @@ const HolidayCreateUpdateForm = ({
                                     id={field.name}
                                     autoComplete="off"
                                     placeholder="Description"
-                                    {...getDisableHideFieldProps(field.name)}
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -161,7 +161,7 @@ const HolidayCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={props.readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={holidayId ? 'Update' : 'Create'}

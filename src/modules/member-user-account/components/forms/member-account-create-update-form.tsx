@@ -25,6 +25,8 @@ import InputDate from '@/components/ui/input-date'
 import PasswordInput from '@/components/ui/password-input'
 import { PhoneInput } from '@/components/ui/phone-input'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import {
@@ -46,12 +48,8 @@ interface IMemberUserAccountFormProps
 const MemberUserAccountCreateUpdateForm = ({
     userId,
     memberProfileId,
-
-    readOnly,
     className,
-    defaultValues,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberUserAccountFormProps) => {
     const form = useForm<TForm>({
         resolver: standardSchemaResolver(MemberProfileUserAccountSchema),
@@ -66,8 +64,8 @@ const MemberUserAccountCreateUpdateForm = ({
             contact_number: '',
             middle_name: '',
             suffix: '',
-            ...defaultValues,
-            with_password: defaultValues?.with_password ?? false,
+            ...formProps.defaultValues,
+            with_password: formProps.defaultValues?.with_password ?? false,
             birthdate: toReadableDate(new Date(), 'yyyy-MM-dd'),
         },
     })
@@ -92,8 +90,8 @@ const MemberUserAccountCreateUpdateForm = ({
     const createMutation = useCreateMemberProfileUserAccount({
         options: {
             ...withToastCallbacks({
-                onError,
-                onSuccess,
+                onError: formProps.onError,
+                onSuccess: formProps.onSuccess,
                 textSuccess: 'Created member user account',
                 textError: 'Failed to create member user account',
             }),
@@ -103,15 +101,21 @@ const MemberUserAccountCreateUpdateForm = ({
     const updateMutation = useUpdateMemberProfileUserAccount({
         options: {
             ...withToastCallbacks({
-                onError,
-                onSuccess,
+                onError: formProps.onError,
+                onSuccess: formProps.onSuccess,
                 textSuccess: 'Updated member user account',
                 textError: 'Failed to update member user account',
             }),
         },
     })
 
-    const handleSubmit = (formData: TForm) => {
+    const { formRef, handleFocusError, isDisabled } = useFormHelper<TForm>({
+        form,
+        ...formProps,
+        autoSave: !!userId,
+    })
+
+    const handleSubmit = form.handleSubmit((formData: TForm) => {
         const finalPayload: IMemberProfileUserAccountRequest = {
             ...formData,
             birthdate: new Date(formData.birthdate).toISOString(),
@@ -128,7 +132,7 @@ const MemberUserAccountCreateUpdateForm = ({
             memberProfileId,
             data: finalPayload,
         })
-    }
+    }, handleFocusError)
 
     const {
         isPending: isLoading,
@@ -141,11 +145,12 @@ const MemberUserAccountCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(handleSubmit)}
+                ref={formRef}
+                onSubmit={handleSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isLoading || readOnly}
+                    disabled={isLoading || formProps.readOnly}
                     className="grid grid-cols-1 gap-x-6 gap-y-8"
                 >
                     <fieldset className="space-y-3">
@@ -162,6 +167,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                         id={field.name}
                                         autoComplete="given-name"
                                         placeholder="First Name"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -176,6 +182,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                         id={field.name}
                                         placeholder="Middle Name"
                                         autoComplete="additional-name"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -190,6 +197,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                         id={field.name}
                                         placeholder="Last Name"
                                         autoComplete="family-name"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -207,6 +215,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                     {...field}
                                     value={field.value ?? ''}
                                     className="block"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -231,6 +240,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                         {...field}
                                         className="w-full"
                                         defaultCountry="PH"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 </div>
                             )}
@@ -250,6 +260,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                     id={field.name}
                                     autoComplete="username"
                                     placeholder="Username"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -263,6 +274,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                     id={field.name}
                                     autoComplete="email"
                                     placeholder="example@email.com"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -289,6 +301,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                         defaultVisibility
                                         placeholder="+8 Character Password"
                                         autoComplete="new-password"
+                                        disabled={isDisabled(field.name)}
                                     />
                                     {with_password && (
                                         <ValueChecklistMeter
@@ -329,7 +342,7 @@ const MemberUserAccountCreateUpdateForm = ({
                 )}
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isLoading}
                     disableSubmit={!form.formState.isDirty}
                     submitText={userId === undefined ? 'Create' : 'Update'}

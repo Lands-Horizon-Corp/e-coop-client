@@ -1,10 +1,11 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -13,6 +14,8 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -40,12 +43,8 @@ export interface IMemberAddressFormProps
 const MemberAddressCreateUpdateForm = ({
     memberProfileId,
     memberAddressId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberAddressFormProps) => {
     const form = useForm<TMemberAddressFormValues>({
         resolver: standardSchemaResolver(MemberAddressSchema),
@@ -60,7 +59,7 @@ const MemberAddressCreateUpdateForm = ({
             barangay: '',
             landmark: '',
             address: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -68,8 +67,8 @@ const MemberAddressCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Created',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -77,11 +76,18 @@ const MemberAddressCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Updated',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberAddressFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!memberAddressId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (memberAddressId) {
@@ -96,25 +102,27 @@ const MemberAddressCreateUpdateForm = ({
                 data: formData,
             })
         }
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = memberAddressId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = memberAddressId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TMemberAddressFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const error = serverRequestErrExtractor({ error: rawError })
 
     const countryCode = form.watch('country_code')
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -139,6 +147,7 @@ const MemberAddressCreateUpdateForm = ({
                                 <CountryCombobox
                                     {...field}
                                     defaultValue={field.value}
+                                    disabled={isDisabled(field.name)}
                                     onChange={(country) =>
                                         field.onChange(country.alpha2)
                                     }
@@ -231,7 +240,7 @@ const MemberAddressCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={memberAddressId ? 'Update' : 'Create'}

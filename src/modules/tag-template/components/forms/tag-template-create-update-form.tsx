@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -22,6 +22,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -48,12 +50,8 @@ export interface ITagTemplateFormProps
 
 const TagTemplateCreateUpdateForm = ({
     tagTemplateId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: ITagTemplateFormProps) => {
     const form = useForm<TTagTemplateFormValues>({
         resolver: standardSchemaResolver(TagTemplateSchema),
@@ -64,7 +62,7 @@ const TagTemplateCreateUpdateForm = ({
             category: TAG_CATEGORY[0],
             color: '',
             icon: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -73,8 +71,8 @@ const TagTemplateCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Tag template created',
                 textError: 'Failed to create tag template',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -83,11 +81,18 @@ const TagTemplateCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Tag template updated',
                 textError: 'Failed to update tag template',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TTagTemplateFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!tagTemplateId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (tagTemplateId) {
@@ -95,7 +100,7 @@ const TagTemplateCreateUpdateForm = ({
         } else {
             createMutation.mutate(formData)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -104,17 +109,15 @@ const TagTemplateCreateUpdateForm = ({
     } = tagTemplateId ? updateMutation : createMutation
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TTagTemplateFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -193,20 +196,14 @@ const TagTemplateCreateUpdateForm = ({
                             <IconCombobox
                                 {...field}
                                 value={field.value as TIcon}
+                                disabled={isDisabled(field.name)}
                             />
-                            // <Input
-                            //     {...field}
-                            //     id={field.name}
-                            //     placeholder="e.g. star, heart"
-                            //     autoComplete="off"
-                            //     disabled={isDisabled(field.name)}
-                            // />
                         )}
                     />
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={tagTemplateId ? 'Update' : 'Create'}

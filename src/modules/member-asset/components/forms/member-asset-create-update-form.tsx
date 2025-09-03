@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IMedia } from '@/modules/media'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -16,6 +17,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -43,12 +46,8 @@ export interface IMemberAssetFormProps
 const MemberAssetCreateUpdateForm = ({
     memberProfileId,
     assetId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberAssetFormProps) => {
     const form = useForm<TMemberAssetFormValues>({
         resolver: standardSchemaResolver(MemberAssetSchema),
@@ -57,9 +56,9 @@ const MemberAssetCreateUpdateForm = ({
         defaultValues: {
             name: '',
             member_profile_id: memberProfileId,
-            ...defaultValues,
+            ...formProps.defaultValues,
             entry_date: toInputDateString(
-                defaultValues?.entry_date ?? new Date()
+                formProps.defaultValues?.entry_date ?? new Date()
             ),
         },
     })
@@ -68,8 +67,8 @@ const MemberAssetCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Created',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -77,11 +76,18 @@ const MemberAssetCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Updated',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberAssetFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!assetId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (assetId) {
@@ -96,23 +102,25 @@ const MemberAssetCreateUpdateForm = ({
                 data: formData,
             })
         }
-    })
+    }, handleFocusError)
 
-    const { error, isPending, reset } = assetId
-        ? updateMutation
-        : createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = assetId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TMemberAssetFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -207,7 +215,7 @@ const MemberAssetCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={assetId ? 'Update' : 'Create'}

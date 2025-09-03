@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -13,6 +13,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import TextEditor from '@/components/text-editor'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -33,13 +35,9 @@ export interface ILoanPurposeFormProps
 }
 
 const LoanPurposeCreateUpdateForm = ({
-    readOnly,
-    className,
     loanPurposeId,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    className,
+    ...formProps
 }: ILoanPurposeFormProps) => {
     const form = useForm<TLoanPurposeSchema>({
         resolver: standardSchemaResolver(LoanPurposeSchema),
@@ -48,7 +46,7 @@ const LoanPurposeCreateUpdateForm = ({
         defaultValues: {
             icon: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -56,8 +54,8 @@ const LoanPurposeCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Created',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -65,11 +63,18 @@ const LoanPurposeCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Updated',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TLoanPurposeSchema>({
+            form,
+            ...formProps,
+            autoSave: !!loanPurposeId,
+        })
 
     const onSubmit = form.handleSubmit((payload) => {
         if (loanPurposeId) {
@@ -77,7 +82,7 @@ const LoanPurposeCreateUpdateForm = ({
         } else {
             createMutation.mutate(payload)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -85,19 +90,17 @@ const LoanPurposeCreateUpdateForm = ({
         reset,
     } = loanPurposeId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TLoanPurposeSchema>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -110,6 +113,7 @@ const LoanPurposeCreateUpdateForm = ({
                                     {...field}
                                     value={field.value as TIcon}
                                     placeholder="Select purpose icon"
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -131,7 +135,7 @@ const LoanPurposeCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={loanPurposeId ? 'Update' : 'Create'}

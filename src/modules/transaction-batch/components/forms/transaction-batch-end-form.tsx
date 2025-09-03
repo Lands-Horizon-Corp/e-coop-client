@@ -1,7 +1,7 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
@@ -17,6 +17,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import SignatureField from '@/components/ui/signature-field'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm } from '@/types'
 
@@ -39,29 +41,30 @@ export interface ITransactionBatchEndFormProps
         > {}
 
 const TransactionBatchEndForm = ({
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: ITransactionBatchEndFormProps) => {
     const form = useForm<TTransactionBatchEndFormValues>({
-        resolver: zodResolver(TransactionBatchEndSchema),
+        resolver: standardSchemaResolver(TransactionBatchEndSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
             employee_by_signature_media_id: '',
             employee_by_name: '',
             employee_by_position: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const { onOpenSecurityAction } = useActionSecurityStore()
 
-    const isDisabled = (field: Path<TTransactionBatchEndFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TTransactionBatchEndFormValues>({
+            form,
+            ...formProps,
+            autoSave: false,
+            preventExitOnDirty: false,
+        })
 
     const {
         mutate: endBatch,
@@ -69,8 +72,8 @@ const TransactionBatchEndForm = ({
         isPending,
     } = useTransactionBatchEndCurrentBatch({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
@@ -82,16 +85,17 @@ const TransactionBatchEndForm = ({
             description: 'Type your password to end your transaction',
             onSuccess: () => endBatch(formData),
         })
-    })
+    }, handleFocusError)
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -121,6 +125,7 @@ const TransactionBatchEndForm = ({
                                             newImage
                                         )
                                     }}
+                                    disabled={isDisabled(field.name)}
                                 />
                             )
                         }}
@@ -160,7 +165,7 @@ const TransactionBatchEndForm = ({
                     <Button
                         size="sm"
                         type="submit"
-                        disabled={isPending}
+                        disabled={isPending || formProps.readOnly}
                         className="mt-4 w-full self-end px-8"
                     >
                         {isPending ? <LoadingSpinner /> : 'End Batch'}

@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -14,6 +14,8 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -37,12 +39,8 @@ export interface ICollateralFormProps
 
 const CollateralCreateUpdateForm = ({
     collateralId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: ICollateralFormProps) => {
     const form = useForm<TCollateralSchema>({
         resolver: standardSchemaResolver(CollateralSchema),
@@ -52,28 +50,35 @@ const CollateralCreateUpdateForm = ({
             name: '',
             description: '',
             icon: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateCollateral({
         options: {
             ...withToastCallbacks({
-                textSuccess: 'Loan Status Created',
-                onSuccess,
-                onError,
+                textSuccess: 'Collateral Created',
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
     const updateMutation = useUpdateCollateralById({
         options: {
             ...withToastCallbacks({
-                textSuccess: 'Loan Status Updated',
-                onSuccess,
-                onError,
+                textSuccess: 'Collateral Updated',
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TCollateralSchema>({
+            form,
+            ...formProps,
+            autoSave: !!collateralId,
+        })
 
     const onSubmit = form.handleSubmit((payload) => {
         if (collateralId) {
@@ -81,7 +86,7 @@ const CollateralCreateUpdateForm = ({
         } else {
             createMutation.mutate(payload)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -91,17 +96,15 @@ const CollateralCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TCollateralSchema>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <FormFieldWrapper
@@ -142,6 +145,7 @@ const CollateralCreateUpdateForm = ({
                             <IconCombobox
                                 {...field}
                                 value={field.value as TIcon}
+                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
@@ -149,7 +153,7 @@ const CollateralCreateUpdateForm = ({
 
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={collateralId ? 'Update' : 'Create'}

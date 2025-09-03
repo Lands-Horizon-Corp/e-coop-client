@@ -24,6 +24,8 @@ import {
     InputOTPSlot,
 } from '@/components/ui/input-otp'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IForm } from '@/types'
 
 import { useVerify } from '../../authentication.service'
@@ -39,18 +41,26 @@ interface Props extends IForm<TVerifyForm, IUserBase> {
 
 const VerifyForm = ({
     className,
-    readOnly = false,
     verifyMode = 'mobile',
-    defaultValues = { otp: '' },
     onSkip,
-    onError,
-    onSuccess,
+    ...formProps
 }: Props) => {
     const form = useForm<TVerifyForm>({
         resolver: standardSchemaResolver(OTPSchema),
         reValidateMode: 'onChange',
-        defaultValues,
+        defaultValues: {
+            otp: '',
+            ...formProps.defaultValues,
+        },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TVerifyForm>({
+            form,
+            ...formProps,
+            autoSave: false,
+            preventExitOnDirty: true,
+        })
 
     const {
         mutate: handleVerify,
@@ -58,10 +68,15 @@ const VerifyForm = ({
         error: rawError,
     } = useVerify({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
+
+    const onSubmit = form.handleSubmit(
+        (data) => handleVerify({ ...data, verifyMode }),
+        handleFocusError
+    )
 
     const error = serverRequestErrExtractor({ error: rawError })
 
@@ -69,9 +84,8 @@ const VerifyForm = ({
         <>
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit((data) =>
-                        handleVerify({ ...data, verifyMode })
-                    )}
+                    ref={formRef}
+                    onSubmit={onSubmit}
                     className={cn(
                         'flex min-w-[380px] flex-col gap-y-4',
                         className
@@ -92,7 +106,7 @@ const VerifyForm = ({
                         </p>
                     </div>
                     <fieldset
-                        disabled={readOnly || isPending}
+                        disabled={formProps.readOnly || isPending}
                         className="flex flex-col gap-y-4"
                     >
                         <FormField
@@ -104,18 +118,12 @@ const VerifyForm = ({
                                         <InputOTP
                                             autoFocus
                                             maxLength={6}
-                                            onComplete={() =>
-                                                form.handleSubmit((data) =>
-                                                    handleVerify({
-                                                        ...data,
-                                                        verifyMode,
-                                                    })
-                                                )()
-                                            }
+                                            onComplete={() => onSubmit()}
                                             pattern={
                                                 REGEXP_ONLY_DIGITS_AND_CHARS
                                             }
                                             containerClassName="mx-auto capitalize w-fit"
+                                            disabled={isDisabled(field.name)}
                                             {...field}
                                         >
                                             <InputOTPGroup>
@@ -145,7 +153,7 @@ const VerifyForm = ({
                             {onSkip && (
                                 <Button
                                     variant={'outline'}
-                                    disabled={readOnly}
+                                    disabled={formProps.readOnly}
                                     onClick={(e) => {
                                         e.preventDefault()
                                         onSkip()
@@ -154,7 +162,10 @@ const VerifyForm = ({
                                     Skip
                                 </Button>
                             )}
-                            <Button type="submit">
+                            <Button
+                                type="submit"
+                                disabled={isPending || formProps.readOnly}
+                            >
                                 {isPending ? <LoadingSpinner /> : 'Submit'}
                             </Button>
                         </div>

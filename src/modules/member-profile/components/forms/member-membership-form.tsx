@@ -1,10 +1,11 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import MemberCenterCombobox from '@/modules/member-center/components/member-center-combobox'
 import MemberClassificationCombobox from '@/modules/member-classification/components/member-classification-combobox'
@@ -20,6 +21,8 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+
+import { useFormHelper, useFormPreventExit } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -47,14 +50,9 @@ export interface IMemberProfileMembershipInfoFormProps
 }
 
 const MemberMembershipForm = ({
-    readOnly,
     className,
-    hiddenFields,
-    defaultValues,
-    disabledFields,
     memberProfileId,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberProfileMembershipInfoFormProps) => {
     const form = useForm<TMemberProfileMembershipInfoFormValues>({
         resolver: standardSchemaResolver(MemberProfileMembershipInfoSchema),
@@ -62,7 +60,7 @@ const MemberMembershipForm = ({
         mode: 'onSubmit',
         defaultValues: {
             status: 'for review',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -73,8 +71,10 @@ const MemberMembershipForm = ({
         reset,
     } = useUpdateMemberProfileMembershipInfo({
         options: {
-            onSuccess,
-            onError,
+            ...withToastCallbacks({
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
+            }),
             meta: {
                 invalidates: [
                     ['member-profile'],
@@ -83,6 +83,17 @@ const MemberMembershipForm = ({
             },
         },
     })
+
+    const error = serverRequestErrExtractor({ error: rawError })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberProfileMembershipInfoFormValues>({
+            form,
+            ...formProps,
+            autoSave: true,
+        })
+
+    useFormPreventExit({ form })
 
     const onSubmit = form.handleSubmit((formData) => {
         mutate(
@@ -94,20 +105,19 @@ const MemberMembershipForm = ({
                 },
             }
         )
-    })
-
-    const error = serverRequestErrExtractor({ error: rawError })
-
-    const isDisabled = (field: Path<TMemberProfileMembershipInfoFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
+    }, handleFocusError)
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
-                <fieldset disabled={readOnly} className="grid gap-x-6 gap-y-4">
+                <fieldset
+                    disabled={formProps.readOnly}
+                    className="grid gap-x-6 gap-y-4"
+                >
                     <div className="space-y-4">
                         <p>Membership Information</p>
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
@@ -115,7 +125,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="passbook"
                                 label="Passbook"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -129,7 +139,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="old_reference_id"
                                 label="Old Reference ID"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -143,7 +153,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="status"
                                 label="Status"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <GeneralStatusCombobox
                                         {...field}
@@ -158,7 +168,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="member_type_id"
                                 label="Member Type"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <MemberTypeCombobox
                                         {...field}
@@ -174,7 +184,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="member_group_id"
                                 label="Member Group"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <MemberGroupCombobox
                                         {...field}
@@ -192,7 +202,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="member_classification_id"
                                 label="Member Classification"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <MemberClassificationCombobox
                                         {...field}
@@ -208,7 +218,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="member_center_id"
                                 label="Member Center"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <MemberCenterCombobox
                                         {...field}
@@ -226,7 +236,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="member_department_id"
                                 label="Member Department"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => (
                                     <MemberDepartmentCombobox
                                         {...field}
@@ -242,7 +252,7 @@ const MemberMembershipForm = ({
                                 control={form.control}
                                 name="recruited_by_member_profile_id"
                                 label="Recruited By"
-                                hiddenFields={hiddenFields}
+                                hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {
                                     const value = form.getValues(
                                         'recruited_by_member_profile'
@@ -286,7 +296,7 @@ const MemberMembershipForm = ({
                                 <FormFieldWrapper
                                     name="is_mutual_fund_member"
                                     control={form.control}
-                                    hiddenFields={hiddenFields}
+                                    hiddenFields={formProps.hiddenFields}
                                     className="col-span-1"
                                     render={({ field }) => (
                                         <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
@@ -321,7 +331,7 @@ const MemberMembershipForm = ({
                                 <FormFieldWrapper
                                     name="is_micro_finance_member"
                                     control={form.control}
-                                    hiddenFields={hiddenFields}
+                                    hiddenFields={formProps.hiddenFields}
                                     className="col-span-1"
                                     render={({ field }) => (
                                         <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
@@ -360,10 +370,10 @@ const MemberMembershipForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Create"
+                    submitText="Save"
                     onReset={() => {
                         form.reset()
                         reset()

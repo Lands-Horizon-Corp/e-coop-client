@@ -28,6 +28,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 type TFeedBack = z.infer<typeof feedbackSchema>
 
 const FeedbackForm = () => {
@@ -54,9 +56,16 @@ const FeedbackForm = () => {
         },
     })
 
-    const handleFeedBackSubmit = (data: TFeedBack) => {
-        sendFeedbackMessage(data)
-    }
+    const { formRef, handleFocusError, isDisabled } = useFormHelper<TFeedBack>({
+        form: feedbackForm,
+    })
+
+    const handleFeedBackSubmit = feedbackForm.handleSubmit(
+        (data: TFeedBack) => {
+            sendFeedbackMessage(data)
+        },
+        handleFocusError
+    )
 
     const showFieldError = Object.values(feedbackForm.formState.errors)[0]
         ?.message
@@ -64,7 +73,8 @@ const FeedbackForm = () => {
         <div className="space-y-2 px-2">
             <Form {...feedbackForm}>
                 <form
-                    onSubmit={feedbackForm.handleSubmit(handleFeedBackSubmit)}
+                    ref={formRef}
+                    onSubmit={handleFeedBackSubmit}
                     className="space-y-3"
                 >
                     <FormField
@@ -84,6 +94,9 @@ const FeedbackForm = () => {
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                             name={field.name}
+                                            disabled={isDisabled(
+                                                'feedback_type'
+                                            )}
                                         >
                                             <SelectTrigger
                                                 className={cn(
@@ -134,7 +147,8 @@ const FeedbackForm = () => {
                                     <TextEditor
                                         content={field.value}
                                         onChange={field.onChange}
-                                    ></TextEditor>
+                                        disabled={isDisabled('description')}
+                                    />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -181,6 +195,7 @@ const FeedbackForm = () => {
                                                 placeholder="ecoop@email.com"
                                                 {...field}
                                                 autoComplete="email"
+                                                disabled={isDisabled('email')}
                                             />
                                         </div>
                                     </FormControl>
@@ -192,7 +207,7 @@ const FeedbackForm = () => {
                         className="w-fit text-[12px]"
                         errorMessage={showFieldError}
                     />
-                    <Button className={cn('w-full')}>
+                    <Button className={cn('w-full')} disabled={isPending}>
                         {isPending ? (
                             <LoadingCircleIcon className="animate-spin" />
                         ) : (

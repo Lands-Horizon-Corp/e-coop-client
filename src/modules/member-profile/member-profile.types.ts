@@ -7,7 +7,6 @@ import {
     TGeneralStatus,
 } from '@/types'
 
-import { ISignUpRequest } from '../authentication'
 import { IBranch } from '../branch'
 import { IMedia } from '../media/media.types'
 import {
@@ -56,43 +55,15 @@ import { IMemberType } from '../member-type/member-type.types'
 import { IOrganization } from '../organization'
 import { IQrScanResult } from '../qr-crypto'
 import { IUserBase } from '../user/user.types'
+import {
+    TMemberProfileMembershipInfoSchema,
+    TQuickCreateMemberProfileSchema,
+} from './member-profile.validation'
 
 // Mini Create Only use for quick creation of member profile
 // Ideal because of ease of creation
 // Should Only use by employee
-export interface IMemberProfileQuickCreateRequest {
-    old_reference_id?: string
-    passbook?: string
-
-    organization_id?: TEntityId
-    branch_id?: TEntityId
-
-    first_name: string
-    middle_name?: string
-    last_name: string
-    full_name?: string
-    suffix?: string
-    member_gender_id?: TEntityId
-    birthdate?: string
-    contact_number?: string
-
-    civil_status: TCivilStatus
-    occupation_id?: TEntityId
-
-    status: TGeneralStatus
-
-    is_mutual_fund_member: boolean
-    is_micro_finance_member: boolean
-
-    member_type_id: TEntityId
-
-    // Prior Connect
-
-    user_id?: TEntityId
-
-    // Or Create User Account
-    account_info?: Pick<ISignUpRequest, 'user_name' | 'email' | 'password'>
-}
+export type IMemberProfileQuickCreateRequest = TQuickCreateMemberProfileSchema
 
 export interface IMemberProfileRequest {
     id?: TEntityId
@@ -281,22 +252,8 @@ export interface IMemberProfilePersonalInfoRequest {
 }
 
 // 🏛️ Membership Info
-export interface IMemberProfileMembershipInfoRequest {
-    passbook?: string
-    old_reference_id?: string
-
-    status?: TGeneralStatus
-
-    member_type_id?: TEntityId
-    member_group_id?: TEntityId
-    member_classification_id?: TEntityId
-    member_center_id?: TEntityId
-
-    recruited_by_member_profile_id?: TEntityId
-
-    is_mutual_fund_member?: boolean
-    is_micro_finance_member?: boolean
-}
+export type IMemberProfileMembershipInfoRequest =
+    TMemberProfileMembershipInfoSchema
 
 export interface IMemberProfileAccountRequest {
     user_id?: TEntityId

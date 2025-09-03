@@ -1,6 +1,4 @@
-'use client'
-
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -13,6 +11,8 @@ import FormFooterResetSubmit from '@/components/form-components/form-footer-rese
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IForm, TEntityId } from '@/types'
 
@@ -33,19 +33,13 @@ export interface IBrowseExcludeIncludeAccountsFormProps
         Error
     > {
     browseExcludeIncludeAccountId?: TEntityId
-    readOnly?: boolean
     className?: string
-    disabledFields?: Path<TBrowseExcludeIncludeAccountsSchema>[]
 }
 
 const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
     browseExcludeIncludeAccountId,
-    defaultValues,
-    onSuccess,
-    onError,
-    readOnly,
     className,
-    disabledFields,
+    ...formProps
 }: IBrowseExcludeIncludeAccountsFormProps) => {
     const form = useForm<TBrowseExcludeIncludeAccountsSchema>({
         resolver: standardSchemaResolver(BrowseExcludeIncludeAccountsSchema),
@@ -56,26 +50,33 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
             interest_account_id: '',
             deliquent_account_id: '',
             include_existing_loan_account_id: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
     const createMutation = useCreateBrowseExcludeIncludeAccounts({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
     const updateMutation = useUpdateBrowseExcludeIncludeAccountsById({
         options: {
             ...withToastCallbacks({
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TBrowseExcludeIncludeAccountsSchema>({
+            form,
+            ...formProps,
+            autoSave: !!browseExcludeIncludeAccountId,
+        })
 
     const onSubmit = form.handleSubmit((data) => {
         if (browseExcludeIncludeAccountId) {
@@ -86,7 +87,7 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
         } else {
             createMutation.mutate(data)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -98,17 +99,15 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TBrowseExcludeIncludeAccountsSchema>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
                 >
                     <FormFieldWrapper
@@ -226,7 +225,7 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
 
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={

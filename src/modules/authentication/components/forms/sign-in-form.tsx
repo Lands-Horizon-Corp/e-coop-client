@@ -20,6 +20,8 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password-input'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm } from '@/types'
 
 import { useSignIn } from '../../authentication.service'
@@ -30,24 +32,17 @@ type TSignIn = z.infer<typeof SignInSchema>
 
 interface ISignInFormProps
     extends IClassProps,
-        IForm<Partial<TSignIn>, IAuthContext> {}
+        Omit<IForm<Partial<TSignIn>, IAuthContext>, 'preventExitOnDirty'> {}
 
-const SignInForm = ({
-    readOnly,
-    className,
-    defaultValues,
-    onError,
-    onSubmit,
-    onSuccess,
-}: ISignInFormProps) => {
+const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
     const {
         mutate,
         error: responseError,
         isPending,
     } = useSignIn({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
@@ -58,26 +53,36 @@ const SignInForm = ({
         defaultValues: {
             password: '',
             key: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } = useFormHelper<TSignIn>({
+        form,
+        ...formProps,
+        autoSave: false,
+        preventExitOnDirty: false,
+    })
+
+    const onSubmit = form.handleSubmit((data) => {
+        mutate(data)
+        formProps.onSubmit?.(data)
+    }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: responseError })
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit((data) => {
-                    mutate(data)
-                    onSubmit?.(data)
-                })}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <div className="flex items-center gap-x-2 py-4 font-medium">
                     <p className="text-lg font-medium md:text-5xl">Sign In</p>
                 </div>
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="space-y-3"
                 >
                     <FormField
@@ -91,6 +96,7 @@ const SignInForm = ({
                                         id={field.name}
                                         placeholder="Email Address"
                                         autoComplete="off"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 </FormControl>
                                 <FormMessage className="text-xs" />
@@ -108,6 +114,7 @@ const SignInForm = ({
                                         id="password-field"
                                         autoComplete="off"
                                         placeholder="Password"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 </FormControl>
                                 <FormMessage className="text-xs" />
@@ -121,7 +128,7 @@ const SignInForm = ({
                         size="sm"
                         type="submit"
                         className="w-full max-w-xl rounded-3xl"
-                        disabled={isPending || readOnly}
+                        disabled={isPending || formProps.readOnly}
                     >
                         {isPending ? <LoadingSpinner /> : 'Login'}
                     </Button>

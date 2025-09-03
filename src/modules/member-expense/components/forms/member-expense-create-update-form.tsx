@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -13,6 +13,8 @@ import TextEditor from '@/components/text-editor'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -40,12 +42,8 @@ export interface IMemberExpenseFormProps
 const MemberExpenseCreateUpdateForm = ({
     memberProfileId,
     expenseId,
-    readOnly,
     className,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberExpenseFormProps) => {
     const form = useForm<TMemberExpenseFormValues>({
         resolver: standardSchemaResolver(MemberExpenseSchema),
@@ -56,7 +54,7 @@ const MemberExpenseCreateUpdateForm = ({
             amount: 0,
             description: '',
             member_profile_id: memberProfileId,
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
@@ -64,8 +62,8 @@ const MemberExpenseCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Created',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -73,11 +71,18 @@ const MemberExpenseCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Updated',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberExpenseFormValues>({
+            form,
+            ...formProps,
+            autoSave: !!expenseId,
+        })
 
     const onSubmit = form.handleSubmit((formData) => {
         if (expenseId) {
@@ -92,7 +97,7 @@ const MemberExpenseCreateUpdateForm = ({
                 data: formData,
             })
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -100,19 +105,17 @@ const MemberExpenseCreateUpdateForm = ({
         reset,
     } = expenseId ? updateMutation : createMutation
 
-    const isDisabled = (field: Path<TMemberExpenseFormValues>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -161,7 +164,7 @@ const MemberExpenseCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={expenseId ? 'Update' : 'Create'}

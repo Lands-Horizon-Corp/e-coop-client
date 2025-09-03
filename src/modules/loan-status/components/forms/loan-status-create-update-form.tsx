@@ -1,4 +1,4 @@
-import { Path, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -14,6 +14,8 @@ import TextEditor from '@/components/text-editor'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+
+import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -34,13 +36,9 @@ export interface ILoanStatusFormProps
 }
 
 const LoanStatusCreateUpdateForm = ({
-    readOnly,
-    className,
     loanStatusId,
-    defaultValues,
-    disabledFields,
-    onError,
-    onSuccess,
+    className,
+    ...formProps
 }: ILoanStatusFormProps) => {
     const form = useForm<TLoanStatusSchema>({
         resolver: standardSchemaResolver(LoanStatusSchema),
@@ -51,15 +49,16 @@ const LoanStatusCreateUpdateForm = ({
             icon: '',
             color: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
+
     const createMutation = useCreateLoanStatus({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Loan Status Created',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
@@ -67,18 +66,26 @@ const LoanStatusCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Loan Status Updated',
-                onSuccess,
-                onError,
+                onSuccess: formProps.onSuccess,
+                onError: formProps.onError,
             }),
         },
     })
+
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TLoanStatusSchema>({
+            form,
+            ...formProps,
+            autoSave: !!loanStatusId,
+        })
+
     const onSubmit = form.handleSubmit((payload) => {
         if (loanStatusId) {
             updateMutation.mutate({ id: loanStatusId, payload })
         } else {
             createMutation.mutate(payload)
         }
-    })
+    }, handleFocusError)
 
     const {
         error: rawError,
@@ -88,17 +95,15 @@ const LoanStatusCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const isDisabled = (field: Path<TLoanStatusSchema>) =>
-        readOnly || disabledFields?.includes(field) || false
-
     return (
         <Form {...form}>
             <form
+                ref={formRef}
                 onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -126,6 +131,7 @@ const LoanStatusCreateUpdateForm = ({
                                         {...field}
                                         value={field.value as TIcon}
                                         placeholder="Select status icon"
+                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -163,7 +169,7 @@ const LoanStatusCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
+                    readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
                     submitText={loanStatusId ? 'Update' : 'Create'}

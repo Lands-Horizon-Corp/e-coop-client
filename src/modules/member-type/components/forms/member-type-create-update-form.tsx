@@ -19,6 +19,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
+import { useFormHelper } from '@/hooks/use-form-helper'
+
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 export type TMemberTypeForm = z.infer<typeof MemberTypeSchema>
@@ -31,14 +33,9 @@ export interface IMemberTypeCreateUpdateFormProps
 
 const MemberTypeCreateUpdateForm = ({
     memberTypeId,
-    readOnly,
     className,
-    defaultValues,
-    onError,
-    onSuccess,
+    ...formProps
 }: IMemberTypeCreateUpdateFormProps) => {
-    const isUpdateMode = Boolean(memberTypeId)
-
     const form = useForm<TMemberTypeForm>({
         resolver: standardSchemaResolver(MemberTypeSchema),
         reValidateMode: 'onChange',
@@ -47,54 +44,56 @@ const MemberTypeCreateUpdateForm = ({
             name: '',
             prefix: '',
             description: '',
-            ...defaultValues,
+            ...formProps.defaultValues,
         },
     })
 
-    const {
-        error: createError,
-        isPending: isCreating,
-        mutate: createMemberType,
-        reset: resetCreate,
-    } = useCreate({
+    const createMutation = useCreate({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
-    const {
-        error: updateError,
-        isPending: isUpdating,
-        mutate: updateMemberType,
-        reset: resetUpdate,
-    } = useUpdateById({
+    const updateMutation = useUpdateById({
         options: {
-            onSuccess,
-            onError,
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
-    const onSubmit = (formData: TMemberTypeForm) => {
-        if (isUpdateMode && memberTypeId) {
-            updateMemberType({ id: memberTypeId, payload: formData })
+    const { formRef, handleFocusError, isDisabled } =
+        useFormHelper<TMemberTypeForm>({
+            form,
+            ...formProps,
+            autoSave: !!memberTypeId,
+        })
+
+    const onSubmit = form.handleSubmit((formData) => {
+        if (memberTypeId) {
+            updateMutation.mutate({ id: memberTypeId, payload: formData })
         } else {
-            createMemberType(formData)
+            createMutation.mutate(formData)
         }
-    }
+    }, handleFocusError)
 
-    const error = serverRequestErrExtractor({
-        error: createError || updateError,
-    })
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = memberTypeId ? updateMutation : createMutation
+
+    const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                ref={formRef}
+                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
             >
                 <fieldset
-                    disabled={isCreating || isUpdating || readOnly}
+                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                 >
                     <fieldset className="space-y-3">
@@ -108,9 +107,7 @@ const MemberTypeCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Member Type Name"
                                     autoComplete="member-type-name"
-                                    disabled={
-                                        isCreating || isUpdating || readOnly
-                                    }
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -125,9 +122,7 @@ const MemberTypeCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Prefix"
                                     autoComplete="member-type-prefix"
-                                    disabled={
-                                        isCreating || isUpdating || readOnly
-                                    }
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -142,9 +137,7 @@ const MemberTypeCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Description"
                                     autoComplete="member-type-description"
-                                    disabled={
-                                        isCreating || isUpdating || readOnly
-                                    }
+                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -153,14 +146,13 @@ const MemberTypeCreateUpdateForm = ({
 
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={readOnly}
-                    isLoading={isCreating || isUpdating}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Create"
+                    submitText={memberTypeId ? 'Update' : 'Create'}
                     onReset={() => {
                         form.reset()
-                        resetCreate()
-                        resetUpdate()
+                        reset()
                     }}
                 />
             </form>
