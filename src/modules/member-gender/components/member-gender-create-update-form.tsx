@@ -60,6 +60,7 @@ const MemberGenderCreateUpdateForm = ({
             form,
             ...formProps,
             autoSave: !!genderId,
+            autoSaveDelay: 2000,
         })
 
     const onSubmit = form.handleSubmit((formData) => {
@@ -121,17 +122,19 @@ const MemberGenderCreateUpdateForm = ({
                         />
                     </fieldset>
                 </fieldset>
-                <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
-                    disableSubmit={!form.formState.isDirty}
-                    submitText={genderId ? 'Update' : 'Create'}
-                    onReset={() => {
-                        form.reset()
-                        reset()
-                    }}
-                />
+                {!genderId && (
+                    <FormFooterResetSubmit
+                        error={error}
+                        readOnly={formProps.readOnly}
+                        isLoading={isPending}
+                        disableSubmit={!form.formState.isDirty}
+                        submitText={genderId ? 'Update' : 'Create'}
+                        onReset={() => {
+                            form.reset()
+                            reset()
+                        }}
+                    />
+                )}
             </form>
         </Form>
     )
@@ -157,7 +160,9 @@ export const MemberGenderCreateUpdateFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
+                    if (!formProps?.genderId) {
+                        props.onOpenChange?.(false)
+                    }
                 }}
             />
         </Modal>
