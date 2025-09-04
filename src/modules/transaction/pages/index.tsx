@@ -1,48 +1,42 @@
 import { useCallback } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 
+import { IGeneralLedger } from '@/modules/general-ledger'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
 import {
     ITransaction,
-    TransactionActions,
     TransactionCurrentPaymentEntry,
-    // TransactionCurrentPaymentEntry,
-    TransactionForm,
     TransactionHistory,
-    TransactionMemberProfile,
     TransactionModalSuccessPayment,
     TransactionNoFoundBatch,
-    TransactionViewNoMemberSelected,
     useGetById,
 } from '@/modules/transaction'
-import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from '@/components/ui/resizable'
+import { Card, CardContent } from '@/components/ui/card'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
+import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
+
+import PaymentWithTransactionForm from '../components/forms/create-payment-with-transaction-form'
+import TransactionShortcuts from '../components/transaction-shorcuts'
 
 type TTransactionProps = {
     transactionId: TEntityId
     fullPath: string
 }
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
-    const { data: transactionBatch } = useTransactionBatchStore()
-    const navigate = useNavigate()
-    const hasTransactionBatch = !!transactionBatch
-
+    const queryClient = useQueryClient()
     const {
         selectedMember,
         openSuccessModal,
@@ -51,13 +45,23 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         setSelectedMember,
         setOpenSuccessModal,
         setFocusTypePayment,
-        setOpenMemberPicker,
         setSelectedAccountId,
         setTransactionFormSuccess,
         setOpenPaymentWithTransactionModal,
         setSelectedAccount,
+        selectedJointMember,
+        setOpenMemberPicker,
     } = useTransactionStore()
+    const navigate = useNavigate()
 
+    const handleSetTransactionId = (transactionId?: TEntityId) => {
+        navigate({
+            to: fullPath,
+            search: {
+                transactionId: transactionId ?? '',
+            },
+        })
+    }
     const {
         data: transaction,
         isError,
@@ -69,6 +73,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             enabled: !!transactionId,
         },
     })
+
     const handleGetTransactionByIdSuccess = useCallback(
         (data: ITransaction) => {
             setSelectedMember(data?.member_profile)
@@ -83,15 +88,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         isSuccess: isSuccess,
         onSuccess: handleGetTransactionByIdSuccess,
     })
-
-    const handleSetTransactionId = (transactionId?: TEntityId) => {
-        navigate({
-            to: fullPath,
-            search: {
-                transactionId: transactionId ?? '',
-            },
-        })
-    }
 
     const handleCloseSuccessModal = () => {
         setOpenSuccessModal(false)
@@ -110,13 +106,30 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     useSubscribe(`transaction.create.${transactionId}`)
     useSubscribe(`transaction.update.${transactionId}`)
 
-    const hasSelectedMember = !!selectedMember
+    const handleOnSuccessPaymentCallBack = (transaction: IGeneralLedger) => {
+        setTransactionFormSuccess(transaction)
+        setOpenSuccessModal(true)
+    }
+
     const hasSelectedTransactionId = !!transactionId
 
-    const disAbledActionButtons = !hasSelectedMember || !hasTransactionBatch
+    useShortcut(
+        'Escape',
+        () => {
+            handleResetAll()
+            handleSetTransactionId(undefined)
+        },
+        { disableActiveButton: true }
+    )
+
+    useShortcut('Enter', () => {
+        if (!selectedMember) {
+            setOpenMemberPicker(true)
+        }
+    })
 
     return (
-        <PageContainer className="flex h-[90vh] items-center w-full !overflow-y-hidden">
+        <PageContainer className="flex h-[90vh] w-full !overflow-hidden">
             <TransactionNoFoundBatch />
             <TransactionModalSuccessPayment
                 open={openSuccessModal}
@@ -125,95 +138,45 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 onClose={handleCloseSuccessModal}
                 isOpen={openSuccessModal}
             />
-            <div className="flex h-full w-full over-flow-y-auto ">
-                <ResizablePanelGroup
-                    direction="vertical"
-                    className="grow px-5 flex !overflow-y-auto"
-                >
-                    <ResizablePanel
-                        defaultSize={57}
-                        maxSize={70}
-                        className="p-2 !h-fit !overflow-y-auto ecoop-scroll"
-                    >
-                        <div className="flex w-full !h-full bg-secondary/10 p-5 rounded-2xl  flex-col gap-y-2">
-                            <TransactionViewNoMemberSelected
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    setOpenMemberPicker(true)
-                                }}
-                                disabledSelectTrigger={hasSelectedTransactionId}
-                                isDisplay={!hasSelectedMember}
-                            />
-                            <TransactionMemberProfile
-                                memberInfo={selectedMember}
-                                onSelectMember={() => {
-                                    setOpenMemberPicker(true)
-                                }}
-                                hasTransaction={hasSelectedTransactionId}
-                            />
-                            <TransactionForm
-                                transactionId={transactionId}
-                                hasSelectedTransactionId={
-                                    hasSelectedTransactionId
-                                }
-                                handleSetTransactionId={handleSetTransactionId}
-                                hasSelectedMember={hasSelectedMember}
-                            />
-                        </div>
-                    </ResizablePanel>
-                    <ResizableHandle withHandle />
-                    <ResizablePanel className="p-2 h-full !overflow-y-auto ecoop-scroll">
-                        <div className="w-full p-2">
-                            <MemberAccountingLedgerTable
-                                mode="member"
-                                memberProfileId={
-                                    (selectedMember?.id ??
-                                        undefined) as TEntityId
-                                }
-                                onRowClick={(data) => {
-                                    setOpenPaymentWithTransactionModal(true)
-                                    setSelectedAccountId(
-                                        data.original.account_id
-                                    )
-                                    setSelectedAccount(data.original.account)
-                                    setFocusTypePayment('payment')
-                                }}
-                                actionComponent={(props) => {
-                                    return (
-                                        <MemberAccountGeneralLedgerAction
-                                            memberAccountLedger={
-                                                props.row.original
-                                            }
-                                        />
-                                    )
-                                }}
-                                className="w-full min-h-[40vh] h-full"
-                            />
-                        </div>
-                    </ResizablePanel>
-                </ResizablePanelGroup>
-                <div className="ecoop-scroll w-[40%] py-2">
+
+            <div className="flex h-full w-full gap-2 !overflow-hidden">
+                <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
+                    <div className="flex justify-end mb-2">
+                        <TransactionShortcuts />
+                    </div>
+                    <TransactionMemberScanner
+                        fullPath={fullPath}
+                        handleSetTransactionId={handleSetTransactionId}
+                        transactionId={transactionId}
+                    />
+                    <div className="w-full p-2">
+                        <MemberAccountingLedgerTable
+                            mode="member"
+                            memberProfileId={
+                                (selectedMember?.id ?? undefined) as TEntityId
+                            }
+                            onRowClick={(data) => {
+                                setOpenPaymentWithTransactionModal(true)
+                                setSelectedAccountId(data.original.account_id)
+                                setSelectedAccount(data.original.account)
+                                setFocusTypePayment('payment')
+                            }}
+                            actionComponent={(props) => (
+                                <MemberAccountGeneralLedgerAction
+                                    memberAccountLedger={props.row.original}
+                                />
+                            )}
+                            className="w-full min-h-[40vh] h-full"
+                        />
+                    </div>
+                </div>
+
+                {/* Right Section: History & Payment */}
+                <div className="lg:w-[30%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
                     <TransactionHistory fullPath={fullPath} />
-                    <TransactionActions
-                        paymentLabel="Payment"
-                        paymentOnClick={() => {
-                            setFocusTypePayment('payment')
-                        }}
-                        depositOnClick={() => {
-                            setFocusTypePayment('deposit')
-                        }}
-                        withdrawOnClick={() => {
-                            setFocusTypePayment('withdraw')
-                        }}
-                        PaymentButtonProps={{
-                            disabled: disAbledActionButtons,
-                        }}
-                        DepositButtonProps={{
-                            disabled: disAbledActionButtons,
-                        }}
-                        withdrawButtonProps={{
-                            disabled: disAbledActionButtons,
-                        }}
+                    <TransactionCurrentPaymentEntry
+                        totalAmount={transaction?.amount}
+                        transactionId={transactionId}
                     />
                     {hasSelectedTransactionId && (
                         <Button
@@ -230,12 +193,48 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             reset current transaction
                         </Button>
                     )}
-                    <TransactionCurrentPaymentEntry
-                        totalAmount={transaction?.amount}
-                        transactionId={transactionId}
-                    />
                 </div>
             </div>
+            {selectedMember && (
+                <Card className="sticky top-0 m-2 w-full !p-0 h-fit">
+                    <CardContent className="h-fit grid grid-cols-1 !p-2 items-center !w-full">
+                        <PaymentWithTransactionForm
+                            className="max-w-2xl"
+                            transactionId={transactionId}
+                            memberProfileId={selectedMember?.id}
+                            memberJointId={selectedJointMember?.id}
+                            onSuccess={(transaction) => {
+                                queryClient.invalidateQueries({
+                                    queryKey: ['member-accounting-ledger'],
+                                })
+                                queryClient.invalidateQueries({
+                                    queryKey: ['member-profile', 'paginated'],
+                                })
+                                queryClient.invalidateQueries({
+                                    queryKey: [
+                                        'member-joint-account',
+                                        'paginated',
+                                    ],
+                                })
+                                queryClient.invalidateQueries({
+                                    queryKey: ['transaction'],
+                                })
+                                queryClient.invalidateQueries({
+                                    queryKey: ['general-ledger'],
+                                })
+
+                                setOpenPaymentWithTransactionModal(false)
+                                setSelectedMember(transaction.member_profile)
+                                setSelectedAccountId(undefined)
+                                handleSetTransactionId(
+                                    transaction.transaction_id
+                                )
+                                handleOnSuccessPaymentCallBack(transaction)
+                            }}
+                        />
+                    </CardContent>
+                </Card>
+            )}
         </PageContainer>
     )
 }

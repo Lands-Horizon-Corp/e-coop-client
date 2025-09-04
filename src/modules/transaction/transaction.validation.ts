@@ -2,12 +2,12 @@ import z from 'zod'
 
 import {
     EntityIdSchema,
-    descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
 } from '@/validation'
 
 export const PaymentWithTransactionSchema = z.object({
+    reference_number: z.string().min(1, 'Reference number is required'),
     amount: z.coerce.number<number>({ error: 'Amount is required' }).min(0.01),
     signature_media_id: entityIdSchema.optional(),
     proof_of_payment_media_id: entityIdSchema.optional(),
@@ -18,7 +18,8 @@ export const PaymentWithTransactionSchema = z.object({
         .optional(),
     account_id: EntityIdSchema('Account').min(1),
     payment_type_id: EntityIdSchema('Payment type').min(1),
-    description: descriptionSchema
+    description: z.coerce
+        .string<string>({ error: 'Description is must be a string' })
         .transform(descriptionTransformerSanitizer)
         .optional(),
 
@@ -28,8 +29,6 @@ export const PaymentWithTransactionSchema = z.object({
     member: z.any().optional(),
     account: z.any().optional(),
 })
-export const QuickWithdrawSchema = z.object({})
-
 export type TPaymentWithTransactionFormValues = z.infer<
     typeof PaymentWithTransactionSchema
 >

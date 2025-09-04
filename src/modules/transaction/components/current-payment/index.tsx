@@ -106,7 +106,7 @@ const TransactionCurrentPaymentEntry = ({
         generalLedgerBasedTransaction &&
         generalLedgerBasedTransaction.data.length > 0
     return (
-        <div className="h-full flex flex-col gap-y-2">
+        <div className="!h-full flex flex-col gap-y-2 overflow-hidden">
             <div className="flex items-center gap-x-2">
                 <div className=" flex-grow rounded-xl py-2">
                     <div className="flex items-center justify-between gap-x-2">
@@ -122,7 +122,8 @@ const TransactionCurrentPaymentEntry = ({
                     </div>
                 </div>
             </div>
-            <ScrollArea className="flex h-[60vh] max-h-[60vh] overflow-x-auto">
+            <Separator />
+            <ScrollArea className="flex h-full max-h-[60vh] overflow-x-auto">
                 <div className="space-y-1.5">
                     {hasPayments ? (
                         generalLedgerBasedTransaction.data.map(

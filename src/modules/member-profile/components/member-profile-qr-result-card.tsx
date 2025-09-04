@@ -13,6 +13,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IClassProps } from '@/types'
 
 import { IMemberProfile } from '..'
+import { MemberOverallInfoModal } from './member-infos/view-member-info'
 
 interface Props extends IClassProps {
     memberProfile: IMemberProfile | undefined
@@ -24,7 +25,7 @@ const MemberProfileQrResultCard = ({ className, memberProfile }: Props) => {
     return (
         <div className={cn('min-w-[500px] space-y-4', className)}>
             {/* TODO: Once info modal is implemented */}
-            {/* {memberProfile && (
+            {memberProfile && (
                 <MemberOverallInfoModal
                     {...fullInfoViewModal}
                     overallInfoProps={{
@@ -32,7 +33,7 @@ const MemberProfileQrResultCard = ({ className, memberProfile }: Props) => {
                         defaultMemberProfile: memberProfile,
                     }}
                 />
-            )} */}
+            )}
             <div className="flex gap-x-2 items-center pt-4 justify-between">
                 <div className="flex flex-col mx-auto gap-y-2 items-center">
                     <PreviewMediaWrapper media={memberProfile?.media}>

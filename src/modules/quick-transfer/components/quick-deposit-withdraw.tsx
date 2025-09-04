@@ -26,8 +26,7 @@ import {
 import { TEntityId } from '@/types'
 
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
-    const { selectedMember, setOpenMemberPicker, setSelectedAccount } =
-        useDepositWithdrawStore()
+    const { selectedMember, setSelectedAccount } = useDepositWithdrawStore()
     const {
         settings_accounting_deposit_default_value_id,
         settings_accounting_withdraw_default_value_id,
@@ -97,9 +96,6 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                         <TransactionMemberProfile
                             memberInfo={selectedMember}
                             className="!bg-secondary"
-                            onSelectMember={() => {
-                                setOpenMemberPicker(true)
-                            }}
                             viewOnly
                         />
                     </div>

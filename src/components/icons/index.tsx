@@ -66,6 +66,7 @@ import {
     CiGlobe as GlobeIcon,
 } from 'react-icons/ci'
 import {
+    FaLocationArrow as ArrowIcon,
     FaMoneyBill as BillIcon,
     FaBookOpen as BookOpenIcon,
     FaBook as BookThickIcon,
@@ -255,6 +256,7 @@ import {
     MdManageAccounts as AccountSettingIcon,
     MdOutlineManageAccounts as AccountSetupIcon,
     MdAccountBalance as AccountsIcon,
+    MdAutoAwesome as AutoAwesomeIcon,
     MdOutlineAccountBalance as BankIcon,
     MdFlipCameraAndroid as CameraFlipIcon,
     MdCameraEnhance as CameraSelectIcon,
@@ -417,6 +419,7 @@ export {
     StoreIcon,
     ResetIcon,
     HouseIcon,
+    ArrowIcon,
     FunnelIcon,
     ColumnIcon,
     TabletIcon,
@@ -585,6 +588,7 @@ export {
     PDFFileFillIcon,
     BankDuoToneIcon,
     BarcodeScanIcon,
+    AutoAwesomeIcon,
     HandsHelpingIcon,
     DoorExitFillIcon,
     ArrowUpRightIcon,
@@ -995,6 +999,8 @@ export const IconMap: Record<TIcon, IconType> = {
     'Outline Payment': OutlinePaymentIcon,
     'Pi Hand Deposit': PiHandDepositIcon,
     'Pi Hand Withdraw': PiHandWithdrawIcon,
+    'Auto Awesome': AutoAwesomeIcon,
+    'Arrow Icon': ArrowIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

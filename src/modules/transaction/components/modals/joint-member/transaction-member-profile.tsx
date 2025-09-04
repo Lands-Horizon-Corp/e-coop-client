@@ -12,7 +12,6 @@ import MemberOverallInfo, {
 import HoveruserInfo from '@/modules/user/components/hover-user-info'
 import { useImagePreview } from '@/store/image-preview-store'
 
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     BadgeCheckIcon,
     IdCardIcon,
@@ -46,7 +45,6 @@ import TransactionModalJointMember from './transaction-modal-joint-member'
 
 export type MemberProfileTransactionViewProps = {
     memberInfo: IMemberProfile | null
-    onSelectMember: () => void
     onSelectedJointMember?: (jointMemberId: TEntityId | undefined) => void
     hasTransaction?: boolean
     viewOnly?: boolean
@@ -55,7 +53,6 @@ export type MemberProfileTransactionViewProps = {
 
 const TransactionMemberProfile = ({
     memberInfo,
-    onSelectMember,
     onSelectedJointMember,
     hasTransaction,
     viewOnly = false,
@@ -70,7 +67,6 @@ const TransactionMemberProfile = ({
     onSelectedJointMember?.(selectedJointMember?.id)
 
     const handleMedia = (media: IMedia[] | undefined) => {
-        console.log('media', media)
         if (media) {
             onOpen({
                 Images: media,
@@ -92,11 +88,9 @@ const TransactionMemberProfile = ({
                     memberProfileId: memberInfo.id,
                 }}
             />
-            <GradientBackground
-                gradientOnly
-                opacity={0}
+            <div
                 className={cn(
-                    'w-full ecoop-scroll overflow-x-auto h-fit flex-col space-y-2 min-w-[300px] overscroll-contain bg-background p-5',
+                    'w-full ecoop-scroll rounded-2xl overflow-x-auto h-fit flex-col space-y-2 min-w-[300px] overscroll-contain bg-card bg-gradient-to-br from-primary/10 to-background border-primary/40 p-5',
                     className
                 )}
             >
@@ -105,7 +99,7 @@ const TransactionMemberProfile = ({
                         <div className="flex-shrink-0">
                             <PreviewMediaWrapper media={memberInfo.media}>
                                 <ImageDisplay
-                                    className="size-24"
+                                    className="size-16"
                                     onClick={() => handleMedia(memberMedias)}
                                     src={memberInfo.media?.download_url}
                                     fallback={
@@ -117,23 +111,13 @@ const TransactionMemberProfile = ({
                         <Drawer>
                             <DrawerTrigger asChild className="">
                                 <Button
-                                    variant={'outline'}
+                                    variant={'secondary'}
                                     size="sm"
                                     className="text-xs w-full h-7 min-w-24 cursor-pointer"
                                 >
                                     View Profile
                                 </Button>
                             </DrawerTrigger>
-                            {!viewOnly && (
-                                <Button
-                                    size="sm"
-                                    className="w-full h-7 min-w-24"
-                                    disabled={hasTransaction}
-                                    onClick={onSelectMember}
-                                >
-                                    select
-                                </Button>
-                            )}
                             <DrawerContent className="h-full w-full">
                                 <MemberOverallInfo
                                     className="overflow-y-auto px-5"
@@ -194,16 +178,7 @@ const TransactionMemberProfile = ({
                                 </HoverCard>
                             )}
                         </div>
-                        <div className="text-xs pb-2">
-                            <h3 className="mb-1 font-medium text-muted-foreground">
-                                Member Profile ID
-                            </h3>
-                            <div className="flex items-center gap-2">
-                                <span className="truncate font-mono">
-                                    <CopyWrapper>{memberInfo.id}</CopyWrapper>
-                                </span>
-                            </div>
-                        </div>
+
                         <Separator />
                         <div className="flex  justify-between space-x-5 pr-5 pt-2 text-xs">
                             <div>
@@ -263,7 +238,7 @@ const TransactionMemberProfile = ({
                         }
                     />
                 )}
-            </GradientBackground>
+            </div>
         </>
     )
 }

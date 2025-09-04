@@ -96,7 +96,6 @@ const Signature = ({
 
     const handleGetSignatureTrimmedData = () => {
         if (signatureRef.current) {
-            console.log(signatureRef.current.getCanvas().toDataURL())
             if (signatureRef.current.isEmpty()) {
                 toast.warning(
                     'Drawing required: Please create a drawing before rendering.'

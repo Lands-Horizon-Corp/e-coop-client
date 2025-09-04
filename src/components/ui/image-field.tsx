@@ -3,7 +3,7 @@ import { ReactElement, forwardRef, useState } from 'react'
 import { cn } from '@/helpers/tw-utils'
 import { IMedia } from '@/modules/media'
 
-import { ImageIcon, XIcon } from '@/components/icons'
+import { ImageIcon, UploadIcon, XIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import SingleImageUploaderModal from '@/components/single-image-uploader/single-image-uploader-modal'
 import { Button, ButtonProps } from '@/components/ui/button'
@@ -16,10 +16,21 @@ interface ImageFieldProps extends Omit<ButtonProps, 'onChange'>, IClassProps {
     placeholder?: string
     displayComponent?: (value?: string) => ReactElement
     onChange?: (media: IMedia | undefined) => void
+    isFieldView?: boolean
 }
 
 const ImageField = forwardRef<HTMLButtonElement, ImageFieldProps>(
-    ({ value, placeholder, className, onChange, ...props }, ref) => {
+    (
+        {
+            value,
+            placeholder,
+            className,
+            onChange,
+            isFieldView = false,
+            ...props
+        },
+        ref
+    ) => {
         const [open, setOpen] = useState(false)
 
         return (
@@ -73,12 +84,20 @@ const ImageField = forwardRef<HTMLButtonElement, ImageFieldProps>(
                             </span>
                         </div>
                     ) : (
-                        <div className="flex flex-1 flex-col items-center justify-center">
-                            <div className="mb-2 flex size-11 shrink-0 items-center justify-center rounded-full border bg-background">
-                                <ImageIcon />
-                            </div>
-                            {placeholder}
-                        </div>
+                        <>
+                            {isFieldView ? (
+                                <div className="flex items-center   ">
+                                    upload photo <UploadIcon className="ml-2" />
+                                </div>
+                            ) : (
+                                <div className="flex flex-1 flex-col items-center justify-center">
+                                    <div className="mb-2 flex size-11 shrink-0 items-center justify-center rounded-full border bg-background">
+                                        <ImageIcon />
+                                    </div>
+                                    {placeholder}
+                                </div>
+                            )}
+                        </>
                     )}
                 </Button>
             </>

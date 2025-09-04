@@ -30,6 +30,7 @@ interface Props extends IPickerBaseProps<IAccount> {
     defaultOpen?: boolean
     onOpenChange?(open: boolean): void
     mode?: TPaginatedAccountHookMode
+    nameOnly?: boolean
     hideDescription?: boolean
 }
 
@@ -43,6 +44,7 @@ const AccountPicker = ({
     modalOnly = false,
     onOpenChange,
     open,
+    nameOnly = false,
     hideDescription = false,
 }: Props) => {
     const queryClient = useQueryClient()
@@ -206,7 +208,7 @@ const AccountPicker = ({
                             ) : (
                                 <span className="inline-flex gap-x-4 items-center">
                                     <span>{value.name}</span>
-                                    {!hideDescription && (
+                                    {!nameOnly && !hideDescription && (
                                         <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
                                             {value.description}
                                         </span>
@@ -217,26 +219,28 @@ const AccountPicker = ({
                         {allowShorcutCommand && (
                             <span className="mr-2 text-sm">⌘ ↵ </span>
                         )}
-                        <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
-                            {value?.type && (
-                                <AccountTypeBadge
-                                    type={value.type}
-                                    description="(Type)"
-                                />
-                            )}
-                            {value?.general_ledger_type && (
-                                <GeneralLedgerTypeBadge
-                                    type={value.general_ledger_type}
-                                    description="(GL)"
-                                />
-                            )}
-                            {value?.financial_statement_type && (
-                                <FinancialStatementTypeBadge
-                                    type={value.financial_statement_type}
-                                    description=" (FS)"
-                                />
-                            )}
-                        </span>
+                        {!nameOnly && (
+                            <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
+                                {value?.type && (
+                                    <AccountTypeBadge
+                                        type={value.type}
+                                        description="(Type)"
+                                    />
+                                )}
+                                {value?.general_ledger_type && (
+                                    <GeneralLedgerTypeBadge
+                                        type={value.general_ledger_type}
+                                        description="(GL)"
+                                    />
+                                )}
+                                {value?.financial_statement_type && (
+                                    <FinancialStatementTypeBadge
+                                        type={value.financial_statement_type}
+                                        description=" (FS)"
+                                    />
+                                )}
+                            </span>
+                        )}
                     </span>
                     <ChevronDownIcon />
                 </Button>

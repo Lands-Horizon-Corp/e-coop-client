@@ -75,11 +75,9 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
     TPaymentTransactionProps
 >({
     mutationFn: async ({ data, mode, transactionId, transactionPayload }) => {
-        console.log(data, mode, transactionId, transactionPayload)
         if (transactionId) {
             return createPaymentTransaction({ data, mode, transactionId })
         } else {
-            console.log('create transaction with payload')
             const [error, result] = await withCatchAsync(
                 create({ payload: transactionPayload })
             )

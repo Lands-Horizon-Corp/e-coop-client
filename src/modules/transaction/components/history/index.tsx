@@ -83,11 +83,11 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
         !CurrentTransaction || CurrentTransaction.data.length === 0
 
     return (
-        <div className="flex w-full flex-row items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-end">
             <Sheet open={onOpen} onOpenChange={setOnOpen}>
                 <SheetTrigger asChild className="">
                     <Button
-                        variant="ghost"
+                        variant="secondary"
                         className=""
                         size="sm"
                         onClick={() => setOnOpen(true)}
@@ -157,9 +157,6 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                     </div>
                 </SheetContent>
             </Sheet>
-            <p className="text-[min(10px,1rem)] text-muted-foreground/50 text-end">
-                F1 - payment | F2 - deposit | F3 - withdraw | Esc - reset
-            </p>
         </div>
     )
 }

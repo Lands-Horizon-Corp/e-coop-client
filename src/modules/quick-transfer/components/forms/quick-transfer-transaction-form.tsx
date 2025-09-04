@@ -265,9 +265,10 @@ export const QuickTransferTransactionForm = ({
                                         shouldDirty: true,
                                     })
                                 }}
-                                placeholder="Select an account"
+                                // nameOnly
                                 hideDescription
-                                triggerClassName="!min-w-fit !bg-red-500"
+                                placeholder="Select an account"
+                                triggerClassName="!min-w-fit "
                                 value={
                                     form.getValues('account') || selectedAccount
                                 }
@@ -408,7 +409,7 @@ export const QuickTransferTransactionForm = ({
                                             ? (value as IMedia).download_url
                                             : value
                                     }
-                                    className="!max-h-16 h-55 !bg-red-500"
+                                    className="!max-h-25 h-25"
                                     onChange={(newImage) => {
                                         if (newImage)
                                             field.onChange(newImage.id)

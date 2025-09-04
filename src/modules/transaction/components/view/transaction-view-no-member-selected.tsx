@@ -1,4 +1,9 @@
 import { Button } from '@/components/ui/button'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 type NoMemberSelectedViewProps = {
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
@@ -27,16 +32,25 @@ const TransactionViewNoMemberSelected = ({
                 <p className="z-10 text-center text-xs text-accent-foreground/70">
                     Select a member first to add transaction
                 </p>{' '}
-                <Button
-                    disabled={disabledSelectTrigger}
-                    size={'sm'}
-                    variant={'secondary'}
-                    onClick={onClick}
-                    className=""
-                >
-                    Select Member{' '}
-                    <span className="text-lg ml-2 translate-y-[2px]">↵</span>
-                </Button>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            disabled={disabledSelectTrigger}
+                            size={'sm'}
+                            variant={'secondary'}
+                            onClick={onClick}
+                            className=""
+                        >
+                            Select Member{' '}
+                            <span className="text-lg ml-2 translate-y-[2px]">
+                                ↵
+                            </span>
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        "↵" press enter to open member picker
+                    </TooltipContent>
+                </Tooltip>
             </div>
         </div>
     )
