@@ -88,7 +88,6 @@ const MemberJointAccountCreateUpdateForm = ({
         useFormHelper<TMemberJointAccountFormValues>({
             form,
             ...formProps,
-            autoSave: !!jointAccountId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

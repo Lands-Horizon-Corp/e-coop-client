@@ -67,7 +67,6 @@ const MemberClassificationCreateUpdateForm = ({
         useFormHelper<TMemberClassificationForm>({
             form,
             ...formProps,
-            autoSave: !!memberClassificationId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

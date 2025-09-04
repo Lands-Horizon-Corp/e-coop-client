@@ -97,7 +97,6 @@ const InvitationCodeCreateUpdateForm = ({
         useFormHelper<TInvitationCodeFormValues>({
             form,
             ...formProps,
-            autoSave: !!invitationCodeId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

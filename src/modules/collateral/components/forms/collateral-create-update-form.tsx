@@ -77,7 +77,6 @@ const CollateralCreateUpdateForm = ({
         useFormHelper<TCollateralSchema>({
             form,
             ...formProps,
-            autoSave: !!collateralId,
         })
 
     const onSubmit = form.handleSubmit((payload) => {

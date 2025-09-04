@@ -79,7 +79,6 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
         useFormHelper<TEducationalAttainmentFormValues>({
             form,
             ...formProps,
-            autoSave: !!educationalAttainmentId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

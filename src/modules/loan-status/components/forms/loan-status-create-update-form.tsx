@@ -76,7 +76,6 @@ const LoanStatusCreateUpdateForm = ({
         useFormHelper<TLoanStatusSchema>({
             form,
             ...formProps,
-            autoSave: !!loanStatusId,
         })
 
     const onSubmit = form.handleSubmit((payload) => {

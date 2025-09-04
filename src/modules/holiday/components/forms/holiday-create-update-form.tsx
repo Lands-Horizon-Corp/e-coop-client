@@ -73,7 +73,6 @@ const HolidayCreateUpdateForm = ({
         useFormHelper<THolidaySchema>({
             form,
             ...formProps,
-            autoSave: !!holidayId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

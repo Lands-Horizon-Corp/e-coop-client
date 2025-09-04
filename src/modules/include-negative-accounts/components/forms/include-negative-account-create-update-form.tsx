@@ -76,7 +76,6 @@ const IncludeNegativeAccountCreateUpdateForm = ({
         useFormHelper<TFormValues>({
             form,
             ...formProps,
-            autoSave: !!includeNegativeAccountId,
         })
 
     const onSubmit = form.handleSubmit((data) => {

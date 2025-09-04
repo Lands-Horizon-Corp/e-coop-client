@@ -73,7 +73,6 @@ const LoanPurposeCreateUpdateForm = ({
         useFormHelper<TLoanPurposeSchema>({
             form,
             ...formProps,
-            autoSave: !!loanPurposeId,
         })
 
     const onSubmit = form.handleSubmit((payload) => {

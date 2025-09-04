@@ -84,7 +84,6 @@ const MemberContactCreateUpdateForm = ({
         useFormHelper<TMemberContactReferenceFormValues>({
             form,
             ...formProps,
-            autoSave: !!contactReferenceId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

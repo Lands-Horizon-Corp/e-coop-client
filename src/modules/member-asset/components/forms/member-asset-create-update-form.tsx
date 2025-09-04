@@ -86,7 +86,6 @@ const MemberAssetCreateUpdateForm = ({
         useFormHelper<TMemberAssetFormValues>({
             form,
             ...formProps,
-            autoSave: !!assetId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

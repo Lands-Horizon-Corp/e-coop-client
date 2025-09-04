@@ -81,7 +81,6 @@ const MemberExpenseCreateUpdateForm = ({
         useFormHelper<TMemberExpenseFormValues>({
             form,
             ...formProps,
-            autoSave: !!expenseId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

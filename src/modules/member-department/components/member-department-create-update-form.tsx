@@ -66,7 +66,6 @@ const MemberDepartmentCreateUpdateForm = ({
         useFormHelper<TMemberDepartmentFormValues>({
             form,
             ...formProps,
-            autoSave: !!memberDepartmentId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

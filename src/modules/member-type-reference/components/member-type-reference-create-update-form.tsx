@@ -72,7 +72,6 @@ const MemberTypeReferenceCreateUpdateForm = ({
         useFormHelper<TMemberTypeReferenceFormValues>({
             form,
             ...formProps,
-            autoSave: !!memberTypeReferenceId,
         })
 
     const onSubmit = form.handleSubmit((data) => {

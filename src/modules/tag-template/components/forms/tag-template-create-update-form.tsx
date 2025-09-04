@@ -91,7 +91,6 @@ const TagTemplateCreateUpdateForm = ({
         useFormHelper<TTagTemplateFormValues>({
             form,
             ...formProps,
-            autoSave: !!tagTemplateId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

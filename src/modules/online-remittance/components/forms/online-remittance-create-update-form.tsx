@@ -92,7 +92,6 @@ const OnlineRemittanceCreateUpdateForm = ({
         useFormHelper<TFormValues>({
             form,
             ...formProps,
-            autoSave: !!onlineRemittanceId,
         })
 
     const onSubmit = form.handleSubmit((data) => {

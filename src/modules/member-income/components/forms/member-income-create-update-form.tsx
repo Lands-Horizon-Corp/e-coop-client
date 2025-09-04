@@ -87,7 +87,6 @@ const MemberIncomeCreateUpdateForm = ({
         useFormHelper<TMemberIncomeFormValues>({
             form,
             ...formProps,
-            autoSave: !!incomeId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

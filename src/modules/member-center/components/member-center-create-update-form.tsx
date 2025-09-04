@@ -63,7 +63,6 @@ const MemberCenterCreateUpdateForm = ({
         useFormHelper<TMemberCenterForm>({
             form,
             ...formProps,
-            autoSave: !!memberCenterId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

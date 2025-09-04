@@ -75,7 +75,6 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
         useFormHelper<TBrowseExcludeIncludeAccountsSchema>({
             form,
             ...formProps,
-            autoSave: !!browseExcludeIncludeAccountId,
         })
 
     const onSubmit = form.handleSubmit((data) => {

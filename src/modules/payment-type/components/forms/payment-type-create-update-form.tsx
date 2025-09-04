@@ -86,7 +86,6 @@ const PaymentTypeCreateUpdateForm = ({
         useFormHelper<PaymentTypeFormValues>({
             form,
             ...formProps,
-            autoSave: !!paymentTypeId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

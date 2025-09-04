@@ -82,7 +82,6 @@ const BillsAndCoinCreateUpdateForm = ({
         useFormHelper<TBillsAndCoinFormValues>({
             form,
             ...formProps,
-            autoSave: !!billsAndCoinId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

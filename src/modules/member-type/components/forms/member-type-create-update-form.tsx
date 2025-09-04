@@ -66,7 +66,6 @@ const MemberTypeCreateUpdateForm = ({
         useFormHelper<TMemberTypeForm>({
             form,
             ...formProps,
-            autoSave: !!memberTypeId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

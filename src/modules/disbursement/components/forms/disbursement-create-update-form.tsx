@@ -73,7 +73,6 @@ const DisbursementCreateUpdateForm = ({
         useFormHelper<TDisbursementFormValues>({
             form,
             ...formProps,
-            autoSave: !!disbursementId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

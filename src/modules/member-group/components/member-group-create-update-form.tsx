@@ -57,7 +57,6 @@ const MemberGroupCreateUpdateForm = ({
         useFormHelper<TGroupFormValues>({
             form,
             ...formProps,
-            autoSave: !!groupId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

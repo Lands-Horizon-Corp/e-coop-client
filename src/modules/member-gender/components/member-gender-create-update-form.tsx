@@ -59,7 +59,6 @@ const MemberGenderCreateUpdateForm = ({
         useFormHelper<TGenderFormValues>({
             form,
             ...formProps,
-            autoSave: !!genderId,
             autoSaveDelay: 2000,
         })
 

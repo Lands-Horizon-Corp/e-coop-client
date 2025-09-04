@@ -81,7 +81,6 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
         useFormHelper<TMemberGovernmentBenefitFormValues>({
             form,
             ...formProps,
-            autoSave: !!benefitId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

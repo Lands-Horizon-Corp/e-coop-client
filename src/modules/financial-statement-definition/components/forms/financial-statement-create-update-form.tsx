@@ -95,7 +95,6 @@ const FinancialStatementCreateUpdateForm = ({
             ...formProps,
             readOnly,
             disabledFields,
-            autoSave: !!financialStatementId,
         })
 
     const onSubmit = form.handleSubmit((data) => {

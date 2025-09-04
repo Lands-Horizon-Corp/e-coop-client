@@ -84,7 +84,6 @@ const PermissionTemplateCreateUpdateForm = ({
         useFormHelper<TPermissionTemplateSchema>({
             form,
             ...formProps,
-            autoSave: !!permissionTemplateId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

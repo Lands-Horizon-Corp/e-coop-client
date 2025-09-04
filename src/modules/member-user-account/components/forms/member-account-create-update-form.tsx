@@ -112,7 +112,6 @@ const MemberUserAccountCreateUpdateForm = ({
     const { formRef, handleFocusError, isDisabled } = useFormHelper<TForm>({
         form,
         ...formProps,
-        autoSave: !!userId,
     })
 
     const handleSubmit = form.handleSubmit((formData: TForm) => {

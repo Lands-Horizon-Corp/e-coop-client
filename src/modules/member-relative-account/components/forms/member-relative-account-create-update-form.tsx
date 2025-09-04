@@ -83,7 +83,6 @@ const MemberRelativeAccountCreateUpdateForm = ({
         useFormHelper<TMemberRelativeAccountFormValues>({
             form,
             ...formProps,
-            autoSave: !!relativeAccountId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

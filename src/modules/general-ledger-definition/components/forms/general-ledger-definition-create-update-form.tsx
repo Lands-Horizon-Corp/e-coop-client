@@ -91,7 +91,6 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
             ...formProps,
             readOnly,
             disabledFields,
-            autoSave: !!generalLedgerDefinitionId,
         })
 
     const onSubmit = form.handleSubmit((data) => {

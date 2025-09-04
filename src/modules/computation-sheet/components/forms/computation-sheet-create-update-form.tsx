@@ -86,7 +86,6 @@ const ComputationSheetCreateUpdateForm = ({
         useFormHelper<TFormValues>({
             form,
             ...formProps,
-            autoSave: !!computationSheetId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

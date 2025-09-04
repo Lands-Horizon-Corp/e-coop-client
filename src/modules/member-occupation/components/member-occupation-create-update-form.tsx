@@ -59,7 +59,6 @@ const MemberOccupationCreateUpdateForm = ({
         useFormHelper<TMemberOccupationForm>({
             form,
             ...formProps,
-            autoSave: !!memberOccupationId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

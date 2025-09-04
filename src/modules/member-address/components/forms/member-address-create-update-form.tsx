@@ -86,7 +86,6 @@ const MemberAddressCreateUpdateForm = ({
         useFormHelper<TMemberAddressFormValues>({
             form,
             ...formProps,
-            autoSave: !!memberAddressId,
         })
 
     const onSubmit = form.handleSubmit((formData) => {
