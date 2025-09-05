@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { type TFilterObject } from '@/contexts/filter-context'
+import { cn } from '@/helpers'
 import { MemberQrScannerModal } from '@/modules/member-profile/components/member-qr-scanner'
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
@@ -40,6 +41,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             modalState,
             placeholder,
             allowShorcutCommand = false,
+            triggerClassName,
             onSelect,
         },
         ref
@@ -200,7 +202,10 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     variant="secondary"
                     disabled={disabled}
                     onClick={() => setState(true)}
-                    className="w-full items-center justify-between rounded-md border p-0 px-2"
+                    className={cn(
+                        'w-full items-center justify-between rounded-md border p-0 px-2',
+                        triggerClassName
+                    )}
                 >
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
