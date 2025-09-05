@@ -207,7 +207,7 @@ const RouteDetailsSheet = ({
                     )}
                     <InfoSection
                         icon={
-                            <PaperPlaneIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
+                            <PaperPlaneIcon className="h-4 w-4 text-primary dark:text-primary" />
                         }
                         title="Request Type"
                         body={route.request}

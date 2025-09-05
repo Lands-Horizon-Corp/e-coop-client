@@ -25,7 +25,7 @@ const computationTypeStyles: Record<
     },
     [ComputationTypeEnum.DiminishingAddOn]: {
         label: 'Diminishing Add-On',
-        bgColor: 'bg-green-800',
+        bgColor: 'bg-primary/60',
         textColor: 'text-green-50',
     },
     [ComputationTypeEnum.DiminishingYearly]: {

@@ -520,8 +520,8 @@ const BranchSettingsForm = ({
                     {/* Deposit OR Settings */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
-                            <div className="size-fit rounded-full bg-green-100 p-2 dark:bg-green-900/20">
-                                <MoneyCheckIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
+                            <div className="size-fit rounded-full bg-primary/10 p-2 dark:bg-primary/10/20">
+                                <MoneyCheckIcon className="h-5 w-5 text-primary dark:text-primary" />
                             </div>
                             <div>
                                 <h3 className="text font-semibold">

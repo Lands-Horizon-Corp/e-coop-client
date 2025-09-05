@@ -112,7 +112,7 @@ const MediaResourceFileIcon = ({
         case 'sheet':
             return (
                 <span
-                    className={cn('text-green-500', commonIconClass, className)}
+                    className={cn('text-primary', commonIconClass, className)}
                 >
                     <SpreadSheetFileIcon className={iconClassName} />
                 </span>

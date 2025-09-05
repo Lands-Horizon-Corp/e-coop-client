@@ -16,8 +16,8 @@ export const FileTypeIcons = {
     sheet: <Image src={attachmentSheet} alt="attachment-sheet" />,
     text: <Image src={attachmentTxt} alt="attachment-text" />,
     image: (
-        <div className="flex size-8 items-center justify-center rounded-sm bg-green-100">
-            <ImageIcon className="size-5 text-green-800" />
+        <div className="flex size-8 items-center justify-center rounded-sm bg-primary/10">
+            <ImageIcon className="size-5 text-primary/70" />
         </div>
     ),
     unknown: (

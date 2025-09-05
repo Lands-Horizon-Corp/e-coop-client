@@ -62,7 +62,7 @@ const ProfileConnectUserModalDisplay = ({ memberProfile, userOrg }: Props) => {
                 </div>
             </div>
 
-            <Card className="border-2 border-dashed border-green-200 bg-green-50/50 dark:border-green-800 dark:bg-green-950/50">
+            <Card className="border-2 border-dashed border-primary bg-green-50/50 dark:border-primary/70 dark:bg-green-950/50">
                 <CardContent className="p-4">
                     <div className="flex items-center gap-3">
                         <PreviewMediaWrapper media={userOrg.user.media}>
@@ -79,10 +79,10 @@ const ProfileConnectUserModalDisplay = ({ memberProfile, userOrg }: Props) => {
                         </PreviewMediaWrapper>
                         <div className="min-w-0 flex-1">
                             <div className="mb-1 flex items-center gap-2">
-                                <ShieldIcon className="h-4 w-4 text-green-600 dark:text-green-400" />
+                                <ShieldIcon className="h-4 w-4 text-primary dark:text-primary" />
                                 <Badge
                                     variant="secondary"
-                                    className="bg-green-100 text-xs text-green-700 hover:bg-green-100 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-900"
+                                    className="bg-primary/10 text-xs text-primary/80 hover:bg-primary/10 dark:bg-primary/10 dark:text-primary dark:hover:bg-primary/10"
                                 >
                                     User Account
                                 </Badge>

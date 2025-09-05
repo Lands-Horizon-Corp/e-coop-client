@@ -282,7 +282,7 @@ const DurationBadge = ({
                     'border-amber-200 bg-amber-100 text-amber-800 hover:bg-amber-100 dark:border-amber-800/50 dark:bg-amber-900/30 dark:text-amber-300 dark:hover:bg-amber-900/40',
                 !isOngoing &&
                     variant === 'default' &&
-                    'border-green-200 bg-green-100 text-green-800 hover:bg-green-100 dark:border-green-800/50 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/40',
+                    'border-primary bg-primary/10 text-primary/70 hover:bg-primary/10 dark:border-primary/70/50 dark:bg-primary/10/30 dark:text-primary dark:hover:bg-primary/10/40',
                 className
             )}
         >

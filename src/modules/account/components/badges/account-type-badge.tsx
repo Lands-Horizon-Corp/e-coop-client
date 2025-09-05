@@ -59,7 +59,7 @@ const AccoutTTypeStyles: Record<
     },
     [AccountTypeEnum.APLedger]: {
         label: 'A/P-Ledger',
-        bgColor: 'bg-green-700',
+        bgColor: 'bg-primary/90',
         textColor: 'text-green-50',
     },
     [AccountTypeEnum.Other]: {

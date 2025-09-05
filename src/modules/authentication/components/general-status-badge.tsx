@@ -15,7 +15,7 @@ const generalStatusVariants = cva(
                 'for review':
                     'bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-900/30',
                 verified:
-                    'bg-green-100 text-green-800 border-green-200 hover:bg-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800 dark:hover:bg-green-900/30',
+                    'bg-primary/10 text-primary/70 border-primary hover:bg-primary/20 dark:bg-primary/10/20 dark:text-primary dark:border-primary/70 dark:hover:bg-primary/10/30',
                 'not allowed':
                     'bg-red-100 text-red-800 border-red-200 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/30',
                 unknown:
