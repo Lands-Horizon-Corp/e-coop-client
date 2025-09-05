@@ -1,18 +1,29 @@
-/// <reference types="react-scripts" />
+/// <reference types="vite/client" />
 
+// CSS Modules
 declare module '*.css'
+
+// Global types
 declare global {
     interface Window {
         // Add any global window properties here
         gtag?: (...args: unknown[]) => void
         dataLayer?: Record<string, unknown>[]
-    }
-
-    // Global utility types
-    type Nullable<T> = T | null
-    type Optional<T> = T | undefined
-    type Maybe<T> = T | null | undefined
-    type DeepPartial<T> = {
-        [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
+        turnstile?: {
+            render: (
+                element: string | HTMLElement,
+                options: {
+                    sitekey: string
+                    callback?: (token: string) => void
+                    'error-callback'?: (error: Error) => void
+                    theme?: 'light' | 'dark' | 'auto'
+                    size?: 'normal' | 'compact'
+                }
+            ) => string
+            remove: (widgetId: string) => void
+            reset: (widgetId?: string) => void
+        }
     }
 }
+
+export {}

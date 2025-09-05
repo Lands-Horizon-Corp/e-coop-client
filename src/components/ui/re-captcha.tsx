@@ -9,7 +9,15 @@ import {
 
 import { toast } from 'sonner'
 
-import { CloseIcon } from '../icons'
+import { TURNSTILE_CAPTCHA_SITE_KEY } from '@/constants'
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from './dialog'
 
 interface ChatReCaptchaProps {
     onSuccess: (token: string) => void
@@ -52,14 +60,21 @@ const ChatReCaptcha = forwardRef<ChatReCaptchaRef, ChatReCaptchaProps>(
             [onError]
         )
 
-        const handleClose = useCallback(() => {
-            setIsVisible(false)
-        }, [])
-
         // Initialize Turnstile when component becomes visible
         useEffect(() => {
-            const siteKey = import.meta.env.VITE_TURNSTILE_CAPTCHA_SITE_KEY
-            if (!isVisible || !window.turnstile || !siteKey) {
+            const siteKey = TURNSTILE_CAPTCHA_SITE_KEY
+
+            if (!isVisible) {
+                return
+            }
+
+            // If no site key is configured, auto-succeed
+            if (!siteKey) {
+                handleSuccess('bypass-token')
+                return
+            }
+
+            if (!window.turnstile) {
                 return
             }
 
@@ -71,16 +86,17 @@ const ChatReCaptcha = forwardRef<ChatReCaptchaRef, ChatReCaptchaProps>(
             // Add a small delay to ensure DOM is ready
             const timeoutId = setTimeout(() => {
                 try {
-                    const widgetId = window.turnstile.render(
-                        `#${DEFAULT_CONTAINER_ID}`,
-                        {
-                            sitekey: siteKey,
-                            callback: handleSuccess,
-                            'error-callback': handleError,
-                        }
-                    )
-
-                    widgetIdRef.current = widgetId
+                    if (window.turnstile) {
+                        const widgetId = window.turnstile.render(
+                            `#${DEFAULT_CONTAINER_ID}`,
+                            {
+                                sitekey: siteKey,
+                                callback: handleSuccess,
+                                'error-callback': handleError,
+                            }
+                        )
+                        widgetIdRef.current = widgetId
+                    }
                 } catch (error) {
                     console.error(
                         'ChatReCaptcha: Failed to render Turnstile:',
@@ -94,7 +110,7 @@ const ChatReCaptcha = forwardRef<ChatReCaptchaRef, ChatReCaptchaProps>(
                 clearTimeout(timeoutId)
 
                 // Cleanup Turnstile widget
-                if (widgetIdRef.current) {
+                if (widgetIdRef.current && window.turnstile) {
                     window.turnstile.remove(widgetIdRef.current)
                     widgetIdRef.current = null
                 }
@@ -104,33 +120,21 @@ const ChatReCaptcha = forwardRef<ChatReCaptchaRef, ChatReCaptchaProps>(
 
         // Reset widget when visibility changes
         useEffect(() => {
-            if (!isVisible && widgetIdRef.current) {
+            if (!isVisible && widgetIdRef.current && window.turnstile) {
                 window.turnstile.remove(widgetIdRef.current)
                 widgetIdRef.current = null
             }
         }, [isVisible])
 
-        if (!isVisible) {
-            return null
-        }
-
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-sm">
-                <div className="relative rounded-lg bg-card border border-border px-6 py-6 shadow-xl">
-                    <button
-                        onClick={handleClose}
-                        className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                        <CloseIcon className="size-4" />
-                    </button>
-                    <div className="mb-4 text-center">
-                        <h3 className="text-lg font-medium text-foreground">
-                            Verify you're human
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
+            <Dialog open={isVisible} onOpenChange={setIsVisible}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Verify you're human</DialogTitle>
+                        <DialogDescription>
                             Please complete the CAPTCHA to continue.
-                        </p>
-                    </div>
+                        </DialogDescription>
+                    </DialogHeader>
                     <div className="flex justify-center">
                         <div
                             ref={containerRef}
@@ -138,8 +142,8 @@ const ChatReCaptcha = forwardRef<ChatReCaptchaRef, ChatReCaptchaProps>(
                             className="flex min-h-[65px] items-center justify-center"
                         />
                     </div>
-                </div>
-            </div>
+                </DialogContent>
+            </Dialog>
         )
     }
 )
