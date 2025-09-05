@@ -61,7 +61,7 @@ const App = () => {
 
     if (!isAllowed || isChecking)
         return (
-            <PageContainer className="w-dvh h-dvh items-center justify-center gap-y-4 text-muted-foreground/70">
+            <PageContainer className="w-screen h-dvh items-center justify-center gap-y-4 text-muted-foreground/70">
                 {isChecking ? (
                     <LoadingSpinner />
                 ) : (
