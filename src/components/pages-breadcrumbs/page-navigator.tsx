@@ -1,8 +1,9 @@
 import { useRouter } from '@tanstack/react-router'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+
+import ActionTooltip from '../tooltips/action-tooltip'
 
 const PageNavigator = () => {
     const router = useRouter()

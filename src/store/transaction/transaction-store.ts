@@ -1,15 +1,17 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { IAccount } from '@/types/coop-types/accounts/account'
-import { create } from 'zustand'
-
+import { IAccount } from '@/modules/account'
 import {
     IGeneralLedger,
-    IMemberJointAccount,
-    IMemberProfile,
-    TEntityId,
-    TPaymentMode,
-} from '@/types'
+    IGeneralLedgerPaginated,
+} from '@/modules/general-ledger'
+import { IMemberJointAccount } from '@/modules/member-joint-account'
+import { IMemberProfile } from '@/modules/member-profile'
+import { IQRMemberProfile } from '@/modules/qr-crypto'
+import { TPaymentMode } from '@/modules/quick-transfer'
+import { create } from 'zustand'
+
+import { TEntityId } from '@/types'
 
 export interface TransactionPropsStore {
     openMemberPicker: boolean
@@ -30,6 +32,8 @@ export interface TransactionPropsStore {
           }
         | undefined
     selectedAccount?: IAccount
+    currentPayment: IGeneralLedgerPaginated | null
+    decodedMemberProfile?: IQRMemberProfile
 
     setOpenMemberPicker: Dispatch<SetStateAction<boolean>>
     setFocusTypePayment: (payment: TPaymentMode) => void
@@ -42,7 +46,8 @@ export interface TransactionPropsStore {
     setTransactionFormSuccess: (transaction: IGeneralLedger | null) => void
     setOpenPaymentWithTransactionModal: (open: boolean) => void
     setSelectedAccount: (accountId?: IAccount) => void
-
+    setGetCurrentPayment: (payment?: IGeneralLedgerPaginated | null) => void
+    setDecodedMemberProfile: (profile?: IQRMemberProfile) => void
     handleResetAll: () => void
     setFocusedLedger: (
         focused:
@@ -69,6 +74,8 @@ export const useTransactionStore = create<TransactionPropsStore>(
         openPaymentWithTransactionModal: false,
         focusedLedger: undefined,
         selectedAccount: undefined,
+        currentPayment: null,
+        decodedMemberProfile: undefined,
 
         setSelectedAccountId: (accountId) =>
             set({ selectedAccountId: accountId }),
@@ -96,6 +103,11 @@ export const useTransactionStore = create<TransactionPropsStore>(
             set({ transactionFormSuccess: transaction }),
         setOpenPaymentWithTransactionModal: (open) =>
             set({ openPaymentWithTransactionModal: open }),
+        setGetCurrentPayment: (payment) =>
+            set({ currentPayment: payment ?? null }),
+
+        setDecodedMemberProfile: (profile) =>
+            set({ decodedMemberProfile: profile }),
 
         handleResetAll: () =>
             set(() => ({
@@ -109,6 +121,8 @@ export const useTransactionStore = create<TransactionPropsStore>(
                 openSuccessModal: false,
                 transactionFormSuccess: null,
                 openPaymentWithTransactionModal: false,
+                currentPayment: null,
+                decodedMemberProfile: undefined,
             })),
         setFocusedLedger: (focused) => set({ focusedLedger: focused }),
         setSelectedAccount: (account) =>

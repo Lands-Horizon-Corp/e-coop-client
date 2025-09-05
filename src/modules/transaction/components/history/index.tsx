@@ -1,0 +1,164 @@
+import { useState } from 'react'
+
+import { useNavigate } from '@tanstack/react-router'
+
+import { PAGINATION_INITIAL_INDEX } from '@/constants'
+import { TransactionDetails } from '@/modules/transaction'
+import { useFilteredPaginatedTransaction } from '@/modules/transactions'
+import { PaginationState } from '@tanstack/react-table'
+
+import RefreshButton from '@/components/buttons/refresh-button'
+import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
+import { HistoryIcon } from '@/components/icons'
+import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { useShortcut } from '@/hooks/use-shorcuts'
+
+import { TEntityId } from '@/types'
+
+import TransactionSkeletonCard from '../skeleton/transaction-skeleton-card'
+import TransactionNoFound from './transaction-no-found'
+
+export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
+    const navigate = useNavigate()
+    const [onOpen, setOnOpen] = useState(false)
+    const [pagination, setPagination] = useState<PaginationState>({
+        pageIndex: PAGINATION_INITIAL_INDEX,
+        pageSize: 10,
+    })
+    const { sortingStateBase64 } = useDataTableSorting()
+
+    const filterState = useDatableFilterState({
+        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
+    })
+
+    const {
+        data: CurrentTransaction,
+        isLoading: isLoadingCurrentTransaction,
+        isFetching,
+        refetch: refetchCurrentTransaction,
+    } = useFilteredPaginatedTransaction({
+        mode: 'current-user',
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+    })
+
+    const handleNavigate = (transactionId: TEntityId, fullPath: string) => {
+        navigate({
+            to: fullPath,
+            search: {
+                transactionId: transactionId,
+            },
+        })
+        setOnOpen(false)
+    }
+
+    useShortcut(
+        'h',
+        () => {
+            setOnOpen(true)
+        },
+        {
+            disableTextInputs: true,
+        }
+    )
+    if (isLoadingCurrentTransaction) {
+        return (
+            <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, index) => (
+                    <TransactionSkeletonCard key={index} />
+                ))}
+            </div>
+        )
+    }
+
+    const isNoCurrentTransaction =
+        !CurrentTransaction || CurrentTransaction.data.length === 0
+
+    return (
+        <div className="flex w-full flex-row items-center justify-end">
+            <Sheet open={onOpen} onOpenChange={setOnOpen}>
+                <SheetTrigger asChild className="">
+                    <Button
+                        variant="secondary"
+                        className=""
+                        size="sm"
+                        onClick={() => setOnOpen(true)}
+                    >
+                        <HistoryIcon className="mr-2" />
+                        History
+                    </Button>
+                </SheetTrigger>
+                <SheetContent className=" min-w-full h-full max-w-[500px] md:min-w-[600px] overflow-hidden ">
+                    <div className=" ecoop-scroll m-5">
+                        <h1 className="text-lg font-bold mb-2">
+                            Transaction History
+                            <RefreshButton
+                                className="bg-transparent size-7"
+                                onClick={refetchCurrentTransaction}
+                                isLoading={isLoadingCurrentTransaction}
+                            />
+                        </h1>
+                        <ScrollArea>
+                            <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
+                                {isNoCurrentTransaction ? (
+                                    <TransactionNoFound />
+                                ) : (
+                                    CurrentTransaction?.data.map(
+                                        (transaction) => (
+                                            <div key={transaction.id}>
+                                                <TransactionDetails
+                                                    item={transaction}
+                                                    onClick={() =>
+                                                        handleNavigate(
+                                                            transaction.id,
+                                                            fullPath
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        )
+                                    )
+                                )}
+                            </div>
+                        </ScrollArea>
+                        <div className="sticky bottom-0 left-0 right-0">
+                            <MiniPaginationBar
+                                pagination={{
+                                    pageIndex: pagination.pageIndex,
+                                    pageSize: pagination.pageSize,
+                                    totalPage:
+                                        CurrentTransaction?.totalPage ?? 0,
+                                    totalSize:
+                                        CurrentTransaction?.totalSize ?? 0,
+                                }}
+                                disablePageMove={isFetching}
+                                onNext={({ pageIndex }) =>
+                                    setPagination((prev) => ({
+                                        ...prev,
+                                        pageIndex,
+                                    }))
+                                }
+                                onPrev={({ pageIndex }) =>
+                                    setPagination((prev) => ({
+                                        ...prev,
+                                        pageIndex,
+                                    }))
+                                }
+                            />
+                        </div>
+                    </div>
+                </SheetContent>
+            </Sheet>
+        </div>
+    )
+}
+
+export default TransactionHistory

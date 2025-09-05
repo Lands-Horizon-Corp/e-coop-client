@@ -1,4 +1,6 @@
+import { cn } from '@/helpers/tw-utils'
 import { useTheme } from '@/providers/theme-provider'
+import type { IBaseProps } from '@/types/component-types/base-component'
 
 import { MoonIcon, SunIcon, SunMoonIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -8,10 +10,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
-import { cn } from '@/lib/utils'
-
-import { IBaseProps } from '@/types'
 
 export const ThemeToggleMenu = ({ className }: IBaseProps) => {
     const { setTheme } = useTheme()

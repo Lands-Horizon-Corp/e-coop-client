@@ -1,14 +1,13 @@
 import { CSSProperties } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Column, Header, Table } from '@tanstack/react-table'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { PushPinSlashIcon } from '@/components/icons'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
-
-import { cn } from '@/lib/utils'
 
 import ColumnResizeHandle from './column-drag-resize'
 

@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
 import { toast } from 'sonner'
 import { z } from 'zod'
-
-import { Loader2, PipetteIcon } from 'lucide-react'
-import { HexAlphaColorPicker, HexColorPicker } from 'react-colorful'
 
 import {
     hexToRgb,
@@ -14,7 +12,11 @@ import {
     rgbToHsl,
     rgbaToHex,
     rgbaToHsla,
-} from '@/components/helper/color-converter'
+} from '@/helpers'
+import { cn } from '@/helpers'
+import { Loader2, PipetteIcon } from 'lucide-react'
+import { HexAlphaColorPicker, HexColorPicker } from 'react-colorful'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -30,8 +32,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-
-import { cn } from '@/lib/utils'
 
 export const colorSchema = z
     .string()
@@ -61,7 +61,7 @@ interface ColorValues {
     hsla?: { h: number; s: number; l: number; a: number }
 }
 
-export default function InputColor({
+export default function ColorPicker({
     value,
     onChange,
     onBlur,
@@ -95,28 +95,55 @@ export default function InputColor({
         }
     })
 
-    // Update all color formats when color changes
-    const updateColorValues = (newColor: string) => {
+    // Initialize color values on mount and when value changes
+    useEffect(() => {
         if (alpha) {
-            const rgba = hexToRgba(newColor)
+            const rgba = hexToRgba(value)
             const hsla = rgbaToHsla(rgba.r, rgba.g, rgba.b, rgba.a)
             setColorValues({
-                hex: newColor.length === 9 ? newColor.slice(0, 7) : newColor,
+                hex: value.length === 9 ? value.slice(0, 7) : value,
                 rgb: { r: rgba.r, g: rgba.g, b: rgba.b },
                 hsl: rgbToHsl(rgba.r, rgba.g, rgba.b),
                 rgba,
                 hsla,
             })
         } else {
-            const rgb = hexToRgb(newColor)
+            const rgb = hexToRgb(value)
             const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b)
             setColorValues({
-                hex: newColor.toUpperCase(),
+                hex: value.toUpperCase(),
                 rgb,
                 hsl,
             })
         }
-    }
+    }, [value, alpha])
+
+    // Update all color formats when color changes
+    const updateColorValues = useCallback(
+        (newColor: string) => {
+            if (alpha) {
+                const rgba = hexToRgba(newColor)
+                const hsla = rgbaToHsla(rgba.r, rgba.g, rgba.b, rgba.a)
+                setColorValues({
+                    hex:
+                        newColor.length === 9 ? newColor.slice(0, 7) : newColor,
+                    rgb: { r: rgba.r, g: rgba.g, b: rgba.b },
+                    hsl: rgbToHsl(rgba.r, rgba.g, rgba.b),
+                    rgba,
+                    hsla,
+                })
+            } else {
+                const rgb = hexToRgb(newColor)
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b)
+                setColorValues({
+                    hex: newColor.toUpperCase(),
+                    rgb,
+                    hsl,
+                })
+            }
+        },
+        [alpha]
+    )
 
     // Handle color picker change
     const handleColorChange = (newColor: string) => {
@@ -277,11 +304,6 @@ export default function InputColor({
             toast.info('eyedropper canceled')
         }
     }
-
-    // Initialize color values on mount
-    useEffect(() => {
-        updateColorValues(value)
-    }, [value])
 
     // Get display color for the color button
     const getDisplayColor = () => {

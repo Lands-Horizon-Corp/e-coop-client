@@ -2,6 +2,8 @@ import { ReactNode } from 'react'
 
 import { ControllerProps, FieldValues, Path } from 'react-hook-form'
 
+import { cn } from '@/helpers/tw-utils'
+
 import {
     FormDescription,
     FormField,
@@ -10,8 +12,6 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form'
-
-import { cn } from '@/lib/utils'
 
 export interface FormFieldWrapperProps<
     T extends FieldValues = FieldValues,

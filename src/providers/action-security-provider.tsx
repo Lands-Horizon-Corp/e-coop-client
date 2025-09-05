@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import ActionSecurityModal from '@/components/modals/action-security-modal'
 

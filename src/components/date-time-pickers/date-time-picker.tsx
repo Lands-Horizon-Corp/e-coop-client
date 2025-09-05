@@ -1,10 +1,14 @@
 import { useState } from 'react'
 
-import { CaptionLayout } from 'react-day-picker'
-
 import DateTimeSetter from '@/components/date-time-pickers/date-time-setter'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
+
+export type CaptionLayout =
+    | 'label'
+    | 'dropdown'
+    | 'dropdown-months'
+    | 'dropdown-years'
 
 type DateTimePickerProps = {
     fromYear?: number

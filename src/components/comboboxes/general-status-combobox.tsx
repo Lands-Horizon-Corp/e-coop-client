@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { GENERAL_STATUS } from '@/constants'
+import { cn } from '@/helpers'
 import { Check } from 'lucide-react'
 
 import { ChevronDownIcon } from '@/components/icons'
@@ -18,8 +19,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-
-import { cn } from '@/lib/utils'
 
 import { TGeneralStatus } from '@/types'
 

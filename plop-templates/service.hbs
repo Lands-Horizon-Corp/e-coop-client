@@ -1,0 +1,46 @@
+import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+
+import type { I{{pascalCase name}}, I{{pascalCase name}}Request } from '../{{kebabCase name}}'
+
+const { apiCrudHooks, apiCrudService, baseQueryKey : {{camelCase name}}BaseKey } = createDataLayerFactory<
+    I{{pascalCase name}},
+    I{{pascalCase name}}Request
+>({
+    url: '/api/v1/{{kebabCase name}}',
+    baseKey: '{{kebabCase name}}',
+})
+
+// ⚙️🛠️ API SERVICE HERE
+export const {
+    API, // rarely used, for raw calls
+    route: {{camelCase name}}APIRoute, // matches url above
+
+    create: create{{pascalCase name}},
+    updateById: update{{pascalCase name}}ById,
+
+    deleteById: delete{{pascalCase name}}ById,
+    deleteMany: deleteMany{{pascalCase name}},
+
+    getById: get{{pascalCase name}}ById,
+    getAll: getAll{{pascalCase name}},
+    getPaginated: getPaginated{{pascalCase name}},
+} = apiCrudService
+
+// custom service functions can go here
+
+// 🪝 HOOK STARTS HERE
+export { {{camelCase name}}BaseKey } // Exported in case it's needed outside
+
+export const {
+    useCreate: useCreate{{pascalCase name}},
+    useUpdateById: useUpdate{{pascalCase name}}ById,
+
+    useGetAll: useGetAll{{pascalCase name}},
+    useGetById: useGet{{pascalCase name}}ById,
+    useGetPaginated: useGetPaginated{{pascalCase name}},
+
+    useDeleteById: useDelete{{pascalCase name}}ById,
+    useDeleteMany: useDeleteMany{{pascalCase name}},
+} = apiCrudHooks
+
+// custom hooks can go here

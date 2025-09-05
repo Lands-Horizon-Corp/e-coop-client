@@ -1,11 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
-
-import { useAuthUser } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import FootstepTable from '@/modules/footstep/components/footsteps-table'
+import FootstepAction from '@/modules/footstep/components/footsteps-table/row-action-context'
+
 import PageContainer from '@/components/containers/page-container'
-import FootstepTable from '@/components/tables/footsteps-table'
-import FootstepTableAction from '@/components/tables/footsteps-table/row-action-context'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
@@ -23,19 +23,19 @@ function RouteComponent() {
 
     useSubscribe(`footstep.create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me'],
+            queryKey: ['footstep', 'paginated', 'me'],
         })
     })
 
     useSubscribe(`footstep.update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me'],
+            queryKey: ['footstep', 'paginated', 'me'],
         })
     })
 
     useSubscribe(`footstep.delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
-            queryKey: ['footstep', 'resource-query', 'me'],
+            queryKey: ['footstep', 'paginated', 'me'],
         })
     })
 
@@ -43,7 +43,7 @@ function RouteComponent() {
         <PageContainer>
             <FootstepTable
                 mode="me"
-                actionComponent={FootstepTableAction}
+                actionComponent={FootstepAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>

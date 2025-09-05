@@ -1,14 +1,13 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { contactFormSchema } from '@/routes/(landing)/-validations/contact-form'
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
+import { cn } from '@/helpers/tw-utils'
+import { contactUsSchema, useCreate } from '@/modules/contact-us'
 
-import { PhoneInput } from '@/components/contact-input/contact-input'
-import CopyWrapper from '@/components/elements/copy-wrapper'
 import {
     EmailIcon,
     FacebookIcon,
@@ -26,17 +25,16 @@ import {
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { PhoneInput } from '@/components/ui/phone-input'
 import { Textarea } from '@/components/ui/textarea'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
-import { cn } from '@/lib/utils'
-
-import { useCreateContactUs } from '@/hooks/api-hooks/use-contact-us'
 import UseCooldown from '@/hooks/use-cooldown'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import LinkTag from './policy/-components/link-tag'
 
-type TContact = z.infer<typeof contactFormSchema>
+type TContact = z.infer<typeof contactUsSchema>
 
 const contactInputClasses =
     'rounded-[10px] border border-[#4D4C4C]/20 bg-white/50 dark:bg-secondary/70 focus:border-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-0 placeholder:text-[#838383]'
@@ -53,7 +51,7 @@ const ContactPage = () => {
     }
 
     const form = useForm<TContact>({
-        resolver: zodResolver(contactFormSchema),
+        resolver: standardSchemaResolver(contactUsSchema),
         reValidateMode: 'onChange',
         mode: 'onChange',
         defaultValues,
@@ -63,19 +61,20 @@ const ContactPage = () => {
         counterInterval: 1000,
     })
 
-    const { mutate: sendContactMessage, isPending } = useCreateContactUs({
-        onSuccess: (data) => {
-            toast.success(
-                `Thank you ${data.first_name} ${data.last_name}. Expect a call or email for us personally :)`
-            )
-            startCooldown()
-            form.reset()
+    const { mutate: sendContactMessage, isPending } = useCreate({
+        options: {
+            onSuccess: (data) => {
+                toast.success(
+                    `Thank you ${data.first_name} ${data.last_name}. Expect a call or email for us personally :)`
+                )
+                startCooldown()
+                form.reset()
+            },
         },
     })
 
-    const onSubmitContactForm = async (data: TContact) => {
-        const parsedData = contactFormSchema.parse(data)
-        sendContactMessage(parsedData)
+    const onSubmitContactForm = (data: TContact) => {
+        sendContactMessage(data)
     }
 
     const showFieldError = Object.values(form.formState.errors)[0]?.message
@@ -88,7 +87,7 @@ const ContactPage = () => {
                 </h1>
                 <h2 className="max-w-[1100px] text-center text-[min(24px,3.5vw)] font-medium">
                     Got any questions about the product or scaling on our
-                    platform? We’re here to help. Chat our friendly team 24/7
+                    platform? We're here to help. Chat our friendly team 24/7
                     and get onboard in less than 5 minutes.
                 </h2>
                 <div className="flex w-full flex-col justify-evenly md:flex-row">
@@ -239,7 +238,7 @@ const ContactPage = () => {
                                 <Button
                                     disabled={isPending}
                                     type="submit"
-                                    className="mt-6 bg-[#34C759] hover:bg-[#38b558]"
+                                    className="mt-6 bg-primary hover:bg-primary/50"
                                 >
                                     {isPending ? (
                                         <LoadingCircleIcon className="animate-spin" />

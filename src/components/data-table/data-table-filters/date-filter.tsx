@@ -5,7 +5,7 @@ import {
     filterModeMap,
     useFilter,
 } from '@/contexts/filter-context'
-import { isDate } from '@/helpers'
+import { isDate } from 'date-fns'
 
 import InputDatePicker from '@/components/date-time-pickers/input-date-picker'
 import { Button } from '@/components/ui/button'
@@ -88,8 +88,6 @@ const DateFilter = <T,>({
                 <DateRange
                     modal
                     withTimePick
-                    fromYear={1960}
-                    captionLayout="dropdown-buttons"
                     value={
                         {
                             from: filterVal.from,

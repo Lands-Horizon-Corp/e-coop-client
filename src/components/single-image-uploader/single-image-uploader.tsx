@@ -1,20 +1,17 @@
 import { useState } from 'react'
 
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
+import { IMedia, useUploadMedia } from '@/modules/media'
 
-import ActionTooltip from '@/components/action-tooltip'
 import { AdjustIcon } from '@/components/icons'
 import PictureCrop from '@/components/picture-crop'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
-
-import { IMedia } from '@/types'
-
 import ImageDisplay from '../image-display'
+import ActionTooltip from '../tooltips/action-tooltip'
 import SingleImageUploadOption from './upload-options'
 
 export interface ISingleImageUploadProps {
@@ -40,10 +37,29 @@ const SingleImageUpload = ({
         data: uploadedPhoto,
         isPending: isUploadingPhoto,
         mutate: uploadPhoto,
-    } = useSinglePictureUpload({
-        onSuccess: onUploadComplete,
-        onUploadProgressChange: (progress) => setUploadMediaProgress(progress),
+    } = useUploadMedia({
+        options: {
+            onSuccess: onUploadComplete,
+        },
+        onProgress: (progressEvent) => {
+            if (progressEvent.total) {
+                const progress = Math.round(
+                    (progressEvent.loaded / progressEvent.total) * 100
+                )
+                setUploadMediaProgress(progress)
+            }
+        },
     })
+
+    const handleUploadPhoto = () => {
+        if (!croppedImage) return
+        uploadPhoto({
+            file: base64ImagetoFile(
+                croppedImage,
+                `${defaultFileName}.jpg`
+            ) as File,
+        })
+    }
 
     return (
         <div className="space-y-4">
@@ -129,16 +145,7 @@ const SingleImageUpload = ({
                             </Button>
                         )}
                         {!uploadedPhoto && !isUploadingPhoto && (
-                            <Button
-                                onClick={() =>
-                                    uploadPhoto(
-                                        base64ImagetoFile(
-                                            croppedImage,
-                                            `${defaultFileName}.jpg`
-                                        ) as File
-                                    )
-                                }
-                            >
+                            <Button onClick={() => handleUploadPhoto()}>
                                 Upload
                             </Button>
                         )}

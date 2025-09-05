@@ -1,9 +1,10 @@
 import { forwardRef, useCallback, useState } from 'react'
+
 import { toast } from 'sonner'
 
+import { cn } from '@/helpers/tw-utils'
 import Webcam from 'react-webcam'
 
-import ActionTooltip from '@/components/action-tooltip'
 import {
     CameraFlipIcon,
     CameraOffIcon,
@@ -12,10 +13,9 @@ import {
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib/utils'
-
 import { IClassProps } from '@/types'
 
+import ActionTooltip from '../tooltips/action-tooltip'
 import CameraDevicePicker from './camera-device-picker'
 
 interface Props extends IClassProps {}

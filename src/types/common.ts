@@ -1,27 +1,31 @@
 import {
     AccountClosureReasons,
     CIVIL_STATUS,
-    EDUCATIONAL_ATTAINMENT,
     FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
     USER_TYPE,
 } from '@/constants'
+import { IBranch } from '@/modules/branch'
+import { TAG_CATEGORY } from '@/modules/tag-template/tag.constants'
 
-import { IUserBase } from './auth/user'
-import { IBranch } from './coop-types'
-import { IOrganization } from './lands-types'
+import { IOrganization } from '../modules/organization'
+import { IUserBase } from '../modules/user/user.types'
 
 export type TEntityId = string
 
-export type TUserType = (typeof USER_TYPE)[number]
+export type TUserType = (typeof USER_TYPE)[number] // move User module
 
 export type TGeneralStatus = (typeof GENERAL_STATUS)[number]
 
-export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number]
+export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number] // move to member profile relative
+
+export type TTagCategory = (typeof TAG_CATEGORY)[number]
+
+export type TPageType = 'PUBLIC' | 'AUTHENTICATED'
 
 export interface ILongLat {
-    longitude?: number // `float64` maps to `number` in TypeScript
-    latitude?: number // `float64` maps to `number` in TypeScript
+    longitude?: number
+    latitude?: number
 }
 
 /* Extend interface if gusto magka ts type neto */
@@ -39,7 +43,7 @@ export interface IAuditable {
 /* Only use this for entity that has branch_id */
 export interface IIDentity {
     branch_id: TEntityId
-    branch: IBranch
+    // branch: IBranch
 }
 
 export interface IOrgIdentity {
@@ -70,13 +74,19 @@ export interface ITimeStamps {
     updated_at?: string
 }
 
-export type TCivilStatus = (typeof CIVIL_STATUS)[number]
+export type TCivilStatus = (typeof CIVIL_STATUS)[number] // move to member profile
 
-export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number]
-
-export type TEducationalAttainment = (typeof EDUCATIONAL_ATTAINMENT)[number]
+export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number] // member profile
 
 export interface UpdateIndexRequest {
     id: TEntityId
     index: number
+}
+
+export interface IPaginatedResult<T> {
+    data: T[]
+    pageIndex: number
+    totalPage: number
+    pageSize: number
+    totalSize: number
 }

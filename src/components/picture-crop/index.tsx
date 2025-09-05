@@ -1,12 +1,12 @@
 import { useState } from 'react'
+
+import Cropper, { Area } from 'react-easy-crop'
 import { toast } from 'sonner'
 
-import { getCroppedImg } from '@/helpers'
-import { cn } from '@/lib'
-import { withCatchAsync } from '@/utils'
-import Cropper, { Area } from 'react-easy-crop'
+import { withCatchAsync } from '@/helpers/function-utils'
+import { getCroppedImg } from '@/helpers/picture-crop-helper'
+import { cn } from '@/helpers/tw-utils'
 
-import ActionTooltip from '@/components/action-tooltip'
 import {
     FlipHorizontalIcon,
     FlipHorizontalLineIcon,
@@ -20,6 +20,7 @@ import {
     ZoomOutIcon,
 } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 

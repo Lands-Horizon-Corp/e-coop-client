@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { cn } from '@/lib'
 import { useLocation, useRouter } from '@tanstack/react-router'
+
+import { cn } from '@/helpers/tw-utils'
 import { VariantProps } from 'class-variance-authority'
 
 import { ChevronRightIcon } from '@/components/icons'

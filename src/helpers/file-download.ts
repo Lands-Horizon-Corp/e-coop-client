@@ -1,11 +1,11 @@
-import APIService from '@/api-service/api-service'
+import API from '@/providers/api'
 
 export async function downloadFileService(
     url: string,
     fileName?: string
 ): Promise<void> {
     try {
-        const response = await APIService.get<Blob>(url, {
+        const response = await API.get<Blob>(url, {
             responseType: 'blob',
         })
 
@@ -15,7 +15,7 @@ export async function downloadFileService(
             const fileNameMatch = contentDisposition.match(
                 /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
             )
-            if (fileNameMatch != null && fileNameMatch[1]) {
+            if (fileNameMatch?.[1]) {
                 finalFileName = fileNameMatch[1].replace(/['"]/g, '')
             }
         }

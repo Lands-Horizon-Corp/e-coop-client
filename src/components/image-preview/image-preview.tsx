@@ -2,14 +2,7 @@
 import * as React from 'react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 
-import { formatBytes, formatDate } from '@/helpers'
-import {
-    DownloadProps,
-    ImageContainerProps,
-    ImagePreviewActionProps,
-    ImagePreviewButtonActionProps,
-    ImagePreviewPanelProps,
-} from '@/types/components/image-preview'
+import { cn, formatBytes, formatDate } from '@/helpers'
 import useEmblaCarousel from 'embla-carousel-react'
 import {
     ChevronLeftIcon,
@@ -29,8 +22,15 @@ import {
 // Local Components
 import { useCarousel } from '@/components/ui/carousel'
 
+import {
+    DownloadProps,
+    ImageContainerProps,
+    ImagePreviewActionProps,
+    ImagePreviewButtonActionProps,
+    ImagePreviewPanelProps,
+} from '@/types'
+
 // Utility Functions
-import { cn } from '@/lib/utils'
 
 import { Button } from '../ui/button'
 import { Card } from '../ui/card'
@@ -335,11 +335,7 @@ export const ImagePreviewButtonAction = React.forwardRef<
                                 defaultIconStyles,
                                 iconClassName
                             )}
-                        >
-                            {React.cloneElement(Icon as React.ReactElement, {
-                                className: cn(defaultIconStyles, iconClassName),
-                            })}
-                        </span>
+                        ></span>
                     )}
                     <p className="hidden lg:block">{name}</p>
                 </TooltipTrigger>

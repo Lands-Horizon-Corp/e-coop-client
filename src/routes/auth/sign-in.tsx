@@ -1,15 +1,15 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 
-import { useAuthStore } from '@/store/user-auth-store'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter, useSearch } from '@tanstack/react-router'
 import { createFileRoute } from '@tanstack/react-router'
 
-import SignInForm from '@/components/forms/auth-forms/sign-in-form'
+import { IAuthContext } from '@/modules/authentication'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
+import SignInForm from '@/modules/authentication/components/forms/sign-in-form'
+
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import GuestGuard from '@/components/wrappers/guest-guard'
-
-import { IAuthContext } from '@/types'
 
 import AuthPageWrapper from './-components/auth-page-wrapper'
 
@@ -32,14 +32,16 @@ function SignInPage() {
             queryClient.setQueryData(['current-user'], userData)
 
             if (cbUrl?.startsWith('/org') && !userData.user_organization) {
-                router.navigate({ to: '/onboarding', search: { cbUrl } })
+                router.navigate({
+                    to: '/onboarding' as string,
+                    search: { cbUrl },
+                })
             }
 
             router.navigate({ to: cbUrl as string })
         },
         [cbUrl, queryClient, router, setCurrentAuth]
     )
-
     return (
         <GuestGuard>
             <div className="flex min-h-full w-full flex-col items-center justify-center">

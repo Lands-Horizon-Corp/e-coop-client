@@ -1,5 +1,6 @@
-import { useAuthStore } from '@/store/user-auth-store'
 import { Link, useRouter } from '@tanstack/react-router'
+
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 
 import EcoopLogo from '@/components/ecoop-logo'
 import {
@@ -127,7 +128,7 @@ const NeonFooter = () => {
                         <EcoopLogo className="size-16" blurDisabled />
                     </div>
                     <div className="flex items-center text-sm">
-                        <span className="h-2 w-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                        <span className="h-2 w-2 bg-primary rounded-full mr-2 animate-pulse"></span>
                         All systems operational{' '}
                     </div>
                     <div className="text-sm font-thin">
@@ -186,10 +187,10 @@ const NeonFooter = () => {
                                 <span className="flex items-center p-1.5">
                                     {item.icon}
                                 </span>
-                                <p className="border break-all inline-block !text-wrap ">
+                                <span className="break-all inline-block !text-wrap ">
                                     {' '}
                                     {item.text}
-                                </p>
+                                </span>
                             </p>
                         ))}
                     </div>

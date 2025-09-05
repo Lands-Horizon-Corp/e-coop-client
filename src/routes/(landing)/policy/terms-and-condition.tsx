@@ -4,8 +4,8 @@ import { useCallback, useRef } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 
 import PageContainer from '@/components/containers/page-container'
-import CopyWrapper from '@/components/elements/copy-wrapper'
 import { Separator } from '@/components/ui/separator'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 import LinkTag from './-components/link-tag'
 import SitePolicyItem from './-components/site-policy-items'
@@ -526,7 +526,7 @@ function RouteComponent() {
                                         e.preventDefault()
                                         scrollToSection(sectionId)
                                     }}
-                                    className="text-green-600 min-w-64 dark:text-green-400 hover:underline cursor-pointer text-sm"
+                                    className="text-primary min-w-64 dark:text-primary hover:underline cursor-pointer text-sm"
                                 >
                                     {idx + 1}
                                     {'. '}

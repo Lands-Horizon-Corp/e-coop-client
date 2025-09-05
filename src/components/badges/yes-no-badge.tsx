@@ -1,8 +1,7 @@
 import { forwardRef } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { type VariantProps, cva } from 'class-variance-authority'
-
-import { cn } from '@/lib/utils'
 
 import type { IClassProps } from '@/types'
 
@@ -12,8 +11,8 @@ const yesNoVariants = cva(
         variants: {
             variant: {
                 yes: [
-                    'bg-green-100 text-green-800 border-green-200 hover:bg-green-200',
-                    'dark:bg-green-900/20 dark:text-green-400 dark:border-green-800 dark:hover:bg-green-900/30',
+                    'bg-primary/10 text-primary/70 border-primary hover:bg-primary/20',
+                    'dark:bg-primary/10/20 dark:text-primary dark:border-primary/70 dark:hover:bg-primary/10/30',
                 ],
                 no: [
                     'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200',

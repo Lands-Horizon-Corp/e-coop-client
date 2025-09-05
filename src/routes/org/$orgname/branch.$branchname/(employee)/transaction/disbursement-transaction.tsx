@@ -1,21 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import PageContainer from '@/components/containers/page-container'
-import DisbursementTransactionTable from '@/components/tables/disbursement-transaction-table'
+import DisbursementTransactionPage from '@/modules/disbursement-transaction/components/pages/disbursement-transaction'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction'
 )({
-    component: RouteComponent,
+    component: DisbursementTransactionPage,
 })
-
-function RouteComponent() {
-    return (
-        <PageContainer>
-            <DisbursementTransactionTable
-                mode="branch"
-                className="max-h-[90vh] min-h-[90vh] w-full"
-            />
-        </PageContainer>
-    )
-}

@@ -1,18 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import LoanSchemeEditor from '@/components/computation-sheet-scheme/computation-sheet-scheme-editor'
-import PageContainer from '@/components/containers/page-container'
+import ComputationSheetPage from '@/modules/computation-sheet/components/pages/computation-sheet'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/loan/computation-sheet-scheme/'
 )({
-    component: RouteComponent,
+    component: ComputationSheetPage,
 })
-
-function RouteComponent() {
-    return (
-        <PageContainer>
-            <LoanSchemeEditor />
-        </PageContainer>
-    )
-}

@@ -1,6 +1,5 @@
-import { formatBytes } from '@/helpers'
-
-import { IMedia } from '@/types'
+import { formatBytes } from '@/helpers/common-helper'
+import { IMedia } from '@/modules/media'
 
 import { DotMediumIcon, TrashIcon } from '../icons'
 import ImageDisplay from '../image-display'

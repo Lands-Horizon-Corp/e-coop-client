@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
-import { toast } from 'sonner'
 
-import { useAuthUser } from '@/store/user-auth-store'
 import { Navigate } from '@tanstack/react-router'
 
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import {
     useSendHeartbeatOffline,
     useSendHeartbeatOnline,
-} from '@/hooks/api-hooks/use-heartbeat'
+} from '@/modules/heartbeat/heartbeat.service'
 
 import { IChildProps } from '@/types'
 
@@ -36,10 +35,11 @@ const UserOrgGuard = ({ children }: Props) => {
         return () => {
             window.removeEventListener('beforeunload', handleUnload)
         }
-    }, [user_organization])
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     if (!user_organization) {
-        toast.warning('Please select what org and branch to operate.')
         return <Navigate to={'/onboarding' as string} />
     }
 

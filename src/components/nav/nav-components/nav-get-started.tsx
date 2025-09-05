@@ -1,8 +1,9 @@
-import { useAuthStore } from '@/store/user-auth-store'
 import { useRouter } from '@tanstack/react-router'
 
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
+import UserAvatar from '@/modules/user/components/user-avatar'
+
 import { Button } from '@/components/ui/button'
-import UserAvatar from '@/components/user-avatar'
 
 const NavGetStarted = () => {
     const { navigate } = useRouter()
@@ -37,7 +38,7 @@ const NavGetStarted = () => {
                     })
                 }
             }}
-            className="scale-effects gap-x-2 rounded-full px-2"
+            className="scale-effects gap-x-2 cursor-pointer rounded-full px-2"
         >
             <UserAvatar
                 src={user.media?.download_url ?? ''}

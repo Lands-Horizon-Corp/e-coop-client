@@ -4,14 +4,13 @@ import { createFileRoute, useRouter, useSearch } from '@tanstack/react-router'
 
 import ForgotPasswordEmail, {
     TForgotPasswordEmail,
-} from '@/components/forms/auth-forms/forgot-password-email'
-import ResendPasswordResetLinkButton from '@/components/forms/auth-forms/resend-password-reset-link-button'
+} from '@/modules/authentication/components/forms/forgot-password-email'
+import ResendPasswordResetLinkButton from '@/modules/authentication/components/forms/resend-password-reset-link-button'
+
 import { ArrowLeftIcon, EmailCheckIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import GuestGuard from '@/components/wrappers/guest-guard'
-
-import useLoadingErrorState from '@/hooks/use-loading-error-state'
 
 import AuthPageWrapper from './-components/auth-page-wrapper'
 
@@ -20,7 +19,7 @@ const ForgotPasswordPage = () => {
     const preFilledValues = useSearch({ from: '/auth/forgot-password' })
     const [sentTo, setSentTo] = useState<null | TForgotPasswordEmail>(null)
 
-    const { error, setError } = useLoadingErrorState()
+    const [error, setError] = useState<string>()
 
     return (
         <GuestGuard>

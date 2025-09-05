@@ -1,14 +1,13 @@
 import { toast } from 'sonner'
 
-import { arrayMove } from '@dnd-kit/sortable'
-import { create } from 'zustand'
-
 import {
     FinancialStatementTypeEnum,
     IFinancialStatementDefinition,
-    TEntityId,
-    UpdateIndexRequest,
-} from '@/types'
+} from '@/modules/financial-statement-definition'
+import { arrayMove } from '@dnd-kit/sortable'
+import { create } from 'zustand'
+
+import { TEntityId, UpdateIndexRequest } from '@/types'
 
 interface FinancialStatementAccountsGroupingStore {
     financialStatementAccountsGroupingId: string | null

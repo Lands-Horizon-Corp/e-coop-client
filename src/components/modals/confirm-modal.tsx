@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import Modal from '@/components/modals/modal'
@@ -17,7 +17,7 @@ const ConfirmModal = () => {
             description={modalData?.description}
         >
             {modalData?.content}
-            {modalData?.hideSeparator ? null : <Separator className="my-4" />}
+            {modalData?.hideSeparator ? null : <Separator className="my-1" />}
             <div
                 className={cn(
                     `flex justify-end gap-x-2`,

@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import Placeholder from '@tiptap/extension-placeholder'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'

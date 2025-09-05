@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import { IBaseProps } from '@/types'
 

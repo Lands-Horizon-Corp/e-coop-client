@@ -1,8 +1,9 @@
+import { cn } from '@/helpers/tw-utils'
 import { ResolvedTheme, useTheme } from '@/providers/theme-provider'
 
-import { cn } from '@/lib/utils'
-
 import { IClassProps } from '@/types'
+
+import Image from './image'
 
 type TEcoopThemeMode = 'dynamic' | ResolvedTheme
 
@@ -48,13 +49,13 @@ const EcoopLogo = ({
 
     return (
         <div className={cn('relative size-8', className)}>
-            <img
+            <Image
                 src={finalUrl}
                 alt="logo"
                 className="h-full w-full rounded-md"
             />
             {!blurDisabled && (
-                <img
+                <Image
                     src={finalUrl}
                     alt="logo-blur"
                     className={cn(

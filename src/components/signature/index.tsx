@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { toast } from 'sonner'
 
-import { dataUrlToFile } from '@/helpers'
-import { cn } from '@/lib'
+import { dataUrlToFile } from '@/helpers/common-helper'
+import { cn } from '@/helpers/tw-utils'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useSignature } from '@/store/signature-store'
 import { format } from 'date-fns'
@@ -26,6 +27,7 @@ import {
     HardDriveUploadIcon,
     SmallBrushIcon,
 } from '../icons'
+import Image from '../image'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 import CaptureSignature from './capture-signature'
@@ -101,7 +103,7 @@ const Signature = ({
                 return
             }
             const trimmedData = signatureRef.current
-                .getTrimmedCanvas()
+                .getCanvas()
                 .toDataURL('image/png')
 
             const convertedData = dataUrlToFile(
@@ -224,7 +226,7 @@ const Signature = ({
                 className
             )}
         >
-            <div className={cn('flex h-14 min-h-[50px] w-full')}>
+            <div className={cn('flex h-14 min-h-[50px] w-[183.5px]')}>
                 <div
                     className={cn(
                         'flex  w-full justify-between items-center',
@@ -359,12 +361,12 @@ const Signature = ({
             <Separator className="" />
             {trimmedData && (
                 <div className="my-2 w-fit rounded-lg border-[3px] border-primary p-2">
-                    <img
+                    <Image
                         ref={imageRef}
                         src={trimmedData ?? ''}
                         alt="signature"
                         className="h-auto w-16"
-                    ></img>
+                    />
                 </div>
             )}
             <div className="flex space-x-2 py-2">

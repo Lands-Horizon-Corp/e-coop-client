@@ -50,7 +50,7 @@ const RowActionsGroup = <TData,>({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="size-fit p-1" variant="ghost">
+                <Button size="icon" className="size-fit p-1" variant="ghost">
                     <DotsVerticalIcon />
                 </Button>
             </DropdownMenuTrigger>

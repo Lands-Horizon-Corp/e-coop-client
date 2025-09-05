@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { KeysOfOrString } from '@/types'
+import type { KeysOfOrString } from '@/types'
 
 export interface ISortItem<T = unknown> {
     field: KeysOfOrString<T>

@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react'
+
 import { toast } from 'sonner'
 
 import Webcam from 'react-webcam'

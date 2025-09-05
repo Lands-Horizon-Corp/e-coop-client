@@ -1,16 +1,17 @@
-import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
-import { useAuthUser } from '@/store/user-auth-store'
 import { createFileRoute } from '@tanstack/react-router'
 
-import ErrorPage from '@/components/error-page'
+import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
+import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import { useGetUserOrganizationByUserId } from '@/modules/user-organization/user-organization.service'
+
 import { LandmarkIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 
-import { useGetUserOrganizationByUserId } from '@/hooks/api-hooks/use-user-organization'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import NoOrganizationView from './-components/no-organization-view'
-import WithOrganization from './-components/with-organization'
+import ErrorPage from '../-common-pages/error-page'
+import NoOrganizationView from '../../modules/organization/components/no-organization-view'
+import WithOrganization from '../../modules/organization/components/with-organization'
 
 export const Route = createFileRoute('/onboarding/')({
     component: RouteComponent,
@@ -28,16 +29,29 @@ function RouteComponent() {
         isError,
         isFetching,
         refetch,
-    } = useGetUserOrganizationByUserId(user.id)
+        error,
+    } = useGetUserOrganizationByUserId({ userId: user.id })
 
     useSubscribe(`user_organization.create.user.${user.id}`, () => refetch())
     useSubscribe(`user_organization.update.user.${user.id}`, () => refetch())
     useSubscribe(`user_organization.delete.user.${user.id}`, () => refetch())
 
-    const hasOrganization: boolean = userOrganizationsData.length > 0
+    const hasOrganization: boolean = userOrganizationsData
+        ? userOrganizationsData.length > 0
+        : false
 
     if (isError) {
-        return <ErrorPage />
+        return (
+            <ErrorPage
+                reset={refetch}
+                error={
+                    error instanceof Error
+                        ? error
+                        : new Error(error ? String(error) : 'Unknown error')
+                }
+                className="w-full"
+            />
+        )
     }
 
     if (isPending || isLoading || isFetching) {

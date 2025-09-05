@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 
 import { Link } from '@tanstack/react-router'
+
 import { ArrowRight } from 'lucide-react'
 
 import { MagnifyingGlassIcon } from '@/components/icons'

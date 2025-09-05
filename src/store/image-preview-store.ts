@@ -1,6 +1,5 @@
+import { IMedia } from '@/modules/media'
 import { create } from 'zustand'
-
-import { IMedia } from '@/types'
 
 interface ImagePreviewState {
     isOpen: boolean

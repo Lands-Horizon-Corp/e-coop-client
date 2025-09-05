@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { emailSchema } from '@/validations/common'
+import { emailSchema } from '@/validation'
 
 export const SignInPageSearchSchema = z.object({
     key: emailSchema.optional(),

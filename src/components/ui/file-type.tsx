@@ -1,7 +1,6 @@
-// FileTypeIcon.tsx
 import React from 'react'
 
-import { getFileType } from '@/helpers'
+import { getFileType } from '@/helpers/common-helper'
 
 import { FileTypeIcons } from './FileTypeIcons'
 

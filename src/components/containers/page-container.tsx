@@ -1,6 +1,6 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
-import { IBaseProps } from '@/types'
+import type { IBaseProps } from '@/types'
 
 interface Props extends IBaseProps {}
 

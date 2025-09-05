@@ -1,19 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import PageContainer from '@/components/containers/page-container'
-
-import QuickDepositWithdraw from './-component/quick-deposit-withdraw'
+import { QuickDepositWithdraw } from '@/modules/quick-transfer'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit'
 )({
-    component: RouteComponent,
+    component: () => <QuickDepositWithdraw mode="deposit" />,
 })
-
-function RouteComponent() {
-    return (
-        <PageContainer className="flex w-full">
-            <QuickDepositWithdraw mode="deposit" />
-        </PageContainer>
-    )
-}

@@ -1,12 +1,16 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import {
     DefaultValues,
+    FieldPath,
     FieldValues,
     Path,
     UseFormReturn,
 } from 'react-hook-form'
+
+import useConfirmModalStore from '@/store/confirm-modal-store'
+
+import { usePreventExit } from './use-prevent-exit'
 
 interface UseFormHelperProps<T extends FieldValues> {
     readOnly?: boolean
@@ -15,7 +19,12 @@ interface UseFormHelperProps<T extends FieldValues> {
     resetOnDefaultChange?: boolean
     disabledFields?: Path<T>[]
     defaultValues?: DefaultValues<T>
-    onNewDefaulValueNotice?: { title: string; description: string }
+
+    autoSave?: boolean
+    autoSaveDelay?: number
+    focusOnError?: boolean
+    preventExitOnDirty?: boolean
+    // onNewDefaulValueNotice?: { title: string; description: string }
 }
 
 export const useFormHelper = <T extends FieldValues>({
@@ -24,7 +33,12 @@ export const useFormHelper = <T extends FieldValues>({
     disabledFields = [],
     form,
     defaultValues,
+    autoSave = false,
+    autoSaveDelay = 400,
+    // onNewDefaulValueNotice,
     resetOnDefaultChange = false,
+    focusOnError = true,
+    preventExitOnDirty = true,
 }: UseFormHelperProps<T>) => {
     const { onOpen } = useConfirmModalStore()
 
@@ -73,10 +87,127 @@ export const useFormHelper = <T extends FieldValues>({
 
     const firstError = Object.values(form.formState.errors)[0]?.message
 
+    const formRef = useFormAutosave({
+        form,
+        autoSave: autoSave,
+        delay: autoSaveDelay,
+    })
+
+    const handleFocusError = useFocusOnErrorField({
+        form,
+        enabled: focusOnError,
+    })
+
+    useFormPreventExit({ form, enabled: preventExitOnDirty })
+
     return {
+        formRef,
         isHidden,
         firstError,
         isDisabled,
+        handleFocusError,
         getDisableHideFieldProps,
     }
+}
+
+export const useFocusOnErrorField = <T extends FieldValues>({
+    form,
+    enabled = true,
+}: {
+    form: UseFormReturn<T>
+    enabled?: boolean
+}) => {
+    return useCallback(() => {
+        if (!enabled) return
+
+        const errors = form.formState.errors
+
+        const firstErrorField = Object.keys(errors)[0] as
+            | FieldPath<T>
+            | undefined
+
+        if (firstErrorField) {
+            form.setFocus(firstErrorField)
+        }
+    }, [form, enabled])
+}
+
+export const useFormAutosave = <T extends FieldValues>({
+    form,
+    delay = 500,
+    autoSave = false,
+}: {
+    form: UseFormReturn<T>
+    delay?: number
+    autoSave?: boolean
+}) => {
+    const formRef = useRef<HTMLFormElement | null>(null)
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const mountedRef = useRef(false)
+    const isSubmittingRef = useRef(false)
+
+    useEffect(() => {
+        if (!autoSave) return
+
+        const subscription = form.watch(() => {
+            if (
+                !mountedRef.current ||
+                !form.formState.isDirty ||
+                isSubmittingRef.current
+            )
+                return
+
+            if (timeoutRef.current) clearTimeout(timeoutRef.current)
+
+            timeoutRef.current = setTimeout(async () => {
+                if (!form.formState.isDirty || isSubmittingRef.current) return
+
+                isSubmittingRef.current = true
+                try {
+                    formRef.current?.requestSubmit()
+                } finally {
+                    setTimeout(() => {
+                        isSubmittingRef.current = false
+                    }, 100)
+                }
+            }, delay)
+        })
+
+        mountedRef.current = true
+
+        return () => {
+            subscription.unsubscribe()
+            if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        }
+    }, [form, delay, autoSave])
+
+    return formRef
+}
+
+export const useFormPreventExit = <T extends FieldValues>({
+    form,
+    enabled = true,
+}: {
+    form: UseFormReturn<T>
+    enabled?: boolean
+}) => {
+    const { onOpen } = useConfirmModalStore()
+    const hasDirtyFields = Object.keys(form.formState.dirtyFields).length > 0
+
+    const onExitPrevented = useCallback(
+        (proceed: () => void) => {
+            onOpen({
+                title: 'Unsaved changes',
+                description:
+                    "Seem's like there are unsaved changes, are you sure to discard?",
+                onConfirm: () => proceed(),
+            })
+        },
+        [onOpen]
+    )
+
+    usePreventExit({
+        shouldPrevent: hasDirtyFields && enabled,
+        onExitPrevented,
+    })
 }

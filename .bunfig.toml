@@ -1,0 +1,10 @@
+# .bunfig.toml
+
+[install]
+exact = true
+frozenLockfile = true
+production = false  # Keep dev deps installed for development
+
+
+[workspace]
+requiredBunVersion = "1.2.20"

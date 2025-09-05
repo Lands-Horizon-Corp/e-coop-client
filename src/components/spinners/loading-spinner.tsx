@@ -1,6 +1,6 @@
-import { LoadingCircleIcon } from '@/components/icons'
+import { cn } from '@/helpers/tw-utils'
 
-import { cn } from '@/lib/utils'
+import { LoadingCircleIcon } from '@/components/icons'
 
 import { IClassProps } from '@/types'
 

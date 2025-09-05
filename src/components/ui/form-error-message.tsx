@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/helpers/tw-utils'
 
 import { IClassProps } from '@/types'
 

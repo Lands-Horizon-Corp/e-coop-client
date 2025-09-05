@@ -1,19 +1,19 @@
 import { useState } from 'react'
+
+import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
 import z from 'zod'
 
+import { useCheckResetId } from '@/modules/authentication'
+import ResetPasswordForm from '@/modules/authentication/components/forms/reset-password-form'
 import AuthPageWrapper from '@/routes/auth/-components/auth-page-wrapper'
-import { createFileRoute, useParams, useRouter } from '@tanstack/react-router'
 
-import ResetPasswordForm from '@/components/forms/auth-forms/reset-password-form'
 import { ArrowLeftIcon, KeyIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import GuestGuard from '@/components/wrappers/guest-guard'
 
-import { useCheckResetId } from '@/hooks/api-hooks/use-auth'
-
 export const PasswordResetPagePathSchema = z.object({
-    resetId: z.string({ required_error: 'Missing Reset Link' }),
+    resetId: z.string({ error: 'Missing Reset Link' }),
 })
 
 export const Route = createFileRoute('/auth/password-reset/$resetId')({
@@ -89,9 +89,9 @@ function PasswordResetPage() {
                         <div className="flex w-full flex-col gap-y-4 sm:w-[390px]">
                             <div className="flex flex-col items-center gap-y-4 py-4 text-center">
                                 <div className="relative p-8">
-                                    <KeyIcon className="size-[53px] text-green-500" />
-                                    <div className="absolute inset-0 rounded-full bg-green-500/20" />
-                                    <div className="absolute inset-5 rounded-full bg-green-500/20" />
+                                    <KeyIcon className="size-[53px] text-primary" />
+                                    <div className="absolute inset-0 rounded-full bg-primary/20" />
+                                    <div className="absolute inset-5 rounded-full bg-primary/20" />
                                 </div>
                                 <p className="text-xl font-medium">
                                     Password Set

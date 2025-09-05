@@ -1,6 +1,6 @@
-import { BugIcon, PlantGrowthIcon } from '@/components/icons'
+import { SoftwareUpdates } from '@/modules/feedback'
 
-import { SoftwareUpdates, UpdateStatus } from '@/types'
+import { BugIcon, PlantGrowthIcon } from '@/components/icons'
 
 export const softwareUpdates: SoftwareUpdates = {
     name: 'e-Coop Beta',
@@ -10,12 +10,12 @@ export const softwareUpdates: SoftwareUpdates = {
     updates: [
         {
             text: 'Improved loading times by optimizing database queries.',
-            updateStatus: UpdateStatus.GENERAL,
+            updateStatus: 'general',
             Icon: <PlantGrowthIcon />,
         },
         {
             text: 'Resolved a bug in the reporting feature.',
-            updateStatus: UpdateStatus.BUG,
+            updateStatus: 'bug',
             Icon: <BugIcon />,
         },
     ],

@@ -9,6 +9,7 @@ import React, {
     useState,
 } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
 import { Check, Copy } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
@@ -22,7 +23,7 @@ import remarkGfm from 'remark-gfm'
 
 import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib/utils'
+import Image from '../image'
 
 // Define remark and rehype plugins
 const remarkPlugins = [remarkGfm]
@@ -81,7 +82,7 @@ const CopyButton = memo(function CopyButton({ text }: { text: string }) {
             aria-label="Copy code block"
         >
             {copied ? (
-                <Check className="h-4 w-4 text-green-500" />
+                <Check className="h-4 w-4 text-primary" />
             ) : (
                 <Copy className="h-4 w-4" />
             )}
@@ -311,9 +312,9 @@ const staticComponents: Components = {
         </a>
     ),
     img: ({ src, alt, ...props }) => (
-        <img
+        <Image
             src={src || '/placeholder.svg'}
-            alt={alt}
+            alt={alt || 'placeholder image'}
             className="max-w-full h-auto rounded-lg my-4 shadow-sm"
             loading="lazy"
             {...props}

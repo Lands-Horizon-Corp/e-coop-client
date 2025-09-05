@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { Row, flexRender } from '@tanstack/react-table'
 
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'

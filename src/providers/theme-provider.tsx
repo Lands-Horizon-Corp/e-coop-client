@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 export type ResolvedTheme = 'dark' | 'light'
@@ -34,19 +40,19 @@ export const ThemeProvider = ({
     )
     const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('light')
 
-    const removeClassTheme = (root: HTMLElement) => {
+    const removeClassTheme = useCallback((root: HTMLElement) => {
         if (!root) return
         root.classList.remove('light', 'dark')
-    }
+    }, [])
 
-    const handleSetTheme = (root: HTMLElement, theme: Theme) => {
+    const handleSetTheme = useCallback((root: HTMLElement, theme: Theme) => {
         if (!root) return
 
         if (theme === 'light') setResolvedTheme('light')
         else setResolvedTheme('dark')
 
         root.classList.add(theme)
-    }
+    }, [])
 
     useEffect(() => {
         const root = window.document.documentElement
@@ -82,7 +88,7 @@ export const ThemeProvider = ({
                 mediaQuery.removeListener(handleThemeChange)
             }
         }
-    }, [theme])
+    }, [theme, removeClassTheme, handleSetTheme])
 
     useEffect(() => {
         const handleStorageChange = (event: StorageEvent) => {

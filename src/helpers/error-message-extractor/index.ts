@@ -3,7 +3,7 @@ import { searchParamErrExtractor } from './path-params-err-extractor'
 import { zodErrExtractor } from './zod-err-extractor'
 
 export type TErrorMessageExtractor = [
-    new (...args: any[]) => Error, // Error, AxiosError, or any other error
+    new (...args: unknown[]) => Error, // Error, AxiosError, or any other error
     (error: Error) => string,
 ]
 
@@ -46,21 +46,14 @@ export const allErrorMessageExtractor = ({
         // add your own error extractor here
     ],
     ...other
-}: TExtractErrorMessageParams): any => {
+}: TExtractErrorMessageParams): unknown => {
     // Error, AxiosError, or any other error
     return extractErrorMessage({ ...other, errorMessageExtractors })
 }
 
-/**
- * Since Horizon Server utilize axios, it will throw an AxiosError when an error is encountered,
- * this function returns error message
- * @returns {string}
- */
-export const serverRequestErrExtractor = ({
-    error,
-}: {
-    error: unknown
-}): string => {
+export const serverRequestErrExtractor = ({ error }: { error: unknown }) => {
+    if (!error) return
+
     return extractErrorMessage({
         error,
         errorMessageExtractors: [axiosErrExtractor],

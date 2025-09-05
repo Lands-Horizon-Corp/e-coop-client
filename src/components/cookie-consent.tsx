@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import CookieSvg from '@/assets/cookie-icon.svg'
+import { cn } from '@/helpers/tw-utils'
 import { addYears } from 'date-fns'
 import Cookies from 'js-cookie'
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 
-import { cn } from '@/lib/utils'
+import Image from './image'
 
 const CookieConsent = () => {
     const [accepted, setAccepted] = useState(true)
@@ -42,7 +43,11 @@ const CookieConsent = () => {
             )}
         >
             <span className="absolute -top-6 block size-fit rounded-full bg-secondary p-1 lg:static">
-                <img className="size-9 lg:size-6" src={CookieSvg} />
+                <Image
+                    alt="cookie"
+                    className="size-9 lg:size-6"
+                    src={CookieSvg}
+                />
             </span>
             <AlertDescription className="pt-4 lg:pt-0">
                 ECoop uses cookies to enhance the user experience.

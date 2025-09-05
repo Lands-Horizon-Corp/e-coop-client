@@ -1,9 +1,11 @@
-import Fuse from 'fuse.js'
 import { forwardRef, useMemo, useState } from 'react'
 
+import Fuse from 'fuse.js'
+
+import { cn } from '@/helpers/tw-utils'
 import { Check } from 'lucide-react'
 
-import { ChevronDownIcon, IconMap } from '@/components/icons'
+import { ChevronDownIcon, IconMap, TIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -18,10 +20,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-
-import { cn } from '@/lib/utils'
-
-import { TIcon } from '@/types'
 
 interface Props {
     value?: TIcon

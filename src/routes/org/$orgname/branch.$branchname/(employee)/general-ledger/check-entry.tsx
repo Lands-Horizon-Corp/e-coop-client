@@ -1,23 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import PageContainer from '@/components/containers/page-container'
-import GeneralLedgerTable from '@/components/tables/ledgers-tables/general-ledger-table'
+import CheckEntryPage from '@/modules/general-ledger/components/pages/check-entry'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/general-ledger/check-entry'
 )({
-    component: RouteComponent,
+    component: CheckEntryPage,
 })
-
-function RouteComponent() {
-    return (
-        <PageContainer>
-            <GeneralLedgerTable
-                mode="branch"
-                TEntryType="check-entry"
-                excludeColumnIds={['balance']}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-            />
-        </PageContainer>
-    )
-}

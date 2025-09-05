@@ -13,5 +13,8 @@ src/routeTree.gen.ts
 # Ignore node_modules
 node_modules/
 
-# Ignore Amplify
-amplify/
+*.hbs
+*.handlebars
+*.mustache
+templates/**/*.hbs
+views/**/*.hbs

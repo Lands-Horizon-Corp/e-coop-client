@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'

@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { Header, Table } from '@tanstack/react-table'
 
 import { DragHandleIcon } from '@/components/icons'

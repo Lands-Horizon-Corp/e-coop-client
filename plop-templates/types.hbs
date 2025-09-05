@@ -1,0 +1,13 @@
+import z from 'zod'
+
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
+
+import { {{pascalCase name}}Schema } from './{{dashCase name}}.validation'
+
+export interface I{{pascalCase name}} extends IBaseEntityMeta {
+    //add here
+}
+
+export type I{{pascalCase name}}Request = z.infer<typeof {{pascalCase name}}Schema>
+
+export interface I{{pascalCase name}}Paginated extends IPaginatedResult<I{{pascalCase name}}> {}

@@ -143,27 +143,6 @@ export const isValidDecimalInput = (value: string) => {
     )
 }
 
-export const formatNumberOnBlur = (
-    value: string,
-    onChange: (val: number | undefined) => void,
-    isFixed = true
-) => {
-    const sanitized = sanitizeNumberInput(value)
-    if (!sanitized || sanitized === '-') {
-        onChange(undefined)
-        return
-    }
-    let parsedValue = parseFloat(sanitized)
-    if (!isNaN(parsedValue)) {
-        if (isFixed) {
-            parsedValue = isFixed
-                ? parseFloat(parsedValue.toFixed(2))
-                : parsedValue
-            onChange(parsedValue)
-        }
-    }
-}
-
 export const downloadFile = async (url: string, fileName: string) => {
     try {
         const response = await axios.get(url, {
@@ -227,4 +206,11 @@ export function sortBy<T>(
 
         return 0
     }
+}
+
+export const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+    }).format(amount)
 }

@@ -11,7 +11,7 @@ import { MousePosition, SceneObjects } from '../types'
 export const useThreeScene = () => {
     const mountRef = useRef<HTMLDivElement>(null)
     const sceneRef = useRef<SceneObjects>({})
-    const animationRef = useRef<number>()
+    const animationRef = useRef<number>(0)
     const [mousePos, setMousePos] = useState<MousePosition>({ x: 0, y: 0 })
 
     useEffect(() => {

@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
+
+import { cn } from '@/helpers/tw-utils'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
-import { cn } from '@/lib/utils'
 
 import { Image2Icon } from './icons'
 

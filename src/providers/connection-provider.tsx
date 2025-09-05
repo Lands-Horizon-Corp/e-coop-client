@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
+import { cn } from '@/helpers/tw-utils'
+
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogTitle,
 } from '@/components/ui/dialog'
-
-import { cn } from '@/lib/utils'
 
 const ConnectionProvider = ({ interval = 10_000 }: { interval?: number }) => {
     const [isConnected, setIsConnected] = useState(true)
@@ -32,7 +32,7 @@ const ConnectionProvider = ({ interval = 10_000 }: { interval?: number }) => {
     return (
         <Dialog open={!isConnected}>
             <DialogContent
-                hideCloseButton
+                showCloseButton={false}
                 overlayClassName={cn(
                     'backdrop-blur ease-in-out ![animation-duration:1s]',
                     isConnected && 'backdrop-blur-none'

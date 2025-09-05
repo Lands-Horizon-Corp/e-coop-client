@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { cn } from '@/lib'
-import { useImagePreview } from '@/store/image-preview-store'
 import * as ImagePreviewPrimitive from '@radix-ui/react-dialog'
+
+import { cn } from '@/helpers'
+import { useImagePreview } from '@/store/image-preview-store'
 import { X } from 'lucide-react'
 
 import { DownloadProps } from '@/types'
@@ -92,7 +93,9 @@ const ImagePreviewModal = () => {
         setScale(1)
         setFlipScale('')
     }
-    const scrollIntoView = useRef<HTMLDivElement>(null)
+    const scrollIntoView = useRef<HTMLDivElement>(
+        null
+    ) as React.RefObject<HTMLDivElement>
 
     const handleSelect = useCallback(() => {
         if (api) {
@@ -155,7 +158,7 @@ const ImagePreviewModal = () => {
                     <DialogContent
                         overlayClassName="bg-transparent"
                         className={cn(
-                            '!h-max-[100vh] h-full w-full max-w-[100vw] border-[0px] border-primary bg-transparent'
+                            '!h-max-[100vh] h-full !w-full !max-w-full  border-[0px] border-primary bg-transparent'
                         )}
                     >
                         <div

@@ -1,4 +1,5 @@
 import { PAGE_SIZES_DENSE } from '@/constants'
+import { cn } from '@/helpers/tw-utils'
 import { Table } from '@tanstack/react-table'
 
 import {
@@ -15,8 +16,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-
-import { cn } from '@/lib/utils'
 
 interface DataTablePaginationProps<TData> {
     className?: string

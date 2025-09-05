@@ -1,5 +1,6 @@
-import { ICategory } from '@/types/lands-types/category'
 import { UseNavigateResult } from '@tanstack/react-router'
+
+import { ICategory } from '@/modules/category'
 import { create } from 'zustand'
 
 import { TEntityId } from '@/types'

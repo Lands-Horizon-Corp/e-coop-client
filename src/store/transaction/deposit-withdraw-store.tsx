@@ -1,9 +1,8 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { IAccount } from '@/types/coop-types/accounts/account'
+import { IAccount } from '@/modules/account'
+import { IMemberProfile } from '@/modules/member-profile'
 import { create } from 'zustand'
-
-import { IMemberProfile } from '@/types'
 
 export interface DepositWithdrawStore {
     selectedMember: IMemberProfile | null

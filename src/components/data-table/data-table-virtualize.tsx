@@ -1,7 +1,7 @@
 /** This table is virtualized, incase big data needs to be displayed */
 import { useRef } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
 import { Row, Table, flexRender } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 

@@ -1,191 +1,158 @@
 import { useState } from 'react'
-import { toast } from 'sonner'
 
-import { formatBytes } from '@/helpers'
-import { cn } from '@/lib'
+import { calculateUploadProgress } from '@/helpers/axios-helpers/axios-progress-helper'
+import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
+import { cn } from '@/helpers/tw-utils'
+import { useUploadMedia } from '@/modules/media/media.service'
+import { IMedia } from '@/modules/media/media.types'
 
-import {
-    CameraIcon,
-    DotMediumIcon,
-    HardDriveUploadIcon,
-    TrashIcon,
-} from '@/components/icons'
-import Modal, { IModalProps } from '@/components/modals/modal'
+import { AdjustIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import PictureCrop from '@/components/picture-crop'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
-import FileTypeIcon from '@/components/ui/file-type'
 import { Progress } from '@/components/ui/progress'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import WebCam from '@/components/webcam'
 
-import { useSinglePictureUpload } from '@/hooks/api-hooks/use-media'
-import { useCamera } from '@/hooks/use-camera'
+import SingleImageUploadOption from './upload-options'
 
-import { IMedia } from '@/types'
-import { IClassProps } from '@/types'
-
-import SingleFileDrop from '../file-drop/single-file-drop'
-
-type TUploadSource = 'file' | 'capture'
-
-interface ISingleImageUploaderProps extends IClassProps {
-    onSuccess?: (media: IMedia) => void
+export interface ISingleImageUploadProps {
+    disableCrop?: boolean
+    defaultImage?: string
+    defaultFileName?: string
+    squarePreview?: boolean
+    onUploadComplete: (mediaResource: IMedia) => void
 }
 
-const SingleImageUploader = ({
-    className,
-    onSuccess,
-}: ISingleImageUploaderProps) => {
-    const [eta, setEta] = useState('')
-    const [progress, setProgress] = useState(0)
-    const [file, setFile] = useState<File | undefined>(undefined)
-    const [uploadSource, setUploadSource] = useState<TUploadSource>('file')
-
-    const { camRef, captureImageToFile } = useCamera()
+const SingleImageUpload = ({
+    disableCrop,
+    squarePreview = false,
+    defaultFileName,
+    onUploadComplete,
+}: ISingleImageUploadProps) => {
+    const [reAdjust, setReAdjust] = useState(false)
+    const [newImage, setNewImage] = useState<string | null>(null)
+    const [croppedImage, setCroppedImage] = useState<string | null>(null)
+    const [uploadMediaProgress, setUploadMediaProgress] = useState<number>(0)
 
     const {
-        data: uploadedFile,
+        data: uploadedPhoto,
         isPending: isUploadingPhoto,
         mutate: uploadPhoto,
-        reset,
-    } = useSinglePictureUpload({
-        onSuccess: (media) => {
-            onSuccess?.(media)
+    } = useUploadMedia({
+        options: {
+            onSuccess: (data) => onUploadComplete?.(data),
         },
-        onUploadProgressChange: (progress) => setProgress(progress),
-        onUploadETAChange: (ETA) => setEta(ETA),
+        onProgress: (progressEvent) => {
+            const calculated = calculateUploadProgress(progressEvent)
+            if (!calculated) return
+
+            setUploadMediaProgress(calculated.progress)
+        },
     })
 
     return (
-        <div className={cn('relative space-y-2 p-1', className)}>
-            <Tabs
-                defaultValue="file"
-                value={uploadSource}
-                className="items-start justify-start"
-                onValueChange={(uploadSource) =>
-                    setUploadSource(uploadSource as TUploadSource)
-                }
-            >
-                <ScrollArea>
-                    <TabsList className="relative mb-3 h-auto w-full justify-start gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border">
-                        <TabsTrigger
-                            value="file"
-                            className="overflow-hidden rounded-b-none border-x border-t border-border bg-muted py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
-                        >
-                            <HardDriveUploadIcon className="-ms-0.5 me-1.5 opacity-60" />
-                            File Upload
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="capture"
-                            className="overflow-hidden rounded-b-none border-x border-t border-border bg-muted py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
-                        >
-                            <CameraIcon className="-ms-0.5 me-1.5 opacity-60" />
-                            Capture
-                        </TabsTrigger>
-                    </TabsList>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
-                <TabsContent value="file" className="relative p-1">
-                    <SingleFileDrop
-                        maxFiles={1}
-                        accept={{
-                            'image/png': ['.png'],
-                            'image/webp': ['.webp'],
-                            'image/jpeg': ['.jpg', '.jpeg'],
-                        }}
-                        onFileSelect={(files) => {
-                            setFile(files[0])
-                        }}
-                    />
-                </TabsContent>
-                <TabsContent
-                    value="capture"
-                    className="relative flex flex-col items-center gap-y-4"
-                >
-                    <WebCam ref={camRef} className="h-full w-full" />
-                    <Button
-                        size="icon"
-                        variant="secondary"
-                        className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full"
-                        onClick={() => {
-                            captureImageToFile({
-                                onCaptureSuccess: (image) => setFile(image),
-                                onCaptureError: () =>
-                                    toast.error('Failed to capture'),
-                            })
-                        }}
-                    >
-                        <CameraIcon />
-                    </Button>
-                </TabsContent>
-            </Tabs>
-
-            {file && (
-                <div className="space-y-2 rounded-lg border border-secondary bg-popover p-3">
-                    <div className="flex space-x-3">
-                        <FileTypeIcon file={file} />
-                        <div className="flex-grow space-y-2">
-                            <p className="text-xs font-semibold">{file.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                                {formatBytes(file.size)}
-                            </p>
-                        </div>
-                        <Button
-                            size="icon"
-                            variant="secondary"
-                            disabled={isUploadingPhoto}
-                            hoverVariant="destructive"
-                            onClick={() => {
-                                setFile(undefined)
-                                reset()
-                            }}
-                            className="size-fit rounded-md p-1 hover:text-destructive-foreground"
-                        >
-                            <TrashIcon className="size-4 cursor-pointer" />
-                        </Button>
+        <div className="space-y-4">
+            {newImage === null && (
+                <SingleImageUploadOption
+                    onPhotoChoose={(base64Image) => {
+                        setNewImage(base64Image)
+                        if (disableCrop) setCroppedImage(base64Image)
+                    }}
+                />
+            )}
+            {newImage !== null &&
+            !disableCrop &&
+            (!croppedImage || reAdjust) ? (
+                <PictureCrop
+                    image={newImage}
+                    onCrop={(result) => {
+                        setReAdjust(false)
+                        setCroppedImage(result)
+                    }}
+                    onCancel={() => {
+                        if (croppedImage) {
+                            setReAdjust(false)
+                        } else {
+                            setNewImage(null)
+                        }
+                        setReAdjust(false)
+                    }}
+                />
+            ) : null}
+            {croppedImage && !reAdjust && (
+                <div className="space-y-4">
+                    <div className="relative mx-auto size-fit">
+                        <ImageDisplay
+                            fallback="-"
+                            src={croppedImage}
+                            className={cn(
+                                'size-48 rounded-lg',
+                                squarePreview && ''
+                            )}
+                        />
+                        {!disableCrop && (
+                            <ActionTooltip
+                                side="right"
+                                align="center"
+                                tooltipContent="ReAdjust Image"
+                            >
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setReAdjust(true)}
+                                    className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
+                                >
+                                    <AdjustIcon className="size-4 opacity-50 duration-300 ease-in-out group-hover:opacity-80" />
+                                </Button>
+                            </ActionTooltip>
+                        )}
                     </div>
                     {isUploadingPhoto && (
-                        <div className="space-y-1 pb-1">
-                            <p className="inline-flex items-center text-xs text-muted-foreground/60">
-                                {progress}%{''}
-                                <DotMediumIcon className="inline" /> {eta}{' '}
-                                seconds left.
-                            </p>
-                            <Progress value={progress} className="h-0.5" />
-                        </div>
+                        <>
+                            <Progress
+                                value={uploadMediaProgress}
+                                className="h-1"
+                            />
+                            <div className="flex items-center justify-center gap-x-1 text-center text-xs text-foreground/60">
+                                <LoadingSpinner className="size-2" />
+                                {isUploadingPhoto && 'uploading picture...'}
+                            </div>
+                        </>
                     )}
+                    <fieldset
+                        disabled={isUploadingPhoto}
+                        className="flex w-full items-center justify-center gap-x-2"
+                    >
+                        {!uploadedPhoto && !isUploadingPhoto && (
+                            <Button
+                                variant="secondary"
+                                onClick={() => {
+                                    setNewImage(null)
+                                    setCroppedImage(null)
+                                }}
+                            >
+                                Replace
+                            </Button>
+                        )}
+                        {!uploadedPhoto && !isUploadingPhoto && (
+                            <Button
+                                onClick={() =>
+                                    uploadPhoto({
+                                        file: base64ImagetoFile(
+                                            croppedImage,
+                                            `${defaultFileName}.jpg`
+                                        ) as File,
+                                    })
+                                }
+                            >
+                                Upload
+                            </Button>
+                        )}
+                    </fieldset>
                 </div>
             )}
-            <Button
-                className="w-full"
-                disabled={
-                    isUploadingPhoto || !file || uploadedFile !== undefined
-                }
-                onClick={() => (file ? uploadPhoto(file) : undefined)}
-            >
-                {isUploadingPhoto ? (
-                    <span>
-                        <LoadingSpinner className="mr-2 inline size-4" />
-                        uploading...
-                    </span>
-                ) : (
-                    'Upload'
-                )}
-            </Button>
         </div>
     )
 }
 
-export const SingleImageUploaderModal = ({
-    singleImageUploaderProp,
-    ...other
-}: IModalProps & { singleImageUploaderProp: ISingleImageUploaderProps }) => {
-    return (
-        <Modal {...other}>
-            <SingleImageUploader {...singleImageUploaderProp} />
-        </Modal>
-    )
-}
-
-export default SingleImageUploader
+export default SingleImageUpload

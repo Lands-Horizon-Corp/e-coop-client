@@ -3,15 +3,22 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import manifestSRI from "vite-plugin-manifest-sri";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig, type PluginOption } from "vite";
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
+import tailwindcss from '@tailwindcss/vite'
+import { compression } from 'vite-plugin-compression2'
+import UnheadVite from '@unhead/addons/vite'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [
+        UnheadVite(),
         manifestSRI(),
-        TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
+        tanstackRouter({ target: 'react', autoCodeSplitting: true }),
         react(),
         tsconfigPaths(),
+        tailwindcss(),
         visualizer({
             filename: "bundle-analysis.html",
             template: "treemap",
@@ -19,18 +26,31 @@ export default defineConfig({
             gzipSize: true,
             brotliSize: true,
         }) as PluginOption,
+        compression(),
+        NodeGlobalsPolyfillPlugin({
+          buffer: true,
+          process: true,
+        }),
     ],
+    resolve: {
+      alias: {
+        stream: "stream-browserify",
+        crypto: "crypto-browserify",
+      },
+    },
     build: {
-        sourcemap: false,
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    vendor: ["react", "react-dom"],
-                },
-            },
-        },
+      rollupOptions: {
+        plugins: [rollupNodePolyFill()],
+        output: {
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              return "vendor";
+            }
+          }
+        }
+      }
     },
-    define: {
-        "process.env": process.env,
-    },
+    // define: {
+    //     "process.env": process.env,
+    // },
 });

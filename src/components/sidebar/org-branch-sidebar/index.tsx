@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
 import { Link, useParams, useRouter } from '@tanstack/react-router'
 
-import ActionTooltip from '@/components/action-tooltip'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+
 import EcoopLogo from '@/components/ecoop-logo'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import AppSidebarItem from '@/components/ui/app-sidebar/app-sidebar-item'
 import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
 import AppSidebarUser from '@/components/ui/app-sidebar/app-sidebar-user'
@@ -85,10 +86,10 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                     <ActionTooltip
                                         tooltipContent={
                                             <>
-                                                <span className="space-y-2 text-xs text-muted-foreground/80">
+                                                <span className="space-y-2 text-xs">
                                                     As{' '}
                                                     <Badge
-                                                        variant="outline"
+                                                        variant="secondary"
                                                         className="capitalize"
                                                     >
                                                         {

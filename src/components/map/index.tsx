@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import logger from '@/helpers/loggers/logger'
-import { cn } from '@/lib'
-import { Pin, TMainMapProps, TMapWithClickProps } from '@/types/components'
+import { cn } from '@/helpers/tw-utils'
+import { Pin, TMainMapProps, TMapWithClickProps } from '@/types/map/map'
 import L, { LatLngExpression, latLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import {

@@ -35,7 +35,7 @@ const ServiceCard = ({
             <Card className=" dark:text-white h-full backdrop-blur-sm bg-transparent border-0 rounded-full text-black shadow-none">
                 <CardHeader className="flex items-center justify-center">
                     <div
-                        className={`w-16 h-16 ${bgColor} border-[.5px] border-green-400 rounded-full flex items-center justify-center text-white`}
+                        className={`w-16 h-16 ${bgColor} border-[.5px] border-primary rounded-full flex items-center justify-center text-white`}
                     >
                         {icon}
                     </div>
@@ -59,50 +59,50 @@ const OurServices = () => {
             title: 'Digital Cooperative Banking',
             description:
                 'Secure online account management for members and cooperatives. Digital transactions, savings, loans, and payments. Real-time balance and transaction history.',
-            bgColor: 'bg-green-900',
-            icon: <Banknote className="w-8 h-8 text-green-400" />,
+            bgColor: 'bg-primary/10',
+            icon: <Banknote className="w-8 h-8 text-primary" />,
         },
         {
             title: 'Membership Management',
             description:
                 'Easy onboarding and KYC (Know Your Customer) verification. Member records, profiles, and digital ID. Automated membership renewals and status tracking.',
-            bgColor: 'bg-green-900',
-            icon: <Users className="w-8 h-8 text-green-400" />,
+            bgColor: 'bg-primary/10',
+            icon: <Users className="w-8 h-8 text-primary" />,
         },
         {
             title: 'Financial Tools and Analytics',
             description:
                 'Automated financial reports and statements. Loan processing, approvals, and management. Budgeting, forecasting, and customizable analytics dashboards.',
-            bgColor: 'bg-green-900',
-            icon: <BarChart3 className="w-8 h-8 text-green-400" />,
+            bgColor: 'bg-primary/10',
+            icon: <BarChart3 className="w-8 h-8 text-primary" />,
         },
         {
             title: 'Secure Document Management',
             description:
                 'Digital storage and sharing of cooperative documents. Role-based access and encrypted file storage. E-signature support for approvals and agreements.',
-            bgColor: 'bg-green-900',
-            icon: <FileLock className="w-8 h-8 text-green-400" />,
+            bgColor: 'bg-primary/10',
+            icon: <FileLock className="w-8 h-8 text-primary" />,
         },
         {
             title: 'Communication & Collaboration',
             description:
                 'Announcements, notifications, and messaging for members. Discussion boards and voting tools for cooperative decisions. Event scheduling and reminders.',
-            bgColor: 'bg-green-900',
-            icon: <MessagesSquare className="w-8 h-8 text-green-400" />,
+            bgColor: 'bg-primary/10',
+            icon: <MessagesSquare className="w-8 h-8 text-primary" />,
         },
         {
             title: 'API & Integrations',
             description:
                 'Developer API access for custom integrations (with organization membership). Seamless connection to third-party apps and services.',
-            bgColor: 'bg-green-900',
-            icon: <Puzzle className="w-8 h-8 text-green-400" />,
+            bgColor: 'bg-primary/10',
+            icon: <Puzzle className="w-8 h-8 text-primary" />,
         },
         {
             title: 'Support & Training',
             description:
                 'Dedicated customer support via email and phone. Help center, FAQs, and user guides. Training sessions for cooperative leaders and members.',
-            bgColor: 'bg-green-900',
-            icon: <LifeBuoy className="w-8 h-8 text-green-400" />,
+            bgColor: 'bg-primary/10',
+            icon: <LifeBuoy className="w-8 h-8 text-primary" />,
         },
     ]
 

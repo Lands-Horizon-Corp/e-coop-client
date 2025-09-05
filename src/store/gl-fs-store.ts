@@ -1,4 +1,4 @@
-import { IAccount } from '@/types/coop-types/accounts/account'
+import { IAccount } from '@/modules/account'
 import { create } from 'zustand'
 
 import { UpdateIndexRequest } from '@/types'

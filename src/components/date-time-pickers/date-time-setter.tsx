@@ -1,4 +1,4 @@
-import { toReadableDate } from '@/utils'
+import { toReadableDate } from '@/helpers/date-utils'
 
 import TimePicker from '@/components/date-time-pickers/time-picker'
 import { ClockIcon } from '@/components/icons'

@@ -1,5 +1,6 @@
-import { useAuthStore } from '@/store/user-auth-store'
 import { Navigate, useSearch } from '@tanstack/react-router'
+
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 
 import { IBaseProps } from '@/types'
 

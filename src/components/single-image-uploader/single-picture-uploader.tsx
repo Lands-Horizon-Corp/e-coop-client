@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
-import { cn } from '@/lib'
+import { cn } from '@/helpers/tw-utils'
+import UserAvatar from '@/modules/user/components/user-avatar'
 
-import ActionTooltip from '../action-tooltip'
 import { AdjustIcon } from '../icons'
 import Modal, { IModalProps } from '../modals/modal'
 import PictureCrop from '../picture-crop'
+import ActionTooltip from '../tooltips/action-tooltip'
 import { Button } from '../ui/button'
-import UserAvatar from '../user-avatar'
 import PictureDrop from './picture-drop'
 
 interface singlePictureUploadModalProps extends IModalProps {

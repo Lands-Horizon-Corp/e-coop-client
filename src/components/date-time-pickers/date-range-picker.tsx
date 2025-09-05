@@ -1,25 +1,19 @@
-import {
-    CaptionLayout,
-    DateRange,
-    SelectRangeEventHandler,
-} from 'react-day-picker'
+import { DateRange } from 'react-day-picker'
 
 import { Calendar } from '@/components/ui/calendar'
 
+import { CaptionLayout } from './date-time-picker'
+
 type DateRangePickerProps = {
-    toYear?: number
     value: DateRange | undefined
-    fromYear?: number
     modal?: boolean
     captionLayout?: CaptionLayout
-    disabled?: (date: Date) => boolean
-    onChange: SelectRangeEventHandler | undefined
+    disabled?: boolean
+    onChange: (range: DateRange | undefined) => void
 }
 
 const DateRangePicker = ({
-    toYear = new Date().getFullYear(),
     value,
-    fromYear,
     onChange,
     disabled,
     ...other
@@ -27,13 +21,12 @@ const DateRangePicker = ({
     return (
         <Calendar
             {...other}
+            required
             mode="range"
-            toYear={toYear}
             showOutsideDays
             selected={value}
-            fromYear={fromYear}
-            onSelect={onChange}
             disabled={disabled}
+            onSelect={onChange}
         />
     )
 }

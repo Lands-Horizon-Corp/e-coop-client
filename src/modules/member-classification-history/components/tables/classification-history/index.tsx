@@ -1,0 +1,170 @@
+import { useMemo } from 'react'
+
+import { PAGE_SIZES_SMALL } from '@/constants'
+import FilterContext from '@/contexts/filter-context/filter-context'
+import { cn } from '@/helpers'
+import { useMemberClassificationHistory } from '@/modules/member-classification-history/member-classification-history.service'
+import { IMemberClassificationHistory } from '@/modules/member-classification-history/member-classification-history.types'
+import {
+    getCoreRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
+
+import DataTable from '@/components/data-table'
+import DataTablePagination from '@/components/data-table/data-table-pagination'
+import DataTableToolbar, {
+    IDataTableToolbarProps,
+} from '@/components/data-table/data-table-toolbar'
+import { TableProps } from '@/components/data-table/table.type'
+import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
+import useDataTableState from '@/components/data-table/use-datatable-state'
+
+import useDatableFilterState from '@/hooks/use-filter-state'
+import { usePagination } from '@/hooks/use-pagination'
+
+import { TEntityId } from '@/types'
+
+import memberClassificationHistoryColumns, {
+    IMemberClassificationHistoryColumnProps,
+    memberClassificationHistoryGlobalSearchTargets,
+} from './columns'
+
+export interface MemberClassificationHistoryTableProps
+    extends TableProps<IMemberClassificationHistory>,
+        IMemberClassificationHistoryColumnProps {
+    toolbarProps?: Omit<
+        IDataTableToolbarProps<IMemberClassificationHistory>,
+        | 'table'
+        | 'actionComponent'
+        | 'refreshActionProps'
+        | 'globalSearchProps'
+        | 'scrollableProps'
+        | 'filterLogicProps'
+        | 'exportActionProps'
+        | 'deleteActionProps'
+    >
+    profileId: TEntityId
+}
+
+const MemberClassificationHistoryTable = ({
+    profileId,
+    className,
+    toolbarProps,
+}: MemberClassificationHistoryTableProps) => {
+    const { pagination, setPagination } = usePagination({
+        pageSize: PAGE_SIZES_SMALL[2],
+    })
+    const { sortingStateBase64, tableSorting, setTableSorting } =
+        useDataTableSorting()
+
+    const columns = useMemo(() => memberClassificationHistoryColumns(), [])
+
+    const {
+        getRowIdFn,
+        columnOrder,
+        setColumnOrder,
+        isScrollable,
+        setIsScrollable,
+        columnVisibility,
+        setColumnVisibility,
+        rowSelectionState,
+        createHandleRowSelectionChange,
+    } = useDataTableState<IMemberClassificationHistory>({
+        defaultColumnOrder: columns.map((c) => c.id!),
+    })
+
+    const filterState = useDatableFilterState({
+        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
+    })
+
+    const {
+        isPending,
+        isRefetching,
+        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        refetch,
+    } = useMemberClassificationHistory({
+        profileId,
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+    })
+
+    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+
+    const table = useReactTable({
+        columns,
+        data,
+        initialState: {
+            columnPinning: { left: ['select'] },
+        },
+        state: {
+            sorting: tableSorting,
+            pagination,
+            columnOrder,
+            rowSelection: rowSelectionState.rowSelection,
+            columnVisibility,
+        },
+        rowCount: pageSize,
+        manualSorting: true,
+        pageCount: totalPage,
+        getRowId: getRowIdFn,
+        manualFiltering: true,
+        enableMultiSort: false,
+        manualPagination: true,
+        columnResizeMode: 'onChange',
+        onSortingChange: setTableSorting,
+        onPaginationChange: setPagination,
+        getCoreRowModel: getCoreRowModel(),
+        onColumnOrderChange: setColumnOrder,
+        getSortedRowModel: getSortedRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: handleRowSelectionChange,
+    })
+
+    return (
+        <FilterContext.Provider value={filterState}>
+            <div
+                className={cn(
+                    'flex h-full flex-col gap-y-2',
+                    className,
+                    !isScrollable && 'h-fit !max-h-none'
+                )}
+            >
+                <DataTableToolbar
+                    globalSearchProps={{
+                        defaultMode: 'equal',
+                        targets: memberClassificationHistoryGlobalSearchTargets,
+                    }}
+                    table={table}
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    filterLogicProps={{
+                        filterLogic: filterState.filterLogic,
+                        setFilterLogic: filterState.setFilterLogic,
+                    }}
+                    {...toolbarProps}
+                />
+                <DataTable
+                    table={table}
+                    isStickyHeader
+                    isStickyFooter
+                    isScrollable={isScrollable}
+                    setColumnOrder={setColumnOrder}
+                />
+                <DataTablePagination
+                    table={table}
+                    totalSize={totalSize}
+                    pageSizes={PAGE_SIZES_SMALL.slice(1)}
+                />
+            </div>
+        </FilterContext.Provider>
+    )
+}
+
+export default MemberClassificationHistoryTable

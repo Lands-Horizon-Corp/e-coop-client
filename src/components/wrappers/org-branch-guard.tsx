@@ -1,17 +1,18 @@
-import { useAuthUserWithOrgBranch } from '@/store/user-auth-store'
-import { getOrgBranchSafeURLNames } from '@/utils'
 import { useParams, useRouter } from '@tanstack/react-router'
 
-import { IChildProps } from '@/types'
+import { getOrgBranchSafeURLNames } from '@/helpers/function-utils'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 
-import { FlickeringGrid } from '../elements/backgrounds/flickering-grid'
+import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import {
     ArrowLeftIcon,
     ArrowUpIcon,
     OrganizationIcon,
     ShieldExclamationIcon,
-} from '../icons'
-import { Button } from '../ui/button'
+} from '@/components/icons'
+import { Button } from '@/components/ui/button'
+
+import { IChildProps } from '@/types'
 
 const OrgBranchUrlGuard = ({ children }: IChildProps) => {
     const router = useRouter()

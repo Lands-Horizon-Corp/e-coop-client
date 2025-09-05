@@ -1,18 +1,21 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
-import { cn } from '@/lib'
-import * as DialogPrimitive from '@radix-ui/react-dialog'
+import type * as DialogPrimitive from '@radix-ui/react-dialog'
+
+import { cn } from '@/helpers/tw-utils'
+import type {
+    IBaseProps,
+    IClassProps,
+} from '@/types/component-types/base-component'
 
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogExtraProps,
+    type DialogExtraProps,
     DialogTitle,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-
-import { IBaseProps, IClassProps } from '@/types'
 
 export interface IModalClassNames extends DialogExtraProps, IClassProps {
     titleClassName?: string
@@ -35,8 +38,8 @@ const Modal = ({
     className,
     description,
     titleClassName,
-    hideCloseButton,
     overlayClassName,
+    showCloseButton,
     closeButtonClassName,
     descriptionClassName,
     ...other
@@ -44,7 +47,7 @@ const Modal = ({
     return (
         <Dialog {...other}>
             <DialogContent
-                hideCloseButton={hideCloseButton}
+                showCloseButton={!showCloseButton}
                 closeButtonClassName={closeButtonClassName}
                 overlayClassName={cn('backdrop-blur', overlayClassName)}
                 className={cn(

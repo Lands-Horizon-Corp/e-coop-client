@@ -1,4 +1,5 @@
 import { WS_URL } from '@/constants'
+import logger from '@/helpers/loggers/logger'
 import { NatsConnection, connect } from 'nats.ws'
 import { create } from 'zustand'
 
@@ -29,7 +30,7 @@ export const useNatsStore = create<INatsState>((set, get) => ({
     } = {}) => {
         const { connection } = get()
         if (connection) {
-            console.warn('📡: already connected, reusing.')
+            logger.warn('📡: already connected, reusing.')
             onConnect?.()
             return
         }
@@ -43,21 +44,21 @@ export const useNatsStore = create<INatsState>((set, get) => ({
 
             conn.closed().then((err) => {
                 if (err) {
-                    console.error(
+                    logger.error(
                         '📡‧‧‧‧‧‧🔥‧‧‧‧‧‧🛰️: connection closed with error:',
                         err
                     )
                     onClosed?.(err)
                 } else {
-                    console.warn('📡😴: connection closed normally')
+                    logger.warn('📡😴: connection closed normally')
                     onClosed?.()
                 }
                 set({ connection: null })
             })
 
-            console.info('📡‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧🛰️: Connected')
+            logger.info('📡‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧🛰️: Connected')
         } catch (error) {
-            console.error('📡‧‧‧‧‧‧❌‧‧‧‧‧‧‧🛰️: failed to connect:', error)
+            logger.error('📡‧‧‧‧‧‧❌‧‧‧‧‧‧‧🛰️: failed to connect:', error)
             onError?.(error)
             throw error
         }
@@ -66,7 +67,7 @@ export const useNatsStore = create<INatsState>((set, get) => ({
     disconnect: async () => {
         const { connection } = get()
         if (!connection) {
-            console.warn('📡💀: no connection to close.')
+            logger.warn('📡💀: no connection to close.')
             return
         }
         await connection.close()

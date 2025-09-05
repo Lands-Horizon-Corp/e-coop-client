@@ -1,18 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import Approval from '@/components/approval'
-import PageContainer from '@/components/containers/page-container'
+import ApprovalPage from '@/modules/approvals/components/pages/approval'
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/approvals/'
 )({
-    component: RouteComponent,
+    component: ApprovalPage,
 })
-
-function RouteComponent() {
-    return (
-        <PageContainer className="">
-            <Approval className="min-h-[91dvh]" />
-        </PageContainer>
-    )
-}

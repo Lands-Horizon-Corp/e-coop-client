@@ -1,4 +1,6 @@
-import { cn } from '@/lib'
+import { ReactNode } from 'react'
+
+import { cn } from '@/helpers/tw-utils'
 import {
     DndContext,
     DragEndEvent,
@@ -11,7 +13,6 @@ import {
 } from '@dnd-kit/core'
 import { restrictToHorizontalAxis } from '@dnd-kit/modifiers'
 import { arrayMove } from '@dnd-kit/sortable'
-import { ReactNode } from '@tanstack/react-router'
 import { Row, Table as TableInstance } from '@tanstack/react-table'
 
 import { IChildProps, IClassProps } from '@/types'
