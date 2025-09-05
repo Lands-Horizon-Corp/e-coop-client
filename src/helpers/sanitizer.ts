@@ -1,8 +1,7 @@
 import DOMPurify from 'dompurify'
 
 export const sanitizeHtml = (html: string): string => {
-    return DOMPurify.sanitize(html)
-        .replace(/<[^>]*>/g, '')
+    return DOMPurify.sanitize(html, { ALLOWED_TAGS: [] })
         .replace(/&nbsp;/g, ' ')
         .replace(/&amp;/g, '&')
         .replace(/&lt;/g, '<')
