@@ -126,7 +126,7 @@ const TransactionCurrentPaymentEntry = ({
             <ScrollArea className="flex h-full max-h-[60vh] overflow-x-auto">
                 <div className="space-y-1.5">
                     {hasPayments ? (
-                        generalLedgerBasedTransaction.data.map(
+                        generalLedgerBasedTransaction?.data.map(
                             (payment, idx) => (
                                 <div>
                                     <Card

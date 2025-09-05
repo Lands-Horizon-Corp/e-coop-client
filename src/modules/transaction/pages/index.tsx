@@ -16,6 +16,7 @@ import {
 } from '@/modules/transaction'
 import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
+import { HotkeysProvider, useHotkeys } from 'react-hotkeys-hook'
 
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
@@ -54,7 +55,13 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     } = useTransactionStore()
     const navigate = useNavigate()
 
-    const handleSetTransactionId = (transactionId?: TEntityId) => {
+    const handleSetTransactionId = ({
+        transactionId,
+        fullPath,
+    }: {
+        transactionId?: TEntityId
+        fullPath: string
+    }) => {
         navigate({
             to: fullPath,
             search: {
@@ -62,6 +69,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             },
         })
     }
+
     const {
         data: transaction,
         isError,
@@ -117,12 +125,15 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         'Escape',
         () => {
             handleResetAll()
-            handleSetTransactionId(undefined)
+            handleSetTransactionId({ fullPath })
         },
-        { disableActiveButton: true }
+        {
+            disableActiveButton: true,
+            disableTextInputs: true,
+        }
     )
 
-    useShortcut('Enter', () => {
+    useHotkeys('Enter', () => {
         if (!selectedMember) {
             setOpenMemberPicker(true)
         }
@@ -138,17 +149,25 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 onClose={handleCloseSuccessModal}
                 isOpen={openSuccessModal}
             />
-
             <div className="flex h-full w-full gap-2 !overflow-hidden">
                 <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
                     <div className="flex justify-end mb-2">
                         <TransactionShortcuts />
                     </div>
-                    <TransactionMemberScanner
-                        fullPath={fullPath}
-                        handleSetTransactionId={handleSetTransactionId}
-                        transactionId={transactionId}
-                    />
+                    <HotkeysProvider
+                        initiallyActiveScopes={['member-scanner-view']}
+                    >
+                        <TransactionMemberScanner
+                            fullPath={fullPath}
+                            handleSetTransactionId={() =>
+                                handleSetTransactionId({
+                                    transactionId: undefined,
+                                    fullPath,
+                                })
+                            }
+                            transactionId={transactionId}
+                        />
+                    </HotkeysProvider>
                     <div className="w-full p-2">
                         <MemberAccountingLedgerTable
                             mode="member"
@@ -185,7 +204,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             onClick={(e) => {
                                 e.preventDefault()
                                 handleResetAll()
-                                handleSetTransactionId(undefined)
+                                handleSetTransactionId({ fullPath })
                             }}
                             className="w-full mb-2"
                         >
@@ -198,40 +217,51 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             {selectedMember && (
                 <Card className="sticky top-0 m-2 w-full !p-0 h-fit">
                     <CardContent className="h-fit grid grid-cols-1 !p-2 items-center !w-full">
-                        <PaymentWithTransactionForm
-                            className="max-w-2xl"
-                            transactionId={transactionId}
-                            memberProfileId={selectedMember?.id}
-                            memberJointId={selectedJointMember?.id}
-                            onSuccess={(transaction) => {
-                                queryClient.invalidateQueries({
-                                    queryKey: ['member-accounting-ledger'],
-                                })
-                                queryClient.invalidateQueries({
-                                    queryKey: ['member-profile', 'paginated'],
-                                })
-                                queryClient.invalidateQueries({
-                                    queryKey: [
-                                        'member-joint-account',
-                                        'paginated',
-                                    ],
-                                })
-                                queryClient.invalidateQueries({
-                                    queryKey: ['transaction'],
-                                })
-                                queryClient.invalidateQueries({
-                                    queryKey: ['general-ledger'],
-                                })
+                        <HotkeysProvider
+                            initiallyActiveScopes={['transaction']}
+                        >
+                            <PaymentWithTransactionForm
+                                className="max-w-2xl"
+                                transactionId={transactionId}
+                                memberProfileId={selectedMember?.id}
+                                memberJointId={selectedJointMember?.id}
+                                onSuccess={(transaction) => {
+                                    queryClient.invalidateQueries({
+                                        queryKey: ['member-accounting-ledger'],
+                                    })
+                                    queryClient.invalidateQueries({
+                                        queryKey: [
+                                            'member-profile',
+                                            'paginated',
+                                        ],
+                                    })
+                                    queryClient.invalidateQueries({
+                                        queryKey: [
+                                            'member-joint-account',
+                                            'paginated',
+                                        ],
+                                    })
+                                    queryClient.invalidateQueries({
+                                        queryKey: ['transaction'],
+                                    })
+                                    queryClient.invalidateQueries({
+                                        queryKey: ['general-ledger'],
+                                    })
 
-                                setOpenPaymentWithTransactionModal(false)
-                                setSelectedMember(transaction.member_profile)
-                                setSelectedAccountId(undefined)
-                                handleSetTransactionId(
-                                    transaction.transaction_id
-                                )
-                                handleOnSuccessPaymentCallBack(transaction)
-                            }}
-                        />
+                                    setOpenPaymentWithTransactionModal(false)
+                                    setSelectedMember(
+                                        transaction.member_profile
+                                    )
+                                    setSelectedAccountId(undefined)
+                                    handleSetTransactionId({
+                                        transactionId:
+                                            transaction.transaction_id,
+                                        fullPath,
+                                    })
+                                    handleOnSuccessPaymentCallBack(transaction)
+                                }}
+                            />
+                        </HotkeysProvider>
                     </CardContent>
                 </Card>
             )}
