@@ -100,7 +100,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                             </h2>
                             <div className="space-x-2">
                                 <Badge variant="outline">
-                                    {memberProfile.member_type.name}
+                                    {memberProfile.member_type?.name}
                                 </Badge>
                                 {memberProfile.is_closed ? (
                                     <Badge variant="destructive">Closed</Badge>
@@ -161,7 +161,7 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                                     <UserIcon className="size-3" />
                                     <span>
                                         <CopyWrapper>
-                                            {memberProfile.member_type.name}
+                                            {memberProfile.member_type?.name}
                                         </CopyWrapper>
                                     </span>
                                 </div>

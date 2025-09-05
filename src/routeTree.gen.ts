@@ -91,6 +91,7 @@ import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport }
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/disbursement-transaction'
 import { Route as OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/disbursement'
+import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoansRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loans'
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-status'
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-purpose'
 import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-application'
@@ -626,6 +627,12 @@ const OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute =
     path: '/transaction/disbursement',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameemployeeLoanLoansRoute =
+  OrgOrgnameBranchBranchnameemployeeLoanLoansRouteImport.update({
+    id: '/(employee)/loan/loans',
+    path: '/loan/loans',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute =
   OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport.update({
     id: '/(employee)/loan/loan-status',
@@ -945,6 +952,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
   '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
   '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
+  '/org/$orgname/branch/$branchname/loan/loans': typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
@@ -1056,6 +1064,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
   '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
   '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
+  '/org/$orgname/branch/$branchname/loan/loans': typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
@@ -1173,6 +1182,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
   '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
   '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
+  '/org/$orgname/branch/$branchname/(employee)/loan/loans': typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
@@ -1290,6 +1300,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/loan/loan-application'
     | '/org/$orgname/branch/$branchname/loan/loan-purpose'
     | '/org/$orgname/branch/$branchname/loan/loan-status'
+    | '/org/$orgname/branch/$branchname/loan/loans'
     | '/org/$orgname/branch/$branchname/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/transaction/disbursement-transaction'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
@@ -1401,6 +1412,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/loan/loan-application'
     | '/org/$orgname/branch/$branchname/loan/loan-purpose'
     | '/org/$orgname/branch/$branchname/loan/loan-status'
+    | '/org/$orgname/branch/$branchname/loan/loans'
     | '/org/$orgname/branch/$branchname/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/transaction/disbursement-transaction'
     | '/org/$orgname/branch/$branchname/transaction/payment-type'
@@ -1517,6 +1529,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/loan/loan-application'
     | '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose'
     | '/org/$orgname/branch/$branchname/(employee)/loan/loan-status'
+    | '/org/$orgname/branch/$branchname/(employee)/loan/loans'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction'
     | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
@@ -2142,6 +2155,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(employee)/loan/loans': {
+      id: '/org/$orgname/branch/$branchname/(employee)/loan/loans'
+      path: '/loan/loans'
+      fullPath: '/org/$orgname/branch/$branchname/loan/loans'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': {
       id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-status'
       path: '/loan/loan-status'
@@ -2544,6 +2564,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
   OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
   OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
+  OrgOrgnameBranchBranchnameemployeeLoanLoansRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
   OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
   OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
   OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
@@ -2641,6 +2662,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute,
     OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute:
       OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute,
+    OrgOrgnameBranchBranchnameemployeeLoanLoansRoute:
+      OrgOrgnameBranchBranchnameemployeeLoanLoansRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute:
       OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute,
     OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute:

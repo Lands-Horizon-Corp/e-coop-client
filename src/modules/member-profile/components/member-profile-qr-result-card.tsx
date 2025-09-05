@@ -24,7 +24,6 @@ const MemberProfileQrResultCard = ({ className, memberProfile }: Props) => {
 
     return (
         <div className={cn('min-w-[500px] space-y-4', className)}>
-            {/* TODO: Once info modal is implemented */}
             {memberProfile && (
                 <MemberOverallInfoModal
                     {...fullInfoViewModal}

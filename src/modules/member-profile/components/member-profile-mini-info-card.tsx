@@ -126,7 +126,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                     </HoverCard>
                                 )}
                                 <Badge variant="outline">
-                                    {memberProfile.member_type.name}
+                                    {memberProfile.member_type?.name}
                                 </Badge>
                                 {memberProfile.is_closed ? (
                                     <Badge variant="destructive">Closed</Badge>
@@ -187,7 +187,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                     <UserIcon className="size-3" />
                                     <span>
                                         <CopyWrapper>
-                                            {memberProfile.member_type.name}
+                                            {memberProfile.member_type?.name}
                                         </CopyWrapper>
                                     </span>
                                 </div>

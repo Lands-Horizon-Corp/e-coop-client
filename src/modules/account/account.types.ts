@@ -308,6 +308,7 @@ export type TPaginatedAccountHookMode =
     | 'adjustment'
     | 'journal-voucher'
     | 'check-voucher'
+    | 'loan'
 
 export type TDeleteAccountFromGLFSType = {
     id: TEntityId

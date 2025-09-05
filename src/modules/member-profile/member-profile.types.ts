@@ -130,8 +130,8 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     signature_id?: TEntityId
     signature?: IMedia
 
-    member_type_id: TEntityId
-    member_type: IMemberType
+    member_type_id?: TEntityId
+    member_type?: IMemberType
 
     member_group_id: TEntityId
     member_group: IMemberGroup
