@@ -204,6 +204,7 @@ export type Keys = KeyboardKey
 
 type UseShortcutOptions = {
     passive?: boolean
+    disabled?: boolean
 }
 
 export const useSimpleShortcut = (
@@ -212,9 +213,11 @@ export const useSimpleShortcut = (
     options: UseShortcutOptions = {}
 ) => {
     const pressedKeysRef = useRef<Set<string>>(new Set())
-    const { passive = false } = options
+    const { passive = false, disabled = false } = options
 
     useEffect(() => {
+        if (disabled) return
+
         const handleKeyDown = (e: KeyboardEvent) => {
             pressedKeysRef.current.add(e.key)
 
@@ -238,5 +241,5 @@ export const useSimpleShortcut = (
             window.removeEventListener('keydown', handleKeyDown)
             window.removeEventListener('keyup', handleKeyUp)
         }
-    }, [keys, callback, passive])
+    }, [keys, callback, passive, disabled])
 }

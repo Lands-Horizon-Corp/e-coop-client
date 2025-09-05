@@ -122,10 +122,10 @@ export const useFilteredPaginatedAccount = ({
     return useQuery<IAccountPaginated, Error>({
         queryKey: ['account', 'paginated', mode, query],
         queryFn: async () => {
-            let url: string | undefined
             const targetUrl = mode ? `${mode}/search` : 'search'
+
             return apiCrudService.getPaginated<IAccount>({
-                url: url ? `${apiCrudService.route}/${targetUrl}` : undefined,
+                url: `${apiCrudService.route}/${targetUrl}`,
                 query,
             })
         },

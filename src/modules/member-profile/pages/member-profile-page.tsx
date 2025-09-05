@@ -17,7 +17,13 @@ function ViewMemberProfilePage() {
     const createModal = useModalState()
     const {
         currentAuth: {
-            user_organization: { branch_id, organization_id },
+            user_organization: {
+                branch_id,
+                organization_id,
+                branch: {
+                    branch_setting: { default_member_type_id },
+                },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -47,6 +53,7 @@ function ViewMemberProfilePage() {
                     defaultValues: {
                         organization_id,
                         branch_id,
+                        member_type_id: default_member_type_id,
                     },
                     onSuccess: () => {},
                 }}

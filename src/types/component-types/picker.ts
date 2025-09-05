@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import { useModalState } from '@/hooks/use-modal-state'
 
 export interface IPickerBaseProps<T = unknown> {
@@ -8,4 +10,6 @@ export interface IPickerBaseProps<T = unknown> {
     placeholder?: string
     triggerClassName?: string
     modalState?: ReturnType<typeof useModalState>
+
+    customComponent?: ReactNode
 }

@@ -5,15 +5,6 @@ import {
     GENERAL_STATUS,
     USER_TYPE,
 } from '@/constants'
-import {
-    COMPUTATION_TYPE,
-    LOAN_AMORTIZATION_TYPE,
-    LOAN_COLLECTOR_PLACE,
-    LOAN_COMAKER_TYPE,
-    LOAN_MODE_OF_PAYMENT,
-    LOAN_TYPE,
-    WEEKDAYS,
-} from '@/constants/loan'
 import { IBranch } from '@/modules/branch'
 import { TAG_CATEGORY } from '@/modules/tag-template/tag.constants'
 
@@ -99,17 +90,3 @@ export interface IPaginatedResult<T> {
     pageSize: number
     totalSize: number
 }
-
-export type TLoanModeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number] // move to loan mode of payment
-
-export type TWeekdays = (typeof WEEKDAYS)[number] // move to loan
-
-export type TLoanCollectorPlace = (typeof LOAN_COLLECTOR_PLACE)[number] // loan collector
-
-export type TLoanComakerType = (typeof LOAN_COMAKER_TYPE)[number] // loan
-
-export type TLoanType = (typeof LOAN_TYPE)[number] // loan
-
-export type TLoanAmortizationType = (typeof LOAN_AMORTIZATION_TYPE)[number] // loan
-
-export type TComputationType = (typeof COMPUTATION_TYPE)[number] // loan

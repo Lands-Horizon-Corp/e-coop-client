@@ -195,7 +195,9 @@ const AccountPicker = ({
                 >
                     <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
-                            <div>{isFetching ? <LoadingSpinner /> : ''}</div>
+                            <div>
+                                {isFetching && !value ? <LoadingSpinner /> : ''}
+                            </div>
                             {value?.icon && value.icon.length > 0 && (
                                 <span className="bg-muted rounded-full p-0.5">
                                     <RenderIcon icon={value.icon as TIcon} />

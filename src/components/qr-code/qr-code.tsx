@@ -44,7 +44,8 @@ const QrCode = forwardRef<HTMLDivElement, IQrCodeProps>(
                             excavate: true,
                         }}
                         value={value}
-                        className="size-full rounded-sm duration-300"
+                        // NOTE: DO NOT PUT RADIUS THAT COULD CROP QRCODE! QR CODE WONT IDENTIFY BY QR CODE READER
+                        className="size-full duration-300"
                     />
                 )}
             </div>
