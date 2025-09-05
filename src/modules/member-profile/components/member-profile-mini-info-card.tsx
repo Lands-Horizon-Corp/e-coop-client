@@ -51,7 +51,7 @@ const getStatusConfig = (status: string) => {
                 label: 'Verified',
                 variant: 'default' as const,
                 className:
-                    'border-green-500/20 bg-green-500/10 text-green-700 hover:bg-green-500/20 dark:text-green-400 dark:bg-green-500/10 dark:hover:bg-green-500/20',
+                    'border-primary/20 bg-primary/10 text-primary/80 hover:bg-primary/20 dark:text-primary dark:bg-primary/10 dark:hover:bg-primary/20',
                 icon: <CheckIcon className="h-3 w-3" />,
             }
         case 'not allowed':

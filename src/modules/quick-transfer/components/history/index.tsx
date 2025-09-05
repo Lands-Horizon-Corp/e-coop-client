@@ -217,7 +217,7 @@ const TransactionDepositWithdrawCardListItem = ({
                 </div>
             </div>
             <div className="actions text-xs text-end">
-                <p className="font-bold text-green-600 dark:text-green-400">
+                <p className="font-bold text-primary dark:text-primary">
                     {formatCurrency(item.balance)}
                 </p>
                 <p className="text-xs text-muted-foreground">

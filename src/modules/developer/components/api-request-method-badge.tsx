@@ -15,8 +15,8 @@ const apiMethodVariants = cva(
                     'dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-900/30',
                 ],
                 post: [
-                    'bg-green-100 text-green-800 border-green-200 hover:bg-green-200',
-                    'dark:bg-green-900/20 dark:text-green-400 dark:border-green-800 dark:hover:bg-green-900/30',
+                    'bg-primary/10 text-primary/70 border-primary hover:bg-primary/20',
+                    'dark:bg-primary/10/20 dark:text-primary dark:border-primary/70 dark:hover:bg-primary/10/30',
                 ],
                 put: [
                     'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200',

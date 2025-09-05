@@ -2,6 +2,7 @@ import z from 'zod'
 
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
+import { IAccount } from '../account'
 import { IMemberType } from '../member-type'
 import { BranchSettingsSchema } from './branch-settings.validation'
 
@@ -9,6 +10,12 @@ export interface IBranchSettings extends IBaseEntityMeta {
     id: TEntityId
 
     branch_id: TEntityId
+
+    cash_on_hand_account_id: TEntityId
+    cash_on_hand_account: IAccount
+
+    paid_up_shared_capital_account_id: TEntityId
+    paid_up_shared_capital_account: IAccount
 
     withdraw_allow_user_input: boolean
     /** Validation: omitempty */

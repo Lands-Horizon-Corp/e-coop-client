@@ -85,7 +85,7 @@ const Heartbeat = () => {
                 </div>
                 <div className="flex items-center gap-2">
                     <Badge variant="outline" className="gap-1">
-                        <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                        <div className="w-2 h-2  dark:bg-primary rounded-full"></div>
                         Online ({data?.online_users_count || 0})
                     </Badge>
                     <Button
@@ -132,7 +132,7 @@ const Heartbeat = () => {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
-                                            <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                                            <div className="w-2 h-2 bg-primary dark:bg-primary rounded-full"></div>
                                             Online Now
                                         </div>
                                         <div className="text-2xl font-bold text-foreground">
@@ -214,7 +214,7 @@ const Heartbeat = () => {
                                         size="sm"
                                         className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
                                     >
-                                        <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
+                                        <div className="w-2 h-2 bg-primary dark:bg-primary rounded-full"></div>
                                         System Online
                                     </Button>
                                     <Button

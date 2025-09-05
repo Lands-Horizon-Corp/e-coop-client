@@ -6,6 +6,13 @@ export const BranchSettingsSchema = z.object({
     id: entityIdSchema,
     branch_id: entityIdSchema,
 
+    // Default Accounts
+    cash_on_hand_account_id: entityIdSchema,
+    cash_on_hand_account: z.any(),
+
+    paid_up_shared_capital_account_id: entityIdSchema,
+    paid_up_shared_capital_account: z.any(),
+
     // Withdraw settings
     withdraw_allow_user_input: z.boolean(),
     withdraw_prefix: z.string(),

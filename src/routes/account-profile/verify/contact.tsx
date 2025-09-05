@@ -44,9 +44,9 @@ function RouteComponent() {
                 <div>
                     <div className="flex flex-col items-center gap-y-4 py-4 text-center">
                         <div className="relative p-8">
-                            <BadgeCheckFillIcon className="size-[53px] text-green-500" />
-                            <div className="absolute inset-0 rounded-full bg-green-500/20" />
-                            <div className="absolute inset-5 rounded-full bg-green-500/20" />
+                            <BadgeCheckFillIcon className="size-[53px] text-primary" />
+                            <div className="absolute inset-0 rounded-full bg-primary/20" />
+                            <div className="absolute inset-5 rounded-full bg-primary/20" />
                         </div>
                         <p className="text-xl font-medium">
                             Contact Number Verified

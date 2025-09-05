@@ -18,7 +18,7 @@ const SectionTitle = ({ Icon, title, subTitle }: Props) => {
             {Icon && (
                 <>
                     <Icon className="relative z-10 inline size-8 text-foreground" />
-                    <Icon className="absolute z-0 size-8 text-green-400/70 blur-md" />
+                    <Icon className="absolute z-0 size-8 text-primary/70 blur-md" />
                 </>
             )}
             <div className="space-y-2">

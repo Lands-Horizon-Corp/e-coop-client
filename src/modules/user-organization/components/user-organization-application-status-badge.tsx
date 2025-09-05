@@ -24,8 +24,8 @@ const userOrganizationApplicationStatusVariants = cva(
                     'dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800 dark:hover:bg-orange-900'
                 ),
                 accepted: cn(
-                    'bg-green-100 text-green-800 border-green-200 hover:bg-green-200',
-                    'dark:bg-green-950 dark:text-green-300 dark:border-green-800 dark:hover:bg-green-900'
+                    'bg-primary/10 text-primary/70 border-primary hover:bg-primary/20',
+                    'dark:bg-green-950 dark:text-primary dark:border-primary/70 dark:hover:bg-primary/10'
                 ),
                 ban: cn(
                     'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',

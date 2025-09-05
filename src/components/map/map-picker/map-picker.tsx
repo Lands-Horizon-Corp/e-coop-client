@@ -359,7 +359,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             types.includes('locality') ||
             types.includes('administrative_area_level_1')
         ) {
-            return <Globe className="h-4 w-4 text-green-500" />
+            return <Globe className="h-4 w-4 text-primary" />
         }
         return <Navigation className="text-muted-foreground h-4 w-4" />
     }

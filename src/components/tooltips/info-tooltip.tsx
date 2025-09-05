@@ -54,9 +54,8 @@ const InfoTooltip = ({
                         align={align}
                         sideOffset={sideOffset}
                         alignOffset={alignOffset}
-                        className="text-xs px-1.5 rounded-lg bg-background border-secondary"
+                        className="text-xs px-1.5 rounded-lg border bg-background"
                         style={{ zIndex: 99999 }}
-                        asChild
                     >
                         <div>{content}</div>
                     </TooltipContent>

@@ -39,12 +39,12 @@ const CopyURL = ({
             className={cn(
                 'group flex cursor-pointer gap-x-4 rounded-md bg-secondary px-3 py-2 text-xs text-foreground/70 duration-200 hover:text-foreground',
                 className,
-                coppied && 'bg-green-300/20'
+                coppied && 'bg-primary/30'
             )}
         >
             <p>{displayText}</p>
             {coppied ? (
-                <Check className="size-4 text-green-700" strokeWidth={1} />
+                <Check className="size-4 text-primary/80" strokeWidth={1} />
             ) : (
                 <Copy className="h-4 w-4" strokeWidth={1} />
             )}

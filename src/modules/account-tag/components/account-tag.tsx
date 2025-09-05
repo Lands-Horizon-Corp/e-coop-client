@@ -92,7 +92,7 @@ const AccountTag = () => {
                 </PopoverTrigger>
                 <PopoverContent className="max-w-64">
                     {!hasAccountTag ? (
-                        <div className="flex items-center flex-col border-2 border-dashed border-green-200  dark:border-green-800 rounded-xl justify-center p-5">
+                        <div className="flex items-center flex-col border-2 border-dashed border-primary  dark:border-primary/70 rounded-xl justify-center p-5">
                             <span className="text-muted-foreground text-xs">
                                 No account tags available
                             </span>

@@ -526,7 +526,7 @@ function RouteComponent() {
                                         e.preventDefault()
                                         scrollToSection(sectionId)
                                     }}
-                                    className="text-green-600 min-w-64 dark:text-green-400 hover:underline cursor-pointer text-sm"
+                                    className="text-primary min-w-64 dark:text-primary hover:underline cursor-pointer text-sm"
                                 >
                                     {idx + 1}
                                     {'. '}

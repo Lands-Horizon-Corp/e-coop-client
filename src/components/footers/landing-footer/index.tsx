@@ -128,7 +128,7 @@ const NeonFooter = () => {
                         <EcoopLogo className="size-16" blurDisabled />
                     </div>
                     <div className="flex items-center text-sm">
-                        <span className="h-2 w-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                        <span className="h-2 w-2 bg-primary rounded-full mr-2 animate-pulse"></span>
                         All systems operational{' '}
                     </div>
                     <div className="text-sm font-thin">
