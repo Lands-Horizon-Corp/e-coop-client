@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { cn } from '@/helpers'
 import { formatNumber } from '@/helpers/number-utils'
+import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import { BatchFundingCreateFormModal } from '@/modules/batch-funding/components/batch-funding-create-form'
 import { TTransactionBatchFullorMin } from '@/modules/transaction-batch/transaction-batch.types'
 
@@ -20,6 +21,10 @@ const BeginningBalanceCard = ({
     transactionBatch,
     onAdd,
 }: Props) => {
+    const {
+        currentAuth: { user },
+    } = useAuthUserWithOrg()
+
     const [addModal, setAddModal] = useState(false)
 
     return (
@@ -34,6 +39,10 @@ const BeginningBalanceCard = ({
                 onOpenChange={setAddModal}
                 formProps={{
                     transactionBatchId: transactionBatch?.id,
+                    defaultValues: {
+                        provided_by_user: user,
+                        provided_by_user_id: user.id,
+                    },
                     onSuccess() {
                         setAddModal(false)
                         onAdd?.()
