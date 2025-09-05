@@ -5,16 +5,19 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { AccountPicker } from '@/modules/account'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
+    BankIcon,
     CalendarIcon,
     CheckIcon,
     CreditCardIcon,
     HandCoinsIcon,
     InfoIcon,
     MoneyCheckIcon,
+    MoneyIcon,
     ReceiptIcon,
     UserIcon,
 } from '@/components/icons'
@@ -114,7 +117,7 @@ const BranchSettingsForm = ({
         useFormHelper<TBranchSettingsFormValues>({
             form,
             ...formProps,
-            autoSave: true,
+            autoSave: false,
         })
 
     const onSubmit = form.handleSubmit(
@@ -162,7 +165,7 @@ const BranchSettingsForm = ({
                                     Default Member Type{' '}
                                     <InfoTooltip
                                         content={
-                                            <div className="flex gap-2 max-w-[400px]">
+                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
                                                 <InfoIcon
                                                     className="size-6 shrink-0 opacity-60"
                                                     size={16}
@@ -172,7 +175,7 @@ const BranchSettingsForm = ({
                                                     <p className="text-[13px] font-medium">
                                                         Default member type
                                                     </p>
-                                                    <p className="text-muted-foreground text-xs">
+                                                    <p className="text-xs">
                                                         Select a default member
                                                         type, so new member
                                                         quick create form will
@@ -193,6 +196,120 @@ const BranchSettingsForm = ({
                                     }}
                                     placeholder="Select default member type"
                                     disabled={isDisabled(field.name)}
+                                />
+                            )}
+                        />
+                    </div>
+                    <Separator />
+
+                    {/* Default accounts */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-yellow-100 p-2 dark:bg-yellow-900/20">
+                                <BankIcon className="size-5 " />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">
+                                    Default Accounts
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure default settings for accounts.
+                                </p>
+                            </div>
+                        </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="paid_up_shared_capital_account_id"
+                            label={
+                                <span>
+                                    Paid Up Share Capital{' '}
+                                    <InfoTooltip
+                                        content={
+                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
+                                                <InfoIcon
+                                                    className="size-6 shrink-0 opacity-60"
+                                                    size={16}
+                                                    aria-hidden="true"
+                                                />
+                                                <div className="space-y-1">
+                                                    <p className="text-[13px] font-medium">
+                                                        Paid up share capital
+                                                        account
+                                                    </p>
+                                                    <p className="text-muted-foreground text-xs">
+                                                        Indicates the account
+                                                        containing paid up share
+                                                        capital
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    />
+                                </span>
+                            }
+                            render={({ field }) => (
+                                <AccountPicker
+                                    value={form.getValues(
+                                        'paid_up_shared_capital_account'
+                                    )}
+                                    onSelect={(selectedAccount) => {
+                                        field.onChange(selectedAccount?.id)
+                                        form.setValue(
+                                            'paid_up_shared_capital_account',
+                                            selectedAccount,
+                                            { shouldDirty: true }
+                                        )
+                                    }}
+                                    placeholder="Select default account"
+                                    disabled
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="cash_on_hand_account_id"
+                            label={
+                                <span>
+                                    Cash On Hand (COH) account
+                                    <InfoTooltip
+                                        content={
+                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
+                                                <MoneyIcon
+                                                    className="size-6 shrink-0 opacity-60"
+                                                    size={16}
+                                                    aria-hidden="true"
+                                                />
+                                                <div className="space-y-1">
+                                                    <p className="text-[13px] font-medium">
+                                                        Cash on Hand Account
+                                                    </p>
+                                                    <p className="text-muted-foreground text-xs">
+                                                        Indicates the Cash on
+                                                        Hand account
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    />
+                                </span>
+                            }
+                            render={({ field }) => (
+                                <AccountPicker
+                                    value={form.getValues(
+                                        'cash_on_hand_account'
+                                    )}
+                                    onSelect={(selectedAccount) => {
+                                        field.onChange(selectedAccount?.id)
+                                        form.setValue(
+                                            'cash_on_hand_account',
+                                            selectedAccount,
+                                            { shouldDirty: true }
+                                        )
+                                    }}
+                                    placeholder="Select default account"
+                                    disabled
                                 />
                             )}
                         />
