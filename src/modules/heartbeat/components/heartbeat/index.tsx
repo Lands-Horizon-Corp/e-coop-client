@@ -1,5 +1,8 @@
+import { toast } from 'sonner'
+
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import { MemberQrScannerModal } from '@/modules/member-profile/components/member-qr-scanner'
 import {
     Activity,
     Building2,
@@ -22,6 +25,7 @@ import { useGetHeartbeat } from '../../heartbeat.service'
 
 const Heartbeat = () => {
     const modalState = useModalState()
+    const qrScannerModal = useModalState()
 
     const { data, isLoading, error: rawError, refetch } = useGetHeartbeat()
     const {
@@ -53,6 +57,18 @@ const Heartbeat = () => {
     return (
         <div className="space-y-6 p-6 bg-background">
             {/* Header */}
+            <MemberQrScannerModal
+                className="!w-fit !min-w-fit"
+                {...qrScannerModal}
+                scannerProps={{
+                    hideButton: true,
+                    onSelectMemberProfile: (memberProfile) => {
+                        toast.success(
+                            `Selected member: ${memberProfile.full_name}`
+                        )
+                    },
+                }}
+            />
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-primary/10 rounded-lg">
@@ -205,7 +221,8 @@ const Heartbeat = () => {
                                         size="sm"
                                         variant="outline"
                                         onClick={() =>
-                                            modalState.onOpenChange(true)
+                                            // modalState.onOpenChange(true)
+                                            qrScannerModal.onOpenChange(true)
                                         }
                                         className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
                                     >

@@ -27,12 +27,14 @@ import MemberProfileQrResultCard from './member-profile-qr-result-card'
 interface MemberQrScannerProps extends IBaseProps {
     onSelectMemberProfile: (memberProfile: IMemberProfile) => void
     onResultFound?: (memberProfile: IMemberProfile) => void
+    hideButton?: boolean
 }
 
 const MemberQrScanner = ({
     className,
     onResultFound,
     onSelectMemberProfile,
+    hideButton,
 }: MemberQrScannerProps) => {
     const [decodedMemberProfile, setDecodedMemberProfile] = useState<
         IQRMemberProfile | undefined
@@ -114,21 +116,25 @@ const MemberQrScanner = ({
                         Confirm if the member profile is correct.
                     </p>
                     <MemberProfileQrResultCard memberProfile={data} />
-                    <div className="grid grid-cols-2 gap-x-2 ">
-                        <Button
-                            onClick={() => setDecodedMemberProfile(undefined)}
-                            size="sm"
-                            variant="secondary"
-                        >
-                            Rescan <ScanLineIcon className="ml-2" />
-                        </Button>
-                        <Button
-                            size="sm"
-                            onClick={() => onSelectMemberProfile(data)}
-                        >
-                            Select <ChevronRightIcon className="ml-2" />
-                        </Button>
-                    </div>
+                    {!hideButton && (
+                        <div className="grid grid-cols-2 gap-x-2 ">
+                            <Button
+                                onClick={() =>
+                                    setDecodedMemberProfile(undefined)
+                                }
+                                size="sm"
+                                variant="secondary"
+                            >
+                                Rescan <ScanLineIcon className="ml-2" />
+                            </Button>
+                            <Button
+                                size="sm"
+                                onClick={() => onSelectMemberProfile(data)}
+                            >
+                                Select <ChevronRightIcon className="ml-2" />
+                            </Button>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

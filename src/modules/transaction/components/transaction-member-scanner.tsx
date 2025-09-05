@@ -4,16 +4,14 @@ import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import {
-    IQRMemberProfile,
-    IQRMemberProfileDecodedResult,
-} from '@/modules/qr-crypto'
+import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
 import {
     TransactionMemberProfile,
     TransactionViewNoMemberSelected,
 } from '@/modules/transaction'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { ScanLineIcon } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { EyeIcon } from '@/components/icons'
 import QrCodeScanner from '@/components/qrcode-scanner'
@@ -22,7 +20,6 @@ import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
-import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { IBaseProps, TEntityId } from '@/types'
 
@@ -33,25 +30,24 @@ import { useGetMemberProfileById } from '../../member-profile/member-profile.ser
 interface MemberQrScannerProps extends IBaseProps {
     transactionId: TEntityId
     fullPath: string
-    handleSetTransactionId: (transactionId?: TEntityId) => void
+    handleSetTransactionId: () => void
 }
 
 const TransactionMemberScanner = ({
     className,
     transactionId,
 }: MemberQrScannerProps) => {
-    const [decodedMemberProfile, setDecodedMemberProfile] = useState<
-        IQRMemberProfile | undefined
-    >()
     const [startScan, setStartScan] = useState(false)
+
     const {
         setSelectedMember,
         selectedMember,
         setOpenMemberPicker,
         openMemberPicker,
+        setDecodedMemberProfile,
+        decodedMemberProfile,
     } = useTransactionStore()
     const focusedId = decodedMemberProfile?.member_profile_id
-
     const {
         data,
         isPending,
@@ -82,8 +78,10 @@ const TransactionMemberScanner = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    useShortcut('s', () => {
-        setStartScan((start) => !start)
+    useHotkeys('s', () => {
+        if (!transactionId) {
+            setStartScan((start) => !start)
+        }
     })
 
     return (
@@ -108,7 +106,7 @@ const TransactionMemberScanner = ({
             {/* Left: Scanner */}
             <div className="flex flex-col flex-shrink-0 lg:w-[15rem] justify-center items-center w-full">
                 <div className="w-fit">
-                    {startScan ? (
+                    {startScan && !selectedMember ? (
                         <div className="w-full aspect-square max-w-[90%] rounded-xl overflow-hidden ">
                             <QrCodeScanner<IQRMemberProfileDecodedResult>
                                 allowMultiple
@@ -126,13 +124,13 @@ const TransactionMemberScanner = ({
                         <div className="flex flex-col h-full items-center justify-center text-center py-8">
                             <ScanLineIcon className="mx-auto h-16 w-16 text-muted-foreground/70" />
                             <Button
-                                disabled={!!transactionId}
+                                disabled={!!transactionId || !!selectedMember}
                                 onClick={() => setStartScan((start) => !start)}
                                 size="sm"
                                 variant="outline"
                             >
                                 <EyeIcon className="mr-1 h-4 w-4" />
-                                {startScan ? 'Stop' : 'Start'}
+                                Start
                             </Button>
                             <p className="text-muted-foreground/70 text-sm mt-4">
                                 Click start to scan member QR
@@ -142,7 +140,6 @@ const TransactionMemberScanner = ({
                 </div>
             </div>
 
-            {/* Middle: Loader + Member Profile + Transaction Form */}
             <div className="flex flex-col flex-1 w-full space-y-4">
                 {isPending && decodedMemberProfile !== undefined && (
                     <p className="text-muted-foreground/70 flex items-center">
@@ -150,27 +147,13 @@ const TransactionMemberScanner = ({
                         Loading member profile
                     </p>
                 )}
-
                 {error && <FormErrorMessage errorMessage={error} />}
-
                 {selectedMember ? (
                     <div className="space-y-4">
                         <TransactionMemberProfile
                             memberInfo={selectedMember}
                             hasTransaction={false}
                         />
-
-                        <Button
-                            onClick={() => {
-                                setDecodedMemberProfile(undefined)
-                                setSelectedMember(null)
-                            }}
-                            className="w-full"
-                            size="sm"
-                            variant="secondary"
-                        >
-                            clear
-                        </Button>
                     </div>
                 ) : (
                     <TransactionViewNoMemberSelected
