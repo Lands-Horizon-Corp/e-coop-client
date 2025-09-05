@@ -25,22 +25,22 @@ jobs:
             - name: 🛠️ Set up Node.js
               uses: actions/setup-node@v3
               with:
-                  node-version: "22.14.0"
+                  node-version: "22.18.0"
 
-            - name: 📦 Install pnpm
-              run: npm install -g pnpm@10.8.0
+            - name: 📦 Install bu
+              run: npm i -g bun@1.2.20
 
             - name: 📦 Install dependencies
-              run: pnpm install
+              run: bun install
 
             - name: 🔍 Run ESLint
-              run: pnpm run lint
+              run: bun run lint
 
             - name: 🧹 Run Prettier Check
-              run: pnpm run fc
+              run: bun run fc
 
             - name: 🧪 Run Tests
-              run: pnpm vitest run
+              run: bun vitest run
 
             - name: 🏁 Run Build
-              run: pnpm run build
+              run: bun run build
