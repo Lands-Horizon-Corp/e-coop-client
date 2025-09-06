@@ -411,43 +411,6 @@ const LoanTransactionTableColumns = (
         },
 
         {
-            id: 'collector_place',
-            accessorKey: 'collector_place',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Collector Place">
-                    <ColumnActions {...props}>
-                        <TextFilter<ILoanTransaction>
-                            displayText="Collector Place"
-                            field="collector_place"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { collector_place },
-                },
-            }) => (
-                <p className="!text-wrap text-muted-foreground">
-                    {collector_place && (
-                        <LoanCollectorPlaceBadge
-                            collectorPlace={
-                                collector_place as TLoanCollectorPlace
-                            }
-                        />
-                    )}
-                </p>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 300,
-            minSize: 300,
-            maxSize: 800,
-        },
-
-        {
             id: 'approved_date',
             accessorKey: 'approved_date',
             header: (props) => (
