@@ -1,5 +1,8 @@
 import { cn } from '@/helpers/tw-utils'
-import { ResolvedTheme, useTheme } from '@/providers/theme-provider'
+import {
+    ResolvedTheme,
+    useTheme,
+} from '@/modules/settings/provider/theme-provider'
 
 import { IClassProps } from '@/types'
 

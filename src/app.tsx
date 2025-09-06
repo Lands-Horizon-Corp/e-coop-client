@@ -8,7 +8,7 @@ import {
 import { MutationCache } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
-import { ThemeProvider } from '@/providers/theme-provider';
+import { ThemeProvider } from '@/modules/settings/provider/theme-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import SpySvg from '../src/assets/spy.svg';
