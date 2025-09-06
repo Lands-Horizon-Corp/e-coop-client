@@ -93,18 +93,13 @@ export const ThemeProvider = ({
                 Object.entries(modeColors).forEach(([property, value]) => {
                     root.style.setProperty(property, value)
                 })
-                // Save theme colors to localStorage for persistence
                 localStorage.setItem(
                     'ecoop-theme-colors',
                     JSON.stringify(colors)
                 )
             } else {
-                // Remove saved colors when switching to default
                 localStorage.removeItem('ecoop-theme-colors')
             }
-
-            // Don't call setCustomTheme here to avoid circular dependencies
-            // The caller should handle updating the theme state
         },
         [resolvedTheme]
     )

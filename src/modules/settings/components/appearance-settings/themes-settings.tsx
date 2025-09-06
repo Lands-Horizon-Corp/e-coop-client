@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import Fuse from 'fuse.js'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import Themes from '@/modules/settings/data/themes.json'
 
 import { PaintIcon } from '@/components/icons'
+import { Input } from '@/components/ui/input'
 
 import { IClassProps } from '@/types'
 
@@ -16,8 +18,8 @@ interface Props extends IClassProps {}
 interface CustomTheme {
     name: string
     colors: {
-        light: Record<string, string>
-        dark: Record<string, string>
+        light: Record<string, string | undefined>
+        dark: Record<string, string | undefined>
     }
 }
 
@@ -32,11 +34,49 @@ const ThemesSettings = ({ className }: Props) => {
     const [currentMode, setCurrentMode] = useState<'light' | 'dark'>(
         resolvedTheme
     )
+    const [searchQuery, setSearchQuery] = useState<string>('')
+
+    const sortedThemes = useMemo(() => {
+        return [...Themes].sort((a, b) => a.name.localeCompare(b.name))
+    }, [])
+
+    const fuse = useMemo(() => {
+        return new Fuse(sortedThemes, {
+            keys: ['name'],
+            threshold: 0.3,
+            includeScore: true,
+        })
+    }, [sortedThemes])
+
+    const filteredThemes = useMemo(() => {
+        if (!searchQuery.trim()) {
+            return sortedThemes
+        }
+
+        const results = fuse.search(searchQuery)
+        return results.map((result) => result.item)
+    }, [searchQuery, fuse, sortedThemes])
 
     const applyCustomTheme = useCallback(
         (theme: CustomTheme) => {
             // Apply the theme colors first
-            applyCustomThemeColors(theme.colors, theme.name)
+            applyCustomThemeColors(
+                {
+                    light: Object.fromEntries(
+                        Object.entries(theme.colors.light).map(([k, v]) => [
+                            k,
+                            v ?? '',
+                        ])
+                    ),
+                    dark: Object.fromEntries(
+                        Object.entries(theme.colors.dark).map(([k, v]) => [
+                            k,
+                            v ?? '',
+                        ])
+                    ),
+                },
+                theme.name
+            )
 
             // Then update the state
             setSelectedTheme(theme.name)
@@ -70,8 +110,27 @@ const ThemesSettings = ({ className }: Props) => {
                 </p>
             </div>
 
+            {/* Search Input */}
+            <div className="w-full max-w-sm">
+                <Input
+                    type="text"
+                    placeholder="Search themes..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full"
+                />
+            </div>
+
+            {/* No results message */}
+            {searchQuery.trim() && filteredThemes.length === 0 && (
+                <div className="text-center text-muted-foreground py-8">
+                    <p>No themes found matching "{searchQuery}"</p>
+                    <p className="text-sm">Try adjusting your search terms</p>
+                </div>
+            )}
+
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {Themes.map((theme) => (
+                {filteredThemes.map((theme) => (
                     <div key={theme.name} className="space-y-2">
                         <div
                             className={cn(
