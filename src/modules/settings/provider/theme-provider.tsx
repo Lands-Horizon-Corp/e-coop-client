@@ -185,20 +185,18 @@ export const ThemeProvider = ({
                     root.style.setProperty(property, value)
                 })
 
-                // Update state without triggering the applyCustomThemeColors function
                 if (customTheme !== savedCustomTheme) {
                     setCustomThemeState(savedCustomTheme)
                 }
             } catch (error) {
                 console.warn('Failed to parse saved theme colors:', error)
-                // Clear invalid data
+
                 localStorage.removeItem('ecoop-theme-colors')
                 localStorage.setItem('ecoop-custom-theme', 'Default')
                 setCustomThemeState('Default')
             }
         }
-    }, [resolvedTheme, customTheme]) // Remove applyCustomThemeColors dependency
-
+    }, [resolvedTheme, customTheme])
     const value = {
         theme,
         resolvedTheme,
