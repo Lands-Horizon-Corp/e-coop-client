@@ -6,7 +6,8 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import Themes from '@/modules/settings/data/themes.json'
 
-import { PaintIcon } from '@/components/icons'
+import { PaintIcon, XIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 import { IClassProps } from '@/types'
@@ -91,6 +92,20 @@ const ThemesSettings = ({ className }: Props) => {
         [applyCustomThemeColors, setCustomTheme, currentMode]
     )
 
+    const resetToDefault = useCallback(() => {
+        const defaultTheme = sortedThemes.find(
+            (theme) => theme.name === 'Default'
+        )
+        if (defaultTheme) {
+            applyCustomTheme(defaultTheme)
+            toast.success('Reset to Default theme')
+        }
+    }, [sortedThemes, applyCustomTheme])
+
+    const clearSearch = useCallback(() => {
+        setSearchQuery('')
+    }, [])
+
     // Sync with theme provider
     useEffect(() => {
         setSelectedTheme(customTheme)
@@ -110,15 +125,36 @@ const ThemesSettings = ({ className }: Props) => {
                 </p>
             </div>
 
-            {/* Search Input */}
-            <div className="w-full max-w-sm">
-                <Input
-                    type="text"
-                    placeholder="Search themes..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full"
-                />
+            {/* Search Input and Reset Button */}
+            <div className="flex gap-3 items-center">
+                <div className="flex-1 max-w-sm relative">
+                    <Input
+                        type="text"
+                        placeholder="Search themes..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pr-8"
+                    />
+                    {searchQuery && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={clearSearch}
+                            className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted"
+                        >
+                            <XIcon className="h-3 w-3" />
+                        </Button>
+                    )}
+                </div>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={resetToDefault}
+                    disabled={selectedTheme === 'Default'}
+                    className="whitespace-nowrap"
+                >
+                    Reset to Default
+                </Button>
             </div>
 
             {/* No results message */}
@@ -129,7 +165,7 @@ const ThemesSettings = ({ className }: Props) => {
                 </div>
             )}
 
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 gap-y-10">
                 {filteredThemes.map((theme) => (
                     <div key={theme.name} className="space-y-2">
                         <div
@@ -270,11 +306,8 @@ const ThemesSettings = ({ className }: Props) => {
                         </div>
 
                         <div className="text-center">
-                            <p className="font-medium">{theme.name}</p>
                             <p className="text-xs text-muted-foreground">
-                                {theme.name === 'Default'
-                                    ? 'Original colors (Light & Dark)'
-                                    : `${theme.name.split(' ')[0]} theme (Both modes)`}
+                                {theme.name}
                             </p>
                         </div>
                     </div>
