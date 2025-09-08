@@ -10,7 +10,7 @@ import {
     WEEKDAYS,
 } from './loan.constants'
 
-export const WithWeekdays = z.discriminatedUnion(
+const WithWeekdays = z.discriminatedUnion(
     'mode_of_payment',
     [
         z.object({
@@ -55,6 +55,30 @@ export const WithWeekdays = z.discriminatedUnion(
     }
 )
 
+const WithComaker = z.discriminatedUnion(
+    'comaker_type',
+    [
+        z.object({
+            comaker_type: z.literal('member'),
+            comaker_member_profile_id: z.uuidv4('Comaker member is required'),
+            comaker_member_profile: z.any(),
+        }),
+        z.object({
+            comaker_type: z.literal('deposit'),
+            comaker_deposit_member_accounting_ledger_id: z.uuidv4(
+                'Invalid member accounting ledger'
+            ),
+            comaker_deposit_member_accounting_ledger: z.any(),
+        }),
+        z.object({
+            comaker_type: z.literal('others'),
+            comaker_collateral_id: entityIdSchema,
+            comaker_collateral_description: z.string().optional(),
+        }),
+    ],
+    { error: 'Invalid comaker' }
+)
+
 export const LoanTransactionSchema = z
     .object({
         id: entityIdSchema.optional(),
@@ -67,23 +91,22 @@ export const LoanTransactionSchema = z
         comaker_type: z.enum(LOAN_COMAKER_TYPE, {
             error: 'Please select valid comaker',
         }),
-        comaker_deposit_member_accounting_ledger_id: entityIdSchema.optional(),
-        comaker_collateral_id: entityIdSchema.optional(),
-        comaker_collateral_description: z.string().optional(),
 
         collector_place: z.enum(LOAN_COLLECTOR_PLACE, {
             error: 'Please select valid collector place',
         }),
 
         loan_type: z.enum(LOAN_TYPE),
+        terms: z.coerce.number('Invalid Terms').int('Invalid Terms'),
+
         previous_loan_id: entityIdSchema.optional(),
-        terms: z.number().int(),
+        previous_loan: z.any(),
 
         amortization_amount: z.number().optional(),
         is_add_on: z.boolean().optional(),
 
-        applied_1: z.number(),
-        applied_2: z.number().optional(),
+        applied_1: z.coerce.number('Invalid amount'),
+        applied_2: z.coerce.number('Invalid amount').optional(),
 
         account_id: entityIdSchema.optional(),
         account: z.any(),
@@ -152,5 +175,6 @@ export const LoanTransactionSchema = z
         paid_by_position: z.string().optional(),
     })
     .and(WithWeekdays)
+    .and(WithComaker)
 
 export type TLoanTransactionSchema = z.infer<typeof LoanTransactionSchema>

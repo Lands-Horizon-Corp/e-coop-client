@@ -362,7 +362,7 @@ export const generateSidebarGroups = (
                     type: 'item',
                     icon: UserListIcon,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Browse all cooperative members',
+                    shortDescription: 'Browse all members/member profile',
                 },
                 {
                     title: 'Member Accounting Ledger',
@@ -524,7 +524,7 @@ export const generateSidebarGroups = (
                     title: 'Tag Templates',
                     url: `${baseUrl}/maintenance/tag-template`,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Manage bills and coins',
+                    shortDescription: 'Manage Tag Templates',
                 },
                 {
                     type: 'item',
@@ -532,7 +532,7 @@ export const generateSidebarGroups = (
                     title: 'Collateral',
                     url: `${baseUrl}/maintenance/collateral`,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Manage bills and coins',
+                    shortDescription: 'Manage common collaterals for loans',
                 },
                 {
                     type: 'item',

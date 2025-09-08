@@ -81,6 +81,7 @@ export const ICONS = [
     'Facebook',
     'Book Thick',
     'Linkedin',
+    'Shapes',
     'Code SandBox',
     'Users 3 Fill',
     'Users 3 Line',

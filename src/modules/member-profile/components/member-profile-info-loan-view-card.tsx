@@ -68,8 +68,9 @@ const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
                         )}
                         <Button
                             size="icon"
-                            disabled={!memberProfile}
+                            type="button"
                             variant="ghost"
+                            disabled={!memberProfile}
                             onClick={() => fullInfoViewModal.onOpenChange(true)}
                             className="size-fit col-span-3 p-1.5 text-xs opacity-80 underline"
                         >

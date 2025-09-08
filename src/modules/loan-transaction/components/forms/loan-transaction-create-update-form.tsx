@@ -9,6 +9,8 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
+import CollateralCombobox from '@/modules/collateral/components/collateral-combobox'
+import MemberAccountingLedgerPicker from '@/modules/member-accounting-ledger/components/member-accounting-ledger-picker'
 import {
     IMemberProfile,
     useGetMemberProfileById,
@@ -19,27 +21,41 @@ import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
+    BadgeExclamationIcon,
     BuildingBranchIcon,
     CheckIcon,
     DotsHorizontalIcon,
     HandDepositIcon,
+    HashIcon,
     PinLocationIcon,
     ScanLineIcon,
+    ShapesIcon,
+    TextFileFillIcon,
     UserIcon,
+    XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import QrCodeScanner from '@/components/qrcode-scanner'
 import { Button } from '@/components/ui/button'
-import { Form, FormItem } from '@/components/ui/form'
+import { Form, FormControl, FormItem } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
+import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
-import { useShortcut } from '@/hooks/use-shorcuts'
 import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
@@ -53,7 +69,8 @@ import {
     LoanTransactionSchema,
     TLoanTransactionSchema,
 } from '../../loan-transaction.validation'
-import { LOAN_MODE_OF_PAYMENT } from '../../loan.constants'
+import { LOAN_MODE_OF_PAYMENT, LOAN_TYPE } from '../../loan.constants'
+import LoanPicker from '../loan-picker'
 import WeekdayCombobox from '../weekday-combobox'
 
 type TLoanTransactionFormMode = 'create' | 'update'
@@ -114,7 +131,7 @@ const LoanMemberProfileScanner = ({
         isSuccess,
     })
 
-    useShortcut('s', () => setStartScan(true))
+    useSimpleShortcut(['S'], () => setStartScan(true))
 
     return (
         <div className="flex flex-col flex-shrink-0 w-fit justify-center items-center">
@@ -147,6 +164,7 @@ const LoanMemberProfileScanner = ({
 
 const LoanTransactionCreateUpdateForm = ({
     className,
+    loanTransactionId,
     mode = 'create',
     ...formProps
 }: ILoanTransactionFormProps) => {
@@ -154,15 +172,16 @@ const LoanTransactionCreateUpdateForm = ({
     const [formMode, setFormMode] = useState<TLoanTransactionFormMode>(mode)
     const memberPickerModal = useModalState()
 
-    const [_createdLoanTransactionId, setCreatedLoanTransactionId] =
+    const [createdLoanTransactionId, setCreatedLoanTransactionId] =
         useState<TEntityId | null>(null)
-    const hasAutoCreatedRef = useRef(false) // Prevent multiple auto-creates
+    const hasAutoCreatedRef = useRef(false)
 
     const form = useForm<TLoanTransactionSchema>({
         resolver: standardSchemaResolver(LoanTransactionSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
+            loan_type: 'standard',
             ...formProps.defaultValues,
         },
     })
@@ -197,17 +216,17 @@ const LoanTransactionCreateUpdateForm = ({
             ...formProps,
         })
 
-    const onSubmit = form.handleSubmit((_payload) => {
-        // const targetId = loanStatusId || createdLoanTransactionId
-        // if (formMode === 'update' && targetId) {
-        //     updateMutation.mutate({ id: targetId, payload })
-        // } else if (formMode === 'create' && !hasAutoCreatedRef.current) {
-        //     // Manual create if auto-create hasn't happened
-        //     createMutation.mutate(payload)
-        // }
+    const onSubmit = form.handleSubmit((payload) => {
+        const targetId = loanTransactionId || createdLoanTransactionId
+        if (formMode === 'update' && targetId) {
+            updateMutation.mutate({ id: targetId, payload })
+        } else if (formMode === 'create' && !hasAutoCreatedRef.current) {
+            // Manual create if auto-create hasn't happened
+            createMutation.mutate(payload)
+        }
     }, handleFocusError)
 
-    useSimpleShortcut(['S'], () => {
+    useSimpleShortcut(['Control', 'Enter'], () => {
         memberPickerModal.onOpenChange(!memberPickerModal.open)
     })
 
@@ -219,352 +238,867 @@ const LoanTransactionCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
+    // console.log(form.formState.errors)
+
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
+    const comaker_type = form.watch('comaker_type')
+    const comaker_member_profile = form.watch('comaker_member_profile')
+    const comaker_deposit_member_accounting_ledger = form.watch(
+        'comaker_deposit_member_accounting_ledger'
+    )
+    const previous_loan = form.watch('previous_loan')
 
     return (
         <Form {...form}>
             <form
                 ref={formRef}
                 onSubmit={onSubmit}
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn('flex w-full flex-col', className)}
             >
                 <fieldset
                     disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 p-4 gap-y-4 sm:gap-y-3"
                 >
-                    <fieldset className="space-y-3">
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="member_profile_id"
-                            render={({ field }) => {
-                                return (
-                                    <div className="gap-x-2 flex items-center">
-                                        <LoanMemberProfileScanner
-                                            key={field.value}
-                                            startScan={startScan}
-                                            setStartScan={setStartScan}
-                                            onSelect={(memberProfile) => {
-                                                field.onChange(
-                                                    memberProfile?.id
-                                                )
+                    <div className="space-y-3">
+                        <div className="space-y-4 rounded-xl bg-popover p-4">
+                            <div>
+                                <p className="font-medium">
+                                    <UserIcon className="inline text-primary" />{' '}
+                                    Member Information & Loan Account
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    Basic member details and loan account
+                                    information
+                                </p>
+                            </div>
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="member_profile_id"
+                                render={({ field }) => {
+                                    return (
+                                        <div className="gap-x-2 flex items-center">
+                                            {!memberProfile && (
+                                                <LoanMemberProfileScanner
+                                                    startScan={startScan}
+                                                    setStartScan={setStartScan}
+                                                    onSelect={(
+                                                        memberProfile
+                                                    ) => {
+                                                        field.onChange(
+                                                            memberProfile?.id
+                                                        )
+                                                        form.setValue(
+                                                            'member_profile',
+                                                            memberProfile,
+                                                            {
+                                                                shouldDirty: true,
+                                                            }
+                                                        )
+
+                                                        if (
+                                                            comaker_member_profile?.id ===
+                                                            memberProfile?.id
+                                                        ) {
+                                                            form.setValue(
+                                                                'comaker_member_profile_id',
+                                                                undefined as unknown as TEntityId
+                                                            )
+                                                            form.setValue(
+                                                                'comaker_member_profile',
+                                                                undefined
+                                                            )
+                                                        }
+                                                    }}
+                                                />
+                                            )}
+                                            <div className="space-y-2 flex-1 bg-gradient-to-br flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl p-4">
+                                                {memberProfile ? (
+                                                    <>
+                                                        <MemberProfileInfoViewCard
+                                                            className="w-full"
+                                                            memberProfile={
+                                                                memberProfile
+                                                            }
+                                                        />
+                                                        <Button
+                                                            size="sm"
+                                                            type="button"
+                                                            onClick={() => {
+                                                                field.onChange(
+                                                                    undefined
+                                                                )
+                                                                form.setValue(
+                                                                    'member_profile',
+                                                                    undefined
+                                                                )
+                                                            }}
+                                                            variant="secondary"
+                                                            className="w-full"
+                                                        >
+                                                            Replace
+                                                        </Button>
+                                                    </>
+                                                ) : (
+                                                    <div className="p-4 flex-col items-center justify-center">
+                                                        <UserIcon className="size-12 mx-auto text-muted-foreground" />
+                                                        <p className="text-center text-muted-foreground">
+                                                            Please Select Member
+                                                        </p>
+                                                        <p className="text-center text-muted-foreground/80 text-xs">
+                                                            select member or
+                                                            press 'CTRL + Enter'
+                                                            to show picker | or
+                                                            press 'Shit + S' to
+                                                            scan QR Code
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                <MemberPicker
+                                                    modalState={{
+                                                        ...memberPickerModal,
+                                                    }}
+                                                    value={memberProfile}
+                                                    placeholder="Select Member"
+                                                    triggerClassName="hidden"
+                                                    onSelect={(
+                                                        memberProfile
+                                                    ) => {
+                                                        field.onChange(
+                                                            memberProfile?.id
+                                                        )
+                                                        form.setValue(
+                                                            'member_profile',
+                                                            memberProfile,
+                                                            {
+                                                                shouldDirty: true,
+                                                            }
+                                                        )
+
+                                                        if (
+                                                            comaker_member_profile?.id ===
+                                                            memberProfile?.id
+                                                        ) {
+                                                            form.setValue(
+                                                                'comaker_member_profile_id',
+                                                                undefined as unknown as TEntityId
+                                                            )
+                                                            form.setValue(
+                                                                'comaker_member_profile',
+                                                                undefined
+                                                            )
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )
+                                }}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="account_id"
+                                label="Loan Account"
+                                render={({ field }) => (
+                                    <AccountPicker
+                                        mode="loan"
+                                        value={form.getValues('account')}
+                                        placeholder="Select Loan Account"
+                                        onSelect={(account) => {
+                                            field.onChange(account?.id)
+
+                                            form.setValue('account', account)
+                                        }}
+                                        disabled={isDisabled(field.name)}
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <Separator />
+
+                        <fieldset
+                            disabled={!memberProfile}
+                            className="space-y-4 rounded-xl p-4 bg-popover"
+                        >
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-9">
+                                    <p className="font-medium">
+                                        <TextFileFillIcon className="inline text-primary" />{' '}
+                                        Loan Details
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Specify loan type, amount, and payment
+                                        terms
+                                    </p>
+                                </div>
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="loan_type"
+                                    className="col-span-3"
+                                    render={({ field }) => (
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger className="w-full capitalize">
+                                                    <SelectValue
+                                                        placeholder="Select Loan Type"
+                                                        className="capitalize"
+                                                    />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {LOAN_TYPE.map((loan_type) => (
+                                                    <SelectItem
+                                                        className="capitalize"
+                                                        value={loan_type}
+                                                    >
+                                                        {loan_type}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                            </div>
+
+                            {!memberProfile && (
+                                <FormErrorMessage errorMessage="Select member profile first to enable this section" />
+                            )}
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="applied_1"
+                                    label="Applied Amount *"
+                                    render={({ field }) => (
+                                        <Input
+                                            {...field}
+                                            id={field.name}
+                                            placeholder="Applied Amount"
+                                            className="border-primary/70 border-2"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="applied_2"
+                                    label={
+                                        <span>
+                                            Applied Amount{' '}
+                                            <span className="text-muted-foreground ml-1 text-xs">
+                                                (secondary)
+                                            </span>
+                                        </span>
+                                    }
+                                    render={({ field }) => (
+                                        <Input
+                                            {...field}
+                                            id={field.name}
+                                            placeholder="Applied Amount (secondary)"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                />
+                            </div>
+
+                            <Separator />
+
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="mode_of_payment"
+                                        label="Mode of Payment"
+                                        className="shrink-0 w-fit col-span-4"
+                                        render={({ field }) => (
+                                            <RadioGroup
+                                                onValueChange={field.onChange}
+                                                value={field.value ?? ''}
+                                                className="flex gap-x-2"
+                                            >
+                                                {LOAN_MODE_OF_PAYMENT.map(
+                                                    (mop) => (
+                                                        <FormItem
+                                                            key={mop}
+                                                            className="flex items-center gap-4"
+                                                        >
+                                                            <label
+                                                                key={`mop-${mop}`}
+                                                                className="border-accent hover:bg-accent ease-in-out duration-100 bg-muted has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/40 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-6 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
+                                                            >
+                                                                <RadioGroupItem
+                                                                    value={mop}
+                                                                    id={`mop-${mop}`}
+                                                                    tabIndex={0}
+                                                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                                                />
+                                                                <p className="text-foreground capitalize text-xs leading-none font-medium pointer-events-none">
+                                                                    {mop}
+                                                                </p>
+                                                                {field.value ===
+                                                                    mop && (
+                                                                    <CheckIcon className="inline pointer-events-none" />
+                                                                )}
+                                                            </label>
+                                                        </FormItem>
+                                                    )
+                                                )}
+                                            </RadioGroup>
+                                        )}
+                                    />
+                                    <Separator
+                                        className="min-h-8 mt-6"
+                                        orientation="vertical"
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="terms"
+                                        label="Terms"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                id={field.name}
+                                                placeholder="Terms"
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
+                                {mode_of_payment === 'weekly' && (
+                                    <>
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            name="mode_of_payment_weekly"
+                                            label="Weekdays"
+                                            className="space-y-1 col-span-1"
+                                            render={({ field }) => (
+                                                <WeekdayCombobox {...field} />
+                                            )}
+                                        />
+                                    </>
+                                )}
+                                {mode_of_payment === 'semi-monthly' && (
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            name="mode_of_payment_semi_monthly_pay_1"
+                                            label="Pay 1 (Day of Month) *"
+                                            className="col-span-1"
+                                            render={({ field }) => (
+                                                <Input {...field} />
+                                            )}
+                                        />
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            name="mode_of_payment_semi_monthly_pay_2"
+                                            label="Pay 2 (Day of Month) *"
+                                            className="col-span-1"
+                                            render={({ field }) => (
+                                                <Input {...field} />
+                                            )}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            <Separator />
+
+                            <fieldset
+                                disabled={!memberProfile}
+                                className="flex gap-x-2"
+                            >
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="official_receipt_number"
+                                    label={
+                                        <span>
+                                            OR{' '}
+                                            <HashIcon className="inline text-muted-foreground" />
+                                        </span>
+                                    }
+                                    className="col-span-1"
+                                    render={({ field }) => <Input {...field} />}
+                                />
+                                <Separator
+                                    orientation="vertical"
+                                    className="min-h-9 mt-6"
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="previous_loan_id"
+                                    label="Change prev. loan to amt. applied"
+                                    className="col-span-1"
+                                    render={({ field }) => (
+                                        <LoanPicker
+                                            mode="member-profile"
+                                            value={previous_loan}
+                                            memberProfileId={
+                                                form.getValues(
+                                                    'member_profile_id'
+                                                ) as TEntityId
+                                            }
+                                            disabled={
+                                                memberProfile === undefined
+                                            }
+                                            placeholder="Select previous loan"
+                                            onSelect={(loan) => {
+                                                field.onChange(loan?.id)
                                                 form.setValue(
-                                                    'member_profile',
-                                                    memberProfile,
-                                                    {
-                                                        shouldDirty: true,
-                                                    }
+                                                    'previous_loan',
+                                                    loan
                                                 )
                                             }}
                                         />
-                                        <div className="space-y-2 flex-1 bg-gradient-to-br min-h-56 flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl p-4">
-                                            {memberProfile ? (
-                                                <>
-                                                    <MemberProfileInfoViewCard
-                                                        className="w-full"
-                                                        memberProfile={
-                                                            memberProfile
-                                                        }
-                                                    />
-                                                    <Button
-                                                        size="sm"
-                                                        onClick={() => {
-                                                            field.onChange(
-                                                                undefined
-                                                            )
-                                                            form.setValue(
-                                                                'member_profile',
-                                                                undefined
-                                                            )
-                                                        }}
-                                                        variant="secondary"
-                                                        className="w-full"
+                                    )}
+                                />
+                                <Separator
+                                    orientation="vertical"
+                                    className="min-h-9 mt-6"
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="is_add_on"
+                                    render={({ field }) => (
+                                        <div className="border-input mt-5 has-data-[state=checked]:border-primary/50 border-2 has-data-[state=checked]:bg-primary/20 duration-200 ease-in-out relative flex w-full items-center gap-2 rounded-xl px-2 py-0.5 shadow-xs outline-none">
+                                            <Switch
+                                                id="loan-add-on"
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                aria-describedby={`loan-add-on-description`}
+                                                className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                            />
+                                            <div className="flex grow items-center gap-3">
+                                                <ShapesIcon className="text-primary size-4" />
+                                                <div className="text-xs">
+                                                    <Label
+                                                        htmlFor={'loan-add-on'}
+                                                        className="text-xs"
                                                     >
-                                                        Replace
-                                                    </Button>
-                                                </>
-                                            ) : (
-                                                <div className="p-4 flex-col items-center justify-center">
-                                                    <UserIcon className="size-12 mx-auto text-muted-foreground" />
-                                                    <p className="text-center text-muted-foreground">
-                                                        Please Select Member
-                                                    </p>
-                                                    <p className="text-center text-muted-foreground/80 text-xs">
-                                                        select member or press
-                                                        'Enter' to show picker |
-                                                        or press 'S' to scan QR
-                                                        Code
+                                                        Add-On{' '}
+                                                    </Label>
+                                                    <p
+                                                        id="loan-add-on-description"
+                                                        className="text-muted-foreground text-xs"
+                                                    >
+                                                        Include Add-On&apos;s
                                                     </p>
                                                 </div>
-                                            )}
-                                            <MemberPicker
-                                                modalState={{
-                                                    ...memberPickerModal,
-                                                }}
-                                                value={memberProfile}
-                                                placeholder="Select Member"
-                                                triggerClassName="hidden"
-                                                onSelect={(memberProfile) => {
-                                                    field.onChange(
-                                                        memberProfile?.id
-                                                    )
-                                                    form.setValue(
-                                                        'member_profile',
-                                                        memberProfile,
-                                                        {
-                                                            shouldDirty: true,
-                                                        }
-                                                    )
-                                                }}
-                                            />
+                                            </div>
                                         </div>
-                                    </div>
-                                )
-                            }}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="account_id"
-                            label="Account"
-                            render={({ field }) => (
-                                <AccountPicker
-                                    mode="loan"
-                                    value={form.getValues('account')}
-                                    placeholder="Select Account"
-                                    onSelect={(account) => {
-                                        field.onChange(account?.id)
-
-                                        form.setValue('account', account)
-                                    }}
-                                    disabled={isDisabled(field.name)}
+                                    )}
                                 />
-                            )}
-                        />
-                        <div className="flex gap-x-4">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="mode_of_payment"
-                                label="Mode of Payment"
-                                className="shrink-0 w-fit"
-                                render={({ field }) => (
-                                    <RadioGroup
-                                        onValueChange={field.onChange}
-                                        value={field.value ?? ''}
-                                        className="flex gap-x-2"
-                                    >
-                                        {LOAN_MODE_OF_PAYMENT.map((mop) => (
-                                            <FormItem
-                                                key={mop}
-                                                className="flex items-center gap-4"
-                                            >
-                                                <label
-                                                    key={`mop-${mop}`}
-                                                    className="border-accent hover:bg-accent ease-in-out duration-100 bg-muted has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/40 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-6 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
-                                                >
-                                                    <RadioGroupItem
-                                                        value={mop}
-                                                        id={`mop-${mop}`}
-                                                        className="sr-only after:absolute after:inset-0"
-                                                    />
-                                                    <p className="text-foreground capitalize text-xs leading-none font-medium">
-                                                        {mop}
-                                                    </p>
-                                                    {field.value === mop && (
-                                                        <CheckIcon className="inline" />
-                                                    )}
-                                                </label>
-                                            </FormItem>
-                                        ))}
-                                    </RadioGroup>
-                                )}
-                            />
-                            {mode_of_payment === 'weekly' && (
-                                <>
-                                    <Separator
-                                        role="none"
-                                        orientation="vertical"
-                                        className="!min-h-12 my-3"
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mode_of_payment_weekly"
-                                        label="Weekdays"
-                                        className="space-y-1 col-span-1"
-                                        render={({ field }) => (
-                                            <WeekdayCombobox {...field} />
-                                        )}
-                                    />
-                                </>
-                            )}
-                            {mode_of_payment === 'semi-monthly' && (
-                                <>
-                                    <Separator
-                                        role="none"
-                                        orientation="vertical"
-                                        className="!min-h-12 my-3"
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mode_of_payment_semi_monthly_pay_1"
-                                        label="Pay 1"
-                                        className="col-span-1"
-                                        render={({ field }) => (
-                                            <Input {...field} />
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mode_of_payment_semi_monthly_pay_2"
-                                        label="Pay 2"
-                                        className="col-span-1"
-                                        render={({ field }) => (
-                                            <Input {...field} />
-                                        )}
-                                    />
-                                </>
-                            )}
-                        </div>
+                            </fieldset>
+                        </fieldset>
 
-                        <div className="flex gap-x-4 items-center">
+                        <Separator />
+
+                        <fieldset
+                            disabled={!memberProfile}
+                            className="space-y-4 bg-popover rounded-xl p-4"
+                        >
+                            <div>
+                                <p className="font-medium">
+                                    <BadgeExclamationIcon className="inline text-primary" />{' '}
+                                    Additional Info
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    Co-maker details, and loan purpose
+                                </p>
+                            </div>
+
+                            {!memberProfile && (
+                                <FormErrorMessage errorMessage="Select member profile first to enable this section" />
+                            )}
                             <FormFieldWrapper
                                 control={form.control}
                                 name="collector_place"
                                 label="Collector"
-                                className="shrink-0 w-fit"
+                                className="shrink-0 w-full"
                                 render={({ field }) => (
                                     <RadioGroup
                                         value={field.value ?? ''}
                                         onValueChange={field.onChange}
-                                        className="flex gap-x-2"
+                                        className="grid grid-cols-2 gap-2"
                                     >
-                                        <FormItem className="flex items-center gap-4">
-                                            <div className="border-input has-data-[state=checked]:bg-gradient-to-t hover:bg-accent ease-in-out duration-100 from-primary/30 has-data-[state=checked]:border-primary/50 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border px-6 py-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px]">
+                                        <FormItem>
+                                            <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
                                                 <RadioGroupItem
                                                     value="field"
                                                     id="collector-field"
-                                                    className="sr-only"
+                                                    aria-describedby="collector-field-description"
+                                                    className="order-1 after:absolute after:inset-0"
                                                 />
-                                                <PinLocationIcon
-                                                    size={20}
-                                                    aria-hidden="true"
-                                                    className="opacity-60"
-                                                />
-                                                <label
-                                                    htmlFor="collector-field"
-                                                    className="text-foreground cursor-pointer text-xs leading-none font-medium after:absolute after:inset-0"
-                                                >
-                                                    Field
-                                                </label>
+                                                <div className="flex grow items-start gap-3">
+                                                    <PinLocationIcon
+                                                        aria-hidden="true"
+                                                        className="shrink-0 size-4 opacity-60"
+                                                    />
+                                                    <div>
+                                                        <label
+                                                            htmlFor="collector-field"
+                                                            className="text-foreground text-sm font-medium cursor-pointer"
+                                                        >
+                                                            Field Collection
+                                                            <span className="text-muted-foreground text-xs leading-[inherit] font-normal ml-1">
+                                                                (On-site)
+                                                            </span>
+                                                        </label>
+                                                        <p
+                                                            id="collector-field-description"
+                                                            className="text-muted-foreground text-xs"
+                                                        >
+                                                            Collector visits
+                                                            member's location
+                                                            for payment
+                                                            collection
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </FormItem>
 
-                                        <FormItem className="flex items-center gap-4">
-                                            <div className="border-input hover:bg-accent has-data-[state=checked]:bg-gradient-to-t from-primary/30 ease-in-out duration-100 to-accent/80 has-data-[state=checked]:border-primary/50 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border px-6 py-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px]">
+                                        <FormItem>
+                                            <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
                                                 <RadioGroupItem
                                                     value="office"
                                                     id="collector-office"
-                                                    className="sr-only"
+                                                    aria-describedby="collector-office-description"
+                                                    className="order-1 after:absolute after:inset-0"
                                                 />
-                                                <BuildingBranchIcon
-                                                    size={20}
-                                                    aria-hidden="true"
-                                                    className="opacity-60"
-                                                />
-                                                <label
-                                                    htmlFor="collector-office"
-                                                    className="text-foreground cursor-pointer text-xs leading-none font-medium after:absolute after:inset-0"
-                                                >
-                                                    Office
-                                                </label>
+                                                <div className="flex grow items-start gap-3">
+                                                    <BuildingBranchIcon
+                                                        aria-hidden="true"
+                                                        className="shrink-0 size-4 opacity-60"
+                                                    />
+                                                    <div>
+                                                        <label
+                                                            htmlFor="collector-office"
+                                                            className="text-foreground text-sm font-medium cursor-pointer"
+                                                        >
+                                                            Office Collection
+                                                            <span className="text-muted-foreground text-xs leading-[inherit] font-normal ml-1">
+                                                                (Branch)
+                                                            </span>
+                                                        </label>
+                                                        <p
+                                                            id="collector-office-description"
+                                                            className="text-muted-foreground text-xs"
+                                                        >
+                                                            Collector receives
+                                                            payments at the
+                                                            office or branch
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </FormItem>
                                     </RadioGroup>
                                 )}
                             />
-                            <Separator
-                                orientation="vertical"
-                                className="!min-h-20"
-                            />
+
+                            <Separator />
 
                             <FormFieldWrapper
                                 control={form.control}
                                 name="comaker_type"
                                 label="Comaker"
-                                className="shrink-0 w-fit"
+                                className="shrink-0 w-full"
                                 render={({ field }) => (
                                     <RadioGroup
                                         value={field.value ?? ''}
                                         onValueChange={field.onChange}
-                                        className="flex gap-x-2"
+                                        className="grid grid-cols-3 gap-2"
                                     >
-                                        <FormItem className="flex items-center gap-4">
-                                            <div className="border-input hover:bg-accent has-data-[state=checked]:bg-gradient-to-t ease-in-out duration-100 from-primary/30 has-data-[state=checked]:border-primary/50 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border px-6 py-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px]">
+                                        <FormItem>
+                                            <div className="border-input has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/10 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-xl border-2 p-4 shadow-xs outline-none">
                                                 <RadioGroupItem
                                                     value="member"
                                                     id="comaker-member"
-                                                    className="sr-only"
+                                                    aria-describedby="comaker-member-description"
+                                                    className="order-1 after:absolute after:inset-0"
                                                 />
-                                                <UserIcon
-                                                    size={20}
-                                                    aria-hidden="true"
-                                                    className="opacity-60"
-                                                />
-                                                <label
-                                                    htmlFor="comaker-member"
-                                                    className="text-foreground cursor-pointer text-xs leading-none font-medium after:absolute after:inset-0"
-                                                >
-                                                    Member
-                                                </label>
+                                                <div className="flex grow items-center gap-3">
+                                                    <UserIcon
+                                                        size={32}
+                                                        aria-hidden="true"
+                                                        className="shrink-0 opacity-60"
+                                                    />
+                                                    <div className="grid grow gap-2">
+                                                        <label
+                                                            htmlFor="comaker-member"
+                                                            className="text-foreground text-sm font-medium cursor-pointer"
+                                                        >
+                                                            Member
+                                                            <span className="text-muted-foreground text-xs leading-[inherit] font-normal ml-1">
+                                                                (Co-member)
+                                                            </span>
+                                                        </label>
+                                                        <p
+                                                            id="comaker-member-description"
+                                                            className="text-muted-foreground text-xs"
+                                                        >
+                                                            Another cooperative
+                                                            member acts as
+                                                            co-maker
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </FormItem>
-                                        <FormItem className="flex items-center gap-4">
-                                            <div className="border-input hover:bg-accent has-data-[state=checked]:bg-gradient-to-t ease-in-out duration-100 from-primary/30 has-data-[state=checked]:border-primary/50 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border px-6 py-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px]">
+
+                                        <FormItem>
+                                            <div className="border-input has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/10 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-xl border-2 p-4 shadow-xs outline-none">
                                                 <RadioGroupItem
                                                     value="deposit"
                                                     id="comaker-deposit"
-                                                    className="sr-only"
+                                                    aria-describedby="comaker-deposit-description"
+                                                    className="order-1 after:absolute after:inset-0"
                                                 />
-                                                <HandDepositIcon
-                                                    size={20}
-                                                    aria-hidden="true"
-                                                    className="opacity-60"
-                                                />
-                                                <label
-                                                    htmlFor="comaker-deposit"
-                                                    className="text-foreground cursor-pointer text-xs leading-none font-medium after:absolute after:inset-0"
-                                                >
-                                                    Deposit
-                                                </label>
+                                                <div className="flex grow items-center gap-3">
+                                                    <HandDepositIcon
+                                                        size={32}
+                                                        aria-hidden="true"
+                                                        className="shrink-0 opacity-60"
+                                                    />
+                                                    <div className="grid grow gap-2">
+                                                        <label
+                                                            htmlFor="comaker-deposit"
+                                                            className="text-foreground text-sm font-medium cursor-pointer"
+                                                        >
+                                                            Deposit
+                                                            <span className="text-muted-foreground text-xs leading-[inherit] font-normal ml-1">
+                                                                (Hold-out)
+                                                            </span>
+                                                        </label>
+                                                        <p
+                                                            id="comaker-deposit-description"
+                                                            className="text-muted-foreground text-xs"
+                                                        >
+                                                            Member's deposit
+                                                            serves as
+                                                            collateral/co-maker
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </FormItem>
-                                        <FormItem className="flex items-center gap-4">
-                                            <div className="border-input hover:bg-accent has-data-[state=checked]:bg-gradient-to-t ease-in-out duration-100 from-primary/30 has-data-[state=checked]:border-primary/50 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border px-6 py-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px]">
+
+                                        <FormItem>
+                                            <div className="border-input has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/10 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-xl border-2 p-4 shadow-xs outline-none">
                                                 <RadioGroupItem
                                                     value="others"
                                                     id="comaker-others"
-                                                    className="sr-only"
+                                                    aria-describedby="comaker-others-description"
+                                                    className="order-1 after:absolute after:inset-0"
                                                 />
-                                                <DotsHorizontalIcon
-                                                    size={20}
-                                                    aria-hidden="true"
-                                                    className="opacity-60"
-                                                />
-                                                <label
-                                                    htmlFor="comaker-others"
-                                                    className="text-foreground cursor-pointer text-xs leading-none font-medium after:absolute after:inset-0"
-                                                >
-                                                    Other
-                                                </label>
+                                                <div className="flex grow items-center gap-3">
+                                                    <DotsHorizontalIcon
+                                                        size={32}
+                                                        aria-hidden="true"
+                                                        className="shrink-0 opacity-60"
+                                                    />
+                                                    <div className="grid grow gap-2">
+                                                        <label
+                                                            htmlFor="comaker-others"
+                                                            className="text-foreground text-sm font-medium cursor-pointer"
+                                                        >
+                                                            Others
+                                                            <span className="text-muted-foreground text-xs leading-[inherit] font-normal ml-1">
+                                                                (External)
+                                                            </span>
+                                                        </label>
+                                                        <p
+                                                            id="comaker-others-description"
+                                                            className="text-muted-foreground text-xs"
+                                                        >
+                                                            Non-member
+                                                            individual or
+                                                            external guarantor
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </FormItem>
                                     </RadioGroup>
                                 )}
                             />
-                        </div>
-                    </fieldset>
+
+                            {comaker_type === 'member' && (
+                                <>
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="comaker_member_profile_id"
+                                        label="Comaker"
+                                        className="shrink-0 w-full"
+                                        render={({ field }) => (
+                                            <span className="flex gap-x-2 items-center">
+                                                <MemberPicker
+                                                    triggerClassName="flex-1"
+                                                    value={form.getValues(
+                                                        'comaker_member_profile'
+                                                    )}
+                                                    onSelect={(
+                                                        memberProfile
+                                                    ) => {
+                                                        if (
+                                                            memberProfile &&
+                                                            memberProfile.id ===
+                                                                form.getValues(
+                                                                    'member_profile_id'
+                                                                )
+                                                        ) {
+                                                            return toast.warning(
+                                                                "Can't select member as comaker himself/herself, select other member instead."
+                                                            )
+                                                        }
+
+                                                        field.onChange(
+                                                            memberProfile?.id
+                                                        )
+
+                                                        form.setValue(
+                                                            'comaker_member_profile',
+                                                            memberProfile
+                                                        )
+                                                    }}
+                                                />
+                                                {comaker_member_profile && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="secondary"
+                                                        onClick={() => {
+                                                            form.setValue(
+                                                                'comaker_member_profile_id',
+                                                                undefined as unknown as TEntityId
+                                                            )
+                                                            form.setValue(
+                                                                'comaker_member_profile',
+                                                                undefined
+                                                            )
+                                                        }}
+                                                        className="shrink-0"
+                                                        size="icon"
+                                                    >
+                                                        <XIcon />
+                                                    </Button>
+                                                )}
+                                            </span>
+                                        )}
+                                    />
+                                </>
+                            )}
+
+                            {comaker_type === 'others' && (
+                                <>
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="comaker_collateral_id"
+                                        label="Comaker Collateral"
+                                        className="shrink-0"
+                                        render={({ field }) => (
+                                            <span className="flex gap-x-2 items-center">
+                                                <CollateralCombobox
+                                                    {...field}
+                                                    onChange={(collateral) =>
+                                                        field.onChange(
+                                                            collateral?.id
+                                                        )
+                                                    }
+                                                    className="flex-1"
+                                                />
+                                                {form.getValues(
+                                                    'comaker_collateral_id'
+                                                ) !== undefined && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="secondary"
+                                                        onClick={() =>
+                                                            field.onChange(
+                                                                undefined
+                                                            )
+                                                        }
+                                                        className="shrink-0"
+                                                        size="icon"
+                                                    >
+                                                        <XIcon />
+                                                    </Button>
+                                                )}
+                                            </span>
+                                        )}
+                                    />
+                                </>
+                            )}
+
+                            {comaker_type === 'deposit' && (
+                                <>
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="comaker_deposit_member_accounting_ledger_id"
+                                        label="Comaker Member Deposit Account Ledger"
+                                        className="shrink-0"
+                                        render={({ field }) => (
+                                            <span className="flex gap-x-2 items-center">
+                                                <MemberAccountingLedgerPicker
+                                                    mode="member"
+                                                    triggerClassName="flex-1"
+                                                    memberProfileId={
+                                                        memberProfile.id
+                                                    }
+                                                    value={
+                                                        comaker_deposit_member_accounting_ledger
+                                                    }
+                                                    onSelect={(
+                                                        memberAccountingLedger
+                                                    ) => {
+                                                        field.onChange(
+                                                            memberAccountingLedger.id
+                                                        )
+
+                                                        form.setValue(
+                                                            'comaker_deposit_member_accounting_ledger',
+                                                            memberAccountingLedger
+                                                        )
+                                                    }}
+                                                />
+                                                {form.getValues(
+                                                    'comaker_deposit_member_accounting_ledger_id'
+                                                ) !== undefined && (
+                                                    <Button
+                                                        type="button"
+                                                        variant="secondary"
+                                                        onClick={() => {
+                                                            field.onChange(
+                                                                undefined
+                                                            )
+                                                            form.setValue(
+                                                                'comaker_deposit_member_accounting_ledger',
+                                                                undefined
+                                                            )
+                                                        }}
+                                                        className="shrink-0"
+                                                        size="icon"
+                                                    >
+                                                        <XIcon />
+                                                    </Button>
+                                                )}
+                                            </span>
+                                        )}
+                                    />
+                                </>
+                            )}
+                        </fieldset>
+                    </div>
                 </fieldset>
                 <FormFooterResetSubmit
-                    className="p-4"
+                    className="p-4 sticky bottom-0 mx-4 mb-4 bg-popover/70 rounded-xl"
                     error={error}
                     readOnly={formProps.readOnly}
                     isLoading={isPending}
@@ -572,7 +1106,7 @@ const LoanTransactionCreateUpdateForm = ({
                     //     formMode === 'create' && !areRequiredFieldsFilled
                     // }
                     submitText={
-                        formMode === 'update' ? 'Update' : ''
+                        formMode === 'update' ? 'Update' : 'Create'
                         // : areRequiredFieldsFilled
                         //   ? 'Creating...'
                         //   : 'Save'
@@ -601,7 +1135,9 @@ export const LoanTransactionCreateUpdateFormModal = ({
         <Modal
             title=""
             description=""
-            className={cn('p-0 !max-w-7xl', className)}
+            titleClassName="sr-only"
+            descriptionClassName="sr-only"
+            className={cn('p-0 !max-w-7xl gap-y-0', className)}
             {...props}
         >
             <LoanTransactionCreateUpdateForm

@@ -1,3 +1,7 @@
+import { toast } from 'sonner'
+
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+
 import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -8,6 +12,7 @@ import LoanTransactionAction from '../loan-transaction-table/row-action-context'
 
 const LoansPage = () => {
     const createModal = useModalState()
+    const { data } = useTransactionBatchStore()
 
     return (
         <PageContainer>
@@ -19,7 +24,13 @@ const LoansPage = () => {
                 mode="branch"
                 toolbarProps={{
                     createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
+                        onClick: () => {
+                            if (!data)
+                                return toast.warning(
+                                    'Please create transaction batch first before making any loan.'
+                                )
+                            createModal.onOpenChange(true)
+                        },
                     },
                 }}
                 actionComponent={LoanTransactionAction}
