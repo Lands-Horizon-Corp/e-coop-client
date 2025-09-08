@@ -3,7 +3,10 @@ import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
-import { TransactionDetails } from '@/modules/transaction'
+import {
+    PaymentsEntryListSkeleton,
+    TransactionDetails,
+} from '@/modules/transaction'
 import { useFilteredPaginatedTransaction } from '@/modules/transactions'
 import { PaginationState } from '@tanstack/react-table'
 
@@ -20,7 +23,6 @@ import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
 
-import TransactionSkeletonCard from '../skeleton/transaction-skeleton-card'
 import TransactionNoFound from './transaction-no-found'
 
 export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
@@ -69,15 +71,6 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
             disableTextInputs: true,
         }
     )
-    if (isLoadingCurrentTransaction) {
-        return (
-            <div className="space-y-4">
-                {Array.from({ length: 3 }).map((_, index) => (
-                    <TransactionSkeletonCard key={index} />
-                ))}
-            </div>
-        )
-    }
 
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
@@ -106,29 +99,34 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                                 isLoading={isLoadingCurrentTransaction}
                             />
                         </h1>
-                        <ScrollArea>
-                            <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
-                                {isNoCurrentTransaction ? (
-                                    <TransactionNoFound />
-                                ) : (
-                                    CurrentTransaction?.data.map(
-                                        (transaction) => (
-                                            <div key={transaction.id}>
-                                                <TransactionDetails
-                                                    item={transaction}
-                                                    onClick={() =>
-                                                        handleNavigate(
-                                                            transaction.id,
-                                                            fullPath
-                                                        )
-                                                    }
-                                                />
-                                            </div>
+                        {isLoadingCurrentTransaction ? (
+                            <PaymentsEntryListSkeleton itemNumber={10} />
+                        ) : (
+                            <ScrollArea>
+                                <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
+                                    {isNoCurrentTransaction ? (
+                                        <TransactionNoFound />
+                                    ) : (
+                                        CurrentTransaction?.data.map(
+                                            (transaction) => (
+                                                <div key={transaction.id}>
+                                                    <TransactionDetails
+                                                        item={transaction}
+                                                        onClick={() =>
+                                                            handleNavigate(
+                                                                transaction.id,
+                                                                fullPath
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            )
                                         )
-                                    )
-                                )}
-                            </div>
-                        </ScrollArea>
+                                    )}
+                                </div>
+                            </ScrollArea>
+                        )}
+
                         <div className="sticky bottom-0 left-0 right-0">
                             <MiniPaginationBar
                                 pagination={{

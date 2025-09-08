@@ -98,10 +98,6 @@ const TransactionCurrentPaymentEntry = ({
         isSuccess: isSuccess,
     })
 
-    if (isLoading) {
-        return <PaymentsEntryListSkeleton />
-    }
-
     const hasPayments =
         generalLedgerBasedTransaction &&
         generalLedgerBasedTransaction.data.length > 0
@@ -124,141 +120,174 @@ const TransactionCurrentPaymentEntry = ({
             </div>
             <Separator />
             <ScrollArea className="flex h-full max-h-[60vh] overflow-x-auto">
-                <div className="space-y-1.5">
-                    {hasPayments ? (
-                        generalLedgerBasedTransaction?.data.map(
-                            (payment, idx) => (
-                                <div>
-                                    <Card
-                                        key={idx}
-                                        className="!bg-background/90 p-3"
-                                    >
-                                        <CardContent
-                                            className={cn('w-full p-0 pr-1')}
+                {isLoading ? (
+                    <PaymentsEntryListSkeleton itemNumber={4} />
+                ) : (
+                    <div className="space-y-1.5">
+                        {hasPayments ? (
+                            generalLedgerBasedTransaction?.data.map(
+                                (payment, idx) => (
+                                    <div>
+                                        <Card
+                                            key={idx}
+                                            className="!bg-background/90 p-3"
                                         >
-                                            <div className="flex w-full items-center gap-x-2">
-                                                <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                                    <LedgerSourceBadge
-                                                        source={payment.source}
-                                                        className="rounded-lg size-10 flex items-center justify-center"
-                                                        showValue={false}
-                                                    />
-                                                </div>
-                                                <div className="w-full">
-                                                    <div className="b flex w-full items-center gap-x-2">
-                                                        <p className="grow flex flex-col">
-                                                            <span className="inline-flex items-center gap-x-2 text-sm font-semibold">
-                                                                {
-                                                                    payment
-                                                                        .account
-                                                                        ?.name
-                                                                }
-                                                            </span>
-                                                            <span className="text-[11px] text-muted-foreground">
-                                                                {dateAgo(
-                                                                    payment.created_at
-                                                                )}
-                                                            </span>
-                                                        </p>
-
-                                                        <p className="text-primary">
-                                                            ₱{' '}
-                                                            {commaSeparators(
-                                                                (
-                                                                    payment.credit ||
-                                                                    payment.debit ||
-                                                                    0
-                                                                ).toString()
-                                                            )}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <Accordion
-                                                type="single"
-                                                collapsible
-                                                className="w-full mt-2"
+                                            <CardContent
+                                                className={cn(
+                                                    'w-full p-0 pr-1'
+                                                )}
                                             >
-                                                <AccordionItem
-                                                    value="item-1"
-                                                    className={cn('border-0')}
-                                                >
-                                                    <AccordionTrigger
-                                                        className={cn(
-                                                            'py-0 text-xs'
-                                                        )}
-                                                    >
-                                                        view details
-                                                    </AccordionTrigger>
-                                                    <AccordionContent className="py-2">
-                                                        <PaymentsEntryItem
-                                                            label="reference number"
-                                                            copyText={
-                                                                payment.reference_number
+                                                <div className="flex w-full items-center gap-x-2">
+                                                    <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                                        <LedgerSourceBadge
+                                                            source={
+                                                                payment.source
                                                             }
-                                                            value={
-                                                                payment.reference_number
-                                                            }
+                                                            className="rounded-lg size-10 flex items-center justify-center"
+                                                            showValue={false}
                                                         />
-                                                        <PaymentsEntryItem
-                                                            label="payment type"
-                                                            value={
-                                                                payment.type_of_payment_type
-                                                            }
-                                                        />
-                                                        <PaymentsEntryItem
-                                                            label="print number"
-                                                            value={String(
-                                                                payment.print_number
-                                                            )}
-                                                        />
-                                                        <PaymentsEntryItem
-                                                            label="note"
-                                                            value={
-                                                                payment.description
-                                                            }
-                                                        />
-                                                        {[
-                                                            'online',
-                                                            'bank',
-                                                            'check',
-                                                        ].includes(
-                                                            payment.payment_type
-                                                                ?.type ?? ''
-                                                        ) && (
-                                                            <>
-                                                                <Separator className="my-2" />
-                                                                <PaymentsEntryItem
-                                                                    label="Bank Details"
-                                                                    className="font-bold"
-                                                                />
-                                                                <PaymentsEntryItem
-                                                                    label="name"
-                                                                    value={
+                                                    </div>
+                                                    <div className="w-full">
+                                                        <div className="b flex w-full items-center gap-x-2">
+                                                            <p className="grow flex flex-col">
+                                                                <span className="inline-flex items-center gap-x-2 text-sm font-semibold">
+                                                                    {
                                                                         payment
-                                                                            .bank
+                                                                            .account
                                                                             ?.name
                                                                     }
-                                                                />
-                                                                <PaymentsEntryItem
-                                                                    label="reference number"
-                                                                    value={
-                                                                        payment.bank_reference_number
-                                                                    }
-                                                                />
-                                                                <PaymentsEntryItem
-                                                                    label="entry date"
-                                                                    value={toReadableDate(
-                                                                        payment.entry_date
+                                                                </span>
+                                                                <span className="text-[11px] text-muted-foreground">
+                                                                    {dateAgo(
+                                                                        payment.created_at
                                                                     )}
-                                                                />
-                                                                <PaymentsEntryItem
-                                                                    label="Proof of Payment"
-                                                                    className="font-bold"
-                                                                />
+                                                                </span>
+                                                            </p>
+
+                                                            <p className="text-primary">
+                                                                ₱{' '}
+                                                                {commaSeparators(
+                                                                    (
+                                                                        payment.credit ||
+                                                                        payment.debit ||
+                                                                        0
+                                                                    ).toString()
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <Accordion
+                                                    type="single"
+                                                    collapsible
+                                                    className="w-full mt-2"
+                                                >
+                                                    <AccordionItem
+                                                        value="item-1"
+                                                        className={cn(
+                                                            'border-0'
+                                                        )}
+                                                    >
+                                                        <AccordionTrigger
+                                                            className={cn(
+                                                                'py-0 text-xs'
+                                                            )}
+                                                        >
+                                                            view details
+                                                        </AccordionTrigger>
+                                                        <AccordionContent className="py-2">
+                                                            <PaymentsEntryItem
+                                                                label="reference number"
+                                                                copyText={
+                                                                    payment.reference_number
+                                                                }
+                                                                value={
+                                                                    payment.reference_number
+                                                                }
+                                                            />
+                                                            <PaymentsEntryItem
+                                                                label="payment type"
+                                                                value={
+                                                                    payment.type_of_payment_type
+                                                                }
+                                                            />
+                                                            <PaymentsEntryItem
+                                                                label="print number"
+                                                                value={String(
+                                                                    payment.print_number
+                                                                )}
+                                                            />
+                                                            <PaymentsEntryItem
+                                                                label="note"
+                                                                value={
+                                                                    payment.description
+                                                                }
+                                                            />
+                                                            {[
+                                                                'online',
+                                                                'bank',
+                                                                'check',
+                                                            ].includes(
+                                                                payment
+                                                                    .payment_type
+                                                                    ?.type ?? ''
+                                                            ) && (
+                                                                <>
+                                                                    <Separator className="my-2" />
+                                                                    <PaymentsEntryItem
+                                                                        label="Bank Details"
+                                                                        className="font-bold"
+                                                                    />
+                                                                    <PaymentsEntryItem
+                                                                        label="name"
+                                                                        value={
+                                                                            payment
+                                                                                .bank
+                                                                                ?.name
+                                                                        }
+                                                                    />
+                                                                    <PaymentsEntryItem
+                                                                        label="reference number"
+                                                                        value={
+                                                                            payment.bank_reference_number
+                                                                        }
+                                                                    />
+                                                                    <PaymentsEntryItem
+                                                                        label="entry date"
+                                                                        value={toReadableDate(
+                                                                            payment.entry_date
+                                                                        )}
+                                                                    />
+                                                                    <PaymentsEntryItem
+                                                                        label="Proof of Payment"
+                                                                        className="font-bold"
+                                                                    />
+                                                                    <PreviewMediaWrapper
+                                                                        media={
+                                                                            payment.proof_of_payment_media ||
+                                                                            undefined
+                                                                        }
+                                                                    >
+                                                                        <ImageDisplay
+                                                                            className="size-20 w-full rounded-xl"
+                                                                            src={
+                                                                                payment
+                                                                                    .proof_of_payment_media
+                                                                                    ?.download_url
+                                                                            }
+                                                                        />
+                                                                    </PreviewMediaWrapper>
+                                                                    <Separator className="my-5" />
+                                                                </>
+                                                            )}
+                                                            <PaymentsEntryItem
+                                                                label="Signature"
+                                                                className="font-bold"
+                                                            />
+                                                            <div>
                                                                 <PreviewMediaWrapper
                                                                     media={
-                                                                        payment.proof_of_payment_media ||
+                                                                        payment.signature_media ||
                                                                         undefined
                                                                     }
                                                                 >
@@ -266,47 +295,25 @@ const TransactionCurrentPaymentEntry = ({
                                                                         className="size-20 w-full rounded-xl"
                                                                         src={
                                                                             payment
-                                                                                .proof_of_payment_media
+                                                                                .signature_media
                                                                                 ?.download_url
                                                                         }
                                                                     />
                                                                 </PreviewMediaWrapper>
-                                                                <Separator className="my-5" />
-                                                            </>
-                                                        )}
-                                                        <PaymentsEntryItem
-                                                            label="Signature"
-                                                            className="font-bold"
-                                                        />
-                                                        <div>
-                                                            <PreviewMediaWrapper
-                                                                media={
-                                                                    payment.signature_media ||
-                                                                    undefined
-                                                                }
-                                                            >
-                                                                <ImageDisplay
-                                                                    className="size-20 w-full rounded-xl"
-                                                                    src={
-                                                                        payment
-                                                                            .signature_media
-                                                                            ?.download_url
-                                                                    }
-                                                                />
-                                                            </PreviewMediaWrapper>
-                                                        </div>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            </Accordion>
-                                        </CardContent>
-                                    </Card>
-                                </div>
+                                                            </div>
+                                                        </AccordionContent>
+                                                    </AccordionItem>
+                                                </Accordion>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                )
                             )
-                        )
-                    ) : (
-                        <TransactionNoCurrentPaymentFound />
-                    )}
-                </div>
+                        ) : (
+                            <TransactionNoCurrentPaymentFound />
+                        )}
+                    </div>
+                )}
             </ScrollArea>
             <MiniPaginationBar
                 pagination={{

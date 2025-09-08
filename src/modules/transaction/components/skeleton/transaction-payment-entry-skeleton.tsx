@@ -3,10 +3,10 @@ import { cn } from '@/helpers'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const PaymentsEntryListSkeleton = () => {
+const PaymentsEntryListSkeleton = ({ itemNumber }: { itemNumber: number }) => {
     return (
         <div className="h-full space-y-2">
-            {[...Array(5)].map((_, idx) => (
+            {[...Array(itemNumber)].map((_, idx) => (
                 <Card
                     key={idx}
                     className="!bg-background/90 text-secondary border-0 p-2"

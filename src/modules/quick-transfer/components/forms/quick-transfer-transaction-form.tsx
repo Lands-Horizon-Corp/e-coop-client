@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 
@@ -25,6 +27,7 @@ import {
 import { useGetUserSettings } from '@/modules/user-profile'
 import { useImagePreview } from '@/store/image-preview-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -58,9 +61,19 @@ export const QuickTransferTransactionForm = ({
     defaultValues,
     onSuccess,
     mode,
-    account,
+    // account,
 }: TransactionEntryFormProps) => {
-    const { userSettingOR } = useGetUserSettings()
+    const {
+        userSettingOR,
+        settings_accounting_withdraw_default_value,
+        settings_accounting_deposit_default_value,
+    } = useGetUserSettings()
+
+    const defaultAccount =
+        mode === 'withdraw'
+            ? settings_accounting_withdraw_default_value
+            : settings_accounting_deposit_default_value
+
     const queryClient = useQueryClient()
     const { isOpen } = useImagePreview()
 
@@ -77,8 +90,8 @@ export const QuickTransferTransactionForm = ({
         resolver: zodResolver(QuickWithdrawSchema),
         defaultValues: {
             ...defaultValues,
-            account_id: selectedAccount?.id,
-            account: account,
+            account: defaultAccount,
+            account_id: defaultAccount?.id,
         },
     })
 
@@ -152,6 +165,31 @@ export const QuickTransferTransactionForm = ({
     })
 
     const isFormIsDirty = form.formState.isDirty
+
+    useEffect(() => {
+        if (selectedAccount) {
+            form.setValue('account', selectedAccount)
+            form.setValue('account_id', selectedAccount?.id)
+        }
+        form.setFocus('amount')
+    }, [selectedAccount, form, selectedMember])
+
+    useHotkeys('A', (e) => {
+        form.setFocus('amount')
+        e.preventDefault()
+    })
+
+    useHotkeys(
+        'ctrl+Enter',
+        (e) => {
+            e.preventDefault()
+            handleSubmit()
+        },
+        {
+            enableOnFormTags: ['INPUT', 'SELECT', 'TEXTAREA'],
+        }
+    )
+
     return (
         <Form {...form}>
             <form onSubmit={handleSubmit} className="min-w-[300px] ">
@@ -222,7 +260,6 @@ export const QuickTransferTransactionForm = ({
                             <TransactionReferenceNumber
                                 {...field}
                                 value={field.value ?? ''}
-                                disabled={form.watch('or_auto_generated')}
                                 className="col-span-2 w-full"
                             />
                         )}

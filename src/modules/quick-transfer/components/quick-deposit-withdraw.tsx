@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { toast } from 'sonner'
 
 import { useGetById } from '@/modules/account'
@@ -26,7 +28,9 @@ import {
 import { TEntityId } from '@/types'
 
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
-    const { selectedMember, setSelectedAccount } = useDepositWithdrawStore()
+    const { selectedMember, setSelectedAccount, handleReset } =
+        useDepositWithdrawStore()
+
     const {
         settings_accounting_deposit_default_value_id,
         settings_accounting_withdraw_default_value_id,
@@ -38,6 +42,11 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
             : settings_accounting_withdraw_default_value_id
 
     const { data: account } = useGetById({ id: accountDefaultValue ?? '' })
+
+    useEffect(() => {
+        setSelectedAccount(undefined)
+        handleReset()
+    }, [mode, setSelectedAccount])
 
     return (
         <PageContainer className="flex w-full !overflow-hidden">
