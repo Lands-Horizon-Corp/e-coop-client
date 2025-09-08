@@ -91,7 +91,7 @@ export const generateSidebarGroups = (
                 {
                     type: 'item',
                     icon: HandCoinsIcon,
-                    title: 'Transaction',
+                    title: 'Payment',
                     url: `${baseUrl}/transaction/`,
                     userType: ['employee', 'owner'],
                     shortDescription: 'Manage fund transfers and movements',

@@ -32,21 +32,20 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
         useDepositWithdrawStore()
 
     const {
-        settings_accounting_deposit_default_value_id,
-        settings_accounting_withdraw_default_value_id,
+        settings_accounting_deposit_default_value,
+        settings_accounting_withdraw_default_value,
     } = useGetUserSettings()
 
     const accountDefaultValue =
         mode === 'deposit'
-            ? settings_accounting_deposit_default_value_id
-            : settings_accounting_withdraw_default_value_id
+            ? settings_accounting_deposit_default_value
+            : settings_accounting_withdraw_default_value
 
-    const { data: account } = useGetById({ id: accountDefaultValue ?? '' })
+    const { data: account } = useGetById({ id: accountDefaultValue?.id ?? '' })
 
     useEffect(() => {
-        setSelectedAccount(undefined)
         handleReset()
-    }, [mode, setSelectedAccount])
+    }, [handleReset])
 
     return (
         <PageContainer className="flex w-full !overflow-hidden">
@@ -83,9 +82,6 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                 >
                     <QuickTransferTransactionForm
                         account={account}
-                        defaultValues={{
-                            account_id: accountDefaultValue ?? undefined,
-                        }}
                         mode={mode}
                         onSuccess={() => {
                             setSelectedAccount(undefined)
