@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { AccountPicker, IAccount } from '@/modules/account'
+import { AccountPicker } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { IMedia } from '@/modules/media'
@@ -54,19 +54,18 @@ interface TransactionEntryFormProps
             TQuickWithdrawSchemaFormValues
         > {
     mode: TPaymentMode
-    account?: IAccount
 }
 
 export const QuickTransferTransactionForm = ({
     defaultValues,
     onSuccess,
     mode,
-    // account,
 }: TransactionEntryFormProps) => {
     const {
         userSettingOR,
         settings_accounting_withdraw_default_value,
         settings_accounting_deposit_default_value,
+        settings_payment_type_default_value_id,
     } = useGetUserSettings()
 
     const defaultAccount =
@@ -81,7 +80,6 @@ export const QuickTransferTransactionForm = ({
         setSelectedMember,
         selectedMember,
         selectedAccount,
-        setSelectedAccount,
         openMemberPicker,
         setOpenMemberPicker,
     } = useDepositWithdrawStore()
@@ -91,13 +89,30 @@ export const QuickTransferTransactionForm = ({
         defaultValues: {
             ...defaultValues,
             account: defaultAccount,
-            account_id: defaultAccount?.id,
+            account_id: defaultAccount?.id || undefined,
         },
     })
 
-    const handleReset = () => {
-        form.reset()
-        setSelectedAccount(undefined)
+    const handleReset = (transaction: IGeneralLedger) => {
+        form.reset({
+            reference_number: userSettingOR,
+            description: '',
+            amount: undefined,
+            bank_id: undefined,
+            entry_date: undefined,
+            bank_reference_number: '',
+            proof_of_payment_media_id: undefined,
+            signature_media_id: undefined,
+            signature: undefined,
+            payment_type_id:
+                settings_payment_type_default_value_id || undefined,
+
+            // transaction-specific fields
+            member: transaction.member_profile,
+            member_profile_id: transaction.member_profile?.id ?? '',
+            account: transaction.account,
+            account_id: transaction.account_id,
+        })
     }
 
     const {
@@ -108,19 +123,9 @@ export const QuickTransferTransactionForm = ({
         options: {
             onSuccess: (transaction) => {
                 onSuccess?.(transaction)
-                handleReset()
-                form.setValue(
-                    'member_profile_id',
-                    transaction.member_profile_id
-                )
-                form.setValue('member', transaction.member_profile)
-
+                handleReset(transaction)
                 queryClient.invalidateQueries({
-                    queryKey: [
-                        'member-accounting-ledger',
-                        // 'filtered-paginated',
-                        // transaction.member_profile_id,
-                    ],
+                    queryKey: ['member-accounting-ledger'],
                 })
             },
         },
@@ -158,7 +163,6 @@ export const QuickTransferTransactionForm = ({
         },
         canResetAll: () => {
             if (isOpen) return
-            handleReset()
             setSelectedMember(null)
         },
         canUnselectMember: () => setSelectedMember(null),
@@ -170,6 +174,10 @@ export const QuickTransferTransactionForm = ({
         if (selectedAccount) {
             form.setValue('account', selectedAccount)
             form.setValue('account_id', selectedAccount?.id)
+        }
+        if (selectedMember) {
+            form.setValue('member', selectedMember)
+            form.setValue('member_profile_id', selectedMember?.id)
         }
         form.setFocus('amount')
     }, [selectedAccount, form, selectedMember])

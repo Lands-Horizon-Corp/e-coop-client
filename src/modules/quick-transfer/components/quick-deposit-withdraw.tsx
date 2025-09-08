@@ -1,8 +1,5 @@
-import { useEffect } from 'react'
-
 import { toast } from 'sonner'
 
-import { useGetById } from '@/modules/account'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
 import {
@@ -14,7 +11,6 @@ import {
     TransactionMemberProfile,
     TransactionNoFoundBatch,
 } from '@/modules/transaction'
-import { useGetUserSettings } from '@/modules/user-profile'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -28,24 +24,7 @@ import {
 import { TEntityId } from '@/types'
 
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
-    const { selectedMember, setSelectedAccount, handleReset } =
-        useDepositWithdrawStore()
-
-    const {
-        settings_accounting_deposit_default_value,
-        settings_accounting_withdraw_default_value,
-    } = useGetUserSettings()
-
-    const accountDefaultValue =
-        mode === 'deposit'
-            ? settings_accounting_deposit_default_value
-            : settings_accounting_withdraw_default_value
-
-    const { data: account } = useGetById({ id: accountDefaultValue?.id ?? '' })
-
-    useEffect(() => {
-        handleReset()
-    }, [handleReset])
+    const { selectedMember, setSelectedAccount } = useDepositWithdrawStore()
 
     return (
         <PageContainer className="flex w-full !overflow-hidden">
@@ -81,10 +60,8 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     className=" !overflow-auto p-5 ecoop-scroll  "
                 >
                     <QuickTransferTransactionForm
-                        account={account}
                         mode={mode}
                         onSuccess={() => {
-                            setSelectedAccount(undefined)
                             toast.success('Transaction completed successfully')
                         }}
                     />
