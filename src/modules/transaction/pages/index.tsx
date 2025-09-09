@@ -158,7 +158,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             fullPath,
                         })
                     }
-                    className='p-1'
+                    className="p-1"
                     transactionId={transactionId}
                 />
             </HotkeysProvider>

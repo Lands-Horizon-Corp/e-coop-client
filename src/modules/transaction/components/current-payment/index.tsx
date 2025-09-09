@@ -165,6 +165,12 @@ const TransactionCurrentPaymentEntry = ({
                                                             </p>
 
                                                             <p className="text-primary">
+                                                                <span className="text-xs mr-1 text-muted-foreground">
+                                                                    {payment.credit >
+                                                                    0
+                                                                        ? 'Credit'
+                                                                        : 'Debit'}
+                                                                </span>
                                                                 ₱{' '}
                                                                 {commaSeparators(
                                                                     (

@@ -8,7 +8,9 @@ import {
 
 export const PaymentWithTransactionSchema = z.object({
     reference_number: z.string().min(1, 'Reference number is required'),
-    amount: z.coerce.number<number>({ error: 'Amount is required' }).refine(val => val !== 0, '0 Amount is not allowed'),
+    amount: z.coerce
+        .number<number>({ error: 'Amount is required' })
+        .refine((val) => val !== 0, '0 Amount is not allowed'),
     signature_media_id: entityIdSchema.optional(),
     proof_of_payment_media_id: entityIdSchema.optional(),
     bank_id: entityIdSchema.optional(),

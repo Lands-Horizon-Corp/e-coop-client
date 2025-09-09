@@ -22,6 +22,9 @@ export const MemberAccountLedgerTotal = ({
     const { data, isPending, refetch } = useMemberAccountGeneralLedgerTotal({
         memberProfileId,
         accountId,
+        options : { 
+            retry : 0
+        }
     })
 
     return (
