@@ -310,9 +310,9 @@ const ViewFootstepDetailCell = ({ footstep }: { footstep: IFootstep }) => {
     return (
         <div onClick={(e) => e.stopPropagation()}>
             <Sheet {...footstepModal}>
-                <SheetHeader>
-                    <SheetTitle className="hidden" />
-                    <SheetDescription className="hidden" />
+                <SheetHeader className="sr-only">
+                    <SheetTitle />
+                    <SheetDescription />
                 </SheetHeader>
                 <SheetContent
                     side="right"
