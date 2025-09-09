@@ -9,6 +9,11 @@ import {
 type Theme = 'dark' | 'light' | 'system'
 export type ResolvedTheme = 'dark' | 'light'
 
+type CustomThemeColors = {
+    light: Record<string, string>
+    dark: Record<string, string>
+}
+
 type ThemeProviderProps = {
     children: React.ReactNode
     defaultTheme?: Theme
@@ -18,13 +23,22 @@ type ThemeProviderProps = {
 type ThemeProviderState = {
     theme: Theme
     resolvedTheme: ResolvedTheme
+    customTheme: string
     setTheme: (theme: Theme) => void
+    setCustomTheme: (themeName: string) => void
+    applyCustomThemeColors: (
+        colors: CustomThemeColors,
+        themeName: string
+    ) => void
 }
 
 const initialState: ThemeProviderState = {
     theme: 'system',
     resolvedTheme: 'light',
+    customTheme: 'Default',
     setTheme: () => null,
+    setCustomTheme: () => null,
+    applyCustomThemeColors: () => null,
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
@@ -39,6 +53,9 @@ export const ThemeProvider = ({
         () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
     )
     const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('light')
+    const [customTheme, setCustomThemeState] = useState<string>(() => {
+        return localStorage.getItem('ecoop-custom-theme') || 'Default'
+    })
 
     const removeClassTheme = useCallback((root: HTMLElement) => {
         if (!root) return
@@ -53,6 +70,39 @@ export const ThemeProvider = ({
 
         root.classList.add(theme)
     }, [])
+
+    const setCustomTheme = useCallback((themeName: string) => {
+        setCustomThemeState(themeName)
+        localStorage.setItem('ecoop-custom-theme', themeName)
+    }, [])
+
+    const applyCustomThemeColors = useCallback(
+        (colors: CustomThemeColors, themeName: string) => {
+            const root = document.documentElement
+            const modeColors = colors[resolvedTheme]
+
+            // Clear any existing custom properties
+            Object.keys(colors.light)
+                .concat(Object.keys(colors.dark))
+                .forEach((property) => {
+                    root.style.removeProperty(property)
+                })
+
+            // Apply new colors if not default
+            if (themeName !== 'Default') {
+                Object.entries(modeColors).forEach(([property, value]) => {
+                    root.style.setProperty(property, value)
+                })
+                localStorage.setItem(
+                    'ecoop-theme-colors',
+                    JSON.stringify(colors)
+                )
+            } else {
+                localStorage.removeItem('ecoop-theme-colors')
+            }
+        },
+        [resolvedTheme]
+    )
 
     useEffect(() => {
         const root = window.document.documentElement
@@ -103,13 +153,55 @@ export const ThemeProvider = ({
         }
     }, [storageKey])
 
+    // Apply saved custom theme on mount and when resolved theme changes
+    useEffect(() => {
+        const savedCustomTheme = localStorage.getItem('ecoop-custom-theme')
+        const savedThemeColors = localStorage.getItem('ecoop-theme-colors')
+
+        if (
+            savedCustomTheme &&
+            savedCustomTheme !== 'Default' &&
+            savedThemeColors
+        ) {
+            try {
+                const colors = JSON.parse(savedThemeColors) as CustomThemeColors
+                const root = document.documentElement
+                const modeColors = colors[resolvedTheme]
+
+                // Clear any existing custom properties
+                Object.keys(colors.light)
+                    .concat(Object.keys(colors.dark))
+                    .forEach((property) => {
+                        root.style.removeProperty(property)
+                    })
+
+                // Apply new colors
+                Object.entries(modeColors).forEach(([property, value]) => {
+                    root.style.setProperty(property, value)
+                })
+
+                if (customTheme !== savedCustomTheme) {
+                    setCustomThemeState(savedCustomTheme)
+                }
+            } catch (error) {
+                console.warn('Failed to parse saved theme colors:', error)
+
+                localStorage.removeItem('ecoop-theme-colors')
+                localStorage.setItem('ecoop-custom-theme', 'Default')
+                setCustomThemeState('Default')
+            }
+        }
+    }, [resolvedTheme, customTheme])
     const value = {
         theme,
         resolvedTheme,
+        customTheme,
         setTheme: (theme: Theme) => {
             localStorage.setItem(storageKey, theme)
             setTheme(theme)
         },
+        setCustomTheme,
+        applyCustomThemeColors,
     }
 
     return (

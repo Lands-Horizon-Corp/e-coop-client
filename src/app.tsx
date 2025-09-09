@@ -8,7 +8,7 @@ import {
 import { MutationCache } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
-import { ThemeProvider } from '@/providers/theme-provider';
+import { ThemeProvider } from '@/modules/settings/provider/theme-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import SpySvg from '../src/assets/spy.svg';
@@ -61,7 +61,7 @@ const App = () => {
 
     if (!isAllowed || isChecking)
         return (
-            <PageContainer className="w-dvh h-dvh items-center justify-center gap-y-4 text-muted-foreground/70">
+            <PageContainer className="w-screen h-dvh items-center justify-center gap-y-4 text-muted-foreground/70">
                 {isChecking ? (
                     <LoadingSpinner />
                 ) : (

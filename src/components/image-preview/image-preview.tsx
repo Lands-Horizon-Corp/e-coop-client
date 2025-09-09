@@ -315,19 +315,18 @@ export const ImagePreviewButtonAction = React.forwardRef<
     const defaultIconStyles = '!size-4 dark:text-white'
 
     return (
-        <Button
-            ref={ref}
-            variant="ghost"
-            className={cn(
-                'flex items-center justify-center space-x-3 border-0 hover:bg-background/20',
-                className
-            )}
-            onClick={onClick}
-            {...props}
-        >
-            <Tooltip>
-                <TooltipTrigger className="flex items-center space-x-2">
-                    {' '}
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Button
+                    ref={ref}
+                    variant="ghost"
+                    className={cn(
+                        'flex items-center justify-center space-x-3 border-0 hover:bg-background/20',
+                        className
+                    )}
+                    onClick={onClick}
+                    {...props}
+                >
                     {Icon && (
                         <span
                             className={cn(
@@ -335,16 +334,18 @@ export const ImagePreviewButtonAction = React.forwardRef<
                                 defaultIconStyles,
                                 iconClassName
                             )}
-                        ></span>
+                        >
+                            {Icon}
+                        </span>
                     )}
                     <p className="hidden lg:block">{name}</p>
-                </TooltipTrigger>
-                <TooltipContent>
-                    {name && <p className="hidden lg:block">{name}</p>}
-                </TooltipContent>
-            </Tooltip>
-            <span className="sr-only">{name}</span>
-        </Button>
+                    <span className="sr-only">{name}</span>
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+                <p>{name}</p>
+            </TooltipContent>
+        </Tooltip>
     )
 })
 

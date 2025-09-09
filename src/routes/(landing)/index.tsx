@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '@/modules/settings/provider/theme-provider'
 import { ArrowRight } from 'lucide-react'
 
 import {

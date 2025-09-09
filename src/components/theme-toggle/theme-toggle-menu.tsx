@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '@/modules/settings/provider/theme-provider'
 import type { IBaseProps } from '@/types/component-types/base-component'
 
 import { MoonIcon, SunIcon, SunMoonIcon } from '@/components/icons'

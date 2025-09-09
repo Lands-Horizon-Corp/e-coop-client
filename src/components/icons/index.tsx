@@ -150,6 +150,7 @@ import {
     GrView as EyeViewIcon,
     GrVmMaintenance as MaintenanceIcon,
     GrFormNextLink as NextIcon,
+    GrPaint as PaintIcon,
     GrPowerReset as PowerResetIcon,
 } from 'react-icons/gr'
 import {
@@ -686,6 +687,7 @@ export {
     Rotate90DegreeRightIcon,
     BadgeExclamationFillIcon,
     TextStrikethroughLightIcon,
+    PaintIcon,
 }
 
 export const IconMap: Record<TIcon, IconType> = {

@@ -4,8 +4,8 @@ import { toast } from 'sonner'
 import { useSignOut } from '@/modules/authentication'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { APIKeyGenModal } from '@/modules/developer/components/api-key-gen'
+import { useTheme } from '@/modules/settings/provider/theme-provider'
 import UserAvatar from '@/modules/user/components/user-avatar'
-import { useTheme } from '@/providers/theme-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {

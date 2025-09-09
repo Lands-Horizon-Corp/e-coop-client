@@ -13,6 +13,37 @@ import AppearanceSettings from '../appearance-settings'
 
 type TSettingPage = 'appearance' | 'my-settings' | 'branch-settings'
 
+interface SettingsNavItem {
+    id: TSettingPage
+    label: string
+    icon: React.ComponentType<{ className?: string }>
+    component: React.ComponentType
+    requiredUserTypes?: string[]
+}
+
+const settingsNavItems: SettingsNavItem[] = [
+    {
+        id: 'appearance',
+        label: 'Appearance',
+        icon: PaintBrushIcon,
+        component: AppearanceSettings,
+    },
+    {
+        id: 'my-settings',
+        label: 'My Settings',
+        icon: GearIcon,
+        component: UserOrganizationSettings,
+        requiredUserTypes: ['employee', 'admin', 'owner'],
+    },
+    {
+        id: 'branch-settings',
+        label: 'Branch Settings',
+        icon: BuildingGearIcon,
+        component: BranchSettings,
+        requiredUserTypes: ['employee', 'admin', 'owner'],
+    },
+]
+
 const MainSettingsPage = () => {
     const {
         currentAuth: {
@@ -21,52 +52,40 @@ const MainSettingsPage = () => {
     } = useAuthUserWithOrg()
     const [page, setPage] = useState<TSettingPage>('appearance')
 
+    const currentPageItem = settingsNavItems.find((item) => item.id === page)
+    const CurrentComponent = currentPageItem?.component
+
+    const shouldShowPage = (item: SettingsNavItem) => {
+        return (
+            !item.requiredUserTypes ||
+            item.requiredUserTypes.includes(user_type)
+        )
+    }
+
     return (
         <PageContainer className="relative flex-row items-start gap-x-4">
             <div className="space-y-0 p-1 flex flex-col">
-                <Button
-                    onClick={() => setPage('appearance')}
-                    className={cn(
-                        'text-muted-foreground w-full justify-start',
-                        page === 'appearance' && 'text-primary'
-                    )}
-                    variant="ghost"
-                    size="sm"
-                >
-                    <PaintBrushIcon className="inline mr-2" /> Appearance
-                </Button>
-                <Button
-                    onClick={() => setPage('my-settings')}
-                    className={cn(
-                        'text-muted-foreground w-full justify-start',
-                        page === 'my-settings' && 'text-primary'
-                    )}
-                    variant="ghost"
-                    size="sm"
-                >
-                    <GearIcon className="inline mr-2" /> My Settings
-                </Button>
-                <Button
-                    onClick={() => setPage('branch-settings')}
-                    className={cn(
-                        'text-muted-foreground w-full justify-start',
-                        page === 'branch-settings' && 'text-primary'
-                    )}
-                    variant="ghost"
-                    size="sm"
-                >
-                    <BuildingGearIcon className="inline mr-2" /> Branch Settings
-                </Button>
+                {settingsNavItems.map((item) => {
+                    const Icon = item.icon
+                    return (
+                        <Button
+                            key={item.id}
+                            onClick={() => setPage(item.id)}
+                            className={cn(
+                                'text-muted-foreground w-full justify-start',
+                                page === item.id && 'text-primary'
+                            )}
+                            variant="ghost"
+                            size="sm"
+                        >
+                            <Icon className="inline mr-2" /> {item.label}
+                        </Button>
+                    )
+                })}
             </div>
-            {page === 'appearance' && <AppearanceSettings />}
-            {page === 'my-settings' &&
-                ['employee', 'admin', 'owner'].includes(user_type) && (
-                    <UserOrganizationSettings />
-                )}
-            {page === 'branch-settings' &&
-                ['employee', 'admin', 'owner'].includes(user_type) && (
-                    <BranchSettings />
-                )}
+            {CurrentComponent && shouldShowPage(currentPageItem!) && (
+                <CurrentComponent />
+            )}
         </PageContainer>
     )
 }

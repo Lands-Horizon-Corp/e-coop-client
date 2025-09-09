@@ -110,6 +110,8 @@ const TransactionBatchNavButton = (_props: Props) => {
                             name: `${user.user_name}'s-batch-${toReadableDate(new Date(), 'MM-dd-yyyy')}`.toLowerCase(),
                             branch_id: user_organization.branch_id,
                             organization_id: user_organization.organization_id,
+                            provided_by_user: user,
+                            provided_by_user_id: user.id,
                         },
                         onSuccess: setData,
                     }}
