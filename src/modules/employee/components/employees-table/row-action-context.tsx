@@ -10,6 +10,7 @@ import TransactionBatchAction from '@/modules/transaction-batch/components/trans
 import { TransactionsTable } from '@/modules/transactions'
 import { IUserOrganization } from '@/modules/user-organization'
 import { UserOrgPermissionUpdateFormModal } from '@/modules/user-organization/components/forms/user-org-permission-update-form'
+import { UserOrgSettingsFormModal } from '@/modules/user-organization/components/forms/user-org-settings-form'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -189,13 +190,14 @@ export const EmployeesAction = ({
                     />
                 </Modal>
 
-                {/* <UserOrgSettingsFormModal
+                <UserOrgSettingsFormModal
                     {...userSettingsModal}
+                    className="!max-w-[95vw]"
                     formProps={{
                         mode: 'specific',
                         defaultValues: employee,
                     }}
-                /> */}
+                />
                 <UserOrgPermissionUpdateFormModal
                     {...permissionModal}
                     formProps={{
@@ -550,13 +552,14 @@ export const EmployeesRowContext = ({
                 />
             </Modal>
 
-            {/* <UserOrgSettingsFormModal
+            <UserOrgSettingsFormModal
                 {...userSettingsModal}
+                className="!max-w-[95vw]"
                 formProps={{
                     mode: 'specific',
                     defaultValues: employee,
                 }}
-            /> */}
+            />
 
             <UserOrgPermissionUpdateFormModal
                 {...permissionModal}

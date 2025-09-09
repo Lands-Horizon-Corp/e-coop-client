@@ -97,7 +97,7 @@ export const generateSidebarGroups = (
                     shortDescription: 'Manage fund transfers and movements',
                 },
                 {
-                    title: 'Quick Transfer',
+                    title: 'Quick Payment',
                     userType: ['employee', 'owner'],
                     url: `${baseUrl}/transaction/quick-transfer`,
                     type: 'dropdown',

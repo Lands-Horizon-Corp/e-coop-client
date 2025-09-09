@@ -10,6 +10,7 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import CollateralCombobox from '@/modules/collateral/components/collateral-combobox'
+import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
 import MemberAccountingLedgerPicker from '@/modules/member-accounting-ledger/components/member-accounting-ledger-picker'
 import {
     IMemberProfile,
@@ -423,21 +424,40 @@ const LoanTransactionCreateUpdateForm = ({
                             disabled={!memberProfile}
                             className="space-y-4 rounded-xl p-4 bg-popover"
                         >
-                            <div className="grid grid-cols-12">
-                                <div className="col-span-9">
-                                    <p className="font-medium">
-                                        <TextFileFillIcon className="inline text-primary" />{' '}
-                                        Loan Details
-                                    </p>
-                                    <p className="text-xs text-muted-foreground">
-                                        Specify loan type, amount, and payment
-                                        terms
-                                    </p>
-                                </div>
+                            <div>
+                                <p className="font-medium">
+                                    <TextFileFillIcon className="inline text-primary" />{' '}
+                                    Loan Details
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    Specify loan type, amount, and payment terms
+                                </p>
+                            </div>
+
+                            {!memberProfile && (
+                                <FormErrorMessage errorMessage="Select member profile first to enable this section" />
+                            )}
+
+                            <div className="items-center grid grid-cols-3 gap-3">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="loan_purpose_id"
+                                    label="Loan Purpose"
+                                    className="col-span-1"
+                                    render={({ field }) => (
+                                        <LoanPurposeCombobox
+                                            {...field}
+                                            onChange={(loanPurpose) =>
+                                                field.onChange(loanPurpose.id)
+                                            }
+                                        />
+                                    )}
+                                />
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="loan_type"
-                                    className="col-span-3"
+                                    label="Loan Type"
+                                    className="col-span-1"
                                     render={({ field }) => (
                                         <Select
                                             onValueChange={field.onChange}
@@ -464,13 +484,6 @@ const LoanTransactionCreateUpdateForm = ({
                                         </Select>
                                     )}
                                 />
-                            </div>
-
-                            {!memberProfile && (
-                                <FormErrorMessage errorMessage="Select member profile first to enable this section" />
-                            )}
-
-                            <div className="grid grid-cols-2 gap-3">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="applied_1"
@@ -485,7 +498,10 @@ const LoanTransactionCreateUpdateForm = ({
                                         />
                                     )}
                                 />
-                                <FormFieldWrapper
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-3">
+                                {/* <FormFieldWrapper
                                     control={form.control}
                                     name="applied_2"
                                     label={
@@ -504,7 +520,7 @@ const LoanTransactionCreateUpdateForm = ({
                                             disabled={isDisabled(field.name)}
                                         />
                                     )}
-                                />
+                                /> */}
                             </div>
 
                             <Separator />

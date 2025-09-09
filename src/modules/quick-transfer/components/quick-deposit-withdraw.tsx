@@ -37,7 +37,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                         <HandWithdrawIcon size={25} />
                     )}
                     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-                        {` Quick Transfer ${mode?.charAt(0).toUpperCase()}${mode?.slice(1)}`}
+                        {` Quick ${mode?.charAt(0).toUpperCase()}${mode?.slice(1)}`}
                     </h4>
                 </div>
                 <div

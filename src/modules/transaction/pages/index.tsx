@@ -149,49 +149,23 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 onClose={handleCloseSuccessModal}
                 isOpen={openSuccessModal}
             />
-            <div className="flex h-full w-full gap-2 !overflow-hidden">
-                <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
-                    <div className="flex justify-end mb-2">
-                        <TransactionShortcuts />
-                    </div>
-                    <HotkeysProvider
-                        initiallyActiveScopes={['member-scanner-view']}
-                    >
-                        <TransactionMemberScanner
-                            fullPath={fullPath}
-                            handleSetTransactionId={() =>
-                                handleSetTransactionId({
-                                    transactionId: undefined,
-                                    fullPath,
-                                })
-                            }
-                            transactionId={transactionId}
-                        />
-                    </HotkeysProvider>
-                    <div className="w-full p-2">
-                        <MemberAccountingLedgerTable
-                            mode="member"
-                            memberProfileId={
-                                (selectedMember?.id ?? undefined) as TEntityId
-                            }
-                            onRowClick={(data) => {
-                                setOpenPaymentWithTransactionModal(true)
-                                setSelectedAccountId(data.original.account_id)
-                                setSelectedAccount(data.original.account)
-                                setFocusTypePayment('payment')
-                            }}
-                            actionComponent={(props) => (
-                                <MemberAccountGeneralLedgerAction
-                                    memberAccountLedger={props.row.original}
-                                />
-                            )}
-                            className="w-full min-h-[40vh] h-full"
-                        />
-                    </div>
-                </div>
+            <HotkeysProvider initiallyActiveScopes={['member-scanner-view']}>
+                <TransactionMemberScanner
+                    fullPath={fullPath}
+                    handleSetTransactionId={() =>
+                        handleSetTransactionId({
+                            transactionId: undefined,
+                            fullPath,
+                        })
+                    }
+                    className='p-1'
+                    transactionId={transactionId}
+                />
+            </HotkeysProvider>
 
+            <div className="flex h-full w-full gap-2 !overflow-hidden">
                 {/* Right Section: History & Payment */}
-                <div className="lg:w-[30%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
+                <div className="lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
                     <TransactionHistory fullPath={fullPath} />
                     <TransactionCurrentPaymentEntry
                         totalAmount={transaction?.amount}
@@ -212,6 +186,32 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             reset current transaction
                         </Button>
                     )}
+                </div>
+
+                <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
+                    <div className="flex justify-end mb-2">
+                        <TransactionShortcuts />
+                    </div>
+                    <div className="w-full p-2">
+                        <MemberAccountingLedgerTable
+                            mode="member"
+                            memberProfileId={
+                                (selectedMember?.id ?? undefined) as TEntityId
+                            }
+                            onRowClick={(data) => {
+                                setOpenPaymentWithTransactionModal(true)
+                                setSelectedAccountId(data.original.account_id)
+                                setSelectedAccount(data.original.account)
+                                setFocusTypePayment('payment')
+                            }}
+                            actionComponent={(props) => (
+                                <MemberAccountGeneralLedgerAction
+                                    memberAccountLedger={props.row.original}
+                                />
+                            )}
+                            className="w-full min-h-[40vh] h-full"
+                        />
+                    </div>
                 </div>
             </div>
             {selectedMember && (
