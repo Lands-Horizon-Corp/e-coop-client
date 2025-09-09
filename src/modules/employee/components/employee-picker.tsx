@@ -17,7 +17,10 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import useFilterState from '@/hooks/use-filter-state'
 import { useShortcut } from '@/hooks/use-shorcuts'
 
-import { useFilteredPaginatedEmployees } from '../employee.service'
+import {
+    TEmployeesPaginatedHookMode,
+    useFilteredPaginatedEmployees,
+} from '../employee.service'
 
 interface Props {
     value?: IUserBase
@@ -25,11 +28,19 @@ interface Props {
     placeholder?: string
     onSelect?: (selectedEmployee: IUserOrganization) => void
     allowShorcutCommand?: boolean
+    mode?: TEmployeesPaginatedHookMode
 }
 
 const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
     (
-        { value, disabled, allowShorcutCommand = false, placeholder, onSelect },
+        {
+            mode = 'employee',
+            value,
+            disabled,
+            allowShorcutCommand = false,
+            placeholder,
+            onSelect,
+        },
         ref
     ) => {
         const queryClient = useQueryClient()
@@ -61,6 +72,7 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
             isLoading,
             isFetching,
         } = useFilteredPaginatedEmployees({
+            mode,
             options: {
                 enabled: !disabled,
             },

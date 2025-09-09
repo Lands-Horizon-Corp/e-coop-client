@@ -18,6 +18,7 @@ import {
     ISignInRequest,
     ISignUpRequest,
     IVerification,
+    IVerificationPasswordAdminRequest,
     IVerificationPasswordRequest,
     IVerifyContactNumberRequest,
     IVerifyEmailRequest,
@@ -70,6 +71,16 @@ export const verifyWithPassword = async (
         IVerificationPasswordRequest,
         IVerification
     >(`${authenticationAPIRoute}/verify-with-password`, verificationData)
+    return response.data
+}
+
+export const verifyWithPasswordAdmin = async (
+    verificationData: IVerificationPasswordAdminRequest
+) => {
+    const response = await API.post<
+        IVerificationPasswordAdminRequest,
+        IVerification
+    >(`${authenticationAPIRoute}/verify-with-password/admin`, verificationData)
     return response.data
 }
 
