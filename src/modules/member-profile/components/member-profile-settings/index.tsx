@@ -136,9 +136,7 @@ const MemberProfileSettings = ({
     return (
         <div className={cn('w-full flex-1 space-y-4', className)}>
             <div className="flex my-4 items-center justify-between">
-                <p className="text-muted-foreground">
-                    Edit Member Profile
-                </p>
+                <p className="text-muted-foreground">Edit Member Profile</p>
             </div>
             {!memberProfile && isPending && (
                 <MemberProfileMiniInfoCardSkeleton />
