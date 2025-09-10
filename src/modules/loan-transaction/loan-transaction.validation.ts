@@ -14,6 +14,12 @@ const WithWeekdays = z.discriminatedUnion(
     'mode_of_payment',
     [
         z.object({
+            mode_of_payment: z.literal('daily'),
+            mode_of_payment_fixed_days: z.coerce
+                .number('Invalid number of days')
+                .min(1, 'Minimum of 1 day'),
+        }),
+        z.object({
             mode_of_payment: z.literal('weekly'),
             mode_of_payment_weekly: z.enum(WEEKDAYS, {
                 error: 'Please provide valid weekdays',
@@ -45,7 +51,7 @@ const WithWeekdays = z.discriminatedUnion(
         z.object({
             mode_of_payment: z.enum(
                 LOAN_MODE_OF_PAYMENT.filter(
-                    (val) => !['weekly', 'semi-monthly'].includes(val)
+                    (val) => !['weekly', 'daily', 'semi-monthly'].includes(val)
                 )
             ),
         }),
@@ -86,6 +92,7 @@ export const LoanTransactionSchema = z
         official_receipt_number: z.string().optional(),
         voucher: z.string().optional(),
         loan_purpose_id: entityIdSchema.optional(),
+
         loan_status_id: entityIdSchema.optional(),
 
         comaker_type: z.enum(LOAN_COMAKER_TYPE, {
@@ -97,12 +104,15 @@ export const LoanTransactionSchema = z
         }),
 
         loan_type: z.enum(LOAN_TYPE),
-        terms: z.coerce.number('Invalid Terms').int('Invalid Terms'),
+        terms: z.coerce
+            .number('Invalid Terms')
+            .min(1, 'Minimum 1 term (Month)')
+            .int('Invalid Terms'),
 
         previous_loan_id: entityIdSchema.optional(),
         previous_loan: z.any(),
 
-        amortization_amount: z.number().optional(),
+        amortization_amount: z.coerce.number().optional(),
         is_add_on: z.boolean().optional(),
 
         applied_1: z.coerce.number('Invalid amount'),
@@ -117,9 +127,9 @@ export const LoanTransactionSchema = z
         member_joint_account_id: entityIdSchema.optional(),
         signature_media_id: entityIdSchema.optional(),
 
-        mount_to_be_closed: z.number().optional(),
-        damayan_fund: z.number().optional(),
-        share_capital: z.number().optional(),
+        mount_to_be_closed: z.coerce.number().optional(),
+        damayan_fund: z.coerce.number().min(1, 'yeag'),
+        share_capital: z.coerce.number().optional(),
         length_of_service: z.string().optional(),
 
         exclude_sunday: z.boolean().optional(),
@@ -131,7 +141,7 @@ export const LoanTransactionSchema = z
         record_of_loan_payments_or_loan_status: z.string().optional(),
         collateral_offered: z.string().optional(),
 
-        appraised_value: z.number().optional(),
+        appraised_value: z.coerce.number().optional(),
         appraised_value_description: z.string().optional(),
 
         printed_date: stringDateWithTransformSchema.optional(),

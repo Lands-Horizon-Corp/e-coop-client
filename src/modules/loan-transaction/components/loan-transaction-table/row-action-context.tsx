@@ -11,6 +11,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { useDeleteLoanTransactionById } from '../../loan-transaction.service'
 import { ILoanTransaction } from '../../loan-transaction.types'
+import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import { ILoanTransactionTableActionComponentProp } from './columns'
 
 interface UseLoanTransactionActionsProps {
@@ -23,7 +24,7 @@ const useLoanTransactionActions = ({
     onDeleteSuccess,
 }: UseLoanTransactionActionsProps) => {
     const updateModal = useModalState()
-    const loanPurpose = row.original
+    const loanTransaction = row.original
 
     const { onOpen } = useConfirmModalStore()
 
@@ -45,12 +46,12 @@ const useLoanTransactionActions = ({
         onOpen({
             title: 'Delete Loan',
             description: 'Are you sure you want to delete this Loan?',
-            onConfirm: () => deleteLoanTransaction(loanPurpose.id),
+            onConfirm: () => deleteLoanTransaction(loanTransaction.id),
         })
     }
 
     return {
-        loanPurpose,
+        loanTransaction,
         updateModal,
         isDeletingLoanTransaction,
         handleEdit,
@@ -69,8 +70,8 @@ export const LoanTransactionAction = ({
     onDeleteSuccess,
 }: ILoanTransactionTableActionProps) => {
     const {
-        // loanPurpose,
-        // updateModal,
+        loanTransaction,
+        updateModal,
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
@@ -79,7 +80,14 @@ export const LoanTransactionAction = ({
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                {/* TODO: Add modals */}
+                <LoanTransactionCreateUpdateFormModal
+                    {...updateModal}
+                    formProps={{
+                        mode: 'update',
+                        loanTransactionId: loanTransaction.id,
+                        defaultValues: loanTransaction,
+                    }}
+                />
             </div>
             <RowActionsGroup
                 canSelect
@@ -112,8 +120,8 @@ export const LoanTransactionRowContext = ({
     onDeleteSuccess,
 }: ILoanTransactionRowContextProps) => {
     const {
-        // loanPurpose,
-        // updateModal,
+        loanTransaction,
+        updateModal,
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
@@ -121,7 +129,14 @@ export const LoanTransactionRowContext = ({
 
     return (
         <>
-            {/* TODO: Add modals */}
+            <LoanTransactionCreateUpdateFormModal
+                {...updateModal}
+                formProps={{
+                    mode: 'update',
+                    loanTransactionId: loanTransaction.id,
+                    defaultValues: loanTransaction,
+                }}
+            />
             <DataTableRowContext
                 row={row}
                 onDelete={{

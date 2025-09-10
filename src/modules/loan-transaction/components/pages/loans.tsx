@@ -8,7 +8,9 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import LoanTransactionTable from '../loan-transaction-table'
-import LoanTransactionAction from '../loan-transaction-table/row-action-context'
+import LoanTransactionAction, {
+    LoanTransactionRowContext,
+} from '../loan-transaction-table/row-action-context'
 
 const LoansPage = () => {
     const createModal = useModalState()
@@ -33,6 +35,7 @@ const LoansPage = () => {
                         },
                     },
                 }}
+                RowContextComponent={LoanTransactionRowContext}
                 actionComponent={LoanTransactionAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
