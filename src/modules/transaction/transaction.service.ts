@@ -160,3 +160,36 @@ export const useUpdateReferenceNumber = createMutationFactory<
     invalidationFn: (args) =>
         createMutationInvalidateFn('update-reference-number-transaction', args),
 })
+
+// POST - /api/v1/transaction/general-ledger/:general_ledger_id/reverse (Single)
+// POST - /api/v1/transaction/:transaction_id/reverse (All)
+
+export const useSingleReverseTransaction = createMutationFactory<
+    IGeneralLedger,
+    Error,
+    { general_ledger_id: TEntityId }
+>({
+    mutationFn: async ({ general_ledger_id }) =>
+        (
+            await API.post<void, IGeneralLedger>(
+                `${route}/general-ledger/${general_ledger_id}/reverse`
+            )
+        ).data,
+    invalidationFn: (args) =>
+        createMutationInvalidateFn('single-reverse-transaction', args),
+})
+
+export const useAllReverseTransaction = createMutationFactory<
+    IGeneralLedger,
+    Error,
+    { transaction_id: TEntityId }
+>({
+    mutationFn: async ({ transaction_id }) =>
+        (
+            await API.post<void, IGeneralLedger>(
+                `${route}/${transaction_id}/reverse`
+            )
+        ).data,
+    invalidationFn: (args) =>
+        createMutationInvalidateFn('all-reverse-transaction', args),
+})

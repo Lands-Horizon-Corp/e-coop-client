@@ -313,4 +313,5 @@ export const ICONS = [
     'Ri Community Fill Icon',
     'Auto Awesome',
     'Arrow Icon',
+    'Redo Circle Icon',
 ] as const

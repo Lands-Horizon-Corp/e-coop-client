@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 import { IGeneralLedger } from '@/modules/general-ledger'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
@@ -15,6 +16,7 @@ import {
     useGetById,
 } from '@/modules/transaction'
 import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
+import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { HotkeysProvider, useHotkeys } from 'react-hotkeys-hook'
 
@@ -29,6 +31,7 @@ import { useShortcut } from '@/hooks/use-shorcuts'
 import { TEntityId } from '@/types'
 
 import PaymentWithTransactionForm from '../components/forms/create-payment-with-transaction-form'
+import TransactionReverseRequestFormModal from '../components/modals/transaction-modal-request-reverse'
 import TransactionShortcuts from '../components/transaction-shorcuts'
 
 type TTransactionProps = {
@@ -37,6 +40,9 @@ type TTransactionProps = {
 }
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
+
+    const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
+
     const {
         selectedMember,
         openSuccessModal,
@@ -143,6 +149,18 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     return (
         <>
+            <TransactionReverseRequestFormModal
+                open={isOpen}
+                onOpenChange={onClose}
+                title={modalData?.title || 'Request Reverse Transaction'}
+                formProps={{
+                    onSuccess: () => {
+                        toast.success('success request verification')
+                        modalData?.onSuccess?.()
+                    },
+                }}
+            />
+
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
                 <TransactionNoFoundBatch />
                 <div className="w-full flex justify-end pb-2">

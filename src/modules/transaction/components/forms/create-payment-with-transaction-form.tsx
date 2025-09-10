@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -21,6 +20,7 @@ import {
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
 import { useGetUserSettings } from '@/modules/user-profile'
+import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -44,12 +44,9 @@ import { Label } from '@/components/ui/label'
 import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import ReferenceNumber from '../input/transaction-reference-number-field'
-import TransactionReverseRequestFormModal from '../modals/transaction-modal-request-reverse'
 
 interface PaymentWithTransactionFormProps
     extends IClassProps,
@@ -72,8 +69,6 @@ const PaymentWithTransactionForm = ({
     memberJointId,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
-    const { open, onOpenChange } = useModalState()
-    const [isVerified, setIsVerified] = useState(false)
     const {
         userSettingOR,
         settings_accounting_payment_default_value,
@@ -141,40 +136,46 @@ const PaymentWithTransactionForm = ({
                 )
                 form.setFocus('amount')
                 onSuccess?.(transaction)
-                setIsVerified(false)
             },
         },
     })
 
     const { data: paymentTypes } = useGetAll()
 
+    const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
+
+    const handleSubmitForm = (data: TPaymentWithTransactionFormValues) => {
+        const entryDate = data.entry_date
+            ? new Date(data.entry_date).toISOString()
+            : undefined
+        const transactionpayPayload: ITransactionRequest = {
+            ...data,
+            member_profile_id: memberProfileId,
+            member_joint_account_id: memberJointId,
+            source: 'payment',
+        }
+        creatTransactionDeposit({
+            data: {
+                ...data,
+                entry_date: entryDate,
+            },
+            mode: 'payment',
+            transactionId,
+            transactionPayload: transactionpayPayload,
+        })
+    }
+
     const handleSubmit = form.handleSubmit(
         (data: TPaymentWithTransactionFormValues) => {
-            const entryDate = data.entry_date
-                ? new Date(data.entry_date).toISOString()
-                : undefined
-
             if (data.amount < 0) {
-                if (!isVerified) {
-                    onOpenChange(true)
-                    return
-                }
+                onOpenReverseRequestAction({
+                    onSuccess: () => {
+                        handleSubmitForm(data)
+                    },
+                })
+                return
             }
-            const transactionpayPayload: ITransactionRequest = {
-                ...data,
-                member_profile_id: memberProfileId,
-                member_joint_account_id: memberJointId,
-                source: 'payment',
-            }
-            creatTransactionDeposit({
-                data: {
-                    ...data,
-                    entry_date: entryDate,
-                },
-                mode: 'payment',
-                transactionId,
-                transactionPayload: transactionpayPayload,
-            })
+            handleSubmitForm(data)
         }
     )
 
@@ -210,16 +211,6 @@ const PaymentWithTransactionForm = ({
         <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
             <CardContent className="!h-fit grid grid-cols-1 p-2 lg:!p-0 items-center w-full lg:!w-full">
                 <Form {...form}>
-                    <TransactionReverseRequestFormModal
-                        open={open}
-                        onOpenChange={onOpenChange}
-                        formProps={{
-                            onSuccess: () => {
-                                toast.success('success request verification')
-                                setIsVerified(true)
-                            },
-                        }}
-                    />
                     <form
                         onSubmit={handleSubmit}
                         className=" !w-full flex flex-col lg:justify-between lg:flex-row overflow-auto "

@@ -56,6 +56,7 @@ import {
     CgDetailsLess as DetailsIcon,
     CgFacebook as FacebookIcon,
     CgInternal as InternalIcon,
+    CgRedo as RedoCircleIcon,
     CgSmartphone as SmartphoneIcon,
     CgUnavailable as UnavailableIcon,
 } from 'react-icons/cg'
@@ -567,6 +568,7 @@ export {
     UserShieldIcon,
     Users3FillIcon,
     PaintBrushIcon,
+    RedoCircleIcon,
     WeightScaleIcon,
     PeopleGroupIcon,
     TargetArrowIcon,
@@ -1006,6 +1008,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Pi Hand Withdraw': PiHandWithdrawIcon,
     'Auto Awesome': AutoAwesomeIcon,
     'Arrow Icon': ArrowIcon,
+    'Redo Circle Icon': RedoCircleIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]
