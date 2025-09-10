@@ -71,8 +71,7 @@ const PaymentWithTransactionForm = ({
     memberProfileId,
     memberJointId,
 }: PaymentWithTransactionFormProps) => {
-    const { focusTypePayment, selectedAccount, selectedMember } =
-        useTransactionStore()
+    const { focusTypePayment, selectedAccount } = useTransactionStore()
     const { open, onOpenChange } = useModalState()
     const [isVerified, setIsVerified] = useState(false)
     const {
@@ -99,11 +98,13 @@ const PaymentWithTransactionForm = ({
 
     useEffect(() => {
         if (selectedAccount) {
-            form.setValue('account', selectedAccount)
-            form.setValue('account_id', selectedAccount?.id)
+            form.reset({
+                account: selectedAccount,
+                account_id: selectedAccount?.id,
+            })
         }
         form.setFocus('amount')
-    }, [selectedAccount, form, selectedMember])
+    }, [selectedAccount, form])
 
     const formReset = () => {
         form.reset({

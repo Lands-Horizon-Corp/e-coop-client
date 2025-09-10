@@ -63,7 +63,8 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                                 src={value}
                                 className={cn(
                                     'block size-full rounded-none',
-                                    value && 'dark:bg-background/75'
+                                    value &&
+                                        'dark:bg-secondary-foreground bg-secondary-foreground/50'
                                 )}
                             />
                             <span
@@ -71,7 +72,7 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                                     e.stopPropagation()
                                     onChange?.(undefined)
                                 }}
-                                className="absolute hover:cursor-pointer bg-secondary right-2 top-2 size-fit rounded-full p-1 ease-in-out duration-200 hover:bg-destructive hover:text-destructive-foreground"
+                                className="absolute hover:cursor-pointer bg-destructive text-white right-2 top-2 size-fit rounded-full p-1 ease-in-out duration-200 hover:bg-destructive hover:text-destructive-foreground"
                             >
                                 <XIcon className="size-4" />
                             </span>

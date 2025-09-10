@@ -201,7 +201,7 @@ export const QuickTransferTransactionForm = ({
         <Form {...form}>
             <form onSubmit={handleSubmit} className="min-w-[300px] ">
                 <div className="flex flex-end">
-                    <CommandShortcut className="rounded-md bg-secondary p-1">
+                    <CommandShortcut className="rounded-md bg-primary/20 p-1">
                         <div className="text-[min(10px,1rem)] text-muted-foreground/80">
                             ↵ select member | Esc - reset Form
                         </div>

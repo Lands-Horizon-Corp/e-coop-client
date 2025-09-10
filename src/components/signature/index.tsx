@@ -213,7 +213,7 @@ const Signature = ({
     }, [isFullScreenMode])
 
     const isCurrentMode = (mode: SignatureModeType) => {
-        return mode === currentMode ? 'bg-secondary' : ''
+        return mode === currentMode ? 'bg-primary text-white' : ''
     }
 
     return (

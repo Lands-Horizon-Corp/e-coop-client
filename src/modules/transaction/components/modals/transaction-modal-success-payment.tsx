@@ -102,7 +102,7 @@ const TransactionModalSuccessPayment = ({
                     </p>
                     <p className="text-muted-foreground text-sm">
                         <span className="text-primary font-extrabold ">
-                            {memberName}
+                            {memberName}{' '}
                         </span>
                         Successfully added {paymentType}
                         <span>

@@ -46,7 +46,7 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
                     <ImageDisplay
                         fallbackClassName="rounded-none"
                         imageClassName="object-contain rounded-none"
-                        className="min-h-60 w-full rounded-lg border bg-background"
+                        className="min-h-60 w-full rounded-lg border !bg-white"
                         src={objectUrl}
                     />
                     <FileItem
