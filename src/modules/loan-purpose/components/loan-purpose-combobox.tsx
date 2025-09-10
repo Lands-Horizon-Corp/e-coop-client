@@ -106,7 +106,15 @@ const LoanPurposeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             disabled={disabled || isLoading}
                         >
                             {selectedOption ? (
-                                selectedOption.description
+                                <>
+                                    {selectedOption.icon && (
+                                        <RenderIcon
+                                            icon={selectedOption.icon as TIcon}
+                                            className="inline mr-1"
+                                        />
+                                    )}
+                                    {selectedOption.description}
+                                </>
                             ) : (
                                 <span className="text-muted-foreground">
                                     {placeholder}
@@ -157,11 +165,12 @@ const LoanPurposeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                                     onChange?.(option)
                                                 }}
                                             >
-                                                <span>
+                                                <span className="flex items-center">
                                                     <RenderIcon
                                                         icon={
                                                             option.icon as TIcon
                                                         }
+                                                        className="inline mr-1.5"
                                                     />
                                                     <span>
                                                         {option.description}
