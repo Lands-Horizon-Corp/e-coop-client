@@ -91,6 +91,7 @@ export const ICONS = [
     'People Group',
     'Running',
     'Paint Brush',
+    'Wand Sparkle',
     'Devices',
     'Exclude',
     'Receipt',

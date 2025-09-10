@@ -114,6 +114,7 @@ import {
     FaUserPlus as UserPlusIcon,
     FaUserShield as UserShieldIcon,
     FaUsersLine as Users3LineIcon,
+    FaWandMagicSparkles as WandSparkleIcon,
 } from 'react-icons/fa6'
 import {
     FiCamera as CameraIcon,
@@ -589,6 +590,7 @@ export {
     HandDepositIcon,
     ChevronDownIcon,
     PDFFileFillIcon,
+    WandSparkleIcon,
     BankDuoToneIcon,
     BarcodeScanIcon,
     AutoAwesomeIcon,
@@ -910,6 +912,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Bank DuoTone': BankDuoToneIcon,
     'Barcode Scan': BarcodeScanIcon,
     'People Group': PeopleGroupIcon,
+    'Wand Sparkle': WandSparkleIcon,
     'Arrow Up Down': ArrowUpDownIcon,
     'PDF File Fill': PDFFileFillIcon,
     'Money Check 2': MoneyCheck2Icon,
