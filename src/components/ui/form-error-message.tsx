@@ -1,3 +1,4 @@
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 
 import { IClassProps } from '@/types'
@@ -5,11 +6,13 @@ import { IClassProps } from '@/types'
 import { ErrorExclamationIcon } from '../icons'
 
 interface Props extends IClassProps {
-    errorMessage?: string | null
+    errorMessage?: string | null | Error
 }
 
 const FormErrorMessage = ({ className, errorMessage }: Props) => {
     if (!errorMessage || errorMessage === null) return null
+
+    const rawError = serverRequestErrExtractor({ error: errorMessage })
 
     return (
         <span
@@ -19,7 +22,7 @@ const FormErrorMessage = ({ className, errorMessage }: Props) => {
             )}
         >
             <ErrorExclamationIcon className="my-1 size-4" />
-            <p className="w-full">{errorMessage}</p>
+            <p className="w-full">{rawError}</p>
         </span>
     )
 }

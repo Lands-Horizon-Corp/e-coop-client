@@ -44,12 +44,13 @@ const TransactionNoFoundBatch = () => {
                 title="No Transaction Batch Found"
                 description="Please create a new transaction batch to proceed."
                 titleClassName="text-center text-2xl font-bold"
-                descriptionClassName="text-center text-sm"
+                descriptionClassName="text-center text-sm !mb-0"
                 open={!hasTransactionBatch}
-                // hideCloseButton
+                className="!max-w-md space-y-0"
                 footer={
                     <>
                         <Button
+                            size={'sm'}
                             onClick={() => {
                                 createBatchModalState.onOpenChange(true)
                             }}
@@ -62,7 +63,11 @@ const TransactionNoFoundBatch = () => {
                             }
                             className="w-full"
                         >
-                            <Button className="w-full" variant={'secondary'}>
+                            <Button
+                                size={'sm'}
+                                className="w-full"
+                                variant={'secondary'}
+                            >
                                 Return to Dashboard
                             </Button>
                         </Link>

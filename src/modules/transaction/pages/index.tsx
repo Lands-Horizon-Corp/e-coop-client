@@ -21,7 +21,6 @@ import { HotkeysProvider, useHotkeys } from 'react-hotkeys-hook'
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
@@ -117,6 +116,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const handleOnSuccessPaymentCallBack = (transaction: IGeneralLedger) => {
         setTransactionFormSuccess(transaction)
         setOpenSuccessModal(true)
+        setOpenPaymentWithTransactionModal(false)
+        setSelectedMember(transaction.member_profile)
+        setSelectedAccountId(undefined)
     }
 
     const hasSelectedTransactionId = !!transactionId
@@ -143,7 +145,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         <>
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
                 <TransactionNoFoundBatch />
-                <div className="w-full flex pb-2">
+                <div className="w-full flex justify-end pb-2">
                     <TransactionShortcuts />
                     <TransactionHistory fullPath={fullPath} />
                 </div>
@@ -169,9 +171,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         transactionId={transactionId}
                     />
                 </HotkeysProvider>
-
-                <div className="flex flex-col lg:flex-row  w-full gap-2 overflow-hidden">
-                    {/* Left Section (History & Payment) */}
+                <div className="flex h-full flex-col lg:flex-row  w-full gap-2 overflow-hidden">
+                    {/* Left Section (Payment) */}
                     <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
                         <TransactionCurrentPaymentEntry
                             totalAmount={transaction?.amount}
@@ -193,7 +194,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             </Button>
                         )}
                     </div>
-
                     {/* Right Section (Ledger Table) */}
                     <div className="flex-1 w-full flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
                         <MemberAccountingLedgerTable
@@ -216,56 +216,49 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         />
                     </div>
                 </div>
+                {/* bottom Section (transaction  Payment) */}
             </PageContainer>
             {selectedMember && (
-                <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
-                    <CardContent className="!h-fit grid grid-cols-1 p-2 lg:!p-0 items-center w-full lg:!w-full">
-                        <HotkeysProvider
-                            initiallyActiveScopes={['transaction']}
-                        >
-                            <PaymentWithTransactionForm
-                                transactionId={transactionId}
-                                memberProfileId={selectedMember?.id}
-                                memberJointId={selectedJointMember?.id}
-                                onSuccess={(transaction) => {
-                                    queryClient.invalidateQueries({
-                                        queryKey: ['member-accounting-ledger'],
-                                    })
-                                    queryClient.invalidateQueries({
-                                        queryKey: [
-                                            'member-profile',
-                                            'paginated',
-                                        ],
-                                    })
-                                    queryClient.invalidateQueries({
-                                        queryKey: [
-                                            'member-joint-account',
-                                            'paginated',
-                                        ],
-                                    })
-                                    queryClient.invalidateQueries({
-                                        queryKey: ['transaction'],
-                                    })
-                                    queryClient.invalidateQueries({
-                                        queryKey: ['general-ledger'],
-                                    })
+                <HotkeysProvider initiallyActiveScopes={['transaction']}>
+                    <PaymentWithTransactionForm
+                        transactionId={transactionId}
+                        memberProfileId={selectedMember?.id}
+                        memberJointId={selectedJointMember?.id}
+                        onSuccess={(transaction) => {
+                            queryClient.invalidateQueries({
+                                queryKey: [
+                                    'member-accounting-ledger',
+                                    'filtered-paginated',
+                                    'member',
+                                    selectedMember?.id,
+                                ],
+                            })
 
-                                    setOpenPaymentWithTransactionModal(false)
-                                    setSelectedMember(
-                                        transaction.member_profile
-                                    )
-                                    setSelectedAccountId(undefined)
-                                    handleSetTransactionId({
-                                        transactionId:
-                                            transaction.transaction_id,
-                                        fullPath,
-                                    })
-                                    handleOnSuccessPaymentCallBack(transaction)
-                                }}
-                            />
-                        </HotkeysProvider>
-                    </CardContent>
-                </Card>
+                            queryClient.invalidateQueries({
+                                queryKey: [
+                                    'transaction',
+                                    'current-user',
+                                    // transaction.member_profile_id,
+                                    // transaction.transaction_batch_id,
+                                    // transaction.account_id,
+                                ],
+                            })
+                            queryClient.invalidateQueries({
+                                queryKey: [
+                                    'general-ledger',
+                                    'filtered-paginated',
+                                    'transaction',
+                                ],
+                                exact: false,
+                            })
+                            handleSetTransactionId({
+                                transactionId: transaction.transaction_id,
+                                fullPath,
+                            })
+                            handleOnSuccessPaymentCallBack(transaction)
+                        }}
+                    />
+                </HotkeysProvider>
             )}
         </>
     )

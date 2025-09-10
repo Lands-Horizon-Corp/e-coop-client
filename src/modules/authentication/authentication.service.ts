@@ -80,7 +80,7 @@ export const verifyWithPasswordAdmin = async (
     const response = await API.post<
         IVerificationPasswordAdminRequest,
         IVerification
-    >(`${authenticationAPIRoute}/verify-with-password/admin`, verificationData)
+    >(`${authenticationAPIRoute}/verify-with-password/owner`, verificationData)
     return response.data
 }
 
@@ -338,3 +338,11 @@ export const useCurrentLoggedInUserLogout = ({
         mutationFn: async () => await signOutLoggedInUsers(),
     })
 }
+
+export const useRequestReverseTransaction = createMutationFactory<
+    IVerification,
+    Error,
+    IVerificationPasswordAdminRequest
+>({
+    mutationFn: async (data) => await verifyWithPasswordAdmin(data),
+})

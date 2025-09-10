@@ -1,3 +1,4 @@
+import { cn } from '@/helpers'
 import { FocusIcon } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -27,7 +28,7 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-const TransactionShortcuts = () => {
+const TransactionShortcuts = ({ className }: { className?: string }) => {
     const { open, onOpenChange } = useModalState()
 
     useHotkeys('Alt+C', () => {
@@ -35,7 +36,7 @@ const TransactionShortcuts = () => {
     })
 
     return (
-        <div>
+        <div className={cn('w-fit', className)}>
             <Button
                 variant="ghost"
                 size="sm"
@@ -47,25 +48,36 @@ const TransactionShortcuts = () => {
                     e.preventDefault()
                     onOpenChange(false)
                 }}
-                className=" hover:!bg-transparent text-muted-foreground/70"
+                className="hover:!bg-transparent text-muted-foreground/70"
             >
-                command shorcuts
+                Command Shortcuts
             </Button>
             <Popover open={open} onOpenChange={onOpenChange} modal>
-                <PopoverTrigger></PopoverTrigger>
+                <PopoverTrigger />
                 <PopoverContent className="md:min-w-[450px] bg-transparent p-0 border-0">
-                    <Command className="rounded-lg border shadow-md ">
-                        <CommandList>
-                            <CommandSeparator />
-                            <CommandGroup heading="Transaction Shortcuts (must unfocus to any element to work)">
+                    <Command className="rounded-lg border shadow-md">
+                        <CommandList className="ecoop-scroll">
+                            {/* General Shortcuts */}
+                            <CommandGroup heading="General">
                                 <CommandItem>
                                     <EyeIcon />
-                                    <span>Open / close command shortcuts</span>
+                                    <span>Open / Close Command Shortcuts</span>
                                     <CommandShortcut>Alt + C</CommandShortcut>
                                 </CommandItem>
                                 <CommandItem>
+                                    <HistoryIcon />
+                                    <span>History</span>
+                                    <CommandShortcut>H</CommandShortcut>
+                                </CommandItem>
+                            </CommandGroup>
+
+                            <CommandSeparator />
+
+                            {/* Member Actions */}
+                            <CommandGroup heading="Member Actions">
+                                <CommandItem>
                                     <ViewIcon />
-                                    <span>View member profile</span>
+                                    <span>View Member Profile</span>
                                     <span className="text-xs italic text-muted-foreground">
                                         (requires a member to be selected)
                                     </span>
@@ -73,24 +85,30 @@ const TransactionShortcuts = () => {
                                 </CommandItem>
                                 <CommandItem>
                                     <UserIcon />
-                                    <span>Select a member</span>
+                                    <span>Select a Member</span>
                                     <CommandShortcut>Enter</CommandShortcut>
                                 </CommandItem>
                                 <CommandItem>
                                     <ScanQrIcon />
-                                    <span>Start/Stop scanner</span>
+                                    <span>Start / Stop Scanner</span>
                                     <CommandShortcut>S</CommandShortcut>
                                 </CommandItem>
                                 <CommandItem>
                                     <ResetIcon />
                                     <span>
-                                        Reset transaction / Clear member
+                                        Reset Transaction / Clear Member
                                     </span>
                                     <CommandShortcut>Escape</CommandShortcut>
                                 </CommandItem>
+                            </CommandGroup>
+
+                            <CommandSeparator />
+
+                            {/* Transaction Actions */}
+                            <CommandGroup heading="Transaction">
                                 <CommandItem>
                                     <FocusIcon />
-                                    <span>Focus on amount</span>
+                                    <span>Focus on Amount</span>
                                     <span className="text-xs italic text-muted-foreground">
                                         (requires a member to be selected)
                                     </span>
@@ -98,18 +116,13 @@ const TransactionShortcuts = () => {
                                 </CommandItem>
                                 <CommandItem>
                                     <ArrowIcon />
-                                    <span>Submit payment</span>
+                                    <span>Submit Payment</span>
                                     <span className="text-xs italic text-muted-foreground">
                                         (requires a member and valid form)
                                     </span>
                                     <CommandShortcut>
                                         Ctrl + Enter
                                     </CommandShortcut>
-                                </CommandItem>
-                                <CommandItem>
-                                    <HistoryIcon />
-                                    <span>History</span>
-                                    <CommandShortcut>H</CommandShortcut>
                                 </CommandItem>
                             </CommandGroup>
                         </CommandList>

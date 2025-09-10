@@ -587,9 +587,7 @@ const UpdateOrganizationForm = ({
                         </TabsContent>
                     </Tabs>
                     <div className="space-y-2">
-                        <FormErrorMessage
-                            errorMessage={error ? error?.message : null}
-                        />
+                        <FormErrorMessage errorMessage={error} />
                         <div className="flex items-center justify-end gap-x-2">
                             <Button
                                 size="sm"

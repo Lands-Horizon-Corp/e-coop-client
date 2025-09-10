@@ -2,7 +2,7 @@
 export { default as TransactionActions } from './actions/transaction-actions'
 
 //exort current payment
-export { default as TransactionCurrentPaymentEntry } from './current-payment'
+export { default as TransactionCurrentPaymentEntry } from './current-payment/transaction-current-payment'
 export { default as TransactionNoCurrentPaymentFound } from './current-payment/transaction-no-current-payment-found'
 
 //export forms

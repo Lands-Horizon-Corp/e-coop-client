@@ -101,6 +101,7 @@ const TransactionCurrentPaymentEntry = ({
     const hasPayments =
         generalLedgerBasedTransaction &&
         generalLedgerBasedTransaction.data.length > 0
+
     return (
         <div className="!h-full flex flex-col gap-y-2 overflow-hidden">
             <div className="flex items-center gap-x-2">
@@ -130,17 +131,15 @@ const TransactionCurrentPaymentEntry = ({
                                     <div>
                                         <Card
                                             key={idx}
-                                            className="!bg-background/90 p-3"
+                                            className="!bg-background/90"
                                         >
                                             <CardContent
-                                                className={cn(
-                                                    'w-full p-0 pr-1'
-                                                )}
+                                                className={cn('w-full !p-0')}
                                             >
                                                 <Accordion
                                                     type="single"
                                                     collapsible
-                                                    className="w-full mt-2"
+                                                    className="w-full"
                                                 >
                                                     <AccordionItem
                                                         value="item-1"
@@ -150,7 +149,7 @@ const TransactionCurrentPaymentEntry = ({
                                                     >
                                                         <AccordionTrigger
                                                             className={cn(
-                                                                'py-0 text-xs hover:!no-underline flex w-full gap-x-2'
+                                                                'p-2 text-xs hover:!no-underline flex w-full gap-x-2'
                                                             )}
                                                         >
                                                             <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -181,7 +180,7 @@ const TransactionCurrentPaymentEntry = ({
                                                                         </span>
                                                                     </div>
                                                                 </div>
-                                                                <p className="text-primary">
+                                                                <p className="text-primary text-sm">
                                                                     <span className="text-xs mr-1 text-muted-foreground">
                                                                         {payment.credit >
                                                                         0
@@ -199,7 +198,7 @@ const TransactionCurrentPaymentEntry = ({
                                                                 </p>
                                                             </div>
                                                         </AccordionTrigger>
-                                                        <AccordionContent className="py-2">
+                                                        <AccordionContent className="py-2 mr-3 pl-2">
                                                             <PaymentsEntryItem
                                                                 label="reference number"
                                                                 copyText={
@@ -256,12 +255,15 @@ const TransactionCurrentPaymentEntry = ({
                                                                             payment.bank_reference_number
                                                                         }
                                                                     />
-                                                                    <PaymentsEntryItem
-                                                                        label="entry date"
-                                                                        value={toReadableDate(
-                                                                            payment.entry_date
-                                                                        )}
-                                                                    />
+
+                                                                    {payment.entry_date && (
+                                                                        <PaymentsEntryItem
+                                                                            label="entry date"
+                                                                            value={toReadableDate(
+                                                                                payment.entry_date
+                                                                            )}
+                                                                        />
+                                                                    )}
                                                                     <PaymentsEntryItem
                                                                         label="Proof of Payment"
                                                                         className="font-bold"

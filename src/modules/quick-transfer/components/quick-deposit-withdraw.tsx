@@ -76,8 +76,8 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     </div>
                     <div className="sticky top-0 z-50">
                         <TransactionMemberProfile
+                            className="!bg-sidebar"
                             memberInfo={selectedMember}
-                            className="!bg-secondary"
                             viewOnly
                         />
                     </div>

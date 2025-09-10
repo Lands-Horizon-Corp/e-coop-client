@@ -1,7 +1,6 @@
 import { IGeneratedReport } from '../generated-reports'
 import { IUserBase } from '../user'
 import { IUserOrganization } from '../user-organization'
-import { TVerificationPasswordAdminSchema } from './authentication.validation'
 
 export interface IAuthContext<TUser = IUserBase | undefined> {
     user?: TUser
@@ -63,7 +62,10 @@ export interface IVerificationPasswordRequest {
     password: string
 }
 
-export type IVerificationPasswordAdminRequest = TVerificationPasswordAdminSchema
+export type IVerificationPasswordAdminRequest = {
+    user_organization_id: string
+    password: string
+}
 
 export interface IVerification {
     success: boolean

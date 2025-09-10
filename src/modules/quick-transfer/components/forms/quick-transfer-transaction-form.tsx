@@ -130,7 +130,6 @@ export const QuickTransferTransactionForm = ({
             },
         },
     })
-
     const { data: paymentType } = useGetAll()
 
     const handleSubmit = form.handleSubmit(
