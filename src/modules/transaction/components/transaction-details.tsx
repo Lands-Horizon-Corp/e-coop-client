@@ -4,6 +4,7 @@ import { dateAgo } from '@/helpers/date-utils'
 import { ITransaction } from '@/modules/transaction'
 
 import ImageDisplay from '@/components/image-display'
+import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 import { TransactionCardItem } from './transaction-card-item'
@@ -36,9 +37,13 @@ export const TransactionDetails = ({
                 <p onClick={() => onClick?.()}>
                     {item.member_profile?.full_name || 'Unknown Member'}
                     {item.reference_number !== '' && (
-                        <span className="text-xs rounded-sm bg-secondary px-1.5 py-1">
+                        <Button
+                            size={'sm'}
+                            variant="ghost"
+                            className="text-xs rounded-sm hover:!bg-transparent text-muted-foreground "
+                        >
                             - {item.reference_number}
-                        </span>
+                        </Button>
                     )}
                     <span className="italic text-xs">{item.source}</span>
                 </p>

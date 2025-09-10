@@ -80,7 +80,7 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
             <Sheet open={onOpen} onOpenChange={setOnOpen}>
                 <SheetTrigger asChild className="">
                     <Button
-                        variant="secondary"
+                        variant="ghost"
                         className=""
                         size="sm"
                         onClick={() => setOnOpen(true)}

@@ -11,6 +11,7 @@ import MemberOverallInfo, {
 } from '@/modules/member-profile/components/member-infos/view-member-info'
 import HoveruserInfo from '@/modules/user/components/hover-user-info'
 import { useImagePreview } from '@/store/image-preview-store'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
     BadgeCheckIcon,
@@ -76,10 +77,15 @@ const TransactionMemberProfile = ({
         }
     }
 
+    useHotkeys('Alt+V', () => {
+        infoModal.onOpenChange(() => !infoModal.open)
+    })
+
     if (!memberInfo) return null
     const memberMedias = [memberInfo.media, memberInfo.signature_media].filter(
         (media): media is IMedia => !!media
     )
+
     return (
         <>
             <MemberOverallInfoModal
@@ -90,11 +96,11 @@ const TransactionMemberProfile = ({
             />
             <div
                 className={cn(
-                    'w-full ecoop-scroll rounded-2xl overflow-x-auto h-fit flex-col space-y-2 min-w-[300px] overscroll-contain bg-card bg-gradient-to-br from-primary/10 to-background border-primary/40 p-5',
+                    'w-full ecoop-scroll rounded-2xl overflow-x-auto h-fit flex flex-col justify-between space-y-2 min-w-[300px] overscroll-contain bg-card bg-gradient-to-br from-primary/10 to-background border-primary/40 p-5',
                     className
                 )}
             >
-                <div className="flex w-full  space-x-5 items-center h-fit ">
+                <div className="flex w-full space-x-5 items-center h-fit ">
                     <div className="flex items-center h-fit gap-y-1 flex-col min-w-[6vw] max-w-[5vw]">
                         <div className="flex-shrink-0">
                             <PreviewMediaWrapper media={memberInfo.media}>
@@ -111,7 +117,7 @@ const TransactionMemberProfile = ({
                         <Drawer>
                             <DrawerTrigger asChild className="">
                                 <Button
-                                    variant={'secondary'}
+                                    variant={'outline'}
                                     size="sm"
                                     className="text-xs w-full h-7 min-w-24 cursor-pointer"
                                 >

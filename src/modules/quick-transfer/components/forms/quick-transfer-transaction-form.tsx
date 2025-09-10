@@ -226,6 +226,8 @@ export const QuickTransferTransactionForm = ({
                                     form.setValue('member', selectedMember)
                                     setSelectedMember(selectedMember)
                                 }}
+                                triggerVariant={'outline'}
+                                // triggerClassName="dark:bg-background hover:bg-secondary/50"
                                 placeholder="Select Member"
                             />
                         )}

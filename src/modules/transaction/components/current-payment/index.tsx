@@ -58,7 +58,7 @@ const TransactionCurrentPaymentEntry = ({
 }: CurrentPaymentsEntryListProps) => {
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
-        pageSize: 50,
+        pageSize: 20,
     })
     const { sortingStateBase64 } = useDataTableSorting()
 
@@ -137,52 +137,6 @@ const TransactionCurrentPaymentEntry = ({
                                                     'w-full p-0 pr-1'
                                                 )}
                                             >
-                                                <div className="flex w-full items-center gap-x-2">
-                                                    <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                                        <LedgerSourceBadge
-                                                            source={
-                                                                payment.source
-                                                            }
-                                                            className="rounded-lg size-10 flex items-center justify-center"
-                                                            showValue={false}
-                                                        />
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <div className="b flex w-full items-center gap-x-2">
-                                                            <p className="grow flex flex-col">
-                                                                <span className="inline-flex items-center gap-x-2 text-sm font-semibold">
-                                                                    {
-                                                                        payment
-                                                                            .account
-                                                                            ?.name
-                                                                    }
-                                                                </span>
-                                                                <span className="text-[11px] text-muted-foreground">
-                                                                    {dateAgo(
-                                                                        payment.created_at
-                                                                    )}
-                                                                </span>
-                                                            </p>
-
-                                                            <p className="text-primary">
-                                                                <span className="text-xs mr-1 text-muted-foreground">
-                                                                    {payment.credit >
-                                                                    0
-                                                                        ? 'Credit'
-                                                                        : 'Debit'}
-                                                                </span>
-                                                                ₱{' '}
-                                                                {commaSeparators(
-                                                                    (
-                                                                        payment.credit ||
-                                                                        payment.debit ||
-                                                                        0
-                                                                    ).toString()
-                                                                )}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <Accordion
                                                     type="single"
                                                     collapsible
@@ -196,10 +150,54 @@ const TransactionCurrentPaymentEntry = ({
                                                     >
                                                         <AccordionTrigger
                                                             className={cn(
-                                                                'py-0 text-xs'
+                                                                'py-0 text-xs hover:!no-underline flex w-full gap-x-2'
                                                             )}
                                                         >
-                                                            view details
+                                                            <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                                                <LedgerSourceBadge
+                                                                    source={
+                                                                        payment.source
+                                                                    }
+                                                                    className="rounded-lg size-10 flex items-center justify-center"
+                                                                    showValue={
+                                                                        false
+                                                                    }
+                                                                />
+                                                            </div>
+                                                            <div className="b flex w-full items-center gap-x-2">
+                                                                <div className="grow flex">
+                                                                    <div className="flex flex-col items-start">
+                                                                        <span className="items-center text-sm font-semibold">
+                                                                            {
+                                                                                payment
+                                                                                    .account
+                                                                                    ?.name
+                                                                            }
+                                                                        </span>
+                                                                        <span className="text-[11px] text-muted-foreground">
+                                                                            {dateAgo(
+                                                                                payment.created_at
+                                                                            )}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <p className="text-primary">
+                                                                    <span className="text-xs mr-1 text-muted-foreground">
+                                                                        {payment.credit >
+                                                                        0
+                                                                            ? 'Credit'
+                                                                            : 'Debit'}
+                                                                    </span>
+                                                                    ₱{' '}
+                                                                    {commaSeparators(
+                                                                        (
+                                                                            payment.credit ||
+                                                                            payment.debit ||
+                                                                            0
+                                                                        ).toString()
+                                                                    )}
+                                                                </p>
+                                                            </div>
                                                         </AccordionTrigger>
                                                         <AccordionContent className="py-2">
                                                             <PaymentsEntryItem

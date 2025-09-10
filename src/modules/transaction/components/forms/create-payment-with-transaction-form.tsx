@@ -197,10 +197,107 @@ const PaymentWithTransactionForm = ({
         <Form {...form}>
             <form
                 onSubmit={handleSubmit}
-                className="flex flex-col lg:flex-row overflow-auto "
+                className=" !w-full flex flex-col lg:justify-between lg:flex-row overflow-auto "
             >
-                <div className=" overflow-y-auto ecoop-scroll flex-1 p-2">
-                    <div className="min-w-[900px] grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4  ">
+                <div className="overflow-y-auto ecoop-scroll p-2">
+                    {isOnlinePayment && (
+                        <Card className="absolute bottom-[105%] bg-sidebar left-0 ">
+                            <CardContent className="grid w-ful grid-cols-1 lg:grid-cols-5 !min-w-fit gap-5 p-0 py-2 px-2 ">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    labelClassName="text-xs font-medium relative text-muted-foreground"
+                                    name="bank_id"
+                                    label="Bank"
+                                    render={({ field }) => (
+                                        <BankCombobox
+                                            {...field}
+                                            value={field.value ?? undefined}
+                                            placeholder="Select a bank"
+                                            onChange={(selectedBank) =>
+                                                field.onChange(selectedBank.id)
+                                            }
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="entry_date"
+                                    labelClassName="text-xs font-medium relative text-muted-foreground"
+                                    label="Bank Date"
+                                    className="relative"
+                                    description="mm/dd/yyyy"
+                                    descriptionClassName="absolute top-0 right-0"
+                                    render={({ field }) => (
+                                        <InputDate
+                                            {...field}
+                                            placeholder="Bank Date"
+                                            className="block"
+                                            value={field.value ?? ''}
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="bank_reference_number"
+                                    label="Bank Reference Number"
+                                    labelClassName="text-xs font-medium relative text-muted-foreground"
+                                    render={({ field }) => (
+                                        <Input
+                                            {...field}
+                                            value={field.value ?? undefined}
+                                            placeholder="add a bank reference number"
+                                            onChange={field.onChange}
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="proof_of_payment_media_id"
+                                    labelClassName="text-xs font-medium relative text-muted-foreground"
+                                    label="Proof of Payment"
+                                    render={({ field }) => {
+                                        const value = form.watch(
+                                            'proof_of_payment_media'
+                                        )
+                                        return (
+                                            <ImageField
+                                                {...field}
+                                                placeholder="Upload Photo"
+                                                className="!max-h-10"
+                                                isFieldView
+                                                value={
+                                                    value
+                                                        ? (value as IMedia)
+                                                              .download_url
+                                                        : value
+                                                }
+                                                onChange={(newImage) => {
+                                                    if (newImage) {
+                                                        field.onChange(
+                                                            newImage.id
+                                                        )
+                                                        form.setValue(
+                                                            'proof_of_payment_media',
+                                                            newImage as IMedia
+                                                        )
+                                                    } else {
+                                                        field.onChange(
+                                                            undefined
+                                                        )
+                                                        form.setValue(
+                                                            'proof_of_payment_media',
+                                                            undefined
+                                                        )
+                                                    }
+                                                }}
+                                            />
+                                        )
+                                    }}
+                                />
+                            </CardContent>
+                        </Card>
+                    )}
+                    <div className=" !min-w-fit lg:!min-w-[900px] h-fit grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-4  ">
                         <div>
                             <FormFieldWrapper
                                 control={form.control}
@@ -304,109 +401,10 @@ const PaymentWithTransactionForm = ({
                             )}
                         />
 
-                        {isOnlinePayment && (
-                            <Card className="absolute bottom-[105%] bg-sidebar left-0 ">
-                                <CardContent className="grid w-full grid-cols-5 !min-w-fit gap-5 p-0 py-2 px-2 ">
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        labelClassName="text-xs font-medium relative text-muted-foreground"
-                                        name="bank_id"
-                                        label="Bank"
-                                        render={({ field }) => (
-                                            <BankCombobox
-                                                {...field}
-                                                value={field.value ?? undefined}
-                                                placeholder="Select a bank"
-                                                onChange={(selectedBank) =>
-                                                    field.onChange(
-                                                        selectedBank.id
-                                                    )
-                                                }
-                                            />
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="entry_date"
-                                        labelClassName="text-xs font-medium relative text-muted-foreground"
-                                        label="Bank Date"
-                                        className="relative"
-                                        description="mm/dd/yyyy"
-                                        descriptionClassName="absolute top-0 right-0"
-                                        render={({ field }) => (
-                                            <InputDate
-                                                {...field}
-                                                placeholder="Bank Date"
-                                                className="block"
-                                                value={field.value ?? ''}
-                                            />
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="bank_reference_number"
-                                        label="Bank Reference Number"
-                                        labelClassName="text-xs font-medium relative text-muted-foreground"
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                value={field.value ?? undefined}
-                                                placeholder="add a bank reference number"
-                                                onChange={field.onChange}
-                                            />
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="proof_of_payment_media_id"
-                                        labelClassName="text-xs font-medium relative text-muted-foreground"
-                                        label="Proof of Payment"
-                                        render={({ field }) => {
-                                            const value = form.watch(
-                                                'proof_of_payment_media'
-                                            )
-                                            return (
-                                                <ImageField
-                                                    {...field}
-                                                    placeholder="Upload Photo"
-                                                    className="!max-h-10"
-                                                    isFieldView
-                                                    value={
-                                                        value
-                                                            ? (value as IMedia)
-                                                                  .download_url
-                                                            : value
-                                                    }
-                                                    onChange={(newImage) => {
-                                                        if (newImage) {
-                                                            field.onChange(
-                                                                newImage.id
-                                                            )
-                                                            form.setValue(
-                                                                'proof_of_payment_media',
-                                                                newImage as IMedia
-                                                            )
-                                                        } else {
-                                                            field.onChange(
-                                                                undefined
-                                                            )
-                                                            form.setValue(
-                                                                'proof_of_payment_media',
-                                                                undefined
-                                                            )
-                                                        }
-                                                    }}
-                                                />
-                                            )
-                                        }}
-                                    />
-                                </CardContent>
-                            </Card>
-                        )}
                         <Accordion
                             type="single"
                             collapsible
-                            className="w-full col-span-3 overflow-auto"
+                            className="w-full col-span-3 hidden overflow-auto"
                             defaultValue="item-1"
                         >
                             <AccordionItem value="item-1 " className="border-0">
@@ -426,7 +424,7 @@ const PaymentWithTransactionForm = ({
                                                 value={field.value}
                                                 placeholder="a short description..."
                                                 autoComplete="off"
-                                                className="!h-12 !max-h-20"
+                                                className="!h-12 !max-h-20 !border"
                                             />
                                         )}
                                     />
@@ -481,13 +479,14 @@ const PaymentWithTransactionForm = ({
                         />
                     </div>
                 </div>
-                <div className="flex items-center justify-end gap-x-2">
+                <div className="flex items-center justify-end mb-2 gap-x-2">
                     <Button
                         size="sm"
                         type="button"
                         variant="ghost"
+                        id="select-member-button"
                         onClick={() => formReset()}
-                        className="w-full self-end px-8 sm:w-fit"
+                        className=" w-full self-end px-8 sm:w-fit"
                     >
                         reset
                     </Button>

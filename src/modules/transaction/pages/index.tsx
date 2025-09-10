@@ -140,59 +140,62 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     })
 
     return (
-        <PageContainer className="flex h-[90vh] w-full !overflow-hidden">
-            <TransactionNoFoundBatch />
-            <TransactionModalSuccessPayment
-                open={openSuccessModal}
-                onOpenChange={setOpenSuccessModal}
-                transaction={transactionFormSuccess}
-                onClose={handleCloseSuccessModal}
-                isOpen={openSuccessModal}
-            />
-            <HotkeysProvider initiallyActiveScopes={['member-scanner-view']}>
-                <TransactionMemberScanner
-                    fullPath={fullPath}
-                    handleSetTransactionId={() =>
-                        handleSetTransactionId({
-                            transactionId: undefined,
-                            fullPath,
-                        })
-                    }
-                    className="p-1"
-                    transactionId={transactionId}
-                />
-            </HotkeysProvider>
-
-            <div className="flex h-full w-full gap-2 !overflow-hidden">
-                {/* Right Section: History & Payment */}
-                <div className="lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
+        <>
+            <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
+                <TransactionNoFoundBatch />
+                <div className="w-full flex pb-2">
+                    <TransactionShortcuts />
                     <TransactionHistory fullPath={fullPath} />
-                    <TransactionCurrentPaymentEntry
-                        totalAmount={transaction?.amount}
+                </div>
+                <TransactionModalSuccessPayment
+                    open={openSuccessModal}
+                    onOpenChange={setOpenSuccessModal}
+                    transaction={transactionFormSuccess}
+                    onClose={handleCloseSuccessModal}
+                    isOpen={openSuccessModal}
+                />
+                <HotkeysProvider
+                    initiallyActiveScopes={['member-scanner-view']}
+                >
+                    <TransactionMemberScanner
+                        fullPath={fullPath}
+                        handleSetTransactionId={() =>
+                            handleSetTransactionId({
+                                transactionId: undefined,
+                                fullPath,
+                            })
+                        }
+                        className="p-2"
                         transactionId={transactionId}
                     />
-                    {hasSelectedTransactionId && (
-                        <Button
-                            size="sm"
-                            variant={'outline'}
-                            onClick={(e) => {
-                                e.preventDefault()
-                                handleResetAll()
-                                handleSetTransactionId({ fullPath })
-                            }}
-                            className="w-full mb-2"
-                        >
-                            <ResetIcon className="mr-2" />
-                            reset current transaction
-                        </Button>
-                    )}
-                </div>
+                </HotkeysProvider>
 
-                <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
-                    <div className="flex justify-end mb-2">
-                        <TransactionShortcuts />
+                <div className="flex flex-col lg:flex-row  w-full gap-2 overflow-hidden">
+                    {/* Left Section (History & Payment) */}
+                    <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
+                        <TransactionCurrentPaymentEntry
+                            totalAmount={transaction?.amount}
+                            transactionId={transactionId}
+                        />
+                        {hasSelectedTransactionId && (
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    handleResetAll()
+                                    handleSetTransactionId({ fullPath })
+                                }}
+                                className="w-full mb-2"
+                            >
+                                <ResetIcon className="mr-2" />
+                                reset current transaction
+                            </Button>
+                        )}
                     </div>
-                    <div className="w-full p-2">
+
+                    {/* Right Section (Ledger Table) */}
+                    <div className="flex-1 w-full flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
                         <MemberAccountingLedgerTable
                             mode="member"
                             memberProfileId={
@@ -213,15 +216,14 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         />
                     </div>
                 </div>
-            </div>
+            </PageContainer>
             {selectedMember && (
-                <Card className="sticky top-0 m-2 w-full !p-0 h-fit">
-                    <CardContent className="h-fit grid grid-cols-1 !p-2 items-center !w-full">
+                <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
+                    <CardContent className="!h-fit grid grid-cols-1 p-2 lg:!p-0 items-center w-full lg:!w-full">
                         <HotkeysProvider
                             initiallyActiveScopes={['transaction']}
                         >
                             <PaymentWithTransactionForm
-                                className="max-w-2xl"
                                 transactionId={transactionId}
                                 memberProfileId={selectedMember?.id}
                                 memberJointId={selectedJointMember?.id}
@@ -265,7 +267,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     </CardContent>
                 </Card>
             )}
-        </PageContainer>
+        </>
     )
 }
 export default Transaction

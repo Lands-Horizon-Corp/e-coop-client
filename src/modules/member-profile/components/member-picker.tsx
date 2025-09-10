@@ -43,6 +43,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             allowShorcutCommand = false,
             triggerClassName,
             onSelect,
+            triggerVariant = 'secondary',
         },
         ref
     ) => {
@@ -199,7 +200,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                 <Button
                     ref={ref}
                     type="button"
-                    variant="secondary"
+                    variant={triggerVariant}
                     disabled={disabled}
                     onClick={() => setState(true)}
                     className={cn(

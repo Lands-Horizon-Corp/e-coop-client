@@ -84,7 +84,7 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
                     ref={ref}
                     value={formattedValue}
                     className={cn(
-                        'border !border-primary',
+                        'border !border-primary/20',
                         isDefault
                             ? ''
                             : 'h-16 rounded-2xl pl-8 pr-10 text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',

@@ -1,11 +1,14 @@
 import { FocusIcon } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
     ArrowIcon,
+    EyeIcon,
     HistoryIcon,
     ResetIcon,
     ScanQrIcon,
     UserIcon,
+    ViewIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,6 +29,10 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 const TransactionShortcuts = () => {
     const { open, onOpenChange } = useModalState()
+
+    useHotkeys('Alt+C', () => {
+        onOpenChange(!open)
+    })
 
     return (
         <div>
@@ -51,6 +58,19 @@ const TransactionShortcuts = () => {
                         <CommandList>
                             <CommandSeparator />
                             <CommandGroup heading="Transaction Shortcuts (must unfocus to any element to work)">
+                                <CommandItem>
+                                    <EyeIcon />
+                                    <span>Open / close command shortcuts</span>
+                                    <CommandShortcut>Alt + C</CommandShortcut>
+                                </CommandItem>
+                                <CommandItem>
+                                    <ViewIcon />
+                                    <span>View member profile</span>
+                                    <span className="text-xs italic text-muted-foreground">
+                                        (requires a member to be selected)
+                                    </span>
+                                    <CommandShortcut>Alt + V</CommandShortcut>
+                                </CommandItem>
                                 <CommandItem>
                                     <UserIcon />
                                     <span>Select a member</span>
@@ -82,7 +102,9 @@ const TransactionShortcuts = () => {
                                     <span className="text-xs italic text-muted-foreground">
                                         (requires a member and valid form)
                                     </span>
-                                    <CommandShortcut>Enter</CommandShortcut>
+                                    <CommandShortcut>
+                                        Ctrl + Enter
+                                    </CommandShortcut>
                                 </CommandItem>
                                 <CommandItem>
                                     <HistoryIcon />
