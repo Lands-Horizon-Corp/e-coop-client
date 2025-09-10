@@ -158,9 +158,10 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
                 </div>
             )
 
-        if (!currentAuth.user)
+        if (!currentAuth.user || authStatus === 'unauthorized')
             return (
                 <Navigate
+                    ignoreBlocker
                     to={'/auth/sign-in' as string}
                     search={{
                         cbUrl: callbackUrl,
