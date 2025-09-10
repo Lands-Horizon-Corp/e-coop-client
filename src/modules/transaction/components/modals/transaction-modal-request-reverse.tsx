@@ -51,7 +51,7 @@ const TransactionReverseRequestForm = ({
         defaultValues: {},
     })
 
-    const { formRef, handleFocusError, isDisabled } =
+    const { formRef, handleFocusError } =
         useFormHelper<TTransactionReverseRequestValues>({
             form,
             ...formProps,
@@ -107,14 +107,13 @@ const TransactionReverseRequestForm = ({
                                 mode="owner"
                                 value={form.getValues('user_organization')}
                                 onSelect={(value) => {
-                                    field.onChange(value?.user_id)
+                                    field.onChange(value?.id)
                                     form.setValue(
-                                        'user_organization_id',
-                                        value.id
+                                        'user_organization',
+                                        value.user
                                     )
                                 }}
                                 placeholder="Select Employee"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
