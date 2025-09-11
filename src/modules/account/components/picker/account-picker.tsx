@@ -73,9 +73,11 @@ const AccountPicker = ({
         mode,
         query: {
             pagination,
-            enabled: !disabled,
             showMessage: false,
             filterPayload: finalFilterPayload,
+        },
+        options: {
+            enabled: !disabled,
         },
     })
     const { data = [], totalPage = 0, totalSize = 0 } = AccountData || {}
