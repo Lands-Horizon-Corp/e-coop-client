@@ -16,7 +16,7 @@ interface IFormResetSubmitFooterProps extends IClassProps {
 
     showConfirmOnReset?: boolean
 
-    submitText?: string
+    submitText?: React.ReactNode | string
     resetText?: string
 
     error?: Error | string | null

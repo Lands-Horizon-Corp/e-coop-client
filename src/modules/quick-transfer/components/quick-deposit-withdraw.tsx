@@ -7,10 +7,8 @@ import {
     QuickTransferTransactionForm,
     TPaymentMode,
 } from '@/modules/quick-transfer'
-import {
-    TransactionMemberProfile,
-    TransactionNoFoundBatch,
-} from '@/modules/transaction'
+import { TransactionMemberProfile } from '@/modules/transaction'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -25,10 +23,10 @@ import { TEntityId } from '@/types'
 
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
     const { selectedMember, setSelectedAccount } = useDepositWithdrawStore()
+    const { hasNoTransactionBatch } = useTransactionBatchStore()
 
     return (
         <PageContainer className="flex w-full !overflow-hidden">
-            <TransactionNoFoundBatch />
             <div className="flex w-full flex-col space-y-1">
                 <div className="flex justify-start items-center space-x-2 w-full px-5">
                     {mode === 'deposit' ? (
@@ -61,6 +59,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                 >
                     <QuickTransferTransactionForm
                         mode={mode}
+                        readOnly={!hasNoTransactionBatch}
                         onSuccess={() => {
                             toast.success('Transaction completed successfully')
                         }}

@@ -12,9 +12,9 @@ import {
     TransactionCurrentPaymentEntry,
     TransactionHistory,
     TransactionModalSuccessPayment,
-    TransactionNoFoundBatch,
     useGetById,
 } from '@/modules/transaction'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
@@ -40,9 +40,8 @@ type TTransactionProps = {
 }
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
-
+    const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
-
     const {
         selectedMember,
         openSuccessModal,
@@ -146,7 +145,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             setOpenMemberPicker(true)
         }
     })
-
     return (
         <>
             <TransactionReverseRequestFormModal
@@ -162,7 +160,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             />
 
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
-                <TransactionNoFoundBatch />
                 <div className="w-full flex justify-end pb-2">
                     <TransactionShortcuts />
                     <TransactionHistory fullPath={fullPath} />
@@ -239,6 +236,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             {selectedMember && (
                 <HotkeysProvider initiallyActiveScopes={['transaction']}>
                     <PaymentWithTransactionForm
+                        readOnly={!hasNoTransactionBatch}
                         transactionId={transactionId}
                         memberProfileId={selectedMember?.id}
                         memberJointId={selectedJointMember?.id}
@@ -251,15 +249,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     selectedMember?.id,
                                 ],
                             })
-
                             queryClient.invalidateQueries({
-                                queryKey: [
-                                    'transaction',
-                                    'current-user',
-                                    // transaction.member_profile_id,
-                                    // transaction.transaction_batch_id,
-                                    // transaction.account_id,
-                                ],
+                                queryKey: ['transaction', 'current-user'],
                             })
                             queryClient.invalidateQueries({
                                 queryKey: [

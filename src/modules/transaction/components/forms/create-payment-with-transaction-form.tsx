@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { useForm } from 'react-hook-form'
+import { Path, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -16,6 +16,7 @@ import {
     PaymentWithTransactionSchema,
     TPaymentWithTransactionFormValues,
     TransactionAmountField,
+    TransactionNoFoundBatch,
     TransactionPaymentTypeComboBox,
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
@@ -67,6 +68,8 @@ const PaymentWithTransactionForm = ({
     transactionId,
     memberProfileId,
     memberJointId,
+    disabledFields,
+    readOnly,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
     const {
@@ -190,15 +193,21 @@ const PaymentWithTransactionForm = ({
         form.setValue('reference_number', userSettingOR)
     }
 
+    const isDisabled = (field: Path<TPaymentWithTransactionFormValues>) =>
+        readOnly || disabledFields?.includes(field) || isPending || false
+
     useHotkeys('A', (e) => {
         form.setFocus('amount')
         e.preventDefault()
     })
 
+    const isFormIsDirty = form.formState.isDirty
+
     useHotkeys(
         'ctrl+Enter',
         (e) => {
             e.preventDefault()
+            if (readOnly || isPending || !isFormIsDirty) return
             handleSubmit()
         },
         {
@@ -210,6 +219,7 @@ const PaymentWithTransactionForm = ({
     return (
         <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
             <CardContent className="!h-fit grid grid-cols-1 p-2 lg:!p-0 items-center w-full lg:!w-full">
+                <TransactionNoFoundBatch mode="payment" />
                 <Form {...form}>
                     <form
                         onSubmit={handleSubmit}
@@ -231,6 +241,9 @@ const PaymentWithTransactionForm = ({
                                                         field.value ?? undefined
                                                     }
                                                     placeholder="Select a bank"
+                                                    disabled={isDisabled(
+                                                        'bank_id'
+                                                    )}
                                                     onChange={(selectedBank) =>
                                                         field.onChange(
                                                             selectedBank.id
@@ -252,6 +265,9 @@ const PaymentWithTransactionForm = ({
                                                     {...field}
                                                     placeholder="Bank Date"
                                                     className="block"
+                                                    disabled={isDisabled(
+                                                        'entry_date'
+                                                    )}
                                                     value={field.value ?? ''}
                                                 />
                                             )}
@@ -268,6 +284,9 @@ const PaymentWithTransactionForm = ({
                                                         field.value ?? undefined
                                                     }
                                                     placeholder="add a bank reference number"
+                                                    disabled={isDisabled(
+                                                        'bank_reference_number'
+                                                    )}
                                                     onChange={field.onChange}
                                                 />
                                             )}
@@ -287,6 +306,9 @@ const PaymentWithTransactionForm = ({
                                                         placeholder="Upload Photo"
                                                         className="!max-h-10"
                                                         isFieldView
+                                                        disabled={isDisabled(
+                                                            'proof_of_payment_media_id'
+                                                        )}
                                                         value={
                                                             value
                                                                 ? (
@@ -337,6 +359,9 @@ const PaymentWithTransactionForm = ({
                                                     id={field.name}
                                                     ref={field.ref}
                                                     placeholder="Reference Number"
+                                                    disabled={isDisabled(
+                                                        'reference_number'
+                                                    )}
                                                     value={field.value}
                                                     onChange={field.onChange}
                                                 />
@@ -353,6 +378,9 @@ const PaymentWithTransactionForm = ({
                                                 <Checkbox
                                                     className="mr-2"
                                                     checked={field.value}
+                                                    disabled={isDisabled(
+                                                        'or_auto_generated'
+                                                    )}
                                                     onCheckedChange={(
                                                         value
                                                     ) => {
@@ -379,6 +407,7 @@ const PaymentWithTransactionForm = ({
                                             <TransactionAmountField
                                                 isDefault
                                                 {...field}
+                                                disabled={isDisabled('amount')}
                                             />
                                         )
                                     }}
@@ -392,6 +421,7 @@ const PaymentWithTransactionForm = ({
                                         <AccountPicker
                                             mode={focusTypePayment}
                                             value={form.watch('account')}
+                                            disabled={isDisabled('account_id')}
                                             onSelect={(account) => {
                                                 field.onChange(account.id)
                                                 form.setValue(
@@ -417,6 +447,9 @@ const PaymentWithTransactionForm = ({
                                             {...field}
                                             value={field.value ?? undefined}
                                             placeholder="Select a payment type"
+                                            disabled={isDisabled(
+                                                'payment_type_id'
+                                            )}
                                             onChange={(selectedPaymentType) => {
                                                 field.onChange(
                                                     selectedPaymentType.id
@@ -464,6 +497,9 @@ const PaymentWithTransactionForm = ({
                                                         value={field.value}
                                                         placeholder="a short description..."
                                                         autoComplete="off"
+                                                        disabled={isDisabled(
+                                                            'description'
+                                                        )}
                                                         className="!h-12 !max-h-20 !border"
                                                     />
                                                 )}
@@ -482,6 +518,9 @@ const PaymentWithTransactionForm = ({
                                                             className="!max-h-15 min-h-15 "
                                                             placeholder="Signature"
                                                             hideIcon
+                                                            disabled={isDisabled(
+                                                                'signature_media_id'
+                                                            )}
                                                             value={
                                                                 value
                                                                     ? (
@@ -521,7 +560,7 @@ const PaymentWithTransactionForm = ({
                             </div>
                             <FormErrorMessage errorMessage={error} />
                         </div>
-                        <div className="flex items-center justify-end mb-2 gap-x-2">
+                        <div className="flex items-center px-2 justify-end mb-2 gap-x-2">
                             <Button
                                 size="sm"
                                 type="button"
