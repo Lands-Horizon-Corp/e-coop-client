@@ -270,8 +270,6 @@ const LoanTransactionCreateUpdateForm = ({
         },
     })
 
-    console.log('values', form.getValues())
-
     const { formRef, handleFocusError, isDisabled, firstError } =
         useFormHelper<TLoanTransactionSchema>({
             form,
@@ -281,14 +279,12 @@ const LoanTransactionCreateUpdateForm = ({
         })
 
     const onSubmit = form.handleSubmit(
-        async (payload, e) => {
-            console.log('Triggerer', e)
+        async (payload) => {
             const targetId = loanTransactionId || createdLoanTransactionId
 
             let promise = undefined
 
             if (formMode === 'update' && targetId) {
-                console.log('Submitted ', payload)
                 promise = updateMutation.mutateAsync(
                     { id: targetId, payload },
                     {
