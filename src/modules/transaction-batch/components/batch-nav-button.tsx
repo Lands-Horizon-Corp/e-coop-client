@@ -126,7 +126,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                     size="sm"
                     variant="secondary"
                     hoverVariant="primary"
-                    className="group rounded-full text-foreground/70"
+                    className="group rounded-full text-muted-foreground"
                 >
                     <LayersSharpDotIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
                     Manage Batch
