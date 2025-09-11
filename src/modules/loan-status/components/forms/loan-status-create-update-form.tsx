@@ -13,6 +13,7 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -27,7 +28,6 @@ import {
     LoanStatusSchema,
     TLoanStatusSchema,
 } from '../../loan-status.validation'
-import { Textarea } from '@/components/ui/textarea'
 
 export interface ILoanStatusFormProps
     extends IClassProps,
