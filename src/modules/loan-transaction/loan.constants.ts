@@ -1,4 +1,5 @@
 export const LOAN_MODE_OF_PAYMENT = [
+    'day',
     'daily',
     'weekly',
     'semi-monthly',

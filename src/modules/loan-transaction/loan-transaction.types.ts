@@ -4,8 +4,10 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import { ICollateral } from '../collateral'
+import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
 import { ILoanPurpose } from '../loan-purpose'
 import { ILoanStatus } from '../loan-status'
+import { ILoanTransactionEntry } from '../loan-transaction-entry'
 import { IMedia } from '../media'
 import { IMemberAccountingLedger } from '../member-account-ledger'
 import { IMemberProfile } from '../member-profile'
@@ -94,6 +96,9 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     damayan_fund: number
     share_capital: number
     length_of_service: string
+
+    loan_clearance_analysis: ILoanClearanceAnalysis[]
+    loan_transaction_entries: ILoanTransactionEntry[]
 
     exclude_sunday: boolean
     exclude_holiday: boolean

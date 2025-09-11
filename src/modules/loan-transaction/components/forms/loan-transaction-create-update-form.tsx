@@ -1,11 +1,11 @@
-import { useCallback, useRef, useState } from 'react'
+import { forwardRef, useCallback, useRef, useState } from 'react'
 
-import { useForm } from 'react-hook-form'
+import { UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { cn } from '@/helpers'
+import { cn, formatNumber } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
@@ -59,6 +59,14 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -80,6 +88,7 @@ import {
 } from '../../loan-transaction.validation'
 import { LOAN_MODE_OF_PAYMENT, LOAN_TYPE } from '../../loan.constants'
 import WeekdayCombobox from '../weekday-combobox'
+import LoanEntriesEditor from './loan-entries-editor'
 
 type TLoanTransactionFormMode = 'create' | 'update'
 
@@ -222,8 +231,10 @@ const LoanTransactionCreateUpdateForm = ({
         },
     } = useAuthUserWithOrgBranch()
 
-    const [createdLoanTransactionId, setCreatedLoanTransactionId] =
-        useState<TEntityId | null>(null)
+    const [createdLoanTransactionId, setCreatedLoanTransactionId] = useState<
+        TEntityId | undefined
+    >(loanTransactionId)
+
     const hasAutoCreatedRef = useRef(false)
 
     const form = useForm<TLoanTransactionSchema>({
@@ -234,6 +245,9 @@ const LoanTransactionCreateUpdateForm = ({
             mode_of_payment_fixed_days: 0,
             is_add_on: false,
             loan_type: 'standard',
+            loan_clearance_analysis: [],
+            loan_transaction_entries: [],
+            loan_transaction_entries_deleted: [],
             ...formProps.defaultValues,
         },
     })
@@ -256,23 +270,39 @@ const LoanTransactionCreateUpdateForm = ({
         },
     })
 
-    const { formRef, handleFocusError, isDisabled } =
+    console.log('values', form.getValues())
+
+    const { formRef, handleFocusError, isDisabled, firstError } =
         useFormHelper<TLoanTransactionSchema>({
             form,
             ...formProps,
-            autoSave: loanTransactionId !== undefined && formMode === 'update',
+            // autoSave: formMode !== 'create',
+            autoSaveDelay: 2000,
         })
 
     const onSubmit = form.handleSubmit(
-        async (payload) => {
+        async (payload, e) => {
+            console.log('Triggerer', e)
             const targetId = loanTransactionId || createdLoanTransactionId
 
             let promise = undefined
 
             if (formMode === 'update' && targetId) {
-                promise = updateMutation.mutateAsync({ id: targetId, payload })
+                console.log('Submitted ', payload)
+                promise = updateMutation.mutateAsync(
+                    { id: targetId, payload },
+                    {
+                        onSuccess: (data) =>
+                            form.reset(
+                                data as unknown as ILoanTransactionRequest
+                            ),
+                    }
+                )
             } else if (formMode === 'create' && !hasAutoCreatedRef.current) {
-                promise = createMutation.mutateAsync(payload)
+                promise = createMutation.mutateAsync(payload, {
+                    onSuccess: (data) =>
+                        form.reset(data as unknown as ILoanTransactionRequest),
+                })
             }
 
             toast.promise(promise as unknown as Promise<unknown>, {
@@ -308,9 +338,7 @@ const LoanTransactionCreateUpdateForm = ({
         reset,
     } = formMode === 'update' ? updateMutation : createMutation
 
-    const error = serverRequestErrExtractor({ error: rawError })
-
-    // console.log(form.formState.errors)
+    const error = firstError || serverRequestErrExtractor({ error: rawError })
 
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
@@ -320,16 +348,18 @@ const LoanTransactionCreateUpdateForm = ({
         'comaker_deposit_member_accounting_ledger'
     )
 
+    // const loan_clearance_analysis = form.watch('loan_clearance_analysis')
+
     return (
         <Form {...form}>
             <form
                 ref={formRef}
                 onSubmit={onSubmit}
-                className={cn('flex w-full flex-col', className)}
+                className={cn('w-full max-w-full', className)}
             >
                 <fieldset
                     disabled={isPending || formProps.readOnly}
-                    className=" p-4 space-y-3"
+                    className="p-4 space-y-3 max-w-full min-w-0"
                 >
                     <div className="space-y-1 rounded-xl bg-popover p-4">
                         <div>
@@ -486,359 +516,6 @@ const LoanTransactionCreateUpdateForm = ({
 
                     <fieldset
                         disabled={!memberProfile}
-                        className="space-y-4 rounded-xl p-4 bg-popover"
-                    >
-                        <div className="justify-between flex items-center">
-                            <div>
-                                <p className="font-medium">
-                                    <TextFileFillIcon className="inline text-primary" />{' '}
-                                    Loan Details
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                    Specify loan type, amount, and payment terms
-                                </p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="official_receipt_number"
-                                    label={
-                                        <span className="flex items-center justify-between pb-1">
-                                            <span>
-                                                OR{' '}
-                                                <HashIcon className="inline text-muted-foreground" />
-                                            </span>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    const constructedOR =
-                                                        user_setting_used_or
-                                                            .toString()
-                                                            .padStart(
-                                                                user_setting_number_padding,
-                                                                '0'
-                                                            )
-
-                                                    form.setValue(
-                                                        'official_receipt_number',
-                                                        constructedOR,
-                                                        { shouldDirty: true }
-                                                    )
-
-                                                    toast.info(
-                                                        `Set or to ${constructedOR}`
-                                                    )
-                                                }}
-                                                className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
-                                            >
-                                                Auto OR{' '}
-                                                <WandSparkleIcon className="inline" />
-                                            </button>
-                                        </span>
-                                    }
-                                    className="col-span-1 max-w-72"
-                                    render={({ field }) => <Input {...field} />}
-                                />
-                                <Separator
-                                    className="min-h-8 mt-6"
-                                    orientation="vertical"
-                                />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="loan_status_id"
-                                    label="Loan Status"
-                                    labelClassName='text-right grow block'                                   className="w-fit"
-                                    render={({ field }) => (
-                                        <LoanStatusCombobox
-                                            value={field.value}
-                                            onChange={(loanStatus) =>
-                                                field.onChange(loanStatus.id)
-                                            }
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
-
-                        {!memberProfile && (
-                            <FormErrorMessage errorMessage="Select member profile first to enable this section" />
-                        )}
-
-                        <div className="items-center grid grid-cols-3 gap-3">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="loan_purpose_id"
-                                label="Loan Purpose"
-                                className="col-span-1"
-                                render={({ field }) => (
-                                    <LoanPurposeCombobox
-                                        {...field}
-                                        onChange={(loanPurpose) =>
-                                            field.onChange(loanPurpose.id)
-                                        }
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="loan_type"
-                                label="Loan Type"
-                                className="col-span-1"
-                                render={({ field }) => (
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger className="w-full capitalize">
-                                                <SelectValue
-                                                    placeholder="Select Loan Type"
-                                                    className="capitalize"
-                                                />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {LOAN_TYPE.map((loan_type) => (
-                                                <SelectItem
-                                                    key={loan_type}
-                                                    value={loan_type}
-                                                    className="capitalize"
-                                                >
-                                                    {loan_type}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="applied_1"
-                                label="Applied Amount *"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        id={field.name}
-                                        placeholder="Applied Amount"
-                                        className="border-primary/70 border-2"
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                )}
-                            />
-                        </div>
-
-                        {/* <FormFieldWrapper
-                                    control={form.control}
-                                    name="applied_2"
-                                    label={
-                                        <span>
-                                            Applied Amount{' '}
-                                            <span className="text-muted-foreground ml-1 text-xs">
-                                                (secondary)
-                                            </span>
-                                        </span>
-                                    }
-                                    render={({ field }) => (
-                                        <Input
-                                            {...field}
-                                            id={field.name}
-                                            placeholder="Applied Amount (secondary)"
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                /> */}
-
-                        <Separator />
-
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="mode_of_payment"
-                                    label="Mode of Payment"
-                                    className="shrink-0 w-fit col-span-4"
-                                    render={({ field }) => (
-                                        <RadioGroup
-                                            onValueChange={field.onChange}
-                                            value={field.value ?? ''}
-                                            className="flex gap-x-2"
-                                        >
-                                            {LOAN_MODE_OF_PAYMENT.map((mop) => (
-                                                <FormItem
-                                                    key={mop}
-                                                    className="flex items-center gap-4"
-                                                >
-                                                    <label
-                                                        key={`mop-${mop}`}
-                                                        className="border-accent hover:bg-accent ease-in-out duration-100 bg-muted has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/40 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-6 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
-                                                    >
-                                                        <RadioGroupItem
-                                                            value={mop}
-                                                            id={`mop-${mop}`}
-                                                            tabIndex={0}
-                                                            className="absolute border-0 inset-0 opacity-0 cursor-pointer"
-                                                        />
-                                                        <p className="text-foreground capitalize text-xs leading-none font-medium pointer-events-none">
-                                                            {mop}
-                                                        </p>
-                                                        {field.value ===
-                                                            mop && (
-                                                            <CheckIcon className="inline pointer-events-none" />
-                                                        )}
-                                                    </label>
-                                                </FormItem>
-                                            ))}
-                                        </RadioGroup>
-                                    )}
-                                />
-                                <Separator
-                                    className="min-h-8 mt-6"
-                                    orientation="vertical"
-                                />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="terms"
-                                    label="Terms"
-                                    render={({ field }) => (
-                                        <Input
-                                            {...field}
-                                            id={field.name}
-                                            placeholder="Terms"
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
-                            </div>
-                            {mode_of_payment === 'daily' && (
-                                <>
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mode_of_payment_fixed_days"
-                                        label="Days"
-                                        className="space-y-1 col-span-1"
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                placeholder="No of Days"
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                            />
-                                        )}
-                                    />
-                                </>
-                            )}
-                            {mode_of_payment === 'weekly' && (
-                                <>
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mode_of_payment_weekly"
-                                        label="Weekdays"
-                                        className="space-y-1 col-span-1"
-                                        render={({ field }) => (
-                                            <WeekdayCombobox {...field} />
-                                        )}
-                                    />
-                                </>
-                            )}
-                            {mode_of_payment === 'semi-monthly' && (
-                                <div className="grid grid-cols-2 gap-3">
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mode_of_payment_semi_monthly_pay_1"
-                                        label="Pay 1 (Day of Month) *"
-                                        className="col-span-1"
-                                        render={({ field }) => (
-                                            <Input {...field} />
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mode_of_payment_semi_monthly_pay_2"
-                                        label="Pay 2 (Day of Month) *"
-                                        className="col-span-1"
-                                        render={({ field }) => (
-                                            <Input {...field} />
-                                        )}
-                                    />
-                                </div>
-                            )}
-                        </div>
-
-                        <Separator />
-
-                        <fieldset
-                            disabled={!memberProfile}
-                            className="flex gap-x-2"
-                        >
-                            {/* <FormFieldWrapper
-                                    control={form.control}
-                                    name="previous_loan_id"
-                                    label="Change prev. loan to amt. applied"
-                                    className="col-span-1"
-                                    render={({ field }) => (
-                                        <LoanPicker
-                                            mode="member-profile"
-                                            value={previous_loan}
-                                            memberProfileId={
-                                                form.getValues(
-                                                    'member_profile_id'
-                                                ) as TEntityId
-                                            }
-                                            disabled={
-                                                memberProfile === undefined
-                                            }
-                                            placeholder="Select previous loan"
-                                            onSelect={(loan) => {
-                                                field.onChange(loan?.id)
-                                                form.setValue(
-                                                    'previous_loan',
-                                                    loan
-                                                )
-                                            }}
-                                        />
-                                    )}
-                                /> */}
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="is_add_on"
-                                render={({ field }) => (
-                                    <div className="border-input has-data-[state=checked]:border-primary/50 border-2 has-data-[state=checked]:bg-primary/20 duration-200 ease-in-out relative flex w-full items-center gap-2 rounded-xl px-2 py-0.5 shadow-xs outline-none">
-                                        <Switch
-                                            id="loan-add-on"
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            aria-describedby={`loan-add-on-description`}
-                                            className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <ShapesIcon className="text-primary size-4" />
-                                            <div className="text-xs">
-                                                <Label
-                                                    htmlFor={'loan-add-on'}
-                                                    className="text-xs"
-                                                >
-                                                    Add-On{' '}
-                                                </Label>
-                                                <p
-                                                    id="loan-add-on-description"
-                                                    className="text-muted-foreground text-xs"
-                                                >
-                                                    Include Add-On&apos;s
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-                        </fieldset>
-                    </fieldset>
-
-                    <Separator />
-
-                    <fieldset
-                        disabled={!memberProfile}
                         className="space-y-4 bg-popover rounded-xl p-4"
                     >
                         <div>
@@ -982,9 +659,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 id="comaker-member-description"
                                                                 className="text-muted-foreground text-xs"
                                                             >
-                                                                Another
-                                                                cooperative
-                                                                member acts as
+                                                                A member acts as
                                                                 co-maker
                                                             </p>
                                                         </div>
@@ -1310,9 +985,364 @@ const LoanTransactionCreateUpdateForm = ({
                         </div>
                     </fieldset>
 
+                    <Separator />
+
+                    <fieldset
+                        disabled={!memberProfile}
+                        className="space-y-4 rounded-xl p-4 bg-popover"
+                    >
+                        <div className="justify-between flex items-center">
+                            <div>
+                                <p className="font-medium">
+                                    <TextFileFillIcon className="inline text-primary" />{' '}
+                                    Loan Details
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    Specify loan type, amount, and payment terms
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="official_receipt_number"
+                                    label={
+                                        <span className="flex items-center justify-between pb-1">
+                                            <span>
+                                                OR{' '}
+                                                <HashIcon className="inline text-muted-foreground" />
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const constructedOR =
+                                                        user_setting_used_or
+                                                            .toString()
+                                                            .padStart(
+                                                                user_setting_number_padding,
+                                                                '0'
+                                                            )
+
+                                                    form.setValue(
+                                                        'official_receipt_number',
+                                                        constructedOR,
+                                                        { shouldDirty: true }
+                                                    )
+
+                                                    toast.info(
+                                                        `Set or to ${constructedOR}`
+                                                    )
+                                                }}
+                                                className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
+                                            >
+                                                Auto OR{' '}
+                                                <WandSparkleIcon className="inline" />
+                                            </button>
+                                        </span>
+                                    }
+                                    className="col-span-1 max-w-72"
+                                    render={({ field }) => <Input {...field} />}
+                                />
+                                <Separator
+                                    className="min-h-8 mt-6"
+                                    orientation="vertical"
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="loan_status_id"
+                                    label="Loan Status"
+                                    labelClassName="text-right grow block"
+                                    className="w-fit"
+                                    render={({ field }) => (
+                                        <LoanStatusCombobox
+                                            value={field.value}
+                                            onChange={(loanStatus) =>
+                                                field.onChange(loanStatus.id)
+                                            }
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+
+                        {!memberProfile && (
+                            <FormErrorMessage errorMessage="Select member profile first to enable this section" />
+                        )}
+
+                        <div className="items-center grid grid-cols-3 gap-3">
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="loan_purpose_id"
+                                label="Loan Purpose"
+                                className="col-span-1"
+                                render={({ field }) => (
+                                    <LoanPurposeCombobox
+                                        {...field}
+                                        onChange={(loanPurpose) =>
+                                            field.onChange(loanPurpose.id)
+                                        }
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="loan_type"
+                                label="Loan Type"
+                                className="col-span-1"
+                                render={({ field }) => (
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className="w-full capitalize">
+                                                <SelectValue
+                                                    placeholder="Select Loan Type"
+                                                    className="capitalize"
+                                                />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {LOAN_TYPE.map((loan_type) => (
+                                                <SelectItem
+                                                    key={loan_type}
+                                                    value={loan_type}
+                                                    className="capitalize"
+                                                >
+                                                    {loan_type}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="applied_1"
+                                label="Applied Amount *"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        id={field.name}
+                                        placeholder="Applied Amount"
+                                        className="border-primary/70 border-2"
+                                        disabled={isDisabled(field.name)}
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        {/* <FormFieldWrapper
+                                    control={form.control}
+                                    name="applied_2"
+                                    label={
+                                        <span>
+                                            Applied Amount{' '}
+                                            <span className="text-muted-foreground ml-1 text-xs">
+                                                (secondary)
+                                            </span>
+                                        </span>
+                                    }
+                                    render={({ field }) => (
+                                        <Input
+                                            {...field}
+                                            id={field.name}
+                                            placeholder="Applied Amount (secondary)"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                /> */}
+
+                        <Separator />
+
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="mode_of_payment"
+                                    label="Mode of Payment"
+                                    className="shrink-0 w-fit col-span-4"
+                                    render={({ field }) => (
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            value={field.value ?? ''}
+                                            className="flex gap-x-2"
+                                        >
+                                            {LOAN_MODE_OF_PAYMENT.map((mop) => (
+                                                <FormItem
+                                                    key={mop}
+                                                    className="flex items-center gap-4"
+                                                >
+                                                    <label
+                                                        key={`mop-${mop}`}
+                                                        className="border-accent hover:bg-accent ease-in-out duration-100 bg-muted has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/40 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-6 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
+                                                    >
+                                                        <RadioGroupItem
+                                                            value={mop}
+                                                            id={`mop-${mop}`}
+                                                            tabIndex={0}
+                                                            className="absolute border-0 inset-0 opacity-0 cursor-pointer"
+                                                        />
+                                                        <p className="text-foreground capitalize text-xs leading-none font-medium pointer-events-none">
+                                                            {mop}
+                                                        </p>
+                                                        {field.value ===
+                                                            mop && (
+                                                            <CheckIcon className="inline pointer-events-none" />
+                                                        )}
+                                                    </label>
+                                                </FormItem>
+                                            ))}
+                                        </RadioGroup>
+                                    )}
+                                />
+                                <Separator
+                                    className="min-h-8 mt-6"
+                                    orientation="vertical"
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="terms"
+                                    label="Terms"
+                                    render={({ field }) => (
+                                        <Input
+                                            {...field}
+                                            id={field.name}
+                                            placeholder="Terms"
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                />
+                            </div>
+                            {mode_of_payment === 'day' && (
+                                <>
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="mode_of_payment_fixed_days"
+                                        label="Fixed Days"
+                                        className="space-y-1 col-span-1"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                id={field.name}
+                                                placeholder="No of Days"
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </>
+                            )}
+                            {mode_of_payment === 'weekly' && (
+                                <>
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="mode_of_payment_weekly"
+                                        label="Weekdays"
+                                        className="space-y-1 col-span-1"
+                                        render={({ field }) => (
+                                            <WeekdayCombobox {...field} />
+                                        )}
+                                    />
+                                </>
+                            )}
+                            {mode_of_payment === 'semi-monthly' && (
+                                <div className="grid grid-cols-2 gap-3">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="mode_of_payment_semi_monthly_pay_1"
+                                        label="Pay 1 (Day of Month) *"
+                                        className="col-span-1"
+                                        render={({ field }) => (
+                                            <Input {...field} />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="mode_of_payment_semi_monthly_pay_2"
+                                        label="Pay 2 (Day of Month) *"
+                                        className="col-span-1"
+                                        render={({ field }) => (
+                                            <Input {...field} />
+                                        )}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        <Separator />
+
+                        <fieldset
+                            disabled={!memberProfile}
+                            className="flex gap-x-2"
+                        >
+                            {/* <FormFieldWrapper
+                                    control={form.control}
+                                    name="previous_loan_id"
+                                    label="Change prev. loan to amt. applied"
+                                    className="col-span-1"
+                                    render={({ field }) => (
+                                        <LoanPicker
+                                            mode="member-profile"
+                                            value={previous_loan}
+                                            memberProfileId={
+                                                form.getValues(
+                                                    'member_profile_id'
+                                                ) as TEntityId
+                                            }
+                                            disabled={
+                                                memberProfile === undefined
+                                            }
+                                            placeholder="Select previous loan"
+                                            onSelect={(loan) => {
+                                                field.onChange(loan?.id)
+                                                form.setValue(
+                                                    'previous_loan',
+                                                    loan
+                                                )
+                                            }}
+                                        />
+                                    )}
+                                /> */}
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="is_add_on"
+                                render={({ field }) => (
+                                    <div className="border-input has-data-[state=checked]:border-primary/50 border-2 has-data-[state=checked]:bg-primary/20 duration-200 ease-in-out relative flex w-full items-center gap-2 rounded-xl px-2 py-0.5 shadow-xs outline-none">
+                                        <Switch
+                                            id="loan-add-on"
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            aria-describedby={`loan-add-on-description`}
+                                            className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                        />
+                                        <div className="flex grow items-center gap-3">
+                                            <ShapesIcon className="text-primary size-4" />
+                                            <div className="text-xs">
+                                                <Label
+                                                    htmlFor={'loan-add-on'}
+                                                    className="text-xs"
+                                                >
+                                                    Add-On{' '}
+                                                </Label>
+                                                <p
+                                                    id="loan-add-on-description"
+                                                    className="text-muted-foreground text-xs"
+                                                >
+                                                    Include Add-On&apos;s
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            />
+                        </fieldset>
+                    </fieldset>
+
                     <Tabs
                         value={tab}
                         onValueChange={(tab) => setTab(tab as TLoanFormTabs)}
+                        className="max-w-full min-w-0"
                     >
                         <ScrollArea>
                             <TabsList className="before:bg-border justify-start relative h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px">
@@ -1368,12 +1398,16 @@ const LoanTransactionCreateUpdateForm = ({
                             value="entries"
                             className="bg-popover p-4 rounded-xl"
                         >
-                            <div className="min-h-24 rounded-xl bg-accent"></div>
+                            <LoanEntriesEditor
+                                form={form}
+                                disabled={formMode === 'create'}
+                            />
                         </TabsContent>
                         <TabsContent
                             value="clearance"
-                            className="bg-popover p-4 rounded-xl"
+                            className="bg-popover p-4 rounded-xl min-w-0"
                         >
+                            <LoanClearanceAnalysisList form={form} />
                             <div className="grid grid-cols-2 gap-x-2">
                                 <div className="space-y-2">
                                     <FormFieldWrapper
@@ -1561,29 +1595,126 @@ const LoanTransactionCreateUpdateForm = ({
                         </TabsContent>
                     </Tabs>
                 </fieldset>
-                {formMode === 'create' && (
-                    <FormFooterResetSubmit
-                        className="p-4 sticky bottom-0 mx-4 mb-4 bg-popover/70 rounded-xl"
-                        error={error}
-                        readOnly={formProps.readOnly}
-                        isLoading={isPending}
-                        // disableSubmit={
-                        //     formMode === 'create' && !areRequiredFieldsFilled
-                        // }
-                        submitText="Create"
-                        onReset={() => {
-                            form.reset()
-                            reset?.()
-                            hasAutoCreatedRef.current = false
-                            setFormMode('create')
-                            setCreatedLoanTransactionId(null)
-                        }}
-                    />
-                )}
+                <FormFooterResetSubmit
+                    className="grow min-w-0 max-w-full p-4 z-10 sticky bottom-0 mx-4 mb-4 bg-popover/70 rounded-xl"
+                    error={error}
+                    readOnly={formProps.readOnly}
+                    isLoading={isPending}
+                    // disableSubmit={
+                    //     formMode === 'create' && !areRequiredFieldsFilled
+                    // }
+                    submitText={mode}
+                    onReset={() => {
+                        form.reset()
+                        reset?.()
+                        hasAutoCreatedRef.current = false
+                        setFormMode('create')
+                        setCreatedLoanTransactionId(undefined)
+                    }}
+                />
             </form>
         </Form>
     )
 }
+
+const LoanClearanceAnalysisList = forwardRef<
+    HTMLTableElement,
+    { form: UseFormReturn<TLoanTransactionSchema> }
+>(({ form }, ref) => {
+    const { fields, insert } = useFieldArray({
+        control: form.control,
+        name: 'loan_clearance_analysis',
+        keyName: 'fieldKey',
+    })
+
+    useSimpleShortcut(['Shift', 'N'], () => {
+        insert(0, {
+            balances_description: '',
+            regular_deduction_description: '',
+        })
+        toast.info('Added loan analysis')
+    })
+
+    return (
+        <Table
+            ref={ref}
+            wrapperClassName="max-h-72 bg-secondary rounded-xl ecoop-scroll"
+            className="table-fixed border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
+        >
+            <TableHeader className="bg-background/90 sticky top-0 z-10 backdrop-blur-xs">
+                <TableRow className="*:border-border hover:bg-transparent [&>:not(:last-child)]:border-r">
+                    <TableHead colSpan={2} className="text-center font-bold">
+                        Regular Deductions
+                    </TableHead>
+                    <TableHead colSpan={3} className="text-center font-bold">
+                        Balances
+                    </TableHead>
+                </TableRow>
+                <TableRow className="*:border-border hover:bg-transparent [&>:not(:last-child)]:border-r">
+                    <TableHead>Description</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead className="text-right">Cnt.</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {fields.map(
+                    ({
+                        id,
+                        regular_deduction_description,
+                        regular_deduction_amount,
+                        balances_description,
+                        balances_amount,
+                        balances_count,
+                    }) => (
+                        <TableRow
+                            key={id}
+                            className="*:border-border hover:bg-transparent [&>:not(:last-child)]:border-r"
+                        >
+                            <TableCell>
+                                <div className="flex flex-col">
+                                    <span className="font-medium">
+                                        {regular_deduction_description || '-'}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                        Regular Deduction
+                                    </span>
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                ₱{formatNumber(regular_deduction_amount || 0)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                                ₱{formatNumber(balances_amount || 0)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                                {balances_count || 0}
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex flex-col">
+                                    <span className="font-medium">
+                                        {balances_description || '-'}
+                                    </span>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    )
+                )}
+
+                {fields.length === 0 && (
+                    <TableRow>
+                        <TableCell colSpan={5}>
+                            <p className="py-16 text-center text-sm text-muted-foreground/80">
+                                No clearance analysis yet.
+                            </p>
+                        </TableCell>
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
+    )
+})
 
 export const LoanTransactionCreateUpdateFormModal = ({
     className,

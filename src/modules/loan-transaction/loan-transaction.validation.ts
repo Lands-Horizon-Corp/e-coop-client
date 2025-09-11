@@ -2,6 +2,8 @@ import z from 'zod'
 
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
+import { LoanClearanceAnalysisSchema } from '../loan-clearance-analysis'
+import { LoanTransactionEntrySchema } from '../loan-transaction-entry'
 import {
     LOAN_COLLECTOR_PLACE,
     LOAN_COMAKER_TYPE,
@@ -14,7 +16,7 @@ const WithWeekdays = z.discriminatedUnion(
     'mode_of_payment',
     [
         z.object({
-            mode_of_payment: z.literal('daily'),
+            mode_of_payment: z.literal('day'),
             mode_of_payment_fixed_days: z.coerce
                 .number('Invalid number of days')
                 .min(1, 'Minimum of 1 day'),
@@ -51,7 +53,7 @@ const WithWeekdays = z.discriminatedUnion(
         z.object({
             mode_of_payment: z.enum(
                 LOAN_MODE_OF_PAYMENT.filter(
-                    (val) => !['weekly', 'daily', 'semi-monthly'].includes(val)
+                    (val) => !['weekly', 'day', 'semi-monthly'].includes(val)
                 )
             ),
         }),
@@ -121,20 +123,29 @@ export const LoanTransactionSchema = z
         account_id: entityIdSchema.optional(),
         account: z.any(),
 
+        loan_transaction_entries: z.array(LoanTransactionEntrySchema),
+        loan_transaction_entries_deleted: z.array(entityIdSchema).optional(), // not saved in backend, just for indicator what to delete
+
         member_profile_id: entityIdSchema.optional(),
-        member_profile: z.any().optional(), // just for member prorifle picker
+        member_profile: z.any().optional(), // just for member prorifle picker (client side)
 
         member_joint_account_id: entityIdSchema.optional(),
         signature_media_id: entityIdSchema.optional(),
 
         mount_to_be_closed: z.coerce.number().optional(),
-        damayan_fund: z.coerce.number().min(1, 'yeag'),
+        damayan_fund: z.coerce.number().optional(),
         share_capital: z.coerce.number().optional(),
         length_of_service: z.string().optional(),
 
         exclude_sunday: z.boolean().optional(),
         exclude_holiday: z.boolean().optional(),
         exclude_saturday: z.boolean().optional(),
+
+        //Loan Clearance Analysis
+        loan_clearance_analysis: z
+            .array(LoanClearanceAnalysisSchema)
+            .optional()
+            .default([]),
 
         remarks_other_terms: z.string().optional(),
         remarks_payroll_deduction: z.boolean().optional(),

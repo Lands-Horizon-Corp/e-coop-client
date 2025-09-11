@@ -152,14 +152,14 @@ const LoanTransactionTableColumns = (
                     original: { member_profile },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {member_profile && (
                         <ImageNameDisplay
                             src={member_profile.media_id}
                             name={member_profile.full_name}
                         />
                     )}
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -190,7 +190,10 @@ const LoanTransactionTableColumns = (
                 <p className="!text-wrap text-muted-foreground">
                     {account && (
                         <>
-                            <RenderIcon icon={account.icon as TIcon} />
+                            <RenderIcon
+                                icon={account.icon as TIcon}
+                                className="inline mr-1"
+                            />
                             <span>{account.name}</span>
                         </>
                     )}
@@ -222,14 +225,14 @@ const LoanTransactionTableColumns = (
                     original: { employee_user },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {employee_user && (
                         <ImageNameDisplay
                             src={employee_user.media_id}
                             name={employee_user.full_name}
                         />
                     )}
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -257,7 +260,7 @@ const LoanTransactionTableColumns = (
                     original: { loan_status },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {loan_status && (
                         <InfoTooltip content={loan_status.description}>
                             <Badge>
@@ -271,7 +274,7 @@ const LoanTransactionTableColumns = (
                             </Badge>
                         </InfoTooltip>
                     )}
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -360,9 +363,9 @@ const LoanTransactionTableColumns = (
                     original: { loan_type },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {loan_type && <LoanTypeBadge loanType={loan_type} />}
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -391,7 +394,7 @@ const LoanTransactionTableColumns = (
                     original: { collector_place },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {collector_place && (
                         <LoanCollectorPlaceBadge
                             collectorPlace={
@@ -399,7 +402,7 @@ const LoanTransactionTableColumns = (
                             }
                         />
                     )}
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,

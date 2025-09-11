@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -13,13 +14,28 @@ import LoanTransactionAction, {
 } from '../loan-transaction-table/row-action-context'
 
 const LoansPage = () => {
+    const {
+        currentAuth: {
+            user_organization: {
+                branch: {
+                    branch_setting: { cash_on_hand_account },
+                },
+            },
+        },
+    } = useAuthUserWithOrgBranch()
+
     const createModal = useModalState()
     const { data } = useTransactionBatchStore()
 
     return (
         <PageContainer>
             <LoanTransactionCreateUpdateFormModal
-                formProps={{ mode: 'create' }}
+                formProps={{
+                    mode: 'create',
+                    defaultValues: {
+                        cash_on_hand_account,
+                    },
+                }}
                 {...createModal}
             />
             <LoanTransactionTable
