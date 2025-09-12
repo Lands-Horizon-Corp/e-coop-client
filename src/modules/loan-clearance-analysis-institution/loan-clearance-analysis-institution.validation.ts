@@ -1,12 +1,20 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const loanClearanceAnalysisInstitutionSchema = z.object({
-    loan_transaction_id: entityIdSchema,
-    name: z.string().min(1).max(50),
-    description: z.string().optional(),
+export const LoanClearanceAnalysisInstitutionSchema = z.object({
+    id: entityIdSchema.optional(),
+    name: z
+        .string()
+        .min(1, 'LoanClearanceAnalysisInstitution name is required'),
+    loan_transaction_id: entityIdSchema.optional(),
+    description: z
+        .string()
+        .min(10, 'Min 10 character description')
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
-export type TLoanClearanceAnalysisInstitutionFormValues = z.infer<
-    typeof loanClearanceAnalysisInstitutionSchema
+
+export type TLoanClearanceAnalysisInstitutionSchema = z.infer<
+    typeof LoanClearanceAnalysisInstitutionSchema
 >
