@@ -60,6 +60,7 @@ const FormFieldWrapper = <
                     >
                         {label && (
                             <FormLabel
+                                tabIndex={-1}
                                 htmlFor={field.name}
                                 className={cn(
                                     'text-foreground/80',

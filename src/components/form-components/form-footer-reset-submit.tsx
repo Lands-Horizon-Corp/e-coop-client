@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react'
+
 import { cn } from '@/helpers'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
@@ -21,7 +23,11 @@ interface IFormResetSubmitFooterProps extends IClassProps {
 
     error?: Error | string | null
 
+    resetButtonType?: 'button' | 'reset'
+    submitButtonType?: 'button' | 'submit'
+
     onReset?: () => void
+    onSubmit?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 const FormFooterResetSubmit = ({
@@ -34,6 +40,11 @@ const FormFooterResetSubmit = ({
     error,
     showSeparator = false,
     showConfirmOnReset = true,
+
+    resetButtonType = 'button',
+    submitButtonType = 'submit',
+
+    onSubmit,
     onReset,
 }: IFormResetSubmitFooterProps) => {
     const { onOpen } = useConfirmModalStore()
@@ -52,7 +63,7 @@ const FormFooterResetSubmit = ({
             <div className="flex items-center justify-end gap-x-2">
                 <Button
                     size="sm"
-                    type="button"
+                    type={resetButtonType}
                     variant="secondary"
                     onClick={() => {
                         if (showConfirmOnReset) {
@@ -72,7 +83,8 @@ const FormFooterResetSubmit = ({
                 </Button>
                 <Button
                     size="sm"
-                    type="submit"
+                    type={onSubmit !== undefined ? 'button' : submitButtonType}
+                    onClick={onSubmit}
                     disabled={isLoading || readOnly || disableSubmit}
                     className="w-full self-end px-8 sm:w-fit"
                 >

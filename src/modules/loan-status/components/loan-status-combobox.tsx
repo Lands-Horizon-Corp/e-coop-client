@@ -98,6 +98,7 @@ const LoanStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
+                            tabIndex={0}
                             className={cn(
                                 'w-full justify-between px-3',
                                 className

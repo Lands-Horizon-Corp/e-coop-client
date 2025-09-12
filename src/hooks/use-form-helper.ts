@@ -63,10 +63,7 @@ export const useFormHelper = <T extends FieldValues>({
         }
     }, [form, onOpen, defaultValues, resetOnDefaultChange])
 
-    const isDisabled = useCallback(
-        (field: Path<T>) => readOnly || disabledFields.includes(field),
-        [readOnly, disabledFields]
-    )
+    const { isDisabled } = useFormDisabled<T>({ readOnly, disabledFields })
 
     const isHidden = useCallback(
         (field: Path<T>) => hiddenFields.includes(field),
@@ -108,6 +105,21 @@ export const useFormHelper = <T extends FieldValues>({
         handleFocusError,
         getDisableHideFieldProps,
     }
+}
+
+export const useFormDisabled = <T extends FieldValues>({
+    readOnly = false,
+    disabledFields = [],
+}: {
+    readOnly?: boolean
+    disabledFields?: Path<T>[]
+}) => {
+    const isDisabled = useCallback(
+        (field: Path<T>) => readOnly || disabledFields.includes(field),
+        [readOnly, disabledFields]
+    )
+
+    return { isDisabled }
 }
 
 export const useFocusOnErrorField = <T extends FieldValues>({

@@ -190,6 +190,8 @@ const AccountPicker = ({
             {!modalOnly && (
                 <Button
                     type="button"
+                    role="combobox"
+                    tabIndex={0}
                     variant="secondary"
                     disabled={disabled}
                     onClick={() => setState((prev) => !prev)}
