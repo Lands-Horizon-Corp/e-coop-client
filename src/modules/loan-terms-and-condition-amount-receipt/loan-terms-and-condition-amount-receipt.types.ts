@@ -1,27 +1,20 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import z from 'zod'
+
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { ILoanTransaction } from '../loan-transaction'
+import { LoanTermsAndConditionAmountReceiptSchema } from './loan-terms-and-condition-amount-receipt.validation'
 
-export interface ILoanTermsAndConditionAmountReceiptRequest {
-    loan_transaction_id: TEntityId
+export interface ILoanTermsAndConditionAmountReceipt extends IBaseEntityMeta {
+    loan_transaction_id?: TEntityId // auto inserted by server
     account_id: TEntityId
-    amount?: number
-}
-
-export interface ILoanTermsAndConditionAmountReceiptResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    loan_transaction_id: TEntityId
-    loan_transaction?: ILoanTransaction
-    account_id: TEntityId
-    account?: IAccount
+    account: IAccount
     amount: number
 }
+
+export type ILoanTermsAndConditionAmountReceiptRequest = z.infer<
+    typeof LoanTermsAndConditionAmountReceiptSchema
+>
+
+export interface ILoanTermsAndConditionAmountReceiptPaginated
+    extends IPaginatedResult<ILoanTermsAndConditionAmountReceipt> {}
