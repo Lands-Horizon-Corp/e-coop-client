@@ -1,17 +1,21 @@
-import { forwardRef, useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
-import { UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { cn, formatNumber } from '@/helpers'
+import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import CollateralCombobox from '@/modules/collateral/components/collateral-combobox'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
 import LoanStatusCombobox from '@/modules/loan-status/components/loan-status-combobox'
+import {
+    LOAN_MODE_OF_PAYMENT,
+    LOAN_TYPE,
+} from '@/modules/loan-transaction/loan.constants'
 import MemberAccountingLedgerPicker from '@/modules/member-accounting-ledger/components/member-accounting-ledger-picker'
 import {
     IMemberProfile,
@@ -59,14 +63,6 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -77,18 +73,22 @@ import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { useCreateLoanTransaction, useUpdateLoanTransactionById } from '../..'
+import {
+    useCreateLoanTransaction,
+    useUpdateLoanTransactionById,
+} from '../../..'
 import {
     ILoanTransaction,
     ILoanTransactionRequest,
-} from '../../loan-transaction.types'
+} from '../../../loan-transaction.types'
 import {
     LoanTransactionSchema,
     TLoanTransactionSchema,
-} from '../../loan-transaction.validation'
-import { LOAN_MODE_OF_PAYMENT, LOAN_TYPE } from '../../loan.constants'
-import WeekdayCombobox from '../weekday-combobox'
+} from '../../../loan-transaction.validation'
+import WeekdayCombobox from '../../weekday-combobox'
+import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanEntriesEditor from './loan-entries-editor'
+import LoanTermsAndConditionReceiptSection from './loan-terms-and-condition-receipt'
 
 type TLoanTransactionFormMode = 'create' | 'update'
 
@@ -245,9 +245,19 @@ const LoanTransactionCreateUpdateForm = ({
             mode_of_payment_fixed_days: 0,
             is_add_on: false,
             loan_type: 'standard',
+
             loan_clearance_analysis: [],
+            loan_clearance_analysis_deleted: [],
+
             loan_transaction_entries: [],
             loan_transaction_entries_deleted: [],
+
+            loan_terms_and_condition_amount_receipt: [],
+            loan_clearance_analysis_institution_deleted: [],
+
+            loan_terms_and_condition_suggested_payment: [],
+            loan_terms_and_condition_suggested_payment_deleted: [],
+
             ...formProps.defaultValues,
         },
     })
@@ -576,7 +586,6 @@ const LoanTransactionCreateUpdateForm = ({
                                                 </div>
                                             </div>
                                         </FormItem>
-
                                         <FormItem>
                                             <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
                                                 <RadioGroupItem
@@ -1175,7 +1184,6 @@ const LoanTransactionCreateUpdateForm = ({
                                                         <RadioGroupItem
                                                             value={mop}
                                                             id={`mop-${mop}`}
-                                                            tabIndex={0}
                                                             className="absolute border-0 inset-0 opacity-0 cursor-pointer"
                                                         />
                                                         <p className="text-foreground capitalize text-xs leading-none font-medium pointer-events-none">
@@ -1306,6 +1314,7 @@ const LoanTransactionCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <div className="border-input has-data-[state=checked]:border-primary/50 border-2 has-data-[state=checked]:bg-primary/20 duration-200 ease-in-out relative flex w-full items-center gap-2 rounded-xl px-2 py-0.5 shadow-xs outline-none">
                                         <Switch
+                                            tabIndex={0}
                                             id="loan-add-on"
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
@@ -1392,169 +1401,40 @@ const LoanTransactionCreateUpdateForm = ({
                         </ScrollArea>
                         <TabsContent
                             value="entries"
+                            tabIndex={0}
                             className="bg-popover p-4 rounded-xl"
                         >
-                            <LoanEntriesEditor
-                                form={form}
-                                disabled={formMode === 'create'}
+                            <FormFieldWrapper
+                                control={form.control}
+                                name="loan_transaction_entries"
+                                render={({ field }) => (
+                                    <LoanEntriesEditor
+                                        {...field}
+                                        form={form}
+                                        disabled={formMode === 'create'}
+                                    />
+                                )}
                             />
                         </TabsContent>
                         <TabsContent
                             value="clearance"
+                            tabIndex={0}
                             className="bg-popover p-4 rounded-xl min-w-0"
                         >
-                            <LoanClearanceAnalysisList form={form} />
-                            <div className="grid grid-cols-2 gap-x-2">
-                                <div className="space-y-2">
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="mount_to_be_closed"
-                                        label="Amount to be closed "
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                placeholder="Amount"
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                            />
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="share_capital"
-                                        label="Share Capital"
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                placeholder="Share capital amount"
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="damayan_fund"
-                                        label="Damayan Fund"
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                placeholder="Amount"
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                            />
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="length_of_service"
-                                        label="Length of Service"
-                                        render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                id={field.name}
-                                                placeholder="Amount"
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                            </div>
+                            <LoanClearanceAnalysis
+                                form={form}
+                                isDisabled={isDisabled}
+                            />
                         </TabsContent>
                         <TabsContent
                             value="terms-and-condition-receipt"
+                            tabIndex={0}
                             className="bg-popover p-4 space-y-4 rounded-xl"
                         >
-                            <div className="space-y-4 rounded-xl bg-popover">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="font-medium">
-                                            Terms and Coondition / Receipt
-                                        </p>
-                                    </div>
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="remarks_payroll_deduction"
-                                        className="w-fit"
-                                        render={({ field }) => (
-                                            <div className="inline-flex items-center gap-2">
-                                                <Switch
-                                                    id={field.name}
-                                                    aria-label="Toggle remark payroll deduction"
-                                                    checked={
-                                                        field.value || false
-                                                    }
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
-                                                />
-                                                <Label
-                                                    htmlFor={field.name}
-                                                    className="text-sm font-medium"
-                                                >
-                                                    Payroll Deduction
-                                                </Label>
-                                            </div>
-                                        )}
-                                    />
-                                </div>
-                            </div>
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="remarks_other_terms"
-                                label="Remarks"
-                                render={({ field }) => (
-                                    <Textarea
-                                        {...field}
-                                        id={field.name}
-                                        placeholder="Remarks other terms"
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                )}
+                            <LoanTermsAndConditionReceiptSection
+                                form={form}
+                                isDisabled={isDisabled}
                             />
-
-                            <div className="min-h-44 bg-accent/80 rounded-xl" />
-
-                            <div className="grid grid-cols-2 gap-x-3">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="collateral_offered"
-                                    label="Collateral Offered"
-                                    render={({ field }) => (
-                                        <Textarea
-                                            {...field}
-                                            id={field.name}
-                                            placeholder="Collateral Offered"
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
-
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="record_of_loan_payments_or_loan_status"
-                                    label="Record of Loan Payments / Loan Status"
-                                    render={({ field }) => (
-                                        <Textarea
-                                            {...field}
-                                            id={field.name}
-                                            placeholder="Remarks other terms"
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
-                            </div>
                         </TabsContent>
                         <TabsContent
                             value="other"
@@ -1601,7 +1481,7 @@ const LoanTransactionCreateUpdateForm = ({
                     // }
                     submitText={mode}
                     onReset={() => {
-                        form.reset()
+                        form.reset(formProps.defaultValues)
                         reset?.()
                         hasAutoCreatedRef.current = false
                         setFormMode('create')
@@ -1612,105 +1492,6 @@ const LoanTransactionCreateUpdateForm = ({
         </Form>
     )
 }
-
-const LoanClearanceAnalysisList = forwardRef<
-    HTMLTableElement,
-    { form: UseFormReturn<TLoanTransactionSchema> }
->(({ form }, ref) => {
-    const { fields, insert } = useFieldArray({
-        control: form.control,
-        name: 'loan_clearance_analysis',
-        keyName: 'fieldKey',
-    })
-
-    useSimpleShortcut(['Shift', 'N'], () => {
-        insert(0, {
-            balances_description: '',
-            regular_deduction_description: '',
-        })
-        toast.info('Added loan analysis')
-    })
-
-    return (
-        <Table
-            ref={ref}
-            wrapperClassName="max-h-72 bg-secondary rounded-xl ecoop-scroll"
-            className="table-fixed border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
-        >
-            <TableHeader className="bg-background/90 sticky top-0 z-10 backdrop-blur-xs">
-                <TableRow className="*:border-border hover:bg-transparent [&>:not(:last-child)]:border-r">
-                    <TableHead colSpan={2} className="text-center font-bold">
-                        Regular Deductions
-                    </TableHead>
-                    <TableHead colSpan={3} className="text-center font-bold">
-                        Balances
-                    </TableHead>
-                </TableRow>
-                <TableRow className="*:border-border hover:bg-transparent [&>:not(:last-child)]:border-r">
-                    <TableHead>Description</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Description</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead className="text-right">Cnt.</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {fields.map(
-                    ({
-                        id,
-                        regular_deduction_description,
-                        regular_deduction_amount,
-                        balances_description,
-                        balances_amount,
-                        balances_count,
-                    }) => (
-                        <TableRow
-                            key={id}
-                            className="*:border-border hover:bg-transparent [&>:not(:last-child)]:border-r"
-                        >
-                            <TableCell>
-                                <div className="flex flex-col">
-                                    <span className="font-medium">
-                                        {regular_deduction_description || '-'}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                        Regular Deduction
-                                    </span>
-                                </div>
-                            </TableCell>
-                            <TableCell className="text-right">
-                                ₱{formatNumber(regular_deduction_amount || 0)}
-                            </TableCell>
-                            <TableCell className="text-right">
-                                ₱{formatNumber(balances_amount || 0)}
-                            </TableCell>
-                            <TableCell className="text-right">
-                                {balances_count || 0}
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex flex-col">
-                                    <span className="font-medium">
-                                        {balances_description || '-'}
-                                    </span>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    )
-                )}
-
-                {fields.length === 0 && (
-                    <TableRow>
-                        <TableCell colSpan={5}>
-                            <p className="py-16 text-center text-sm text-muted-foreground/80">
-                                No clearance analysis yet.
-                            </p>
-                        </TableCell>
-                    </TableRow>
-                )}
-            </TableBody>
-        </Table>
-    )
-})
 
 export const LoanTransactionCreateUpdateFormModal = ({
     className,

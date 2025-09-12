@@ -5,8 +5,11 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 import { IAccount } from '../account'
 import { ICollateral } from '../collateral'
 import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
+import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
 import { ILoanPurpose } from '../loan-purpose'
 import { ILoanStatus } from '../loan-status'
+import { ILoanTermsAndConditionAmountReceipt } from '../loan-terms-and-condition-amount-receipt'
+import { ILoanTermsAndConditionSuggestedPayment } from '../loan-terms-and-condition-suggested-payment'
 import { ILoanTransactionEntry } from '../loan-transaction-entry'
 import { IMedia } from '../media'
 import { IMemberAccountingLedger } from '../member-account-ledger'
@@ -97,8 +100,22 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     share_capital: number
     length_of_service: string
 
-    loan_clearance_analysis: ILoanClearanceAnalysis[]
     loan_transaction_entries: ILoanTransactionEntry[]
+    loan_transaction_entries_deleted: TEntityId[] // nothing, just for type
+
+    //Loan Clearance Analysis
+    loan_clearance_analysis: ILoanClearanceAnalysis[]
+    loan_clearance_analysis_deleted?: TEntityId[] // nothing, just for type
+
+    loan_clearance_analysis_institution: ILoanClearanceAnalysisInstitution[]
+    loan_clearance_analysis_institution_deleted?: TEntityId[] // nothing, just for type
+
+    // Terms and Condition / Receipt
+    loan_terms_and_condition_amount_receipt: ILoanTermsAndConditionAmountReceipt[]
+    loan_terms_and_condition_amount_receipt_deleted?: TEntityId[] // nothing, just for type
+
+    loan_terms_and_condition_suggested_payment: ILoanTermsAndConditionSuggestedPayment[]
+    loan_terms_and_condition_suggested_payment_deleted?: TEntityId[] // nothing, just for type
 
     exclude_sunday: boolean
     exclude_holiday: boolean

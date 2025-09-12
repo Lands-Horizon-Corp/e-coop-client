@@ -3,6 +3,9 @@ import z from 'zod'
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
 import { LoanClearanceAnalysisSchema } from '../loan-clearance-analysis'
+import { LoanClearanceAnalysisInstitutionSchema } from '../loan-clearance-analysis-institution'
+import { LoanTermsAndConditionAmountReceiptSchema } from '../loan-terms-and-condition-amount-receipt'
+import { LoanTermsAndConditionSuggestedPaymentSchema } from '../loan-terms-and-condition-suggested-payment'
 import { LoanTransactionEntrySchema } from '../loan-transaction-entry'
 import {
     LOAN_COLLECTOR_PLACE,
@@ -144,6 +147,38 @@ export const LoanTransactionSchema = z
         //Loan Clearance Analysis
         loan_clearance_analysis: z
             .array(LoanClearanceAnalysisSchema)
+            .optional()
+            .default([]),
+        loan_clearance_analysis_deleted: z
+            .array(entityIdSchema)
+            .optional()
+            .default([]),
+
+        loan_clearance_analysis_institution: z
+            .array(LoanClearanceAnalysisInstitutionSchema)
+            .optional()
+            .default([]),
+        loan_clearance_analysis_institution_deleted: z
+            .array(entityIdSchema)
+            .optional()
+            .default([]),
+
+        // Terms and Condition / Receipt
+        loan_terms_and_condition_amount_receipt: z
+            .array(LoanTermsAndConditionAmountReceiptSchema)
+            .optional()
+            .default([]),
+        loan_terms_and_condition_amount_receipt_deleted: z
+            .array(entityIdSchema)
+            .optional()
+            .default([]),
+
+        loan_terms_and_condition_suggested_payment: z
+            .array(LoanTermsAndConditionSuggestedPaymentSchema)
+            .optional()
+            .default([]),
+        loan_terms_and_condition_suggested_payment_deleted: z
+            .array(entityIdSchema)
             .optional()
             .default([]),
 

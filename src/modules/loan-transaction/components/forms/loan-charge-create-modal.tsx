@@ -5,10 +5,12 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import { ILoanTransactionEntry } from '@/modules/loan-transaction-entry'
 import { entityIdSchema } from '@/validation'
 
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { Button } from '@/components/ui/button'
+import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -17,8 +19,9 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
-import { IClassProps } from '@/types'
+import { IClassProps, IForm } from '@/types'
 
 const ChargeSchema = z.object({
     account_id: entityIdSchema,
@@ -30,26 +33,31 @@ const ChargeSchema = z.object({
 })
 
 type TChargeFormValues = z.infer<typeof ChargeSchema>
+type ICharge = TChargeFormValues
 
-export interface IChargeFormProps extends IClassProps {
-    onSuccess?: (charge: TChargeFormValues) => void
-    onCancel?: () => void
-    readOnly?: boolean
-}
+export interface IChargeFormProps
+    extends IClassProps,
+        IForm<
+            Partial<ILoanTransactionEntry>,
+            ICharge,
+            Error,
+            TChargeFormValues
+        > {}
 
 const LoanChargeCreateForm = ({
     className,
     onSuccess,
-    onCancel,
     readOnly,
+    ...formProps
 }: IChargeFormProps) => {
     const form = useForm<TChargeFormValues>({
         resolver: standardSchemaResolver(ChargeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            amount: 0,
             is_add_on: false,
+            amount: formProps.defaultValues?.credit || 0,
+            ...formProps.defaultValues,
         },
     })
 
@@ -61,8 +69,13 @@ const LoanChargeCreateForm = ({
 
     const onSubmit = form.handleSubmit((formData, e) => {
         e?.stopPropagation()
+        e?.preventDefault()
         onSuccess?.(formData)
         form.reset()
+    })
+
+    useSimpleShortcut(['Control', ' '], () => {
+        form.setValue('is_add_on', !form.getValues('is_add_on'))
     })
 
     return (
@@ -70,7 +83,10 @@ const LoanChargeCreateForm = ({
             <form
                 ref={formRef}
                 onSubmit={onSubmit}
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn(
+                    'flex w-full max-w-full min-w-0 flex-col gap-y-4',
+                    className
+                )}
             >
                 <div className="space-y-4">
                     <FormFieldWrapper
@@ -107,12 +123,17 @@ const LoanChargeCreateForm = ({
                                 {...field}
                                 id={field.name}
                                 placeholder="0.00"
-                                className="text-right"
                                 disabled={isDisabled(field.name)}
                                 onChange={(e) => {
                                     const value =
                                         parseFloat(e.target.value) || 0
                                     field.onChange(value)
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        onSubmit()
+                                        e.preventDefault()
+                                    }
                                 }}
                             />
                         )}
@@ -126,6 +147,12 @@ const LoanChargeCreateForm = ({
                             <Textarea
                                 {...field}
                                 id={field.name}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        onSubmit()
+                                        e.preventDefault()
+                                    }
+                                }}
                                 placeholder="Charge description"
                                 disabled={isDisabled(field.name)}
                                 rows={3}
@@ -151,6 +178,12 @@ const LoanChargeCreateForm = ({
                                         className="text-sm font-medium"
                                     >
                                         Add-on Charge
+                                        <p className="text-xs inline ml-1 p-1 px-1 bg-muted text-muted-foreground rounded-sm">
+                                            <CommandShortcut className="bg-accent p-0.5 px-1 text-primary rounded-sm mr-1">
+                                                Ctrl + Space
+                                            </CommandShortcut>
+                                            to toggle
+                                        </p>
                                     </Label>
                                 </div>
                             )}
@@ -158,25 +191,19 @@ const LoanChargeCreateForm = ({
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-4">
-                    <Button type="button" variant="outline" onClick={onCancel}>
-                        Cancel
-                    </Button>
-                    <Button
-                        type="button"
-                        disabled={!form.formState.isValid}
-                        onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            form.handleSubmit((data) => {
-                                onSuccess?.(data)
-                                form.reset()
-                            })()
-                        }}
-                    >
-                        Add Charge
-                    </Button>
-                </div>
+                <FormFooterResetSubmit
+                    readOnly={readOnly}
+                    resetButtonType="button"
+                    submitButtonType="button"
+                    disableSubmit={!form.formState.isDirty}
+                    submitText={
+                        formProps.defaultValues?.id ? 'Update' : 'Create'
+                    }
+                    onSubmit={(e) => onSubmit(e)}
+                    onReset={() => {
+                        form.reset()
+                    }}
+                />
             </form>
         </Form>
     )
@@ -186,10 +213,10 @@ export const LoanChargeCreateModal = ({
     title = 'Add Charge',
     description = 'Add a new charge to this loan transaction.',
     className,
-    onSuccess,
+    formProps,
     ...props
 }: IModalProps & {
-    onSuccess?: (charge: TChargeFormValues) => void
+    formProps: IChargeFormProps
 }) => {
     return (
         <Modal
@@ -199,11 +226,11 @@ export const LoanChargeCreateModal = ({
             {...props}
         >
             <LoanChargeCreateForm
+                {...formProps}
                 onSuccess={(charge) => {
-                    onSuccess?.(charge)
+                    formProps.onSuccess?.(charge)
                     props.onOpenChange?.(false)
                 }}
-                onCancel={() => props.onOpenChange?.(false)}
             />
         </Modal>
     )

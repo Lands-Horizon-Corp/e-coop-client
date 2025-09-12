@@ -1,11 +1,25 @@
-import { forwardRef, useEffect, useMemo } from 'react'
+import {
+    KeyboardEvent,
+    forwardRef,
+    memo,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 
 import { UseFormReturn, useFieldArray } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { formatNumber } from '@/helpers'
 import { ILoanTransactionEntryRequest } from '@/modules/loan-transaction-entry'
 
-import { PlusIcon, RenderIcon, TrashIcon } from '@/components/icons'
+import {
+    PencilFillIcon,
+    PlusIcon,
+    RenderIcon,
+    TrashIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
 import {
@@ -21,16 +35,33 @@ import {
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
-import { TLoanTransactionSchema } from '../../loan-transaction.validation'
-import { LoanChargeCreateModal } from './loan-charge-create-modal'
+import { TLoanTransactionSchema } from '../../../loan-transaction.validation'
+import { LoanChargeCreateModal } from '../loan-charge-create-modal'
 
+// Loan Entires Tab Content
 const LoanEntriesEditor = forwardRef<
     HTMLTableElement,
     { form: UseFormReturn<TLoanTransactionSchema>; disabled?: boolean }
 >(({ form, disabled }, ref) => {
     const addChargeModalState = useModalState()
+    const rowRefs = useRef<(HTMLTableRowElement | null)[]>([])
+    const [focusedIndex, setFocusedIndex] = useState(-1)
 
-    const { fields, replace, append, remove } = useFieldArray({
+    const handleKeyDown = (e: KeyboardEvent<HTMLTableElement>) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            const nextIndex = Math.min(focusedIndex + 1, fields.length - 1)
+            setFocusedIndex(nextIndex)
+            rowRefs.current[nextIndex]?.focus()
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            const prevIndex = Math.max(focusedIndex - 1, 0)
+            setFocusedIndex(prevIndex)
+            rowRefs.current[prevIndex]?.focus()
+        }
+    }
+
+    const { fields, replace, append, update, remove } = useFieldArray({
         control: form.control,
         name: 'loan_transaction_entries',
         keyName: 'fieldKey',
@@ -212,11 +243,9 @@ const LoanEntriesEditor = forwardRef<
 
     const handleRemoveEntry = (index: number) => {
         const entry = fields[index]
-
         if (entry?.type === 'deduction') {
             remove(index)
         }
-
         if (entry.id) {
             addToDeletedField(entry.id)
         }
@@ -269,6 +298,7 @@ const LoanEntriesEditor = forwardRef<
                     <Button
                         size="sm"
                         type="button"
+                        tabIndex={0}
                         className="size-fit px-2 py-0.5 text-xs"
                         onClick={() => addChargeModalState.onOpenChange(true)}
                     >
@@ -284,20 +314,27 @@ const LoanEntriesEditor = forwardRef<
                 </div>
             </div>
 
-            <Table ref={ref}>
+            <Table
+                ref={ref}
+                onKeyDown={handleKeyDown}
+                tabIndex={0}
+                wrapperClassName="max-h-72 bg-secondary rounded-xl ecoop-scroll"
+            >
                 <LoanChargeCreateModal
                     {...addChargeModalState}
-                    onSuccess={(charge) => {
-                        append({
-                            account_id: charge.account_id,
-                            account: charge.account,
-                            name: charge.account?.name || '',
-                            debit: 0,
-                            credit: charge.amount,
-                            description: charge.description || '',
-                            is_add_on: charge.is_add_on,
-                            type: 'deduction',
-                        })
+                    formProps={{
+                        onSuccess: (charge) => {
+                            append({
+                                account_id: charge.account_id,
+                                account: charge.account,
+                                name: charge.account?.name || '',
+                                debit: 0,
+                                credit: charge.amount,
+                                description: charge.description || '',
+                                is_add_on: charge.is_add_on,
+                                type: 'deduction',
+                            })
+                        },
                     }}
                 />
                 <TableHeader>
@@ -310,69 +347,19 @@ const LoanEntriesEditor = forwardRef<
                 </TableHeader>
                 <TableBody>
                     {fields.map((field, index) => (
-                        <TableRow key={field.fieldKey}>
-                            <TableCell>
-                                <div className="flex flex-col">
-                                    <span className="font-medium flex gap-x-1 items-center">
-                                        {field.account?.icon && (
-                                            <RenderIcon
-                                                icon={field.account.icon}
-                                            />
-                                        )}
-                                        {field.name || 'Unknown'}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                        {field.description || '...'}
-                                    </span>
-                                    <div className="flex gap-2 mt-1">
-                                        {field.type === 'add-on' && (
-                                            <span className="text-xs text-green-600 font-medium">
-                                                • Add-on Interest
-                                            </span>
-                                        )}
-                                        {field.type === 'deduction' && (
-                                            <span className="text-xs text-orange-600 font-medium">
-                                                • Deduction
-                                            </span>
-                                        )}
-                                        {field.type === 'deduction' &&
-                                            field.is_add_on && (
-                                                <span className="text-xs text-green-600 font-medium">
-                                                    • Add-On
-                                                </span>
-                                            )}
-                                    </div>
-                                </div>
-                            </TableCell>
-                            <TableCell className="text-right">
-                                {field.debit
-                                    ? `₱${formatNumber(field.debit)}`
-                                    : ''}
-                            </TableCell>
-                            <TableCell className="text-right">
-                                {field.credit
-                                    ? `₱${formatNumber(field.credit)}`
-                                    : ''}
-                            </TableCell>
-                            <TableCell>
-                                {field.type === 'deduction' && (
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => {
-                                            handleRemoveEntry(index)
-                                        }}
-                                        className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
-                                    >
-                                        <TrashIcon className="h-4 w-4" />
-                                        <span className="sr-only">
-                                            Remove entry
-                                        </span>
-                                    </Button>
-                                )}
-                            </TableCell>
-                        </TableRow>
+                        <LoanEntryRow
+                            key={field.fieldKey}
+                            field={field}
+                            index={index}
+                            form={form}
+                            ref={(el) => {
+                                rowRefs.current[index] = el
+                            }}
+                            onRemove={handleRemoveEntry}
+                            onUpdate={(index, updatedData) =>
+                                update(index, updatedData)
+                            }
+                        />
                     ))}
                     {fields.length === 0 && (
                         <TableRow>
@@ -406,5 +393,162 @@ const LoanEntriesEditor = forwardRef<
         </fieldset>
     )
 })
+
+interface ILoanEntryRowProps {
+    field: ILoanTransactionEntryRequest & { fieldKey: string }
+    index: number
+    form: UseFormReturn<TLoanTransactionSchema>
+    onRemove: (index: number) => void
+    onUpdate: (index: number, updatedData: ILoanTransactionEntryRequest) => void
+}
+
+const LoanEntryRow = memo(
+    forwardRef<HTMLTableRowElement, ILoanEntryRowProps>(
+        ({ field, index, onRemove, onUpdate }, ref) => {
+            const rowRef = useRef<HTMLTableRowElement>(null)
+
+            const editModalState = useModalState()
+
+            const isEditable = field.type === 'deduction'
+            const isRemovable = field.type === 'deduction'
+
+            const handleRowKeyDown = (
+                e: KeyboardEvent<HTMLTableRowElement>
+            ) => {
+                if (e.key === 'Delete') {
+                    if (!isRemovable)
+                        return toast.info(`Entry ${field.name} not removable`)
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onRemove(index)
+                } else if (e.key === 'F2') {
+                    if (!isEditable)
+                        return toast.info(`Entry ${field.name} not editable`)
+                    e.preventDefault()
+                    e.stopPropagation()
+                    editModalState.onOpenChange(true)
+                }
+            }
+
+            return (
+                <>
+                    <TableRow
+                        ref={(el) => {
+                            rowRef.current = el
+                            if (typeof ref === 'function') {
+                                ref(el)
+                            } else if (ref) {
+                                ref.current = el
+                            }
+                        }}
+                        key={field.fieldKey}
+                        onKeyDown={handleRowKeyDown}
+                        tabIndex={0}
+                        className="focus:bg-background/20"
+                    >
+                        <TableCell>
+                            <div className="flex flex-col">
+                                <span className="font-medium flex gap-x-1 items-center">
+                                    {field.account?.icon && (
+                                        <RenderIcon icon={field.account.icon} />
+                                    )}
+                                    {field.name || 'Unknown'}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                    {field.description || '...'}
+                                </span>
+                                <div className="flex gap-2 mt-1">
+                                    {field.type === 'add-on' && (
+                                        <span className="text-xs text-green-600 font-medium">
+                                            • Add-on Interest
+                                        </span>
+                                    )}
+                                    {field.type === 'deduction' && (
+                                        <span className="text-xs text-orange-600 font-medium">
+                                            • Deduction
+                                        </span>
+                                    )}
+                                    {field.type === 'deduction' &&
+                                        field.is_add_on && (
+                                            <span className="text-xs text-green-600 font-medium">
+                                                • Add-On
+                                            </span>
+                                        )}
+                                </div>
+                            </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                            {field.debit ? `₱${formatNumber(field.debit)}` : ''}
+                        </TableCell>
+                        <TableCell className="text-right">
+                            {field.credit
+                                ? `₱${formatNumber(field.credit)}`
+                                : ''}
+                        </TableCell>
+                        <TableCell>
+                            <div className="flex gap-1">
+                                {isEditable && (
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() =>
+                                            editModalState.onOpenChange(true)
+                                        }
+                                        className="size-8 p-0"
+                                    >
+                                        <PencilFillIcon className="size-4" />
+                                        <span className="sr-only">
+                                            Edit entry
+                                        </span>
+                                    </Button>
+                                )}
+                                {isRemovable && (
+                                    <Button
+                                        size="sm"
+                                        type="button"
+                                        variant="ghost"
+                                        onClick={() => onRemove(index)}
+                                        className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                                    >
+                                        <TrashIcon className="h-4 w-4" />
+                                        <span className="sr-only">
+                                            Remove entry
+                                        </span>
+                                    </Button>
+                                )}
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                    <LoanChargeCreateModal
+                        {...editModalState}
+                        onOpenChange={(state) => {
+                            if (!state) {
+                                rowRef.current?.focus()
+                            }
+                            editModalState.onOpenChange(state)
+                        }}
+                        title="Edit Deduction"
+                        description="Update the deduction details."
+                        formProps={{
+                            defaultValues: field,
+                            onSuccess: (updatedData) => {
+                                onUpdate(index, {
+                                    ...field,
+                                    account_id: updatedData.account_id,
+                                    account: updatedData.account,
+                                    credit: updatedData.amount,
+                                    is_add_on: updatedData.is_add_on,
+                                })
+                            },
+                        }}
+                    />
+                </>
+            )
+        }
+    )
+)
+
+LoanEntryRow.displayName = 'LoanEntryRow'
 
 export default LoanEntriesEditor
