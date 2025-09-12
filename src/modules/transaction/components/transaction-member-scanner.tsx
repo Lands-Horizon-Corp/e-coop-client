@@ -86,7 +86,7 @@ const TransactionMemberScanner = ({
     return (
         <div
             className={cn(
-                'flex flex-col lg:flex-row w-full h-fit bg-sidebar rounded-2xl',
+                'flex flex-col lg:flex-row w-full h-fit bg-sidebar min-h-fit ecoop-scroll overflow-x-auto  rounded-2xl',
                 className
             )}
         >

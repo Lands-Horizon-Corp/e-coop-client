@@ -1,20 +1,16 @@
 import { useCallback, useState } from 'react'
 
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { cn } from '@/helpers'
 import { commaSeparators } from '@/helpers/common-helper'
 import { useFilteredPaginatedGeneralLedger } from '@/modules/general-ledger'
-import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { PaginationState } from '@tanstack/react-table'
 
 import CopyTextButton from '@/components/copy-text-button'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import { RedoCircleIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
-import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 
@@ -23,7 +19,6 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
 
-import { useAllReverseTransaction } from '../../transaction.service'
 import TransactionCurrentPaymentItem from './transaction-current-payment-item'
 
 type itemgBadgeTypeProps = {
@@ -48,33 +43,6 @@ const TransactionCurrentPaymentEntry = ({
     transactionId,
     totalAmount,
 }: CurrentPaymentsEntryListProps) => {
-    const queryClient = useQueryClient()
-    const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
-    const { mutate: reverseAllCurrentPayment } = useAllReverseTransaction({
-        options: {
-            onSuccess: () => {
-                queryClient.invalidateQueries({
-                    queryKey: [
-                        'general-ledger',
-                        'filtered-paginated',
-                        'transaction',
-                    ],
-                    exact: false,
-                })
-            },
-            onError: (error) => {
-                toast.error(error.message)
-            },
-        },
-    })
-
-    const handleReverseAllCurrentPayment = (transaction_id: TEntityId) => {
-        onOpenReverseRequestAction({
-            onSuccess: () => {
-                reverseAllCurrentPayment({ transaction_id })
-            },
-        })
-    }
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 20,
@@ -130,26 +98,6 @@ const TransactionCurrentPaymentEntry = ({
                             <label className="text-sm font-bold uppercase text-muted-foreground">
                                 Total Amount
                             </label>
-                            <ActionTooltip
-                                delayDuration={300}
-                                tooltipContent="this will reverse the transaction by creating another payment but in reverse"
-                            >
-                                <div className="flex size-8 items-center border p-1 justify-center rounded-full bg-primary/10 text-primary">
-                                    <RedoCircleIcon
-                                        size={20}
-                                        className="cursor-pointer hover:opacity-65"
-                                        title="Reverse Payment"
-                                        role="button"
-                                        aria-label="Reverse Payment"
-                                        onClick={(event) => {
-                                            event.stopPropagation()
-                                            handleReverseAllCurrentPayment(
-                                                transactionId
-                                            )
-                                        }}
-                                    />
-                                </div>
-                            </ActionTooltip>
                         </div>
                         <p className="text-lg font-bold text-primary dark:text-primary">
                             ₱{' '}

@@ -1,10 +1,11 @@
 import { cn } from '@/helpers'
-import { FocusIcon } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
     ArrowIcon,
+    CommandIcon,
     EyeIcon,
+    FocusIcon,
     HistoryIcon,
     ResetIcon,
     ScanQrIcon,
@@ -28,7 +29,7 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-const TransactionShortcuts = ({ className }: { className?: string }) => {
+const TransactionButtonShortcuts = ({ className }: { className?: string }) => {
     const { open, onOpenChange } = useModalState()
 
     useHotkeys('Alt+C', () => {
@@ -37,23 +38,16 @@ const TransactionShortcuts = ({ className }: { className?: string }) => {
 
     return (
         <div className={cn('w-fit', className)}>
-            <Button
-                variant="ghost"
-                size="sm"
-                onMouseOver={(e) => {
-                    e.preventDefault()
-                    onOpenChange(true)
-                }}
-                onBlur={(e) => {
-                    e.preventDefault()
-                    onOpenChange(false)
-                }}
-                className="hover:!bg-transparent text-muted-foreground/70"
-            >
-                Command Shortcuts
-            </Button>
             <Popover open={open} onOpenChange={onOpenChange} modal>
-                <PopoverTrigger />
+                <PopoverTrigger asChild>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="hover:!bg-transparent text-muted-foreground/70 h-9 rounded-full"
+                    >
+                        <CommandIcon />
+                    </Button>
+                </PopoverTrigger>
                 <PopoverContent className="md:min-w-[450px] bg-transparent p-0 border-0">
                     <Command className="rounded-lg border shadow-md">
                         <CommandList className="ecoop-scroll">
@@ -133,4 +127,4 @@ const TransactionShortcuts = ({ className }: { className?: string }) => {
     )
 }
 
-export default TransactionShortcuts
+export default TransactionButtonShortcuts

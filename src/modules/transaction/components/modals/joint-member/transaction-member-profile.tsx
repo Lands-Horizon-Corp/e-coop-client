@@ -87,7 +87,7 @@ const TransactionMemberProfile = ({
     )
 
     return (
-        <>
+        <div className="ecoop-scroll overflow-y-auto">
             <MemberOverallInfoModal
                 {...infoModal}
                 overallInfoProps={{
@@ -96,11 +96,11 @@ const TransactionMemberProfile = ({
             />
             <div
                 className={cn(
-                    'w-full ecoop-scroll rounded-2xl overflow-x-auto h-fit flex flex-col justify-between space-y-2 min-w-[300px] overscroll-contain bg-card bg-gradient-to-br from-primary/10 to-background border-primary/40 p-5',
+                    'w-full ecoop-scroll min-w-2xl rounded-2xl overflow-y-auto h-fit flex flex-col justify-between space-y-2 overscroll-contain  bg-gradient-to-br from-primary/10 to-background border-primary/40 p-5',
                     className
                 )}
             >
-                <div className="flex w-full space-x-5 items-center h-fit ">
+                <div className="flex w-full space-x-5 items-center h-fit">
                     <div className="flex items-center h-fit gap-y-1 flex-col min-w-[6vw] max-w-[5vw]">
                         <div className="flex-shrink-0">
                             <PreviewMediaWrapper media={memberInfo.media}>
@@ -245,7 +245,7 @@ const TransactionMemberProfile = ({
                     />
                 )}
             </div>
-        </>
+        </div>
     )
 }
 

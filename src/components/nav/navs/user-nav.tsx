@@ -1,8 +1,9 @@
-import { useRouter } from '@tanstack/react-router'
+import { useLocation, useRouter } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
+import TransactionButtonShortcuts from '@/modules/transaction/components/transaction-shorcuts'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 
 import { BadgeCheckFillIcon } from '@/components/icons'
@@ -26,6 +27,9 @@ const UserNav = ({
     } = useAuthStore()
 
     const router = useRouter()
+    const location = useLocation()
+    const pathName = location.pathname.split('/').pop()
+    const isTransactionPage = pathName === 'transaction'
 
     return (
         <RootNav
@@ -63,6 +67,7 @@ const UserNav = ({
                 {user && user_organization?.user_type === 'employee' && (
                     <NavTimeInBar />
                 )}
+                {isTransactionPage && <TransactionButtonShortcuts />}
                 <NavProfileMenu />
                 <NavThemeToggle />
             </NavContainer>

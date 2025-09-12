@@ -32,7 +32,6 @@ import { TEntityId } from '@/types'
 
 import PaymentWithTransactionForm from '../components/forms/create-payment-with-transaction-form'
 import TransactionReverseRequestFormModal from '../components/modals/transaction-modal-request-reverse'
-import TransactionShortcuts from '../components/transaction-shorcuts'
 
 type TTransactionProps = {
     transactionId: TEntityId
@@ -161,7 +160,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
                 <div className="w-full flex justify-end pb-2">
-                    <TransactionShortcuts />
                     <TransactionHistory fullPath={fullPath} />
                 </div>
                 <TransactionModalSuccessPayment

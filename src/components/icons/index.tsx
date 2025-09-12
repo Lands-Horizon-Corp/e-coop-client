@@ -271,6 +271,7 @@ import {
     MdExpandMore as ExpandMoreIcon,
     MdFamilyRestroom as FamilyIcon,
     MdOutlineQueryStats as FinanceReportsIcon,
+    MdOutlineCenterFocusWeak as FocusIcon,
     MdOutlineScreenshotMonitor as MonitorIcon,
     MdOutlinePayments as OutlinePaymentIcon,
     MdOutlinePayments as PaymentsIcon,
@@ -318,6 +319,7 @@ import {
     PiWarningFill as WarningFillIcon,
 } from 'react-icons/pi'
 import {
+    RiCommandLine as CommandIcon,
     RiFlipHorizontalFill as FlipHorizontalIcon,
     RiFlipHorizontalLine as FlipHorizontalLineIcon,
     RiFlipVerticalFill as FlipVerticalIcon,
@@ -423,6 +425,7 @@ export {
     ResetIcon,
     HouseIcon,
     ArrowIcon,
+    FocusIcon,
     FunnelIcon,
     ColumnIcon,
     TabletIcon,
@@ -449,6 +452,7 @@ export {
     Image2Icon,
     IdCardIcon,
     EyeOffIcon,
+    CommandIcon,
     TwitterIcon,
     EyeViewIcon,
     CodeSandBox,
@@ -1009,6 +1013,8 @@ export const IconMap: Record<TIcon, IconType> = {
     'Auto Awesome': AutoAwesomeIcon,
     'Arrow Icon': ArrowIcon,
     'Redo Circle Icon': RedoCircleIcon,
+    'Focus Icon': FocusIcon,
+    'Command Icon': CommandIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

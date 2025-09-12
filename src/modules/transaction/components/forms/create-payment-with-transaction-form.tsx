@@ -218,14 +218,14 @@ const PaymentWithTransactionForm = ({
 
     return (
         <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
-            <CardContent className="!h-fit grid grid-cols-1 p-2 lg:!p-0 items-center w-full lg:!w-full">
+            <CardContent className="!h-fit p-2 lg:!p-0 items-center w-full lg:!w-full">
                 <TransactionNoFoundBatch mode="payment" />
                 <Form {...form}>
                     <form
                         onSubmit={handleSubmit}
                         className=" !w-full flex flex-col lg:justify-between lg:flex-row overflow-auto "
                     >
-                        <div className="overflow-y-auto ecoop-scroll p-2">
+                        <div className="overflow-y-auto ecoop-scroll w-full p-2">
                             {isOnlinePayment && (
                                 <Card className="absolute bottom-[105%] bg-sidebar left-0 ">
                                     <CardContent className="grid w-ful grid-cols-1 lg:grid-cols-5 !min-w-fit gap-5 p-0 py-2 px-2 ">
@@ -344,7 +344,7 @@ const PaymentWithTransactionForm = ({
                                     </CardContent>
                                 </Card>
                             )}
-                            <div className=" !min-w-fit lg:!min-w-[900px] h-fit grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-4  ">
+                            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-y-7 xl:grid-cols-4 w-full  gap-4">
                                 <div className="relative">
                                     <FormFieldWrapper
                                         control={form.control}
@@ -401,6 +401,7 @@ const PaymentWithTransactionForm = ({
                                     control={form.control}
                                     name="amount"
                                     label="Amount"
+                                    className="mt-2.5 md:mt-0 "
                                     labelClassName="text-xs font-medium text-muted-foreground"
                                     render={({ field }) => {
                                         return (
@@ -467,97 +468,96 @@ const PaymentWithTransactionForm = ({
                                         />
                                     )}
                                 />
-
-                                <Accordion
-                                    type="single"
-                                    collapsible
-                                    className="w-full col-span-4 !p-0 overflow-auto"
-                                >
-                                    <AccordionItem
-                                        value="item-1"
-                                        className=" w-full border-0"
-                                    >
-                                        <AccordionTrigger
-                                            className={cn(
-                                                'p-1 text-xs justify-end text-primary flex w-full gap-x-2'
-                                            )}
-                                        >
-                                            others
-                                        </AccordionTrigger>
-                                        <AccordionContent className="overflow-x-auto ecoop-scroll flex gap-x-2 ">
-                                            <FormFieldWrapper
-                                                control={form.control}
-                                                name="description"
-                                                label="Description"
-                                                className="h-full col-span-2"
-                                                render={({ field }) => (
-                                                    <Textarea
-                                                        {...field}
-                                                        id={field.name}
-                                                        value={field.value}
-                                                        placeholder="a short description..."
-                                                        autoComplete="off"
-                                                        disabled={isDisabled(
-                                                            'description'
-                                                        )}
-                                                        className="!h-12 !max-h-20 !border"
-                                                    />
-                                                )}
-                                            />
-                                            <FormFieldWrapper
-                                                control={form.control}
-                                                name="signature_media_id"
-                                                label="Signature"
-                                                className="h-15"
-                                                render={({ field }) => {
-                                                    const value =
-                                                        form.watch('signature')
-                                                    return (
-                                                        <SignatureField
-                                                            {...field}
-                                                            className="!max-h-15 min-h-15 "
-                                                            placeholder="Signature"
-                                                            hideIcon
-                                                            disabled={isDisabled(
-                                                                'signature_media_id'
-                                                            )}
-                                                            value={
-                                                                value
-                                                                    ? (
-                                                                          value as IMedia
-                                                                      )
-                                                                          .download_url
-                                                                    : value
-                                                            }
-                                                            onChange={(
-                                                                newImage
-                                                            ) => {
-                                                                if (newImage) {
-                                                                    field.onChange(
-                                                                        newImage.id
-                                                                    )
-                                                                    form.setValue(
-                                                                        'signature',
-                                                                        newImage as IMedia
-                                                                    )
-                                                                } else {
-                                                                    field.onChange(
-                                                                        undefined
-                                                                    )
-                                                                    form.setValue(
-                                                                        'signature',
-                                                                        undefined
-                                                                    )
-                                                                }
-                                                            }}
-                                                        />
-                                                    )
-                                                }}
-                                            />
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
                             </div>
+
+                            <Accordion
+                                type="single"
+                                collapsible
+                                className="w-full col-span-4 !p-0 overflow-auto"
+                            >
+                                <AccordionItem
+                                    value="item-1"
+                                    className=" w-full border-0"
+                                >
+                                    <AccordionTrigger
+                                        className={cn(
+                                            'p-1 text-sm justify-end text-primary flex w-full gap-x-2'
+                                        )}
+                                    >
+                                        others
+                                    </AccordionTrigger>
+                                    <AccordionContent className="overflow-x-auto ecoop-scroll flex gap-x-2 ">
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            name="description"
+                                            label="Description"
+                                            className="h-full col-span-2"
+                                            render={({ field }) => (
+                                                <Textarea
+                                                    {...field}
+                                                    id={field.name}
+                                                    value={field.value}
+                                                    placeholder="a short description..."
+                                                    autoComplete="off"
+                                                    disabled={isDisabled(
+                                                        'description'
+                                                    )}
+                                                    className="!h-12 !max-h-20 !border"
+                                                />
+                                            )}
+                                        />
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            name="signature_media_id"
+                                            label="Signature"
+                                            className="h-15"
+                                            render={({ field }) => {
+                                                const value =
+                                                    form.watch('signature')
+                                                return (
+                                                    <SignatureField
+                                                        {...field}
+                                                        className="!max-h-15 min-h-15 "
+                                                        placeholder="Signature"
+                                                        hideIcon
+                                                        disabled={isDisabled(
+                                                            'signature_media_id'
+                                                        )}
+                                                        value={
+                                                            value
+                                                                ? (
+                                                                      value as IMedia
+                                                                  ).download_url
+                                                                : value
+                                                        }
+                                                        onChange={(
+                                                            newImage
+                                                        ) => {
+                                                            if (newImage) {
+                                                                field.onChange(
+                                                                    newImage.id
+                                                                )
+                                                                form.setValue(
+                                                                    'signature',
+                                                                    newImage as IMedia
+                                                                )
+                                                            } else {
+                                                                field.onChange(
+                                                                    undefined
+                                                                )
+                                                                form.setValue(
+                                                                    'signature',
+                                                                    undefined
+                                                                )
+                                                            }
+                                                        }}
+                                                    />
+                                                )
+                                            }}
+                                        />
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                             <FormErrorMessage errorMessage={error} />
                         </div>
                         <div className="flex items-center px-2 justify-end mb-2 gap-x-2">

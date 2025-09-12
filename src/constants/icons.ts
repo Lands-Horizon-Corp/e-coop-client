@@ -314,4 +314,6 @@ export const ICONS = [
     'Auto Awesome',
     'Arrow Icon',
     'Redo Circle Icon',
+    'Focus Icon',
+    'Command Icon',
 ] as const
