@@ -1,6 +1,7 @@
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { GOOGLE_MAPS_API_KEY } from '@/constants'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 import { Building, Globe, MapPin, Navigation, Search, X } from 'lucide-react'
 
@@ -124,11 +125,9 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     className,
     hideButtonCoordinates = true,
 }) => {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-maps-script',
-        googleMapsApiKey: apiKey ?? '',
+        googleMapsApiKey: GOOGLE_MAPS_API_KEY ?? '',
         libraries,
     })
 
@@ -495,7 +494,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         clickableIcons: true,
     }
 
-    if (!apiKey) {
+    if (!GOOGLE_MAPS_API_KEY) {
         return (
             <div className="rounded border border-red-200 p-2 text-sm text-red-600">
                 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is missing

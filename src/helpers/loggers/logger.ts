@@ -1,3 +1,5 @@
+import { APP_ENV } from '@/constants'
+
 /* eslint-disable no-console */
 type LogMethod = (...args: unknown[]) => void
 
@@ -16,9 +18,7 @@ class Logger {
             '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'
         )
 
-        this.isDevelopment = ['development', 'local'].includes(
-            import.meta.env.VITE_APP_ENV
-        )
+        this.isDevelopment = ['development', 'local'].includes(APP_ENV)
 
         if (typeof document !== 'undefined' && !this.isDevelopment) {
             document.addEventListener('contextmenu', (event) =>
