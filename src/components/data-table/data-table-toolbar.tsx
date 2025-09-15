@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import { Table } from '@tanstack/react-table'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import DataTableActiveFilters from '@/components/data-table/data-table-actions/data-table-active-filters'
 import DataTableDeleteSelected from '@/components/data-table/data-table-actions/data-table-delete-selected'
@@ -58,6 +59,13 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
+    useHotkeys('Enter', (e) => {
+        e.preventDefault()
+        if (createActionProps && !hideCreateButton) {
+            createActionProps.onClick()
+        }
+    })
+
     return (
         <div className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto">
             <div className="flex items-center gap-x-2">

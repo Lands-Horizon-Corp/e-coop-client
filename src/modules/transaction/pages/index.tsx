@@ -129,7 +129,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     useShortcut(
         'Escape',
-        () => {
+        (e) => {
+            e.preventDefault()
             handleResetAll()
             handleSetTransactionId({ fullPath })
         },
@@ -139,7 +140,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         }
     )
 
-    useHotkeys('Enter', () => {
+    useHotkeys('Enter', (e) => {
+        e.preventDefault()
         if (!selectedMember) {
             setOpenMemberPicker(true)
         }
