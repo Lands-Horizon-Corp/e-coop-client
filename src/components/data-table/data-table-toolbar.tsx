@@ -59,7 +59,8 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
-    useHotkeys('Enter', () => {
+    useHotkeys('Enter', (e) => {
+        e.preventDefault()
         if (createActionProps && !hideCreateButton) {
             createActionProps.onClick()
         }
