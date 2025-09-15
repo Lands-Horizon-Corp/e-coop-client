@@ -4,13 +4,13 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
 import { TEntityId } from '@/types'
-import { useHotkeys } from 'react-hotkeys-hook'
 
 interface PaymentSuccessModalProps extends IModalProps {
     transaction: IGeneralLedger | null
@@ -43,15 +43,12 @@ const TransactionModalSuccessPayment = ({
         printGeneralLedgerTransaction({ id: generalLedgerId })
     }
 
-    useHotkeys(
-        'enter',
-        (e) => {
-            e.preventDefault()
-            if (!transaction || !isOpen) return
-            handlePrintGeneralLedgerTransaction(transaction.id)
-            onClose?.()
-        },
-    )
+    useHotkeys('enter', (e) => {
+        e.preventDefault()
+        if (!transaction || !isOpen) return
+        handlePrintGeneralLedgerTransaction(transaction.id)
+        onClose?.()
+    })
 
     const paymentType =
         focusTypePayment === 'withdraw' ? 'Withdrawal' : focusTypePayment

@@ -208,7 +208,7 @@ const PaymentWithTransactionForm = ({
         'control+Enter',
         (e) => {
             e.preventDefault()
-           if (readOnly || isPending || !isFormIsDirty) return
+            if (readOnly || isPending || !isFormIsDirty) return
             handleSubmit()
         },
         {

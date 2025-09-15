@@ -1,4 +1,4 @@
-import { useLocation, useRouter } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
@@ -27,9 +27,6 @@ const UserNav = ({
     } = useAuthStore()
 
     const router = useRouter()
-    const location = useLocation()
-    const pathName = location.pathname.split('/').pop()
-    const isTransactionPage = pathName === 'transaction'
 
     return (
         <RootNav
@@ -67,7 +64,7 @@ const UserNav = ({
                 {user && user_organization?.user_type === 'employee' && (
                     <NavTimeInBar />
                 )}
-                {isTransactionPage && <TransactionButtonShortcuts />}
+                <TransactionButtonShortcuts />
                 <NavProfileMenu />
                 <NavThemeToggle />
             </NavContainer>

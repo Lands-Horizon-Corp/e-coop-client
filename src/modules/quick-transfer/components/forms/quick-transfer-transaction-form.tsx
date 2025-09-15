@@ -26,7 +26,6 @@ import {
     useCreateQuickTransactionPayment,
 } from '@/modules/transaction'
 import { useGetUserSettings } from '@/modules/user-profile'
-import { useImagePreview } from '@/store/image-preview-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 import {
     HotkeysProvider,
@@ -47,8 +46,6 @@ import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
 import { IClassProps, IForm } from '@/types'
-
-import useQuickTransferShortcuts from '../shorcuts/quick-transfer-shortcuts'
 
 interface TransactionEntryFormProps
     extends IClassProps,
@@ -82,7 +79,6 @@ export const QuickTransferTransactionForm = ({
             : settings_accounting_deposit_default_value
 
     const queryClient = useQueryClient()
-    const { isOpen } = useImagePreview()
 
     const {
         setSelectedMember,
@@ -163,17 +159,6 @@ export const QuickTransferTransactionForm = ({
     const isOnlinePayment = ['bank', 'online', 'check'].includes(
         paymentTypeType?.toLowerCase() ?? ''
     )
-
-    // useQuickTransferShortcuts({
-    //     canSelectMember: () => {
-    //         setOpenMemberPicker(true)
-    //     },
-    //     canResetAll: () => {
-    //         if (isOpen) return
-    //         setSelectedMember(null)
-    //     },
-    //     canUnselectMember: () => setSelectedMember(null),
-    // })
 
     const isDisabled = (field: Path<TQuickWithdrawSchemaFormValues>) =>
         readOnly ||
