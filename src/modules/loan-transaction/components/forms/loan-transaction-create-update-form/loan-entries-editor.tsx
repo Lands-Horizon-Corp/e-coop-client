@@ -12,6 +12,7 @@ import { UseFormReturn, useFieldArray } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { formatNumber } from '@/helpers'
+import { IAccount } from '@/modules/account'
 import { ILoanTransactionEntryRequest } from '@/modules/loan-transaction-entry'
 
 import {
@@ -75,6 +76,7 @@ const LoanEntriesEditor = forwardRef<
 
     const applied_1 = form.watch('applied_1')
     const is_add_on = form.watch('is_add_on')
+    const account: IAccount | undefined = form.watch('account')
 
     const {
         totalDebit,
@@ -126,7 +128,17 @@ const LoanEntriesEditor = forwardRef<
 
     useEffect(() => {
         const cash_on_hand = fields[0]
-        const account_entry = fields[1]
+        const found_account_entry = fields[1]
+
+        const account_entry: ILoanTransactionEntryRequest = {
+            ...found_account_entry,
+            type: 'static',
+            index: 1,
+            account,
+            account_id: account?.id,
+            name: account?.name || 'No account name',
+            description: account?.description || 'No Description',
+        }
 
         const add_on_entry = fields.find(
             (entry) => entry.type === 'add-on' && !!entry.id
@@ -249,7 +261,7 @@ const LoanEntriesEditor = forwardRef<
             if (add_on_entry?.id) addToDeletedField(add_on_entry.id)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [applied_1, is_add_on, deductionsSignature, replace])
+    }, [account, applied_1, is_add_on, deductionsSignature, replace])
 
     useSimpleShortcut(['Shift', 'N'], () =>
         addChargeModalState.onOpenChange(true)

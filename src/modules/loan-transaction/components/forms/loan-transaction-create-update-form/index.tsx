@@ -1494,10 +1494,15 @@ const LoanTransactionCreateUpdateForm = ({
                     // }
                     submitText={mode}
                     onReset={() => {
-                        form.reset(formProps.defaultValues)
+                        form.reset()
                         reset?.()
                         hasAutoCreatedRef.current = false
-                        setFormMode('create')
+                        setFormMode(
+                            mode === 'create' &&
+                                createdLoanTransactionId === undefined
+                                ? 'create'
+                                : 'update'
+                        )
                         setCreatedLoanTransactionId(undefined)
                     }}
                 />
