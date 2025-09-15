@@ -164,16 +164,16 @@ export const QuickTransferTransactionForm = ({
         paymentTypeType?.toLowerCase() ?? ''
     )
 
-    useQuickTransferShortcuts({
-        canSelectMember: () => {
-            setOpenMemberPicker(true)
-        },
-        canResetAll: () => {
-            if (isOpen) return
-            setSelectedMember(null)
-        },
-        canUnselectMember: () => setSelectedMember(null),
-    })
+    // useQuickTransferShortcuts({
+    //     canSelectMember: () => {
+    //         setOpenMemberPicker(true)
+    //     },
+    //     canResetAll: () => {
+    //         if (isOpen) return
+    //         setSelectedMember(null)
+    //     },
+    //     canUnselectMember: () => setSelectedMember(null),
+    // })
 
     const isDisabled = (field: Path<TQuickWithdrawSchemaFormValues>) =>
         readOnly ||

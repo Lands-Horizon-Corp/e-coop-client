@@ -9,9 +9,8 @@ import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
-import { useShortcut } from '@/hooks/use-shorcuts'
-
 import { TEntityId } from '@/types'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 interface PaymentSuccessModalProps extends IModalProps {
     transaction: IGeneralLedger | null
@@ -44,14 +43,14 @@ const TransactionModalSuccessPayment = ({
         printGeneralLedgerTransaction({ id: generalLedgerId })
     }
 
-    useShortcut(
+    useHotkeys(
         'enter',
-        () => {
+        (e) => {
+            e.preventDefault()
             if (!transaction || !isOpen) return
             handlePrintGeneralLedgerTransaction(transaction.id)
             onClose?.()
         },
-        { disableTextInputs: true }
     )
 
     const paymentType =

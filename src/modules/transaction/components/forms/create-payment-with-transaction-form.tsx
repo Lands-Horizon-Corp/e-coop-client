@@ -169,7 +169,8 @@ const PaymentWithTransactionForm = ({
     }
 
     const handleSubmit = form.handleSubmit(
-        (data: TPaymentWithTransactionFormValues) => {
+        (data: TPaymentWithTransactionFormValues, event) => {
+            event?.preventDefault()
             if (data.amount < 0) {
                 onOpenReverseRequestAction({
                     onSuccess: () => {
@@ -204,10 +205,10 @@ const PaymentWithTransactionForm = ({
     const isFormIsDirty = form.formState.isDirty
 
     useHotkeys(
-        'ctrl+Enter',
+        'control+Enter',
         (e) => {
             e.preventDefault()
-            if (readOnly || isPending || !isFormIsDirty) return
+           if (readOnly || isPending || !isFormIsDirty) return
             handleSubmit()
         },
         {

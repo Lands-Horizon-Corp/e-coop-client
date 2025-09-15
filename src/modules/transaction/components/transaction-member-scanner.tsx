@@ -78,7 +78,8 @@ const TransactionMemberScanner = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    useHotkeys('s', () => {
+    useHotkeys('s', (e) => {
+        e.preventDefault()
         if (!transactionId) {
             setStartScan((start) => !start)
         }
