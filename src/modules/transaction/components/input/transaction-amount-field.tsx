@@ -96,7 +96,7 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
                     placeholder="Enter the payment amount"
                 />
                 {!isDefault && (
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary after:content-['₱']" />
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary after:content-['']" />
                 )}
             </div>
         )

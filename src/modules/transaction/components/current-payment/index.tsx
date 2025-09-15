@@ -110,7 +110,7 @@ const TransactionCurrentPaymentEntry = ({
                             Total Amount
                         </label>
                         <p className="text-lg font-bold text-primary dark:text-primary">
-                            ₱{' '}
+                            {' '}
                             {totalAmount
                                 ? commaSeparators(totalAmount.toString())
                                 : '0.00'}
@@ -170,8 +170,7 @@ const TransactionCurrentPaymentEntry = ({
                                                                     0
                                                                         ? 'Credit'
                                                                         : 'Debit'}
-                                                                </span>
-                                                                ₱{' '}
+                                                                </span>{' '}
                                                                 {commaSeparators(
                                                                     (
                                                                         payment.credit ||

@@ -299,15 +299,28 @@ const LoanTransactionCreateUpdateForm = ({
                     { id: targetId, payload },
                     {
                         onSuccess: (data) =>
-                            form.reset(
-                                data as unknown as ILoanTransactionRequest
-                            ),
+                            form.reset({
+                                ...data,
+                                loan_clearance_analysis_deleted: [],
+                                loan_transaction_entries_deleted: [],
+                                loan_clearance_analysis_institution_deleted: [],
+                                loan_terms_and_condition_suggested_payment_deleted:
+                                    [],
+                            } as unknown as ILoanTransactionRequest),
                     }
                 )
             } else if (formMode === 'create' && !hasAutoCreatedRef.current) {
                 promise = createMutation.mutateAsync(payload, {
                     onSuccess: (data) =>
-                        form.reset(data as unknown as ILoanTransactionRequest),
+                        form.reset({
+                            ...data,
+
+                            loan_clearance_analysis_deleted: [],
+                            loan_transaction_entries_deleted: [],
+                            loan_clearance_analysis_institution_deleted: [],
+                            loan_terms_and_condition_suggested_payment_deleted:
+                                [],
+                        } as unknown as ILoanTransactionRequest),
                 })
             }
 
@@ -1160,7 +1173,7 @@ const LoanTransactionCreateUpdateForm = ({
                         <Separator />
 
                         <div className="space-y-4">
-                            <div className="flex items-center gap-3">
+                            <div className="flex max-w-full overflow-x-auto ecoop-scroll items-center gap-3">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="mode_of_payment"
@@ -1179,7 +1192,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                 >
                                                     <label
                                                         key={`mop-${mop}`}
-                                                        className="border-accent hover:bg-accent ease-in-out duration-100 bg-muted has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/40 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-6 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
+                                                        className="border-accent hover:bg-accent ease-in-out duration-100 bg-muted has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/40 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-5 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
                                                     >
                                                         <RadioGroupItem
                                                             value={mop}

@@ -112,7 +112,7 @@ const LoanPicker = forwardRef<
         )
 
         const displayLoanInfo = (loan: ILoanTransaction) => {
-            return `${loan.loan_type || 'Unknown'} - ₱${loan.applied_1?.toLocaleString() || '0'}`
+            return `${loan.loan_type || 'Unknown'} - ${loan.applied_1?.toLocaleString() || '0'}`
         }
 
         return (
@@ -176,7 +176,7 @@ const LoanPicker = forwardRef<
 
                             <div className="text-right">
                                 <p className="text-sm font-medium text-foreground">
-                                    ₱{loan.applied_1?.toLocaleString() || '0'}
+                                    {loan.applied_1?.toLocaleString() || '0'}
                                 </p>
                                 <p className="text-xs text-muted-foreground">
                                     {loan.official_receipt_number || 'No OR'}

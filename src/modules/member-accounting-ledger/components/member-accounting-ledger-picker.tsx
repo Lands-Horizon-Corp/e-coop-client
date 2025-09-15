@@ -89,7 +89,7 @@ const MemberAccountingLedgerPicker = forwardRef<
         })
 
         const displayLedgerInfo = (ledger: IMemberAccountingLedger) => {
-            return `${ledger.account?.name || 'Unknown Account'} - ₱${ledger.balance ? formatNumber(ledger.balance) : '0'}`
+            return `${ledger.account?.name || 'Unknown Account'} - ${ledger.balance ? formatNumber(ledger.balance) : '0'}`
         }
 
         return (
@@ -158,7 +158,6 @@ const MemberAccountingLedgerPicker = forwardRef<
 
                             <div className="text-right">
                                 <p className="text-sm font-medium text-foreground">
-                                    ₱
                                     {ledger.balance
                                         ? formatNumber(ledger.balance)
                                         : '0'}

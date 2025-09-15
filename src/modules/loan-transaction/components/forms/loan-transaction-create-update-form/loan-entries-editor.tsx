@@ -119,7 +119,7 @@ const LoanEntriesEditor = forwardRef<
         () =>
             fields
                 .filter((f) => f.type === 'deduction')
-                .map((f) => `${f.account_id}:${f.credit}`)
+                .map((f) => `${f.account_id}:${f.credit}:${f.is_add_on}`)
                 .join('|'),
         [fields]
     )
@@ -127,6 +127,10 @@ const LoanEntriesEditor = forwardRef<
     useEffect(() => {
         const cash_on_hand = fields[0]
         const account_entry = fields[1]
+
+        const add_on_entry = fields.find(
+            (entry) => entry.type === 'add-on' && !!entry.id
+        )
 
         if (!cash_on_hand || !account_entry || !applied_1) return
 
@@ -154,22 +158,24 @@ const LoanEntriesEditor = forwardRef<
             const staticEntries: ILoanTransactionEntryRequest[] = [
                 {
                     ...cash_on_hand,
-                    account_id: cash_on_hand.id,
-                    account: cash_on_hand,
+                    account_id: cash_on_hand?.account_id,
+                    account: cash_on_hand.account,
                     debit: 0,
                     credit: cashAmount,
+                    index: 0,
                     name:
-                        cash_on_hand?.name || cash_on_hand?.account?.name || '',
+                        cash_on_hand?.account?.name || cash_on_hand?.name || '',
                     description: cash_on_hand?.description || 'Cash on Hand',
                     is_add_on: false,
                     type: 'static',
                 },
                 {
                     ...account_entry,
-                    account_id: account_entry.id,
-                    account: account_entry,
+                    account_id: account_entry.account_id,
+                    account: account_entry?.account,
                     debit: loanAmount,
                     credit: 0,
+                    index: 1,
                     name:
                         account_entry?.name ||
                         account_entry?.account?.name ||
@@ -184,10 +190,12 @@ const LoanEntriesEditor = forwardRef<
                 addOnCharges > 0 && is_add_on
                     ? [
                           {
+                              ...add_on_entry,
                               account_id: undefined,
                               account: undefined,
                               debit: addOnCharges || 0,
                               credit: 0,
+                              index: 1 + deductionEntries.length,
                               name: 'Add-On',
                               description: 'Add on Interest',
                               is_add_on: false,
@@ -204,22 +212,24 @@ const LoanEntriesEditor = forwardRef<
             const staticEntries: ILoanTransactionEntryRequest[] = [
                 {
                     ...cash_on_hand,
-                    account_id: cash_on_hand.id,
+                    account_id: cash_on_hand?.account_id,
                     account: cash_on_hand,
                     debit: 0,
+                    index: 0,
                     credit: netCashAmount,
                     name:
-                        cash_on_hand?.name || cash_on_hand?.account?.name || '',
+                        cash_on_hand?.account?.name || cash_on_hand?.name || '',
                     description: cash_on_hand?.description || 'Cash on Hand',
                     is_add_on: false,
                     type: 'static',
                 },
                 {
                     ...account_entry,
-                    account_id: account_entry.id,
+                    account_id: account_entry?.account_id,
                     account: account_entry,
                     debit: loanAmount,
                     credit: 0,
+                    index: 1,
                     name:
                         account_entry?.name ||
                         account_entry?.account?.name ||
@@ -233,7 +243,11 @@ const LoanEntriesEditor = forwardRef<
             allEntries = [...staticEntries, ...deductionEntries]
         }
 
-        replace(allEntries)
+        replace(allEntries.map((entry, i) => ({ ...entry, index: i })))
+
+        if (!is_add_on || addOnCharges <= 0) {
+            if (add_on_entry?.id) addToDeletedField(add_on_entry.id)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [applied_1, is_add_on, deductionsSignature, replace])
 
@@ -271,15 +285,15 @@ const LoanEntriesEditor = forwardRef<
                     <p className="font-medium">Loan Entries</p>
                     {deductionsTotal > 0 && (
                         <p className="text-xs text-muted-foreground">
-                            Net cash: ₱{formatNumber(netCashAmount)}
+                            Net cash: {formatNumber(netCashAmount)}
                             <span className="ml-1 text-orange-600">
-                                (₱{formatNumber(deductionsTotal)} deducted)
+                                ({formatNumber(deductionsTotal)} deducted)
                             </span>
                         </p>
                     )}
                     {addOnTotal > 0 && (
                         <p className="text-xs text-green-600">
-                            Add-on charges: ₱{formatNumber(addOnTotal)}
+                            Add-on charges: {formatNumber(addOnTotal)}
                         </p>
                     )}
                 </div>
@@ -293,7 +307,7 @@ const LoanEntriesEditor = forwardRef<
                     >
                         {isBalanced
                             ? '✓ Balanced'
-                            : `⚠ Difference: ₱${formatNumber(difference)}`}
+                            : `⚠ Difference: ${formatNumber(difference)}`}
                     </div>
                     <Button
                         size="sm"
@@ -318,7 +332,7 @@ const LoanEntriesEditor = forwardRef<
                 ref={ref}
                 onKeyDown={handleKeyDown}
                 tabIndex={0}
-                wrapperClassName="max-h-72 bg-secondary rounded-xl ecoop-scroll"
+                wrapperClassName="max-h-[50vh] bg-secondary rounded-xl ecoop-scroll"
             >
                 <LoanChargeCreateModal
                     {...addChargeModalState}
@@ -372,13 +386,13 @@ const LoanEntriesEditor = forwardRef<
                     )}
                 </TableBody>
                 <TableFooter>
-                    <TableRow className="bg-muted/50">
+                    <TableRow className="bg-muted/50 text-xl">
                         <TableCell className="font-semibold">Total</TableCell>
                         <TableCell className="text-right font-semibold">
-                            ₱{formatNumber(totalDebit)}
+                            {formatNumber(totalDebit)}
                         </TableCell>
                         <TableCell className="text-right font-semibold">
-                            ₱{formatNumber(totalCredit)}
+                            {formatNumber(totalCredit)}
                         </TableCell>
                         <TableCell>
                             <div
@@ -478,11 +492,11 @@ const LoanEntryRow = memo(
                             </div>
                         </TableCell>
                         <TableCell className="text-right">
-                            {field.debit ? `₱${formatNumber(field.debit)}` : ''}
+                            {field.debit ? `${formatNumber(field.debit)}` : ''}
                         </TableCell>
                         <TableCell className="text-right">
                             {field.credit
-                                ? `₱${formatNumber(field.credit)}`
+                                ? `${formatNumber(field.credit)}`
                                 : ''}
                         </TableCell>
                         <TableCell>

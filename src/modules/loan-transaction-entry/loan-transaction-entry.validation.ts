@@ -8,7 +8,7 @@ export const LoanTransactionEntrySchema = z.object({
     id: entityIdSchema.optional(),
     loan_transaction_id: entityIdSchema.optional(),
 
-    // index: z.number().int().min(0).optional(),
+    index: z.number().int().min(0).optional(),
 
     account_id: entityIdSchema.optional(),
     account: z.any().optional(),

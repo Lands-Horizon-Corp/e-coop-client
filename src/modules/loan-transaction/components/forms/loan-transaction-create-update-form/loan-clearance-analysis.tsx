@@ -9,7 +9,12 @@ import { ILoanClearanceAnalysisInstitutionRequest } from '@/modules/loan-clearan
 import { LoanClearanceAnalysisInstitutionCreateUpdateModal } from '@/modules/loan-clearance-analysis-institution/components/form/loan-clearance-analysis-institution'
 import { LoanClearanceAnalysisCreateUpdateModal } from '@/modules/loan-clearance-analysis/components/form/loan-clearance-analysis-create-update-form'
 
-import { PencilFillIcon, PlusIcon, TrashIcon } from '@/components/icons'
+import {
+    CheckFillIcon,
+    PencilFillIcon,
+    PlusIcon,
+    TrashIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -145,7 +150,12 @@ const LoanClearanceAnalysisField = ({
     const handleRemoveAnalysis = (index: number, id?: TEntityId) => {
         remove(index)
         if (id) addDeletedClearanceAnalysis(id)
-        toast.success('Analysis removed')
+        toast.warning(
+            <span>
+                <TrashIcon className="mr-1 text-destructive inline" /> Analysis
+                Removed. Don&apos;t forget to save changes.
+            </span>
+        )
     }
 
     const handleUpdateAnalysis = (
@@ -153,7 +163,12 @@ const LoanClearanceAnalysisField = ({
         updatedData: ILoanClearanceAnalysisRequest
     ) => {
         update(index, updatedData)
-        toast.success('Analysis updated')
+        toast(
+            <span>
+                <CheckFillIcon className="mr-1 text-primary inline" /> Analysis
+                Updated. Don&apos;t forget to save changes.
+            </span>
+        )
     }
 
     return (
@@ -163,7 +178,13 @@ const LoanClearanceAnalysisField = ({
                 formProps={{
                     onSuccess: (analysis) => {
                         append(analysis)
-                        toast.success('Analysis added')
+                        toast(
+                            <span>
+                                <PlusIcon className="mr-1 text-primary inline" />{' '}
+                                Analysis Added. Don&apos;t forget to save
+                                changes.
+                            </span>
+                        )
                     },
                 }}
             />
@@ -199,7 +220,7 @@ const LoanClearanceAnalysisField = ({
                             </div>
                         </div>
                         <Table
-                            {...field}
+                            ref={field?.ref}
                             wrapperClassName="max-h-[50vh] min-h-32 bg-secondary rounded-xl ecoop-scroll"
                             className="border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
                         >
@@ -435,7 +456,9 @@ const LoanClearanceInstitutionField = ({
     const handleRemoveInstitution = (index: number, id?: TEntityId) => {
         remove(index)
         if (id) addDeletedClearanceAnalysisInstitution(id)
-        toast.success('Institution removed')
+        toast.warning(
+            <span>Institution Removed. Don&apos;t forget to save changes.</span>
+        )
     }
 
     const handleUpdateInstitution = (
@@ -443,7 +466,12 @@ const LoanClearanceInstitutionField = ({
         updatedData: ILoanClearanceAnalysisInstitutionRequest
     ) => {
         update(index, updatedData)
-        toast.success('Institution updated')
+        toast(
+            <span>
+                <CheckFillIcon className="mr-1 text-primary inline" />{' '}
+                Institution Updated. Don&apos;t forget to save changes.
+            </span>
+        )
     }
 
     return (
@@ -453,7 +481,13 @@ const LoanClearanceInstitutionField = ({
                 formProps={{
                     onSuccess: (institution) => {
                         append(institution)
-                        toast.success('Institution added')
+                        toast(
+                            <span>
+                                <PlusIcon className="mr-1 text-primary inline" />{' '}
+                                Institution Added. Don&apos;t forget to save
+                                changes.
+                            </span>
+                        )
                     },
                 }}
             />
@@ -490,7 +524,7 @@ const LoanClearanceInstitutionField = ({
                             </div>
                         </div>
                         <Table
-                            {...field}
+                            ref={field.ref}
                             wrapperClassName="max-h-[50vh] max-w-full min-w-0 min-h-32 bg-secondary rounded-xl ecoop-scroll"
                             className="border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
                         >

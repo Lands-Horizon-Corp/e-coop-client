@@ -90,7 +90,7 @@ const LoanTermsAndConditionSuggestedPaymentCreateForm = ({
                     <FormFieldWrapper
                         control={form.control}
                         name="name"
-                        label="Payment Method Name"
+                        label="Name"
                         render={({ field }) => (
                             <Input
                                 {...field}

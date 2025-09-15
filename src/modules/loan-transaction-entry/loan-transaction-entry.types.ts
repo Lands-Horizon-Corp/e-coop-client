@@ -13,7 +13,7 @@ export interface ILoanTransactionEntry extends IBaseEntityMeta {
     loan_transaction_id: TEntityId
     loan_transaction?: ILoanTransaction
 
-    // index: number
+    index?: number
 
     account_id?: TEntityId
     account?: IAccount

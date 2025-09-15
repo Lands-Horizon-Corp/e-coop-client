@@ -10,6 +10,7 @@ import { ILoanTermsAndConditionSuggestedPaymentRequest } from '@/modules/loan-te
 import { LoanTermsAndConditionSuggestedPaymentCreateModal } from '@/modules/loan-terms-and-condition-suggested-payment/components/forms/loan-terms-and-condition-suggested-payment-create-update-form'
 
 import {
+    CheckFillIcon,
     CreditCardIcon,
     PencilFillIcon,
     PlusIcon,
@@ -182,7 +183,9 @@ const LoanTermsAndConditionReceiptField = ({
     const handleRemoveReceipt = (index: number, id?: TEntityId) => {
         remove(index)
         if (id) addDeletedReceipt(id)
-        toast.success('Receipt removed')
+        toast.warning(
+            <span>Receipt Removed. Don&apos;t forget to save changes.</span>
+        )
     }
 
     const handleUpdateReceipt = (
@@ -192,7 +195,12 @@ const LoanTermsAndConditionReceiptField = ({
         const currentReceipt = receipts[index]
         const mergedData = { ...currentReceipt, ...updatedData }
         update(index, mergedData)
-        toast.success('Receipt updated')
+        toast(
+            <span>
+                <CheckFillIcon className="mr-1 text-primary inline" /> Receipt
+                Updated. Don&apos;t forget to save changes.
+            </span>
+        )
     }
 
     return (
@@ -203,7 +211,13 @@ const LoanTermsAndConditionReceiptField = ({
                     loanTransactionId: form.getValues('id'),
                     onSuccess: (receipt) => {
                         append(receipt)
-                        toast.success('Receipt added')
+                        toast(
+                            <span>
+                                <PlusIcon className="mr-1 text-primary inline" />{' '}
+                                Receipt Added. Don&apos;t forget to save
+                                changes.
+                            </span>
+                        )
                     },
                 }}
             />
@@ -241,7 +255,7 @@ const LoanTermsAndConditionReceiptField = ({
                     name="loan_terms_and_condition_amount_receipt"
                     render={({ field }) => (
                         <div
-                            {...field}
+                            ref={field.ref}
                             role="list"
                             aria-label="Amount receipts list"
                             className="grid grid-cols-1 md:grid-cols-3 max-h-[50vh] overflow-y-auto ecoop-scroll lg:grid-cols-4 bg-muted border rounded-xl p-2 gap-4"
@@ -454,7 +468,11 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
     const handleRemoveSuggestedPayment = (index: number, id?: TEntityId) => {
         remove(index)
         if (id) addDeletedSuggestedPayment(id)
-        toast.success('Suggested payment removed')
+        toast.warning(
+            <span>
+                Suggested Payment Removed. Don&apos;t forget to save changes.
+            </span>
+        )
     }
 
     const handleUpdateSuggestedPayment = (
@@ -464,7 +482,12 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
         const currentPayment = suggestedPayments[index]
         const mergedData = { ...currentPayment, ...updatedData }
         update(index, mergedData)
-        toast.success('Suggested payment updated')
+        toast(
+            <span>
+                <CheckFillIcon className="mr-1 text-primary inline" /> Suggested
+                Payment Updated. Don&apos;t forget to save changes.
+            </span>
+        )
     }
 
     return (
@@ -475,7 +498,14 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
                     loanTransactionId: form.getValues('id'),
                     onSuccess: (payment) => {
                         append(payment)
-                        toast.success('Suggested payment added')
+
+                        toast(
+                            <span>
+                                <PlusIcon className="mr-1 text-primary inline" />{' '}
+                                Suggested Payment Added. Don&apos;t forget to
+                                save changes.
+                            </span>
+                        )
                     },
                 }}
             />
@@ -516,7 +546,7 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
                     name="loan_terms_and_condition_suggested_payment"
                     render={({ field }) => (
                         <div
-                            {...field}
+                            ref={field.ref}
                             role="list"
                             aria-label="Suggested payment list"
                             className="grid grid-cols-1 md:grid-cols-2 max-h-[50vh] overflow-y-auto ecoop-scroll lg:grid-cols-3 bg-muted border rounded-xl p-2 gap-4"
