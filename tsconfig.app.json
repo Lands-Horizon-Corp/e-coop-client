@@ -26,5 +26,5 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["src", ".temp/query-factory.ts", "./src/types/augmentation/global-types.d.ts"],
+    "include": ["src"],
 }
