@@ -245,6 +245,7 @@ const LoanTransactionCreateUpdateForm = ({
             mode_of_payment_fixed_days: 0,
             is_add_on: false,
             loan_type: 'standard',
+            applied_1: 0,
 
             loan_clearance_analysis: [],
             loan_clearance_analysis_deleted: [],
