@@ -24,7 +24,7 @@ const NavTimeInBar = () => {
                         disabled={isLoading && !timesheet}
                         hoverVariant="primary"
                         className={cn(
-                            'group relative gap-x-2 rounded-full text-muted-foreground'
+                            'group relative gap-x-2 rounded-full text-accent-foreground dark:text-muted-foreground'
                         )}
                     >
                         {!!timesheet && (

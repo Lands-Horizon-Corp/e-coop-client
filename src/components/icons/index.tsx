@@ -56,6 +56,7 @@ import {
     CgDetailsLess as DetailsIcon,
     CgFacebook as FacebookIcon,
     CgInternal as InternalIcon,
+    CgRedo as RedoCircleIcon,
     CgSmartphone as SmartphoneIcon,
     CgUnavailable as UnavailableIcon,
 } from 'react-icons/cg'
@@ -271,6 +272,7 @@ import {
     MdExpandMore as ExpandMoreIcon,
     MdFamilyRestroom as FamilyIcon,
     MdOutlineQueryStats as FinanceReportsIcon,
+    MdOutlineCenterFocusWeak as FocusIcon,
     MdOutlineScreenshotMonitor as MonitorIcon,
     MdOutlinePayments as OutlinePaymentIcon,
     MdOutlinePayments as PaymentsIcon,
@@ -318,6 +320,7 @@ import {
     PiWarningFill as WarningFillIcon,
 } from 'react-icons/pi'
 import {
+    RiCommandLine as CommandIcon,
     RiFlipHorizontalFill as FlipHorizontalIcon,
     RiFlipHorizontalLine as FlipHorizontalLineIcon,
     RiFlipVerticalFill as FlipVerticalIcon,
@@ -423,6 +426,7 @@ export {
     ResetIcon,
     HouseIcon,
     ArrowIcon,
+    FocusIcon,
     FunnelIcon,
     ColumnIcon,
     TabletIcon,
@@ -449,6 +453,7 @@ export {
     Image2Icon,
     IdCardIcon,
     EyeOffIcon,
+    CommandIcon,
     TwitterIcon,
     EyeViewIcon,
     CodeSandBox,
@@ -568,6 +573,7 @@ export {
     UserShieldIcon,
     Users3FillIcon,
     PaintBrushIcon,
+    RedoCircleIcon,
     WeightScaleIcon,
     PeopleGroupIcon,
     TargetArrowIcon,
@@ -1009,6 +1015,9 @@ export const IconMap: Record<TIcon, IconType> = {
     'Pi Hand Withdraw': PiHandWithdrawIcon,
     'Auto Awesome': AutoAwesomeIcon,
     'Arrow Icon': ArrowIcon,
+    'Redo Circle Icon': RedoCircleIcon,
+    'Focus Icon': FocusIcon,
+    'Command Icon': CommandIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

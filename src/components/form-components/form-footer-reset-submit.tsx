@@ -18,7 +18,7 @@ interface IFormResetSubmitFooterProps extends IClassProps {
 
     showConfirmOnReset?: boolean
 
-    submitText?: string
+    submitText?: React.ReactNode | string
     resetText?: string
 
     error?: Error | string | null
@@ -48,17 +48,9 @@ const FormFooterResetSubmit = ({
     onReset,
 }: IFormResetSubmitFooterProps) => {
     const { onOpen } = useConfirmModalStore()
-
-    const errorMessage =
-        error instanceof Error
-            ? error.message
-            : error
-              ? String(error)
-              : undefined
-
     return (
         <div className={cn('space-y-2 py-1 px-0', className)}>
-            <FormErrorMessage errorMessage={errorMessage} />
+            <FormErrorMessage errorMessage={error} />
             {showSeparator && <Separator className="my-2 sm:my-4" />}
             <div className="flex items-center justify-end gap-x-2">
                 <Button

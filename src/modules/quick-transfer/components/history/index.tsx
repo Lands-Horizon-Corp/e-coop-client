@@ -8,7 +8,7 @@ import {
     useFilteredPaginatedGeneralLedger,
 } from '@/modules/general-ledger'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
-import { PaymentsEntryItem } from '@/modules/transaction/components/current-payment'
+import { PaymentsEntryItem } from '@/modules/transaction/components/current-payment/transaction-current-payment'
 import TransactionNoFound from '@/modules/transaction/components/history/transaction-no-found'
 import TransactionUserInfoGrid from '@/modules/transaction/components/transaction-user-info-grid'
 import { PaginationState } from '@tanstack/react-table'

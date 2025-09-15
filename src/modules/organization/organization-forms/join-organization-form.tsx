@@ -260,15 +260,7 @@ const JoinBranchWithCodeFormModal = ({
                         </div>
                     </GradientBackground>
                 )}
-                <FormErrorMessage
-                    errorMessage={
-                        error
-                            ? typeof error === 'string'
-                                ? error
-                                : error.message
-                            : undefined
-                    }
-                />
+                <FormErrorMessage errorMessage={error} />
             </div>
         </Modal>
     )

@@ -83,31 +83,29 @@ const TransactionMemberScanner = ({
             setStartScan((start) => !start)
         }
     })
-
     return (
         <div
             className={cn(
-                'flex flex-col lg:flex-row w-full h-fit bg-secondary/20 rounded-2xl p-5',
+                'flex flex-col lg:flex-row w-full h-fit bg-sidebar min-h-fit ecoop-scroll overflow-x-auto  rounded-2xl',
                 className
             )}
         >
-            <div className="hidden">
-                <MemberPicker
-                    modalState={{
-                        open: openMemberPicker,
-                        onOpenChange: setOpenMemberPicker,
-                    }}
-                    onSelect={(selectedMember) => {
-                        setSelectedMember(selectedMember)
-                    }}
-                    placeholder="Select Member"
-                />
-            </div>
+            <MemberPicker
+                triggerClassName="hidden"
+                modalState={{
+                    open: openMemberPicker,
+                    onOpenChange: setOpenMemberPicker,
+                }}
+                onSelect={(selectedMember) => {
+                    setSelectedMember(selectedMember)
+                }}
+                placeholder="Select Member"
+            />
             {/* Left: Scanner */}
             <div className="flex flex-col flex-shrink-0 lg:w-[15rem] justify-center items-center w-full">
                 <div className="w-fit">
-                    {startScan && !selectedMember ? (
-                        <div className="w-full aspect-square max-w-[90%] rounded-xl overflow-hidden ">
+                    <div className="w-full aspect-square min-h-[150px] max-w-[95%] rounded-2xl overflow-hidden ">
+                        {startScan && !selectedMember ? (
                             <QrCodeScanner<IQRMemberProfileDecodedResult>
                                 allowMultiple
                                 onSuccessDecode={(data) => {
@@ -119,28 +117,33 @@ const TransactionMemberScanner = ({
                                     setDecodedMemberProfile(data.data)
                                 }}
                             />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col h-full items-center justify-center text-center py-8">
-                            <ScanLineIcon className="mx-auto h-16 w-16 text-muted-foreground/70" />
-                            <Button
-                                disabled={!!transactionId || !!selectedMember}
-                                onClick={() => setStartScan((start) => !start)}
-                                size="sm"
-                                variant="outline"
-                            >
-                                <EyeIcon className="mr-1 h-4 w-4" />
-                                Start
-                            </Button>
-                            <p className="text-muted-foreground/70 text-sm mt-4">
-                                Click start to scan member QR
-                            </p>
-                        </div>
-                    )}
+                        ) : (
+                            <div className="flex flex-col h-full items-center justify-center text-center gap-y-2 ">
+                                <ScanLineIcon
+                                    size={50}
+                                    className=" text-muted-foreground/70"
+                                />
+                                <Button
+                                    disabled={
+                                        !!transactionId || !!selectedMember
+                                    }
+                                    onClick={() =>
+                                        setStartScan((start) => !start)
+                                    }
+                                    size="sm"
+                                >
+                                    <EyeIcon className="mr-1 h-4 w-4" />
+                                    Start
+                                </Button>
+                                <p className="text-muted-foreground/70 text-xs">
+                                    Click start to scan member QR
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
-
-            <div className="flex flex-col flex-1 w-full space-y-4">
+            <div className="flex flex-col flex-1 w-full h-full">
                 {isPending && decodedMemberProfile !== undefined && (
                     <p className="text-muted-foreground/70 flex items-center">
                         <LoadingSpinner className="mr-2 h-4 w-4" />
@@ -149,8 +152,9 @@ const TransactionMemberScanner = ({
                 )}
                 {error && <FormErrorMessage errorMessage={error} />}
                 {selectedMember ? (
-                    <div className="space-y-4">
+                    <div className="h-full">
                         <TransactionMemberProfile
+                            className="h-full"
                             memberInfo={selectedMember}
                             hasTransaction={false}
                         />

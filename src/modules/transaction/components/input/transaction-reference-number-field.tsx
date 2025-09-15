@@ -6,20 +6,23 @@ import { Input } from '@/components/ui/input'
 
 type ReferenceNumberPros = React.InputHTMLAttributes<HTMLInputElement> & {
     InputClassName?: string
-    className?: string
+    isDefault?: boolean
 }
 
 const TransactionReferenceNumber = forwardRef<
     HTMLInputElement,
     ReferenceNumberPros
->(({ InputClassName, className, ...rest }, ref) => {
+>(({ InputClassName, className, isDefault, ...rest }, ref) => {
     return (
         <div className={`relative flex items-center ${className}`}>
             <Input
                 {...rest}
                 ref={ref}
                 className={cn(
-                    'pr-9 text-lg font-semibold bg-secondary  text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',
+                    'border !border-primary/20',
+                    isDefault
+                        ? ''
+                        : 'text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',
                     InputClassName
                 )}
             />
