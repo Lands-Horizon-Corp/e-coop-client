@@ -15,14 +15,11 @@ export const WS_URL =
     'ws://localhost:8080'
 
 // NATS
-export const NATS_CLIENT =
-    import.meta.env.VITE_WS_CLIENT || process.env.VITE_WS_CLIENT || ''
+export const NATS_CLIENT = import.meta.env.VITE_WS_CLIENT || ''
 
-export const NATS_USER =
-    import.meta.env.VITE_WS_USER || process.env.VITE_WS_USER || ''
+export const NATS_USER = import.meta.env.VITE_WS_USER || ''
 
-export const NATS_PASS =
-    import.meta.env.VITE_WS_PASSWORD || process.env.VITE_WS_PASSWORD || ''
+export const NATS_PASS = import.meta.env.VITE_WS_PASSWORD || ''
 
 // TURNSTILE CAPTCHA
 export const TURNSTILE_CAPTCHA_SITE_KEY =
