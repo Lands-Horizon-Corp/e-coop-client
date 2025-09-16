@@ -321,15 +321,15 @@ const LoanTransactionCreateUpdateForm = ({
                             loan_clearance_analysis_institution_deleted: [],
                             loan_terms_and_condition_suggested_payment_deleted:
                                 [],
-                        } as unknown as ILoanTransactionRequest),
+                        } as ILoanTransactionRequest),
                 })
             }
-
-            toast.promise(promise as unknown as Promise<unknown>, {
-                loading: 'Saving...',
-                success: 'Saved',
-                error: 'Failed to save',
-            })
+            if (promise)
+                toast.promise(promise, {
+                    loading: 'Saving...',
+                    success: 'Saved',
+                    error: 'Failed to save',
+                })
 
             await promise
         },

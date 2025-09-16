@@ -39,7 +39,7 @@ const CivilStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
             className,
             disabled = false,
             placeholder = 'Select Civil Status...',
-            civilStatuses = CIVIL_STATUS as unknown as TCivilStatus[],
+            civilStatuses = CIVIL_STATUS,
             onChange,
             ...other
         },

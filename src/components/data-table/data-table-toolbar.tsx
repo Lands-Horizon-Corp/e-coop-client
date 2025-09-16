@@ -26,7 +26,7 @@ import DataTableGlobalSearch, {
     IGlobalSearchProps,
 } from './data-table-filters/data-table-global-search'
 
-export interface IDataTableToolbarProps<TData = unknown> extends IClassProps {
+export interface IDataTableToolbarProps<TData> extends IClassProps {
     table: Table<TData>
     refreshActionProps: IRefreshButtonProps
     globalSearchProps?: IGlobalSearchProps<TData>

@@ -41,7 +41,7 @@ const GeneralStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
             className,
             disabled = false,
             placeholder = 'Select General Status...',
-            generalStatuses = GENERAL_STATUS as unknown as TGeneralStatus[],
+            generalStatuses = GENERAL_STATUS,
             onChange,
             ...other
         },

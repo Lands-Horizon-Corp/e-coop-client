@@ -40,7 +40,7 @@ const RelationshipCombobox = ({
     className,
     disabled = false,
     placeholder = 'Select Relationship...',
-    relationships = FAMILY_RELATIONSHIP as unknown as TRelationship[],
+    relationships = [...FAMILY_RELATIONSHIP],
     onChange,
     ...other
 }: Props) => {
