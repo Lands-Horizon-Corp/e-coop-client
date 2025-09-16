@@ -72,6 +72,7 @@ import {
     FaBookOpen as BookOpenIcon,
     FaBook as BookThickIcon,
     FaBug as BugIcon,
+    FaCode as CodeIcon,
     FaCreditCard as CreditCardIcon,
     FaFileCsv as CsvIcon,
     FaBold as FaBoldIcon,
@@ -373,6 +374,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    CodeIcon,
     XIcon,
     F1Icon,
     F2Icon,
@@ -1018,6 +1020,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Redo Circle Icon': RedoCircleIcon,
     'Focus Icon': FocusIcon,
     'Command Icon': CommandIcon,
+    'Code Icon': CodeIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

@@ -2,6 +2,7 @@ import FaqSection from '../components/home/faq-section'
 import FeatureSection from '../components/home/feature-section'
 import HeroHome from '../components/home/hero-home'
 import IntroSection from '../components/home/intro-section'
+import OurServices from '../components/home/our-services'
 
 export const HomePage = () => {
     return (
@@ -9,6 +10,7 @@ export const HomePage = () => {
             <HeroHome />
             <IntroSection />
             <FeatureSection />
+            <OurServices />
             <FaqSection />
         </div>
     )

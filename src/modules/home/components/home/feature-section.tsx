@@ -1,14 +1,15 @@
 import { Link } from '@tanstack/react-router'
 
+import { CodeIcon } from 'lucide-react'
+
+import { BankIcon, Users3FillIcon } from '@/components/icons'
 import Image from '@/components/image'
 import { Button } from '@/components/ui/button'
 
 export default function FeatureSection() {
     return (
-        <section className="bg-backgroun flex items-center py-8 md:py-16">
-            <div className="to-background/0 via-background/0 from-primary/20 absolute right-0 -z-10 h-full w-full bg-radial-[ellipse_at_-20%_50%] to-10%" />
-            {/* <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 h-full w-full bg-radial-[ellipse_at_50%_120%] to-10%" /> */}
-            {/* <div className="to-background/0 via-background/0 from-primary/20 absolute right-0 -z-10 h-full w-full bg-radial-[ellipse_at_120%_90%] to-10%" /> */}
+        <section className="flex items-center bg-none px-5 my-16">
+            <div className="absolute inset-0 -z-10 h-full w-full bg-radial-[ellipse_at_-20%_50%] from-primary/20 via-background/0 to-background/0 to-10%" />
 
             <div className="container mx-auto px-4">
                 <div className="mx-auto w-full max-w-5xl">
@@ -22,17 +23,16 @@ export default function FeatureSection() {
 
                     <div className="space-y-4 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
                         <div className="bg-card overflow-hidden rounded-lg shadow-sm">
-                            <div className="h-40 rounded-2xl p-3">
+                            <div className="relative h-40 rounded-2xl p-3">
                                 <Image
                                     alt="Membership management"
-                                    className="h-full w-full rounded-2xl object-cover "
-                                    height={1000}
-                                    src="/images/membership.png"
-                                    width={1000}
+                                    className="h-full w-full rounded-2xl object-cover"
+                                    src="/pictures/home/membership.png"
                                 />
                             </div>
                             <div className="p-4">
                                 <h3 className="text-foreground mb-2 min-h-[28px] font-bold md:mb-4">
+                                    <Users3FillIcon className="inline size-5 mr-2" />
                                     Membership Management
                                 </h3>
                                 <p className="text-muted-foreground text-sm md:text-base">
@@ -48,14 +48,13 @@ export default function FeatureSection() {
                                     <Image
                                         alt="API integrations"
                                         className="h-full w-full rounded-2xl object-cover"
-                                        height={1000}
-                                        src="/images/api.png"
-                                        width={1000}
+                                        src="/pictures/home/api.png"
                                     />
                                 </div>
                             </div>
                             <div className="p-4">
                                 <h3 className="text-foreground mb-2 min-h-[28px] font-bold md:mb-4">
+                                    <CodeIcon className="inline size-4 mr-2" />
                                     API & Integrations
                                 </h3>
                                 <p className="text-muted-foreground text-sm md:text-base">
@@ -70,14 +69,13 @@ export default function FeatureSection() {
                                 <Image
                                     alt="Digital cooperative banking"
                                     className="h-full w-full rounded-2xl object-cover"
-                                    height={1000}
-                                    src="/images/transaction.png"
-                                    width={1000}
+                                    src="/pictures/home/transaction.png"
                                 />
                             </div>
 
                             <div className="p-4">
                                 <h3 className="text-foreground mb-2 min-h-[28px] font-bold md:mb-4">
+                                    <BankIcon className="inline size-4 mr-2" />
                                     Digital Cooperative Banking
                                 </h3>
                                 <p className="text-muted-foreground text-sm md:text-base">
@@ -95,7 +93,7 @@ export default function FeatureSection() {
                             variant="default"
                             asChild
                         >
-                            <Link to="/auth/sign-in">Join Waitlist</Link>
+                            <Link to="/auth/sign-in">Sign in Now</Link>
                         </Button>
                     </div>
                 </div>
