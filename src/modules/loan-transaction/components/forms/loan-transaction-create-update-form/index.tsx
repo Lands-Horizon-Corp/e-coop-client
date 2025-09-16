@@ -85,6 +85,7 @@ import {
     LoanTransactionSchema,
     TLoanTransactionSchema,
 } from '../../../loan-transaction.validation'
+import LoanAmortization from '../../loan-amortization'
 import WeekdayCombobox from '../../weekday-combobox'
 import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanEntriesEditor from './loan-entries-editor'
@@ -233,7 +234,7 @@ const LoanTransactionCreateUpdateForm = ({
 
     const [createdLoanTransactionId, setCreatedLoanTransactionId] = useState<
         TEntityId | undefined
-    >(loanTransactionId)
+    >(loanTransactionId || formProps?.defaultValues?.id)
 
     const hasAutoCreatedRef = useRef(false)
 
@@ -285,7 +286,7 @@ const LoanTransactionCreateUpdateForm = ({
         useFormHelper<TLoanTransactionSchema>({
             form,
             ...formProps,
-            autoSave: formMode !== 'create',
+            // autoSave: formMode !== 'create',
             autoSaveDelay: 2000,
         })
 
@@ -1398,7 +1399,6 @@ const LoanTransactionCreateUpdateForm = ({
                                     />
                                     Terms & Condition / Receipt
                                 </TabsTrigger>
-
                                 <TabsTrigger
                                     value="other"
                                     className="bg-muted overflow-hidden rounded-t-lg rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
@@ -1416,11 +1416,12 @@ const LoanTransactionCreateUpdateForm = ({
                         <TabsContent
                             value="entries"
                             tabIndex={0}
-                            className="bg-popover p-4 rounded-xl"
+                            className="bg-popover p-4 rounded-xl max-w-full min-w-0 grid grid-cols-12 gap-2"
                         >
                             <FormFieldWrapper
                                 control={form.control}
                                 name="loan_transaction_entries"
+                                className="col-span-7"
                                 render={({ field }) => (
                                     <LoanEntriesEditor
                                         {...field}
@@ -1429,6 +1430,12 @@ const LoanTransactionCreateUpdateForm = ({
                                     />
                                 )}
                             />
+                            {createdLoanTransactionId && (
+                                <LoanAmortization
+                                    className="col-span-5"
+                                    loanTransactionId={createdLoanTransactionId}
+                                />
+                            )}
                         </TabsContent>
                         <TabsContent
                             value="clearance"
@@ -1525,7 +1532,7 @@ export const LoanTransactionCreateUpdateFormModal = ({
             description=""
             titleClassName="sr-only"
             descriptionClassName="sr-only"
-            className={cn('p-0 !max-w-7xl gap-y-0', className)}
+            className={cn('p-0 !max-w-[80vw] gap-y-0', className)}
             {...props}
         >
             <LoanTransactionCreateUpdateForm
