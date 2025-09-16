@@ -1,8 +1,26 @@
-import { Check } from 'lucide-react'
+import ImageMatch from '@/components/image-match'
 
-import Image from '@/components/image'
+import FeatureList from './feature-list'
 
 const IntroSection = () => {
+    const features = [
+        { text: 'AI forecasting & planning (LLMs + time-series)' },
+        {
+            text: 'Advanced security: encryption, hashing, secure key management',
+        },
+        { text: 'Member & employee management, accounts, and reporting' },
+        { text: 'Automated loan calculations and blotter validation' },
+        {
+            text: 'Accounts: time deposits, savings, ledgers and reconciliations',
+        },
+        { text: 'Role-based access (tellers, managers, owners, employees)' },
+        { text: 'Modern, proven UI/UX for efficient workflows' },
+        {
+            text: 'Fast, scalable backend with real-time updates (built for billions of transactions)',
+        },
+        { text: 'Global cloud infrastructure with high availability' },
+    ]
+
     return (
         <section className="flex items-center bg-none px-5">
             <div className="to-background via-background from-primary/20 absolute right-0 -z-10 h-screen w-full bg-radial-[ellipse_at_100%_40%] to-100%" />
@@ -11,12 +29,10 @@ const IntroSection = () => {
                 <div className="mx-auto w-full max-w-5xl rounded-2xl">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12">
                         <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-lg md:order-1">
-                            <Image
-                                alt="Intro Section Image"
-                                className="object-cover"
-                                height={1000}
-                                src="/images/software.webp"
-                                width={1000}
+                            <ImageMatch
+                                src="/pictures/home/software.png"
+                                alt="Cooperative community working together"
+                                containerClassName="shadow-card overflow-hidden rounded-2xl"
                             />
                         </div>
                         <div className="order-1 md:order-2">
@@ -33,112 +49,10 @@ const IntroSection = () => {
                                 Launch date: January 6, 2026
                             </p>
 
-                            <div className="space-y-3 md:space-y-4">
-                                <h3 className="text-lg font-semibold md:text-xl">
-                                    What we offer
-                                </h3>
-                                <ul className="space-y-2">
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            AI forecasting & planning (LLMs +
-                                            time-series)
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Advanced security: encryption,
-                                            hashing, secure key management
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Member & employee management,
-                                            accounts, and reporting
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Automated loan calculations and
-                                            blotter validation
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Accounts: time deposits, savings,
-                                            ledgers and reconciliations
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Role-based access (tellers,
-                                            managers, owners, employees)
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Modern, proven UI/UX for efficient
-                                            workflows
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Fast, scalable backend with
-                                            real-time updates (built for
-                                            billions of transactions)
-                                        </span>
-                                    </li>
-
-                                    <li className="flex items-start gap-3">
-                                        <Check
-                                            className="text-primary h-5 w-5"
-                                            aria-hidden
-                                        />
-                                        <span className="text-current/70">
-                                            Global cloud infrastructure with
-                                            high availability
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
+                            <FeatureList
+                                title="What we offer"
+                                items={features}
+                            />
                         </div>
                     </div>
                 </div>

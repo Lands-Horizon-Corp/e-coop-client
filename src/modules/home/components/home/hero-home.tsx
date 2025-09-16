@@ -12,7 +12,7 @@ import {
     Users,
 } from 'lucide-react'
 
-import Image from '@/components/image'
+import ImageMatch from '@/components/image-match'
 import { Button } from '@/components/ui/button'
 
 const HeroHome = () => {
@@ -28,7 +28,7 @@ const HeroHome = () => {
                         <div className="space-y-4">
                             <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium">
                                 <Shield className="h-4 w-4" />
-                                E-COOPERATIVES SUITE
+                                LANDS HORIZON CORP.
                             </div>
 
                             <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
@@ -58,7 +58,7 @@ const HeroHome = () => {
                                     to="/auth/sign-up"
                                 >
                                     <UserIcon className="mr-2 h-5 w-5" />
-                                    Join Waitlist
+                                    Sign Up Now
                                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </Button>
@@ -96,8 +96,8 @@ const HeroHome = () => {
                             </div>
                             <div className="text-center">
                                 <div className="mb-2 flex items-center justify-center gap-2">
-                                    <MonitorSmartphoneIcon className="text-accent h-8 w-8" />
-                                    <span className="text-foreground text-2xl font-bold">
+                                    <MonitorSmartphoneIcon className="text-primary/80 h-8 w-8" />
+                                    <span className="text-primary/80 text-2xl font-bold">
                                         1B+
                                     </span>
                                 </div>
@@ -112,13 +112,12 @@ const HeroHome = () => {
 
                     {/* Image Section */}
                     <div className="animate-slide-up relative">
-                        <div className="shadow-card relative overflow-hidden rounded-2xl">
-                            <Image
-                                alt="Cooperative community working together"
-                                className="h-[500px] w-full object-contain grayscale"
+                        <div className="shadow-card relative overflow-hidden rounded-2xl ">
+                            <ImageMatch
                                 src="/pictures/home/poster.png"
+                                alt="Cooperative community working together"
+                                containerClassName="shadow-card overflow-hidden rounded-2xl"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t" />
                         </div>
 
                         {/* Floating cards */}
