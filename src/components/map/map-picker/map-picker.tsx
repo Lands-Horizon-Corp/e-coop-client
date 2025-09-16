@@ -34,8 +34,12 @@ export interface PlaceSuggestion {
     structured_formatting: {
         main_text: string
         secondary_text: string
+        main_text_matched_substrings?: google.maps.places.PredictionSubstring[]
+        secondary_text_matched_substrings?: google.maps.places.PredictionSubstring[]
     }
     types: string[]
+    terms: google.maps.places.PredictionTerm[]
+    matched_substrings: google.maps.places.PredictionSubstring[]
 }
 
 export interface GoogleMapsEvent {
@@ -148,17 +152,15 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     const [isLoadingSuggestions, setIsLoadingSuggestions] =
         useState<boolean>(false)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mapRef = useRef<any | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const geocoderRef = useRef<any | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const markerRef = useRef<any | null>(null)
+    const mapRef = useRef<google.maps.Map | null>(null)
+    const geocoderRef = useRef<google.maps.Geocoder | null>(null)
+    const markerRef = useRef<google.maps.Marker | null>(null)
     const searchInputRef = useRef<HTMLInputElement | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const placesServiceRef = useRef<any | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const autocompleteServiceRef = useRef<any | null>(null)
+    const placesServiceRef = useRef<google.maps.places.PlacesService | null>(
+        null
+    )
+    const autocompleteServiceRef =
+        useRef<google.maps.places.AutocompleteService | null>(null)
     const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const justOpenedRef = useRef(false)
 
@@ -235,7 +237,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         autocompleteServiceRef.current.getPlacePredictions(
             request,
             (
-                predictions: PlaceSuggestion[],
+                predictions: google.maps.places.AutocompletePrediction[] | null,
                 status: google.maps.places.PlacesServiceStatus
             ) => {
                 setIsLoadingSuggestions(false)
@@ -277,7 +279,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             placesServiceRef.current.getDetails(
                 request,
                 (
-                    place: GooglePlaceDetails,
+                    place: google.maps.places.PlaceResult | null,
                     status: google.maps.places.PlacesServiceStatus
                 ) => {
                     setIsLoadingSuggestions(false)
@@ -285,7 +287,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                     if (
                         status ===
                             window.google.maps.places.PlacesServiceStatus.OK &&
-                        place.geometry
+                        place?.geometry?.location
                     ) {
                         const newLoc: LatLng = {
                             lat: place.geometry.location.lat(),
