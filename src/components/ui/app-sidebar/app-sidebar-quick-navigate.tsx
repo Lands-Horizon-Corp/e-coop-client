@@ -79,9 +79,6 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                             )}
                                             <div className="flex-1 space-y-1">
                                                 <p>{groupItem.title}</p>
-                                                <p className="text-xs text-muted-foreground/70">
-                                                    {groupItem.shortDescription}
-                                                </p>
                                             </div>
                                             <div className="w-fit">
                                                 <Link
