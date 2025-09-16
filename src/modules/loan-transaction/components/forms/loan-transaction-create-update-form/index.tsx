@@ -85,7 +85,7 @@ import {
     LoanTransactionSchema,
     TLoanTransactionSchema,
 } from '../../../loan-transaction.validation'
-import LoanAmortization from '../../loan-amortization'
+// import LoanAmortization from '../../loan-amortization'
 import WeekdayCombobox from '../../weekday-combobox'
 import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanEntriesEditor from './loan-entries-editor'
@@ -1430,12 +1430,12 @@ const LoanTransactionCreateUpdateForm = ({
                                     />
                                 )}
                             />
-                            {createdLoanTransactionId && (
+                            {/* {createdLoanTransactionId && (
                                 <LoanAmortization
                                     className="col-span-5"
                                     loanTransactionId={createdLoanTransactionId}
                                 />
-                            )}
+                            )} */}
                         </TabsContent>
                         <TabsContent
                             value="clearance"
