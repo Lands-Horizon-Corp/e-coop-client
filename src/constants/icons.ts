@@ -1,4 +1,5 @@
 export const ICONS = [
+    'Headset',
     'Code Icon',
     'X',
     'F1',

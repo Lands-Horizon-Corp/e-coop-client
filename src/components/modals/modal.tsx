@@ -56,7 +56,7 @@ const Modal = ({
             setActiveScope(SHORTCUT_SCOPES.MODAL)
         }
         return () => {
-                setActiveScope(SHORTCUT_SCOPES.GLOBAL)
+            setActiveScope(SHORTCUT_SCOPES.GLOBAL)
         }
     }, [other.open, setActiveScope])
 

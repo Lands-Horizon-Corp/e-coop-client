@@ -89,6 +89,7 @@ import {
     FaUserClock as UserClockFillIcon,
     FaYoutube as YoutubeIcon,
 } from 'react-icons/fa'
+import { FaHeadset as HeadsetIcon } from 'react-icons/fa6'
 import {
     FaAddressCard as AddressCardIcon,
     FaArrowTrendUp as ArrowTrendUpIcon,
@@ -374,6 +375,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    HeadsetIcon,
     CodeIcon,
     XIcon,
     F1Icon,
@@ -703,6 +705,7 @@ export {
 }
 
 export const IconMap: Record<TIcon, IconType> = {
+    Headset: HeadsetIcon,
     X: XIcon,
     F1: F1Icon,
     F2: F2Icon,
