@@ -7,7 +7,12 @@ import { useSignOut } from '@/modules/authentication'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
-import { ArrowLeftIcon, ArrowRightIcon, DoorExitIcon } from '@/components/icons'
+import {
+    ArrowLeftIcon,
+    ArrowRightIcon,
+    DoorExitIcon,
+    LinkIcon,
+} from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 
 export const QuickActions = () => {
@@ -37,6 +42,7 @@ export const QuickActions = () => {
     return (
         <div className="space-y-1">
             <p className="font-medium text-muted-foreground uppercase tracking-wide mb-1">
+                <LinkIcon className="size-5 inline mr-2" />
                 Actions
             </p>
 

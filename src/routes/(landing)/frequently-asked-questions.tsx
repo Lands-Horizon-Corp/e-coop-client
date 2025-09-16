@@ -252,7 +252,9 @@ function RouteComponent() {
     }, [searchTerm, fuse])
 
     return (
-        <PageContainer className="relative bg-background/80 dark:bg-background/90">
+        <PageContainer className="relative  mt-16">
+            <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
+
             <div className="py-4 z-10 max-w-4xl px-4 md:px-8 w-full space-y-6">
                 <ImageDisplay
                     className="size-40 mx-auto rounded-xl !bg-transparent"

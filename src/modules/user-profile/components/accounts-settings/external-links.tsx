@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { ArrowUpRightIcon } from '@/components/icons'
+import { ArrowUpRightIcon, ShieldIcon } from '@/components/icons'
 
 interface ExternalLink {
     title: string
@@ -17,6 +17,7 @@ export const ExternalLinks = ({ links, title }: ExternalLinksProps) => {
         <div className="space-y-1">
             {title && (
                 <p className="font-medium text-muted-foreground uppercase tracking-wide mb-1">
+                    <ShieldIcon className="size-5 inline mr-2" />
                     {title}
                 </p>
             )}

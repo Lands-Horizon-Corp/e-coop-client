@@ -3,6 +3,8 @@ import { useLocation } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 
+import { SettingsIcon } from '@/components/icons'
+
 interface NavigationItem {
     name: string
     path: string
@@ -25,6 +27,7 @@ export const NavigationSection = ({
         <div className={cn('space-y-1', className)}>
             {title && (
                 <p className="font-medium text-muted-foreground uppercase tracking-wide mb-1">
+                    <SettingsIcon className="size-5 inline mr-2" />
                     {title}
                 </p>
             )}

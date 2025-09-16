@@ -4,6 +4,7 @@ import {
     ChatBubbleIcon,
     EmailIcon,
     LocationPinIcon,
+    PhoneIcon,
     TelephoneIcon,
 } from '@/components/icons'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
@@ -12,7 +13,7 @@ export const ContactInfo = () => {
     return (
         <div className="space-y-1">
             <p className="font-medium text-muted-foreground uppercase tracking-wide mb-1">
-                Contact
+                <PhoneIcon className="size-4 inline mr-2" /> Contact
             </p>
 
             <div className="space-y-0.5">

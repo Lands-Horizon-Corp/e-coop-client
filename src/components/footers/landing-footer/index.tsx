@@ -81,6 +81,14 @@ const NeonFooter = () => {
             label: 'Risk Management Policy',
             to: '/risk-management-policy',
         },
+        {
+            label: 'FAQ',
+            onClick: () => navigate({ to: '/frequently-asked-questions' }),
+        },
+        {
+            label: 'Developers',
+            onClick: () => navigate({ to: '/developers' }),
+        },
     ]
     const contacts = [
         {

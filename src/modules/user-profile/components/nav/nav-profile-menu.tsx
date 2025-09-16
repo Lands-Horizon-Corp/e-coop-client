@@ -366,6 +366,9 @@ const NavProfileMenu = () => {
                     <Button
                         variant="ghost"
                         className="justify-center flex-1"
+                        disabled={
+                            router.state.location.pathname === '/onboarding'
+                        }
                         onClick={() =>
                             onOpen({
                                 title: 'Onboarding',
