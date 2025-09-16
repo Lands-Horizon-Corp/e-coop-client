@@ -6,7 +6,7 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
     IContactUs,
     IContactUsRequest
 >({
-    url: '/api/v1/contact-us',
+    url: '/api/v1/contact',
     baseKey: 'contact-us',
 })
 

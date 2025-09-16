@@ -111,7 +111,7 @@ export default function AboutUsPage() {
                     <OurServices />
                 </section>
                 <section>
-                    <div className="grid grid-cols-3 py-8 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-8 gap-6">
                         {LANDS_TEAM.map((member) => (
                             <TeamMemberCard
                                 key={`${member.name}${member.position}`}
