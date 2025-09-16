@@ -26,7 +26,6 @@ import { Route as AccountProfileSecurityRouteImport } from './routes/account-pro
 import { Route as AccountProfileQrRouteImport } from './routes/account-profile/qr'
 import { Route as AccountProfileProfileRouteImport } from './routes/account-profile/profile'
 import { Route as AccountProfileActivityLogsRouteImport } from './routes/account-profile/activity-logs'
-import { Route as landingTestRouteImport } from './routes/(landing)/test'
 import { Route as landingFrequentlyAskedQuestionsRouteImport } from './routes/(landing)/frequently-asked-questions'
 import { Route as landingDevelopersRouteImport } from './routes/(landing)/developers'
 import { Route as landingContactRouteImport } from './routes/(landing)/contact'
@@ -208,11 +207,6 @@ const AccountProfileActivityLogsRoute =
     path: '/activity-logs',
     getParentRoute: () => AccountProfileRouteRoute,
   } as any)
-const landingTestRoute = landingTestRouteImport.update({
-  id: '/test',
-  path: '/test',
-  getParentRoute: () => landingRouteRoute,
-} as any)
 const landingFrequentlyAskedQuestionsRoute =
   landingFrequentlyAskedQuestionsRouteImport.update({
     id: '/frequently-asked-questions',
@@ -895,7 +889,6 @@ export interface FileRoutesByFullPath {
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
-  '/test': typeof landingTestRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
@@ -1007,7 +1000,6 @@ export interface FileRoutesByTo {
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
-  '/test': typeof landingTestRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
@@ -1124,7 +1116,6 @@ export interface FileRoutesById {
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/developers': typeof landingDevelopersRoute
   '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
-  '/(landing)/test': typeof landingTestRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
@@ -1243,7 +1234,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/developers'
     | '/frequently-asked-questions'
-    | '/test'
     | '/account-profile/activity-logs'
     | '/account-profile/profile'
     | '/account-profile/qr'
@@ -1355,7 +1345,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/developers'
     | '/frequently-asked-questions'
-    | '/test'
     | '/account-profile/activity-logs'
     | '/account-profile/profile'
     | '/account-profile/qr'
@@ -1471,7 +1460,6 @@ export interface FileRouteTypes {
     | '/(landing)/contact'
     | '/(landing)/developers'
     | '/(landing)/frequently-asked-questions'
-    | '/(landing)/test'
     | '/account-profile/activity-logs'
     | '/account-profile/profile'
     | '/account-profile/qr'
@@ -1699,13 +1687,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/account-profile/activity-logs'
       preLoaderRoute: typeof AccountProfileActivityLogsRouteImport
       parentRoute: typeof AccountProfileRouteRoute
-    }
-    '/(landing)/test': {
-      id: '/(landing)/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof landingTestRouteImport
-      parentRoute: typeof landingRouteRoute
     }
     '/(landing)/frequently-asked-questions': {
       id: '/(landing)/frequently-asked-questions'
@@ -2441,7 +2422,6 @@ interface landingRouteRouteChildren {
   landingContactRoute: typeof landingContactRoute
   landingDevelopersRoute: typeof landingDevelopersRoute
   landingFrequentlyAskedQuestionsRoute: typeof landingFrequentlyAskedQuestionsRoute
-  landingTestRoute: typeof landingTestRoute
   landingIndexRoute: typeof landingIndexRoute
   landingSubscriptionIndexRoute: typeof landingSubscriptionIndexRoute
 }
@@ -2452,7 +2432,6 @@ const landingRouteRouteChildren: landingRouteRouteChildren = {
   landingContactRoute: landingContactRoute,
   landingDevelopersRoute: landingDevelopersRoute,
   landingFrequentlyAskedQuestionsRoute: landingFrequentlyAskedQuestionsRoute,
-  landingTestRoute: landingTestRoute,
   landingIndexRoute: landingIndexRoute,
   landingSubscriptionIndexRoute: landingSubscriptionIndexRoute,
 }
