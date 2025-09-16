@@ -3,5 +3,5 @@ export enum SHORTCUT_SCOPES {
     PAYMENT = 'payment',
     DATA_TABLE = 'data-table',
     MODAL = 'modal',
-    MODAL_SUCCESS_TRANSACTION = 'modal-success-transaction',
+    QUICK_TRANSFER = 'quick-transfer',
 }

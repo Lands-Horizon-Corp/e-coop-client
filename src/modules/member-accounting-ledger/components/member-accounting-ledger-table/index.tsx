@@ -8,6 +8,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import DataTable from '@/components/data-table'
 import DataTablePagination from '@/components/data-table/data-table-pagination'
@@ -145,6 +146,9 @@ const MemberAccountingLedgerTable = ({
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
+    })
+    useHotkeys('Alt + R', () => {
+        refetch()
     })
 
     return (

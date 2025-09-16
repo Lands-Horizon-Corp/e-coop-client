@@ -99,7 +99,6 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     setState(true)
                 }
             },
-            { scopes: ['member-picker'] },
             [
                 value,
                 disabled,

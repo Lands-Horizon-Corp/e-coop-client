@@ -253,7 +253,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             ],
                         })
                         queryClient.invalidateQueries({
-                            queryKey: ['transaction', 'current-user'],
+                            queryKey: ['transaction'],
                         })
                         queryClient.invalidateQueries({
                             queryKey: [

@@ -12,6 +12,7 @@ import { PaymentsEntryItem } from '@/modules/transaction/components/current-paym
 import TransactionNoFound from '@/modules/transaction/components/history/transaction-no-found'
 import TransactionUserInfoGrid from '@/modules/transaction/components/transaction-user-info-grid'
 import { PaginationState } from '@tanstack/react-table'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { HistoryIcon } from '@/components/icons'
@@ -266,6 +267,11 @@ const CurrentTransactionWithdrawHistoryData = ({
     })
     const isNoCurrentTransaction =
         !currentGeneralLedger || currentGeneralLedger.data.length === 0
+
+    useHotkeys('Alt + R', () => {
+        refetchCurrentTransaction()
+    })
+
     return (
         <>
             <ScrollArea className="">

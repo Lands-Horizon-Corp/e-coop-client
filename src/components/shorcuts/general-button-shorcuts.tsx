@@ -9,20 +9,17 @@ import {
     EyeIcon,
     FocusIcon,
     HistoryIcon,
+    ReloadIcon,
     ResetIcon,
     ScanQrIcon,
     UserIcon,
     ViewIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog'
 
 import { useModalState } from '@/hooks/use-modal-state'
+
+import Modal from '../modals/modal'
 
 interface ShortcutItemProps {
     icon: ReactNode
@@ -106,6 +103,12 @@ const shortcutsData = {
                 text: 'Reset Transaction / Clear Member',
                 shortcut: 'Escape',
             },
+            {
+                icon: <ReloadIcon />,
+                text: 'Refresh Accounts Table',
+                description: 'this will work on history page panel too',
+                shortcut: 'Alt + R',
+            },
         ],
     },
     transaction: {
@@ -156,7 +159,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
     )
 
     return (
-        <div className={cn('w-fit', className)}>
+        <div className={cn('w-fit ', className)}>
             <Button
                 variant="outline"
                 size="sm"
@@ -165,15 +168,16 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
             >
                 <CommandIcon />
             </Button>
-
-            <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent className="min-w-fit lg:min-w-[1200px] h-[600px] bg-neutral-900 border-neutral-700 text-white p-6 flex flex-col">
-                    <DialogHeader className="flex-none">
-                        <DialogTitle className="text-xl font-bold text-center mb-6">
-                            All Keyboard Shortcuts
-                        </DialogTitle>
-                    </DialogHeader>
-
+            <Modal
+                open={open}
+                title="All Keyboard Shortcuts"
+                titleClassName="text-lg font-semibold text-center "
+                description="Here are some useful keyboard shortcuts to help you navigate and perform actions quickly."
+                descriptionClassName="text-sm text-center text-muted-foreground"
+                onOpenChange={onOpenChange}
+                className="min-w-fit lg:min-w-[1200px] h-fit bg-neutral-900 border-neutral-700 text-white p-6 flex flex-col"
+            >
+                <div className="">
                     {/* Main Content Area - Columns */}
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 ecoop-scroll overflow-y-auto">
                         {Object.values(shortcutsData).map((category, index) => (
@@ -202,8 +206,8 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                         </div>
                         <div>Pin keyboard shortcut help</div>
                     </div>
-                </DialogContent>
-            </Dialog>
+                </div>
+            </Modal>
         </div>
     )
 }

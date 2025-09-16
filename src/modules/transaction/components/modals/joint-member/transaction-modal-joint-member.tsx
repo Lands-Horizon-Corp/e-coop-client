@@ -31,6 +31,7 @@ const TransactionModalJointMember = ({
     triggerClassName,
     triggerProps,
     value,
+    allowShorcutCommand = true,
     ...rest
 }: JointMemberModalProps) => {
     const [openPicker, setOpenPicker] = useState(false)

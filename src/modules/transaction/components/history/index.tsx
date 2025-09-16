@@ -52,6 +52,10 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
         },
     })
 
+    useHotkeys('Alt + R', () => {
+        refetchCurrentTransaction()
+    })
+
     const handleNavigate = (transactionId: TEntityId, fullPath: string) => {
         navigate({
             to: fullPath,
