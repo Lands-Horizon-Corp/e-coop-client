@@ -2,6 +2,7 @@
 
 import { Link } from '@tanstack/react-router'
 
+import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import { ArrowRightIcon, UserIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
@@ -65,13 +66,20 @@ export const LANDS_TEAM: ILandsTeamMember[] = [
 ]
 export default function AboutUsPage() {
     return (
-        <div className="py-20 ">
+        <div className="py-20 relative ">
+            <FlickeringGrid
+                gridGap={1}
+                squareSize={64}
+                maxOpacity={0.5}
+                flickerChance={0.05}
+                className="absolute inset-0 h-screen w-full -top-1/4 -z-10 opacity-100 [mask-image:linear-gradient(to_bottom,white_0%,transparent_100%)] dark:opacity-40"
+            />
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
 
             <div className="container mx-auto px-4  max-w-6xl">
                 <div className="mx-auto max-w-3xl text-center">
                     <h1 className="text-foreground text-4xl font-extrabold">
-                        About e-coop
+                        About <span className="text-primary"> e-coop</span>
                     </h1>
                     <p className="text-muted-foreground mt-4 text-lg">
                         Lands Horizon Corp builds e-coop-suite to empower

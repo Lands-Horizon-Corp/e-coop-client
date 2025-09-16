@@ -107,9 +107,7 @@ export const DownloadButton = React.forwardRef<
 
     return (
         <ImagePreviewButtonAction
-            Icon={
-                <DownloadIcon className="size-full cursor-pointer dark:text-white" />
-            }
+            Icon={<DownloadIcon className="size-full cursor-pointer " />}
             name={name}
             ref={ref}
             className={className}

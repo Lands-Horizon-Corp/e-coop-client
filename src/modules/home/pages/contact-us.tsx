@@ -3,14 +3,27 @@
 import ContactForm from '@/modules/contact-us/components/forms/contact-us-create-form'
 import { Mail, MapPin, Phone } from 'lucide-react'
 
+import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const ContactPage = () => {
     return (
         <div className="px-4 pt-20 pb-16 sm:px-6 lg:px-8">
-            <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_100%_0%] to-100%" />
-            <div className="to-background/0 via-background/0 from-primary/20 absolute right-0 -z-10 h-screen w-full bg-radial-[ellipse_at_0%_50%] to-100%" />
+            <div className="absolute inset-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_100%_0%] from-primary/50 via-background/0 to-background/0 to-100%" />
+            <div className="absolute inset-0 -z-10 h-screen w-full bg-radial-[ellipse_at_0%_50%] from-primary/20 via-background/0 to-background/0 to-100%" />
+
+            <FlickeringGrid
+                gridGap={1}
+                squareSize={64}
+                maxOpacity={0.5}
+                flickerChance={0.05}
+                className="absolute inset-0 -bottom-1/2 -z-10 h-screen w-full opacity-20 dark:opacity-10
+    [mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
+    [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
+    [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]
+    [mask-size:100%_100%] [-webkit-mask-size:100%_100%]"
+            />
 
             <div className="mx-auto max-w-7xl">
                 {/* Header */}
@@ -85,7 +98,7 @@ const ContactPage = () => {
                                 <h3 className="mb-3 text-lg font-semibold">
                                     Ready to Transform Your Cooperative?
                                 </h3>
-                                <p className="mb-4 text-white/90">
+                                <p className="mb-4 e">
                                     Join our platform and empower your community
                                     with cutting-edge digital tools.
                                 </p>

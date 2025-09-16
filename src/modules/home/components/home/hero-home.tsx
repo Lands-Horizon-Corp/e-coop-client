@@ -12,13 +12,21 @@ import {
     Users,
 } from 'lucide-react'
 
+import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import ImageMatch from '@/components/image-match'
 import { Button } from '@/components/ui/button'
 
 const HeroHome = () => {
     return (
-        <section className="relative min-h-screen overflow-hidden">
+        <section className=" min-h-screen overflow-hidden">
             {/* Background gradients */}
+            <FlickeringGrid
+                gridGap={1}
+                squareSize={64}
+                maxOpacity={0.5}
+                flickerChance={0.05}
+                className="absolute inset-0 h-screen w-full -top-1/4 -z-10 opacity-50 [mask-image:linear-gradient(to_bottom,white_0%,white_0%,transparent_100%)] dark:opacity-40"
+            />
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
 
             <div className="relative mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">

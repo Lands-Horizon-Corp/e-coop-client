@@ -19,7 +19,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     squareSize = 4,
     gridGap = 6,
     flickerChance = 0.3,
-    color = 'rgb(0, 0, 0)',
+    color,
     width,
     height,
     className,
@@ -31,7 +31,31 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     const [isInView, setIsInView] = useState(false)
     const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 })
 
+    // Get primary color from CSS custom properties
+    const getPrimaryColor = useCallback(() => {
+        if (typeof window === 'undefined') return 'rgb(0, 0, 0)'
+
+        const primaryColor = getComputedStyle(document.documentElement)
+            .getPropertyValue('--primary')
+            .trim()
+
+        // Convert HSL to RGB if needed
+        if (primaryColor.startsWith('hsl') || primaryColor.includes(' ')) {
+            // Create a temporary element to get computed color
+            const tempDiv = document.createElement('div')
+            tempDiv.style.color = `hsl(${primaryColor})`
+            document.body.appendChild(tempDiv)
+            const rgbColor = getComputedStyle(tempDiv).color
+            document.body.removeChild(tempDiv)
+            return rgbColor
+        }
+
+        return primaryColor || 'rgb(0, 0, 0)'
+    }, [])
+
     const memoizedColor = useMemo(() => {
+        const colorToUse = color || getPrimaryColor()
+
         const toRGBA = (color: string) => {
             if (typeof window === 'undefined') {
                 return `rgba(0, 0, 0,`
@@ -45,8 +69,8 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
             const [r, g, b] = Array.from(ctx.getImageData(0, 0, 1, 1).data)
             return `rgba(${r}, ${g}, ${b},`
         }
-        return toRGBA(color)
-    }, [color])
+        return toRGBA(colorToUse)
+    }, [color, getPrimaryColor])
 
     const setupCanvas = useCallback(
         (canvas: HTMLCanvasElement, width: number, height: number) => {
@@ -176,11 +200,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     }, [setupCanvas, updateSquares, drawGrid, width, height, isInView])
 
     return (
-        <div
-            ref={containerRef}
-            className={cn(`h-full w-full ${className}`)}
-            {...props}
-        >
+        <div ref={containerRef} className={cn(` ${className}`)} {...props}>
             <canvas
                 ref={canvasRef}
                 className="pointer-events-none"

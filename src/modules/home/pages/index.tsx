@@ -5,7 +5,7 @@ import IntroSection from '../components/home/intro-section'
 
 export const HomePage = () => {
     return (
-        <div className="mb-24 md:mb-0">
+        <div className="relative mb-24 md:mb-0">
             <HeroHome />
             <IntroSection />
             <FeatureSection />
