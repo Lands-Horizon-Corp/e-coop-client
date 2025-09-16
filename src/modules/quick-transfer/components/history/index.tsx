@@ -18,6 +18,7 @@ import RefreshButton from '@/components/buttons/refresh-button'
 import { HistoryIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import SheetModal from '@/components/sheet/sheet'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -340,19 +341,21 @@ const CurrentTransactionWithdrawHistory = ({
 
     return (
         <div>
-            <Sheet open={onOpen} onOpenChange={setOnOpen}>
-                <SheetTrigger asChild className="">
-                    <Button
-                        variant="ghost"
-                        className=""
-                        size="sm"
-                        onClick={() => setOnOpen(true)}
-                    >
-                        <HistoryIcon className="mr-2" />
-                        History
-                    </Button>
-                </SheetTrigger>
-                <SheetContent className=" min-w-full max-w-[500px] md:min-w-[600px] ">
+            <Button
+                variant="ghost"
+                className=""
+                size="sm"
+                onClick={() => setOnOpen(true)}
+            >
+                <HistoryIcon className="mr-2" />
+                History
+            </Button>
+            <SheetModal
+                open={onOpen}
+                onOpenChange={setOnOpen}
+                className=" min-w-full max-w-[500px] md:min-w-[600px] "
+            >
+                <div>
                     <div className="overflow-y-auto ecoop-scroll w-full p-5">
                         <Tabs defaultValue={modeState} className="">
                             <div className="items-center flex h-full ">
@@ -381,8 +384,8 @@ const CurrentTransactionWithdrawHistory = ({
                             </TabsContent>
                         </Tabs>
                     </div>
-                </SheetContent>
-            </Sheet>
+                </div>
+            </SheetModal>
         </div>
     )
 }

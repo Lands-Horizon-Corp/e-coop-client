@@ -4,4 +4,5 @@ export enum SHORTCUT_SCOPES {
     DATA_TABLE = 'data-table',
     MODAL = 'modal',
     QUICK_TRANSFER = 'quick-transfer',
+    SHEET = 'sheet',
 }

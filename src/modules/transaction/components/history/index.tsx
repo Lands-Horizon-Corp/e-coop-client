@@ -15,9 +15,9 @@ import RefreshButton from '@/components/buttons/refresh-button'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import { HistoryIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import SheetModal from '@/components/sheet/sheet'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 
@@ -76,19 +76,21 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
 
     return (
         <div className="">
-            <Sheet open={onOpen} onOpenChange={setOnOpen}>
-                <SheetTrigger asChild className="">
-                    <Button
-                        variant="outline"
-                        className=""
-                        size="sm"
-                        onClick={() => setOnOpen(true)}
-                    >
-                        <HistoryIcon className="mr-2" />
-                        History
-                    </Button>
-                </SheetTrigger>
-                <SheetContent className=" min-w-full h-full max-w-[500px] md:min-w-[600px] overflow-hidden ">
+            <Button
+                variant="outline"
+                className=""
+                size="sm"
+                onClick={() => setOnOpen(true)}
+            >
+                <HistoryIcon className="mr-2" />
+                History
+            </Button>
+            <SheetModal
+                open={onOpen}
+                onOpenChange={setOnOpen}
+                className="min-w-full h-full max-w-[500px] md:min-w-[600px] overflow-hidden"
+            >
+                <div className="  ">
                     <div className=" ecoop-scroll m-5">
                         <h1 className="text-lg font-bold mb-2">
                             Transaction History
@@ -152,8 +154,8 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                             />
                         </div>
                     </div>
-                </SheetContent>
-            </Sheet>
+                </div>
+            </SheetModal>
         </div>
     )
 }
