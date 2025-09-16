@@ -178,14 +178,14 @@ export const generateSidebarGroups = (
             title: 'Loan',
             userType: ['employee'],
             navItems: [
-                {
-                    type: 'item',
-                    icon: PlusIcon,
-                    title: 'Loan Application',
-                    url: `${baseUrl}/loan/loan-application`,
-                    userType: ['employee', 'owner'],
-                    shortDescription: 'Create/Add Loan Application',
-                },
+                // {
+                //     type: 'item',
+                //     icon: PlusIcon,
+                //     title: 'Loan Application',
+                //     url: `${baseUrl}/loan/loan-application`,
+                //     userType: ['employee', 'owner'],
+                //     shortDescription: 'Create/Add Loan Application',
+                // },
                 {
                     type: 'item',
                     icon: MoneyCheckIcon,
