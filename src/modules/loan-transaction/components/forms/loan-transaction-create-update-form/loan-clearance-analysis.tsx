@@ -8,6 +8,7 @@ import { ILoanClearanceAnalysisRequest } from '@/modules/loan-clearance-analysis
 import { ILoanClearanceAnalysisInstitutionRequest } from '@/modules/loan-clearance-analysis-institution'
 import { LoanClearanceAnalysisInstitutionCreateUpdateModal } from '@/modules/loan-clearance-analysis-institution/components/form/loan-clearance-analysis-institution'
 import { LoanClearanceAnalysisCreateUpdateModal } from '@/modules/loan-clearance-analysis/components/form/loan-clearance-analysis-create-update-form'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
     CheckFillIcon,
@@ -29,7 +30,6 @@ import {
 } from '@/components/ui/table'
 
 import { useModalState } from '@/hooks/use-modal-state'
-import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { TEntityId } from '@/types'
 
@@ -141,7 +141,9 @@ const LoanClearanceAnalysisField = ({
         keyName: 'fieldKey',
     })
 
-    useSimpleShortcut(['Shift', 'N'], () => {
+    useHotkeys('shift+n', (e) => {
+        e.stopPropagation()
+        e.preventDefault()
         addLoanClearanceAnalysisModal?.onOpenChange(true)
     })
 
@@ -449,7 +451,9 @@ const LoanClearanceInstitutionField = ({
         keyName: 'fieldKey',
     })
 
-    useSimpleShortcut(['Shift', 'I'], () => {
+    useHotkeys('shift+i', (e) => {
+        e.stopPropagation()
+        e.preventDefault()
         addLoanClearanceAnalysisInstitutionModal?.onOpenChange(true)
     })
 

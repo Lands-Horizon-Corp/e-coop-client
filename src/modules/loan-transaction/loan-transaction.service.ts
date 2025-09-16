@@ -8,6 +8,7 @@ import {
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
+    IAmortizationSchedule,
     ILoanTransaction,
     ILoanTransactionPaginated,
     ILoanTransactionRequest,
@@ -90,6 +91,27 @@ export const useGetPaginatedLoanTransaction = ({
             }
 
             return getPaginatedLoanTransaction({ url, query })
+        },
+    })
+}
+
+// GET LOAN AMORT
+export const useGetLoanAmortization = ({
+    loanTransactionId,
+    options,
+}: {
+    loanTransactionId: TEntityId
+    options?: HookQueryOptions<IAmortizationSchedule, Error>
+}) => {
+    return useQuery<IAmortizationSchedule, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, loanTransactionId, 'amortization'],
+        queryFn: async () => {
+            const response = await API.get<IAmortizationSchedule>(
+                `${loanTransactionAPIRoute}/${loanTransactionId}/amortization-schedule`
+            )
+
+            return response.data
         },
     })
 }

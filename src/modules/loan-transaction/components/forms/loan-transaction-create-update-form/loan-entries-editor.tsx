@@ -14,13 +14,16 @@ import { toast } from 'sonner'
 import { formatNumber } from '@/helpers'
 import { IAccount } from '@/modules/account'
 import { ILoanTransactionEntryRequest } from '@/modules/loan-transaction-entry'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
+    CalendarNumberIcon,
     PencilFillIcon,
     PlusIcon,
     RenderIcon,
     TrashIcon,
 } from '@/components/icons'
+import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
 import {
@@ -34,16 +37,22 @@ import {
 } from '@/components/ui/table'
 
 import { useModalState } from '@/hooks/use-modal-state'
-import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
+
+import { TEntityId } from '@/types'
 
 import { TLoanTransactionSchema } from '../../../loan-transaction.validation'
+import LoanAmortization from '../../loan-amortization'
 import { LoanChargeCreateModal } from '../loan-charge-create-modal'
 
 // Loan Entires Tab Content
 const LoanEntriesEditor = forwardRef<
     HTMLTableElement,
-    { form: UseFormReturn<TLoanTransactionSchema>; disabled?: boolean }
->(({ form, disabled }, ref) => {
+    {
+        form: UseFormReturn<TLoanTransactionSchema>
+        disabled?: boolean
+        loanTransactionId?: TEntityId
+    }
+>(({ form, loanTransactionId, disabled }, ref) => {
     const addChargeModalState = useModalState()
     const rowRefs = useRef<(HTMLTableRowElement | null)[]>([])
     const [focusedIndex, setFocusedIndex] = useState(-1)
@@ -263,9 +272,7 @@ const LoanEntriesEditor = forwardRef<
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account, applied_1, is_add_on, deductionsSignature, replace])
 
-    useSimpleShortcut(['Shift', 'N'], () =>
-        addChargeModalState.onOpenChange(true)
-    )
+    useHotkeys('shift+n', () => addChargeModalState.onOpenChange(true))
 
     const handleRemoveEntry = (index: number) => {
         const entry = fields[index]
@@ -344,7 +351,7 @@ const LoanEntriesEditor = forwardRef<
                 ref={ref}
                 onKeyDown={handleKeyDown}
                 tabIndex={0}
-                wrapperClassName="max-h-[50vh] bg-secondary rounded-xl ecoop-scroll"
+                wrapperClassName="max-h-[95vh] bg-secondary rounded-xl ecoop-scroll"
             >
                 <LoanChargeCreateModal
                     {...addChargeModalState}
@@ -399,7 +406,11 @@ const LoanEntriesEditor = forwardRef<
                 </TableBody>
                 <TableFooter>
                     <TableRow className="bg-muted/50 text-xl">
-                        <TableCell className="font-semibold">Total</TableCell>
+                        <TableCell className="font-semibold">
+                            <AmortizationView
+                                loanTransactionId={loanTransactionId}
+                            />
+                        </TableCell>
                         <TableCell className="text-right font-semibold">
                             {formatNumber(totalDebit)}
                         </TableCell>
@@ -576,5 +587,59 @@ const LoanEntryRow = memo(
 )
 
 LoanEntryRow.displayName = 'LoanEntryRow'
+
+const AmortizationView = ({
+    loanTransactionId,
+}: {
+    loanTransactionId?: TEntityId
+}) => {
+    const amortViewer = useModalState()
+
+    useHotkeys('shift+a', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        amortViewer.onOpenChange(!amortViewer.open)
+    })
+
+    return (
+        <>
+            {loanTransactionId && (
+                <Modal
+                    {...amortViewer}
+                    title=""
+                    description=""
+                    closeButtonClassName="top-2 right-2"
+                    titleClassName="sr-only"
+                    descriptionClassName="sr-only"
+                    className="!max-w-[90vw] p-0 shadow-none border-none bg-transparent gap-y-0"
+                >
+                    <LoanAmortization
+                        className="col-span-5 p-0 bg-transparent"
+                        loanTransactionId={loanTransactionId}
+                    />
+                </Modal>
+            )}
+            <Button
+                size="sm"
+                type="button"
+                className="text-xs size-fit !pl-4 py-0.5"
+                disabled={!loanTransactionId}
+                onClick={() => amortViewer.onOpenChange(!amortViewer.open)}
+                aria-label="See amortization"
+                aria-name="View amortization"
+            >
+                <CalendarNumberIcon className="inline size-3" /> See
+                Amortization
+                <p className="text-xs p-1 px-2 bg-muted/90 text-muted-foreground rounded-sm">
+                    Press{' '}
+                    <CommandShortcut className="bg-accent p-0.5 px-1 text-primary rounded-sm mr-1">
+                        Shift + A
+                    </CommandShortcut>
+                    to view amortization
+                </p>
+            </Button>
+        </>
+    )
+}
 
 export default LoanEntriesEditor

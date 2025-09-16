@@ -10,7 +10,6 @@ import { entityIdSchema } from '@/validation'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -19,7 +18,6 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
-import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { IClassProps, IForm } from '@/types'
 
@@ -72,10 +70,6 @@ const LoanChargeCreateForm = ({
         e?.preventDefault()
         onSuccess?.(formData)
         form.reset()
-    })
-
-    useSimpleShortcut(['Control', ' '], () => {
-        form.setValue('is_add_on', !form.getValues('is_add_on'))
     })
 
     return (
@@ -178,12 +172,6 @@ const LoanChargeCreateForm = ({
                                         className="text-sm font-medium"
                                     >
                                         Add-on Charge
-                                        <p className="text-xs inline ml-1 p-1 px-1 bg-muted text-muted-foreground rounded-sm">
-                                            <CommandShortcut className="bg-accent p-0.5 px-1 text-primary rounded-sm mr-1">
-                                                Ctrl + Space
-                                            </CommandShortcut>
-                                            to toggle
-                                        </p>
                                     </Label>
                                 </div>
                             )}
