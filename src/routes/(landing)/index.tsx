@@ -167,5 +167,3 @@ const LandingPage = () => {
 export const Route = createFileRoute('/(landing)/')({
     component: LandingPage,
 })
-
-export default LandingPage

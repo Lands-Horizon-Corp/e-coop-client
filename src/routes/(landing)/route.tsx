@@ -44,5 +44,3 @@ const PublicLayout = () => {
 export const Route = createFileRoute('/(landing)')({
     component: PublicLayout,
 })
-
-export default PublicLayout

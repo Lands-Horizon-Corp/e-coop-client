@@ -315,5 +315,3 @@ const TeamMemberCard = ({
 export const Route = createFileRoute('/(landing)/about')({
     component: AboutPage,
 })
-
-export default AboutPage

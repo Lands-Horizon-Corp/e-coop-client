@@ -329,5 +329,3 @@ const ContactPage = () => {
 export const Route = createFileRoute('/(landing)/contact')({
     component: ContactPage,
 })
-
-export default ContactPage

@@ -13,10 +13,6 @@ import ErrorPage from '../-common-pages/error-page'
 import NoOrganizationView from '../../modules/organization/components/no-organization-view'
 import WithOrganization from '../../modules/organization/components/with-organization'
 
-export const Route = createFileRoute('/onboarding/')({
-    component: RouteComponent,
-})
-
 function RouteComponent() {
     const {
         currentAuth: { user },
@@ -88,4 +84,6 @@ function RouteComponent() {
     )
 }
 
-export default RouteComponent
+export const Route = createFileRoute('/onboarding/')({
+    component: RouteComponent,
+})
