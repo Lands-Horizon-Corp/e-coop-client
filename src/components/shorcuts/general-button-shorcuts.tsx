@@ -62,46 +62,86 @@ const ShortcutItem = ({
 }
 
 const shortcutsData = {
-    general: [
-        {
-            icon: <EyeIcon />,
-            text: 'Open / Close Command Shortcuts',
-            shortcut: 'Ctrl + J',
-        },
-        { icon: <HistoryIcon />, text: 'History', shortcut: 'H' },
-    ],
-    memberActions: [
-        {
-            icon: <ViewIcon />,
-            text: 'View Member Profile',
-            description: '(requires a member to be selected)',
-            shortcut: 'Alt + V',
-        },
-        { icon: <UserIcon />, text: 'Select a Member', shortcut: 'Enter' },
-        { icon: <ScanQrIcon />, text: 'Start / Stop Scanner', shortcut: 'S' },
-        {
-            icon: <ResetIcon />,
-            text: 'Reset Transaction / Clear Member',
-            shortcut: 'Escape',
-        },
-    ],
-    transaction: [
-        {
-            icon: <FocusIcon />,
-            text: 'Focus on Amount',
-            description: '(requires a member to be selected)',
-            shortcut: 'A',
-        },
-        {
-            icon: <ArrowIcon />,
-            text: 'Submit Payment',
-            description: '(requires a member and valid form)',
-            shortcut: 'Ctrl + Enter',
-        },
-    ],
+    general: {
+        title: 'General',
+        items: [
+            {
+                icon: <EyeIcon />,
+                text: 'Open / Close Command Shortcuts',
+                shortcut: 'Ctrl + J',
+            },
+            {
+                icon: <EyeIcon />,
+                text: 'Open Create Form',
+                description: '(from any table)',
+                shortcut: 'Enter',
+            },
+            {
+                text: 'Quick Navigate',
+                description: 'search pages',
+                icon: <CommandIcon />,
+                shortcut: 'Alt + Q, Ctrl + Q, Meta + Q, Q',
+            },
+        ],
+    },
+    quicktTransfer: {
+        title: 'Quick Transfer / Payment',
+        items: [
+            { icon: <UserIcon />, text: 'Select a Member', shortcut: 'Enter' },
+            {
+                icon: <ArrowIcon />,
+                text: 'Submit Payment',
+                description: '(requires a member and valid form)',
+                shortcut: 'Ctrl + Enter',
+            },
+            {
+                icon: <ViewIcon />,
+                text: 'View Member Profile',
+                description: '(requires a member to be selected)',
+                shortcut: 'Alt + V',
+            },
+            { icon: <HistoryIcon />, text: 'History', shortcut: 'H' },
+            {
+                icon: <ResetIcon />,
+                text: 'Reset Transaction / Clear Member',
+                shortcut: 'Escape',
+            },
+        ],
+    },
+    transaction: {
+        title: 'Payment',
+        items: [
+            {
+                icon: <ScanQrIcon />,
+                text: 'Start / Stop Scanner',
+                shortcut: 'S',
+            },
+            {
+                icon: <FocusIcon />,
+                text: 'Focus on Amount',
+                description: '(requires a member to be selected)',
+                shortcut: 'A',
+            },
+        ],
+    },
+    loanActions: {
+        title: 'Loan',
+        items: [
+            {
+                icon: <ScanQrIcon />,
+                text: 'Start Code Scanner',
+                shortcut: 'Shift + S',
+            },
+            {
+                icon: <UserIcon />,
+                text: 'Select a Member',
+                shortcut: 'Ctrl + Enter',
+            },
+        ],
+    },
 }
 
-const TransactionButtonShortcuts = ({ className }: { className?: string }) => {
+const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
     const { open, onOpenChange } = useModalState()
 
     useHotkeys(
@@ -136,45 +176,21 @@ const TransactionButtonShortcuts = ({ className }: { className?: string }) => {
 
                     {/* Main Content Area - Columns */}
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 ecoop-scroll overflow-y-auto">
-                        {/* Column 1: General */}
-                        <div className="p-2">
-                            <h2 className="text-sm text-neutral-400 font-medium mb-2">
-                                General
-                            </h2>
-                            <div className="space-y-1">
-                                {shortcutsData.general.map((item, index) => (
-                                    <ShortcutItem key={index} {...item} />
-                                ))}
+                        {Object.values(shortcutsData).map((category, index) => (
+                            <div key={index} className="p-2">
+                                <h2 className="text-sm text-neutral-400 font-medium mb-2">
+                                    {category.title}
+                                </h2>
+                                <div className="space-y-1">
+                                    {category.items.map((item, itemIndex) => (
+                                        <ShortcutItem
+                                            key={itemIndex}
+                                            {...item}
+                                        />
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-
-                        {/* Column 2: Member Actions */}
-                        <div className="p-2">
-                            <h2 className="text-sm text-neutral-400 font-medium mb-2">
-                                Member Actions
-                            </h2>
-                            <div className="space-y-1">
-                                {shortcutsData.memberActions.map(
-                                    (item, index) => (
-                                        <ShortcutItem key={index} {...item} />
-                                    )
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Column 3: Transaction */}
-                        <div className="p-2">
-                            <h2 className="text-sm text-neutral-400 font-medium mb-2">
-                                Transaction
-                            </h2>
-                            <div className="space-y-1">
-                                {shortcutsData.transaction.map(
-                                    (item, index) => (
-                                        <ShortcutItem key={index} {...item} />
-                                    )
-                                )}
-                            </div>
-                        </div>
+                        ))}
                     </div>
 
                     {/* Bottom Panel */}
@@ -192,4 +208,4 @@ const TransactionButtonShortcuts = ({ className }: { className?: string }) => {
     )
 }
 
-export default TransactionButtonShortcuts
+export default GeneralButtonShortcuts

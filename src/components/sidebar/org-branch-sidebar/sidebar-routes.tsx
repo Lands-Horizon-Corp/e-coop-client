@@ -20,7 +20,7 @@ import {
     LayersIcon,
     MaintenanceIcon,
     MoneyCheckIcon,
-    PlusIcon,
+    // PlusIcon,
     PriceTagIcon,
     QrCodeIcon,
     SettingsIcon,

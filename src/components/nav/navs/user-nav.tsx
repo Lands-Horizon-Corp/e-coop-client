@@ -3,7 +3,6 @@ import { useRouter } from '@tanstack/react-router'
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
-import TransactionButtonShortcuts from '@/modules/transaction/components/transaction-shorcuts'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 
 import { BadgeCheckFillIcon } from '@/components/icons'
@@ -11,6 +10,7 @@ import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
 import NavContainer from '@/components/nav/nav-container'
 import RootNav from '@/components/nav/root-nav'
 import PageBreadCrumb from '@/components/pages-breadcrumbs'
+import GeneralButtonShortcuts from '@/components/shorcuts/general-button-shorcuts'
 import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
 import { Button } from '@/components/ui/button'
 
@@ -64,7 +64,7 @@ const UserNav = ({
                 {user && user_organization?.user_type === 'employee' && (
                     <NavTimeInBar />
                 )}
-                <TransactionButtonShortcuts />
+                <GeneralButtonShortcuts />
                 <NavProfileMenu />
                 <NavThemeToggle />
             </NavContainer>

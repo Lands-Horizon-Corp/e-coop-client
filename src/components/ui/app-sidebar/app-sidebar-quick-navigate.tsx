@@ -1,8 +1,9 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import { Link } from '@tanstack/react-router'
 
 import { ArrowRight } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { MagnifyingGlassIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -26,17 +27,16 @@ interface Props {
 const AppSidebarQruickNavigate = ({ groups }: Props) => {
     const [open, setOpen] = useState(false)
 
-    useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key === 'q' && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault()
-                setOpen((open) => !open)
-            }
+    useHotkeys(
+        'control+Q, Alt+Q, meta+Q, command+Q, Q',
+        (e) => {
+            e.preventDefault()
+            setOpen((open) => !open)
+        },
+        {
+            keydown: true,
         }
-
-        document.addEventListener('keydown', down)
-        return () => document.removeEventListener('keydown', down)
-    }, [])
+    )
 
     return (
         <>
