@@ -188,7 +188,7 @@ const Heartbeat = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
                                         <Users className="h-4 w-4" />
                                         Online ({data.online_members})
@@ -196,7 +196,7 @@ const Heartbeat = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
                                         <MessagesSquare className="h-4 w-4" />
                                         New Message
@@ -204,7 +204,7 @@ const Heartbeat = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
                                         <Settings className="h-4 w-4" />
                                         Settings
@@ -212,7 +212,7 @@ const Heartbeat = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
                                         <div className="w-2 h-2 bg-primary dark:bg-primary rounded-full"></div>
                                         System Online
@@ -224,7 +224,7 @@ const Heartbeat = () => {
                                             // modalState.onOpenChange(true)
                                             qrScannerModal.onOpenChange(true)
                                         }
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
                                         <ScanQrIcon />
                                         Quick Search Member

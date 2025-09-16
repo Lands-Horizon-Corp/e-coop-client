@@ -118,10 +118,10 @@ const NeonFooter = () => {
     const linkClass =
         'text-gray-500 hover:text-primary transition-colors duration-200 cursor-pointer'
     const socialLinkClass =
-        'flex items-center text-accent-foreground hover:text-primary transition-colors duration-200'
+        'flex items-center  hover:text-primary transition-colors duration-200'
 
     return (
-        <footer className="bg-background border-t-[.2px] border-gray-600/20 text-accent-foreground py-12 px-4 md:px-8 lg:px-16">
+        <footer className="bg-background border-t-[.2px] border-gray-600/20  py-12 px-4 md:px-8 lg:px-16">
             <div className="max-w-[100rem] mx-auto flex flex-col lg:flex-row justify-between gap-10">
                 <div className="flex flex-col gap-6 w-full md:w-1/8 lg:w-[40%]">
                     <div className="mb-4">
@@ -182,7 +182,7 @@ const NeonFooter = () => {
                         {contacts.map((item, index) => (
                             <p
                                 key={index}
-                                className=" text-wrap min-w-5 text-accent-foreground flex items-center cursor-pointer"
+                                className=" text-wrap min-w-5  flex items-center cursor-pointer"
                             >
                                 <span className="flex items-center p-1.5">
                                     {item.icon}
@@ -195,9 +195,7 @@ const NeonFooter = () => {
                         ))}
                     </div>
                     <div className="flex flex-col gap-3 text-sm">
-                        <h3 className="font-semibold text-accent-foreground mb-2">
-                            Follow Us
-                        </h3>
+                        <h3 className="font-semibold  mb-2">Follow Us</h3>
                         {socialLinks.map((item, idx) => (
                             <a
                                 key={idx}

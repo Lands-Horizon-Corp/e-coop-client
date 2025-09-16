@@ -49,7 +49,7 @@ const UserNav = ({
                     <Button
                         variant="secondary"
                         hoverVariant="primary"
-                        className="rounded-full group text-accent-foreground dark:text-muted-foreground"
+                        className="rounded-full group"
                         onClick={() =>
                             router.navigate({
                                 to: '/org/$orgname/branch/$branchname/approvals' as string,

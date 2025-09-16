@@ -167,15 +167,8 @@ export const PaymentsEntryItem = ({
                     {label}
                 </p>
             </div>
-            <div className="grow gap-x-2 text-end text-sm text-accent-foreground">
-                <span
-                    className={cn(
-                        'text-sm text-accent-foreground',
-                        valueClassName
-                    )}
-                >
-                    {value}
-                </span>
+            <div className="grow gap-x-2 text-end text-sm ">
+                <span className={cn('text-sm ', valueClassName)}>{value}</span>
                 {badge && (
                     <Badge
                         className={cn('', badge.className)}

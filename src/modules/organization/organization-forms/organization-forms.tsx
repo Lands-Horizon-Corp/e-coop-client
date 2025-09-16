@@ -416,11 +416,8 @@ const OrganizationForm = () => {
                                 reset
                             </Button>
                             <div className="flex items-center gap-x-2 text-card-foreground/70">
-                                <span className="text-accent-foreground">
-                                    {' '}
-                                    {activeStep + 1}
-                                </span>{' '}
-                                of {steps.length}
+                                <span className=""> {activeStep + 1}</span> of{' '}
+                                {steps.length}
                             </div>
                             <Button
                                 variant="ghost"

@@ -32,7 +32,7 @@ const TransactionViewNoMemberSelected = ({
 
             {/* CTA */}
             <div className="absolute bottom-4 flex flex-col items-center justify-center gap-y-2">
-                <p className="z-10 text-center text-xs sm:text-sm text-accent-foreground/70">
+                <p className="z-10 text-center text-xs sm:text-sm /70">
                     {/* Select a member first to add transaction */}
                 </p>
                 <Tooltip>

@@ -197,7 +197,7 @@ const GeneralLedgerDefinitionNode = ({
                                 {node.name}
                             </h1>
                             {!isFirstLevel && (
-                                <span className="text-xs text-accent-foreground/50">
+                                <span className="text-xs /50">
                                     {node?.general_ledger_type && (
                                         <GeneralLedgerTypeBadge
                                             type={node.general_ledger_type}
@@ -208,13 +208,13 @@ const GeneralLedgerDefinitionNode = ({
                         </div>
                     </span>
                     {node.description && (
-                        <span className="text-xs text-accent-foreground/70">
+                        <span className="text-xs /70">
                             <PlainTextEditor content={node.description} />
                         </span>
                     )}
 
                     {isFirstLevel && (
-                        <p className="text-xs text-accent-foreground/30">
+                        <p className="text-xs /30">
                             {firstLevelItemLabel}
                             {childLength && hasAccountNode ? ' • ' : ''}
                             {firstLevelAccountsLabel}

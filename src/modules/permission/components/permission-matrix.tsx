@@ -153,7 +153,7 @@ const PermissionMatrix = forwardRef<
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="pl-10"
                             />
-                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2  h-4 w-4" />
                         </div>
                         <div className="flex items-center space-x-4">
                             <Badge variant="secondary">
@@ -206,7 +206,7 @@ const PermissionMatrix = forwardRef<
                                             <div className="font-medium">
                                                 {resource.label}
                                             </div>
-                                            <div className="text-sm text-muted-foreground">
+                                            <div className="text-sm ">
                                                 {resource.description}
                                             </div>
                                         </div>
@@ -273,7 +273,7 @@ const PermissionMatrix = forwardRef<
 
                     {filteredResources.length === 0 && searchTerm && (
                         <div className="text-center py-8">
-                            <p className="text-muted-foreground/70 text-sm">
+                            <p className="/70 text-sm">
                                 No resources found matching "{searchTerm}"
                             </p>
                         </div>

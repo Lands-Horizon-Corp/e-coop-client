@@ -63,10 +63,10 @@ function RouteComponent() {
                 <main className="flex w-full flex-1 items-center">
                     <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col items-center justify-center overflow-y-auto">
                         <BackButton />
-                        <div className="relative mt-24 flex min-h-[80vh] w-full max-w-5xl flex-1 flex-col space-y-4">
+                        <div className="relative mt-24 flex min-h-[80vh] w-full max-w-7xl flex-1 flex-col space-y-4">
                             {/* <AccountSettingsUserBanner /> */}
                             <div className="flex flex-1 gap-x-8">
-                                <AccountSettingsSidebar />
+                                <AccountSettingsSidebar className="w-full" />
                                 <div className="flex min-h-full flex-1 flex-col items-center space-y-4 px-4">
                                     <div className="min-h-full w-full flex-1 space-y-4 px-0 sm:px-4">
                                         <Outlet />

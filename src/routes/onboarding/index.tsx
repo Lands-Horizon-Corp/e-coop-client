@@ -58,10 +58,7 @@ function RouteComponent() {
                     className="block size-52 animate-pulse rounded-none !bg-transparent"
                     fallbackClassName="!bg-transparent rounded-none"
                 />
-                <p className="animate-pulse text-xs text-accent-foreground">
-                    {' '}
-                    Getting ready...
-                </p>
+                <p className="animate-pulse text-xs "> Getting ready...</p>
             </div>
         )
     }
