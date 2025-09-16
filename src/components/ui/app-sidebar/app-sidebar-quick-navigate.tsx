@@ -28,7 +28,7 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
     const [open, setOpen] = useState(false)
 
     useHotkeys(
-        'control+Q, Alt+Q, meta+Q, command+Q, Q',
+        'control+Q, Alt+Q, meta+Q, command+Q',
         (e) => {
             e.preventDefault()
             setOpen((open) => !open)

@@ -80,7 +80,7 @@ const shortcutsData = {
                 text: 'Quick Navigate',
                 description: 'search pages',
                 icon: <CommandIcon />,
-                shortcut: 'Alt + Q, Ctrl + Q, Meta + Q, Q',
+                shortcut: 'Alt + Q, Ctrl + Q, Meta + Q',
             },
         ],
     },

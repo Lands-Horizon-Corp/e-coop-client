@@ -87,7 +87,7 @@ const TransactionMemberScanner = ({
     return (
         <div
             className={cn(
-                'flex flex-col lg:flex-row w-full h-fit bg-sidebar min-h-fit ecoop-scroll overflow-x-auto  rounded-2xl',
+                'flex flex-col xl:flex-row w-full h-fit bg-sidebar min-h-fit ecoop-scroll  rounded-2xl',
                 className
             )}
         >
@@ -103,9 +103,15 @@ const TransactionMemberScanner = ({
                 placeholder="Select Member"
             />
             {/* Left: Scanner */}
-            <div className="flex flex-col flex-shrink-0 lg:w-[15rem] justify-center items-center w-full">
-                <div className="w-fit">
-                    <div className="w-full aspect-square min-h-[150px] max-w-[95%] rounded-2xl overflow-hidden ">
+            <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
+                <div className="w-full xl:p-1 mr-1 mb-1 xl:mb-0 flex justify-center">
+                    <div
+                        className={cn(
+                            startScan && !selectedMember
+                                ? 'xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden '
+                                : 'p-4'
+                        )}
+                    >
                         {startScan && !selectedMember ? (
                             <QrCodeScanner<IQRMemberProfileDecodedResult>
                                 allowMultiple
@@ -119,7 +125,7 @@ const TransactionMemberScanner = ({
                                 }}
                             />
                         ) : (
-                            <div className="flex flex-col h-full items-center justify-center text-center gap-y-2 ">
+                            <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2 ">
                                 <ScanLineIcon
                                     size={50}
                                     className=" text-muted-foreground/70"
