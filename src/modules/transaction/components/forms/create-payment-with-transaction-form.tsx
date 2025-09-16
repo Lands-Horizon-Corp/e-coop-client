@@ -72,6 +72,7 @@ const PaymentWithTransactionForm = ({
     readOnly,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
+
     const {
         userSettingOR,
         settings_accounting_payment_default_value,
@@ -197,11 +198,6 @@ const PaymentWithTransactionForm = ({
     const isDisabled = (field: Path<TPaymentWithTransactionFormValues>) =>
         readOnly || disabledFields?.includes(field) || isPending || false
 
-    useHotkeys('A', (e) => {
-        form.setFocus('amount')
-        e.preventDefault()
-    })
-
     const isFormIsDirty = form.formState.isDirty
 
     useHotkeys(
@@ -213,10 +209,18 @@ const PaymentWithTransactionForm = ({
         },
         {
             enableOnFormTags: ['INPUT', 'SELECT', 'TEXTAREA'],
-            scopes: ['transaction'],
+            scopes: ['payment'],
         }
     )
 
+    useHotkeys(
+        'A',
+        (e) => {
+            form.setFocus('amount')
+            e.preventDefault()
+        },
+        { scopes: ['payment'] }
+    )
     return (
         <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
             <CardContent className="!h-fit p-2 lg:!p-0 items-center w-full lg:!w-full">

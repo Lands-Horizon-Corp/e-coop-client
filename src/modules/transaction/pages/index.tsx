@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
+import { SHORTCUT_SCOPES } from '@/constants'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
@@ -18,15 +19,15 @@ import { useTransactionBatchStore } from '@/modules/transaction-batch/store/tran
 import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
-import { HotkeysProvider, useHotkeys } from 'react-hotkeys-hook'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
+import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
-import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
 
@@ -37,10 +38,13 @@ type TTransactionProps = {
     transactionId: TEntityId
     fullPath: string
 }
+
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
     const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
+    const { setActiveScope } = useShortcutContext()
+
     const {
         selectedMember,
         openSuccessModal,
@@ -127,7 +131,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     const hasSelectedTransactionId = !!transactionId
 
-    useShortcut(
+    useHotkeys(
         'Escape',
         (e) => {
             e.preventDefault()
@@ -135,8 +139,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             handleSetTransactionId({ fullPath })
         },
         {
-            disableActiveButton: true,
-            disableTextInputs: true,
+            scopes: [SHORTCUT_SCOPES.PAYMENT],
+            enableOnFormTags: ['INPUT', 'SELECT', 'TEXTAREA'],
         }
     )
 
@@ -147,7 +151,11 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         }
     })
     return (
-        <>
+        <div
+            onClick={() => {
+                setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+            }}
+        >
             <TransactionReverseRequestFormModal
                 open={isOpen}
                 onOpenChange={onClose}
@@ -171,21 +179,17 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     onClose={handleCloseSuccessModal}
                     isOpen={openSuccessModal}
                 />
-                <HotkeysProvider
-                    initiallyActiveScopes={['member-scanner-view']}
-                >
-                    <TransactionMemberScanner
-                        fullPath={fullPath}
-                        handleSetTransactionId={() =>
-                            handleSetTransactionId({
-                                transactionId: undefined,
-                                fullPath,
-                            })
-                        }
-                        className="p-2"
-                        transactionId={transactionId}
-                    />
-                </HotkeysProvider>
+                <TransactionMemberScanner
+                    fullPath={fullPath}
+                    handleSetTransactionId={() =>
+                        handleSetTransactionId({
+                            transactionId: undefined,
+                            fullPath,
+                        })
+                    }
+                    className="p-2"
+                    transactionId={transactionId}
+                />
                 <div className="flex h-full flex-col lg:flex-row  w-full gap-2 overflow-hidden">
                     {/* Left Section (Payment) */}
                     <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
@@ -234,42 +238,41 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 {/* bottom Section (transaction  Payment) */}
             </PageContainer>
             {selectedMember && (
-                <HotkeysProvider initiallyActiveScopes={['transaction']}>
-                    <PaymentWithTransactionForm
-                        readOnly={!hasNoTransactionBatch}
-                        transactionId={transactionId}
-                        memberProfileId={selectedMember?.id}
-                        memberJointId={selectedJointMember?.id}
-                        onSuccess={(transaction) => {
-                            queryClient.invalidateQueries({
-                                queryKey: [
-                                    'member-accounting-ledger',
-                                    'filtered-paginated',
-                                    'member',
-                                    selectedMember?.id,
-                                ],
-                            })
-                            queryClient.invalidateQueries({
-                                queryKey: ['transaction', 'current-user'],
-                            })
-                            queryClient.invalidateQueries({
-                                queryKey: [
-                                    'general-ledger',
-                                    'filtered-paginated',
-                                    'transaction',
-                                ],
-                                exact: false,
-                            })
-                            handleSetTransactionId({
-                                transactionId: transaction.transaction_id,
-                                fullPath,
-                            })
-                            handleOnSuccessPaymentCallBack(transaction)
-                        }}
-                    />
-                </HotkeysProvider>
+                <PaymentWithTransactionForm
+                    readOnly={!hasNoTransactionBatch}
+                    transactionId={transactionId}
+                    memberProfileId={selectedMember?.id}
+                    memberJointId={selectedJointMember?.id}
+                    onSuccess={(transaction) => {
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                'member-accounting-ledger',
+                                'filtered-paginated',
+                                'member',
+                                selectedMember?.id,
+                            ],
+                        })
+                        queryClient.invalidateQueries({
+                            queryKey: ['transaction', 'current-user'],
+                        })
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                'general-ledger',
+                                'filtered-paginated',
+                                'transaction',
+                            ],
+                            exact: false,
+                        })
+                        handleSetTransactionId({
+                            transactionId: transaction.transaction_id,
+                            fullPath,
+                        })
+                        handleOnSuccessPaymentCallBack(transaction)
+                        setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+                    }}
+                />
             )}
-        </>
+        </div>
     )
 }
 export default Transaction

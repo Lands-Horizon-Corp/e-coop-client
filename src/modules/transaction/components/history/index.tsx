@@ -9,6 +9,7 @@ import {
 } from '@/modules/transaction'
 import { useFilteredPaginatedTransaction } from '@/modules/transactions'
 import { PaginationState } from '@tanstack/react-table'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
@@ -19,7 +20,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
-import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
 
@@ -62,15 +62,10 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
         setOnOpen(false)
     }
 
-    useShortcut(
-        'h',
-        () => {
-            setOnOpen(true)
-        },
-        {
-            disableTextInputs: true,
-        }
-    )
+    useHotkeys('h', (e) => {
+        e.preventDefault()
+        setOnOpen(true)
+    })
 
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0

@@ -11,11 +11,13 @@ import { IAuthContext, useAuthContext } from '@/modules/authentication'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
+import { HotkeysProvider } from 'react-hotkeys-hook'
 
 import CookieConsent from '@/components/cookie-consent'
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
 import ConfirmModal from '@/components/modals/confirm-modal'
 import InfoModal from '@/components/modals/info-modal'
+import { ShortcutProvider } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Toaster } from '@/components/ui/sonner'
 
 import { useNatsConnect } from '@/hooks/use-pubsub'
@@ -71,24 +73,30 @@ function RootLayout() {
     })
     useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
     return (
-        <div className="relative">
-            <DndProvider backend={HTML5Backend}>
-                <Toaster
-                    expand
-                    richColors
-                    closeButton
-                    theme="system"
-                    className="z-[9999]"
-                />
-                <Outlet />
-                <ConnectionProvider />
-                <CookieConsent />
-                <ImagePreviewModal />
-                <ConfirmModal />
-                <InfoModal />
-                <TanStackRouterDevtools />
-                <ActionSecurityProvider />
-            </DndProvider>
-        </div>
+        <HotkeysProvider>
+            <ShortcutProvider>
+                <div className="relative">
+                    <DndProvider backend={HTML5Backend}>
+                        <Toaster
+                            expand
+                            richColors
+                            closeButton
+                            theme="system"
+                            className="z-[9999]"
+                        />
+
+                        <Outlet />
+
+                        <ConnectionProvider />
+                        <CookieConsent />
+                        <ImagePreviewModal />
+                        <ConfirmModal />
+                        <InfoModal />
+                        <TanStackRouterDevtools />
+                        <ActionSecurityProvider />
+                    </DndProvider>
+                </div>
+            </ShortcutProvider>
+        </HotkeysProvider>
     )
 }

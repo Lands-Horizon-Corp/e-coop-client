@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { toast } from 'sonner'
 
+import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
@@ -15,6 +16,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { EyeIcon } from '@/components/icons'
 import QrCodeScanner from '@/components/qrcode-scanner'
+import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -38,6 +40,7 @@ const TransactionMemberScanner = ({
     transactionId,
 }: MemberQrScannerProps) => {
     const [startScan, setStartScan] = useState(false)
+    const { setActiveScope } = useShortcutContext()
 
     const {
         setSelectedMember,
@@ -86,6 +89,10 @@ const TransactionMemberScanner = ({
     })
     return (
         <div
+            onClick={(e) => {
+                e.preventDefault()
+                setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+            }}
             className={cn(
                 'flex flex-col xl:flex-row w-full h-fit bg-sidebar min-h-fit ecoop-scroll  rounded-2xl',
                 className

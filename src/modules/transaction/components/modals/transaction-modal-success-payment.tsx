@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 
+import { SHORTCUT_SCOPES } from '@/constants'
 import { toReadableDate } from '@/helpers/date-utils'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
@@ -8,6 +9,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
 import { TEntityId } from '@/types'
@@ -24,6 +26,8 @@ const TransactionModalSuccessPayment = ({
     isOpen,
     ...props
 }: PaymentSuccessModalProps) => {
+    const { setActiveScope } = useShortcutContext()
+
     const { mutate: printGeneralLedgerTransaction } =
         usePrintGeneralLedgerTransaction({
             options: {
@@ -43,12 +47,19 @@ const TransactionModalSuccessPayment = ({
         printGeneralLedgerTransaction({ id: generalLedgerId })
     }
 
-    useHotkeys('enter', (e) => {
-        e.preventDefault()
-        if (!transaction || !isOpen) return
-        handlePrintGeneralLedgerTransaction(transaction.id)
-        onClose?.()
-    })
+    useHotkeys(
+        'enter',
+        (e) => {
+            e.preventDefault()
+            if (!transaction || !isOpen) return
+            handlePrintGeneralLedgerTransaction(transaction.id)
+            onClose?.()
+        },
+        {
+            scopes: [SHORTCUT_SCOPES.MODAL],
+        },
+        [transaction, isOpen, onClose, setActiveScope]
+    )
 
     const paymentType =
         focusTypePayment === 'withdraw' ? 'Withdrawal' : focusTypePayment

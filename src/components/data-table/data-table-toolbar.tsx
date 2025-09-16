@@ -59,12 +59,16 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
-    useHotkeys('Enter', (e) => {
-        e.preventDefault()
-        if (createActionProps && !hideCreateButton) {
-            createActionProps.onClick()
-        }
-    })
+    useHotkeys(
+        'Enter',
+        (e) => {
+            e.preventDefault()
+            if (createActionProps && !hideCreateButton) {
+                createActionProps.onClick()
+            }
+        },
+        [createActionProps, hideCreateButton]
+    )
 
     return (
         <div className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto">
