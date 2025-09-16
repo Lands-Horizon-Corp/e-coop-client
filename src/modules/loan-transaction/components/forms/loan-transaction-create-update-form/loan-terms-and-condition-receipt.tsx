@@ -8,6 +8,7 @@ import { ILoanTermsAndConditionAmountReceiptRequest } from '@/modules/loan-terms
 import { LoanTermsAndConditionAmountReceiptCreateModal } from '@/modules/loan-terms-and-condition-amount-receipt/components/forms/loan-terms-and-condition-amount-receipt-create-update-form'
 import { ILoanTermsAndConditionSuggestedPaymentRequest } from '@/modules/loan-terms-and-condition-suggested-payment'
 import { LoanTermsAndConditionSuggestedPaymentCreateModal } from '@/modules/loan-terms-and-condition-suggested-payment/components/forms/loan-terms-and-condition-suggested-payment-create-update-form'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
     CheckFillIcon,
@@ -28,7 +29,6 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useModalState } from '@/hooks/use-modal-state'
-import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { TEntityId } from '@/types'
 
@@ -174,7 +174,7 @@ const LoanTermsAndConditionReceiptField = ({
         keyName: 'fieldKey',
     })
 
-    useSimpleShortcut(['Shift', 'R'], () => {
+    useHotkeys('shift+r', () => {
         addReceiptModal?.onOpenChange(true)
     })
 
@@ -459,7 +459,7 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
         keyName: 'fieldKey',
     })
 
-    useSimpleShortcut(['Shift', 'P'], () => {
+    useHotkeys('shift+p', () => {
         addSuggestedPaymentModal?.onOpenChange(true)
     })
 

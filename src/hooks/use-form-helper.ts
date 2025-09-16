@@ -176,6 +176,10 @@ export const useFormAutosave = <T extends FieldValues>({
 
                 isSubmittingRef.current = true
                 try {
+                    console.log(
+                        'loan sample value',
+                        form.getValues('loan_transaction_entries')[0]
+                    )
                     formRef.current?.requestSubmit()
                 } finally {
                     setTimeout(() => {
