@@ -3,21 +3,105 @@ import { Fragment } from 'react'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { useTheme } from '@/modules/settings/provider/theme-provider'
+import {
+    type AnimationVariant,
+    useTheme,
+} from '@/modules/settings/provider/theme-provider'
 
 import { IClassProps } from '@/types'
 
+interface AnimationPreviewProps {
+    variant: AnimationVariant
+    title: string
+    description: string
+    isSelected: boolean
+    onClick: () => void
+}
+
 interface Props extends IClassProps {}
+
+const animationConfig = {
+    circle: {
+        title: 'Circle',
+        description: 'Smooth circular expanding transition',
+        animation: 'circle-expand 2s ease-in-out infinite',
+        className: 'w-16 h-16 rounded-full bg-primary/60',
+    },
+    'circle-blur': {
+        title: 'Circle Blur',
+        description: 'Circular transition with blur effect',
+        animation: 'blur-pulse 2.5s ease-in-out infinite',
+        className: 'w-20 h-20 rounded-full bg-primary/60',
+    },
+    polygon: {
+        title: 'Polygon',
+        description: 'Directional wipe transition effect',
+        animation: 'wipe-in 2s ease-in-out infinite',
+        className: 'absolute inset-y-0 w-full bg-primary/60',
+    },
+    gif: {
+        title: 'GIF',
+        description: 'Custom GIF animation transition',
+        animation: 'circle-expand 2s ease-in-out infinite',
+        className: 'w-16 h-16 rounded-full bg-primary/60',
+    },
+} as const
+
+const AnimationPreview = ({
+    variant,
+    title,
+    description,
+    isSelected,
+    onClick,
+}: AnimationPreviewProps) => {
+    const config = animationConfig[variant]
+
+    return (
+        <div className="space-y-1 cursor-pointer group" onClick={onClick}>
+            <div
+                tabIndex={0}
+                className={cn(
+                    'bg-background border rounded-xl h-32 flex items-center justify-center group-hover:border-primary ease-in-out duration-100 relative overflow-hidden',
+                    isSelected && 'border-4 border-primary/80'
+                )}
+            >
+                <div className="relative w-full h-full flex items-center justify-center">
+                    <div className="absolute inset-0 bg-muted" />
+                    <div className="relative z-10 flex items-center justify-center w-full h-full">
+                        <div
+                            className={config.className}
+                            style={{
+                                animation: config.animation,
+                                ...(variant === 'polygon' && { left: '0' }),
+                            }}
+                        />
+                        <span className="relative z-20 text-xs font-medium text-muted-foreground">
+                            {title}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <p className="font-medium">{title}</p>
+            <p className="text-xs text-muted-foreground">{description}</p>
+        </div>
+    )
+}
 
 const TransitionSettings = ({ className }: Props) => {
     const { animationVariant, setAnimationVariant } = useTheme()
 
-    const handleVariantChange = (variant: typeof animationVariant) => {
+    const handleVariantChange = (variant: AnimationVariant) => {
         setAnimationVariant(variant)
         toast.message(
             `Set transition to ${variant.charAt(0).toUpperCase() + variant.slice(1).replace('-', ' ')}`
         )
     }
+
+    const displayVariants: AnimationVariant[] = [
+        'circle',
+        'circle-blur',
+        'polygon',
+    ]
 
     return (
         <Fragment>
@@ -39,6 +123,7 @@ const TransitionSettings = ({ className }: Props) => {
                     100% { transform: scale(0.3); filter: blur(2px); opacity: 0.4; }
                 }
             `}</style>
+
             <div
                 className={cn('flex flex-col gap-y-4 flex-1 w-full', className)}
             >
@@ -48,118 +133,21 @@ const TransitionSettings = ({ className }: Props) => {
                         Choose animation style for theme switching
                     </p>
                 </div>
+
                 <div className="grid grid-cols-3 gap-x-4 w-full">
-                    {/* Circle Transition */}
-                    <div
-                        className="space-y-1 cursor-pointer group"
-                        onClick={() => handleVariantChange('circle')}
-                    >
-                        <div
-                            tabIndex={0}
-                            className={cn(
-                                'bg-background border rounded-xl h-32 flex items-center justify-center group-hover:border-primary ease-in-out duration-100 relative overflow-hidden',
-                                animationVariant === 'circle' &&
-                                    'border-4 border-primary/80'
-                            )}
-                        >
-                            <div className="relative w-full h-full flex items-center justify-center">
-                                {/* Background */}
-                                <div className="absolute inset-0 bg-muted" />
-                                {/* Circle animation */}
-                                <div className="relative z-10 flex items-center justify-center w-full h-full">
-                                    <div
-                                        className="absolute w-16 h-16 rounded-full bg-primary/60"
-                                        style={{
-                                            animation:
-                                                'circle-expand 2s ease-in-out infinite',
-                                        }}
-                                    />
-                                    <span className="relative z-20 text-xs font-medium text-muted-foreground">
-                                        Circle
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <p>Circle</p>
-                        <p className="text-xs text-muted-foreground">
-                            Smooth circular expanding transition
-                        </p>
-                    </div>
-
-                    {/* Circle Blur Transition */}
-                    <div
-                        className="space-y-1 cursor-pointer group"
-                        onClick={() => handleVariantChange('circle-blur')}
-                    >
-                        <div
-                            tabIndex={0}
-                            className={cn(
-                                'bg-background border rounded-xl h-32 flex items-center justify-center group-hover:border-primary ease-in-out duration-100 relative overflow-hidden',
-                                animationVariant === 'circle-blur' &&
-                                    'border-4 border-primary/80'
-                            )}
-                        >
-                            <div className="relative w-full h-full flex items-center justify-center">
-                                {/* Background */}
-                                <div className="absolute inset-0 bg-muted" />
-                                {/* Circle blur animation */}
-                                <div className="relative z-10 flex items-center justify-center w-full h-full">
-                                    <div
-                                        className="absolute w-20 h-20 rounded-full bg-primary/60"
-                                        style={{
-                                            animation:
-                                                'blur-pulse 2.5s ease-in-out infinite',
-                                        }}
-                                    />
-                                    <span className="relative z-20 text-xs font-medium text-muted-foreground">
-                                        Blur
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <p>Circle Blur</p>
-                        <p className="text-xs text-muted-foreground">
-                            Circular transition with blur effect
-                        </p>
-                    </div>
-
-                    {/* Polygon Transition */}
-                    <div
-                        className="space-y-1 cursor-pointer group"
-                        onClick={() => handleVariantChange('polygon')}
-                    >
-                        <div
-                            tabIndex={0}
-                            className={cn(
-                                'bg-background border rounded-xl h-32 flex items-center justify-center group-hover:border-primary ease-in-out duration-100 relative overflow-hidden',
-                                animationVariant === 'polygon' &&
-                                    'border-4 border-primary/80'
-                            )}
-                        >
-                            <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
-                                {/* Background */}
-                                <div className="absolute inset-0 bg-muted" />
-                                {/* Wipe animation */}
-                                <div className="relative z-10 flex items-center justify-center w-full h-full">
-                                    <div
-                                        className="absolute inset-y-0 w-full bg-primary/60"
-                                        style={{
-                                            animation:
-                                                'wipe-in 2s ease-in-out infinite',
-                                            left: '0',
-                                        }}
-                                    />
-                                    <span className="relative z-20 text-xs font-medium text-muted-foreground">
-                                        Wipe
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <p>Polygon</p>
-                        <p className="text-xs text-muted-foreground">
-                            Directional wipe transition effect
-                        </p>
-                    </div>
+                    {displayVariants.map((variant) => {
+                        const config = animationConfig[variant]
+                        return (
+                            <AnimationPreview
+                                key={variant}
+                                variant={variant}
+                                title={config.title}
+                                description={config.description}
+                                isSelected={animationVariant === variant}
+                                onClick={() => handleVariantChange(variant)}
+                            />
+                        )
+                    })}
                 </div>
             </div>
         </Fragment>
