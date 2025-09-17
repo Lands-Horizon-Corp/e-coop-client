@@ -6,6 +6,7 @@ import { Path, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { SHORTCUT_SCOPES } from '@/constants'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { IGeneralLedger } from '@/modules/general-ledger'
@@ -230,6 +231,9 @@ export const QuickTransferTransactionForm = ({
         },
         [setSelectedMember, form]
     )
+    const errorMessage = serverRequestErrExtractor({
+        error: quickTransactionError,
+    })
 
     return (
         <Form {...form}>
@@ -569,7 +573,7 @@ export const QuickTransferTransactionForm = ({
 
                 <Separator className="my-2 sm:my-4" />
                 <FormFooterResetSubmit
-                    error={quickTransactionError}
+                    error={errorMessage}
                     isLoading={isQuickTransactionPending || !isFormIsDirty}
                     submitText={
                         <p className="">

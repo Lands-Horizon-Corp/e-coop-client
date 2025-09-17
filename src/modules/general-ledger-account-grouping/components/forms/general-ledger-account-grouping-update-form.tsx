@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     GeneralLedgerAccountsGroupingSchema,
     IGeneralLedgerAccountGrouping,
@@ -84,6 +85,8 @@ const GLAccountsGroupingUpdateFormModal = ({
     }, handleFocusError)
 
     const { error, isPending, reset } = updateMutation
+
+    const errorMessage = serverRequestErrExtractor({ error })
 
     return (
         <Form {...form}>
@@ -188,9 +191,7 @@ const GLAccountsGroupingUpdateFormModal = ({
                     <>
                         <Separator />
                         <div className="space-y-2">
-                            <FormErrorMessage
-                                errorMessage={error ? error.message : null}
-                            />
+                            <FormErrorMessage errorMessage={errorMessage} />
                             <div className="flex items-center justify-end gap-x-2">
                                 <Button
                                     size="sm"

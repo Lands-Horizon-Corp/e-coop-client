@@ -5,6 +5,7 @@ import { useNavigate } from '@tanstack/react-router'
 import qs from 'query-string'
 import { toast } from 'sonner'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { useVerifyInvitationCode } from '@/modules/invitation-code'
 import { IOrganizationWithPolicies } from '@/modules/organization'
@@ -85,7 +86,9 @@ const JoinBranchWithCodeFormModal = ({
     }
 
     const isLoading = (isPending && !!code) || IsLoadingJoining
-    const error = codeSearchError || joinError
+    const errorMessage = serverRequestErrExtractor({
+        error: codeSearchError || joinError,
+    })
 
     const handleInvalidateSearch = () => {
         queryClient.invalidateQueries({ queryKey: ['invitation-code', code] })
@@ -260,7 +263,7 @@ const JoinBranchWithCodeFormModal = ({
                         </div>
                     </GradientBackground>
                 )}
-                <FormErrorMessage errorMessage={error} />
+                <FormErrorMessage errorMessage={errorMessage} />
             </div>
         </Modal>
     )

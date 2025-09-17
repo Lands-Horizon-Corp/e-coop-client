@@ -4,6 +4,7 @@ import z from 'zod'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     IVerification,
     IVerificationPasswordAdminRequest,
@@ -78,6 +79,8 @@ const TransactionReverseRequestForm = ({
         })
     }, handleFocusError)
 
+    const error = serverRequestErrExtractor({ error: rawError })
+
     return (
         <Form {...form}>
             <form
@@ -132,7 +135,7 @@ const TransactionReverseRequestForm = ({
                 </fieldset>
                 <div>
                     <Separator className="my-2 sm:my-4" />
-                    <FormErrorMessage errorMessage={rawError} />
+                    <FormErrorMessage errorMessage={error} />
                     <Button
                         size="sm"
                         type="submit"

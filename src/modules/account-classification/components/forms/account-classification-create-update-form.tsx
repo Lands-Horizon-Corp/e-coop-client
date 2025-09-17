@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
     AccountClassificationFormValues,
@@ -103,7 +104,9 @@ const AccountClassificationCreateUpdateForm = ({
     }, handleFocusError)
 
     const isPending = isCreating || isUpdating
-    const error = createError || updateError
+    const error = serverRequestErrExtractor({
+        error: createError || updateError,
+    })
 
     const isAccountClassificationOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(formProps.defaultValues)
@@ -156,9 +159,7 @@ const AccountClassificationCreateUpdateForm = ({
                 </fieldset>
                 <Separator />
                 <div className="space-y-2">
-                    <FormErrorMessage
-                        errorMessage={error ? error.toString() : null}
-                    />
+                    <FormErrorMessage errorMessage={error} />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
                             size="sm"

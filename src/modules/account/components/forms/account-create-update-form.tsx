@@ -149,9 +149,7 @@ const AccountCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 className={cn('w-full', className)}
             >
-                <FormErrorMessage
-                    errorMessage={error ? error.toString() : null}
-                />
+                <FormErrorMessage errorMessage={error} />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
                         disabled={formProps.readOnly}

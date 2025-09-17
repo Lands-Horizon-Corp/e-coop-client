@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     GeneralLedgerDefinitionSchema,
     GeneralLedgerTypeEnum,
@@ -80,10 +81,13 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 },
             },
         })
-    const { mutate: UpdateGeneralLedgerDefinition, isPending: isUpdating } =
-        useUpdateById({
-            options: { onSuccess: onSuccess },
-        })
+    const {
+        mutate: UpdateGeneralLedgerDefinition,
+        isPending: isUpdating,
+        error,
+    } = useUpdateById({
+        options: { onSuccess: onSuccess },
+    })
 
     const { formRef, handleFocusError, isDisabled } =
         useFormHelper<IGeneralLedgerDefinitionFormValues>({
@@ -127,6 +131,8 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
     }, handleFocusError)
 
     const isLoading = isCreating || isUpdating
+
+    const errorMessage = serverRequestErrExtractor({ error })
 
     return (
         <Form {...form}>
@@ -313,11 +319,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                     <>
                         <Separator />
                         <div className="space-y-2">
-                            <FormErrorMessage
-                                errorMessage={
-                                    form.formState.errors.root?.message || ''
-                                }
-                            />
+                            <FormErrorMessage errorMessage={errorMessage} />
                             <div className="flex items-center justify-end gap-x-2">
                                 <Button
                                     size="sm"

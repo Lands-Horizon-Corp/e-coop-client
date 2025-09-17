@@ -6,6 +6,7 @@ import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { base64ImagetoFile } from '@/helpers/picture-crop-helper'
 import { cn } from '@/helpers/tw-utils'
 import { useUploadMedia } from '@/modules/media'
@@ -169,6 +170,8 @@ const UpdateOrganizationForm = ({
         form.watch('description') === ''
             ? 'This is sample description for your banner'
             : form.watch('description')
+
+    const errorMessage = serverRequestErrExtractor({ error })
 
     return (
         <Form {...form}>
@@ -587,7 +590,7 @@ const UpdateOrganizationForm = ({
                         </TabsContent>
                     </Tabs>
                     <div className="space-y-2">
-                        <FormErrorMessage errorMessage={error} />
+                        <FormErrorMessage errorMessage={errorMessage} />
                         <div className="flex items-center justify-end gap-x-2">
                             <Button
                                 size="sm"

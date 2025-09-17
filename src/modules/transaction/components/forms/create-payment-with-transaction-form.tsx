@@ -5,6 +5,7 @@ import { Path, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { IGeneralLedger } from '@/modules/general-ledger'
@@ -221,6 +222,9 @@ const PaymentWithTransactionForm = ({
         },
         { scopes: ['payment'] }
     )
+
+    const errorMessage = serverRequestErrExtractor({ error })
+
     return (
         <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
             <CardContent className="!h-fit p-2 lg:!p-0 items-center w-full lg:!w-full">
@@ -563,7 +567,7 @@ const PaymentWithTransactionForm = ({
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
-                            <FormErrorMessage errorMessage={error} />
+                            <FormErrorMessage errorMessage={errorMessage} />
                         </div>
                         <div className="flex items-center px-2 justify-end mb-2 gap-x-2">
                             <Button

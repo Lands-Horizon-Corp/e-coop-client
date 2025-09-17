@@ -21,7 +21,7 @@ interface IFormResetSubmitFooterProps extends IClassProps {
     submitText?: React.ReactNode | string
     resetText?: string
 
-    error?: Error | string | null
+    error?: string
 
     resetButtonType?: 'button' | 'reset'
     submitButtonType?: 'button' | 'submit'

@@ -84,9 +84,7 @@ function RootLayout() {
                             theme="system"
                             className="z-[9999]"
                         />
-
                         <Outlet />
-
                         <ConnectionProvider />
                         <CookieConsent />
                         <ImagePreviewModal />
