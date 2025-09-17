@@ -285,7 +285,7 @@ const LoanTransactionCreateUpdateForm = ({
         useFormHelper<TLoanTransactionSchema>({
             form,
             ...formProps,
-            // autoSave: formMode !== 'create',
+            autoSave: formMode !== 'create',
             autoSaveDelay: 2000,
         })
 

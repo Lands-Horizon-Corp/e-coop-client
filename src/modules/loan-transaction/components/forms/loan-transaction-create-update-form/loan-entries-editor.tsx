@@ -57,21 +57,7 @@ const LoanEntriesEditor = forwardRef<
     const rowRefs = useRef<(HTMLTableRowElement | null)[]>([])
     const [focusedIndex, setFocusedIndex] = useState(-1)
 
-    const handleKeyDown = (e: KeyboardEvent<HTMLTableElement>) => {
-        if (e.key === 'ArrowDown') {
-            e.preventDefault()
-            const nextIndex = Math.min(focusedIndex + 1, fields.length - 1)
-            setFocusedIndex(nextIndex)
-            rowRefs.current[nextIndex]?.focus()
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault()
-            const prevIndex = Math.max(focusedIndex - 1, 0)
-            setFocusedIndex(prevIndex)
-            rowRefs.current[prevIndex]?.focus()
-        }
-    }
-
-    const { fields, replace, append, update, remove } = useFieldArray({
+    const { append, remove, update } = useFieldArray({
         control: form.control,
         name: 'loan_transaction_entries',
         keyName: 'fieldKey',
@@ -87,6 +73,12 @@ const LoanEntriesEditor = forwardRef<
     const is_add_on = form.watch('is_add_on')
     const account: IAccount | undefined = form.watch('account')
 
+    const loanEntries = form.watch('loan_transaction_entries')
+
+    const isDisabled =
+        disabled || loanEntries[0] === undefined || loanEntries[1] === undefined
+
+    // Pang Display Computation totals
     const {
         totalDebit,
         totalCredit,
@@ -95,20 +87,20 @@ const LoanEntriesEditor = forwardRef<
         netCashAmount,
         addOnTotal,
     } = useMemo(() => {
-        const debitTotal = fields.reduce(
+        const debitTotal = loanEntries.reduce(
             (sum, field) => sum + (Number(field.debit) || 0),
             0
         )
-        const creditTotal = fields.reduce(
+        const creditTotal = loanEntries.reduce(
             (sum, field) => sum + (Number(field.credit) || 0),
             0
         )
 
-        const regularDeductions = fields
+        const regularDeductions = loanEntries
             .filter((field) => field.type === 'deduction' && !field.is_add_on)
             .reduce((sum, field) => sum + (Number(field.credit) || 0), 0)
 
-        const addOnCharges = fields
+        const addOnCharges = loanEntries
             .filter((field) => field.type === 'deduction' && field.is_add_on)
             .reduce((sum, field) => sum + (Number(field.credit) || 0), 0)
 
@@ -122,22 +114,12 @@ const LoanEntriesEditor = forwardRef<
             netCashAmount: netCash,
             addOnTotal: addOnCharges,
         }
-    }, [fields, applied_1])
+    }, [loanEntries, applied_1])
 
-    const isBalanced = totalDebit === totalCredit
-
-    const deductionsSignature = useMemo(
-        () =>
-            fields
-                .filter((f) => f.type === 'deduction')
-                .map((f) => `${f.account_id}:${f.credit}:${f.is_add_on}`)
-                .join('|'),
-        [fields]
-    )
-
-    useEffect(() => {
-        const cash_on_hand = fields[0]
-        const found_account_entry = fields[1]
+    // Para sa Computed/Generated Entries (Pang display lang)
+    const computedLoanEntries = useMemo(() => {
+        const cash_on_hand = loanEntries[0]
+        const found_account_entry = loanEntries[1]
 
         const account_entry: ILoanTransactionEntryRequest = {
             ...found_account_entry,
@@ -149,22 +131,15 @@ const LoanEntriesEditor = forwardRef<
             description: account?.description || 'No Description',
         }
 
-        const add_on_entry = fields.find(
+        const add_on_entry = loanEntries.find(
             (entry) => entry.type === 'add-on' && !!entry.id
         )
 
-        if (!cash_on_hand || !account_entry || !applied_1) return
+        if (!cash_on_hand || !account_entry || !applied_1) return []
 
-        const deductionEntries = fields.filter(
+        const deductionEntries = loanEntries.filter(
             (entry) => entry.type === 'deduction'
         )
-
-        const regularDeductions = deductionEntries
-            .filter((entry) => {
-                if (is_add_on) return !entry.is_add_on
-                return true
-            })
-            .reduce((sum, entry) => sum + (Number(entry.credit) || 0), 0)
 
         const addOnCharges = deductionEntries
             .filter((entry) => entry.is_add_on)
@@ -172,110 +147,172 @@ const LoanEntriesEditor = forwardRef<
 
         let allEntries = []
 
-        if (is_add_on && addOnCharges > 0) {
-            const cashAmount = applied_1 - regularDeductions
-            const loanAmount = applied_1
+        const addOnEntry: ILoanTransactionEntryRequest[] =
+            addOnCharges > 0 && is_add_on
+                ? [
+                      {
+                          ...add_on_entry,
+                          account_id: undefined,
+                          account: undefined,
+                          debit: addOnCharges || 0,
+                          credit: 0,
+                          index: 1 + deductionEntries.length,
+                          name: 'Add-On',
+                          description: 'Add on Interest',
+                          is_add_on: false,
+                          type: 'add-on',
+                      },
+                  ]
+                : []
 
-            const staticEntries: ILoanTransactionEntryRequest[] = [
-                {
-                    ...cash_on_hand,
-                    account_id: cash_on_hand?.account_id,
-                    account: cash_on_hand.account,
+        allEntries = [
+            ...loanEntries.slice(0, 2),
+            ...deductionEntries,
+            ...addOnEntry,
+        ]
+
+        return allEntries
+    }, [account, applied_1, is_add_on, loanEntries])
+
+    // Pang stable deduction tracking
+    const deductionEntries = useMemo(() => {
+        return loanEntries.filter((entry) => entry.type === 'deduction')
+    }, [loanEntries])
+
+    // Pang stable entry signature dependency
+    // need to para di mag unexpected reupdate sa pang updat eng COH
+    const deductionsSignature = useMemo(() => {
+        return deductionEntries
+            .map(
+                (entry) =>
+                    `${entry.id || 'new'}:${entry.account_id}:${entry.credit}:${entry.is_add_on}`
+            )
+            .join('|')
+    }, [deductionEntries])
+
+    // Pang update ng COH, ADD_ON entry
+    useEffect(() => {
+        if (!applied_1 || !account) return
+
+        const entries = form.getValues('loan_transaction_entries')
+
+        // Totals
+        const regularDeductions = deductionEntries
+            .filter((entry) => !entry.is_add_on)
+            .reduce((sum, entry) => sum + (Number(entry.credit) || 0), 0)
+
+        const addOnCharges = deductionEntries
+            .filter((entry) => entry.is_add_on)
+            .reduce((sum, entry) => sum + (Number(entry.credit) || 0), 0)
+
+        const cashEntry = entries[0]
+
+        // Update (Cash on Hand) Entry
+        if (cashEntry) {
+            const newCashCredit = is_add_on
+                ? applied_1 - regularDeductions
+                : applied_1 - (regularDeductions + addOnCharges)
+
+            if (cashEntry.credit !== newCashCredit) {
+                update(0, {
+                    ...cashEntry,
+                    credit: newCashCredit,
                     debit: 0,
-                    credit: cashAmount,
-                    index: 0,
-                    name:
-                        cash_on_hand?.account?.name || cash_on_hand?.name || '',
-                    description: cash_on_hand?.description || 'Cash on Hand',
-                    is_add_on: false,
-                    type: 'static',
-                },
-                {
-                    ...account_entry,
-                    account_id: account_entry.account_id,
-                    account: account_entry?.account,
-                    debit: loanAmount,
+                })
+            }
+        }
+
+        // Update (Loan Account)
+        const loanAccountEntry = entries[1]
+        if (loanAccountEntry && account) {
+            const shouldUpdate =
+                loanAccountEntry.account_id !== account.id ||
+                loanAccountEntry.debit !== applied_1
+
+            if (shouldUpdate) {
+                update(1, {
+                    ...loanAccountEntry,
+                    account_id: account.id,
+                    account: account,
+                    name: account.name,
+                    description: account.description || 'Loan account',
+                    debit: applied_1,
                     credit: 0,
-                    index: 1,
-                    name:
-                        account_entry?.name ||
-                        account_entry?.account?.name ||
-                        'Unknown account',
-                    description: account_entry?.description || '...',
-                    is_add_on: false,
-                    type: 'static',
-                },
-            ]
+                })
+            }
+        }
 
-            const addOnEntry: ILoanTransactionEntryRequest[] =
-                addOnCharges > 0 && is_add_on
-                    ? [
-                          {
-                              ...add_on_entry,
-                              account_id: undefined,
-                              account: undefined,
-                              debit: addOnCharges || 0,
-                              credit: 0,
-                              index: 1 + deductionEntries.length,
-                              name: 'Add-On',
-                              description: 'Add on Interest',
-                              is_add_on: false,
-                              type: 'add-on',
-                          },
-                      ]
-                    : []
+        // Add/Update/Remove add-on entry
+        const currentAddOnIndex = entries.findIndex(
+            (entry) => entry.type === 'add-on'
+        )
+        const shouldHaveAddOn = is_add_on && addOnCharges > 0
+        const expectedAddOnIndex = 2 + deductionEntries.length // nilagay ko sa pang last na index
 
-            allEntries = [...staticEntries, ...deductionEntries, ...addOnEntry]
+        if (shouldHaveAddOn) {
+            const addOnEntryData = {
+                id:
+                    currentAddOnIndex !== -1
+                        ? entries[currentAddOnIndex].id
+                        : undefined,
+                account_id: undefined,
+                account: undefined,
+                debit: addOnCharges,
+                credit: 0,
+                index: expectedAddOnIndex,
+                name: 'Add-On',
+                description: 'Add on Interest',
+                is_add_on: false,
+                type: 'add-on' as const,
+            }
+
+            if (currentAddOnIndex === -1) {
+                // Add add on entry
+                append(addOnEntryData)
+            } else if (currentAddOnIndex !== expectedAddOnIndex) {
+                // Modify existing add on index since may na add/naremove sa deductions
+                const currentAddOn = entries[currentAddOnIndex]
+                remove(currentAddOnIndex)
+                append({
+                    ...addOnEntryData,
+                    id: currentAddOn.id,
+                })
+            } else {
+                // Update sa existing add-on entry
+                const currentAddOn = entries[currentAddOnIndex]
+                if (currentAddOn.debit !== addOnCharges) {
+                    update(currentAddOnIndex, addOnEntryData)
+                }
+            }
         } else {
-            const netCashAmount = applied_1 - regularDeductions
-            const loanAmount = applied_1
-
-            const staticEntries: ILoanTransactionEntryRequest[] = [
-                {
-                    ...cash_on_hand,
-                    account_id: cash_on_hand?.account_id,
-                    account: cash_on_hand,
-                    debit: 0,
-                    index: 0,
-                    credit: netCashAmount,
-                    name:
-                        cash_on_hand?.account?.name || cash_on_hand?.name || '',
-                    description: cash_on_hand?.description || 'Cash on Hand',
-                    is_add_on: false,
-                    type: 'static',
-                },
-                {
-                    ...account_entry,
-                    account_id: account_entry?.account_id,
-                    account: account_entry,
-                    debit: loanAmount,
-                    credit: 0,
-                    index: 1,
-                    name:
-                        account_entry?.name ||
-                        account_entry?.account?.name ||
-                        'Unknown account',
-                    description: account_entry?.description || '...',
-                    is_add_on: false,
-                    type: 'static',
-                },
-            ]
-
-            allEntries = [...staticEntries, ...deductionEntries]
+            // Remove if not need add on entry
+            if (currentAddOnIndex !== -1) {
+                const addOnToRemove = entries[currentAddOnIndex]
+                if (addOnToRemove.id) {
+                    addToDeletedField(addOnToRemove.id)
+                }
+                remove(currentAddOnIndex)
+            }
         }
+    }, [
+        is_add_on,
+        applied_1,
+        account,
+        deductionEntries,
+        deductionsSignature,
+        append,
+        update,
+        remove,
+        addToDeletedField,
+        form,
+    ])
 
-        replace(allEntries.map((entry, i) => ({ ...entry, index: i })))
-
-        if (!is_add_on || addOnCharges <= 0) {
-            if (add_on_entry?.id) addToDeletedField(add_on_entry.id)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account, applied_1, is_add_on, deductionsSignature, replace])
+    const isBalanced = totalDebit === totalCredit
 
     useHotkeys('shift+n', () => addChargeModalState.onOpenChange(true))
 
     const handleRemoveEntry = (index: number) => {
-        const entry = fields[index]
+        const entry = loanEntries[index]
         if (entry?.type === 'deduction') {
             remove(index)
         }
@@ -284,8 +321,19 @@ const LoanEntriesEditor = forwardRef<
         }
     }
 
-    const isDisabled =
-        disabled || fields[0] === undefined || fields[1] === undefined
+    const handleKeyDown = (e: KeyboardEvent<HTMLTableElement>) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            const nextIndex = Math.min(focusedIndex + 1, loanEntries.length - 1)
+            setFocusedIndex(nextIndex)
+            rowRefs.current[nextIndex]?.focus()
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            const prevIndex = Math.max(focusedIndex - 1, 0)
+            setFocusedIndex(prevIndex)
+            rowRefs.current[prevIndex]?.focus()
+        }
+    }
 
     if (isDisabled)
         return (
@@ -363,6 +411,7 @@ const LoanEntriesEditor = forwardRef<
                                 name: charge.account?.name || '',
                                 debit: 0,
                                 credit: charge.amount,
+                                index: 2 + deductionEntries.length,
                                 description: charge.description || '',
                                 is_add_on: charge.is_add_on,
                                 type: 'deduction',
@@ -379,10 +428,10 @@ const LoanEntriesEditor = forwardRef<
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {fields.map((field, index) => (
+                    {computedLoanEntries.map((field, index) => (
                         <LoanEntryRow
-                            key={field.fieldKey}
-                            field={field}
+                            key={`${field.id}-${index}`}
+                            entry={field}
                             index={index}
                             form={form}
                             ref={(el) => {
@@ -394,7 +443,7 @@ const LoanEntriesEditor = forwardRef<
                             }
                         />
                     ))}
-                    {fields.length === 0 && (
+                    {loanEntries.length === 0 && (
                         <TableRow>
                             <TableCell colSpan={4}>
                                 <p className="py-16 text-center text-sm text-muted-foreground/80">
@@ -432,7 +481,7 @@ const LoanEntriesEditor = forwardRef<
 })
 
 interface ILoanEntryRowProps {
-    field: ILoanTransactionEntryRequest & { fieldKey: string }
+    entry: ILoanTransactionEntryRequest
     index: number
     form: UseFormReturn<TLoanTransactionSchema>
     onRemove: (index: number) => void
@@ -441,26 +490,26 @@ interface ILoanEntryRowProps {
 
 const LoanEntryRow = memo(
     forwardRef<HTMLTableRowElement, ILoanEntryRowProps>(
-        ({ field, index, onRemove, onUpdate }, ref) => {
+        ({ entry, index, onRemove, onUpdate }, ref) => {
             const rowRef = useRef<HTMLTableRowElement>(null)
 
             const editModalState = useModalState()
 
-            const isEditable = field.type === 'deduction'
-            const isRemovable = field.type === 'deduction'
+            const isEditable = entry.type === 'deduction'
+            const isRemovable = entry.type === 'deduction'
 
             const handleRowKeyDown = (
                 e: KeyboardEvent<HTMLTableRowElement>
             ) => {
                 if (e.key === 'Delete') {
                     if (!isRemovable)
-                        return toast.info(`Entry ${field.name} not removable`)
+                        return toast.info(`Entry ${entry.name} not removable`)
                     e.preventDefault()
                     e.stopPropagation()
                     onRemove(index)
                 } else if (e.key === 'F2') {
                     if (!isEditable)
-                        return toast.info(`Entry ${field.name} not editable`)
+                        return toast.info(`Entry ${entry.name} not editable`)
                     e.preventDefault()
                     e.stopPropagation()
                     editModalState.onOpenChange(true)
@@ -470,6 +519,7 @@ const LoanEntryRow = memo(
             return (
                 <>
                     <TableRow
+                        onDoubleClick={() => editModalState.onOpenChange(true)}
                         ref={(el) => {
                             rowRef.current = el
                             if (typeof ref === 'function') {
@@ -478,7 +528,6 @@ const LoanEntryRow = memo(
                                 ref.current = el
                             }
                         }}
-                        key={field.fieldKey}
                         onKeyDown={handleRowKeyDown}
                         tabIndex={0}
                         className="focus:bg-background/20"
@@ -486,27 +535,27 @@ const LoanEntryRow = memo(
                         <TableCell>
                             <div className="flex flex-col">
                                 <span className="font-medium flex gap-x-1 items-center">
-                                    {field.account?.icon && (
-                                        <RenderIcon icon={field.account.icon} />
+                                    {entry.account?.icon && (
+                                        <RenderIcon icon={entry.account.icon} />
                                     )}
-                                    {field.name || 'Unknown'}
+                                    {entry.name || 'Unknown'}
                                 </span>
                                 <span className="text-xs text-muted-foreground">
-                                    {field.description || '...'}
+                                    {entry.description || '...'}
                                 </span>
                                 <div className="flex gap-2 mt-1">
-                                    {field.type === 'add-on' && (
+                                    {entry.type === 'add-on' && (
                                         <span className="text-xs text-green-600 font-medium">
                                             • Add-on Interest
                                         </span>
                                     )}
-                                    {field.type === 'deduction' && (
+                                    {entry.type === 'deduction' && (
                                         <span className="text-xs text-orange-600 font-medium">
                                             • Deduction
                                         </span>
                                     )}
-                                    {field.type === 'deduction' &&
-                                        field.is_add_on && (
+                                    {entry.type === 'deduction' &&
+                                        entry.is_add_on && (
                                             <span className="text-xs text-green-600 font-medium">
                                                 • Add-On
                                             </span>
@@ -515,11 +564,11 @@ const LoanEntryRow = memo(
                             </div>
                         </TableCell>
                         <TableCell className="text-right">
-                            {field.debit ? `${formatNumber(field.debit)}` : ''}
+                            {entry.debit ? `${formatNumber(entry.debit)}` : ''}
                         </TableCell>
                         <TableCell className="text-right">
-                            {field.credit
-                                ? `${formatNumber(field.credit)}`
+                            {entry.credit
+                                ? `${formatNumber(entry.credit)}`
                                 : ''}
                         </TableCell>
                         <TableCell>
@@ -568,10 +617,10 @@ const LoanEntryRow = memo(
                         title="Edit Deduction"
                         description="Update the deduction details."
                         formProps={{
-                            defaultValues: field,
+                            defaultValues: entry,
                             onSuccess: (updatedData) => {
                                 onUpdate(index, {
-                                    ...field,
+                                    ...entry,
                                     account_id: updatedData.account_id,
                                     account: updatedData.account,
                                     credit: updatedData.amount,
