@@ -75,7 +75,7 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
         !CurrentTransaction || CurrentTransaction.data.length === 0
 
     return (
-        <div className="">
+        <>
             <Button
                 variant="outline"
                 className=""
@@ -88,75 +88,70 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
             <SheetModal
                 open={onOpen}
                 onOpenChange={setOnOpen}
-                className="min-w-full h-full max-w-[500px] md:min-w-[600px] overflow-hidden"
+                className="min-w-full h-full max-w-[500px] p-5 md:min-w-[600px] overflow-hidden"
             >
-                <div className="  ">
-                    <div className=" ecoop-scroll m-5">
-                        <h1 className="text-lg font-bold mb-2">
-                            Transaction History
-                            <RefreshButton
-                                className="bg-transparent size-7"
-                                onClick={refetchCurrentTransaction}
-                                isLoading={isLoadingCurrentTransaction}
-                            />
-                        </h1>
-                        {isLoadingCurrentTransaction ? (
-                            <PaymentsEntryListSkeleton itemNumber={10} />
-                        ) : (
-                            <ScrollArea>
-                                <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
-                                    {isNoCurrentTransaction ? (
-                                        <TransactionNoFound />
-                                    ) : (
-                                        CurrentTransaction?.data.map(
-                                            (transaction) => (
-                                                <div key={transaction.id}>
-                                                    <TransactionDetails
-                                                        item={transaction}
-                                                        onClick={() =>
-                                                            handleNavigate(
-                                                                transaction.id,
-                                                                fullPath
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                            )
+                <h1 className="text-lg font-bold ">
+                    Transaction History
+                    <RefreshButton
+                        className="bg-transparent size-7"
+                        onClick={refetchCurrentTransaction}
+                        isLoading={isLoadingCurrentTransaction}
+                    />
+                </h1>
+                <div className=" ecoop-scroll max-h-[90vh] overflow-auto ">
+                    {isLoadingCurrentTransaction ? (
+                        <PaymentsEntryListSkeleton itemNumber={10} />
+                    ) : (
+                        <ScrollArea>
+                            <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
+                                {isNoCurrentTransaction ? (
+                                    <TransactionNoFound />
+                                ) : (
+                                    CurrentTransaction?.data.map(
+                                        (transaction) => (
+                                            <div key={transaction.id}>
+                                                <TransactionDetails
+                                                    item={transaction}
+                                                    onClick={() =>
+                                                        handleNavigate(
+                                                            transaction.id,
+                                                            fullPath
+                                                        )
+                                                    }
+                                                />
+                                            </div>
                                         )
-                                    )}
-                                </div>
-                            </ScrollArea>
-                        )}
-
-                        <div className="sticky bottom-0 left-0 right-0">
-                            <MiniPaginationBar
-                                pagination={{
-                                    pageIndex: pagination.pageIndex,
-                                    pageSize: pagination.pageSize,
-                                    totalPage:
-                                        CurrentTransaction?.totalPage ?? 0,
-                                    totalSize:
-                                        CurrentTransaction?.totalSize ?? 0,
-                                }}
-                                disablePageMove={isFetching}
-                                onNext={({ pageIndex }) =>
-                                    setPagination((prev) => ({
-                                        ...prev,
-                                        pageIndex,
-                                    }))
-                                }
-                                onPrev={({ pageIndex }) =>
-                                    setPagination((prev) => ({
-                                        ...prev,
-                                        pageIndex,
-                                    }))
-                                }
-                            />
-                        </div>
-                    </div>
+                                    )
+                                )}
+                            </div>
+                        </ScrollArea>
+                    )}
+                </div>
+                <div className="sticky bottom-0 left-0 right-0">
+                    <MiniPaginationBar
+                        pagination={{
+                            pageIndex: pagination.pageIndex,
+                            pageSize: pagination.pageSize,
+                            totalPage: CurrentTransaction?.totalPage ?? 0,
+                            totalSize: CurrentTransaction?.totalSize ?? 0,
+                        }}
+                        disablePageMove={isFetching}
+                        onNext={({ pageIndex }) =>
+                            setPagination((prev) => ({
+                                ...prev,
+                                pageIndex,
+                            }))
+                        }
+                        onPrev={({ pageIndex }) =>
+                            setPagination((prev) => ({
+                                ...prev,
+                                pageIndex,
+                            }))
+                        }
+                    />
                 </div>
             </SheetModal>
-        </div>
+        </>
     )
 }
 
