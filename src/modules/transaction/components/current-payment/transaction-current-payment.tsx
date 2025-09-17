@@ -67,6 +67,9 @@ const TransactionCurrentPaymentEntry = ({
     } = useFilteredPaginatedGeneralLedger({
         transactionId,
         mode: 'transaction',
+        options: {
+            retry: 0,
+        },
         query: {
             ...pagination,
             sort: sortingStateBase64,
