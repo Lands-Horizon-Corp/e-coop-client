@@ -15,7 +15,7 @@ export default defineConfig({
     plugins: [
         UnheadVite(),
         manifestSRI(),
-        tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+        tanstackRouter({ target: 'react' }),
         react(),
         tsconfigPaths(),
         tailwindcss(),

@@ -13,8 +13,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-type AnimationVariant = 'circle' | 'circle-blur' | 'gif' | 'polygon'
-
 type StartPosition =
     | 'center'
     | 'top-left'
@@ -23,18 +21,19 @@ type StartPosition =
     | 'bottom-right'
 
 interface ThemeToggleMenuProps extends IBaseProps {
-    variant?: AnimationVariant
     start?: StartPosition
     url?: string
 }
 
 export const ThemeToggleMenu = ({
     className,
-    variant = 'circle',
     start = 'center',
     url,
 }: ThemeToggleMenuProps) => {
-    const { setTheme, resolvedTheme } = useTheme()
+    const { setTheme, resolvedTheme, animationVariant } = useTheme()
+
+    // Use the variant from props or fall back to the one from theme provider
+    const activeVariant = animationVariant
 
     // Theme transition hook using View Transitions API
     const startTransition = useCallback((updateFn: () => void) => {
@@ -62,7 +61,7 @@ export const ThemeToggleMenu = ({
                 'bottom-right': 'bottom right',
             }
 
-            if (variant === 'circle') {
+            if (activeVariant === 'circle') {
                 const cx =
                     start === 'center'
                         ? '50'
@@ -94,7 +93,7 @@ export const ThemeToggleMenu = ({
                         }
                     }
                 `
-            } else if (variant === 'circle-blur') {
+            } else if (activeVariant === 'circle-blur') {
                 const cx =
                     start === 'center'
                         ? '50'
@@ -129,7 +128,7 @@ export const ThemeToggleMenu = ({
                         }
                     }
                 `
-            } else if (variant === 'gif' && url) {
+            } else if (activeVariant === 'gif' && url) {
                 css = `
                     @supports (view-transition-name: root) {
                         ::view-transition-old(root) {
@@ -163,7 +162,7 @@ export const ThemeToggleMenu = ({
                         }
                     }
                 `
-            } else if (variant === 'polygon') {
+            } else if (activeVariant === 'polygon') {
                 css = `
                     @supports (view-transition-name: root) {
                         ::view-transition-old(root) {
@@ -210,7 +209,7 @@ export const ThemeToggleMenu = ({
                 setTheme(newTheme)
             })
         },
-        [setTheme, startTransition, variant, start, url, resolvedTheme]
+        [setTheme, startTransition, activeVariant, start, url, resolvedTheme]
     )
 
     return (

@@ -6,8 +6,9 @@ import {
     useState,
 } from 'react'
 
-type Theme = 'dark' | 'light' | 'system'
+export type Theme = 'dark' | 'light' | 'system'
 export type ResolvedTheme = 'dark' | 'light'
+export type AnimationVariant = 'circle' | 'circle-blur' | 'polygon' | 'gif'
 
 type CustomThemeColors = {
     light: Record<string, string>
@@ -24,8 +25,10 @@ type ThemeProviderState = {
     theme: Theme
     resolvedTheme: ResolvedTheme
     customTheme: string
+    animationVariant: AnimationVariant
     setTheme: (theme: Theme) => void
     setCustomTheme: (themeName: string) => void
+    setAnimationVariant: (variant: AnimationVariant) => void
     applyCustomThemeColors: (
         colors: CustomThemeColors,
         themeName: string
@@ -36,8 +39,10 @@ const initialState: ThemeProviderState = {
     theme: 'system',
     resolvedTheme: 'light',
     customTheme: 'Default',
+    animationVariant: 'circle',
     setTheme: () => null,
     setCustomTheme: () => null,
+    setAnimationVariant: () => null,
     applyCustomThemeColors: () => null,
 }
 
@@ -56,6 +61,14 @@ export const ThemeProvider = ({
     const [customTheme, setCustomThemeState] = useState<string>(() => {
         return localStorage.getItem('ecoop-custom-theme') || 'Default'
     })
+    const [animationVariant, setAnimationVariantState] =
+        useState<AnimationVariant>(() => {
+            return (
+                (localStorage.getItem(
+                    'ecoop-animation-variant'
+                ) as AnimationVariant) || 'circle'
+            )
+        })
 
     const removeClassTheme = useCallback((root: HTMLElement) => {
         if (!root) return
@@ -74,6 +87,11 @@ export const ThemeProvider = ({
     const setCustomTheme = useCallback((themeName: string) => {
         setCustomThemeState(themeName)
         localStorage.setItem('ecoop-custom-theme', themeName)
+    }, [])
+
+    const setAnimationVariant = useCallback((variant: AnimationVariant) => {
+        setAnimationVariantState(variant)
+        localStorage.setItem('ecoop-animation-variant', variant)
     }, [])
 
     const applyCustomThemeColors = useCallback(
@@ -196,11 +214,13 @@ export const ThemeProvider = ({
         theme,
         resolvedTheme,
         customTheme,
+        animationVariant,
         setTheme: (theme: Theme) => {
             localStorage.setItem(storageKey, theme)
             setTheme(theme)
         },
         setCustomTheme,
+        setAnimationVariant,
         applyCustomThemeColors,
     }
 
