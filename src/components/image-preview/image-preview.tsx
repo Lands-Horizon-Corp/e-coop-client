@@ -289,7 +289,7 @@ export const ImageContainer = ({
                     <a
                         target="_blank"
                         href={media.url}
-                        className="py-1 text-xs text-black dark:text-white"
+                        className="py-1 text-xs "
                     >
                         Open in Browser
                     </a>
@@ -310,8 +310,6 @@ export const ImagePreviewButtonAction = React.forwardRef<
     HTMLButtonElement,
     ImagePreviewButtonActionProps
 >(({ onClick, Icon, name, className, iconClassName, ...props }, ref) => {
-    const defaultIconStyles = '!size-4 dark:text-white'
-
     return (
         <Tooltip>
             <TooltipTrigger asChild>
@@ -328,8 +326,7 @@ export const ImagePreviewButtonAction = React.forwardRef<
                     {Icon && (
                         <span
                             className={cn(
-                                'mr-2',
-                                defaultIconStyles,
+                                'mr-2 !size-4 text-primary',
                                 iconClassName
                             )}
                         >

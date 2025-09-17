@@ -38,7 +38,7 @@ const ShortcutItem = ({
         <div
             className={cn(
                 'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-                'aria-selected:bg-accent aria-selected:',
+                'aria-selected:bg-accent aria-selected:text-accent-foreground',
                 'hover:!bg-transparent' // Custom styling to disable hover
             )}
         >
@@ -171,18 +171,18 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
             <Modal
                 open={open}
                 title="All Keyboard Shortcuts"
-                titleClassName="text-lg font-semibold text-center "
+                titleClassName="text-lg font-semibold text-center"
                 description="Here are some useful keyboard shortcuts to help you navigate and perform actions quickly."
                 descriptionClassName="text-sm text-center text-muted-foreground"
                 onOpenChange={onOpenChange}
-                className="min-w-fit lg:min-w-[1200px] h-fit bg-neutral-900 border-neutral-700 text-white p-6 flex flex-col"
+                className="min-w-fit lg:min-w-[1200px] h-fit bg-background border-border text-foreground p-6 flex flex-col"
             >
                 <div className="">
                     {/* Main Content Area - Columns */}
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 ecoop-scroll overflow-y-auto">
                         {Object.values(shortcutsData).map((category, index) => (
                             <div key={index} className="p-2">
-                                <h2 className="text-sm text-neutral-400 font-medium mb-2">
+                                <h2 className="text-sm text-muted-foreground font-medium mb-2">
                                     {category.title}
                                 </h2>
                                 <div className="space-y-1">
@@ -198,11 +198,11 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                     </div>
 
                     {/* Bottom Panel */}
-                    <div className="flex-none hidden pt-4 mt-6 border-t border-neutral-700 justify-between items-center text-sm text-neutral-400">
+                    <div className="flex-none hidden pt-4 mt-6 border-t border-border justify-between items-center text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
                             <span>Single-character shortcuts</span>
                             {/* You would add a switch component here */}
-                            <div className="w-10 h-5 bg-neutral-600 rounded-full"></div>
+                            <div className="w-10 h-5 bg-muted rounded-full"></div>
                         </div>
                         <div>Pin keyboard shortcut help</div>
                     </div>

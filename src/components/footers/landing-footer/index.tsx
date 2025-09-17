@@ -146,9 +146,7 @@ const NeonFooter = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 lg:gap-16 w-full md:w-full lg:w-4/5">
                     <div className="flex flex-col gap-3 text-sm">
-                        <h3 className="font-semibold dark:text-white text-black mb-2">
-                            Quick Links
-                        </h3>
+                        <h3 className="font-semibold  mb-2">Quick Links</h3>
                         {quickLinks.map((item, index) =>
                             item.to ? (
                                 <Link
@@ -170,9 +168,7 @@ const NeonFooter = () => {
                         )}
                     </div>
                     <div className="flex flex-col gap-3 text-sm">
-                        <h3 className="font-semibold dark:text-white text-black mb-2">
-                            Policies
-                        </h3>
+                        <h3 className="font-semibold k mb-2">Policies</h3>
                         {policies.map((item) => (
                             <Link
                                 key={item.to}
@@ -184,9 +180,7 @@ const NeonFooter = () => {
                         ))}
                     </div>
                     <div className="flex flex-col gap-3  text-sm">
-                        <h3 className="font-semibold dark:text-white text-black mb-2">
-                            Contacts
-                        </h3>
+                        <h3 className="font-semibold  mb-2">Contacts</h3>
                         {contacts.map((item, index) => (
                             <p
                                 key={index}
