@@ -6,8 +6,6 @@ import { toast } from 'sonner'
 
 import { SHORTCUT_SCOPES } from '@/constants'
 import { IGeneralLedger } from '@/modules/general-ledger'
-import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
-import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
 import {
     ITransaction,
     TransactionCurrentPaymentEntry,
@@ -33,6 +31,7 @@ import { TEntityId } from '@/types'
 
 import PaymentWithTransactionForm from '../components/forms/create-payment-with-transaction-form'
 import TransactionReverseRequestFormModal from '../components/modals/transaction-modal-request-reverse'
+import TransactionAccountMemberLedger from '../components/tables/transaction-account-member-ledger'
 
 type TTransactionProps = {
     transactionId: TEntityId
@@ -52,7 +51,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         handleResetAll,
         setSelectedMember,
         setOpenSuccessModal,
-        setFocusTypePayment,
         setSelectedAccountId,
         setTransactionFormSuccess,
         setOpenPaymentWithTransactionModal,
@@ -150,6 +148,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             setOpenMemberPicker(true)
         }
     })
+
     return (
         <div
             onClick={() => {
@@ -167,7 +166,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     },
                 }}
             />
-
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
                 <div className="w-full flex justify-end pb-2">
                     <TransactionHistory fullPath={fullPath} />
@@ -215,23 +213,12 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     </div>
                     {/* Right Section (Ledger Table) */}
                     <div className="flex-1 w-full flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
-                        <MemberAccountingLedgerTable
-                            mode="member"
-                            memberProfileId={
-                                (selectedMember?.id ?? undefined) as TEntityId
-                            }
+                        <TransactionAccountMemberLedger
+                            memberProfileId={selectedMember?.id as TEntityId}
                             onRowClick={(data) => {
-                                setOpenPaymentWithTransactionModal(true)
                                 setSelectedAccountId(data.original.account_id)
                                 setSelectedAccount(data.original.account)
-                                setFocusTypePayment('payment')
                             }}
-                            actionComponent={(props) => (
-                                <MemberAccountGeneralLedgerAction
-                                    memberAccountLedger={props.row.original}
-                                />
-                            )}
-                            className="w-full min-h-[40vh] h-full"
                         />
                     </div>
                 </div>

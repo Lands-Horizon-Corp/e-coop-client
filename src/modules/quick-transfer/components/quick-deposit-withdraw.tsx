@@ -1,8 +1,6 @@
 import { toast } from 'sonner'
 
 import { SHORTCUT_SCOPES } from '@/constants'
-import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
-import MemberAccountGeneralLedgerAction from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table/member-account-general-ledger-table/actions'
 import {
     CurrentTransactionWithdrawHistory,
     QuickTransferTransactionForm,
@@ -10,6 +8,7 @@ import {
 } from '@/modules/quick-transfer'
 import { TransactionMemberProfile } from '@/modules/transaction'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+import TransactionAccountMemberLedger from '@/modules/transaction/components/tables/transaction-account-member-ledger'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -88,22 +87,11 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                                 viewOnly
                             />
                         </div>
-                        <MemberAccountingLedgerTable
-                            mode="member"
-                            memberProfileId={
-                                (selectedMember?.id ?? undefined) as TEntityId
-                            }
+                        <TransactionAccountMemberLedger
+                            memberProfileId={selectedMember?.id as TEntityId}
                             onRowClick={(data) => {
                                 setSelectedAccount(data.original.account)
                             }}
-                            actionComponent={(props) => {
-                                return (
-                                    <MemberAccountGeneralLedgerAction
-                                        memberAccountLedger={props.row.original}
-                                    />
-                                )
-                            }}
-                            className="w-full mt-2"
                         />
                     </ResizablePanel>
                 </ResizablePanelGroup>
