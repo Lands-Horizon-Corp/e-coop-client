@@ -8,16 +8,14 @@ import { VersionAndFeedBack } from './-landing-components/version'
 
 const PublicLayout = () => {
     return (
-        <>
-            <div>
-                <main>
-                    <LandingNav />
-                    <Outlet />
-                    <Footer />
-                </main>
-                <VersionAndFeedBack />
-            </div>
-        </>
+        <div>
+            <main>
+                <LandingNav />
+                <Outlet />
+                <Footer />
+            </main>
+            <VersionAndFeedBack />
+        </div>
     )
 }
 

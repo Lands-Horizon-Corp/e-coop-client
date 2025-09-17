@@ -34,7 +34,6 @@ import { Route as landingAboutRouteImport } from './routes/(landing)/about'
 import { Route as OnboardingOrganizationRouteRouteImport } from './routes/onboarding/organization/route'
 import { Route as landingPolicyRouteRouteImport } from './routes/(landing)/policy/route'
 import { Route as OnboardingOrganizationIndexRouteImport } from './routes/onboarding/organization/index'
-import { Route as landingSubscriptionIndexRouteImport } from './routes/(landing)/subscription/index'
 import { Route as OnboardingOrganizationOrganization_idRouteImport } from './routes/onboarding/organization/$organization_id'
 import { Route as OnboardingCreateBranchOrganization_idRouteImport } from './routes/onboarding/create-branch.$organization_id'
 import { Route as AuthPasswordResetResetIdRouteImport } from './routes/auth/password-reset.$resetId'
@@ -250,12 +249,6 @@ const OnboardingOrganizationIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => OnboardingOrganizationRouteRoute,
-  } as any)
-const landingSubscriptionIndexRoute =
-  landingSubscriptionIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => landingSubscriptionRoute,
   } as any)
 const OnboardingOrganizationOrganization_idRoute =
   OnboardingOrganizationOrganization_idRouteImport.update({
@@ -895,7 +888,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
-  '/subscription': typeof landingSubscriptionRouteWithChildren
+  '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
@@ -925,7 +918,6 @@ export interface FileRoutesByFullPath {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganization_idRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
-  '/subscription/': typeof landingSubscriptionIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
@@ -1007,6 +999,7 @@ export interface FileRoutesByTo {
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
+  '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
@@ -1037,7 +1030,6 @@ export interface FileRoutesByTo {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganization_idRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
-  '/subscription': typeof landingSubscriptionIndexRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
@@ -1123,7 +1115,7 @@ export interface FileRoutesById {
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/developers': typeof landingDevelopersRoute
   '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
-  '/(landing)/subscription': typeof landingSubscriptionRouteWithChildren
+  '/(landing)/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
@@ -1154,7 +1146,6 @@ export interface FileRoutesById {
   '/auth/password-reset/$resetId': typeof AuthPasswordResetResetIdRoute
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganization_idRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
-  '/(landing)/subscription/': typeof landingSubscriptionIndexRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
@@ -1272,7 +1263,6 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
-    | '/subscription/'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
@@ -1354,6 +1344,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/developers'
     | '/frequently-asked-questions'
+    | '/subscription'
     | '/account-profile/activity-logs'
     | '/account-profile/profile'
     | '/account-profile/qr'
@@ -1384,7 +1375,6 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
-    | '/subscription'
     | '/onboarding/organization'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/dashboard'
@@ -1500,7 +1490,6 @@ export interface FileRouteTypes {
     | '/auth/password-reset/$resetId'
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
-    | '/(landing)/subscription/'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
@@ -1753,13 +1742,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding/organization/'
       preLoaderRoute: typeof OnboardingOrganizationIndexRouteImport
       parentRoute: typeof OnboardingOrganizationRouteRoute
-    }
-    '/(landing)/subscription/': {
-      id: '/(landing)/subscription/'
-      path: '/'
-      fullPath: '/subscription/'
-      preLoaderRoute: typeof landingSubscriptionIndexRouteImport
-      parentRoute: typeof landingSubscriptionRoute
     }
     '/onboarding/organization/$organization_id': {
       id: '/onboarding/organization/$organization_id'
@@ -2433,24 +2415,13 @@ const landingPolicyRouteRouteChildren: landingPolicyRouteRouteChildren = {
 const landingPolicyRouteRouteWithChildren =
   landingPolicyRouteRoute._addFileChildren(landingPolicyRouteRouteChildren)
 
-interface landingSubscriptionRouteChildren {
-  landingSubscriptionIndexRoute: typeof landingSubscriptionIndexRoute
-}
-
-const landingSubscriptionRouteChildren: landingSubscriptionRouteChildren = {
-  landingSubscriptionIndexRoute: landingSubscriptionIndexRoute,
-}
-
-const landingSubscriptionRouteWithChildren =
-  landingSubscriptionRoute._addFileChildren(landingSubscriptionRouteChildren)
-
 interface landingRouteRouteChildren {
   landingPolicyRouteRoute: typeof landingPolicyRouteRouteWithChildren
   landingAboutRoute: typeof landingAboutRoute
   landingContactRoute: typeof landingContactRoute
   landingDevelopersRoute: typeof landingDevelopersRoute
   landingFrequentlyAskedQuestionsRoute: typeof landingFrequentlyAskedQuestionsRoute
-  landingSubscriptionRoute: typeof landingSubscriptionRouteWithChildren
+  landingSubscriptionRoute: typeof landingSubscriptionRoute
   landingIndexRoute: typeof landingIndexRoute
 }
 
@@ -2460,7 +2431,7 @@ const landingRouteRouteChildren: landingRouteRouteChildren = {
   landingContactRoute: landingContactRoute,
   landingDevelopersRoute: landingDevelopersRoute,
   landingFrequentlyAskedQuestionsRoute: landingFrequentlyAskedQuestionsRoute,
-  landingSubscriptionRoute: landingSubscriptionRouteWithChildren,
+  landingSubscriptionRoute: landingSubscriptionRoute,
   landingIndexRoute: landingIndexRoute,
 }
 
