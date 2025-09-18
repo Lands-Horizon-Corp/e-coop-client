@@ -93,6 +93,8 @@ export const QuickTransferTransactionForm = ({
             ...defaultValues,
             account: defaultAccount,
             account_id: defaultAccount?.id || undefined,
+            payment_type_id:
+                settings_payment_type_default_value_id || undefined,
         },
     })
 
