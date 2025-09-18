@@ -227,7 +227,7 @@ class ErrorBoundary extends React.Component<
     render() {
         if (this.state.hasError) {
             return (
-                <div className="text-red-500">
+                <div className="text-destructive">
                     Error rendering markdown content.
                 </div>
             )

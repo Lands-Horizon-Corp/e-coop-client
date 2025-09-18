@@ -318,7 +318,7 @@ export const CreateUpdateBranchByOrgForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 name="is_main_branch"
-                                className="col-span-2 bg-red-500"
+                                className="col-span-2 bg-destructive"
                                 label="Set as Main Branch"
                                 hiddenFields={formProps.hiddenFields}
                                 render={({ field }) => {

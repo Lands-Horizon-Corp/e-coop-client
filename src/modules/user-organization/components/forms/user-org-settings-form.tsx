@@ -303,8 +303,8 @@ const UserOrgSettingsForm = ({
                     {/* Withdrawal and Balance Settings */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
-                            <div className="size-fit rounded-full bg-red-100 p-2 dark:bg-red-900/20">
-                                <BillIcon className="h-5 w-5 text-red-600 dark:text-red-400" />
+                            <div className="size-fit rounded-full bg-destructive/40 p-2 dark:bg-red-900/20">
+                                <BillIcon className="h-5 w-5 text-destructive dark:text-destructive" />
                             </div>
                             <div>
                                 <h3 className="font-semibold">

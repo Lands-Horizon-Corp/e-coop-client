@@ -50,7 +50,7 @@ export const ValueChecklistMeter: React.FC<ValueChecklistMeterProps> = ({
     }, [strength, checkList])
 
     const getStrengthColor = (percentage: number) => {
-        if (percentage <= 25) return 'bg-red-500' // Weak
+        if (percentage <= 25) return 'bg-destructive' // Weak
         if (percentage <= 50) return 'bg-orange-500' // Okay
         if (percentage <= 75) return 'bg-amber-500' // Good
         return 'bg-emerald-500' // Great

@@ -867,7 +867,7 @@ const AccountsTableColumns = (
                         className={cn(
                             interest_deduction === InterestDeductionEnum.Above
                                 ? 'text-blue-500'
-                                : 'text-red-400'
+                                : 'text-destructive'
                         )}
                     >
                         {interest_deduction}
@@ -875,7 +875,7 @@ const AccountsTableColumns = (
                     {interest_deduction === InterestDeductionEnum.Above ? (
                         <ArrowUpLong className="text-blue-400" />
                     ) : (
-                        <ArrowUpLong className="rotate-180 text-red-400" />
+                        <ArrowUpLong className="rotate-180 text-destructive" />
                     )}
                 </div>
             ),

@@ -23,8 +23,8 @@ const apiMethodVariants = cva(
                     'dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800 dark:hover:bg-yellow-900/30',
                 ],
                 delete: [
-                    'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',
-                    'dark:bg-red-900/20 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/30',
+                    'bg-destructive/40 text-destructive/70 border-red-200 hover:bg-destructive/70',
+                    'dark:bg-red-900/20 dark:text-destructive dark:border-red-800 dark:hover:bg-red-900/30',
                 ],
                 patch: [
                     'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200',

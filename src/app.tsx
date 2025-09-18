@@ -15,6 +15,7 @@ import SpySvg from '../src/assets/spy.svg';
 import PageContainer from './components/containers/page-container';
 import Image from './components/image';
 import LoadingSpinner from './components/spinners/loading-spinner';
+import { APP_ENV } from './constants';
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
 import { routeTree } from './routeTree.gen';
 
@@ -59,7 +60,7 @@ const App = () => {
         },
     });
 
-    if (!isAllowed || isChecking)
+    if ((!isAllowed || isChecking) && APP_ENV !== 'development')
         return (
             <PageContainer className="w-screen h-dvh items-center justify-center gap-y-4 text-muted-foreground/70">
                 {isChecking ? (

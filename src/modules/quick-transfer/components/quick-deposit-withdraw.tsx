@@ -45,7 +45,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
         mx-5 my-3 w-16 h-2 relative rounded-xl
         ${
             mode === 'withdraw'
-                ? 'bg-red-400 before:bg-red-400 before:content-[""]'
+                ? 'bg-destructive before:bg-destructive before:content-[""]'
                 : 'bg-blue-400 before:bg-blue-400 before:content-[""]'
         }
            before:absolute before:w-16 before:h-2 before:blur-sm before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2

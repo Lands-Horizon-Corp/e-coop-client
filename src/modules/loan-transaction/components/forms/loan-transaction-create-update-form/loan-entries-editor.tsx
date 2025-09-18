@@ -507,7 +507,9 @@ const LoanEntriesEditor = forwardRef<
                         <TableCell>
                             <div
                                 className={`w-3 h-3 rounded-full ${
-                                    isBalanced ? 'bg-green-500' : 'bg-red-500'
+                                    isBalanced
+                                        ? 'bg-green-500'
+                                        : 'bg-destructive'
                                 }`}
                             />
                         </TableCell>

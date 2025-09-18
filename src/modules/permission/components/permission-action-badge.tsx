@@ -33,8 +33,8 @@ const permissionActionVariants = cva(
                     'dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800 dark:hover:bg-amber-900'
                 ),
                 Delete: cn(
-                    'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',
-                    'dark:bg-red-950 dark:text-red-300 dark:border-red-800 dark:hover:bg-red-900'
+                    'bg-destructive/40 text-destructive/70 border-red-200 hover:bg-destructive/70',
+                    'dark:bg-red-950 dark:text-destructive dark:border-red-800 dark:hover:bg-red-900'
                 ),
                 Export: cn(
                     'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200',

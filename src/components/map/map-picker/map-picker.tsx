@@ -498,7 +498,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
     if (!GOOGLE_MAPS_API_KEY) {
         return (
-            <div className="rounded border border-red-200 p-2 text-sm text-red-600">
+            <div className="rounded border border-red-200 p-2 text-sm text-destructive">
                 GOOGLE_MAPS_API_KEY is missing
             </div>
         )
@@ -506,7 +506,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
     if (loadError) {
         return (
-            <div className="rounded border border-red-200 p-2 text-sm text-red-600">
+            <div className="rounded border border-red-200 p-2 text-sm text-destructive">
                 Failed to load Google Maps
             </div>
         )
