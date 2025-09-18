@@ -33,20 +33,20 @@ const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
                 <div className="shrink-0 gap-x-1 items-center flex">
                     <PreviewMediaWrapper media={memberProfile.media}>
                         <ImageDisplay
-                            className="size-28 rounded-sm"
+                            className="size-18 rounded-sm"
                             src={memberProfile.media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <PreviewMediaWrapper media={memberProfile.signature_media}>
                         <ImageDisplay
-                            className="size-28 rounded-sm"
+                            className="size-18 rounded-sm"
                             imageClassName="bg-gray-300"
                             src={memberProfile.signature_media?.download_url}
                         />
                     </PreviewMediaWrapper>
                 </div>
-                <div className="flex-1 ">
-                    <div className="flex p-4 items-center justify-between">
+                <div className="flex-1">
+                    <div className="flex items-center justify-between">
                         <div className="w-full flex items-center gap-x-2 justify-between">
                             <div className="flex w-fit items-center gap-x-2">
                                 <h2 className="truncate font-bold">
@@ -80,7 +80,7 @@ const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
                     </div>
 
                     <Separator />
-                    <div className="flex  justify-between space-x-5 pr-5 pt-2 text-xs">
+                    <div className="flex justify-between space-x-5 pr-5 pt-2 text-xs">
                         <div>
                             <h3 className="mb-1 font-medium text-muted-foreground">
                                 Contact Number

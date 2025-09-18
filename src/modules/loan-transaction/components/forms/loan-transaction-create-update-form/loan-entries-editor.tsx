@@ -21,11 +21,15 @@ import {
     PencilFillIcon,
     PlusIcon,
     RenderIcon,
+    ShapesIcon,
     TrashIcon,
 } from '@/components/icons'
 import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 import {
     Table,
     TableBody,
@@ -364,7 +368,7 @@ const LoanEntriesEditor = forwardRef<
                         </p>
                     )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center shrink-0 flex-1 justify-end gap-2">
                     <div
                         className={`text-xs px-2 py-1 rounded-sm ${
                             isBalanced
@@ -390,8 +394,42 @@ const LoanEntriesEditor = forwardRef<
                         <CommandShortcut className="bg-accent p-0.5 px-1 text-primary rounded-sm mr-1">
                             Shift + N
                         </CommandShortcut>
-                        to add deduction
+                        to add
                     </p>
+                    <FormFieldWrapper
+                        control={form.control}
+                        name="is_add_on"
+                        className="w-fit"
+                        render={({ field }) => (
+                            <div className="border-input has-data-[state=checked]:border-primary/50 border-2 has-data-[state=checked]:bg-primary/20 duration-200 ease-in-out relative flex w-fit items-center gap-2 rounded-xl px-2 py-0.5 shadow-xs outline-none">
+                                <Switch
+                                    tabIndex={0}
+                                    id="loan-add-on"
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                    aria-describedby={`loan-add-on-description`}
+                                    className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                />
+                                <div className="flex grow items-center gap-3">
+                                    <ShapesIcon className="text-primary size-4" />
+                                    <div className="text-xs flex items-center gap-x-2">
+                                        <Label
+                                            htmlFor={'loan-add-on'}
+                                            className="text-xs"
+                                        >
+                                            Add-On{' '}
+                                        </Label>
+                                        <p
+                                            id="loan-add-on-description"
+                                            className="text-muted-foreground text-xs"
+                                        >
+                                            Include Add-On&apos;s
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    />
                 </div>
             </div>
 
@@ -532,7 +570,7 @@ const LoanEntryRow = memo(
                         tabIndex={0}
                         className="focus:bg-background/20"
                     >
-                        <TableCell>
+                        <TableCell className="py-2 h-fit">
                             <div className="flex flex-col">
                                 <span className="font-medium flex gap-x-1 items-center">
                                     {entry.account?.icon && (
@@ -563,15 +601,15 @@ const LoanEntryRow = memo(
                                 </div>
                             </div>
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right py-2 h-fit">
                             {entry.debit ? `${formatNumber(entry.debit)}` : ''}
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right py-2 h-fit">
                             {entry.credit
                                 ? `${formatNumber(entry.credit)}`
                                 : ''}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="text-right py-2 h-fit">
                             <div className="flex gap-1">
                                 {isEditable && (
                                     <Button
