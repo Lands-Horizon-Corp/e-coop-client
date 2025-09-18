@@ -499,7 +499,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     if (!GOOGLE_MAPS_API_KEY) {
         return (
             <div className="rounded border border-red-200 p-2 text-sm text-red-600">
-                NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is missing
+                GOOGLE_MAPS_API_KEY is missing
             </div>
         )
     }
