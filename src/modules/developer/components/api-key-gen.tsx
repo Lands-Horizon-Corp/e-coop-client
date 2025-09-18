@@ -76,7 +76,7 @@ const APIKeyGen = ({ className }: Props) => {
                     to={'/developers' as string}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline font-medium hover:text-teal-400 underline-offset-4 text-teal-600"
+                    className="underline font-medium hover:text-primary underline-offset-4 text-primary/70"
                 >
                     Developer Policy.
                 </Link>
