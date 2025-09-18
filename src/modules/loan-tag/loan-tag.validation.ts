@@ -1,13 +1,19 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { ICONS } from '@/constants'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const loanTagSchema = z.object({
-    loan_transaction_id: entityIdSchema,
-    name: z.string().min(1).max(50),
-    description: z.string().optional(),
-    category: z.string().optional(),
-    color: z.string().optional(),
-    icon: z.string().optional(),
+export const LoanTagSchema = z.object({
+    id: entityIdSchema.optional(),
+    name: z.string().min(1, 'Loan Tag name is required'),
+    description: z
+        .string()
+        .min(10, 'Min 5 character description')
+        .optional()
+        .transform(descriptionTransformerSanitizer),
+
+    color: z.coerce.string().min(1, 'Color is required'),
+    icon: z.enum(ICONS),
 })
-export type TLoanTagFormValues = z.infer<typeof loanTagSchema>
+
+export type TLoanTagSchema = z.infer<typeof LoanTagSchema>
