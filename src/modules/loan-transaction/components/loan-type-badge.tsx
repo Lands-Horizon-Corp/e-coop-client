@@ -32,7 +32,7 @@ const loanTypeVariants = cva(
                     'dark:bg-green-950 dark:text-green-300 dark:border-green-800 dark:hover:bg-green-900'
                 ),
                 'renewal without deduction': cn(
-                    'bg-teal-100 text-primary/60 border-teal-200 hover:bg-teal-200',
+                    'bg-background text-primary/60 border-teal-200 hover:bg-teal-200',
                     'dark:bg-teal-950 dark:text-primary dark:border-teal-800 dark:hover:bg-teal-900'
                 ),
                 default: cn(
