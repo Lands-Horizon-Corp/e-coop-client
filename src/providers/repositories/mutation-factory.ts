@@ -1,4 +1,5 @@
 import {
+    MutationFunctionContext,
     MutationOptions,
     QueryClient,
     QueryKey,
@@ -19,6 +20,7 @@ type TInvalidationFn<TResponse = unknown, TVariables = unknown> = {
     resultData: TResponse
     variables: TVariables
     queryClient: QueryClient
+    context: MutationFunctionContext
 }
 
 export const createMutationFactory = <
@@ -30,7 +32,10 @@ export const createMutationFactory = <
     defaultInvalidates,
     invalidationFn,
 }: {
-    mutationFn: (variables: TVariables) => Promise<TResponse>
+    mutationFn: (
+        variables: TVariables,
+        context: MutationFunctionContext
+    ) => Promise<TResponse>
     defaultInvalidates?: Array<QueryKey>
     invalidationFn?: (args: TInvalidationFn<TResponse, TVariables>) => void
 }) => {
@@ -49,12 +54,22 @@ export const createMutationFactory = <
             meta: {
                 invalidates: options?.meta?.invalidates || defaultInvalidates,
             },
-            onSuccess: (resultData, variables, context) => {
+            onSuccess: (resultData, variables, onMutateResult, context) => {
                 if (invalidationFn) {
-                    invalidationFn({ resultData, variables, queryClient })
+                    invalidationFn({
+                        resultData,
+                        variables,
+                        queryClient,
+                        context,
+                    })
                 }
 
-                options?.onSuccess?.(resultData, variables, context)
+                options?.onSuccess?.(
+                    resultData,
+                    variables,
+                    onMutateResult,
+                    context
+                )
             },
         })
     }
