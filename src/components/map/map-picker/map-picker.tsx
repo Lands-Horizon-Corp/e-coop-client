@@ -4,6 +4,7 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { GOOGLE_MAPS_API_KEY } from '@/constants'
+import { cn } from '@/helpers'
 import { useTheme } from '@/modules/settings/provider/theme-provider'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
@@ -96,6 +97,7 @@ export interface MapPickerProps {
     _mapContainerStyle?: React.CSSProperties
     /** Button text when no location is selected */
     placeholder?: string
+    viewOnly?: boolean
     /** Button variant */
     variant?:
         | 'default'
@@ -135,6 +137,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     size = 'default',
     disabled = false,
     className,
+    viewOnly = false,
     hideButtonCoordinates = true,
 }) => {
     const { isLoaded, loadError } = useJsApiLoader({
@@ -876,7 +879,12 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="flex gap-2 border-t p-4">
+                                <div
+                                    className={cn(
+                                        'flex gap-2 border-t p-4',
+                                        viewOnly && 'hidden'
+                                    )}
+                                >
                                     <Button
                                         className="flex-1 bg-transparent"
                                         type="button"
@@ -892,6 +900,21 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                         onClick={handleConfirm}
                                     >
                                         Confirm Location
+                                    </Button>
+                                </div>
+                                <div
+                                    className={cn(
+                                        'flex gap-2 border-t p-4',
+                                        !viewOnly && 'hidden'
+                                    )}
+                                >
+                                    <Button
+                                        className="flex-1 bg-transparent"
+                                        type="button"
+                                        variant="outline"
+                                        onClick={handleCancel}
+                                    >
+                                        Close
                                     </Button>
                                 </div>
                             </div>

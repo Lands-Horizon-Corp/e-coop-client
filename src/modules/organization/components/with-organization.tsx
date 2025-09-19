@@ -109,11 +109,6 @@ const UserOrganizationsDashboard = ({
                     Join an Organization
                 </Button>
             </div>
-            <div className="mt-5 w-full px-10">
-                <h4>
-                    You have existing organizations. Choose where to operate.
-                </h4>
-            </div>
             <ScrollArea className="w-full overflow-auto p-10">
                 <Accordion
                     type="single"
