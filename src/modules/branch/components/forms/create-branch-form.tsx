@@ -403,15 +403,13 @@ export const CreateUpdateBranchByOrgForm = ({
                                     const { ref: _ref, ...rest } = field
                                     return (
                                         <FormControl>
-                                            <>
-                                                <TextEditor
-                                                    {...rest}
-                                                    disabled={isLoading}
-                                                    content={field.value ?? ''}
-                                                    textEditorClassName="!h-32"
-                                                    placeholder="Write some description about your branch..."
-                                                />
-                                            </>
+                                            <TextEditor
+                                                {...rest}
+                                                disabled={isLoading}
+                                                content={field.value ?? ''}
+                                                textEditorClassName="!h-32"
+                                                placeholder="Write some description about your branch..."
+                                            />
                                         </FormControl>
                                     )
                                 }}
