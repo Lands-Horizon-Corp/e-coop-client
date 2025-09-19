@@ -96,7 +96,7 @@ export const GradientBackground = memo(
                 {showBackgroundImage && (
                     <ImageDisplay
                         className={cn(
-                            'pointer-events-none absolute top-1/2 -right-[20%] transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-3xl !opacity-30 size-60 -rotate-45 rounded-3xl',
+                            'pointer-events-none absolute top-1/2 -right-[20%] transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-3xl !opacity-30 size-60 -rotate-45 rounded-3xl -z-10',
                             imageBackgroundClassName
                         )}
                         src={mediaUrl}

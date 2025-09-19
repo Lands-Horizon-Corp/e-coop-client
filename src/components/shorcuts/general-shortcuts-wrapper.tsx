@@ -76,7 +76,7 @@ export const GeneralShortcutsWrapper: FC<GeneralShortcutsWrapperProps> = ({
         }
     }, [mode, enableScope, disableScope])
 
-    return <>{children}</>
+    return children
 }
 
 export default GeneralShortcutsWrapper

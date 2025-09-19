@@ -3,6 +3,7 @@ import { IBranch } from '@/modules/branch'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import ImageDisplay from '@/components/image-display'
+import MapPicker from '@/components/map/map-picker/map-picker'
 import { Button } from '@/components/ui/button'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
@@ -36,6 +37,25 @@ export const BranchItem = ({
                             className="text-xs"
                             content={branch.description ?? ''}
                         />
+                        {branch.latitude && branch.longitude && (
+                            <div className="mt-2">
+                                <MapPicker
+                                    value={{
+                                        lat: branch.latitude,
+                                        lng: branch.longitude,
+                                    }}
+                                    onChange={() => {}}
+                                    variant="outline"
+                                    size="sm"
+                                    placeholder="View Branch Location"
+                                    title={`${branch.name} Location`}
+                                    hideButtonCoordinates={true}
+                                    disabled={false}
+                                    viewOnly={true}
+                                    className="text-xs"
+                                />
+                            </div>
+                        )}
                     </div>
                     <Button
                         disabled={!isUserCanJoin}

@@ -45,7 +45,7 @@ const DataTableRowContext = <TData,>({
     canSelect = true,
 }: Props<TData>) => {
     if (!onDelete && !onView && !onEdit && !otherActions) {
-        return <>{children}</>
+        return children
     }
 
     return (

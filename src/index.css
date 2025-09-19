@@ -2,6 +2,21 @@
 @import 'tailwindcss';
 @plugin "tailwindcss-animate";
 
+/* ProseMirror CSS - Required for TipTap editor */
+.ProseMirror {
+    white-space: pre-wrap;
+    outline: none;
+    word-wrap: break-word;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.ProseMirror-focused {
+    outline: none;
+}
+
 /* @tailwind base; */
 
 @custom-variant dark (&:is(.dark *));
