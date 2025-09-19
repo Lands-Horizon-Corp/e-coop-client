@@ -408,8 +408,6 @@ const LoanTransactionCreateUpdateForm = ({
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
 
-    console.log(form.formState.errors)
-
     return (
         <Form {...form}>
             <form
@@ -994,6 +992,91 @@ const LoanTransactionCreateUpdateForm = ({
                                                     )}
                                                 />
                                             </div>
+                                            {mode_of_payment === 'monthly' && (
+                                                <FormFieldWrapper
+                                                    control={form.control}
+                                                    name="mode_of_payment_monthly_exact_day"
+                                                    className="mb-1"
+                                                    render={({ field }) => (
+                                                        <div
+                                                            className="group inline-flex items-center gap-2"
+                                                            data-state={
+                                                                field.value
+                                                                    ? 'checked'
+                                                                    : 'unchecked'
+                                                            }
+                                                        >
+                                                            <span
+                                                                id={`${field.name}-off`}
+                                                                className="group-data-[state=checked]:text-muted-foreground/70 flex-1 text-nowrap cursor-pointer text-right text-sm font-medium"
+                                                                aria-controls={
+                                                                    field.name
+                                                                }
+                                                                onClick={() =>
+                                                                    field.onChange(
+                                                                        false
+                                                                    )
+                                                                }
+                                                            >
+                                                                By 30 Days
+                                                            </span>
+                                                            <Switch
+                                                                id={field.name}
+                                                                checked={
+                                                                    field.value
+                                                                }
+                                                                onCheckedChange={(
+                                                                    switchValue
+                                                                ) => {
+                                                                    alert(
+                                                                        switchValue
+                                                                    )
+                                                                    field.onChange(
+                                                                        switchValue
+                                                                    )
+                                                                }}
+                                                                aria-labelledby={`${field.name}-off ${field.name}-on`}
+                                                            />
+                                                            <span
+                                                                id={`${field.name}-on`}
+                                                                className="group-data-[state=unchecked]:text-muted-foreground/70 flex-1 cursor-pointer text-left text-sm font-medium"
+                                                                aria-controls={
+                                                                    field.name
+                                                                }
+                                                                onClick={() =>
+                                                                    field.onChange(
+                                                                        true
+                                                                    )
+                                                                }
+                                                            >
+                                                                Exact Day
+                                                            </span>
+                                                        </div>
+                                                        // <div className="inline-flex items-center gap-2">
+                                                        //     <Switch
+                                                        //         id={field.name}
+                                                        //         aria-label="Toggle exact day"
+                                                        //         checked={
+                                                        //             field.value ||
+                                                        //             false
+                                                        //         }
+                                                        //         onCheckedChange={
+                                                        //             field.onChange
+                                                        //         }
+                                                        //         className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                                        //     />
+                                                        //     <Label
+                                                        //         htmlFor={
+                                                        //             field.name
+                                                        //         }
+                                                        //         className="text-sm font-medium"
+                                                        //     >
+
+                                                        //     </Label>
+                                                        // </div>
+                                                    )}
+                                                />
+                                            )}
                                             {mode_of_payment === 'day' && (
                                                 <>
                                                     <FormFieldWrapper
