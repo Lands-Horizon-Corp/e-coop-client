@@ -1,7 +1,13 @@
 import z from 'zod'
 
-import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
+import {
+    EntityIdSchema,
+    entityIdSchema,
+    stringDateWithTransformSchema,
+} from '@/validation'
 
+import { ComakerCollateralSchema } from '../comaker-collateral'
+import { ComakerMemberProfileSchema } from '../comaker-member-profile'
 import { LoanClearanceAnalysisSchema } from '../loan-clearance-analysis'
 import { LoanClearanceAnalysisInstitutionSchema } from '../loan-clearance-analysis-institution'
 import { LoanTermsAndConditionAmountReceiptSchema } from '../loan-terms-and-condition-amount-receipt'
@@ -71,8 +77,13 @@ const WithComaker = z.discriminatedUnion(
     [
         z.object({
             comaker_type: z.literal('member'),
-            comaker_member_profile_id: z.uuidv4('Comaker member is required'),
-            comaker_member_profile: z.any(),
+            comaker_member_profiles: z
+                .array(ComakerMemberProfileSchema)
+                .min(1, 'Comaker Member must have atleast 1 Member')
+                .default([]),
+            comaker_member_profiles_deleted: z
+                .array(entityIdSchema)
+                .default([]),
         }),
         z.object({
             comaker_type: z.literal('deposit'),
@@ -83,8 +94,14 @@ const WithComaker = z.discriminatedUnion(
         }),
         z.object({
             comaker_type: z.literal('others'),
-            comaker_collateral_id: entityIdSchema,
-            comaker_collateral_description: z.string().optional(),
+            comaker_collaterals: z
+                .array(ComakerCollateralSchema)
+                .min(1, 'Comaker collateral must at least have 1 collateral')
+                .default([]),
+            comaker_collaterals_deleted: z.array(entityIdSchema).default([]),
+        }),
+        z.object({
+            comaker_type: z.literal('none'),
         }),
     ],
     { error: 'Invalid comaker' }
@@ -100,9 +117,11 @@ export const LoanTransactionSchema = z
 
         loan_status_id: entityIdSchema.optional(),
 
-        comaker_type: z.enum(LOAN_COMAKER_TYPE, {
-            error: 'Please select valid comaker',
-        }),
+        comaker_type: z
+            .enum(LOAN_COMAKER_TYPE, {
+                error: 'Please select valid comaker',
+            })
+            .default('none'),
 
         collector_place: z.enum(LOAN_COLLECTOR_PLACE, {
             error: 'Please select valid collector place',
@@ -120,17 +139,19 @@ export const LoanTransactionSchema = z
         amortization_amount: z.coerce.number().optional(),
         is_add_on: z.boolean().optional(),
 
-        applied_1: z.coerce.number('Invalid amount'),
+        applied_1: z.coerce
+            .number('Invalid amount')
+            .min(1, 'Loan amount must not be 0'), // AMOUNT
         applied_2: z.coerce.number('Invalid amount').optional(),
 
-        account_id: entityIdSchema.optional(),
+        account_id: EntityIdSchema('Loan Account is required'),
         account: z.any(),
 
         loan_transaction_entries: z.array(LoanTransactionEntrySchema),
         loan_transaction_entries_deleted: z.array(entityIdSchema).optional(), // not saved in backend, just for indicator what to delete
 
-        member_profile_id: entityIdSchema.optional(),
-        member_profile: z.any().optional(), // just for member prorifle picker (client side)
+        member_profile_id: EntityIdSchema('Member'),
+        member_profile: z.any(), // just for member prorifle picker (client side)
 
         member_joint_account_id: entityIdSchema.optional(),
         signature_media_id: entityIdSchema.optional(),

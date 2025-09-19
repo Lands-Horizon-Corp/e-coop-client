@@ -3,7 +3,8 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { ICollateral } from '../collateral'
+import { IComakerCollateral } from '../comaker-collateral'
+import { IComakerMemberProfile } from '../comaker-member-profile'
 import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
 import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
 import { ILoanPurpose } from '../loan-purpose'
@@ -65,11 +66,13 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     mode_of_payment_semi_monthly_pay_2: number
 
     comaker_type: TLoanComakerType
+
+    // Pag comaker type ay deposit
     comaker_deposit_member_accounting_ledger_id?: TEntityId
     comaker_deposit_member_accounting_ledger?: IMemberAccountingLedger
-    comaker_collateral_id?: TEntityId
-    comaker_collateral?: ICollateral
-    comaker_collateral_description: string
+
+    comaker_collaterals?: IComakerCollateral[] // pag comaker ay collaterals
+    comaker_member_profiles: IComakerMemberProfile[] // pag comaker ay member
 
     collector_place: TLoanCollectorPlace
 

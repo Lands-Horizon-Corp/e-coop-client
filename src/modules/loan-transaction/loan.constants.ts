@@ -21,7 +21,12 @@ export const WEEKDAYS = [
 
 export const LOAN_COLLECTOR_PLACE = ['office', 'field'] as const
 
-export const LOAN_COMAKER_TYPE = ['member', 'deposit', 'others'] as const
+export const LOAN_COMAKER_TYPE = [
+    'none',
+    'member',
+    'deposit',
+    'others',
+] as const
 
 export const LOAN_TYPE = [
     'standard',
