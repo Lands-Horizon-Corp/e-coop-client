@@ -72,6 +72,8 @@ export interface IBranchSettings extends IBaseEntityMeta {
 
     default_member_type_id: TEntityId
     default_member_type: IMemberType
+
+    loan_applied_equal_to_balance: boolean
 }
 
 export type IBranchSettingsRequest = z.infer<typeof BranchSettingsSchema>

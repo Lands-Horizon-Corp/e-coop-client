@@ -23,6 +23,7 @@ import {
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -95,6 +96,8 @@ const BranchSettingsForm = ({
             check_voucher_or_iteration: 0,
             check_voucher_or_unique: false,
             check_voucher_use_date_or: false,
+
+            loan_applied_equal_to_balance: true,
             ...formProps.defaultValues,
         },
     })
@@ -914,6 +917,53 @@ const BranchSettingsForm = ({
                                 )}
                             />
                         </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Additional OR Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-blue-100 p-2 dark:bg-blue-900/20">
+                                <CreditCardIcon className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">Loan Setting</h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure additional loan settings
+                                </p>
+                            </div>
+                        </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="loan_applied_equal_to_balance"
+                            render={({ field }) => (
+                                <Label
+                                    htmlFor={field.name}
+                                    className="hover:bg-accent/40 ease-in-out duration-150 cursor-pointer flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/80"
+                                >
+                                    <Checkbox
+                                        id={field.name}
+                                        checked={field.value}
+                                        onCheckedChange={(checkState) =>
+                                            field.onChange(checkState)
+                                        }
+                                    />
+                                    <div className="grid gap-1.5 font-normal">
+                                        <p className="text-sm leading-none font-medium">
+                                            Enable Loan Applied = Deposit
+                                            Balance
+                                        </p>
+                                        <p className="text-muted-foreground text-sm">
+                                            When comaker is set to deposit, the
+                                            selected deposit balance will be use
+                                            as the applied amount
+                                        </p>
+                                    </div>
+                                </Label>
+                            )}
+                        />
                     </div>
 
                     <Separator />

@@ -56,6 +56,8 @@ export const BranchSettingsSchema = z.object({
     check_voucher_use_date_or: z.boolean(),
 
     default_member_type_id: entityIdSchema,
+
+    loan_applied_equal_to_balance: z.boolean().default(true),
 })
 
 export type TBranchSettingsSchema = z.infer<typeof BranchSettingsSchema>
