@@ -84,17 +84,22 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
                             mode === 'payment' ? 'px-2 ' : 'p-2'
                         )}
                     >
-                        <Button size={'sm'} variant={'secondary'}>
+                        <Button
+                            size={'sm'}
+                            variant={'secondary'}
+                            className="text-xs"
+                        >
                             <Link
                                 to={
                                     '/org/$orgname/branch/$branchname/dashboard' as string
                                 }
-                                className="w-full"
+                                className="w-"
                             >
                                 Return to Dashboard
                             </Link>
                         </Button>
                         <Button
+                            className="text-xs"
                             size={'sm'}
                             onClick={(e) => {
                                 e.preventDefault()

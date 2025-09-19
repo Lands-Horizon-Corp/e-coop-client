@@ -239,7 +239,7 @@ export const QuickTransferTransactionForm = ({
 
     return (
         <Form {...form}>
-            <form onSubmit={handleSubmit} className="min-w-[300px] relative">
+            <form onSubmit={handleSubmit} className="min-w-[200px] relative">
                 <TransactionNoFoundBatch mode="deposit-withdrawal" />
                 <div className="flex flex-end">
                     <CommandShortcut className="rounded-md bg-primary/20 p-1">
