@@ -116,11 +116,6 @@ export interface MapPickerProps {
 }
 
 const defaultCenter: LatLng = { lat: 37.7749, lng: -122.4194 }
-// const defaultMapContainerStyle: React.CSSProperties = {
-//     width: '100%',
-//     height: '400px',
-//     borderRadius: '8px',
-// }
 
 export const MapPicker: React.FC<MapPickerProps> = ({
     value,
@@ -440,7 +435,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
     const onMapClick = useCallback(
         (e: google.maps.MapMouseEvent) => {
-            if (e.latLng) {
+            if (e.latLng && viewOnly === false) {
                 const loc: LatLng = { lat: e.latLng.lat(), lng: e.latLng.lng() }
                 setSelectedLocation(loc)
                 createOrMoveMarker(loc)
@@ -448,7 +443,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                 setShowSuggestions(false)
             }
         },
-        [createOrMoveMarker, reverseGeocode]
+        [createOrMoveMarker, reverseGeocode, viewOnly]
     )
 
     // Sync internal state with external value
@@ -645,7 +640,12 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                             <div className="flex h-full flex-col">
                                 <div className="flex-1 space-y-4 overflow-y-auto p-6">
                                     {/* Search Section */}
-                                    <div className="space-y-2">
+                                    <div
+                                        className={cn(
+                                            'space-y-2',
+                                            viewOnly && 'hidden'
+                                        )}
+                                    >
                                         <Label htmlFor="location-search">
                                             Search Location
                                         </Label>
