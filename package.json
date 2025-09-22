@@ -109,6 +109,7 @@
         "postcss-loader": "^8.2.0",
         "qrcode.react": "^4.2.0",
         "query-string": "^9.3.1",
+        "radix-ui": "^1.4.3",
         "react": "^19.1.1",
         "react-aria-components": "^1.12.2",
         "react-circle-flags": "^0.0.23",

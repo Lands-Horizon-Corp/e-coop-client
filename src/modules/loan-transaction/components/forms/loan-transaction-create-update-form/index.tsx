@@ -81,6 +81,7 @@ import {
     LoanTransactionSchema,
     TLoanTransactionSchema,
 } from '../../../loan-transaction.validation'
+import LoanStatusIndicator from '../../loan-status-indicator'
 import WeekdayCombobox from '../../weekday-combobox'
 import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanComakerSection from './loan-comaker-section'
@@ -408,6 +409,12 @@ const LoanTransactionCreateUpdateForm = ({
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
 
+    const [printedDate, approvedDate, releasedDate] = form.watch([
+        'printed_date',
+        'approved_date',
+        'released_date',
+    ])
+
     return (
         <Form {...form}>
             <form
@@ -432,12 +439,23 @@ const LoanTransactionCreateUpdateForm = ({
                                 </p>
                             </div>
 
-                            <p className="text-xs p-1 px-2 bg-muted text-muted-foreground rounded-sm">
-                                Select or Replace Member
-                                <CommandShortcut className="bg-accent p-0.5 px-1 text-primary rounded-sm ml-1">
-                                    CTRL + Enter
-                                </CommandShortcut>
-                            </p>
+                            <div className="flex items-center gap-x-1">
+                                <LoanStatusIndicator
+                                    loanTransactionDates={{
+                                        printed_date: printedDate,
+                                        approved_date: approvedDate,
+                                        released_date: releasedDate,
+                                    }}
+                                />
+                                {printedDate === undefined && (
+                                    <p className="text-xs p-1 px-2 bg-muted text-muted-foreground/70 rounded-sm">
+                                        Select or Replace Member
+                                        <CommandShortcut className="bg-accent p-0.5 px-1 text-primary rounded-sm ml-1">
+                                            CTRL + Enter
+                                        </CommandShortcut>
+                                    </p>
+                                )}
+                            </div>
                         </div>
                         <FormFieldWrapper
                             control={form.control}
@@ -549,7 +567,7 @@ const LoanTransactionCreateUpdateForm = ({
                                         size={16}
                                         aria-hidden="true"
                                     />
-                                    Loan Entries
+                                    Loan Details
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="comaker"
@@ -638,7 +656,7 @@ const LoanTransactionCreateUpdateForm = ({
                                         <FormFieldWrapper
                                             control={form.control}
                                             name="loan_status_id"
-                                            label="Loan Status"
+                                            label="Loan Tracking"
                                             labelClassName="text-right grow block"
                                             className="w-fit"
                                             render={({ field }) => (
@@ -1027,14 +1045,11 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 }
                                                                 onCheckedChange={(
                                                                     switchValue
-                                                                ) => {
-                                                                    alert(
-                                                                        switchValue
-                                                                    )
+                                                                ) =>
                                                                     field.onChange(
                                                                         switchValue
                                                                     )
-                                                                }}
+                                                                }
                                                                 aria-labelledby={`${field.name}-off ${field.name}-on`}
                                                             />
                                                             <span

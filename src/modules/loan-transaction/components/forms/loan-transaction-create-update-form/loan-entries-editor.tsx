@@ -22,6 +22,7 @@ import {
     PlusIcon,
     RenderIcon,
     ShapesIcon,
+    SwapArrowIcon,
     TrashIcon,
 } from '@/components/icons'
 import Modal from '@/components/modals/modal'
@@ -353,7 +354,20 @@ const LoanEntriesEditor = forwardRef<
         <fieldset disabled={isDisabled} className="relative">
             <div className="flex items-center justify-between mb-4">
                 <div>
-                    <p className="font-medium">Loan Entries</p>
+                    <p className="font-medium">
+                        Loan Entries
+                        <span
+                            className={`text-xs px-2 py-1 ml-2 rounded-sm ${
+                                isBalanced
+                                    ? 'bg-primary/20 dark:bg-primary/20'
+                                    : 'bg-destructive text-destructive-foreground'
+                            }`}
+                        >
+                            {isBalanced
+                                ? '✓ Balanced'
+                                : `⚠ Difference: ${formatNumber(difference)}`}
+                        </span>
+                    </p>
                     {deductionsTotal > 0 && (
                         <p className="text-xs text-muted-foreground">
                             Net cash: {formatNumber(netCashAmount)}
@@ -369,17 +383,16 @@ const LoanEntriesEditor = forwardRef<
                     )}
                 </div>
                 <div className="flex items-center shrink-0 flex-1 justify-end gap-2">
-                    <div
-                        className={`text-xs px-2 py-1 rounded-sm ${
-                            isBalanced
-                                ? 'bg-primary/20 dark:bg-primary/20'
-                                : 'bg-destructive text-destructive-foreground'
-                        }`}
+                    <Button
+                        size="sm"
+                        tabIndex={0}
+                        type="button"
+                        variant="ghost"
+                        className="size-fit px-2 py-0.5 text-xs"
+                        onClick={() => addChargeModalState.onOpenChange(true)}
                     >
-                        {isBalanced
-                            ? '✓ Balanced'
-                            : `⚠ Difference: ${formatNumber(difference)}`}
-                    </div>
+                        Change Cash Account <SwapArrowIcon className="inline" />
+                    </Button>
                     <Button
                         size="sm"
                         type="button"

@@ -103,6 +103,8 @@ export const ICONS = [
     'Calendar Number',
     'Money Trend',
     'Trend Up',
+    'Printer Fill',
+    'Swap Arrow',
     'Trend Down',
     'Calculator',
     'Savings',

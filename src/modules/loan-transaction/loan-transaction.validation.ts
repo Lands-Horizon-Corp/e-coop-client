@@ -60,9 +60,16 @@ const WithWeekdays = z.discriminatedUnion(
                 }
             ),
         z.object({
+            mode_of_payment: z.literal('monthly'),
+            mode_of_payment_monthly_exact_day: z.boolean().default(false),
+        }),
+        z.object({
             mode_of_payment: z.enum(
                 LOAN_MODE_OF_PAYMENT.filter(
-                    (val) => !['weekly', 'day', 'semi-monthly'].includes(val)
+                    (val) =>
+                        !['weekly', 'day', 'semi-monthly', 'monthly'].includes(
+                            val
+                        )
                 )
             ),
         }),
@@ -211,9 +218,9 @@ export const LoanTransactionSchema = z
         appraised_value: z.coerce.number().optional(),
         appraised_value_description: z.string().optional(),
 
-        printed_date: stringDateWithTransformSchema.optional(),
-        approved_date: stringDateWithTransformSchema.optional(),
-        released_date: stringDateWithTransformSchema.optional(),
+        printed_date: stringDateWithTransformSchema.optional(), // if u change this and save, no effect in server
+        approved_date: stringDateWithTransformSchema.optional(), // if u change this and save, no effect in server
+        released_date: stringDateWithTransformSchema.optional(), // if u change this and save, no effect in server
 
         approved_by_signature_media_id: entityIdSchema.optional(),
         approved_by_name: z.string().optional(),

@@ -42,9 +42,13 @@ export type TLoanAmortizationType = (typeof LOAN_AMORTIZATION_TYPE)[number]
 
 export type TComputationType = (typeof COMPUTATION_TYPE)[number]
 
-export interface ILoanTransaction extends IBaseEntityMeta {
-    //add here
+// NOT SERVER/ONLY CLIENT GENERATED
+export type TLoanStatusType = 'draft' | 'printed' | 'approved' | 'released'
 
+export interface ILoanTransaction
+    extends IBaseEntityMeta,
+        ILoanTransactionSignatures,
+        ILoanTransactionStatusDates {
     voucher_no?: string
 
     transaction_batch_id?: TEntityId
@@ -64,6 +68,7 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     mode_of_payment_weekly: TWeekdays
     mode_of_payment_semi_monthly_pay_1: number
     mode_of_payment_semi_monthly_pay_2: number
+    mode_of_payment_monthly_exact_day: boolean
 
     comaker_type: TLoanComakerType
 
@@ -131,11 +136,15 @@ export interface ILoanTransaction extends IBaseEntityMeta {
 
     appraised_value: number
     appraised_value_description: string
+}
 
-    printed_date?: string
-    approved_date?: string
-    released_date?: string
+export interface ILoanTransactionStatusDates {
+    printed_date?: string // Printed
+    approved_date?: string //
+    released_date?: string // Not editable anymore
+}
 
+export interface ILoanTransactionSignatures {
     approved_by_signature_media_id?: TEntityId
     approved_by_signature_media?: IMedia
     approved_by_name: string
