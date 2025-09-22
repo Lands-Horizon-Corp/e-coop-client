@@ -53,7 +53,7 @@ export interface ILoanTransaction
     extends IBaseEntityMeta,
         ILoanTransactionSignatures,
         ILoanTransactionStatusDates {
-    voucher_no?: string
+    voucher?: string
 
     transaction_batch_id?: TEntityId
     transaction_batch?: ITransactionBatch
@@ -113,6 +113,9 @@ export interface ILoanTransaction
     damayan_fund: number
     share_capital: number
     length_of_service: string
+
+    check_number?: string
+    check_date?: string
 
     loan_transaction_entries: ILoanTransactionEntry[]
     loan_transaction_entries_deleted: TEntityId[] // nothing, just for type
@@ -226,10 +229,6 @@ export interface IAmortizationSummary {
 }
 
 export interface ILoanDetails {
-    passbook_no: string
-    member_name: string
-    classification: string
-    investment: number
     due_date: string
     account_applied: number
     voucher: string

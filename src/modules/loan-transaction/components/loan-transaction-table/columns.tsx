@@ -21,7 +21,9 @@ import {
     ILoanTransaction,
     TLoanCollectorPlace,
 } from '../../loan-transaction.types'
+import { resolveLoanDatesToStatus } from '../../loan.utils'
 import { LoanCollectorPlaceBadge } from '../loan-collector-place-badge'
+import LoanApplicationStatusBadge from '../loan-status-badge'
 import { LoanTypeBadge } from '../loan-type-badge'
 
 export const loanStatusGlobalSearchTargets: IGlobalSearchTargets<ILoanTransaction>[] =
@@ -75,25 +77,25 @@ const LoanTransactionTableColumns = (
             minSize: 80,
         },
         {
-            id: 'voucher_no',
-            accessorKey: 'voucher_no',
+            id: 'voucher',
+            accessorKey: 'voucher',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Voucher No.">
+                <DataTableColumnHeader {...props} title="Voucher">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
-                            displayText="Voucher No."
-                            field="voucher_no"
+                            displayText="Voucher"
+                            field="voucher"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { voucher_no },
+                    original: { voucher },
                 },
             }) => (
                 <div>
-                    <CopyWrapper>{voucher_no}</CopyWrapper>
+                    <CopyWrapper>{voucher}</CopyWrapper>
                 </div>
             ),
             enableMultiSort: true,
@@ -208,30 +210,108 @@ const LoanTransactionTableColumns = (
             maxSize: 800,
         },
         {
-            id: 'processor',
-            accessorKey: 'employee_user',
+            id: 'application_status',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Processor">
+                <DataTableColumnHeader {...props} title="Application Status" />
+            ),
+            cell: ({ row: { original } }) => {
+                const applicationStatusType = resolveLoanDatesToStatus(original)
+
+                return (
+                    <LoanApplicationStatusBadge
+                        size="sm"
+                        status={applicationStatusType}
+                    />
+                )
+            },
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 180,
+            minSize: 180,
+            maxSize: 300,
+        },
+        {
+            id: 'applied_1',
+            accessorKey: 'applied_1',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Aplied Amount">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
-                            displayText="Processor"
-                            field="employee_user.full_name"
+                            displayText="Applied Amount"
+                            field="applied_1"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { employee_user },
+                    original: { applied_1 },
+                },
+            }) => (
+                <p className="!text-wrap font-mono text-lg text-right text-muted-foreground">
+                    {formatNumber(applied_1, 0, 1)}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 200,
+            minSize: 200,
+            maxSize: 400,
+        },
+        // {
+        //     id: 'applied_2',
+        //     accessorKey: 'applied_2',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Aplied 2">
+        //             <ColumnActions {...props}>
+        //                 <TextFilter<ILoanTransaction>
+        //                     displayText="Applied 2"
+        //                     field="applied_2"
+        //                 />
+        //             </ColumnActions>
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { applied_2 },
+        //         },
+        //     }) => (
+        //         <p className="!text-wrap text-right text-muted-foreground">
+        //             {formatNumber(applied_2, 0, 1)}
+        //         </p>
+        //     ),
+        //     enableMultiSort: true,
+        //     enableSorting: true,
+        //     enableResizing: true,
+        //     enableHiding: true,
+        //     size: 300,
+        //     minSize: 300,
+        //     maxSize: 800,
+        // },
+        {
+            id: 'loan_type',
+            accessorKey: 'loan_type',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Loan Type">
+                    <ColumnActions {...props}>
+                        <TextFilter<ILoanTransaction>
+                            displayText="Loan Type"
+                            field="loan_type"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { loan_type },
                 },
             }) => (
                 <div className="!text-wrap text-muted-foreground">
-                    {employee_user && (
-                        <ImageNameDisplay
-                            src={employee_user.media_id}
-                            name={employee_user.full_name}
-                        />
-                    )}
+                    {loan_type && <LoanTypeBadge loanType={loan_type} />}
                 </div>
             ),
             enableMultiSort: true,
@@ -285,86 +365,30 @@ const LoanTransactionTableColumns = (
             maxSize: 800,
         },
         {
-            id: 'applied_1',
-            accessorKey: 'applied_1',
+            id: 'processor',
+            accessorKey: 'employee_user',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Aplied 1">
+                <DataTableColumnHeader {...props} title="Processor">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
-                            displayText="Applied 1"
-                            field="applied_1"
+                            displayText="Processor"
+                            field="employee_user.full_name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { applied_1 },
-                },
-            }) => (
-                <p className="!text-wrap text-right text-muted-foreground">
-                    {formatNumber(applied_1, 0, 1)}
-                </p>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 300,
-            minSize: 300,
-            maxSize: 800,
-        },
-        {
-            id: 'applied_2',
-            accessorKey: 'applied_2',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Aplied 2">
-                    <ColumnActions {...props}>
-                        <TextFilter<ILoanTransaction>
-                            displayText="Applied 2"
-                            field="applied_2"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { applied_2 },
-                },
-            }) => (
-                <p className="!text-wrap text-right text-muted-foreground">
-                    {formatNumber(applied_2, 0, 1)}
-                </p>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 300,
-            minSize: 300,
-            maxSize: 800,
-        },
-
-        {
-            id: 'loan_type',
-            accessorKey: 'loan_type',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Loan Type">
-                    <ColumnActions {...props}>
-                        <TextFilter<ILoanTransaction>
-                            displayText="Loan Type"
-                            field="loan_type"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { loan_type },
+                    original: { employee_user },
                 },
             }) => (
                 <div className="!text-wrap text-muted-foreground">
-                    {loan_type && <LoanTypeBadge loanType={loan_type} />}
+                    {employee_user && (
+                        <ImageNameDisplay
+                            src={employee_user.media_id}
+                            name={employee_user.full_name}
+                        />
+                    )}
                 </div>
             ),
             enableMultiSort: true,
@@ -375,7 +399,6 @@ const LoanTransactionTableColumns = (
             minSize: 300,
             maxSize: 800,
         },
-
         {
             id: 'collector_place',
             accessorKey: 'collector_place',

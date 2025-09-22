@@ -4,9 +4,9 @@ import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
 import {
     BadgeCheckFillIcon,
     CheckIcon,
-    FileFillIcon,
     PencilFillIcon,
     PrinterFillIcon,
+    ThumbsUpIcon,
 } from '@/components/icons'
 import {
     Popover,
@@ -41,7 +41,11 @@ const LoanStatusIndicator = ({ className, loanTransactionDates }: Props) => {
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <LoanStatusBadge size="sm" status={resolvedLoanStatus} />
+                <LoanStatusBadge
+                    size="sm"
+                    className="cursor-pointer"
+                    status={resolvedLoanStatus}
+                />
             </PopoverTrigger>
             <PopoverContent
                 className={cn(
@@ -50,10 +54,11 @@ const LoanStatusIndicator = ({ className, loanTransactionDates }: Props) => {
                 )}
             >
                 <div className="space-y-2 px-3 py-2">
-                    <p className="text-sm font-semibold">Loan Status</p>
+                    <p className="text-sm font-semibold">
+                        Loan Application Status
+                    </p>
                     <p className="text-xs text-muted-foreground">
-                        These loan status indicates what process the loan has
-                        completed. This is an auto generated status by system.
+                        This is an auto generated status by system.
                     </p>
                 </div>
                 <Separator />
@@ -86,7 +91,7 @@ export const LoanStatusIndicatorDetails = ({
             key: 3,
             label: 'Approved',
             date: approved_date,
-            icon: <FileFillIcon className="inline text-accent" />,
+            icon: <ThumbsUpIcon className="inline text-accent" />,
             description: 'Your loan was approved',
         },
         {

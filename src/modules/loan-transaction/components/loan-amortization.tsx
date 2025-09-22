@@ -73,62 +73,24 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                     <div className="grid grid-cols-2 gap-4 text-sm mt-4">
                         <div>
                             <p className="text-xs text-muted-foreground">
-                                Name
-                            </p>
-                            <p>
-                                {data?.loan_details?.member_name || (
-                                    <span className="text-muted-foreground/50 text-xs">
-                                        none
-                                    </span>
-                                )}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p className="text-xs text-muted-foreground">
-                                Passbook
-                            </p>
-                            <p>
-                                {data?.loan_details.passbook_no || (
-                                    <span className="text-muted-foreground/50 text-xs">
-                                        none
-                                    </span>
-                                )}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p className="text-xs text-muted-foreground">
-                                Classification
-                            </p>
-                            <p>
-                                {data?.loan_details.classification || (
-                                    <span className="text-muted-foreground/50 text-xs">
-                                        none
-                                    </span>
-                                )}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p className="text-xs text-muted-foreground">
-                                Investment
-                            </p>
-                            <p>
-                                {formatNumber(
-                                    data?.loan_details.investment || 0
-                                )}
-                            </p>
-                        </div>
-
-                        <div>
-                            <p className="text-xs text-muted-foreground">
                                 Amount Applied
                             </p>
                             <p>
                                 {formatNumber(
                                     data?.loan_details.account_applied || 0,
                                     2
+                                )}
+                            </p>
+                        </div>
+                        <div className="col-span-1">
+                            <p className="text-xs text-muted-foreground">
+                                <TicketIcon className="inline" /> Voucher
+                            </p>
+                            <p>
+                                {data?.loan_details?.voucher || (
+                                    <span className="text-muted-foreground/50 text-xs">
+                                        none
+                                    </span>
                                 )}
                             </p>
                         </div>
@@ -139,18 +101,6 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                             <p>
                                 {data?.loan_details.due_date &&
                                     toReadableDate(data?.loan_details.due_date)}
-                            </p>
-                        </div>
-                        <div className="col-span-2">
-                            <p className="text-xs text-muted-foreground">
-                                <TicketIcon className="inline" /> Voucher
-                            </p>
-                            <p>
-                                {data?.loan_details?.voucher || (
-                                    <span className="text-muted-foreground/50 text-xs">
-                                        none
-                                    </span>
-                                )}
                             </p>
                         </div>
                     </div>

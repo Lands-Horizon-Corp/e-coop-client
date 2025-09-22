@@ -1,8 +1,10 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -46,8 +48,12 @@ const LoanTransactionPrintForm = ({
         defaultValues: {
             voucher: '',
             check_number: '',
-            check_date: '',
             ...formProps.defaultValues,
+            check_date: formProps?.defaultValues?.check_date
+                ? toInputDateString(
+                      formProps.defaultValues?.check_date || new Date()
+                  )
+                : '',
         },
     })
 
@@ -64,8 +70,16 @@ const LoanTransactionPrintForm = ({
             ...formProps,
         })
 
-    const onSubmit = form.handleSubmit((payload) => {
-        printMutation.mutate({ loanTransactionId, payload })
+    const onSubmit = form.handleSubmit(async (payload) => {
+        toast.promise(
+            printMutation.mutateAsync({ loanTransactionId, payload }),
+            {
+                loading: 'Printing...',
+                success: 'Loan Printed',
+                error: (error) =>
+                    `Something went wrong: ${serverRequestErrExtractor({ error })}`,
+            }
+        )
     }, handleFocusError)
 
     const { error: rawError, isPending, reset } = printMutation
@@ -148,8 +162,8 @@ const LoanTransactionPrintForm = ({
 export const LoanTransactionPrintFormModal = ({
     className,
     formProps,
-    title = 'Create Holiday',
-    description = 'Fill out the form to add a new holiday.',
+    title = 'Loan Print',
+    description = 'Print loan',
     ...props
 }: IModalProps & {
     formProps: Omit<ILoanTransactionPrintFormProps, 'className'>

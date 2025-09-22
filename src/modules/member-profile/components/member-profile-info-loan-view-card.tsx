@@ -1,4 +1,6 @@
 import { cn } from '@/helpers'
+import { toReadableDate } from '@/helpers/date-utils'
+import { CakeIcon } from 'lucide-react'
 
 import {
     BadgeCheckIcon,
@@ -24,22 +26,22 @@ interface Props extends IClassProps {
     memberProfile: IMemberProfile
 }
 
-const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
+const MemberProfileInfoViewLoanCard = ({ className, memberProfile }: Props) => {
     const fullInfoViewModal = useModalState()
 
     return (
-        <div className={cn('rounded', className)}>
+        <div className={cn('rounded ring-2 p-4 ring-primary/40', className)}>
             <div className="flex items-center gap-x-2">
-                <div className="shrink-0 gap-x-1 items-center flex">
+                <div className="shrink-0 gap-x-2 items-center flex">
                     <PreviewMediaWrapper media={memberProfile.media}>
                         <ImageDisplay
-                            className="size-18 rounded-sm"
+                            className="size-18 rounded-sm ring-2 ring-secondary"
                             src={memberProfile.media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <PreviewMediaWrapper media={memberProfile.signature_media}>
                         <ImageDisplay
-                            className="size-18 rounded-sm"
+                            className="size-18 rounded-sm ring-2 ring-secondary"
                             imageClassName="bg-gray-300"
                             src={memberProfile.signature_media?.download_url}
                         />
@@ -80,8 +82,8 @@ const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
                     </div>
 
                     <Separator />
-                    <div className="flex justify-between space-x-5 pr-5 pt-2 text-xs">
-                        <div>
+                    <div className="flex justify-between flex-wrap space-y-4 space-x-5 pr-5 pt-2 text-xs">
+                        <div className="shrink-0">
                             <h3 className="mb-1 font-medium text-muted-foreground">
                                 Contact Number
                             </h3>
@@ -94,7 +96,7 @@ const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
                                 </span>
                             </div>
                         </div>
-                        <div>
+                        <div className="shrink-0">
                             <h3 className="mb-1 font-medium text-muted-foreground">
                                 Passbook Number
                             </h3>
@@ -107,16 +109,43 @@ const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
                                 </span>
                             </div>
                         </div>
-                        <div>
+                        <div className="shrink-0">
                             <h3 className="mb-1 font-medium text-muted-foreground">
                                 Member Type
                             </h3>
                             <div className="flex items-center gap-2">
                                 <UserIcon className="size-3" />
                                 <span>
-                                    <CopyWrapper>
-                                        {memberProfile.member_type?.name}
-                                    </CopyWrapper>
+                                    {memberProfile.member_type ? (
+                                        <CopyWrapper>
+                                            {memberProfile.member_type?.name}
+                                        </CopyWrapper>
+                                    ) : (
+                                        <span className="text-xs text-muted-foreground">
+                                            ...
+                                        </span>
+                                    )}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="shrink-0">
+                            <h3 className="mb-1 font-medium text-muted-foreground">
+                                Birthday
+                            </h3>
+                            <div className="flex items-center gap-2">
+                                <CakeIcon className="size-3" />
+                                <span>
+                                    {memberProfile?.birthdate ? (
+                                        <CopyWrapper>
+                                            {toReadableDate(
+                                                memberProfile?.birthdate
+                                            )}
+                                        </CopyWrapper>
+                                    ) : (
+                                        <span className="text-xs text-muted-foreground">
+                                            ...
+                                        </span>
+                                    )}
                                 </span>
                             </div>
                         </div>
@@ -127,4 +156,4 @@ const MemberProfileInfoViewCard = ({ className, memberProfile }: Props) => {
     )
 }
 
-export default MemberProfileInfoViewCard
+export default MemberProfileInfoViewLoanCard

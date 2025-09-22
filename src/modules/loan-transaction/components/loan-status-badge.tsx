@@ -10,23 +10,22 @@ import {
 
 import { TLoanStatusType } from '../loan-transaction.types'
 
-const loanStatusVariants = cva(
+const loanApplicationStatusVariants = cva(
     'font-medium transition-colors duration-200 inline-flex items-center border',
     {
         variants: {
             status: {
                 draft: cn(
-                    'bg-muted text-muted-foreground border-border hover:bg-muted/80'
+                    'bg-warning dark:bg-warning/10 text-warning-foreground border-warning-foreground/20 hover:bg-warning/20'
                 ),
                 printed: cn(
-                    'bg-primary/10 text-primary border-primary/20 hover:bg-primary/20'
+                    'bg-muted text-muted-foreground border-border hover:bg-muted/80'
                 ),
                 approved: cn(
-                    'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-200'
-                    // You can replace above with your custom palette if you have e.g. 'bg-warning text-warning-foreground border-warning'
+                    'bg-accent text-accent-foreground border-accent hover:bg-accent'
                 ),
                 released: cn(
-                    'bg-success text-success-foreground border-success hover:bg-success/90'
+                    'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
                 ),
             },
             size: {
@@ -42,42 +41,42 @@ const loanStatusVariants = cva(
     }
 )
 
-const loanStatusIcons = {
+const loanApplicationStatusIcons = {
     draft: ClockIcon,
     printed: PrinterIcon,
     approved: TextFileFillIcon,
     released: BadgeCheckFillIcon,
 } as const
 
-const loanStatusLabels = {
+const loanApplicationStatusLabels = {
     draft: 'Draft',
     printed: 'Printed',
     approved: 'Approved',
     released: 'Released',
 } as const
 
-export interface LoanStatusBadgeProps
-    extends VariantProps<typeof loanStatusVariants> {
+export interface LoanApplicationStatusBadgeProps
+    extends VariantProps<typeof loanApplicationStatusVariants> {
     className?: string
     showIcon?: boolean
     status: TLoanStatusType
 }
 
-const LoanStatusBadge = ({
+const LoanApplicationStatusBadge = ({
     status = 'draft',
     className,
     showIcon = true,
     size = 'md',
     ...props
-}: LoanStatusBadgeProps) => {
+}: LoanApplicationStatusBadgeProps) => {
     // Determine status
-    const IconComponent = loanStatusIcons[status]
-    const label = loanStatusLabels[status]
+    const IconComponent = loanApplicationStatusIcons[status]
+    const label = loanApplicationStatusLabels[status]
 
     return (
         <div
             className={cn(
-                loanStatusVariants({ status, size }),
+                loanApplicationStatusVariants({ status, size }),
                 'rounded-full max-w-full min-w-0',
                 className
             )}
@@ -91,4 +90,4 @@ const LoanStatusBadge = ({
     )
 }
 
-export default LoanStatusBadge
+export default LoanApplicationStatusBadge

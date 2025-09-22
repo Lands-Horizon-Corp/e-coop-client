@@ -174,7 +174,7 @@ export const usePrintLoanTransaction = createMutationFactory<
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })
 
-// UNDO PRINT
+// RE-PRINT
 
 export const useReprintLoanTransaction = createMutationFactory<
     ILoanTransaction,
@@ -191,4 +191,67 @@ export const useReprintLoanTransaction = createMutationFactory<
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })
 
-// RE-PRINT
+// UNDO PRINT
+
+export const useUndoPrintLoanTransaction = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { loanTransactionId: TEntityId }
+>({
+    mutationFn: async (data) => {
+        const response = await API.put<void, ILoanTransaction>(
+            `${loanTransactionAPIRoute}/${data.loanTransactionId}/print-undo`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+})
+
+// APROVE LOAN
+export const useApproveLoanTransaction = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { loanTransactionId: TEntityId }
+>({
+    mutationFn: async (data) => {
+        const response = await API.put<void, ILoanTransaction>(
+            `${loanTransactionAPIRoute}/${data.loanTransactionId}/approve`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+})
+
+// UNDO APPROVE
+export const useUndoApproveLoanTransaction = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { loanTransactionId: TEntityId }
+>({
+    mutationFn: async (data) => {
+        const response = await API.put<void, ILoanTransaction>(
+            `${loanTransactionAPIRoute}/${data.loanTransactionId}/approve-undo`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+})
+
+// RELEASE LOAN
+export const useReleaseLoanTransaction = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { loanTransactionId: TEntityId }
+>({
+    mutationFn: async (data) => {
+        const response = await API.put<void, ILoanTransaction>(
+            `${loanTransactionAPIRoute}/${data.loanTransactionId}/release`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+})

@@ -20,7 +20,7 @@ import {
     useGetMemberProfileById,
 } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
-import MemberProfileInfoViewCard from '@/modules/member-profile/components/member-profile-info-loan-view-card'
+import MemberProfileInfoViewLoanCard from '@/modules/member-profile/components/member-profile-info-loan-view-card'
 import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -481,10 +481,10 @@ const LoanTransactionCreateUpdateForm = ({
                                                 }}
                                             />
                                         )}
-                                        <div className="space-y-1 flex-1 bg-gradient-to-br flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl p-2">
+                                        <div className="space-y-1 flex-1 bg-gradient-to-br flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl">
                                             {memberProfile ? (
                                                 <>
-                                                    <MemberProfileInfoViewCard
+                                                    <MemberProfileInfoViewLoanCard
                                                         className="w-full"
                                                         memberProfile={
                                                             memberProfile
@@ -656,7 +656,7 @@ const LoanTransactionCreateUpdateForm = ({
                                         <FormFieldWrapper
                                             control={form.control}
                                             name="loan_status_id"
-                                            label="Loan Tracking"
+                                            label="Loan Status"
                                             labelClassName="text-right grow block"
                                             className="w-fit"
                                             render={({ field }) => (
@@ -732,7 +732,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                     className="space-y-2"
                                                 >
                                                     <FormItem>
-                                                        <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
+                                                        <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
                                                             <RadioGroupItem
                                                                 value="field"
                                                                 id="collector-field"
@@ -772,7 +772,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                         </div>
                                                     </FormItem>
                                                     <FormItem>
-                                                        <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
+                                                        <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
                                                             <RadioGroupItem
                                                                 value="office"
                                                                 id="collector-office"
