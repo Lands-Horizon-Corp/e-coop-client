@@ -6,7 +6,11 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-import { SignatureLightIcon } from '@/components/icons'
+import {
+    NotAllowedIcon,
+    PrinterFillIcon,
+    SignatureLightIcon,
+} from '@/components/icons'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
@@ -17,6 +21,8 @@ import {
     ILoanTransaction,
     ILoanTransactionRequest,
 } from '../../loan-transaction.types'
+import { resolveLoanDatesToStatus } from '../../loan.utils'
+import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import { LoanTransactionSignatureUpdateFormModal } from '../forms/loan-transaction-signature-form'
 import { ILoanTransactionTableActionComponentProp } from './columns'
@@ -32,6 +38,7 @@ const useLoanTransactionActions = ({
 }: UseLoanTransactionActionsProps) => {
     const updateModal = useModalState()
     const updateSignatureModal = useModalState()
+    const loanCreatePrintModal = useModalState()
 
     const loanTransaction = row.original
 
@@ -59,11 +66,15 @@ const useLoanTransactionActions = ({
         })
     }
 
+    const loanApplicationStatus = resolveLoanDatesToStatus(loanTransaction)
+
     return {
         loanTransaction,
+        loanApplicationStatus,
 
         updateModal,
         updateSignatureModal,
+        loanCreatePrintModal,
 
         isDeletingLoanTransaction,
         handleEdit,
@@ -83,9 +94,11 @@ export const LoanTransactionAction = ({
 }: ILoanTransactionTableActionProps) => {
     const {
         loanTransaction,
+        loanApplicationStatus,
 
         updateModal,
         updateSignatureModal,
+        loanCreatePrintModal,
 
         isDeletingLoanTransaction,
         handleEdit,
@@ -111,6 +124,12 @@ export const LoanTransactionAction = ({
                         defaultValues: loanTransaction,
                     }}
                 />
+                <LoanTransactionPrintFormModal
+                    {...loanCreatePrintModal}
+                    formProps={{
+                        loanTransactionId: loanTransaction.id,
+                    }}
+                />
             </div>
             <RowActionsGroup
                 canSelect
@@ -131,15 +150,52 @@ export const LoanTransactionAction = ({
                             onClick={() =>
                                 updateSignatureModal.onOpenChange(true)
                             }
-                            disabled={
-                                loanTransaction.printed_date !== undefined
-                            }
                         >
                             <SignatureLightIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
                             />
                             Signature
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                loanCreatePrintModal.onOpenChange(true)
+                            }
+                            disabled={
+                                loanTransaction.printed_date !== undefined
+                            }
+                        >
+                            <PrinterFillIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Print
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            inset
+                            onClick={() => {
+                                // loanCreatePrintModal.onOpenChange(true)
+                                // TODO: Unprint
+                            }}
+                            disabled={
+                                loanTransaction.printed_date === undefined ||
+                                loanApplicationStatus === 'released'
+                            }
+                        >
+                            Re-print
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            inset
+                            onClick={() => {
+                                // loanCreatePrintModal.onOpenChange(true)
+                                // TODO: Unprint
+                            }}
+                            disabled={
+                                loanTransaction.printed_date === undefined ||
+                                loanApplicationStatus === 'released'
+                            }
+                        >
+                            Unprint
                         </DropdownMenuItem>
                     </>
                 }

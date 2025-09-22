@@ -18,6 +18,7 @@ import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
 import {
+    LoanTransactionPrintSchema,
     LoanTransactionSchema,
     TLoanTransactionSignatureSchema,
 } from './loan-transaction.validation'
@@ -57,6 +58,8 @@ export interface ILoanTransaction
     transaction_batch_id?: TEntityId
     transaction_batch?: ITransactionBatch
     official_receipt_number: string
+
+    print_number: number
 
     employee_user_id?: TEntityId
     employee_user?: IUser
@@ -241,3 +244,7 @@ export interface IAmortizationSchedule {
 
 // Loan Transaction Signature
 export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema
+
+// Loan Transaction Print Request
+
+export type ILoanTransactionPrintRequest = LoanTransactionPrintSchema

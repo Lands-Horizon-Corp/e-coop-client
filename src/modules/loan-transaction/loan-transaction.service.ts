@@ -15,6 +15,7 @@ import type {
     IAmortizationSchedule,
     ILoanTransaction,
     ILoanTransactionPaginated,
+    ILoanTransactionPrintRequest,
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
 } from '../loan-transaction'
@@ -58,6 +59,21 @@ export const updateLoanTransactionSignature = async ({
         ILoanTransactionSignatureRequest,
         ILoanTransaction
     >(`${loanTransactionAPIRoute}/${id}/signature`, payload)
+    return response.data
+}
+
+// for printing loan transaction
+export const printLoanTransaction = async ({
+    loanTransactionId,
+    payload,
+}: {
+    loanTransactionId: TEntityId
+    payload: ILoanTransactionPrintRequest
+}) => {
+    const response = await API.put<
+        ILoanTransactionPrintRequest,
+        ILoanTransaction
+    >(`${loanTransactionAPIRoute}/${loanTransactionId}/print`, payload)
     return response.data
 }
 
@@ -146,3 +162,18 @@ export const useUpdateLoanTransactionSignature = createMutationFactory<
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })
+
+// PRINT
+export const usePrintLoanTransaction = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { loanTransactionId: TEntityId; payload: ILoanTransactionPrintRequest }
+>({
+    mutationFn: (data) => printLoanTransaction(data),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+})
+
+// UNDO PRINT
+
+// RE-PRINT

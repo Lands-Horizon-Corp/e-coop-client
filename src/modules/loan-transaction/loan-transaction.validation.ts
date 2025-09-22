@@ -320,3 +320,38 @@ export const LoanTransactionSignatureSchema = z.object({
 export type TLoanTransactionSignatureSchema = z.infer<
     typeof LoanTransactionSignatureSchema
 >
+
+// FOR PRINT
+
+export const LoanTransactionPrintWithCheck = z.discriminatedUnion(
+    'check_number',
+    [z.object({})]
+)
+export const LoanTransactionPrintSchema = z
+    .object({
+        voucher: z.string(),
+        check_number: z.string().optional(),
+        check_date: z
+            .string()
+            .optional()
+            .transform((val) => {
+                if (!val || val.trim() === '') return undefined
+                const date = new Date(val)
+                return isNaN(date.getTime()) ? val : date.toISOString()
+            }),
+    })
+    .refine(
+        (data) => {
+            if (data.check_number && data.check_number.trim() !== '') {
+                return (
+                    !!data.check_date && String(data.check_date).trim() !== ''
+                )
+            }
+            return true
+        },
+        { message: 'Check date is required', path: ['check_date'] }
+    )
+
+export type LoanTransactionPrintSchema = z.infer<
+    typeof LoanTransactionPrintSchema
+>
