@@ -15,6 +15,7 @@ const ConfirmModal = () => {
             onOpenChange={onClose}
             title={modalData?.title}
             description={modalData?.description}
+            className={modalData?.modalClassName}
         >
             {modalData?.content}
             {modalData?.hideSeparator ? null : <Separator className="my-1" />}

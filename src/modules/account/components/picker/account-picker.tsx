@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
+import { cn } from '@/helpers'
 import {
     IAccount,
     TPaginatedAccountHookMode,
@@ -21,6 +22,7 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
 import useFilterState from '@/hooks/use-filter-state'
+import { useInternalState } from '@/hooks/use-internal-state'
 import { useShortcut } from '@/hooks/use-shorcuts'
 
 interface Props extends IPickerBaseProps<IAccount> {
@@ -46,9 +48,15 @@ const AccountPicker = ({
     open,
     nameOnly = false,
     hideDescription = false,
+    modalState,
+    triggerClassName,
 }: Props) => {
     const queryClient = useQueryClient()
-    const [state, setState] = useState(false)
+    const [state, setState] = useInternalState(
+        false,
+        modalState?.open,
+        modalState?.onOpenChange
+    )
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
@@ -195,7 +203,10 @@ const AccountPicker = ({
                     variant="secondary"
                     disabled={disabled}
                     onClick={() => setState((prev) => !prev)}
-                    className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
+                    className={cn(
+                        'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
+                        triggerClassName
+                    )}
                 >
                     <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">

@@ -12,11 +12,14 @@ import { UseFormReturn, useFieldArray } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { formatNumber } from '@/helpers'
-import { IAccount } from '@/modules/account'
+import { AccountPicker, IAccount } from '@/modules/account'
+import AccountMiniCard from '@/modules/account/components/account-mini-card'
 import { ILoanTransactionEntryRequest } from '@/modules/loan-transaction-entry'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
+    ArrowDownIcon,
     CalendarNumberIcon,
     PencilFillIcon,
     PlusIcon,
@@ -59,6 +62,9 @@ const LoanEntriesEditor = forwardRef<
     }
 >(({ form, loanTransactionId, disabled }, ref) => {
     const addChargeModalState = useModalState()
+    const cashAccountPickerModal = useModalState()
+    const { onOpen } = useConfirmModalStore()
+
     const rowRefs = useRef<(HTMLTableRowElement | null)[]>([])
     const [focusedIndex, setFocusedIndex] = useState(-1)
 
@@ -340,6 +346,58 @@ const LoanEntriesEditor = forwardRef<
         }
     }
 
+    const handleChangeCashEntryAccount = (account: IAccount) => {
+        const entries = form.getValues('loan_transaction_entries')
+        if (!entries || !entries[0] || entries[0].type !== 'static') {
+            toast.warning(
+                'Sorry cash account entry does not exist in loan transaction.'
+            )
+            return
+        }
+
+        const originalEntry = entries[0]
+
+        if (originalEntry.account_id === account.id)
+            return toast.warning('Invalid : Account is alread selected')
+
+        onOpen({
+            title: 'Replace cash account',
+            modalClassName: 'w-fit !max-w-none',
+            content: (
+                <div className="space-y-4">
+                    <div className="bg-muted/50 p-4 rounded-lg">
+                        <p className="text-sm text-muted-foreground">
+                            The cash source for this loan entry will be updated
+                            to use a different account
+                        </p>
+                    </div>
+                    <div className="flex flex-col items-center gap-y-4">
+                        <AccountMiniCard
+                            defaultAccount={originalEntry.account}
+                            accountId={originalEntry.account_id as TEntityId}
+                            className="border-dashed border-2 border-destructive bg-destructive/40"
+                        />
+                        <ArrowDownIcon className="size-4 shrink-0" />
+                        <AccountMiniCard
+                            accountId={account.id}
+                            defaultAccount={account}
+                            className="border-2 border-primary"
+                        />
+                    </div>
+                </div>
+            ),
+            confirmString: 'Replace',
+            onConfirm: () =>
+                update(0, {
+                    ...originalEntry,
+                    account_id: account.id,
+                    account: account,
+                    name: account.name,
+                    description: account.description || 'Cash account',
+                }),
+        })
+    }
+
     if (isDisabled)
         return (
             <div className="min-h-48 flex items-center justify-center">
@@ -352,6 +410,12 @@ const LoanEntriesEditor = forwardRef<
 
     return (
         <fieldset disabled={isDisabled} className="relative">
+            <AccountPicker
+                triggerClassName="sr-only"
+                mode="cash-and-cash-equivalence"
+                modalState={cashAccountPickerModal}
+                onSelect={handleChangeCashEntryAccount}
+            />
             <div className="flex items-center justify-between mb-4">
                 <div>
                     <p className="font-medium">
@@ -389,7 +453,9 @@ const LoanEntriesEditor = forwardRef<
                         type="button"
                         variant="ghost"
                         className="size-fit px-2 py-0.5 text-xs"
-                        onClick={() => addChargeModalState.onOpenChange(true)}
+                        onClick={() =>
+                            cashAccountPickerModal.onOpenChange(true)
+                        }
                     >
                         Change Cash Account <SwapArrowIcon className="inline" />
                     </Button>
