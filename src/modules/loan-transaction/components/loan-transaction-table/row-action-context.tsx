@@ -6,12 +6,19 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { SignatureLightIcon } from '@/components/icons'
+import { ContextMenuItem } from '@/components/ui/context-menu'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { useDeleteLoanTransactionById } from '../../loan-transaction.service'
-import { ILoanTransaction } from '../../loan-transaction.types'
+import {
+    ILoanTransaction,
+    ILoanTransactionRequest,
+} from '../../loan-transaction.types'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
+import { LoanTransactionSignatureUpdateFormModal } from '../forms/loan-transaction-signature-form'
 import { ILoanTransactionTableActionComponentProp } from './columns'
 
 interface UseLoanTransactionActionsProps {
@@ -24,6 +31,8 @@ const useLoanTransactionActions = ({
     onDeleteSuccess,
 }: UseLoanTransactionActionsProps) => {
     const updateModal = useModalState()
+    const updateSignatureModal = useModalState()
+
     const loanTransaction = row.original
 
     const { onOpen } = useConfirmModalStore()
@@ -52,7 +61,10 @@ const useLoanTransactionActions = ({
 
     return {
         loanTransaction,
+
         updateModal,
+        updateSignatureModal,
+
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
@@ -71,7 +83,10 @@ export const LoanTransactionAction = ({
 }: ILoanTransactionTableActionProps) => {
     const {
         loanTransaction,
+
         updateModal,
+        updateSignatureModal,
+
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
@@ -84,6 +99,14 @@ export const LoanTransactionAction = ({
                     {...updateModal}
                     formProps={{
                         mode: 'update',
+                        loanTransactionId: loanTransaction.id,
+                        defaultValues:
+                            loanTransaction as ILoanTransactionRequest,
+                    }}
+                />
+                <LoanTransactionSignatureUpdateFormModal
+                    {...updateSignatureModal}
+                    formProps={{
                         loanTransactionId: loanTransaction.id,
                         defaultValues: loanTransaction,
                     }}
@@ -102,7 +125,24 @@ export const LoanTransactionAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
+                otherActions={
+                    <>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                updateSignatureModal.onOpenChange(true)
+                            }
+                            disabled={
+                                loanTransaction.printed_date !== undefined
+                            }
+                        >
+                            <SignatureLightIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Signature
+                        </DropdownMenuItem>
+                    </>
+                }
             />
         </>
     )
@@ -121,7 +161,10 @@ export const LoanTransactionRowContext = ({
 }: ILoanTransactionRowContextProps) => {
     const {
         loanTransaction,
+
         updateModal,
+        updateSignatureModal,
+
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
@@ -133,6 +176,13 @@ export const LoanTransactionRowContext = ({
                 {...updateModal}
                 formProps={{
                     mode: 'update',
+                    loanTransactionId: loanTransaction.id,
+                    defaultValues: loanTransaction as ILoanTransactionRequest,
+                }}
+            />
+            <LoanTransactionSignatureUpdateFormModal
+                {...updateSignatureModal}
+                formProps={{
                     loanTransactionId: loanTransaction.id,
                     defaultValues: loanTransaction,
                 }}
@@ -149,6 +199,24 @@ export const LoanTransactionRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                otherActions={
+                    <>
+                        <ContextMenuItem
+                            onClick={() =>
+                                updateSignatureModal.onOpenChange(true)
+                            }
+                            disabled={
+                                loanTransaction.printed_date !== undefined
+                            }
+                        >
+                            <SignatureLightIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Signature
+                        </ContextMenuItem>
+                    </>
+                }
             >
                 {children}
             </DataTableRowContext>

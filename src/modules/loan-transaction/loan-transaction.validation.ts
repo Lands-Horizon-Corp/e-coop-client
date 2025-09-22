@@ -15,7 +15,7 @@ import { LoanTermsAndConditionSuggestedPaymentSchema } from '../loan-terms-and-c
 import { LoanTransactionEntrySchema } from '../loan-transaction-entry'
 import {
     LOAN_COLLECTOR_PLACE,
-    LOAN_COMAKER_TYPE,
+    // LOAN_COMAKER_TYPE,
     LOAN_MODE_OF_PAYMENT,
     LOAN_TYPE,
     WEEKDAYS,
@@ -64,14 +64,19 @@ const WithWeekdays = z.discriminatedUnion(
             mode_of_payment_monthly_exact_day: z.boolean().default(false),
         }),
         z.object({
-            mode_of_payment: z.enum(
-                LOAN_MODE_OF_PAYMENT.filter(
-                    (val) =>
-                        !['weekly', 'day', 'semi-monthly', 'monthly'].includes(
-                            val
-                        )
+            mode_of_payment: z
+                .enum(
+                    LOAN_MODE_OF_PAYMENT.filter(
+                        (val) =>
+                            ![
+                                'weekly',
+                                'day',
+                                'semi-monthly',
+                                'monthly',
+                            ].includes(val)
+                    )
                 )
-            ),
+                .default('monthly'),
         }),
     ],
     {
@@ -124,11 +129,11 @@ export const LoanTransactionSchema = z
 
         loan_status_id: entityIdSchema.optional(),
 
-        comaker_type: z
-            .enum(LOAN_COMAKER_TYPE, {
-                error: 'Please select valid comaker',
-            })
-            .default('none'),
+        // comaker_type: z
+        //     .enum(LOAN_COMAKER_TYPE, {
+        //         error: 'Please select valid comaker',
+        //     })
+        //     .default('none'),
 
         collector_place: z.enum(LOAN_COLLECTOR_PLACE, {
             error: 'Please select valid collector place',
@@ -262,3 +267,56 @@ export const LoanTransactionSchema = z
     .and(WithComaker)
 
 export type TLoanTransactionSchema = z.infer<typeof LoanTransactionSchema>
+
+// FOR LOAN SIGNATURE
+// for signature
+export const LoanTransactionSignatureSchema = z.object({
+    prepared_by_signature_media_id: entityIdSchema.optional(),
+    prepared_by_signature_media: z.any(),
+    prepared_by_name: z.coerce.string().optional(),
+    prepared_by_position: z.coerce.string().optional(),
+
+    certified_by_signature_media_id: entityIdSchema.optional(),
+    certified_by_signature_media: z.any(),
+    certified_by_name: z.coerce.string().optional(),
+    certified_by_position: z.coerce.string().optional(),
+
+    approved_by_signature_media_id: entityIdSchema.optional(),
+    approved_by_signature_media: z.any(),
+    approved_by_name: z.coerce.string().optional(),
+    approved_by_position: z.coerce.string().optional(),
+
+    verified_by_signature_media_id: entityIdSchema.optional(),
+    verified_by_signature_media: z.any(),
+    verified_by_name: z.coerce.string().optional(),
+    verified_by_position: z.coerce.string().optional(),
+
+    check_by_signature_media_id: entityIdSchema.optional(),
+    check_by_signature_media: z.any(),
+    check_by_name: z.coerce.string().optional(),
+    check_by_position: z.coerce.string().optional(),
+
+    acknowledge_by_signature_media_id: entityIdSchema.optional(),
+    acknowledge_by_signature_media: z.any(),
+    acknowledge_by_name: z.coerce.string().optional(),
+    acknowledge_by_position: z.coerce.string().optional(),
+
+    noted_by_signature_media_id: entityIdSchema.optional(),
+    noted_by_signature_media: z.any(),
+    noted_by_name: z.coerce.string().optional(),
+    noted_by_position: z.coerce.string().optional(),
+
+    posted_by_signature_media_id: entityIdSchema.optional(),
+    posted_by_signature_media: z.any(),
+    posted_by_name: z.coerce.string().optional(),
+    posted_by_position: z.coerce.string().optional(),
+
+    paid_by_signature_media_id: entityIdSchema.optional(),
+    paid_by_signature_media: z.any(),
+    paid_by_name: z.coerce.string().optional(),
+    paid_by_position: z.coerce.string().optional(),
+})
+
+export type TLoanTransactionSignatureSchema = z.infer<
+    typeof LoanTransactionSignatureSchema
+>

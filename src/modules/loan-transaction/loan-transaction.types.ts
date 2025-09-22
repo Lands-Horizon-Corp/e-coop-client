@@ -17,7 +17,10 @@ import { IMemberAccountingLedger } from '../member-account-ledger'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
-import { LoanTransactionSchema } from './loan-transaction.validation'
+import {
+    LoanTransactionSchema,
+    TLoanTransactionSignatureSchema,
+} from './loan-transaction.validation'
 import {
     COMPUTATION_TYPE,
     LOAN_AMORTIZATION_TYPE,
@@ -235,3 +238,6 @@ export interface IAmortizationSchedule {
     summary: IAmortizationSummary
     generated_at: string
 }
+
+// Loan Transaction Signature
+export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema

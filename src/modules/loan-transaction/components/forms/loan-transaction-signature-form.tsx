@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Path, useForm } from 'react-hook-form'
-import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -37,29 +36,28 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import { useUpdateLoanTransactionSignature } from '../../loan-transaction.service'
 import {
-    ITransactionBatchSignatures,
-    useGetTransactionBatchById,
-    useTransBatchUpdateSignApproval,
-} from '../..'
-import { BatchSignSchema } from '../../transaction-batch.validation'
-import TransactionBatchMiniViewCard from '../transaction-batch/transaction-batch-mini-card'
+    ILoanTransactionSignatureRequest,
+    ILoanTransactionSignatures,
+} from '../../loan-transaction.types'
+import { LoanTransactionSignatureSchema } from '../../loan-transaction.validation'
 
-type TBatchSignFormValues = z.infer<typeof BatchSignSchema>
+type TLoanSignFormValues = ILoanTransactionSignatureRequest
 
 type Step = {
     title: string
     description?: string
     longDescription?: string
-    fields: Path<TBatchSignFormValues>[]
+    fields: Path<TLoanSignFormValues>[]
 }
 
 const Steps: Step[] = [
     {
         title: 'Prepared By',
-        description: 'Person who prepared the batch for review.',
+        description: 'Person who prepared the loan for review.',
         longDescription:
-            'This person is responsible for compiling and organizing all transaction records for the day, ensuring that all entries are complete and accurate before submitting for further review.',
+            'This person is responsible for compiling and organizing all transaction records for the loan, ensuring that all entries are complete and accurate before submitting for further review.',
         fields: [
             'prepared_by_name',
             'prepared_by_position',
@@ -68,9 +66,9 @@ const Steps: Step[] = [
     },
     {
         title: 'Certified By',
-        description: 'Person who certified the accuracy of the batch.',
+        description: 'Person who certified the accuracy of the loan.',
         longDescription:
-            'This person verifies that all transactions in the batch are correct and match supporting documents, certifying the batch as accurate.',
+            'This person verifies that all transactions in the loan are correct and match supporting documents, certifying the loan as accurate.',
         fields: [
             'certified_by_name',
             'certified_by_position',
@@ -81,7 +79,7 @@ const Steps: Step[] = [
         title: 'Checked By',
         description: 'Person who checked and verified the entries.',
         longDescription:
-            'This person reviews the batch for any discrepancies or errors, ensuring that all entries are accurate and complete.',
+            'This person reviews the loan for any discrepancies or errors, ensuring that all entries are accurate and complete.',
         fields: [
             'check_by_name',
             'check_by_position',
@@ -90,9 +88,9 @@ const Steps: Step[] = [
     },
     {
         title: 'Approved By',
-        description: 'Person who approved the batch for posting.',
+        description: 'Person who approved the loan for posting.',
         longDescription:
-            'This person gives the final approval for the batch to be posted, confirming that all transactions are accurate and complete.',
+            'This person gives the final approval for the loan to be posted, confirming that all transactions are accurate and complete.',
         fields: [
             'approved_by_name',
             'approved_by_position',
@@ -101,9 +99,9 @@ const Steps: Step[] = [
     },
     {
         title: 'Verified By',
-        description: 'Person who verified the batch completion.',
+        description: 'Person who verified the loan completion.',
         longDescription:
-            'This person verifies that the batch has been completed in accordance with all relevant procedures and regulations.',
+            'This person verifies that the loan has been completed in accordance with all relevant procedures and regulations.',
         fields: [
             'verified_by_name',
             'verified_by_position',
@@ -112,9 +110,9 @@ const Steps: Step[] = [
     },
     {
         title: 'Acknowledge By',
-        description: 'Person who acknowledged the batch closure.',
+        description: 'Person who acknowledged the loan closure.',
         longDescription:
-            'This person acknowledges that the batch has been closed and all transactions have been processed.',
+            'This person acknowledges that the loan has been closed and all transactions have been processed.',
         fields: [
             'acknowledge_by_name',
             'acknowledge_by_position',
@@ -123,9 +121,9 @@ const Steps: Step[] = [
     },
     {
         title: 'Noted By',
-        description: 'Person who noted the batch for records.',
+        description: 'Person who noted the loan for records.',
         longDescription:
-            'This person makes a note of the batch in the records, ensuring that there is a permanent record of all transactions.',
+            'This person makes a note of the loan in the records, ensuring that there is a permanent record of all transactions.',
         fields: [
             'noted_by_name',
             'noted_by_position',
@@ -134,9 +132,9 @@ const Steps: Step[] = [
     },
     {
         title: 'Posted By',
-        description: 'Person who posted the batch to the system.',
+        description: 'Person who posted the loan to the system.',
         longDescription:
-            'This person is responsible for posting the batch to the system, making all transactions official.',
+            'This person is responsible for posting the loan to the system, making all transactions official.',
         fields: [
             'posted_by_name',
             'posted_by_position',
@@ -147,7 +145,7 @@ const Steps: Step[] = [
         title: 'Paid By',
         description: 'Person who processed the payment.',
         longDescription:
-            'This person processes the payment for the batch, ensuring that all transactions are settled.',
+            'This person processes the payment for the loan, ensuring that all transactions are settled.',
         fields: [
             'paid_by_name',
             'paid_by_position',
@@ -156,28 +154,28 @@ const Steps: Step[] = [
     },
 ]
 
-export interface ITransactionBatchSignFormProps
+export interface ILoanTransactionSignatureFormProps
     extends IClassProps,
         IForm<
-            Partial<ITransactionBatchSignatures>,
-            ITransactionBatchSignatures,
+            Partial<ILoanTransactionSignatures>,
+            ILoanTransactionSignatures,
             Error,
-            TBatchSignFormValues
+            TLoanSignFormValues
         > {
-    batchId: TEntityId
+    loanTransactionId: TEntityId
     defaultStep?: number
 }
 
-const TransactionBatchSignCreateUpdateForm = ({
-    batchId,
+const LoanTransactionSignatureUpdateForm = ({
+    loanTransactionId,
     className,
     defaultStep = 0,
     ...formProps
-}: ITransactionBatchSignFormProps) => {
+}: ILoanTransactionSignatureFormProps) => {
     const [step, setStep] = useState(defaultStep)
 
-    const form = useForm<TBatchSignFormValues>({
-        resolver: standardSchemaResolver(BatchSignSchema),
+    const form = useForm<TLoanSignFormValues>({
+        resolver: standardSchemaResolver(LoanTransactionSignatureSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -190,7 +188,7 @@ const TransactionBatchSignCreateUpdateForm = ({
         isPending,
         mutate,
         reset,
-    } = useTransBatchUpdateSignApproval({
+    } = useUpdateLoanTransactionSignature({
         options: {
             onSuccess: (data) => {
                 form.reset(data)
@@ -201,7 +199,7 @@ const TransactionBatchSignCreateUpdateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TBatchSignFormValues>({
+        useFormHelper<TLoanSignFormValues>({
             form,
             ...formProps,
             autoSave: true,
@@ -210,11 +208,6 @@ const TransactionBatchSignCreateUpdateForm = ({
         })
 
     const error = serverRequestErrExtractor({ error: rawError })
-
-    const { data: transactionBatch, isPending: isLoadingBatchInfo } =
-        useGetTransactionBatchById({
-            id: batchId,
-        })
 
     const stepRefs = useRef<(HTMLHeadingElement | null)[]>([])
 
@@ -235,7 +228,7 @@ const TransactionBatchSignCreateUpdateForm = ({
     }
 
     const onSubmit = form.handleSubmit((payload) => {
-        mutate({ id: batchId, payload })
+        mutate({ id: loanTransactionId, payload })
     }, handleFocusError)
 
     const onReset = () => {
@@ -269,7 +262,7 @@ const TransactionBatchSignCreateUpdateForm = ({
                                         disabled={
                                             formProps.readOnly || isPending
                                         }
-                                        className="items-start rounded pb-8 last:pb-0"
+                                        className="items-start cursor-pointer rounded pb-8 last:pb-0"
                                     >
                                         <StepperIndicator asChild>
                                             <p>{i + 1}</p>
@@ -303,16 +296,6 @@ const TransactionBatchSignCreateUpdateForm = ({
                         disabled={isPending || formProps.readOnly}
                         className="ecoop-scroll max-h-[90vh] flex-1 space-y-4 overflow-auto px-2 sm:max-h-[73vh] sm:space-y-3"
                     >
-                        <div className="space-y-1">
-                            <p>Batch Approval Signature</p>
-                            {isLoadingBatchInfo && <LoadingSpinner />}
-                            {transactionBatch && (
-                                <TransactionBatchMiniViewCard
-                                    transactionBatch={transactionBatch}
-                                />
-                            )}
-                        </div>
-                        <Separator />
                         <fieldset className="space-y-3" key={step}>
                             <legend className="font-semibold">
                                 {Steps[step].title}
@@ -358,7 +341,7 @@ const TransactionBatchSignCreateUpdateForm = ({
                                         Steps[step].fields[2].replace(
                                             '_id',
                                             ''
-                                        ) as Path<TBatchSignFormValues>
+                                        ) as Path<TLoanSignFormValues>
                                     )
                                     return (
                                         <SignatureField
@@ -381,7 +364,7 @@ const TransactionBatchSignCreateUpdateForm = ({
                                                     ].fields[2].replace(
                                                         '_id',
                                                         ''
-                                                    ) as Path<TBatchSignFormValues>,
+                                                    ) as Path<TLoanSignFormValues>,
                                                     newImage
                                                 )
                                             }}
@@ -448,12 +431,12 @@ const TransactionBatchSignCreateUpdateForm = ({
     )
 }
 
-export const TransactionBatchSignCreateUpdateFormModal = ({
+export const LoanTransactionSignatureUpdateFormModal = ({
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps: Omit<ITransactionBatchSignFormProps, 'className'>
+    formProps: Omit<ILoanTransactionSignatureFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -463,7 +446,7 @@ export const TransactionBatchSignCreateUpdateFormModal = ({
             className={cn('!max-w-5xl', className)}
             {...props}
         >
-            <TransactionBatchSignCreateUpdateForm
+            <LoanTransactionSignatureUpdateForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -474,4 +457,4 @@ export const TransactionBatchSignCreateUpdateFormModal = ({
     )
 }
 
-export default TransactionBatchSignCreateUpdateForm
+export default LoanTransactionSignatureUpdateForm

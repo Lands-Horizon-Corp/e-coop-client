@@ -1,7 +1,4 @@
-import {
-    dateAgo,
-    toReadableDate,
-} from '@/helpers/date-utils'
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { ITimeStamps } from '@/types'

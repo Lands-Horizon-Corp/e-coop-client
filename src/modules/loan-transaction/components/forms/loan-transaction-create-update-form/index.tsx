@@ -1336,7 +1336,7 @@ export const LoanTransactionCreateUpdateFormModal = ({
             description=""
             titleClassName="sr-only"
             descriptionClassName="sr-only"
-            className={cn('p-0 !max-w-[90vw] gap-y-0', className)}
+            className={cn('p-0 !max-w-5xl gap-y-0', className)}
             {...props}
         >
             <LoanTransactionCreateUpdateForm

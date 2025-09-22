@@ -4,6 +4,10 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
@@ -12,6 +16,7 @@ import type {
     ILoanTransaction,
     ILoanTransactionPaginated,
     ILoanTransactionRequest,
+    ILoanTransactionSignatureRequest,
 } from '../loan-transaction'
 
 const {
@@ -40,6 +45,21 @@ export const {
 } = apiCrudService
 
 // custom service functions can go here
+
+// for signing loan transaction signatures
+export const updateLoanTransactionSignature = async ({
+    id,
+    payload,
+}: {
+    id: TEntityId
+    payload: ILoanTransactionSignatureRequest
+}) => {
+    const response = await API.put<
+        ILoanTransactionSignatureRequest,
+        ILoanTransaction
+    >(`${loanTransactionAPIRoute}/${id}/signature`, payload)
+    return response.data
+}
 
 // 🪝 HOOK STARTS HERE
 export { loanTransactionBaseKey } // Exported in case it's needed outside
@@ -115,3 +135,14 @@ export const useGetLoanAmortization = ({
         },
     })
 }
+
+//  SIGNATURE
+export const useUpdateLoanTransactionSignature = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { id: TEntityId; payload: ILoanTransactionSignatureRequest }
+>({
+    mutationFn: (data) => updateLoanTransactionSignature(data),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+})
