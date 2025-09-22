@@ -1,22 +1,25 @@
 import { ReactNode } from 'react'
 
+import { toast } from 'sonner'
+
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-import {
-    NotAllowedIcon,
-    PrinterFillIcon,
-    SignatureLightIcon,
-} from '@/components/icons'
+import { PrinterFillIcon, SignatureLightIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { useDeleteLoanTransactionById } from '../../loan-transaction.service'
+import {
+    useDeleteLoanTransactionById,
+    useReprintLoanTransaction,
+} from '../../loan-transaction.service'
 import {
     ILoanTransaction,
     ILoanTransactionRequest,
@@ -56,6 +59,8 @@ const useLoanTransactionActions = ({
         },
     })
 
+    const reprintMutation = useReprintLoanTransaction()
+
     const handleEdit = () => updateModal.onOpenChange(true)
 
     const handleDelete = () => {
@@ -75,6 +80,8 @@ const useLoanTransactionActions = ({
         updateModal,
         updateSignatureModal,
         loanCreatePrintModal,
+
+        reprintMutation,
 
         isDeletingLoanTransaction,
         handleEdit,
@@ -99,6 +106,8 @@ export const LoanTransactionAction = ({
         updateModal,
         updateSignatureModal,
         loanCreatePrintModal,
+
+        reprintMutation,
 
         isDeletingLoanTransaction,
         handleEdit,
@@ -174,14 +183,34 @@ export const LoanTransactionAction = ({
                         <DropdownMenuItem
                             inset
                             onClick={() => {
-                                // loanCreatePrintModal.onOpenChange(true)
-                                // TODO: Unprint
+                                toast.promise(
+                                    reprintMutation.mutateAsync({
+                                        loanTransactionId: loanTransaction.id,
+                                    }),
+                                    {
+                                        loading: (
+                                            <span>
+                                                <PrinterFillIcon className="inline mr-1" />{' '}
+                                                Printing... Please wait...
+                                            </span>
+                                        ),
+                                        success: 'Reprinted',
+                                        error: (error) =>
+                                            serverRequestErrExtractor({
+                                                error,
+                                            }),
+                                    }
+                                )
                             }}
                             disabled={
                                 loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'released'
+                                loanApplicationStatus === 'released' ||
+                                reprintMutation.isPending
                             }
                         >
+                            {reprintMutation.isPending && (
+                                <LoadingSpinner className="mr-1 size-3" />
+                            )}
                             Re-print
                         </DropdownMenuItem>
                         <DropdownMenuItem
@@ -192,7 +221,8 @@ export const LoanTransactionAction = ({
                             }}
                             disabled={
                                 loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'released'
+                                loanApplicationStatus === 'released' ||
+                                reprintMutation.isPending
                             }
                         >
                             Unprint

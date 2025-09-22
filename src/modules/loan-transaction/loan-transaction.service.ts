@@ -176,4 +176,19 @@ export const usePrintLoanTransaction = createMutationFactory<
 
 // UNDO PRINT
 
+export const useReprintLoanTransaction = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { loanTransactionId: TEntityId }
+>({
+    mutationFn: async (data) => {
+        const response = await API.put<void, ILoanTransaction>(
+            `${loanTransactionAPIRoute}/${data.loanTransactionId}/print-only`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+})
+
 // RE-PRINT
