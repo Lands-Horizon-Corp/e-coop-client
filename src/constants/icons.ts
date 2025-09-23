@@ -1,4 +1,8 @@
 export const ICONS = [
+    'SidebarLeft',
+    'ArrowChevronUp',
+    'GripHorizontal',
+    'GripVertical',
     'Circle',
     'Pipette',
     'Headset',

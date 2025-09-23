@@ -44,7 +44,6 @@ import {
     BsFillQuestionCircleFill as QuestionCircleFillIcon,
     BsShieldFillCheck as ShieldCheckIcon,
     BsShieldLockFill as ShieldLockIcon,
-    BsLayoutSidebarInset as SidebarLeftIcon,
     BsSignpost2Fill as SignPostIcon,
     BsFileEarmarkSpreadsheetFill as SpreadSheetFileIcon,
     BsFileEarmarkTextFill as TextFileFillIcon,
@@ -80,6 +79,8 @@ import {
     FaBold as FaBoldIcon,
     FaCalendarCheck as FaCalendarCheckIcon,
     FaTimesCircle as FaTimesIcon,
+    FaGripHorizontal as GripHorizontalIcon,
+    FaGripVertical as GripVerticalIcon,
     FaHandsHelping as HandsHelpingIcon,
     FaRegMap as MapIcon,
     FaMoneyCheckAlt as MoneyCheck2Icon,
@@ -167,6 +168,7 @@ import {
     HiAdjustmentsHorizontal as AdjustIcon,
     HiChevronDown as ArrowChevronDown,
     HiChevronRight as ArrowChevronRight,
+    HiChevronUp as ArrowChevronUpIcon,
     HiOutlineArrowDown as ArrowDownIcon,
     HiArrowDownLeft as ArrowDownLeftIcon,
     HiOutlineArrowsUpDown as ArrowUpDownIcon,
@@ -264,6 +266,7 @@ import {
     LuReplace as ReplaceIcon,
     LuScanLine as ScanLineIcon,
     LuScanQrCode as ScanQrIcon,
+    LuPanelLeftOpen as SidebarLeftIcon,
     LuTrash as TrashIcon,
     LuUndo2 as UndoIcon,
     LuView as ViewIcon,
@@ -387,6 +390,8 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    SidebarLeftIcon,
+    ArrowChevronUpIcon,
     CircleIcon,
     PipetteIcon,
     HeadsetIcon,
@@ -614,7 +619,6 @@ export {
     AddressCardIcon,
     ArrowUpDownIcon,
     ChevronLeftIcon,
-    SidebarLeftIcon,
     BuildingCogIcon,
     ListOrderedIcon,
     RotateRightIcon,
@@ -727,9 +731,15 @@ export {
     BadgeExclamationFillIcon,
     TextStrikethroughLightIcon,
     PaintIcon,
+    GripHorizontalIcon,
+    GripVerticalIcon,
 }
 
 export const IconMap: Record<TIcon, IconType> = {
+    SidebarLeft: SidebarLeftIcon,
+    ArrowChevronUp: ArrowChevronUpIcon,
+    GripHorizontal: GripHorizontalIcon,
+    GripVertical: GripVerticalIcon,
     Circle: CircleIcon,
     Pipette: PipetteIcon,
     Headset: HeadsetIcon,

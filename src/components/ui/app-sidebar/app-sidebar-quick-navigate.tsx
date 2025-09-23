@@ -2,10 +2,9 @@ import { Fragment, useState } from 'react'
 
 import { Link } from '@tanstack/react-router'
 
-import { ArrowRight } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import { MagnifyingGlassIcon } from '@/components/icons'
+import { ArrowRightIcon, MagnifyingGlassIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     CommandDialog,
@@ -90,7 +89,7 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                                     className="text-xs text-muted-foreground duration-200 hover:text-foreground"
                                                 >
                                                     Open new tab{' '}
-                                                    <ArrowRight className="inline !size-3 -rotate-45" />
+                                                    <ArrowRightIcon className="inline !size-3 -rotate-45" />
                                                 </Link>
                                             </div>
                                         </CommandItem>

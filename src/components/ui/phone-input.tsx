@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { CheckIcon, ChevronsUpDown } from 'lucide-react'
 import * as RPNInput from 'react-phone-number-input'
 import { type Value } from 'react-phone-number-input'
 import flags from 'react-phone-number-input/flags'
@@ -22,6 +21,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 import { ScrollArea } from '@/components/ui/scroll-area'
+
+import { ArrowChevronDown, CheckIcon } from '../icons'
 
 type PhoneInputProps = Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -107,7 +108,7 @@ const CountrySelect = ({
                     disabled={disabled}
                 >
                     <FlagComponent country={value} countryName={value} />
-                    <ChevronsUpDown
+                    <ArrowChevronDown
                         className={cn(
                             '-mr-2 h-4 w-4 opacity-50',
                             disabled ? 'hidden' : 'opacity-100'
