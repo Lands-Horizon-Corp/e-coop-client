@@ -5,8 +5,7 @@ import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { Send } from 'lucide-react'
-
+import { PaperPlaneIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -167,7 +166,7 @@ const ContactForm = () => {
                         `Please wait ${cooldownCount}s`
                     ) : (
                         <>
-                            <Send className="mr-2 h-4 w-4" />
+                            <PaperPlaneIcon className="mr-2 h-4 w-4" />
                             {isPending ? 'Sending...' : 'Send Message'}
                         </>
                     )}

@@ -1,8 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { CodeIcon } from 'lucide-react'
-
-import { BankIcon, Users3FillIcon } from '@/components/icons'
+import { BankIcon, CodeIcon, Users3FillIcon } from '@/components/icons'
 import Image from '@/components/image'
 import { Button } from '@/components/ui/button'
 

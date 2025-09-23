@@ -1,19 +1,18 @@
 import { Link } from '@tanstack/react-router'
 
-import {
-    ArrowRight,
-    BotIcon,
-    EarthLockIcon,
-    MonitorSmartphoneIcon,
-    RocketIcon,
-    Shield,
-    TrendingUp,
-    UserIcon,
-    Users,
-} from 'lucide-react'
-
 import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import {
+    ArrowChevronRight,
+    GlobeIcon,
+    RobotIcon,
+    RocketIcon,
+    ShieldIcon,
+    SmartphoneIcon,
+    TrendingUpIcon,
+    UserIcon,
+    Users3Icon,
+} from '@/components/icons'
 import ImageMatch from '@/components/image-match'
 import { Button } from '@/components/ui/button'
 import { GradientText } from '@/components/ui/gradient-text'
@@ -37,7 +36,7 @@ const HeroHome = () => {
                     <div className="animate-fade-in space-y-8">
                         <div className="space-y-4">
                             <div className="bg-primary/10 text-primary inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium">
-                                <Shield className="h-4 w-4" />
+                                <ShieldIcon className="h-4 w-4" />
                                 LANDS HORIZON CORP.
                             </div>
 
@@ -49,7 +48,7 @@ const HeroHome = () => {
                                     animate="shimmer"
                                     className="block font-extrabold"
                                 >
-                                    <h1>Gradient Text Component</h1>
+                                    <h1>E-COOPERATIVE SUITE</h1>
                                 </GradientText>
                             </h1>
 
@@ -74,7 +73,7 @@ const HeroHome = () => {
                                 >
                                     <UserIcon className="mr-2 h-5 w-5" />
                                     Sign Up Now
-                                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                                    <ArrowChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </Button>
                             <Button size="lg" variant="outline" asChild>
@@ -94,7 +93,7 @@ const HeroHome = () => {
                         <div className="border-border/50 grid grid-cols-3 gap-8 border-t pt-8">
                             <div className="text-center">
                                 <div className="mb-2 flex items-center justify-center gap-2">
-                                    <BotIcon className="text-primary h-8 w-8" />
+                                    <RobotIcon className="text-primary h-8 w-8" />
                                 </div>
                                 <p className="text-muted-foreground text-sm">
                                     AI Enabled Cooperative Banking with LLM and
@@ -103,7 +102,7 @@ const HeroHome = () => {
                             </div>
                             <div className="text-center">
                                 <div className="mb-2 flex items-center justify-center gap-2">
-                                    <EarthLockIcon className="text-community h-8 w-8" />
+                                    <GlobeIcon className="text-community h-8 w-8" />
                                 </div>
                                 <p className="text-muted-foreground text-sm">
                                     Advanced Security Implementation
@@ -111,7 +110,7 @@ const HeroHome = () => {
                             </div>
                             <div className="text-center">
                                 <div className="mb-2 flex items-center justify-center gap-2">
-                                    <MonitorSmartphoneIcon className="text-primary/80 h-8 w-8" />
+                                    <SmartphoneIcon className="text-primary/80 h-8 w-8" />
                                     <span className="text-primary/80 text-2xl font-bold">
                                         1B+
                                     </span>
@@ -142,7 +141,7 @@ const HeroHome = () => {
                         >
                             <div className="flex items-center gap-3">
                                 <div className="bg-gradient-community flex h-10 w-10 items-center justify-center rounded-full">
-                                    <Users className="h-5 w-5 " />
+                                    <Users3Icon className="h-5 w-5 " />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold">
@@ -161,7 +160,7 @@ const HeroHome = () => {
                         >
                             <div className="flex items-center gap-3">
                                 <div className="bg-gradient-hero flex h-10 w-10 items-center justify-center rounded-full">
-                                    <TrendingUp className="h-5 w-5 " />
+                                    <TrendingUpIcon className="h-5 w-5 " />
                                 </div>
                                 <div>
                                     <GradientBackground className="text-sm font-semibold">

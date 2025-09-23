@@ -15,6 +15,7 @@ import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
 import {
     BsRocketTakeoff as BsRocketTakeoffIcon,
     BsBuildingGear as BuildingCogIcon,
+    BsRocketTakeoffFill as RocketIcon,
     BsLayoutSidebarInset as SidebarIcon,
     BsLayoutSidebarInsetReverse as SidebarRightIcon,
 } from 'react-icons/bs'
@@ -207,6 +208,7 @@ import {
     IoIosFunnel as FunnelFilledIcon,
     IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
+    IoIosPulse as PulseIcon,
     IoIosClose as XIcon,
 } from 'react-icons/io'
 import {
@@ -348,6 +350,7 @@ import {
     RiFlipVerticalFill as FlipVerticalIcon,
     RiFlipVerticalLine as FlipVerticalLineIcon,
     RiCommunityFill as RiCommunityFillIcon,
+    RiRobot2Line as RobotIcon,
     RiListCheck3 as TransactionListIcon,
 } from 'react-icons/ri'
 import {
@@ -395,6 +398,9 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    RobotIcon,
+    RocketIcon,
+    PulseIcon,
     SidebarLeftIcon,
     ArrowChevronUpIcon,
     CircleIcon,
@@ -746,6 +752,9 @@ export {
 }
 
 export const IconMap: Record<TIcon, IconType> = {
+    Robot: RobotIcon,
+    Rocket: RocketIcon,
+    Pulse: PulseIcon,
     SidebarLeft: SidebarLeftIcon,
     ArrowChevronUp: ArrowChevronUpIcon,
     GripHorizontal: GripHorizontalIcon,
