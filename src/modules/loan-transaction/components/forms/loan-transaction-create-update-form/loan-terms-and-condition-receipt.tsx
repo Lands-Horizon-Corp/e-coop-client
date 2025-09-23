@@ -36,10 +36,15 @@ import { TLoanTransactionSchema } from '../../../loan-transaction.validation'
 
 type Props = {
     form: UseFormReturn<TLoanTransactionSchema>
+    isReadOnly?: boolean
     isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
 }
 
-const LoanTermsAndConditionReceiptSection = ({ form, isDisabled }: Props) => {
+const LoanTermsAndConditionReceiptSection = ({
+    form,
+    isReadOnly,
+    isDisabled,
+}: Props) => {
     return (
         <div className="space-y-4">
             <div className="space-y-4 rounded-xl bg-popover">
@@ -96,11 +101,13 @@ const LoanTermsAndConditionReceiptSection = ({ form, isDisabled }: Props) => {
 
             <LoanTermsAndConditionSuggestedPaymentField
                 form={form}
+                isReadOnly={isReadOnly}
                 isDisabled={isDisabled}
             />
 
             <LoanTermsAndConditionReceiptField
                 form={form}
+                isReadOnly={isReadOnly}
                 isDisabled={isDisabled}
             />
 
@@ -149,9 +156,11 @@ const LoanTermsAndConditionReceiptSection = ({ form, isDisabled }: Props) => {
 // LOAN TERMS AND CONDITION RECEIPT FIELD
 const LoanTermsAndConditionReceiptField = ({
     form,
+    isReadOnly,
     isDisabled,
 }: {
     form: UseFormReturn<TLoanTransactionSchema>
+    isReadOnly?: boolean
     isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
 }) => {
     const addReceiptModal = useModalState()
@@ -174,9 +183,13 @@ const LoanTermsAndConditionReceiptField = ({
         keyName: 'fieldKey',
     })
 
-    useHotkeys('shift+r', () => {
-        addReceiptModal?.onOpenChange(true)
-    })
+    useHotkeys(
+        'shift+r',
+        () => {
+            addReceiptModal?.onOpenChange(true)
+        },
+        { enabled: !isReadOnly }
+    )
 
     const disabled = isDisabled('loan_terms_and_condition_amount_receipt')
 
@@ -265,6 +278,9 @@ const LoanTermsAndConditionReceiptField = ({
                                     key={receipt.fieldKey}
                                     receipt={receipt}
                                     index={index}
+                                    disabled={
+                                        isReadOnly || isDisabled(field.name)
+                                    }
                                     ref={(el) => {
                                         cardRefs.current[index] = el
                                     }}
@@ -298,6 +314,7 @@ const LoanTermsAndConditionReceiptField = ({
 interface ILoanTermsAndConditionReceiptCardProps {
     receipt: ILoanTermsAndConditionAmountReceiptRequest & { fieldKey: string }
     index: number
+    disabled?: boolean
     onRemove: (index: number, id?: TEntityId) => void
     onUpdate: (
         index: number,
@@ -307,11 +324,17 @@ interface ILoanTermsAndConditionReceiptCardProps {
 
 const LoanTermsAndConditionReceiptCard = memo(
     forwardRef<HTMLDivElement, ILoanTermsAndConditionReceiptCardProps>(
-        ({ receipt, index, onRemove, onUpdate }, ref) => {
+        ({ receipt, index, disabled, onRemove, onUpdate }, ref) => {
             const cardRef = useRef<HTMLDivElement>(null)
             const editModalState = useModalState()
 
             const handleCardKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+                if (disabled) {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    return
+                }
+
                 if (e.key === 'Delete') {
                     e.preventDefault()
                     e.stopPropagation()
@@ -434,9 +457,11 @@ LoanTermsAndConditionReceiptCard.displayName =
 // LOAN TERMS AND CONDITION SUGGESTED PAYMENT FIELD
 const LoanTermsAndConditionSuggestedPaymentField = ({
     form,
+    isReadOnly,
     isDisabled,
 }: {
     form: UseFormReturn<TLoanTransactionSchema>
+    isReadOnly?: boolean
     isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
 }) => {
     const addSuggestedPaymentModal = useModalState()
@@ -459,9 +484,13 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
         keyName: 'fieldKey',
     })
 
-    useHotkeys('shift+p', () => {
-        addSuggestedPaymentModal?.onOpenChange(true)
-    })
+    useHotkeys(
+        'shift+p',
+        () => {
+            addSuggestedPaymentModal?.onOpenChange(true)
+        },
+        { enabled: !isReadOnly }
+    )
 
     const disabled = isDisabled('loan_terms_and_condition_suggested_payment')
 

@@ -154,7 +154,6 @@ export const LoanTransactionAction = ({
                 <LoanTransactionCreateUpdateFormModal
                     {...updateModal}
                     formProps={{
-                        mode: 'update',
                         loanTransactionId: loanTransaction.id,
                         defaultValues:
                             loanTransaction as ILoanTransactionRequest,
@@ -360,7 +359,6 @@ export const LoanTransactionRowContext = ({
             <LoanTransactionCreateUpdateFormModal
                 {...updateModal}
                 formProps={{
-                    mode: 'update',
                     loanTransactionId: loanTransaction.id,
                     defaultValues: loanTransaction as ILoanTransactionRequest,
                 }}

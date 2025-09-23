@@ -40,12 +40,17 @@ const LoanClearanceAnalysis = forwardRef<
     HTMLDivElement,
     {
         form: UseFormReturn<TLoanTransactionSchema>
+        isReadOnly?: boolean
         isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
     }
->(({ form, isDisabled }, ref) => {
+>(({ form, isReadOnly, isDisabled }, ref) => {
     return (
         <div ref={ref} className="space-y-4">
-            <LoanClearanceAnalysisField form={form} isDisabled={isDisabled} />
+            <LoanClearanceAnalysisField
+                form={form}
+                isReadOnly={isReadOnly}
+                isDisabled={isDisabled}
+            />
             <div className="grid grid-cols-2 gap-x-2">
                 <div className="space-y-2">
                     <FormFieldWrapper
@@ -91,6 +96,7 @@ const LoanClearanceAnalysis = forwardRef<
                 <div className="space-y-2">
                     <LoanClearanceInstitutionField
                         form={form}
+                        isReadOnly={isReadOnly}
                         isDisabled={isDisabled}
                     />
                     <FormFieldWrapper
@@ -116,9 +122,11 @@ const LoanClearanceAnalysis = forwardRef<
 
 const LoanClearanceAnalysisField = ({
     form,
+    isReadOnly,
     isDisabled,
 }: {
     form: UseFormReturn<TLoanTransactionSchema>
+    isReadOnly?: boolean
     isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
 }) => {
     const addLoanClearanceAnalysisModal = useModalState()
@@ -141,11 +149,15 @@ const LoanClearanceAnalysisField = ({
         keyName: 'fieldKey',
     })
 
-    useHotkeys('shift+n', (e) => {
-        e.stopPropagation()
-        e.preventDefault()
-        addLoanClearanceAnalysisModal?.onOpenChange(true)
-    })
+    useHotkeys(
+        'shift+n',
+        (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            addLoanClearanceAnalysisModal?.onOpenChange(true)
+        },
+        { enabled: !isReadOnly }
+    )
 
     const disabled = isDisabled('loan_clearance_analysis')
 
@@ -424,9 +436,11 @@ LoanClearanceAnalysis.displayName = 'LoanClearanceAnalysis'
 // LOAN CLEARANCE ANALYSIS INSTITUTION
 const LoanClearanceInstitutionField = ({
     form,
+    isReadOnly,
     isDisabled,
 }: {
     form: UseFormReturn<TLoanTransactionSchema>
+    isReadOnly?: boolean
     isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
 }) => {
     const addLoanClearanceAnalysisInstitutionModal = useModalState()
@@ -451,11 +465,15 @@ const LoanClearanceInstitutionField = ({
         keyName: 'fieldKey',
     })
 
-    useHotkeys('shift+i', (e) => {
-        e.stopPropagation()
-        e.preventDefault()
-        addLoanClearanceAnalysisInstitutionModal?.onOpenChange(true)
-    })
+    useHotkeys(
+        'shift+i',
+        (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            addLoanClearanceAnalysisInstitutionModal?.onOpenChange(true)
+        },
+        { enabled: !isReadOnly }
+    )
 
     const handleRemoveInstitution = (index: number, id?: TEntityId) => {
         remove(index)
