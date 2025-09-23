@@ -14,7 +14,6 @@ import {
     rgbaToHsla,
 } from '@/helpers'
 import { cn } from '@/helpers'
-import { Loader2, PipetteIcon } from 'lucide-react'
 import { HexAlphaColorPicker, HexColorPicker } from 'react-colorful'
 
 import { Button } from '@/components/ui/button'
@@ -32,6 +31,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+
+import { LoadingSpinnerIcon, PipetteIcon } from '../icons'
 
 export const colorSchema = z
     .string()
@@ -654,7 +655,7 @@ export default function ColorPicker({
                     />
                     {isLoading && (
                         <span className="absolute inset-y-0 right-0 flex items-center pr-4">
-                            <Loader2 className="text-muted-foreground h-5 w-5 animate-spin" />
+                            <LoadingSpinnerIcon className="text-muted-foreground h-5 w-5 animate-spin" />
                         </span>
                     )}
                 </div>

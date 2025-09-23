@@ -1,5 +1,4 @@
-import { HandshakeIcon, Target } from 'lucide-react'
-
+import { HandsHelpingIcon, TargetArrowIcon } from '@/components/icons'
 import { Separator } from '@/components/ui/separator'
 
 interface InfoCardProps {
@@ -30,7 +29,7 @@ const MissionVisionSection = () => {
                 <div className="flex flex-col md:flex-row gap-6 md:gap-8 justify-center items-stretch">
                     <InfoCard
                         icon={
-                            <Target className="w-6 h-6 text-primary-foreground" />
+                            <TargetArrowIcon className="w-6 h-6 text-primary-foreground" />
                         }
                         title="Our Mission"
                     >
@@ -58,7 +57,7 @@ const MissionVisionSection = () => {
                     </InfoCard>
                     <InfoCard
                         icon={
-                            <HandshakeIcon className="w-6 h-6 text-primary-foreground" />
+                            <HandsHelpingIcon className="w-6 h-6 text-primary-foreground" />
                         }
                         title="Our Vision"
                     >

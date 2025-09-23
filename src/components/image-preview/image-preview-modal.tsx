@@ -4,10 +4,10 @@ import * as ImagePreviewPrimitive from '@radix-ui/react-dialog'
 
 import { cn } from '@/helpers'
 import { useImagePreview } from '@/store/image-preview-store'
-import { X } from 'lucide-react'
 
 import { DownloadProps } from '@/types'
 
+import { XIcon } from '../icons'
 import {
     Carousel,
     CarouselApi,
@@ -240,7 +240,7 @@ const ImagePreviewModal = () => {
                                         closeButtonClassName
                                     )}
                                 >
-                                    <X className="size-full" />
+                                    <XIcon className="size-full" />
                                     <span className="sr-only">Close</span>
                                 </ImagePreviewPrimitive.Close>
                             )}

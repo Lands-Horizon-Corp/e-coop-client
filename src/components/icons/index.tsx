@@ -373,7 +373,7 @@ import {
     TbTransactionDollar as TransactionDollarIcon,
     TbUnlink as UnlinkIcon,
 } from 'react-icons/tb'
-import { TiBook as BookIcon } from 'react-icons/ti'
+import { TiBook as BookIcon, TiPipette as PipetteIcon } from 'react-icons/ti'
 import {
     VscBracketError as BracketErrorIcon,
     VscCollapseAll as CollapseIcon,
@@ -386,6 +386,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    PipetteIcon,
     HeadsetIcon,
     CodeIcon,
     XIcon,
@@ -727,6 +728,7 @@ export {
 }
 
 export const IconMap: Record<TIcon, IconType> = {
+    Pipette: PipetteIcon,
     Headset: HeadsetIcon,
     X: XIcon,
     F1: F1Icon,

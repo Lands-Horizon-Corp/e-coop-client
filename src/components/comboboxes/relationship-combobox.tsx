@@ -2,9 +2,8 @@ import * as React from 'react'
 
 import { FAMILY_RELATIONSHIP } from '@/constants'
 import { cn } from '@/helpers'
-import { Check } from 'lucide-react'
 
-import { ChevronDownIcon } from '@/components/icons'
+import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -89,7 +88,7 @@ const RelationshipCombobox = ({
                                     <span className="capitalize">
                                         {relationship}
                                     </span>
-                                    <Check
+                                    <CheckIcon
                                         className={cn(
                                             'ml-auto',
                                             value === relationship

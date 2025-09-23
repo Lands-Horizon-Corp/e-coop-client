@@ -4,20 +4,18 @@ import { forwardRef, useEffect, useRef, useState } from 'react'
 
 import { cn, formatBytes, formatDate } from '@/helpers'
 import useEmblaCarousel from 'embla-carousel-react'
+
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
     DownloadIcon,
-    FlipHorizontal,
-    FlipVertical,
-    ZoomIn,
-    ZoomOut,
-} from 'lucide-react'
-
-import {
+    FlipHorizontalIcon,
+    FlipVerticalIcon,
     PowerResetIcon,
     RotateLeftIcon,
     RotateRightIcon,
+    ZoomInIcon,
+    ZoomOutIcon,
 } from '@/components/icons'
 // Local Components
 import { useCarousel } from '@/components/ui/carousel'
@@ -378,12 +376,12 @@ export const ImagePreviewActions = React.forwardRef<
                         onClick={handleResetActionState}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<ZoomIn />}
+                        Icon={<ZoomInIcon />}
                         name="zoom in"
                         onClick={handleZoomIn}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<ZoomOut />}
+                        Icon={<ZoomOutIcon />}
                         name="zoom out"
                         onClick={handleZoomOut}
                     />
@@ -400,12 +398,12 @@ export const ImagePreviewActions = React.forwardRef<
                         onClick={handleRotateRight}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<FlipHorizontal />}
+                        Icon={<FlipHorizontalIcon />}
                         name="flip horizontal"
                         onClick={handleFlipHorizontal}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<FlipVertical />}
+                        Icon={<FlipVerticalIcon />}
                         name="flip vertical"
                         onClick={handleFlipVertical}
                     />

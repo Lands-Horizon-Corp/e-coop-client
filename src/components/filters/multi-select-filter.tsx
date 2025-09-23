@@ -1,5 +1,4 @@
 import { cn } from '@/helpers'
-import { CheckIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -10,6 +9,8 @@ import {
     CommandItem,
     CommandList,
 } from '@/components/ui/command'
+
+import { CheckIcon } from '../icons'
 
 export interface IMultiSelectOption<TValue> {
     label: string

@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 
 import { cn } from '@/helpers/tw-utils'
-import { ChevronDown } from 'lucide-react'
+import { ArrowChevronDown } from '../icons'
 
 const Accordion = AccordionPrimitive.Root
 
@@ -36,7 +36,7 @@ const AccordionTrigger = React.forwardRef<
         >
             {children}
             {!disableIcon && (
-                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-300" />
+                <ArrowChevronDown className="h-4 w-4 shrink-0 transition-transform duration-300" />
             )}
         </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
