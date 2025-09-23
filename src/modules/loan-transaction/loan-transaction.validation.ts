@@ -15,6 +15,7 @@ import { LoanTermsAndConditionSuggestedPaymentSchema } from '../loan-terms-and-c
 import { LoanTransactionEntrySchema } from '../loan-transaction-entry'
 import {
     LOAN_COLLECTOR_PLACE,
+    LOAN_COMAKER_TYPE,
     // LOAN_COMAKER_TYPE,
     LOAN_MODE_OF_PAYMENT,
     LOAN_TYPE,
@@ -129,15 +130,59 @@ export const LoanTransactionSchema = z
 
         loan_status_id: entityIdSchema.optional(),
 
-        // comaker_type: z
-        //     .enum(LOAN_COMAKER_TYPE, {
-        //         error: 'Please select valid comaker',
-        //     })
-        //     .default('none'),
+        comaker_type: z
+            .enum(LOAN_COMAKER_TYPE, {
+                error: 'Please select valid comaker',
+            })
+            .default('none'),
+
+        comaker_member_profiles: z
+            .array(ComakerMemberProfileSchema)
+            .optional()
+            .default([]),
+        comaker_member_profiles_deleted: z
+            .array(entityIdSchema)
+            .optional()
+            .default([]),
+
+        comaker_collaterals: z
+            .array(ComakerCollateralSchema)
+            .optional()
+            .default([]),
+        comaker_collaterals_deleted: z
+            .array(entityIdSchema)
+            .optional()
+            .default([]),
 
         collector_place: z.enum(LOAN_COLLECTOR_PLACE, {
             error: 'Please select valid collector place',
         }),
+
+        mode_of_payment: z.enum(LOAN_MODE_OF_PAYMENT).default('monthly'),
+        mode_of_payment_fixed_days: z.coerce
+            .number('Invalid number of days')
+            .optional(),
+
+        mode_of_payment_weekly: z
+            .enum(WEEKDAYS, {
+                error: 'Please provide valid weekdays',
+            })
+            .optional()
+            .default('monday'),
+
+        mode_of_payment_semi_monthly_pay_1: z.coerce
+            .number('Choose a valid day 1 - 30')
+            .int()
+            .optional(),
+        mode_of_payment_semi_monthly_pay_2: z.coerce
+            .number('Choose a valid day 1 - 30')
+            .int()
+            .optional(),
+
+        mode_of_payment_monthly_exact_day: z
+            .boolean()
+            .optional()
+            .default(false),
 
         loan_type: z.enum(LOAN_TYPE),
         terms: z.coerce

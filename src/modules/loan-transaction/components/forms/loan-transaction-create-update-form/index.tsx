@@ -281,6 +281,9 @@ const LoanTransactionCreateUpdateForm = ({
             loan_type: 'standard',
             applied_1: 0,
 
+            comaker_type: 'none',
+            mode_of_payment: 'monthly',
+
             comaker_member_profiles: [],
             comaker_member_profiles_deleted: [],
 
@@ -376,7 +379,7 @@ const LoanTransactionCreateUpdateForm = ({
                             loan_terms_and_condition_suggested_payment_deleted:
                                 [],
                             ...data,
-                        } as ILoanTransactionRequest),
+                        } as unknown as ILoanTransactionRequest),
                 })
             }
             if (promise)
