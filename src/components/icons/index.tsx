@@ -345,9 +345,8 @@ import {
     RiFlipVerticalFill as FlipVerticalIcon,
     RiFlipVerticalLine as FlipVerticalLineIcon,
     RiCommunityFill as RiCommunityFillIcon,
+    RiRobot2Line as RobotIcon,
     RiListCheck3 as TransactionListIcon,
-   RiRobot2Line as RobotIcon,
-
 } from 'react-icons/ri'
 import {
     RxDotFilled as DotMediumIcon,

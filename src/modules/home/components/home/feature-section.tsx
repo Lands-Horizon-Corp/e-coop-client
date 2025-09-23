@@ -52,7 +52,7 @@ export default function FeatureSection() {
                             </div>
                             <div className="p-4">
                                 <h3 className="text-foreground mb-2 min-h-[28px] font-bold md:mb-4">
-                                <CodeIcon className="inline size-4 mr-2" />
+                                    <CodeIcon className="inline size-4 mr-2" />
                                     API & Integrations
                                 </h3>
                                 <p className="text-muted-foreground text-sm md:text-base">

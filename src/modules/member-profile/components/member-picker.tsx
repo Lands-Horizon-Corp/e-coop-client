@@ -31,6 +31,7 @@ import { IMemberProfile, useGetPaginatedMemberProfiles } from '..'
 interface Props extends IPickerBaseProps<IMemberProfile> {
     defaultFilter?: TFilterObject
     allowShorcutCommand?: boolean
+    showPBNo?: boolean
 }
 
 const MemberPicker = forwardRef<HTMLButtonElement, Props>(
@@ -44,6 +45,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             triggerClassName,
             onSelect,
             triggerVariant = 'secondary',
+            showPBNo = true,
         },
         ref
     ) => {
@@ -249,15 +251,19 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                             'Select member'}
                                     </span>
                                 ) : (
-                                    <span>{value.full_name}</span>
+                                    <span className="truncate max-w-[120px] min-w-[30px]">
+                                        {value.full_name}
+                                    </span>
                                 )}
                             </span>
                             {allowShorcutCommand && (
                                 <span className="mr-2 text-sm">⌘ ↵ </span>
                             )}
-                            <span className="mr-1 font-mono text-sm text-muted-foreground">
-                                {value?.passbook || ''}
-                            </span>
+                            {showPBNo && (
+                                <span className="mr-1 font-mono text-sm text-muted-foreground">
+                                    {value?.passbook || ''}
+                                </span>
+                            )}
                         </span>
                         <ChevronDownIcon />
                     </Button>

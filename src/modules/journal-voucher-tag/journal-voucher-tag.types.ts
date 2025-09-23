@@ -1,31 +1,27 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import z from 'zod'
 
-import { IJournalVoucherResponse } from '../journal-voucher/journal-voucher.types'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-export interface IJournalVoucherTagRequest {
-    journal_voucher_id: TEntityId
-    name?: string
-    description?: string
-    category?: string
-    color?: string
-    icon?: string
-}
+import { JournalVoucherTagSchema } from './journal-voucher-tag.validation'
 
-export interface IJournalVoucherTagResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    journal_voucher_id: TEntityId
-    journal_voucher?: IJournalVoucherResponse
+export interface IJournalVoucherTag extends IBaseEntityMeta {
+    journal_voucher_id?: TEntityId
     name: string
     description: string
     category: string
     color: string
     icon: string
 }
+
+export type JournalVoucherTagRequest = {
+    journal_voucher_id?: TEntityId
+    name?: string
+    description?: string
+    category?: string
+    color?: string
+    icon?: string
+}
+export type IJournalVoucherTagRequest = z.infer<typeof JournalVoucherTagSchema>
+
+export interface IJournalVoucherTagPaginated
+    extends IPaginatedResult<IJournalVoucherTag> {}

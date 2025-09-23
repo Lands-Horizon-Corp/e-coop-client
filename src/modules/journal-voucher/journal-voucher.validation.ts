@@ -1,47 +1,20 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { descriptionTransformerSanitizer } from '@/validation'
 
-export const journalVoucherSchema = z.object({
-    employee_user_id: entityIdSchema.nullable().optional(),
-    member_profile_id: entityIdSchema.nullable().optional(),
-    printed_by_user_id: entityIdSchema.nullable().optional(),
-    approved_by_user_id: entityIdSchema.nullable().optional(),
-    released_by_user_id: entityIdSchema.nullable().optional(),
-    total_debit: z.number().optional(),
-    total_credit: z.number().optional(),
-    print_count: z.number().optional(),
-    description: z.string().optional(),
-    printed_date: z.string().datetime().nullable().optional(),
-    approved_date: z.string().datetime().nullable().optional(),
-    released_date: z.string().datetime().nullable().optional(),
-    approved_by_signature_media_id: entityIdSchema.nullable().optional(),
-    approved_by_name: z.string().optional(),
-    approved_by_position: z.string().optional(),
-    prepared_by_signature_media_id: entityIdSchema.nullable().optional(),
-    prepared_by_name: z.string().optional(),
-    prepared_by_position: z.string().optional(),
-    certified_by_signature_media_id: entityIdSchema.nullable().optional(),
-    certified_by_name: z.string().optional(),
-    certified_by_position: z.string().optional(),
-    verified_by_signature_media_id: entityIdSchema.nullable().optional(),
-    verified_by_name: z.string().optional(),
-    verified_by_position: z.string().optional(),
-    check_by_signature_media_id: entityIdSchema.nullable().optional(),
-    check_by_name: z.string().optional(),
-    check_by_position: z.string().optional(),
-    acknowledge_by_signature_media_id: entityIdSchema.nullable().optional(),
-    acknowledge_by_name: z.string().optional(),
-    acknowledge_by_position: z.string().optional(),
-    noted_by_signature_media_id: entityIdSchema.nullable().optional(),
-    noted_by_name: z.string().optional(),
-    noted_by_position: z.string().optional(),
-    posted_by_signature_media_id: entityIdSchema.nullable().optional(),
-    posted_by_name: z.string().optional(),
-    posted_by_position: z.string().optional(),
-    paid_by_signature_media_id: entityIdSchema.nullable().optional(),
-    paid_by_name: z.string().optional(),
-    paid_by_position: z.string().optional(),
+export const JournalVoucherSchema = z.object({
+    cash_voucher_number: z.string().min(1, 'Cash voucher number is required'),
+    date: z.string().min(1, 'Date is required'),
+    reference: z.string().min(1, 'Reference is required'),
+    status: z.string().min(1, 'Reference is required'),
+    description: z
+        .string()
+        .min(10, 'Min 10 character description')
+        .optional()
+        .transform(descriptionTransformerSanitizer),
+
+    member_profile_id: z.string().optional(),
+    member_profile: z.any().optional(),
 })
 
-export type TJournalVoucherFormValues = z.infer<typeof journalVoucherSchema>
+export type TJournalVoucherSchema = z.infer<typeof JournalVoucherSchema>

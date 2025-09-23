@@ -15,6 +15,7 @@ interface IFormResetSubmitFooterProps extends IClassProps {
     isLoading?: boolean
     disableSubmit?: boolean
     showSeparator?: boolean
+    disableReset?: boolean
 
     showConfirmOnReset?: boolean
 
@@ -40,6 +41,7 @@ const FormFooterResetSubmit = ({
     error,
     showSeparator = false,
     showConfirmOnReset = true,
+    disableReset,
 
     resetButtonType = 'button',
     submitButtonType = 'submit',
@@ -68,7 +70,9 @@ const FormFooterResetSubmit = ({
                         }
                         onReset?.()
                     }}
-                    disabled={disableSubmit || readOnly || isLoading}
+                    disabled={
+                        disableSubmit || readOnly || isLoading || disableReset
+                    }
                     className="w-full self-end px-8 sm:w-fit"
                 >
                     {resetText}

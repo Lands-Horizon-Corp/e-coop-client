@@ -5,14 +5,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
-    IAccount,
-    deleteMany,
-    exportAll,
-    exportAllFiltered,
-    exportSelected,
-    useGetPaginated,
-} from '@/modules/account'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+    IJournalVoucher,
+    deleteManyJournalVoucher,
+    journalVoucherBaseKey,
+    useGetPaginatedJournalVoucher,
+} from '@/modules/journal-voucher'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -30,19 +27,20 @@ import useDataTableState from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
-import { useSubscribe } from '@/hooks/use-pubsub'
 
-import accountTableColumns, {
-    IAccountsTableColumnProps,
-    accountsGlobalSearchTargets,
+import JournalVoucherTableColumns, {
+    IJournalVoucherTableColumnProps,
+    journalVoucherGlobalSearchTargets,
 } from './columns'
-import { AccountRowContext } from './row-actions'
+import JournalVoucherAction, {
+    JournalVoucherRowContext,
+} from './row-action-context'
 
-export interface AccountsTableProps
-    extends TableProps<IAccount>,
-        IAccountsTableColumnProps {
+export interface JournalVoucherTableProps
+    extends TableProps<IJournalVoucher>,
+        IJournalVoucherTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IAccount>,
+        IDataTableToolbarProps<IJournalVoucher>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -53,7 +51,7 @@ export interface AccountsTableProps
     >
 }
 
-const AccountsTable = ({
+const JournalVoucherTable = ({
     className,
     toolbarProps,
     defaultFilter,
@@ -62,23 +60,17 @@ const AccountsTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
-    RowContextComponent = AccountRowContext,
-}: AccountsTableProps) => {
+    actionComponent = JournalVoucherAction,
+    RowContextComponent = JournalVoucherRowContext,
+}: JournalVoucherTableProps) => {
     const queryClient = useQueryClient()
-
     const { pagination, setPagination } = usePagination()
-    const { tableSorting, setTableSorting } = useDataTableSorting()
-
-    const {
-        currentAuth: {
-            user_organization: { branch_id },
-        },
-    } = useAuthUserWithOrgBranch()
+    const { sortingStateBase64, tableSorting, setTableSorting } =
+        useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            accountTableColumns({
+            JournalVoucherTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -94,7 +86,7 @@ const AccountsTable = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<IAccount>({
+    } = useDataTableState<IJournalVoucher>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -107,16 +99,15 @@ const AccountsTable = ({
     const {
         isPending,
         isRefetching,
-        data: paginatedData,
+        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginated({})
-
-    const {
-        data = [],
-        totalPage = 0,
-        pageSize = 0,
-        totalSize = 0,
-    } = paginatedData || {}
+    } = useGetPaginatedJournalVoucher({
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+    })
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
@@ -148,12 +139,7 @@ const AccountsTable = ({
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
-        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-
-    useSubscribe(`account.create.branch.${branch_id}`, refetch)
-    useSubscribe(`account.update.branch.${branch_id}`, refetch)
-    useSubscribe(`account.delete.branch.${branch_id}`, refetch)
 
     return (
         <FilterContext.Provider value={filterState}>
@@ -165,10 +151,9 @@ const AccountsTable = ({
                 )}
             >
                 <DataTableToolbar
-                    className=""
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: accountsGlobalSearchTargets,
+                        targets: journalVoucherGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
@@ -176,13 +161,14 @@ const AccountsTable = ({
                         isLoading: isPending || isRefetching,
                     }}
                     deleteActionProps={{
-                        onDeleteSuccess: () => {
+                        onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
-                                queryKey: ['account', 'paginated'],
-                            })
-                        },
+                                queryKey: [journalVoucherBaseKey, 'paginated'],
+                            }),
                         onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
+                            deleteManyJournalVoucher({
+                                ids: selectedData.map((data) => data.id),
+                            }),
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
@@ -190,12 +176,13 @@ const AccountsTable = ({
                         isLoading: isPending,
                         filters: filterState.finalFilterPayload,
                         disabled: isPending || isRefetching,
-                        exportAll: exportAll,
-                        exportAllFiltered: exportAllFiltered,
-                        exportCurrentPage: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
-                        exportSelected: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                        // exportAll: exportAll,
+                        // exportCurrentPage: (ids) =>
+                        //     exportSelected(ids.map((data) => data.id)),
+                        // exportSelected: (ids) =>
+                        //     exportSelected(ids.map((data) => data.id)),
+                        // exportAllFiltered: (filters) =>
+                        //     exportAllFiltered(filters),
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
@@ -207,12 +194,12 @@ const AccountsTable = ({
                     table={table}
                     isStickyHeader
                     isStickyFooter
-                    isScrollable={isScrollable}
+                    className="mb-2"
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
+                    isScrollable={isScrollable}
                     RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
-                    className="mb-2"
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>
@@ -220,4 +207,4 @@ const AccountsTable = ({
     )
 }
 
-export default AccountsTable
+export default JournalVoucherTable

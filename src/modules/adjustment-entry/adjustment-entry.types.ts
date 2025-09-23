@@ -1,43 +1,57 @@
-import { IBaseEntityMeta, ITimeStamps } from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { IMedia } from '../media/media.types'
+import { IAdjustmentEntryTag } from '../adjustment-entry-tag'
 import { IMemberProfile } from '../member-profile'
-import { IPaymentType } from '../payment-type/payment-type.types'
-import { IUserBase } from '../user/user.types'
+import { IPaymentType } from '../payment-type'
+import { IUser } from '../user'
 
 export interface IAdjustmentEntry extends IBaseEntityMeta {
-    id: string
-    signature_media_id?: string
-    signature_media?: IMedia
-    account_id: string
-    account?: IAccount
-    member_profile_id?: string
+    //add here
+    signature_media_id?: TEntityId
+    signature_media: TEntityId
+
+    account_id: TEntityId
+    account: IAccount
+
+    member_profile_id?: TEntityId
     member_profile?: IMemberProfile
-    employee_user_id?: string
-    employee_user?: IUserBase
-    payment_type_id?: string
+
+    employee_user_id?: TEntityId
+    employee_user?: IUser
+
+    payment_type_id?: TEntityId
     payment_type?: IPaymentType
-    type_of_payment_type: string
-    description: string
-    reference_number: string
-    entry_date?: string
+
+    type_of_payment_type?: string
+
+    description?: string
+    reference_number?: string
+    entry_date: string
+
+    debit: number
+    credit: number
+
+    adjustment_entry_tags: IAdjustmentEntryTag[]
+}
+
+export interface IAdjustmentEntryRequest {
+    signature_media_id?: TEntityId
+    account_id: TEntityId
+
+    member_profile_id?: TEntityId
+    employee_user_id?: TEntityId
+    payment_type_id?: TEntityId
+
+    type_of_payment_type?: string
+
+    description?: string
+    reference_number?: string
+    entry_date: string
+
     debit: number
     credit: number
 }
 
-export interface IAdjustmentEntryRequest {
-    signature_media_id?: string
-    account_id: string
-    member_profile_id?: string
-    employee_user_id?: string
-    payment_type_id?: string
-    type_of_payment_type?: string
-    description?: string
-    reference_number?: string
-    entry_date?: string
-    debit?: number
-    credit?: number
-}
-
-export type IAdjustmentEntryResponse = IAdjustmentEntry & ITimeStamps
+export interface IAdjustmentEntryPaginated
+    extends IPaginatedResult<IAdjustmentEntry> {}

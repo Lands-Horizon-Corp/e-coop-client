@@ -1,17 +1,15 @@
-import { z } from 'zod'
+import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const AdjustmentEntrySchema = z.object({
-    signature_media_id: entityIdSchema.optional(),
-    account_id: entityIdSchema, // required
-    member_profile_id: entityIdSchema.optional(),
-    employee_user_id: entityIdSchema.optional(),
-    payment_type_id: entityIdSchema.optional(),
-    type_of_payment_type: z.string().max(50).optional(),
-    description: z.string().optional(),
-    reference_number: z.string().optional(),
-    entry_date: z.string().optional(),
-    debit: z.number().optional(),
-    credit: z.number().optional(),
+export const AdjustmentEntryTagSchema = z.object({
+    id: entityIdSchema.optional(),
+    name: z.string().min(1, 'AdjustmentEntryTag name is required'),
+    description: z
+        .string()
+        .min(10, 'Min 10 character description')
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
+
+export type TAdjustmentEntryTagSchema = z.infer<typeof AdjustmentEntryTagSchema>

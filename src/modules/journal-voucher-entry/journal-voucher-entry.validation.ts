@@ -2,9 +2,9 @@ import z from 'zod'
 
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const AdjustmentEntrySchema = z.object({
+export const JournalVoucherEntrySchema = z.object({
     id: entityIdSchema.optional(),
-    name: z.string().min(1, 'AdjustmentEntry name is required'),
+    name: z.string().min(1, 'JournalVoucherEntry name is required'),
     description: z
         .string()
         .min(10, 'Min 10 character description')
@@ -12,4 +12,6 @@ export const AdjustmentEntrySchema = z.object({
         .transform(descriptionTransformerSanitizer),
 })
 
-export type TAdjustmentEntrySchema = z.infer<typeof AdjustmentEntrySchema>
+export type TJournalVoucherEntrySchema = z.infer<
+    typeof JournalVoucherEntrySchema
+>

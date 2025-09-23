@@ -224,7 +224,7 @@ const AccountPicker = ({
                                 </span>
                             ) : (
                                 <span className="inline-flex gap-x-4 items-center">
-                                    <span>{value.name}</span>
+                                    <span>{value.name ?? placeholder}</span>
                                     {!nameOnly && !hideDescription && (
                                         <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
                                             {value.description}

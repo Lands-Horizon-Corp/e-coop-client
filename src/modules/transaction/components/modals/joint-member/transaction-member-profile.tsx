@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import { toast } from 'sonner'
-
 import { cn } from '@/helpers'
 import { IMedia } from '@/modules/media'
 import { IMemberJointAccount } from '@/modules/member-joint-account'
@@ -50,6 +48,8 @@ export type MemberProfileTransactionViewProps = {
     hasTransaction?: boolean
     viewOnly?: boolean
     className?: string
+    allowRemoveButton?: boolean
+    onRemove?: () => void
 }
 
 const TransactionMemberProfile = ({
@@ -58,6 +58,8 @@ const TransactionMemberProfile = ({
     hasTransaction,
     viewOnly = false,
     className,
+    allowRemoveButton = false,
+    onRemove,
 }: MemberProfileTransactionViewProps) => {
     const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
@@ -67,24 +69,10 @@ const TransactionMemberProfile = ({
 
     onSelectedJointMember?.(selectedJointMember?.id)
 
-    const handleMedia = (media: IMedia[] | undefined) => {
-        if (media) {
-            onOpen({
-                Images: media,
-            })
-        } else {
-            toast.warning('No media available for preview.')
-        }
-    }
-
     useHotkeys('Alt+V', () => {
         infoModal.onOpenChange(() => !infoModal.open)
     })
-
     if (!memberInfo) return null
-    const memberMedias = [memberInfo.media, memberInfo.signature_media].filter(
-        (media): media is IMedia => !!media
-    )
 
     return (
         <div className="ecoop-scroll overflow-y-auto border size-full rounded-2xl bg-gradient-to-br from-primary/10 to-background border-primary/90">
@@ -108,7 +96,6 @@ const TransactionMemberProfile = ({
                             <PreviewMediaWrapper media={memberInfo.media}>
                                 <ImageDisplay
                                     className="size-16"
-                                    onClick={() => handleMedia(memberMedias)}
                                     src={memberInfo.media?.download_url}
                                     fallback={
                                         memberInfo.first_name.charAt(0) ?? '-'
@@ -133,6 +120,19 @@ const TransactionMemberProfile = ({
                                 />
                             </DrawerContent>
                         </Drawer>
+                        {allowRemoveButton && (
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                className="text-xs w-full h-7 min-w-24 cursor-pointer mt-2 sm:mt-0"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    onRemove?.()
+                                }}
+                            >
+                                remove
+                            </Button>
+                        )}
                     </div>
 
                     {/* Right section: member details */}
@@ -149,17 +149,23 @@ const TransactionMemberProfile = ({
                                 </div>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                e.stopPropagation()
-                                                handleMedia(memberMedias)
-                                            }}
-                                        >
-                                            <SignatureLightIcon size={25} />
-                                        </Button>
+                                        {memberInfo.signature && (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    onOpen({
+                                                        Images: [
+                                                            memberInfo.signature_media,
+                                                        ] as IMedia[],
+                                                    })
+                                                }}
+                                            >
+                                                <SignatureLightIcon size={25} />
+                                            </Button>
+                                        )}
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         View Signature
