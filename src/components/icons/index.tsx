@@ -73,6 +73,7 @@ import {
     FaBookOpen as BookOpenIcon,
     FaBook as BookThickIcon,
     FaBug as BugIcon,
+    FaRegCircle as CircleIcon,
     FaCode as CodeIcon,
     FaCreditCard as CreditCardIcon,
     FaFileCsv as CsvIcon,
@@ -386,6 +387,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    CircleIcon,
     PipetteIcon,
     HeadsetIcon,
     CodeIcon,
@@ -728,6 +730,7 @@ export {
 }
 
 export const IconMap: Record<TIcon, IconType> = {
+    Circle: CircleIcon,
     Pipette: PipetteIcon,
     Headset: HeadsetIcon,
     X: XIcon,

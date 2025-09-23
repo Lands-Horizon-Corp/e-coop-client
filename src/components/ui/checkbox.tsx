@@ -3,9 +3,7 @@ import * as React from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 
 import { cn } from '@/helpers/tw-utils'
-import { Check } from 'lucide-react'
-
-import { MinusIcon } from '../icons'
+import { CheckIcon, MinusIcon } from '../icons'
 
 const Checkbox = React.forwardRef<
     React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -24,7 +22,7 @@ const Checkbox = React.forwardRef<
                 'group/indicator flex items-center justify-center text-current'
             )}
         >
-            <Check className="size-full group-[[data-state=indeterminate]]/indicator:hidden" />
+            <CheckIcon className="size-full group-[[data-state=indeterminate]]/indicator:hidden" />
             <MinusIcon className="size-full group-[[data-state=checked]]/indicator:hidden" />
         </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>

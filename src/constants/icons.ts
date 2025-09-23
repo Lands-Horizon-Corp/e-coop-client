@@ -1,4 +1,5 @@
 export const ICONS = [
+    'Circle',
     'Pipette',
     'Headset',
     'Code Icon',
