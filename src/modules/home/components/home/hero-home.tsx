@@ -13,8 +13,10 @@ import {
 } from 'lucide-react'
 
 import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import ImageMatch from '@/components/image-match'
 import { Button } from '@/components/ui/button'
+import { GradientText } from '@/components/ui/gradient-text'
 
 const HeroHome = () => {
     return (
@@ -25,7 +27,7 @@ const HeroHome = () => {
                 squareSize={64}
                 maxOpacity={0.5}
                 flickerChance={0.05}
-                className="absolute inset-0 h-screen w-full -top-1/4 -z-10 opacity-50 [mask-image:linear-gradient(to_bottom,white_0%,white_0%,transparent_100%)] dark:opacity-40"
+                className="absolute inset-0 h-screen w-full -top-1/4 -z-10 opacity-50 [mask-image:linear-gradient(to_bottom,white_0%,white_0%,transparent_100%)] dark:opacity-80"
             />
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
 
@@ -41,9 +43,14 @@ const HeroHome = () => {
 
                             <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
                                 Empowering Communities Through{' '}
-                                <span className="bg-gradient-hero text-primary bg-clip-text">
-                                    Cooperative Ownership
-                                </span>
+                                <GradientText
+                                    variant="primary"
+                                    size="6xl"
+                                    animate="shimmer"
+                                    className="block font-extrabold"
+                                >
+                                    <h1>Gradient Text Component</h1>
+                                </GradientText>
                             </h1>
 
                             <p className="text-muted-foreground max-w-2xl text-lg leading-relaxed">
@@ -135,7 +142,7 @@ const HeroHome = () => {
                         >
                             <div className="flex items-center gap-3">
                                 <div className="bg-gradient-community flex h-10 w-10 items-center justify-center rounded-full">
-                                    <Users className="h-5 w-5 text-white" />
+                                    <Users className="h-5 w-5 " />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold">
@@ -154,12 +161,12 @@ const HeroHome = () => {
                         >
                             <div className="flex items-center gap-3">
                                 <div className="bg-gradient-hero flex h-10 w-10 items-center justify-center rounded-full">
-                                    <TrendingUp className="h-5 w-5 text-white" />
+                                    <TrendingUp className="h-5 w-5 " />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-semibold">
+                                    <GradientBackground className="text-sm font-semibold">
                                         P150K Growth
-                                    </p>
+                                    </GradientBackground>
                                     <p className="text-muted-foreground text-xs">
                                         Last month
                                     </p>

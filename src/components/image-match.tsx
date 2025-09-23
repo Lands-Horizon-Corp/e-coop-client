@@ -22,7 +22,7 @@ const ImageMatch = ({
             <Image
                 alt={alt}
                 className={cn(
-                    'h-full w-full object-contain grayscale brightness-0',
+                    'h-full w-full object-contain grayscale brightness-100 dark:brightness-0 dark:opacity-100 opacity-0',
                     className
                 )}
                 src={src}
