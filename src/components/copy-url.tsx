@@ -27,8 +27,7 @@ const CopyURL = ({
             toast.success('Coppied')
             setCoppied(true)
             setTimeout(() => setCoppied(false), duration * 1000)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
+        } catch {
             toast.error("Sorry, Couldn't copy link")
         }
     }

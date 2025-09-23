@@ -93,8 +93,7 @@ const useInvitationCodeActions = ({
         try {
             navigator.clipboard.writeText(invitationCode.code)
             toast.success('Invitation Code Copied')
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
+        } catch {
             toast.error('Failed to copy Invitation Code')
         }
     }
@@ -103,8 +102,7 @@ const useInvitationCodeActions = ({
         try {
             navigator.clipboard.writeText(invitationUrl)
             toast.success('Invitation URL Copied')
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
+        } catch {
             toast.error('Failed to copy')
         }
     }

@@ -103,8 +103,7 @@ const NavProfileMenu = () => {
             queryClient.invalidateQueries()
 
             toast.success(`Switched to ${nextUserOrg.branch.name || 'branch'}`)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
+        } catch {
             toast.error("Can't switch Branch")
         }
     }

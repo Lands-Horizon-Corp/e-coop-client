@@ -33,8 +33,7 @@ const APIKeyGen = ({ className }: Props) => {
                 try {
                     navigator.clipboard.writeText(data.developer_secret_key)
                     toast.success('API Secret Key Copied!')
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (e) {
+                } catch {
                     toast.error('Failed to copy API Secret Key')
                 }
             },
@@ -49,8 +48,7 @@ const APIKeyGen = ({ className }: Props) => {
 
             toast.success('API Key copied')
             return true
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (err) {
+        } catch {
             toast.error('Failed to copy')
             return false
         }
