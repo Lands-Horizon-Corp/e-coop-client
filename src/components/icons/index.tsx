@@ -203,6 +203,7 @@ import {
     IoIosFunnel as FunnelFilledIcon,
     IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
+    IoIosPulse as PulseIcon,
     IoIosClose as XIcon,
 } from 'react-icons/io'
 import {
@@ -390,6 +391,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    PulseIcon,
     SidebarLeftIcon,
     ArrowChevronUpIcon,
     CircleIcon,
@@ -736,6 +738,7 @@ export {
 }
 
 export const IconMap: Record<TIcon, IconType> = {
+    Pulse: PulseIcon,
     SidebarLeft: SidebarLeftIcon,
     ArrowChevronUp: ArrowChevronUpIcon,
     GripHorizontal: GripHorizontalIcon,

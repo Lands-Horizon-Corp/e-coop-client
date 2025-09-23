@@ -1,4 +1,5 @@
 export const ICONS = [
+    'Pulse',
     'SidebarLeft',
     'ArrowChevronUp',
     'GripHorizontal',

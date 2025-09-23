@@ -1,8 +1,11 @@
 import { toReadableDateTime } from '@/helpers/date-utils'
 import { UserTypeBadge } from '@/modules/authentication/components/user-type-badge'
-import { FootprintsIcon } from 'lucide-react'
 
-import { RunningIcon, TextFileFillIcon } from '@/components/icons'
+import {
+    FootstepsIcon,
+    RunningIcon,
+    TextFileFillIcon,
+} from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Map from '@/components/map'
 import { Separator } from '@/components/ui/separator'
@@ -19,7 +22,7 @@ export default function FootstepDetail({ footstep }: Props) {
         <div className="space-y-4">
             <div className="space-y-2">
                 <p className="text-xl">
-                    <FootprintsIcon className="text-primary -rotate-12 inline" />{' '}
+                    <FootstepsIcon className="text-primary -rotate-12 inline" />{' '}
                     Footstep Details
                 </p>
                 <p className="text-sm text-muted-foreground/70">

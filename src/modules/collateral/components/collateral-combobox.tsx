@@ -1,9 +1,9 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { Check } from 'lucide-react'
 
 import {
+    CheckIcon,
     ChevronDownIcon,
     PlusIcon,
     RenderIcon,
@@ -172,7 +172,7 @@ const CollateralCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                                     />
                                                     {option.name}
                                                 </span>
-                                                <Check
+                                                <CheckIcon
                                                     className={cn(
                                                         'ml-auto',
                                                         value === option.id
