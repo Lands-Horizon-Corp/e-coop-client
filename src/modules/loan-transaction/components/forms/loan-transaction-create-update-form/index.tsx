@@ -82,6 +82,7 @@ import {
     TLoanTransactionSchema,
 } from '../../../loan-transaction.validation'
 import LoanStatusIndicator from '../../loan-status-indicator'
+import { LoanTagsManager } from '../../loan-tag-manager'
 import WeekdayCombobox from '../../weekday-combobox'
 import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanComakerSection from './loan-comaker-section'
@@ -440,6 +441,13 @@ const LoanTransactionCreateUpdateForm = ({
                             </div>
 
                             <div className="flex items-center gap-x-1">
+                                {createdLoanTransactionId && (
+                                    <LoanTagsManager
+                                        loanTransactionId={
+                                            createdLoanTransactionId
+                                        }
+                                    />
+                                )}
                                 <LoanStatusIndicator
                                     loanTransactionDates={{
                                         printed_date: printedDate,
@@ -594,7 +602,7 @@ const LoanTransactionCreateUpdateForm = ({
                                 className="space-y-4 rounded-xl p-4 bg-popover"
                             >
                                 <div className="justify-between flex items-center">
-                                    <div>
+                                    <div className="shrink-0">
                                         <p className="font-medium">
                                             <TextFileFillIcon className="inline text-primary" />{' '}
                                             Loan Details
@@ -604,7 +612,7 @@ const LoanTransactionCreateUpdateForm = ({
                                             payment terms
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-start gap-3">
                                         <FormFieldWrapper
                                             control={form.control}
                                             name="official_receipt_number"
@@ -650,7 +658,7 @@ const LoanTransactionCreateUpdateForm = ({
                                             )}
                                         />
                                         <Separator
-                                            className="min-h-8 mt-6"
+                                            className="min-h-8 mt-5"
                                             orientation="vertical"
                                         />
                                         <FormFieldWrapper
@@ -720,6 +728,22 @@ const LoanTransactionCreateUpdateForm = ({
                                     <div className="space-y-4">
                                         <FormFieldWrapper
                                             control={form.control}
+                                            name="loan_purpose_id"
+                                            label="Loan Purpose"
+                                            className="col-span-1"
+                                            render={({ field }) => (
+                                                <LoanPurposeCombobox
+                                                    {...field}
+                                                    onChange={(loanPurpose) =>
+                                                        field.onChange(
+                                                            loanPurpose.id
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        />
+                                        <FormFieldWrapper
+                                            control={form.control}
                                             name="collector_place"
                                             label="Collector"
                                             className="shrink-0 col-span-3 w-full"
@@ -729,85 +753,66 @@ const LoanTransactionCreateUpdateForm = ({
                                                     onValueChange={
                                                         field.onChange
                                                     }
-                                                    className="space-y-2"
+                                                    className="grid grid-cols-2"
                                                 >
-                                                    <FormItem>
-                                                        <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
-                                                            <RadioGroupItem
-                                                                value="field"
-                                                                id="collector-field"
-                                                                aria-describedby="collector-field-description"
-                                                                className="order-1 after:absolute after:inset-0"
+                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-2.5 shadow-xs outline-none">
+                                                        <RadioGroupItem
+                                                            value="field"
+                                                            id="collector-field"
+                                                            aria-describedby="collector-field-description"
+                                                            className="order-1 after:absolute after:inset-0"
+                                                        />
+                                                        <div className="flex grow items-start gap-3">
+                                                            <PinLocationIcon
+                                                                aria-hidden="true"
+                                                                className="shrink-0 size-4 opacity-60"
                                                             />
-                                                            <div className="flex grow items-start gap-3">
-                                                                <PinLocationIcon
-                                                                    aria-hidden="true"
-                                                                    className="shrink-0 size-4 opacity-60"
-                                                                />
-                                                                <div>
-                                                                    <label
-                                                                        htmlFor="collector-field"
-                                                                        className="text-foreground text-sm font-medium cursor-pointer"
-                                                                    >
-                                                                        Field
-                                                                        Collection
-                                                                        <span className="text-muted-foreground text-xs leading-[inherit] font-normal ml-1">
-                                                                            (On-site)
-                                                                        </span>
-                                                                    </label>
-                                                                    <p
-                                                                        id="collector-field-description"
-                                                                        className="text-muted-foreground text-xs"
-                                                                    >
-                                                                        Collector
-                                                                        visits
-                                                                        member's
-                                                                        location
-                                                                        for
-                                                                        payment
-                                                                        collection
-                                                                    </p>
-                                                                </div>
+                                                            <div>
+                                                                <label
+                                                                    htmlFor="collector-field"
+                                                                    className="text-foreground text-sm font-medium cursor-pointer"
+                                                                >
+                                                                    Field
+                                                                    Collection
+                                                                </label>
+                                                                <p
+                                                                    id="collector-field-description"
+                                                                    className="text-muted-foreground text-xs"
+                                                                >
+                                                                    visits
+                                                                    member's
+                                                                    location
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </FormItem>
-                                                    <FormItem>
-                                                        <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
-                                                            <RadioGroupItem
-                                                                value="office"
-                                                                id="collector-office"
-                                                                aria-describedby="collector-office-description"
-                                                                className="order-1 after:absolute after:inset-0"
+                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-2.5 shadow-xs outline-none">
+                                                        <RadioGroupItem
+                                                            value="office"
+                                                            id="collector-office"
+                                                            aria-describedby="collector-office-description"
+                                                            className="order-1 after:absolute after:inset-0"
+                                                        />
+                                                        <div className="flex grow items-start gap-3">
+                                                            <BuildingBranchIcon
+                                                                aria-hidden="true"
+                                                                className="shrink-0 size-4 opacity-60"
                                                             />
-                                                            <div className="flex grow items-start gap-3">
-                                                                <BuildingBranchIcon
-                                                                    aria-hidden="true"
-                                                                    className="shrink-0 size-4 opacity-60"
-                                                                />
-                                                                <div>
-                                                                    <label
-                                                                        htmlFor="collector-office"
-                                                                        className="text-foreground text-sm font-medium cursor-pointer"
-                                                                    >
-                                                                        Office
-                                                                        Collection
-                                                                        <span className="text-muted-foreground text-xs leading-[inherit] font-normal ml-1">
-                                                                            (Branch)
-                                                                        </span>
-                                                                    </label>
-                                                                    <p
-                                                                        id="collector-office-description"
-                                                                        className="text-muted-foreground text-xs"
-                                                                    >
-                                                                        Collector
-                                                                        receives
-                                                                        payments
-                                                                        at the
-                                                                        office
-                                                                        or
-                                                                        branch
-                                                                    </p>
-                                                                </div>
+                                                            <div>
+                                                                <label
+                                                                    htmlFor="collector-office"
+                                                                    className="text-foreground text-sm font-medium cursor-pointer"
+                                                                >
+                                                                    Office
+                                                                    Collection
+                                                                </label>
+                                                                <p
+                                                                    id="collector-office-description"
+                                                                    className="text-muted-foreground text-xs"
+                                                                >
+                                                                    payments at
+                                                                    the office
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </FormItem>
@@ -904,24 +909,6 @@ const LoanTransactionCreateUpdateForm = ({
                                         <div className="flex gap-3">
                                             <FormFieldWrapper
                                                 control={form.control}
-                                                name="loan_purpose_id"
-                                                label="Loan Purpose"
-                                                className="col-span-1"
-                                                render={({ field }) => (
-                                                    <LoanPurposeCombobox
-                                                        {...field}
-                                                        onChange={(
-                                                            loanPurpose
-                                                        ) =>
-                                                            field.onChange(
-                                                                loanPurpose.id
-                                                            )
-                                                        }
-                                                    />
-                                                )}
-                                            />
-                                            <FormFieldWrapper
-                                                control={form.control}
                                                 name="applied_1"
                                                 label="Applied Amount *"
                                                 render={({ field }) => (
@@ -984,7 +971,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                     >
                                                                         <label
                                                                             key={`mop-${mop}`}
-                                                                            className="border-accent hover:bg-accent ease-in-out duration-100 bg-muted has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/40 has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
+                                                                            className="border-accent/50 hover:bg-accent/40 ease-in-out duration-100 bg-muted has-data-[state=checked]:text-primary-foreground has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
                                                                         >
                                                                             <RadioGroupItem
                                                                                 value={
@@ -1043,6 +1030,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 checked={
                                                                     field.value
                                                                 }
+                                                                className="ease-in-out duration-200"
                                                                 onCheckedChange={(
                                                                     switchValue
                                                                 ) =>

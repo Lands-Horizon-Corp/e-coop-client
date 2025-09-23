@@ -1,4 +1,11 @@
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { useQuery } from '@tanstack/react-query'
+
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
+
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type { ILoanTag, ILoanTagRequest } from '../loan-tag'
 
@@ -36,7 +43,7 @@ export const {
     useCreate: useCreateLoanTag,
     useUpdateById: useUpdateLoanTagById,
 
-    useGetAll: useGetAllLoanTag,
+    // useGetAll: useGetAllLoanTag,
     useGetById: useGetLoanTagById,
     useGetPaginated: useGetPaginatedLoanTag,
 
@@ -45,3 +52,38 @@ export const {
 } = apiCrudHooks
 
 // custom hooks can go here
+export type TGellAllLoanTagHookMode = 'all' | 'loan-transaction'
+
+export const useGetAllLoanTag = ({
+    mode = 'all',
+    loanTransactionId,
+    query,
+    options,
+}: {
+    mode: TGellAllLoanTagHookMode
+    loanTransactionId?: TEntityId
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<ILoanTag[], Error>
+}) => {
+    return useQuery<ILoanTag[], Error>({
+        ...options,
+        queryKey: [
+            loanTagBaseKey,
+            'all',
+            query,
+            mode,
+            loanTransactionId,
+        ].filter(Boolean),
+        queryFn: async () => {
+            let url = loanTagAPIRoute
+
+            if (mode === 'loan-transaction')
+                url = `${loanTagAPIRoute}/loan-transaction/${loanTransactionId}`
+
+            return await getAllLoanTag({
+                query,
+                url,
+            })
+        },
+    })
+}
