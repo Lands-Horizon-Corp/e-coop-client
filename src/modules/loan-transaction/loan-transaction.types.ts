@@ -9,6 +9,7 @@ import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
 import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
 import { ILoanPurpose } from '../loan-purpose'
 import { ILoanStatus } from '../loan-status'
+import { ILoanTag } from '../loan-tag'
 import { ILoanTermsAndConditionAmountReceipt } from '../loan-terms-and-condition-amount-receipt'
 import { ILoanTermsAndConditionSuggestedPayment } from '../loan-terms-and-condition-suggested-payment'
 import { ILoanTransactionEntry } from '../loan-transaction-entry'
@@ -142,6 +143,8 @@ export interface ILoanTransaction
     remarks_payroll_deduction: boolean
     record_of_loan_payments_or_loan_status: string
     collateral_offered: string
+
+    loan_tags: ILoanTag[]
 
     appraised_value: number
     appraised_value_description: string

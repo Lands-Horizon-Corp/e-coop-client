@@ -28,48 +28,59 @@ import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IClassProps, TEntityId } from '@/types'
+import { IBaseProps, IClassProps, TEntityId } from '@/types'
 
 export const LoanTagsManagerPopover = ({
     loanTransactionId,
     defaultLoanTags,
     size = 'default',
+    readOnly,
     className,
+    children,
 }: {
     loanTransactionId: TEntityId
     defaultLoanTags?: ILoanTag[]
     size?: LoanTagManagerSize
-    className?: string
-}) => {
+    readOnly?: boolean
+} & IBaseProps) => {
     const { data: loanTags = [], isPending } = useGetAllLoanTag({
         mode: 'loan-transaction',
         loanTransactionId,
-        options: { initialData: defaultLoanTags, retry: 0 },
+        options: {
+            initialData: defaultLoanTags,
+            retry: 0,
+            enabled: !!loanTransactionId,
+        },
     })
 
-    // Memoize count for performance
     const tagCount = useMemo(() => loanTags.length, [loanTags])
 
     return (
         <Popover modal>
             <PopoverTrigger asChild>
-                <Button
-                    size="sm"
-                    type="button"
-                    variant="outline"
-                    className={cn(
-                        'size-fit !p-0 border-accent rounded-full !py-0.5 !px-1.5',
-                        className
-                    )}
-                >
-                    <TagIcon /> <span>{isPending ? '...' : tagCount} Tags</span>
-                </Button>
+                {children ? (
+                    children
+                ) : (
+                    <Button
+                        size="sm"
+                        type="button"
+                        variant="outline"
+                        className={cn(
+                            'size-fit !p-0 border-accent rounded-full !py-0.5 !px-1.5',
+                            className
+                        )}
+                    >
+                        <TagIcon />{' '}
+                        <span>{isPending ? '...' : tagCount} Tags</span>
+                    </Button>
+                )}
             </PopoverTrigger>
             <PopoverContent className="w-auto min-w-[220px] rounded-xl max-w-[340px]">
                 <LoanTagsManager
                     loanTransactionId={loanTransactionId}
                     defaultLoanTags={defaultLoanTags}
                     size={size}
+                    readOnly={readOnly}
                 />
             </PopoverContent>
         </Popover>
@@ -79,11 +90,13 @@ export const LoanTagsManagerPopover = ({
 type LoanTagManagerSize = 'sm' | 'default' | 'lg'
 
 export function LoanTagsManager({
+    readOnly,
     className,
     loanTransactionId,
     defaultLoanTags,
     size = 'default',
 }: {
+    readOnly?: boolean
     loanTransactionId: TEntityId
     defaultLoanTags?: ILoanTag[]
     onSuccess?: () => void
@@ -126,7 +139,7 @@ export function LoanTagsManager({
                     )
                 }}
             />
-            <div className="w-full">
+            <div className="w-full space-y-1">
                 <div className="flex justify-between">
                     <p className="text-sm">Loan Tags</p>
                     {isPending && (
@@ -134,26 +147,28 @@ export function LoanTagsManager({
                     )}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                    Add tags to providfe a quick context about this loan
+                    Tags provide a quick context about this loan.
                 </p>
             </div>
             <Separator />
             <div className="flex gap-1.5 flex-wrap ">
-                <Button
-                    type="button"
-                    variant="outline"
-                    className="border-dashed rounded !size-fit py-1 !px-1 text-xs"
-                    onClick={() => tagPickerModal.onOpenChange(true)}
-                >
-                    <PlusIcon className="inline text-accent-foreground" /> Add
-                    Tag
-                </Button>
+                {!readOnly && (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="border-dashed rounded !size-fit py-1 !px-1 text-xs"
+                        onClick={() => tagPickerModal.onOpenChange(true)}
+                    >
+                        <PlusIcon className="inline text-accent-foreground" />{' '}
+                        Add Tag
+                    </Button>
+                )}
                 {loanTags.map((tag) => (
                     <LoanTagChip
                         key={tag.id}
                         tag={tag}
                         size={size}
-                        onRemove={refetch}
+                        onRemove={readOnly ? undefined : refetch}
                     />
                 ))}
             </div>
@@ -186,7 +201,11 @@ type LoanTagChipProps = {
     size?: LoanTagManagerSize
 } & VariantProps<typeof loanTagChipVariants>
 
-const LoanTagChip = ({ tag, onRemove, size = 'default' }: LoanTagChipProps) => {
+export const LoanTagChip = ({
+    tag,
+    onRemove,
+    size = 'default',
+}: LoanTagChipProps) => {
     const { onOpen } = useConfirmModalStore()
     const deleteMutation = useDeleteLoanTagById({
         options: { onSuccess: onRemove },
@@ -216,34 +235,36 @@ const LoanTagChip = ({ tag, onRemove, size = 'default' }: LoanTagChipProps) => {
                     />
                 )}
                 <span>{tag.name}</span>
-                <Button
-                    size="icon"
-                    type="button"
-                    variant="ghost"
-                    onClick={() =>
-                        onOpen({
-                            title: 'Remove Tag',
-                            description:
-                                'Are you sure to remove this loan tag from this loan?',
-                            confirmString: 'Remove',
-                            onConfirm: () =>
-                                toast.promise(
-                                    deleteMutation.mutateAsync(tag.id),
-                                    {
-                                        loading: 'Deleting tag...',
-                                        success: 'Tag deleted',
-                                        error: (error) =>
-                                            serverRequestErrExtractor({
-                                                error,
-                                            }),
-                                    }
-                                ),
-                        })
-                    }
-                    className="size-fit cursor-pointer text-xs hover:text-red-600 disabled:opacity-50"
-                >
-                    <XIcon className="size-4" />
-                </Button>
+                {onRemove && (
+                    <Button
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                        onClick={() =>
+                            onOpen({
+                                title: 'Remove Tag',
+                                description:
+                                    'Are you sure to remove this loan tag from this loan?',
+                                confirmString: 'Remove',
+                                onConfirm: () =>
+                                    toast.promise(
+                                        deleteMutation.mutateAsync(tag.id),
+                                        {
+                                            loading: 'Deleting tag...',
+                                            success: 'Tag deleted',
+                                            error: (error) =>
+                                                serverRequestErrExtractor({
+                                                    error,
+                                                }),
+                                        }
+                                    ),
+                            })
+                        }
+                        className="size-fit cursor-pointer text-xs hover:text-red-600 disabled:opacity-50"
+                    >
+                        <XIcon className="size-4" />
+                    </Button>
+                )}
             </div>
         </InfoTooltip>
     )

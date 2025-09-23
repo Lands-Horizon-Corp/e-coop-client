@@ -10,10 +10,16 @@ import { createUpdateColumns } from '@/components/data-table/data-table-common-c
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import { PushPinSlashIcon, RenderIcon, TIcon } from '@/components/icons'
+import {
+    PushPinSlashIcon,
+    RenderIcon,
+    TIcon,
+    TagIcon,
+} from '@/components/icons'
 import ImageNameDisplay from '@/components/image-name-display'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
@@ -23,6 +29,7 @@ import {
 } from '../../loan-transaction.types'
 import { LoanCollectorPlaceBadge } from '../loan-collector-place-badge'
 import LoanStatusIndicator from '../loan-status-indicator'
+import { LoanTagChip, LoanTagsManagerPopover } from '../loan-tag-manager'
 import { LoanTypeBadge } from '../loan-type-badge'
 
 export const loanStatusGlobalSearchTargets: IGlobalSearchTargets<ILoanTransaction>[] =
@@ -357,6 +364,50 @@ const LoanTransactionTableColumns = (
             enableHiding: true,
             size: 300,
             minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'loan_tags',
+            accessorKey: 'loan_tags',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Loan Tags">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { loan_tags = [] },
+                },
+            }) => (
+                <div className="flex gap-1.5 flex-wrap items-baseline">
+                    {loan_tags.slice(0, 3).map((tag) => (
+                        <LoanTagChip tag={tag} key={tag.id} size="sm" />
+                    ))}
+                    {loan_tags.length > 3 && (
+                        <LoanTagsManagerPopover
+                            readOnly
+                            loanTransactionId={''}
+                            defaultLoanTags={loan_tags}
+                        >
+                            <Button
+                                size="sm"
+                                type="button"
+                                variant="outline"
+                                className="size-fit !p-0 border-none cursor-pointer text-xs !bg-transparent !py-0.5 !px-1.5"
+                            >
+                                <TagIcon />{' '}
+                                <span>{loan_tags.length - 1} more...</span>
+                            </Button>
+                        </LoanTagsManagerPopover>
+                    )}
+                </div>
+            ),
+            enableMultiSort: false,
+            enableSorting: false,
+            enableResizing: true,
+            enableHiding: true,
+            size: 500,
+            minSize: 500,
             maxSize: 800,
         },
         {
