@@ -343,11 +343,22 @@ export const LoanTransactionRowContext = ({
     children,
     onDeleteSuccess,
 }: ILoanTransactionRowContextProps) => {
+    const { onOpen } = useConfirmModalStore()
     const {
         loanTransaction,
+        loanApplicationStatus,
 
         updateModal,
         updateSignatureModal,
+        loanCreatePrintModal,
+
+        approvalReleaseMode,
+        loanApproveReleaseDisplayModal,
+        openApprovalModal,
+
+        reprintMutation,
+        unprintMutation,
+        isPrintingProcess,
 
         isDeletingLoanTransaction,
         handleEdit,
@@ -370,6 +381,18 @@ export const LoanTransactionRowContext = ({
                     defaultValues: loanTransaction,
                 }}
             />
+            <LoanTransactionPrintFormModal
+                {...loanCreatePrintModal}
+                formProps={{
+                    defaultValues: loanTransaction,
+                    loanTransactionId: loanTransaction.id,
+                }}
+            />
+            <LoanApproveReleaseDisplayModal
+                {...loanApproveReleaseDisplayModal}
+                mode={approvalReleaseMode}
+                loanTransaction={loanTransaction}
+            />
             <DataTableRowContext
                 row={row}
                 onDelete={{
@@ -388,15 +411,131 @@ export const LoanTransactionRowContext = ({
                             onClick={() =>
                                 updateSignatureModal.onOpenChange(true)
                             }
-                            disabled={
-                                loanTransaction.printed_date !== undefined
-                            }
                         >
                             <SignatureLightIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
                             />
                             Signature
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            onClick={() =>
+                                loanCreatePrintModal.onOpenChange(true)
+                            }
+                            disabled={
+                                loanTransaction.printed_date !== undefined
+                            }
+                        >
+                            <PrinterFillIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Print
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            onClick={() => {
+                                toast.promise(
+                                    reprintMutation.mutateAsync({
+                                        loanTransactionId: loanTransaction.id,
+                                    }),
+                                    {
+                                        loading: (
+                                            <span>
+                                                <PrinterFillIcon className="inline mr-1" />{' '}
+                                                Printing... Please wait...
+                                            </span>
+                                        ),
+                                        success: 'Reprinted',
+                                        error: (error) =>
+                                            serverRequestErrExtractor({
+                                                error,
+                                            }),
+                                    }
+                                )
+                            }}
+                            disabled={
+                                loanTransaction.printed_date === undefined ||
+                                loanApplicationStatus === 'released' ||
+                                isPrintingProcess
+                            }
+                        >
+                            {reprintMutation.isPending ? (
+                                <LoadingSpinner className="mr-1 size-3" />
+                            ) : (
+                                <PrinterFillIcon
+                                    className="mr-2"
+                                    strokeWidth={1.5}
+                                />
+                            )}
+                            Re-print
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            onClick={() =>
+                                onOpen({
+                                    title: 'Unprint Loan',
+                                    description:
+                                        'Unprinting loan will remove the set voucher number. Are you sure to unprint?',
+                                    confirmString: 'Unprint Loan',
+                                    onConfirm: () =>
+                                        toast.promise(
+                                            unprintMutation.mutateAsync({
+                                                loanTransactionId:
+                                                    loanTransaction.id,
+                                            }),
+                                            {
+                                                loading: (
+                                                    <span>
+                                                        Unprinting... Please
+                                                        wait...
+                                                    </span>
+                                                ),
+                                                success: 'Unprinted',
+                                                error: (error) =>
+                                                    serverRequestErrExtractor({
+                                                        error,
+                                                    }),
+                                            }
+                                        ),
+                                })
+                            }
+                            disabled={
+                                loanTransaction.printed_date === undefined ||
+                                loanApplicationStatus === 'released' ||
+                                loanApplicationStatus === 'approved' ||
+                                isPrintingProcess
+                            }
+                        >
+                            {unprintMutation.isPending ? (
+                                <LoadingSpinner className="mr-1 size-3" />
+                            ) : (
+                                <UndoIcon className="mr-2" strokeWidth={1.5} />
+                            )}
+                            Unprint
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            onClick={() => openApprovalModal('approve')}
+                            disabled={
+                                loanTransaction.printed_date === undefined ||
+                                loanApplicationStatus === 'approved' ||
+                                loanApplicationStatus === 'released'
+                            }
+                        >
+                            <ThumbsUpIcon className="mr-2" strokeWidth={1.5} />
+                            Approve
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            onClick={() => openApprovalModal('undo-approve')}
+                            disabled={loanApplicationStatus !== 'approved'}
+                        >
+                            <UndoIcon className="mr-2" strokeWidth={1.5} />
+                            Undo Approval
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            onClick={() => openApprovalModal('release')}
+                            disabled={loanApplicationStatus !== 'approved'}
+                        >
+                            <CheckFillIcon className="mr-2" strokeWidth={1.5} />
+                            Release
                         </ContextMenuItem>
                     </>
                 }
