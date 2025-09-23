@@ -3,9 +3,10 @@ import z from 'zod'
 import {
     descriptionTransformerSanitizer,
     entityIdSchema,
-    familyRelationshipSchema,
     stringDateWithTransformSchema,
 } from '@/validation'
+
+import { FamilyRelationshipSchema } from '../member-relative-account'
 
 export const MemberJointAccountSchema = z.object({
     id: z.string().optional(),
@@ -26,5 +27,5 @@ export const MemberJointAccountSchema = z.object({
     last_name: z.string().min(1, 'Last name is required'),
     suffix: z.string().optional(),
     birthday: stringDateWithTransformSchema,
-    family_relationship: familyRelationshipSchema,
+    family_relationship: FamilyRelationshipSchema,
 })

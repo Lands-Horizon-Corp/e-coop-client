@@ -3,14 +3,14 @@ import { ReactNode } from 'react'
 import { Navigate, useRouter } from '@tanstack/react-router'
 
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-import { IUserBase } from '@/modules/user'
+import { IUserBase, TUserType } from '@/modules/user'
 import UserAvatar from '@/modules/user/components/user-avatar'
 
 import { BadgeExclamationFillIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { IBaseProps, TUserType } from '@/types'
+import { IBaseProps } from '@/types'
 
 interface Props extends IBaseProps {
     allowNoUserType?: boolean

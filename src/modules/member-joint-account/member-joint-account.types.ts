@@ -1,10 +1,11 @@
 import z from 'zod'
 
-import { IBaseEntityMeta, TEntityId, TRelationship } from '@/types/common'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IBranch } from '../branch'
 import { IMedia } from '../media/media.types'
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { TRelationship } from '../member-relative-account'
 import { IOrganization } from '../organization'
 import { MemberJointAccountSchema } from './member-joint-account.validation'
 

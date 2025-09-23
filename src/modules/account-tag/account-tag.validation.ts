@@ -5,7 +5,7 @@ import {
     descriptionTransformerSanitizer,
 } from '@/validation'
 
-import { TTagCategory } from '@/types'
+import { TTagCategory } from '../tag-template'
 
 export const AccountTagSchema = z.object({
     account_id: z.string().min(1, 'Account is required'),

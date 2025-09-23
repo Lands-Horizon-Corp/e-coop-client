@@ -58,9 +58,10 @@ const LoanEntriesEditor = forwardRef<
     {
         form: UseFormReturn<TLoanTransactionSchema>
         disabled?: boolean
+        isReadOnly?: boolean
         loanTransactionId?: TEntityId
     }
->(({ form, loanTransactionId, disabled }, ref) => {
+>(({ form, loanTransactionId, isReadOnly, disabled }, ref) => {
     const addChargeModalState = useModalState()
     const cashAccountPickerModal = useModalState()
     const { onOpen } = useConfirmModalStore()
@@ -87,7 +88,10 @@ const LoanEntriesEditor = forwardRef<
     const loanEntries = form.watch('loan_transaction_entries')
 
     const isDisabled =
-        disabled || loanEntries[0] === undefined || loanEntries[1] === undefined
+        disabled ||
+        loanEntries[0] === undefined ||
+        loanEntries[1] === undefined ||
+        isReadOnly
 
     // Pang Display Computation totals
     const {
@@ -320,7 +324,9 @@ const LoanEntriesEditor = forwardRef<
 
     const isBalanced = totalDebit === totalCredit
 
-    useHotkeys('shift+n', () => addChargeModalState.onOpenChange(true))
+    useHotkeys('shift+n', () => addChargeModalState.onOpenChange(true), {
+        enabled: !isDisabled,
+    })
 
     const handleRemoveEntry = (index: number) => {
         const entry = loanEntries[index]
@@ -398,23 +404,14 @@ const LoanEntriesEditor = forwardRef<
         })
     }
 
-    if (isDisabled)
-        return (
-            <div className="min-h-48 flex items-center justify-center">
-                <p className="text-muted-foreground text-sm">
-                    Please save the loan transaction first before entering loan
-                    entries
-                </p>
-            </div>
-        )
-
     return (
-        <fieldset disabled={isDisabled} className="relative">
+        <div className="relative">
             <AccountPicker
                 triggerClassName="sr-only"
                 mode="cash-and-cash-equivalence"
                 modalState={cashAccountPickerModal}
                 onSelect={handleChangeCashEntryAccount}
+                disabled={isReadOnly || isDisabled}
             />
             <div className="flex items-center justify-between mb-4">
                 <div>
@@ -453,6 +450,7 @@ const LoanEntriesEditor = forwardRef<
                         type="button"
                         variant="ghost"
                         className="size-fit px-2 py-0.5 text-xs"
+                        disabled={isReadOnly || isDisabled}
                         onClick={() =>
                             cashAccountPickerModal.onOpenChange(true)
                         }
@@ -464,6 +462,7 @@ const LoanEntriesEditor = forwardRef<
                         type="button"
                         tabIndex={0}
                         className="size-fit px-2 py-0.5 text-xs"
+                        disabled={isReadOnly || isDisabled}
                         onClick={() => addChargeModalState.onOpenChange(true)}
                     >
                         Add Deduction <PlusIcon className="inline" />
@@ -484,6 +483,7 @@ const LoanEntriesEditor = forwardRef<
                                 <Switch
                                     tabIndex={0}
                                     id="loan-add-on"
+                                    disabled={isReadOnly || isDisabled}
                                     checked={field.value}
                                     onCheckedChange={field.onChange}
                                     aria-describedby={`loan-add-on-description`}
@@ -511,7 +511,6 @@ const LoanEntriesEditor = forwardRef<
                     />
                 </div>
             </div>
-
             <Table
                 ref={ref}
                 onKeyDown={handleKeyDown}
@@ -547,6 +546,7 @@ const LoanEntriesEditor = forwardRef<
                 <TableBody>
                     {computedLoanEntries.map((field, index) => (
                         <LoanEntryRow
+                            disabled={isReadOnly || disabled}
                             key={`${field.id}-${index}`}
                             entry={field}
                             index={index}
@@ -595,7 +595,7 @@ const LoanEntriesEditor = forwardRef<
                     </TableRow>
                 </TableFooter>
             </Table>
-        </fieldset>
+        </div>
     )
 })
 
@@ -603,13 +603,14 @@ interface ILoanEntryRowProps {
     entry: ILoanTransactionEntryRequest
     index: number
     form: UseFormReturn<TLoanTransactionSchema>
+    disabled?: boolean
     onRemove: (index: number) => void
     onUpdate: (index: number, updatedData: ILoanTransactionEntryRequest) => void
 }
 
 const LoanEntryRow = memo(
     forwardRef<HTMLTableRowElement, ILoanEntryRowProps>(
-        ({ entry, index, onRemove, onUpdate }, ref) => {
+        ({ entry, index, disabled, onRemove, onUpdate }, ref) => {
             const rowRef = useRef<HTMLTableRowElement>(null)
 
             const editModalState = useModalState()
@@ -620,6 +621,12 @@ const LoanEntryRow = memo(
             const handleRowKeyDown = (
                 e: KeyboardEvent<HTMLTableRowElement>
             ) => {
+                if (disabled) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    return
+                }
+
                 if (e.key === 'Delete') {
                     if (!isRemovable)
                         return toast.info(`Entry ${entry.name} not removable`)
@@ -638,7 +645,10 @@ const LoanEntryRow = memo(
             return (
                 <>
                     <TableRow
-                        onDoubleClick={() => editModalState.onOpenChange(true)}
+                        onDoubleClick={() => {
+                            if (disabled) return
+                            editModalState.onOpenChange(true)
+                        }}
                         ref={(el) => {
                             rowRef.current = el
                             if (typeof ref === 'function') {
@@ -697,6 +707,7 @@ const LoanEntryRow = memo(
                                         type="button"
                                         variant="ghost"
                                         size="sm"
+                                        disabled={disabled}
                                         onClick={() =>
                                             editModalState.onOpenChange(true)
                                         }
@@ -713,6 +724,7 @@ const LoanEntryRow = memo(
                                         size="sm"
                                         type="button"
                                         variant="ghost"
+                                        disabled={disabled}
                                         onClick={() => onRemove(index)}
                                         className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                     >

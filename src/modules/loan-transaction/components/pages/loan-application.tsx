@@ -5,7 +5,7 @@ import LoanTransactionCreateUpdateForm from '../forms/loan-transaction-create-up
 const LoanApplicationPage = () => {
     return (
         <PageContainer>
-            <LoanTransactionCreateUpdateForm mode="create" />
+            <LoanTransactionCreateUpdateForm />
         </PageContainer>
     )
 }

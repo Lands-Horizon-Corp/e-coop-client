@@ -1,25 +1,12 @@
-import {
-    AccountClosureReasons,
-    CIVIL_STATUS,
-    FAMILY_RELATIONSHIP,
-    GENERAL_STATUS,
-    USER_TYPE,
-} from '@/constants'
+import { CIVIL_STATUS, GENERAL_STATUS } from '@/constants'
 import { IBranch } from '@/modules/branch'
-import { TAG_CATEGORY } from '@/modules/tag-template/tag.constants'
 
 import { IOrganization } from '../modules/organization'
 import { IUserBase } from '../modules/user/user.types'
 
 export type TEntityId = string
 
-export type TUserType = (typeof USER_TYPE)[number] // move User module
-
 export type TGeneralStatus = (typeof GENERAL_STATUS)[number]
-
-export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number] // move to member profile relative
-
-export type TTagCategory = (typeof TAG_CATEGORY)[number]
 
 export type TPageType = 'PUBLIC' | 'AUTHENTICATED'
 
@@ -75,8 +62,6 @@ export interface ITimeStamps {
 }
 
 export type TCivilStatus = (typeof CIVIL_STATUS)[number] // move to member profile
-
-export type TAccountClosureReasonType = (typeof AccountClosureReasons)[number] // member profile
 
 export interface UpdateIndexRequest {
     id: TEntityId

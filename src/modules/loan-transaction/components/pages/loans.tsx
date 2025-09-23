@@ -16,14 +16,19 @@ const LoansPage = () => {
     const createModal = useModalState()
     const { data } = useTransactionBatchStore()
 
+    // const {
+    //     currentAuth: {
+    //         user_organization: { branch_id },
+    //     },
+    // } = useAuthUserWithOrgBranch()
+
+    // useSubscribe(`loan-transaction.update.branch.${branch_id}`, () => {
+    //     console.log('Yes')
+    // })
+
     return (
         <PageContainer>
-            <LoanTransactionCreateUpdateFormModal
-                formProps={{
-                    mode: 'create',
-                }}
-                {...createModal}
-            />
+            <LoanTransactionCreateUpdateFormModal {...createModal} />
             <LoanTransactionTable
                 mode="branch"
                 toolbarProps={{

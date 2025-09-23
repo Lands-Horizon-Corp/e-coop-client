@@ -2,9 +2,12 @@ import z from 'zod'
 
 import { TIcon } from '@/components/icons'
 
-import { IBaseEntityMeta, IPaginatedResult, TTagCategory } from '@/types'
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
 import { TagTemplateSchema } from './tag-template.validation'
+import { TAG_CATEGORY } from './tag.constants'
+
+export type TTagCategory = (typeof TAG_CATEGORY)[number]
 
 export interface ITagTemplate extends IBaseEntityMeta {
     name: string

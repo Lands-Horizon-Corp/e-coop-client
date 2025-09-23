@@ -6,7 +6,6 @@ import {
     Tooltip,
     TooltipContent,
     TooltipPortal,
-    TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'
 
@@ -34,34 +33,32 @@ const InfoTooltip = ({
     alignOffset = 0,
 }: InfoTooltipProps) => {
     return (
-        <TooltipProvider delayDuration={delayDuration}>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    {children || (
-                        <span
-                            className={cn(
-                                'inline-flex size-3 cursor-help items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground hover:bg-muted-foreground/20',
-                                className
-                            )}
-                        >
-                            <InfoIcon className="inline size-full" />
-                        </span>
-                    )}
-                </TooltipTrigger>
-                <TooltipPortal>
-                    <TooltipContent
-                        side={side}
-                        align={align}
-                        sideOffset={sideOffset}
-                        alignOffset={alignOffset}
-                        className="text-xs px-1.5 rounded-lg border bg-background"
-                        style={{ zIndex: 99999 }}
+        <Tooltip delayDuration={delayDuration}>
+            <TooltipTrigger asChild>
+                {children || (
+                    <span
+                        className={cn(
+                            'inline-flex size-3 cursor-help items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground hover:bg-muted-foreground/20',
+                            className
+                        )}
                     >
-                        <div>{content}</div>
-                    </TooltipContent>
-                </TooltipPortal>
-            </Tooltip>
-        </TooltipProvider>
+                        <InfoIcon className="inline size-full" />
+                    </span>
+                )}
+            </TooltipTrigger>
+            <TooltipPortal>
+                <TooltipContent
+                    side={side}
+                    align={align}
+                    sideOffset={sideOffset}
+                    alignOffset={alignOffset}
+                    className="text-xs px-1.5 rounded-lg border text-foreground bg-background"
+                    style={{ zIndex: 99999 }}
+                >
+                    <div>{content}</div>
+                </TooltipContent>
+            </TooltipPortal>
+        </Tooltip>
     )
 }
 

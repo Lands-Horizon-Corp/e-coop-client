@@ -3,12 +3,12 @@ import {
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
-    TUserType,
 } from '@/types/common'
 
 import { IBranch } from '../branch/branch.types'
 import { IOrganization } from '../organization'
 import { TPermission } from '../permission'
+import { TUserType } from '../user'
 
 // Invitation Code Resource
 export interface IInvitationCode extends ITimeStamps, IAuditable {

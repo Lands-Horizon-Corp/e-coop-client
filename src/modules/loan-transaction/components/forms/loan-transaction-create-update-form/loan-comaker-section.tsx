@@ -48,10 +48,11 @@ import { TEntityId } from '@/types'
 
 type Props = {
     form: UseFormReturn<TLoanTransactionSchema>
+    disabled?: boolean
     isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
 }
 
-const LoanComakerSection = ({ form, isDisabled }: Props) => {
+const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
     const memberProfile = form.watch('member_profile_id')
     const comakerType = form.watch('comaker_type')
     const comaker_deposit_member_accounting_ledger = form.watch(
@@ -62,7 +63,7 @@ const LoanComakerSection = ({ form, isDisabled }: Props) => {
 
     return (
         <fieldset
-            disabled={!memberProfile}
+            disabled={!memberProfile || disabled}
             className="space-y-4 rounded-xl p-4 bg-popover"
         >
             <div className="justify-between flex items-center">

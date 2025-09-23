@@ -1,11 +1,14 @@
 import z from 'zod'
 
-import { IBaseEntityMeta, TEntityId, TRelationship } from '@/types/common'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IBranch } from '../branch'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 import { IOrganization } from '../organization'
 import { MemberRelativeAccountSchema } from './member-relative-account.validation'
+import { FAMILY_RELATIONSHIP } from './member-relative.constants'
+
+export type TRelationship = (typeof FAMILY_RELATIONSHIP)[number] // move to member profile relative
 
 // FROM LATEST ERD
 export type IMemberRelativeAccountRequest = z.infer<

@@ -27,7 +27,7 @@ import BankTableColumns, {
     IBankTableColumnProps,
     bankGlobalSearchTargets,
 } from './columns'
-import { BankRowContext } from './row-action-context'
+import BankAction, { BankRowContext } from './row-action-context'
 
 export interface BankTableProps
     extends TableProps<IBank>,
@@ -53,7 +53,8 @@ const BankTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = BankAction,
+    RowContextComponent = BankRowContext,
 }: BankTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -188,12 +189,10 @@ const BankTable = ({
                     isStickyFooter
                     className="mb-2"
                     onRowClick={onRowClick}
-                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <BankRowContext {...props} />
-                    )}
+                    onDoubleClick={onDoubleClick}
                     setColumnOrder={setColumnOrder}
+                    RowContextComponent={RowContextComponent}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

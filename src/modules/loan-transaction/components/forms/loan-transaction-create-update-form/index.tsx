@@ -15,6 +15,7 @@ import {
     LOAN_MODE_OF_PAYMENT,
     LOAN_TYPE,
 } from '@/modules/loan-transaction/loan.constants'
+import { resolveLoanDatesToStatus } from '@/modules/loan-transaction/loan.utils'
 import {
     IMemberProfile,
     useGetMemberProfileById,
@@ -22,6 +23,7 @@ import {
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import MemberProfileInfoViewLoanCard from '@/modules/member-profile/components/member-profile-info-loan-view-card'
 import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -82,28 +84,27 @@ import {
     TLoanTransactionSchema,
 } from '../../../loan-transaction.validation'
 import LoanStatusIndicator from '../../loan-status-indicator'
-import { LoanTagsManager } from '../../loan-tag-manager'
+import { LoanTagsManagerPopover } from '../../loan-tag-manager'
 import WeekdayCombobox from '../../weekday-combobox'
 import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanComakerSection from './loan-comaker-section'
 import LoanEntriesEditor from './loan-entries-editor'
 import LoanTermsAndConditionReceiptSection from './loan-terms-and-condition-receipt'
 
-type TLoanTransactionFormMode = 'create' | 'update'
-
 export interface ILoanTransactionFormProps
     extends IClassProps,
         IForm<Partial<ILoanTransactionRequest>, ILoanTransaction, Error> {
     loanTransactionId?: TEntityId
-    mode: TLoanTransactionFormMode
 }
 
 const LoanMemberProfileScanner = ({
+    disabled,
     startScan,
     setStartScan,
     onSelect,
 }: {
     startScan: boolean
+    disabled?: boolean
     setStartScan: (state: boolean) => void
     onSelect: (value: IMemberProfile | undefined) => void
 }) => {
@@ -147,7 +148,14 @@ const LoanMemberProfileScanner = ({
         isSuccess,
     })
 
-    useSimpleShortcut(['S'], () => setStartScan(true))
+    useHotkeys('s', (e) => {
+        if (disabled) {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+
+        setStartScan(true)
+    })
 
     return (
         <div className="flex flex-col flex-shrink-0 w-fit justify-center items-center">
@@ -243,14 +251,13 @@ const getTabForField = (
 
 const LoanTransactionCreateUpdateForm = ({
     className,
-    loanTransactionId,
-    mode = 'create',
+    loanTransactionId: defaultLoanId,
+    readOnly,
     ...formProps
 }: ILoanTransactionFormProps) => {
     const [tab, setTab] = useState<TLoanFormTabs>('entries')
     const [tab2, setTab2] = useState<TLoanFormTabs2>('loan-details')
     const [startScan, setStartScan] = useState(false)
-    const [formMode, setFormMode] = useState<TLoanTransactionFormMode>(mode)
     const memberPickerModal = useModalState()
 
     const {
@@ -261,10 +268,6 @@ const LoanTransactionCreateUpdateForm = ({
             },
         },
     } = useAuthUserWithOrgBranch()
-
-    const [createdLoanTransactionId, setCreatedLoanTransactionId] = useState<
-        TEntityId | undefined
-    >(loanTransactionId || formProps?.defaultValues?.id)
 
     const hasAutoCreatedRef = useRef(false)
 
@@ -300,14 +303,25 @@ const LoanTransactionCreateUpdateForm = ({
         },
     })
 
+    const loanTransactionId = form.watch('id') || defaultLoanId
+    const [printedDate, approvedDate, releasedDate] = form.watch([
+        'printed_date',
+        'approved_date',
+        'released_date',
+    ])
+
+    const resolvedApplicationStatus = resolveLoanDatesToStatus({
+        printed_date: printedDate,
+        approved_date: approvedDate,
+        released_date: releasedDate,
+    })
+
+    const isReadOnly = resolvedApplicationStatus !== 'draft' || readOnly
+
     const createMutation = useCreateLoanTransaction({
         options: {
-            onSuccess: (loanTransaction) => {
-                setFormMode('update')
-                setCreatedLoanTransactionId(loanTransaction.id)
-                hasAutoCreatedRef.current = true
-                // Don't reset form, keep current values
-            },
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
         },
     })
 
@@ -322,17 +336,18 @@ const LoanTransactionCreateUpdateForm = ({
         useFormHelper<TLoanTransactionSchema>({
             form,
             ...formProps,
-            autoSave: formMode !== 'create',
+            readOnly: isReadOnly,
+            autoSave: !!loanTransactionId,
             autoSaveDelay: 2000,
         })
 
     const onSubmit = form.handleSubmit(
         async (payload) => {
-            const targetId = loanTransactionId || createdLoanTransactionId
+            const targetId = loanTransactionId
 
             let promise = undefined
 
-            if (formMode === 'update' && targetId) {
+            if (targetId) {
                 promise = updateMutation.mutateAsync(
                     { id: targetId, payload },
                     {
@@ -349,7 +364,7 @@ const LoanTransactionCreateUpdateForm = ({
                             } as unknown as ILoanTransactionRequest),
                     }
                 )
-            } else if (formMode === 'create' && !hasAutoCreatedRef.current) {
+            } else {
                 promise = createMutation.mutateAsync(payload, {
                     onSuccess: (data) =>
                         form.reset({
@@ -403,18 +418,12 @@ const LoanTransactionCreateUpdateForm = ({
         error: rawError,
         isPending,
         reset,
-    } = formMode === 'update' ? updateMutation : createMutation
+    } = loanTransactionId ? updateMutation : createMutation
 
     const error = firstError || serverRequestErrExtractor({ error: rawError })
 
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
-
-    const [printedDate, approvedDate, releasedDate] = form.watch([
-        'printed_date',
-        'approved_date',
-        'released_date',
-    ])
 
     return (
         <Form {...form}>
@@ -423,10 +432,7 @@ const LoanTransactionCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 className={cn('w-full max-w-full', className)}
             >
-                <fieldset
-                    disabled={isPending || formProps.readOnly}
-                    className="p-4 space-y-3 max-w-full min-w-0"
-                >
+                <div className="p-4 space-y-3 max-w-full min-w-0">
                     <div className="space-y-1 rounded-xl bg-popover p-4">
                         <div className="flex items-center justify-between">
                             <div>
@@ -441,11 +447,10 @@ const LoanTransactionCreateUpdateForm = ({
                             </div>
 
                             <div className="flex items-center gap-x-1">
-                                {createdLoanTransactionId && (
-                                    <LoanTagsManager
-                                        loanTransactionId={
-                                            createdLoanTransactionId
-                                        }
+                                {loanTransactionId && (
+                                    <LoanTagsManagerPopover
+                                        size="sm"
+                                        loanTransactionId={loanTransactionId}
                                     />
                                 )}
                                 <LoanStatusIndicator
@@ -474,6 +479,9 @@ const LoanTransactionCreateUpdateForm = ({
                                         {!memberProfile && (
                                             <LoanMemberProfileScanner
                                                 startScan={startScan}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                                 setStartScan={setStartScan}
                                                 onSelect={(memberProfile) => {
                                                     field.onChange(
@@ -514,6 +522,9 @@ const LoanTransactionCreateUpdateForm = ({
                                                 </div>
                                             )}
                                             <MemberPicker
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                                 modalState={{
                                                     ...memberPickerModal,
                                                 }}
@@ -549,7 +560,6 @@ const LoanTransactionCreateUpdateForm = ({
                                     placeholder="Select Loan Account"
                                     onSelect={(account) => {
                                         field.onChange(account?.id)
-
                                         form.setValue('account', account)
                                     }}
                                     disabled={isDisabled(field.name)}
@@ -597,10 +607,7 @@ const LoanTransactionCreateUpdateForm = ({
                             // className="bg-popover p-4 space-y-4 rounded-xl"
                         >
                             {/* LOAN DETAILS */}
-                            <fieldset
-                                disabled={!memberProfile}
-                                className="space-y-4 rounded-xl p-4 bg-popover"
-                            >
+                            <div className="space-y-4 rounded-xl p-4 bg-popover">
                                 <div className="justify-between flex items-center">
                                     <div className="shrink-0">
                                         <p className="font-medium">
@@ -623,6 +630,9 @@ const LoanTransactionCreateUpdateForm = ({
                                                         <HashIcon className="inline text-muted-foreground" />
                                                     </span>
                                                     <button
+                                                        disabled={isDisabled(
+                                                            'official_receipt_number'
+                                                        )}
                                                         type="button"
                                                         onClick={() => {
                                                             const constructedOR =
@@ -654,12 +664,13 @@ const LoanTransactionCreateUpdateForm = ({
                                             }
                                             className="col-span-1 max-w-72"
                                             render={({ field }) => (
-                                                <Input {...field} />
+                                                <Input
+                                                    {...field}
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
+                                                />
                                             )}
-                                        />
-                                        <Separator
-                                            className="min-h-8 mt-5"
-                                            orientation="vertical"
                                         />
                                         <FormFieldWrapper
                                             control={form.control}
@@ -670,6 +681,7 @@ const LoanTransactionCreateUpdateForm = ({
                                             render={({ field }) => (
                                                 <LoanStatusCombobox
                                                     value={field.value}
+                                                    disabled={false}
                                                     onChange={(loanStatus) =>
                                                         field.onChange(
                                                             loanStatus.id
@@ -686,6 +698,9 @@ const LoanTransactionCreateUpdateForm = ({
                                             className="col-span-1"
                                             render={({ field }) => (
                                                 <Select
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
                                                     onValueChange={
                                                         field.onChange
                                                     }
@@ -724,8 +739,11 @@ const LoanTransactionCreateUpdateForm = ({
                                 {!memberProfile && (
                                     <FormErrorMessage errorMessage="Select member profile first to enable this section" />
                                 )}
-                                <div className="flex gap-x-4">
-                                    <div className="space-y-4">
+                                <fieldset
+                                    disabled={!memberProfile || isReadOnly}
+                                    className="grid grid-cols-12 gap-x-4"
+                                >
+                                    <div className="space-y-4 col-span-5">
                                         <FormFieldWrapper
                                             control={form.control}
                                             name="loan_purpose_id"
@@ -734,6 +752,9 @@ const LoanTransactionCreateUpdateForm = ({
                                             render={({ field }) => (
                                                 <LoanPurposeCombobox
                                                     {...field}
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
                                                     onChange={(loanPurpose) =>
                                                         field.onChange(
                                                             loanPurpose.id
@@ -753,6 +774,9 @@ const LoanTransactionCreateUpdateForm = ({
                                                     onValueChange={
                                                         field.onChange
                                                     }
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
                                                     className="grid grid-cols-2"
                                                 >
                                                     <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-2.5 shadow-xs outline-none">
@@ -819,7 +843,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                 </RadioGroup>
                                             )}
                                         />
-                                        <div className="flex gap-x-4 w-fit items-center">
+                                        <div className="flex gap-x-2 w-fit items-center">
                                             <FormFieldWrapper
                                                 control={form.control}
                                                 name="exclude_holiday"
@@ -840,7 +864,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                         />
                                                         <Label
                                                             htmlFor={field.name}
-                                                            className="text-sm shrink-0 font-medium"
+                                                            className="shrink-0 text-xs font-medium"
                                                         >
                                                             Exclude Holiday
                                                         </Label>
@@ -868,7 +892,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                         />
                                                         <Label
                                                             htmlFor={field.name}
-                                                            className="text-sm shrink-0 font-medium"
+                                                            className="shrink-0 text-xs font-medium"
                                                         >
                                                             Exclude Saturday
                                                         </Label>
@@ -896,7 +920,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                         />
                                                         <Label
                                                             htmlFor={field.name}
-                                                            className="text-sm font-medium"
+                                                            className="font-medium text-xs"
                                                         >
                                                             Exclude Sunday
                                                         </Label>
@@ -905,7 +929,7 @@ const LoanTransactionCreateUpdateForm = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="space-y-4 flex-1">
+                                    <div className="space-y-4 col-span-7 flex-1">
                                         <div className="flex gap-3">
                                             <FormFieldWrapper
                                                 control={form.control}
@@ -980,7 +1004,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                                 id={`mop-${mop}`}
                                                                                 className="absolute border-0 inset-0 opacity-0 cursor-pointer"
                                                                             />
-                                                                            <p className="text-foreground capitalize text-xs leading-none font-medium pointer-events-none">
+                                                                            <p className="capitalize text-xs leading-none font-medium pointer-events-none">
                                                                                 {
                                                                                     mop
                                                                                 }
@@ -1140,12 +1164,13 @@ const LoanTransactionCreateUpdateForm = ({
                                             )}
                                         </div>
                                     </div>
-                                </div>
-                            </fieldset>
+                                </fieldset>
+                            </div>
                         </TabsContent>
                         <TabsContent value="comaker">
                             {/* COMAKER DETAILS */}
                             <LoanComakerSection
+                                disabled={isReadOnly}
                                 isDisabled={isDisabled}
                                 form={form}
                             />
@@ -1221,10 +1246,12 @@ const LoanTransactionCreateUpdateForm = ({
                                     <LoanEntriesEditor
                                         {...field}
                                         form={form}
-                                        loanTransactionId={
-                                            createdLoanTransactionId
+                                        loanTransactionId={loanTransactionId}
+                                        disabled={
+                                            loanTransactionId === undefined ||
+                                            isReadOnly ||
+                                            isDisabled(field.name)
                                         }
-                                        disabled={formMode === 'create'}
                                     />
                                 )}
                             />
@@ -1236,6 +1263,7 @@ const LoanTransactionCreateUpdateForm = ({
                         >
                             <LoanClearanceAnalysis
                                 form={form}
+                                isReadOnly={isReadOnly}
                                 isDisabled={isDisabled}
                             />
                         </TabsContent>
@@ -1246,6 +1274,7 @@ const LoanTransactionCreateUpdateForm = ({
                         >
                             <LoanTermsAndConditionReceiptSection
                                 form={form}
+                                isReadOnly={isReadOnly}
                                 isDisabled={isDisabled}
                             />
                         </TabsContent>
@@ -1283,27 +1312,20 @@ const LoanTransactionCreateUpdateForm = ({
                             />
                         </TabsContent>
                     </Tabs>
-                </fieldset>
+                </div>
                 <FormFooterResetSubmit
                     className="grow min-w-0 max-w-full p-4 z-10 sticky bottom-0 mx-4 mb-4 bg-popover/70 rounded-xl"
                     error={error}
-                    readOnly={formProps.readOnly}
+                    readOnly={isReadOnly}
                     isLoading={isPending}
                     // disableSubmit={
                     //     formMode === 'create' && !areRequiredFieldsFilled
                     // }
-                    submitText={mode}
+                    submitText={loanTransactionId ? 'Update' : 'Create'}
                     onReset={() => {
                         form.reset()
                         reset?.()
                         hasAutoCreatedRef.current = false
-                        setFormMode(
-                            mode === 'create' &&
-                                createdLoanTransactionId === undefined
-                                ? 'create'
-                                : 'update'
-                        )
-                        setCreatedLoanTransactionId(undefined)
                     }}
                 />
             </form>
@@ -1316,7 +1338,7 @@ export const LoanTransactionCreateUpdateFormModal = ({
     formProps,
     ...props
 }: IModalProps & {
-    formProps: Omit<ILoanTransactionFormProps, 'className'>
+    formProps?: Omit<ILoanTransactionFormProps, 'className'>
 }) => {
     return (
         <Modal

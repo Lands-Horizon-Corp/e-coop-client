@@ -159,7 +159,7 @@ const TagTemplateCreateUpdateForm = ({
                                 value={field.value}
                                 onValueChange={field.onChange}
                             >
-                                <SelectTrigger>
+                                <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>

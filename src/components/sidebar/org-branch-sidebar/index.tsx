@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { Link, useParams, useRouter } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import { TUserType } from '@/modules/user'
 
 import EcoopLogo from '@/components/ecoop-logo'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
@@ -25,7 +26,7 @@ import {
     SidebarRail,
 } from '@/components/ui/sidebar'
 
-import { IBaseProps, TUserType } from '@/types'
+import { IBaseProps } from '@/types'
 
 import { generateSidebarGroups } from './sidebar-routes'
 

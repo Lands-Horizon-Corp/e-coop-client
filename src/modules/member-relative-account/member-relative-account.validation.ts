@@ -1,10 +1,10 @@
 import z from 'zod'
 
-import {
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-    familyRelationshipSchema,
-} from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+
+import { FAMILY_RELATIONSHIP } from './member-relative.constants'
+
+export const FamilyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP) // Member profile
 
 // STRICTLY BASED ON IMemberRelativeAccountRequest
 export const MemberRelativeAccountSchema = z.object({
@@ -15,7 +15,7 @@ export const MemberRelativeAccountSchema = z.object({
     member_profile_id: entityIdSchema,
     relative_member_profile_id: entityIdSchema,
     relative_member: z.any(),
-    family_relationship: familyRelationshipSchema,
+    family_relationship: FamilyRelationshipSchema,
     description: z.coerce
         .string()
         .optional()

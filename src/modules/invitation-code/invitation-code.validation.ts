@@ -4,8 +4,9 @@ import {
     descriptionSchema,
     descriptionTransformerSanitizer,
     stringDateSchema,
-    userAccountTypeSchema,
 } from '@/validation'
+
+import { userAccountTypeSchema } from '../user'
 
 export const InviationCodeSchema = z.object({
     code: z.string().min(1, 'invitation code is required'),
