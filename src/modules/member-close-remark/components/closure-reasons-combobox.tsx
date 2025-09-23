@@ -1,6 +1,5 @@
 import * as React from 'react'
 
-import { AccountClosureReasons } from '@/constants'
 import { cn } from '@/helpers'
 
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
@@ -19,7 +18,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-import { TAccountClosureReasonType } from '@/types'
+import { ACCOUNT_CLOSURE_REASONS } from '../member-close-remark.constants'
+import { TAccountClosureReasonType } from '../member-close-remark.types'
 
 interface Props {
     id?: string
@@ -37,7 +37,7 @@ const AccountClosureReasonCombobox = ({
     className,
     disabled = false,
     placeholder = 'Select Closure Reason...',
-    closureReasons = AccountClosureReasons as unknown as TAccountClosureReasonType[],
+    closureReasons = ACCOUNT_CLOSURE_REASONS as unknown as TAccountClosureReasonType[],
     onChange,
     ...other
 }: Props) => {

@@ -59,9 +59,7 @@ function ViewMemberProfilePage() {
                 }}
             />
             <MemberProfileTable
-                RowContextComponent={(props) => {
-                    return <MemberProfileRowContext {...props} />
-                }}
+                RowContextComponent={MemberProfileRowContext}
                 actionComponent={(props) => <MemberProfileAction {...props} />}
                 toolbarProps={{
                     createActionProps: {

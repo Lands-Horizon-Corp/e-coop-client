@@ -1,9 +1,6 @@
-import {
-    IBaseEntityMeta,
-    IPaginatedResult,
-    TEntityId,
-    TTagCategory,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
+
+import { TTagCategory } from '../tag-template'
 
 export interface IAccountTag extends IBaseEntityMeta {
     account_id: TEntityId

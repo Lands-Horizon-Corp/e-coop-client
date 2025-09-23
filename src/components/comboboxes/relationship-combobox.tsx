@@ -1,7 +1,10 @@
 import * as React from 'react'
 
-import { FAMILY_RELATIONSHIP } from '@/constants'
 import { cn } from '@/helpers'
+import {
+    FAMILY_RELATIONSHIP,
+    TRelationship,
+} from '@/modules/member-relative-account'
 
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -18,8 +21,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-
-import { TRelationship } from '@/types'
 
 // Assuming this is where your type and const are
 

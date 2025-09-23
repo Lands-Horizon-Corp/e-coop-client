@@ -181,9 +181,7 @@ const MemberTypeTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <MemberTypeRowContext {...props} />
-                    )}
+                    RowContextComponent={MemberTypeRowContext}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

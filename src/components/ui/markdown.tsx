@@ -22,8 +22,8 @@ import remarkGfm from 'remark-gfm'
 
 import { Button } from '@/components/ui/button'
 
-import Image from '../image'
 import { CheckIcon, CopyIcon } from '../icons'
+import Image from '../image'
 
 // Define remark and rehype plugins
 const remarkPlugins = [remarkGfm]

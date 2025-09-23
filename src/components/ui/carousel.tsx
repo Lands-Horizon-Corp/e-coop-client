@@ -4,7 +4,9 @@ import { cn } from '@/helpers/tw-utils'
 import useEmblaCarousel, {
     type UseEmblaCarouselType,
 } from 'embla-carousel-react'
+
 import { Button } from '@/components/ui/button'
+
 import { ArrowLeftIcon, ArrowRightIcon } from '../icons'
 
 type CarouselApi = UseEmblaCarouselType[1]

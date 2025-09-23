@@ -1,3 +1,5 @@
+import { TUserType } from '@/modules/user'
+
 import {
     AccountSetupIcon,
     BankDuoToneIcon,
@@ -40,8 +42,6 @@ import {
     INavItemDropdown,
     INavItemSingle,
 } from '@/components/ui/app-sidebar/types'
-
-import { TUserType } from '@/types'
 
 const filterNavItemsByUserType = (
     items: INavItem[],

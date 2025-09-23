@@ -3,12 +3,10 @@ import z from 'zod'
 
 import {
     CIVIL_STATUS,
-    FAMILY_RELATIONSHIP,
     GENERAL_STATUS,
     LETTERS_REGEX,
     NUMBER_LETTER_REGEX,
     PASSWORD_MIN_LENGTH,
-    USER_TYPE,
 } from '@/constants'
 import { sanitizeNumberInput } from '@/helpers/common-helper'
 
@@ -37,10 +35,6 @@ export const mediaSchema = z.object({
     created_at: z.string(),
     updated_at: z.string().optional(),
     deleted_at: z.string().optional(),
-})
-
-export const userAccountTypeSchema = z.enum(USER_TYPE, {
-    message: `Valid options are ${USER_TYPE.join(',')}`,
 })
 
 export const emailSchema = z
@@ -110,8 +104,6 @@ export const contactNumberSchema = z.string().min(1, 'Contact Number is empty')
 export const generalStatusSchema = z.enum(GENERAL_STATUS)
 
 export const civilStatusSchema = z.enum(CIVIL_STATUS) //TODO: MOVE TO member profile constant.ts
-
-export const familyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP) // Member profile
 
 export const amount = z.preprocess(
     (val) => {

@@ -7,7 +7,7 @@ export const TRANSACTION_TAG_CATEGORIES = [
     'journal voucher',
     'adjustment',
     'transaction',
-    'general acconting ledger',
+    'general accounting ledger',
 ] as const
 
 export type TransactionTagCategory = (typeof TRANSACTION_TAG_CATEGORIES)[number]

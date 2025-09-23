@@ -1,7 +1,8 @@
 import z from 'zod'
 
-import { USER_TYPE } from '@/constants'
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+
+import { USER_TYPE } from '../user/user.constants'
 
 export const UserOrgPermissionSchema = z.object({
     permission_name: z.string().min(1, 'Permission name is required'),

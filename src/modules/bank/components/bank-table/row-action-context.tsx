@@ -72,7 +72,6 @@ export const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
                     formProps={{
                         bankId: bank.id,
                         defaultValues: { ...bank },
-                        onSuccess: () => updateModal.onOpenChange(false),
                     }}
                 />
             </div>

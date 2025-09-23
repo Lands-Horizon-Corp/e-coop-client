@@ -2,7 +2,6 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import BankTable from '@/modules/bank/components/bank-table'
-import BankAction from '@/modules/bank/components/bank-table/row-action-context'
 import { BankCreateUpdateFormModal } from '@/modules/bank/components/forms/bank-create-update-form'
 
 import PageContainer from '@/components/containers/page-container'
@@ -41,7 +40,6 @@ const BankPage = () => {
         <PageContainer>
             <BankCreateUpdateFormModal {...createModal} />
             <BankTable
-                actionComponent={(props) => <BankAction {...props} />}
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),

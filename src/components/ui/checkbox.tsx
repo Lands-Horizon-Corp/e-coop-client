@@ -3,6 +3,7 @@ import * as React from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 
 import { cn } from '@/helpers/tw-utils'
+
 import { CheckIcon, MinusIcon } from '../icons'
 
 const Checkbox = React.forwardRef<
