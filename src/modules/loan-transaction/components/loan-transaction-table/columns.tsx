@@ -303,7 +303,9 @@ const LoanTransactionTableColumns = (
                 },
             }) => (
                 <div className="!text-wrap text-muted-foreground">
-                    {loan_type && <LoanTypeBadge loanType={loan_type} />}
+                    {loan_type && (
+                        <LoanTypeBadge size="sm" loanType={loan_type} />
+                    )}
                 </div>
             ),
             enableMultiSort: true,
@@ -335,11 +337,12 @@ const LoanTransactionTableColumns = (
                 <div className="!text-wrap text-muted-foreground">
                     {loan_status && (
                         <InfoTooltip content={loan_status.description}>
-                            <Badge>
-                                <span style={{ color: loan_status.color }}>
+                            <Badge variant="outline" className="font-normal">
+                                <span>
                                     <RenderIcon
                                         icon={loan_status.icon as TIcon}
-                                        className="mr-1 size-3"
+                                        className="mr-1 inline size-3"
+                                        style={{ color: loan_status.color }}
                                     />
                                     {loan_status.name}
                                 </span>
@@ -412,6 +415,7 @@ const LoanTransactionTableColumns = (
                 <div className="!text-wrap text-muted-foreground">
                     {collector_place && (
                         <LoanCollectorPlaceBadge
+                            size="sm"
                             collectorPlace={
                                 collector_place as TLoanCollectorPlace
                             }
