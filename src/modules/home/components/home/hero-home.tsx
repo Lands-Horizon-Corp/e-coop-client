@@ -48,7 +48,7 @@ const HeroHome = () => {
                                     animate="shimmer"
                                     className="block font-extrabold"
                                 >
-                                    <h1>Gradient Text Component</h1>
+                                    <h1>E-COOPERATIVE SUITE</h1>
                                 </GradientText>
                             </h1>
 
