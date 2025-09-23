@@ -78,28 +78,28 @@ export const LoanStatusIndicatorDetails = ({
             key: 1,
             label: 'Draft',
             icon: <PencilFillIcon className="inline text-muted-foreground" />,
-            description: 'Your loan is in draft and can be changed',
+            description: 'This Loan is in draft mode and can be changed',
         },
         {
             key: 2,
             label: 'Printed',
             date: printed_date,
             icon: <PrinterFillIcon className="inline text-muted-foreground" />,
-            description: 'Your loan was printed',
+            description: 'Loan has been printed',
         },
         {
             key: 3,
             label: 'Approved',
             date: approved_date,
             icon: <ThumbsUpIcon className="inline text-accent" />,
-            description: 'Your loan was approved',
+            description: 'Loan has been approved',
         },
         {
             key: 4,
             label: 'Released',
-            date: released_date || new Date(),
+            date: released_date,
             icon: <BadgeCheckFillIcon className="inline text-primary" />,
-            description: 'Your loan has been released',
+            description: 'Loan has been finalized and released',
         },
     ]
 

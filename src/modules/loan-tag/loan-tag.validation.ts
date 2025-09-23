@@ -1,10 +1,15 @@
 import z from 'zod'
 
 import { ICONS } from '@/constants'
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import {
+    EntityIdSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validation'
 
 export const LoanTagSchema = z.object({
     id: entityIdSchema.optional(),
+    loan_transaction_id: EntityIdSchema('Loan Transaction is required'),
     name: z.string().min(1, 'Loan Tag name is required'),
     description: z
         .string()

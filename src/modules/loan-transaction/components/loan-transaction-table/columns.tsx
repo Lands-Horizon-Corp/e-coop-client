@@ -21,9 +21,8 @@ import {
     ILoanTransaction,
     TLoanCollectorPlace,
 } from '../../loan-transaction.types'
-import { resolveLoanDatesToStatus } from '../../loan.utils'
 import { LoanCollectorPlaceBadge } from '../loan-collector-place-badge'
-import LoanApplicationStatusBadge from '../loan-status-badge'
+import LoanStatusIndicator from '../loan-status-indicator'
 import { LoanTypeBadge } from '../loan-type-badge'
 
 export const loanStatusGlobalSearchTargets: IGlobalSearchTargets<ILoanTransaction>[] =
@@ -214,16 +213,9 @@ const LoanTransactionTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Application Status" />
             ),
-            cell: ({ row: { original } }) => {
-                const applicationStatusType = resolveLoanDatesToStatus(original)
-
-                return (
-                    <LoanApplicationStatusBadge
-                        size="sm"
-                        status={applicationStatusType}
-                    />
-                )
-            },
+            cell: ({ row: { original } }) => (
+                <LoanStatusIndicator loanTransactionDates={original} />
+            ),
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,
@@ -435,12 +427,41 @@ const LoanTransactionTableColumns = (
             minSize: 300,
             maxSize: 800,
         },
-
+        {
+            id: 'printed_date',
+            accessorKey: 'printed_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Printed">
+                    <ColumnActions {...props}>
+                        <TextFilter<ILoanTransaction>
+                            displayText="Printed Date"
+                            field="printed_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { printed_date },
+                },
+            }) => (
+                <p className="!text-wrap text-muted-foreground">
+                    {printed_date && toReadableDateTime(printed_date)}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
         {
             id: 'approved_date',
             accessorKey: 'approved_date',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Approved Date">
+                <DataTableColumnHeader {...props} title="Date Approved">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
                             displayText="Approved Date"
@@ -456,6 +477,36 @@ const LoanTransactionTableColumns = (
             }) => (
                 <p className="!text-wrap text-muted-foreground">
                     {approved_date && toReadableDateTime(approved_date)}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'released_date',
+            accessorKey: 'released_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Released">
+                    <ColumnActions {...props}>
+                        <TextFilter<ILoanTransaction>
+                            displayText="Released Date"
+                            field="released_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { released_date },
+                },
+            }) => (
+                <p className="!text-wrap text-muted-foreground">
+                    {released_date && toReadableDateTime(released_date)}
                 </p>
             ),
             enableMultiSort: true,
