@@ -36,7 +36,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const hasValue = props.getValue()
             return (
                 <EditableCell
-                    className={cn(hasValue ? '!min-w-[100px] !w-[200px]' : '')}
+                    className={cn(hasValue ? '!min-w-[100px] !w-[220px]' : '')}
                     inputType="account-picker"
                     {...props}
                 />
@@ -57,17 +57,6 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             )
         },
     },
-    // {
-    //     accessorKey: 'description',
-    //     header: 'Description',
-    //     cell: (props) => (
-    //         <EditableCell
-    //             className="min-w-[200px]"
-    //             inputType="text"
-    //             {...props}
-    //         />
-    //     ),
-    // },
     {
         accessorKey: 'cash_check_voucher_number',
         header: 'CV Number',
