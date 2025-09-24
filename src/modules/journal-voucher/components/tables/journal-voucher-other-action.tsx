@@ -33,6 +33,8 @@ const JournalVoucherOtherAction = ({
     const canRelease = isPrinted && isApproved
 
     const showRelease = canRelease && !journalVoucher.released_date
+    // show print
+    const showPrint = isPrinted && !journalVoucher.printed_date
 
     const { mutate: mutatePrint, isPending: isPrinting } =
         useEditPrintJournalVoucher({
@@ -87,6 +89,12 @@ const JournalVoucherOtherAction = ({
             label: isPrinted ? 'print-undo' : 'Print',
             icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
             onSelect: handlePrintAction(isPrinted ? 'print-undo' : 'print'),
+            isVisible: showPrint,
+        },
+        {
+            label: 'Print',
+            icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
+            onSelect: handleJournalAction('print-only'),
             isVisible: true,
         },
         {
