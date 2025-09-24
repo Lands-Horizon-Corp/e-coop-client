@@ -97,7 +97,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
                 {/* Placeholder/Blur background */}
                 {isPlaceholderVisible && (
                     <div
-                        className="absolute inset-0 bg-muted"
+                        className="absolute inset-0"
                         style={{
                             backgroundImage: placeholder
                                 ? `url(${placeholder})`
@@ -116,7 +116,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
                 {/* Loading skeleton */}
                 {!isLoaded && !isPlaceholderVisible && (
                     <div
-                        className="absolute inset-0 animate-pulse bg-muted"
+                        className="absolute inset-0 animate-pulse"
                         aria-hidden="true" // Hide from screen readers
                     />
                 )}
@@ -135,12 +135,15 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
                     onLoad={handleLoad}
                     onError={handleError}
                     className={cn(
-                        'h-full w-full transition-opacity duration-300',
+                        'h-full w-full transition-opacity duration-300 select-none pointer-events-none',
                         isLoaded ? 'opacity-100' : 'opacity-0',
                         hasError && 'opacity-50'
                     )}
                     style={imageStyle}
                     decoding="async"
+                    draggable={false}
+                    onContextMenu={(e) => e.preventDefault()}
+                    onDragStart={(e) => e.preventDefault()}
                 />
             </div>
         )

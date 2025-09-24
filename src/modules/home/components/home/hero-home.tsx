@@ -46,9 +46,12 @@ const HeroHome = () => {
                                     variant="primary"
                                     size="6xl"
                                     animate="shimmer"
-                                    className="block font-extrabold"
+                                    className="block "
+                                    style={{
+                                        fontFamily: "'Knewave', cursive",
+                                    }}
                                 >
-                                    <h1>E-COOPERATIVE SUITE</h1>
+                                    <h1>E-cooperative Suite</h1>
                                 </GradientText>
                             </h1>
 
