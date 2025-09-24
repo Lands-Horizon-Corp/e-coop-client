@@ -1,3 +1,4 @@
+import { cn } from '@/helpers'
 import { IJournalVoucher } from '@/modules/journal-voucher'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -8,6 +9,7 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinIcon } from '@/components/icons'
+import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
 export const journalVoucherGlobalSearchTargets: IGlobalSearchTargets<IJournalVoucher>[] =
@@ -75,6 +77,37 @@ const JournalVoucherTableColumns = (
         ),
         cell: ({
             row: {
+                original: { cash_voucher_number },
+            },
+        }) => (
+            <div className="flex min-w-0 flex-col">
+                <span className="truncate text-xs text-muted-foreground/70">
+                    {cash_voucher_number || '-'}
+                </span>
+            </div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 220,
+        minSize: 180,
+    },
+    {
+        id: 'description',
+        accessorKey: 'description',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Description">
+                <ColumnActions {...props}>
+                    <TextFilter<IJournalVoucher>
+                        displayText="Description"
+                        field="description"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
                 original: { description },
             },
         }) => (
@@ -110,6 +143,54 @@ const JournalVoucherTableColumns = (
         enableHiding: false,
         size: 150,
         minSize: 120,
+    },
+    {
+        id: 'status',
+        accessorKey: 'status',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Status">
+                <ColumnActions {...props}>
+                    <TextFilter<IJournalVoucher>
+                        displayText="Status"
+                        field="status"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({ row: { original: journalVoucher } }) => {
+            const status = journalVoucher.status
+            let badgeColorClass = ''
+
+            switch (status) {
+                case 'posted':
+                    badgeColorClass = 'bg-green-500 text-white'
+                    break
+                case 'cancelled':
+                    badgeColorClass = 'bg-red-500 text-white'
+                    break
+                case 'draft':
+                default:
+                    badgeColorClass = 'bg-gray-500 text-white'
+                    break
+            }
+
+            return (
+                <Badge
+                    className={cn(
+                        '!text-wrap hover:bg-primary/20',
+                        badgeColorClass
+                    )}
+                >
+                    {status}
+                </Badge>
+            )
+        },
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: false,
+        size: 150,
+        minSize: 80,
     },
     {
         id: 'total_debit',
@@ -148,30 +229,25 @@ const JournalVoucherTableColumns = (
         minSize: 120,
     },
     {
-        id: 'status',
-        accessorKey: 'status',
+        id: 'released_by',
+        accessorKey: 'released_by',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Status">
-                <ColumnActions {...props}>
-                    <TextFilter<IJournalVoucher>
-                        displayText="Status"
-                        field="status"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
+            <DataTableColumnHeader {...props} title="Released By" />
         ),
         cell: ({
             row: {
-                original: { status },
+                original: { posted_by },
             },
-        }) => <div className="!text-wrap">{status}</div>,
+        }) => <div className="!text-wrap">{posted_by?.first_name ?? '-'}</div>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
-        size: 100,
-        minSize: 80,
+        size: 150,
+        minSize: 120,
     },
+    // ... (Your other code)
+
     ...createUpdateColumns<IJournalVoucher>(),
 ]
 

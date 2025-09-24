@@ -11,6 +11,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
+    EJournalVoucherStatus,
     IJournalVoucher,
     IJournalVoucherRequest,
     JournalVoucherSchema,
@@ -33,10 +34,16 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import MemberProfilePickerWithScanner from '@/components/pickers/member-picker-with-scanner'
-import { Form } from '@/components/ui/form'
+import { Form, FormControl } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
@@ -68,6 +75,7 @@ const JournalVoucherCreateUpdateForm = ({
 }: IJournalVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
     const modalState = useModalState()
+
     const [defaultMemberId, setDefaultMemberId] = useState<
         TEntityId | undefined
     >(defaultValues?.member_profile?.id)
@@ -327,15 +335,31 @@ const JournalVoucherCreateUpdateForm = ({
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="status"
                         label="Status"
+                        name="status"
                         render={({ field }) => (
-                            <Input
-                                {...field}
-                                id={field.name}
-                                placeholder="Enter status"
-                                disabled={isDisabled(field.name)}
-                            />
+                            <FormControl>
+                                <Select
+                                    disabled={isDisabled(field.name)}
+                                    onValueChange={(selectedValue) => {
+                                        field.onChange(selectedValue)
+                                    }}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        {field.value || 'Select Status'}
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.values(
+                                            EJournalVoucherStatus
+                                        ).map((type) => (
+                                            <SelectItem key={type} value={type}>
+                                                {type}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
                         )}
                     />
                     <FormFieldWrapper
