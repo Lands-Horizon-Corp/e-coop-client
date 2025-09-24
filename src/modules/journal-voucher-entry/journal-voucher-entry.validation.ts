@@ -1,15 +1,17 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import { EntityIdSchema, entityIdSchema } from '@/validation'
 
 export const JournalVoucherEntrySchema = z.object({
     id: entityIdSchema.optional(),
-    name: z.string().min(1, 'JournalVoucherEntry name is required'),
-    description: z
-        .string()
-        .min(10, 'Min 10 character description')
-        .optional()
-        .transform(descriptionTransformerSanitizer),
+
+    cash_check_voucher_number: z.string().optional(),
+    account_id: EntityIdSchema('Account'),
+    member_profile_id: EntityIdSchema('MemberProfile').optional(),
+    employee_user_id: EntityIdSchema('EmployeeUser').optional(),
+
+    credit: z.coerce.number<number>().optional().default(0),
+    debit: z.coerce.number<number>().optional().default(0),
 })
 
 export type TJournalVoucherEntrySchema = z.infer<

@@ -21,6 +21,10 @@ import {
     useUpdateJournalVoucherById,
 } from '@/modules/journal-voucher'
 import {
+    IJournalVoucherEntryRequest,
+    JournalVoucherEntrySchema,
+} from '@/modules/journal-voucher-entry'
+import {
     IMemberProfile,
     useGetMemberProfileById,
 } from '@/modules/member-profile'
@@ -37,6 +41,7 @@ import FormFooterResetSubmit from '@/components/form-components/form-footer-rese
 import Modal, { IModalProps } from '@/components/modals/modal'
 import MemberProfilePickerWithScanner from '@/components/pickers/member-picker-with-scanner'
 import { Form, FormControl } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
@@ -69,6 +74,67 @@ export interface IJournalVoucherCreateUpdateFormProps
     journalVoucherId?: TEntityId
 }
 
+type TValidateResult =
+    | {
+          isValid: true
+          validatedEntries: IJournalVoucherEntryRequest[]
+      }
+    | {
+          isValid: false
+          error: string
+      }
+type TValidateJournalEntryProps = {
+    data: IJournalVoucherEntryRequest[]
+}
+
+const ValidateJournalEntry = ({
+    data,
+}: TValidateJournalEntryProps): TValidateResult => {
+    const transformedEntries = data.map((entry) => {
+        const memberProfile = entry.member_profile as
+            | IMemberProfile
+            | undefined
+            | null
+        const account = entry.account as IAccount | undefined | null
+
+        return {
+            cash_check_voucher_number: entry.cash_check_voucher_number,
+            id: entry.id,
+            credit: entry.credit,
+            debit: entry.debit,
+            member_profile_id: memberProfile?.id,
+            account_id: account?.id,
+        }
+    })
+
+    const parsedEntries = z
+        .array(JournalVoucherEntrySchema)
+        .safeParse(transformedEntries)
+
+    if (!parsedEntries.success) {
+        const firstError = parsedEntries.error.issues[0]
+        const fieldPath = firstError.path
+
+        const fieldName = String(fieldPath[fieldPath.length - 1])
+        const errorMessage = firstError.message
+
+        const errorLocation =
+            fieldPath.length > 1
+                ? `Entry ${parseInt(String(fieldPath[0])) + 1}: `
+                : ''
+
+        return {
+            isValid: false,
+            error: `Field Error: ${errorLocation}name: ${fieldName} message: ${errorMessage}`,
+        }
+    }
+
+    return {
+        isValid: true,
+        validatedEntries: transformedEntries,
+    }
+}
+
 const JournalVoucherCreateUpdateForm = ({
     className,
     journalVoucherId,
@@ -78,9 +144,12 @@ const JournalVoucherCreateUpdateForm = ({
     const queryClient = useQueryClient()
     const modalState = useModalState()
 
+    const [journalEntryError, setJournalEntryError] = useState<string>('')
+
     const [defaultMemberId, setDefaultMemberId] = useState<
         TEntityId | undefined
     >(defaultValues?.member_profile?.id)
+
     const [decodedMemberProfile, setDecodedMemberProfile] = useState<
         IQRMemberProfile | undefined
     >()
@@ -107,6 +176,7 @@ const JournalVoucherCreateUpdateForm = ({
             ...defaultValues,
         },
     })
+
     const {
         mutate: createJournalVoucher,
         isPending: isCreating,
@@ -156,33 +226,23 @@ const JournalVoucherCreateUpdateForm = ({
             ...formData,
             date: new Date(formData.date).toISOString(),
         }
+        const validateResult = ValidateJournalEntry({
+            data: selectedJournalVoucherEntry,
+        })
 
-        const filterSeledtedEntries = selectedJournalVoucherEntry.map(
-            (entry) => {
-                const member: IMemberProfile =
-                    entry.member_profile as IMemberProfile
-                const account: IAccount = entry.account as IAccount
-
-                return {
-                    cash_check_voucher_number: entry.cash_check_voucher_number,
-                    id: entry.id,
-                    credit: entry.credit,
-                    debit: entry.debit,
-                    member_profile_id: member?.id ?? undefined,
-                    account_id: account?.id ?? undefined,
-                }
-            }
-        )
-        if (isUpdate) {
+        if (isUpdate && validateResult.isValid) {
             updateJournalVoucher({
                 id: editJournalId,
                 payload: {
                     ...payload,
-                    journal_voucher_entries: filterSeledtedEntries,
+                    journal_voucher_entries: validateResult.validatedEntries,
                     journal_voucher_entries_deleted:
                         journalVoucherEntriesDeleted,
                 },
             })
+            setJournalEntryError('')
+        } else if (!validateResult.isValid) {
+            setJournalEntryError(validateResult.error)
         } else {
             createJournalVoucher(payload)
         }
@@ -402,6 +462,7 @@ const JournalVoucherCreateUpdateForm = ({
                         />
                     </div>
                 </div>
+                <FormErrorMessage errorMessage={journalEntryError} />
                 <FormFooterResetSubmit
                     error={error}
                     readOnly={formProps.readOnly}
