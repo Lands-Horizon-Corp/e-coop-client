@@ -6,6 +6,7 @@ import {
     FieldValues,
     Path,
     UseFormReturn,
+    useWatch,
 } from 'react-hook-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -222,4 +223,88 @@ export const useFormPreventExit = <T extends FieldValues>({
         shouldPrevent: hasDirtyFields && enabled,
         onExitPrevented,
     })
+}
+
+type AutoSaveProps<T extends FieldValues> = {
+    delay?: number
+    form: UseFormReturn<T>
+    onSave: (data: T) => void | Promise<void>
+}
+
+export function useAutoSave<T extends FieldValues>({
+    delay = 1000,
+    form,
+    onSave,
+}: AutoSaveProps<T>) {
+    const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    console.log('outside', form.formState.isDirty, form.formState.dirtyFields)
+
+    useEffect(() => {
+        const subscription = form.watch(() => {
+            console.log(
+                'Watch Subs: ',
+                form.formState.isDirty,
+                form.formState.dirtyFields
+            )
+
+            if (timer.current) {
+                clearTimeout(timer.current)
+            }
+
+            timer.current = setTimeout(() => {
+                const { isDirty, dirtyFields } = form.formState
+
+                const hasNoChanges = Object.keys(dirtyFields).length === 0
+
+                console.log('watch:timeout', {
+                    isDirty,
+                    dirtyFields,
+                    hasNoChanges,
+                })
+
+                if (hasNoChanges) return
+
+                onSave(form.getValues())
+            }, delay)
+        })
+
+        return () => {
+            subscription.unsubscribe()
+            if (timer.current) clearTimeout(timer.current)
+        }
+    }, [
+        delay,
+        onSave,
+        form,
+        form.formState.isDirty,
+        form.formState.dirtyFields,
+    ])
+}
+
+export function AutoSaveHeadless<T extends FieldValues>({
+    form,
+    onSave,
+    delay = 1000,
+}: AutoSaveProps<T>) {
+    const { control, getValues, formState } = form
+    const values = useWatch({ control })
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            const { isDirty, dirtyFields } = formState
+            const hasNoChanges =
+                !isDirty || Object.keys(dirtyFields).length === 0
+
+
+            if (hasNoChanges) return
+            onSave(getValues())
+        }, delay)
+
+        return () => {
+            clearTimeout(timeout)
+        }
+    }, [values, delay, formState, getValues, onSave])
+
+    return null 
 }
