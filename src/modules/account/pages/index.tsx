@@ -1,8 +1,4 @@
-import {
-    AccountCreateUpdateFormModal,
-    AccountTableAction,
-    AccountsTable,
-} from '@/modules/account'
+import { AccountCreateUpdateFormModal, AccountsTable } from '@/modules/account'
 import { AccountTag } from '@/modules/account-tag'
 
 import PageContainer from '@/components/containers/page-container'
@@ -27,7 +23,6 @@ export const Account = () => {
                         },
                         otherActionLeft: <AccountTag />,
                     }}
-                    actionComponent={(prop) => <AccountTableAction {...prop} />}
                 />
             </div>
         </PageContainer>

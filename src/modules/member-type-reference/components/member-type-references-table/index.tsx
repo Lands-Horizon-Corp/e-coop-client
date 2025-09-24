@@ -33,7 +33,9 @@ import MemberTypeReferenceTableColumns, {
     IMemberTypeReferenceTableColumnProps,
     memberTypeReferenceGlobalSearchTargets,
 } from './columns'
-import { MemberTypeReferenceRowContext } from './row-action-context'
+import MemberTypeReferenceAction, {
+    MemberTypeReferenceRowContext,
+} from './row-action-context'
 
 export interface MemberTypeReferenceTableProps
     extends TableProps<IMemberTypeReference>,
@@ -63,7 +65,7 @@ const MemberTypeReferenceTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = MemberTypeReferenceAction,
     RowContextComponent = MemberTypeReferenceRowContext,
 }: MemberTypeReferenceTableProps) => {
     const queryClient = useQueryClient()

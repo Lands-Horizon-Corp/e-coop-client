@@ -36,7 +36,7 @@ import accountTableColumns, {
     IAccountsTableColumnProps,
     accountsGlobalSearchTargets,
 } from './columns'
-import { AccountRowContext } from './row-actions'
+import { AccountAction, AccountRowContext } from './row-actions'
 
 export interface AccountsTableProps
     extends TableProps<IAccount>,
@@ -62,7 +62,7 @@ const AccountsTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = AccountAction,
     RowContextComponent = AccountRowContext,
 }: AccountsTableProps) => {
     const queryClient = useQueryClient()

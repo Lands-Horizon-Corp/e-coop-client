@@ -31,7 +31,9 @@ import DisbursementTableColumns, {
     IDisbursementTableColumnProps,
     disbursementGlobalSearchTargets,
 } from './columns'
-import { DisbursementRowContext } from './row-action-context'
+import DisbursementAction, {
+    DisbursementRowContext,
+} from './row-action-context'
 
 export interface DisbursementTableProps
     extends TableProps<IDisbursement>,
@@ -57,7 +59,7 @@ const DisbursementTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = DisbursementAction,
     RowContextComponent = DisbursementRowContext,
 }: DisbursementTableProps) => {
     const queryClient = useQueryClient()

@@ -8,7 +8,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import DisbursementTable from '../disbursement-table'
-import DisbursementAction from '../disbursement-table/row-action-context'
 import { DisbursementCreateUpdateFormModal } from '../forms/disbursement-create-update-form'
 
 const DisbursementPage = () => {
@@ -43,7 +42,6 @@ const DisbursementPage = () => {
             <DisbursementCreateUpdateFormModal {...createModal} />
             <DisbursementTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
-                actionComponent={(props) => <DisbursementAction {...props} />}
                 toolbarProps={{
                     createActionProps: {
                         onClick() {

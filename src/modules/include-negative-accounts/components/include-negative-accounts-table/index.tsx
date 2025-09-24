@@ -27,7 +27,9 @@ import {
     useGetAllIncludeNegativeAccounts,
 } from '../../include-negative-accounts.service'
 import { IIncludeNegativeAccounts } from '../../include-negative-accounts.types'
-import { IncludeNegativeAccountRowContext } from './action'
+import IncludeNegativeAccountAction, {
+    IncludeNegativeAccountRowContext,
+} from './action'
 import {
     IIncludeNegativeAccountTableColumnProps,
     includeNegativeAccountGlobalSearchTargets,
@@ -59,7 +61,7 @@ const IncludeNegativeAccountTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
-    actionComponent,
+    actionComponent = IncludeNegativeAccountAction,
     RowContextComponent = IncludeNegativeAccountRowContext,
 }: IncludeNegativeAccountTableProps) => {
     const queryClient = useQueryClient()

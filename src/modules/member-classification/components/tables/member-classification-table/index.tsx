@@ -31,7 +31,9 @@ import memberClassificationColumns, {
     IMemberClassificationTableColumnProps,
     memberClassificationGlobalSearchTargets,
 } from './columns'
-import { MemberClassificationRowContext } from './row-action-context'
+import MemberClassificationAction, {
+    MemberClassificationRowContext,
+} from './row-action-context'
 
 const MemberClassificationTable = ({
     className,
@@ -42,7 +44,7 @@ const MemberClassificationTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = MemberClassificationAction,
     RowContextComponent = MemberClassificationRowContext,
 }: TableProps<IMemberClassification> &
     IMemberClassificationTableColumnProps & {

@@ -6,7 +6,6 @@ import {
     FieldValues,
     Path,
     UseFormReturn,
-    useWatch,
 } from 'react-hook-form'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -35,7 +34,7 @@ export const useFormHelper = <T extends FieldValues>({
     form,
     defaultValues,
     autoSave = false,
-    autoSaveDelay = 400,
+    autoSaveDelay = 1000,
     // onNewDefaulValueNotice,
     resetOnDefaultChange = false,
     focusOnError = true,
@@ -85,10 +84,10 @@ export const useFormHelper = <T extends FieldValues>({
 
     const firstError = Object.values(form.formState.errors)[0]?.message
 
-    const formRef = useFormAutosave({
+    const formRef = useFormAutoSave<T>({
         form,
-        autoSave: autoSave,
         delay: autoSaveDelay,
+        enabled: autoSave,
     })
 
     const handleFocusError = useFocusOnErrorField({
@@ -145,58 +144,6 @@ export const useFocusOnErrorField = <T extends FieldValues>({
     }, [form, enabled])
 }
 
-export const useFormAutosave = <T extends FieldValues>({
-    form,
-    delay = 500,
-    autoSave = false,
-}: {
-    form: UseFormReturn<T>
-    delay?: number
-    autoSave?: boolean
-}) => {
-    const formRef = useRef<HTMLFormElement | null>(null)
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-    const mountedRef = useRef(false)
-    const isSubmittingRef = useRef(false)
-
-    useEffect(() => {
-        if (!autoSave) return
-
-        const subscription = form.watch(() => {
-            if (
-                !mountedRef.current ||
-                !form.formState.isDirty ||
-                isSubmittingRef.current
-            )
-                return
-
-            if (timeoutRef.current) clearTimeout(timeoutRef.current)
-
-            timeoutRef.current = setTimeout(async () => {
-                if (!form.formState.isDirty || isSubmittingRef.current) return
-
-                isSubmittingRef.current = true
-                try {
-                    formRef.current?.requestSubmit()
-                } finally {
-                    setTimeout(() => {
-                        isSubmittingRef.current = false
-                    }, 100)
-                }
-            }, delay)
-        })
-
-        mountedRef.current = true
-
-        return () => {
-            subscription.unsubscribe()
-            if (timeoutRef.current) clearTimeout(timeoutRef.current)
-        }
-    }, [form, delay, autoSave])
-
-    return formRef
-}
-
 export const useFormPreventExit = <T extends FieldValues>({
     form,
     enabled = true,
@@ -227,84 +174,50 @@ export const useFormPreventExit = <T extends FieldValues>({
 
 type AutoSaveProps<T extends FieldValues> = {
     delay?: number
+    enabled?: boolean
     form: UseFormReturn<T>
-    onSave: (data: T) => void | Promise<void>
 }
 
-export function useAutoSave<T extends FieldValues>({
+// EXPERIMENTAL - SUBMITTED DISCUSSION SINCE WITHOUTUSING USECALLBACK WILL CAUSE A BUG
+// https://github.com/orgs/react-hook-form/discussions/13062
+export const useFormAutoSave = <T extends FieldValues>({
     delay = 1000,
     form,
-    onSave,
-}: AutoSaveProps<T>) {
+    enabled,
+    // onSave,
+}: AutoSaveProps<T>) => {
+    const formRef = useRef<HTMLFormElement | null>(null)
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-    console.log('outside', form.formState.isDirty, form.formState.dirtyFields)
+    // const handleSave = useCallback(() => {
+    // onSave()
+    // }, []) // illegal
 
     useEffect(() => {
         const subscription = form.watch(() => {
-            console.log(
-                'Watch Subs: ',
-                form.formState.isDirty,
-                form.formState.dirtyFields
-            )
+            if (!enabled) return
 
-            if (timer.current) {
-                clearTimeout(timer.current)
-            }
+            if (timer.current) clearTimeout(timer.current)
 
             timer.current = setTimeout(() => {
-                const { isDirty, dirtyFields } = form.formState
+                const { dirtyFields } = form.formState
 
                 const hasNoChanges = Object.keys(dirtyFields).length === 0
 
-                console.log('watch:timeout', {
-                    isDirty,
-                    dirtyFields,
-                    hasNoChanges,
-                })
-
                 if (hasNoChanges) return
 
-                onSave(form.getValues())
+                // handleSave()
+                formRef.current?.requestSubmit()
             }, delay)
         })
 
         return () => {
             subscription.unsubscribe()
-            if (timer.current) clearTimeout(timer.current)
+            if (timer.current) {
+                clearTimeout(timer.current)
+            }
         }
-    }, [
-        delay,
-        onSave,
-        form,
-        form.formState.isDirty,
-        form.formState.dirtyFields,
-    ])
-}
+    }, [delay, form, enabled])
 
-export function AutoSaveHeadless<T extends FieldValues>({
-    form,
-    onSave,
-    delay = 1000,
-}: AutoSaveProps<T>) {
-    const { control, getValues, formState } = form
-    const values = useWatch({ control })
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            const { isDirty, dirtyFields } = formState
-            const hasNoChanges =
-                !isDirty || Object.keys(dirtyFields).length === 0
-
-
-            if (hasNoChanges) return
-            onSave(getValues())
-        }, delay)
-
-        return () => {
-            clearTimeout(timeout)
-        }
-    }, [values, delay, formState, getValues, onSave])
-
-    return null 
+    return formRef
 }

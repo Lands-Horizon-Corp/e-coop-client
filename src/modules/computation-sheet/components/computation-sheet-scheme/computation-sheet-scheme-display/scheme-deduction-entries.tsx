@@ -2,7 +2,6 @@ import { forwardRef } from 'react'
 
 import { cn } from '@/helpers'
 import AutomaticLoanDeductionTable from '@/modules/automatic-loan-deduction/components/automatic-loan-deductions-table'
-import AutomaticLoanDeductionAction from '@/modules/automatic-loan-deduction/components/automatic-loan-deductions-table/row-action-context'
 import { AutomaticLoanDeductionCreateUpdateFormModal } from '@/modules/automatic-loan-deduction/components/forms/automatic-loan-deduction-entry-create-update-form'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -37,9 +36,6 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
                 }}
             />
             <AutomaticLoanDeductionTable
-                actionComponent={(props) => (
-                    <AutomaticLoanDeductionAction {...props} />
-                )}
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),

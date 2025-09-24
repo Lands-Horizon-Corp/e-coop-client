@@ -47,7 +47,6 @@ const TransactionBatchPage = () => {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                actionComponent={(prop) => <TransactionBatchAction {...prop} />}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
