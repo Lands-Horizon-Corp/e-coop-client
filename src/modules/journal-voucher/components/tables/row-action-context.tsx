@@ -12,6 +12,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IJournalVoucher, useDeleteJournalVoucherById } from '../..'
 import { JournalVoucherCreateUpdateFormModal } from '../forms/journal-voucher-create-update-modal'
 import { IJournalVoucherTableActionComponentProp } from './columns'
+import JournalVoucherOtherAction from './journal-voucher-other-action'
 
 interface UseJournalVoucherActionsProps {
     row: Row<IJournalVoucher>
@@ -91,7 +92,7 @@ export const JournalVoucherAction = ({
                 />
             </div>
             <RowActionsGroup
-                canSelect
+                // canSelect
                 row={row}
                 onDelete={{
                     text: 'Delete',
@@ -103,7 +104,7 @@ export const JournalVoucherAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
+                otherActions={<JournalVoucherOtherAction row={row} />}
             />
         </>
     )

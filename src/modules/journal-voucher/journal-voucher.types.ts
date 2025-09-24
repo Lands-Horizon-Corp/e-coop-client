@@ -48,5 +48,8 @@ export interface IJournalVoucherPrintRequest {
     cash_voucher_number: string
 }
 
+export type TPrintMode = 'print' | 'print-undo' | 'approve'
+export type TJournalActionMode = 'approve-undo' | 'release' | 'print-only'
+
 export interface IJournalVoucherPaginated
     extends IPaginatedResult<IJournalVoucher> {}

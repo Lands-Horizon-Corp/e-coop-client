@@ -16,6 +16,8 @@ import type {
     IJournalVoucher,
     IJournalVoucherPaginated,
     IJournalVoucherRequest,
+    TJournalActionMode,
+    TPrintMode,
 } from '../journal-voucher'
 
 const {
@@ -95,7 +97,7 @@ export const useEditPrintJournalVoucher = createMutationFactory<
     {
         journal_voucher_id: TEntityId
         voucher_number?: number
-        mode: 'print' | 'unprint'
+        mode: TPrintMode
     }
 >({
     mutationFn: async ({ journal_voucher_id, voucher_number, mode }) => {
@@ -118,11 +120,11 @@ export const useJournalVoucherActions = createMutationFactory<
     Error,
     {
         journal_voucher_id: TEntityId
-        mode: 'print-only' | 'approve-undo' | 'release'
+        mode: TJournalActionMode
     }
 >({
     mutationFn: async ({ journal_voucher_id, mode = 'print-only' }) => {
-        const response = await API.put<
+        const response = await API.post<
             { journal_voucher_id?: TEntityId },
             IJournalVoucher
         >(`${journalVoucherAPIRoute}/${journal_voucher_id}/${mode}`)
