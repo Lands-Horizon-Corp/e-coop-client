@@ -3,10 +3,8 @@ import { IJournalVoucher } from '@/modules/journal-voucher'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
-import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
@@ -66,14 +64,7 @@ const JournalVoucherTableColumns = (
         id: 'voucher_number',
         accessorKey: 'voucher_number',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Voucher Number">
-                <ColumnActions {...props}>
-                    <TextFilter<IJournalVoucher>
-                        displayText="Voucher Number"
-                        field="voucher_number"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
+            <DataTableColumnHeader {...props} title="Voucher Number" />
         ),
         cell: ({
             row: {
@@ -97,14 +88,7 @@ const JournalVoucherTableColumns = (
         id: 'description',
         accessorKey: 'description',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Description">
-                <ColumnActions {...props}>
-                    <TextFilter<IJournalVoucher>
-                        displayText="Description"
-                        field="description"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
+            <DataTableColumnHeader {...props} title="Description" />
         ),
         cell: ({
             row: {
@@ -147,16 +131,7 @@ const JournalVoucherTableColumns = (
     {
         id: 'status',
         accessorKey: 'status',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Status">
-                <ColumnActions {...props}>
-                    <TextFilter<IJournalVoucher>
-                        displayText="Status"
-                        field="status"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
+        header: (props) => <DataTableColumnHeader {...props} title="Status" />,
         cell: ({ row: { original: journalVoucher } }) => {
             const status = journalVoucher.status
             let badgeColorClass = ''
@@ -229,6 +204,44 @@ const JournalVoucherTableColumns = (
         minSize: 120,
     },
     {
+        id: 'action-status',
+        accessorKey: 'action-status',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Action Status" />
+        ),
+        cell: ({ row: { original: journalVoucher } }) => {
+            const isPrinted = !!journalVoucher.printed_date
+            const isApproved = !!journalVoucher.approved_date
+            const isReleased = !!journalVoucher.released_date
+            let statusLabel
+
+            if (isReleased) {
+                statusLabel = 'Released'
+            } else if (isApproved) {
+                statusLabel = 'Approved'
+            } else if (isPrinted) {
+                statusLabel = 'Printed'
+            } else {
+                statusLabel = 'Pending'
+            }
+
+            return (
+                <Badge
+                    className={cn('!text-wrap', {
+                        'bg-green-500 text-white': isReleased,
+                        'bg-blue-500 text-white': isApproved && !isReleased,
+                        'bg-yellow-500 text-white': isPrinted && !isApproved,
+                        'bg-gray-500 text-white': !isPrinted,
+                    })}
+                >
+                    {statusLabel}
+                </Badge>
+            )
+        },
+        size: 150,
+        minSize: 120,
+    },
+    {
         id: 'released_by',
         accessorKey: 'released_by',
         header: (props) => (
@@ -246,6 +259,7 @@ const JournalVoucherTableColumns = (
         size: 150,
         minSize: 120,
     },
+
     // ... (Your other code)
 
     ...createUpdateColumns<IJournalVoucher>(),
