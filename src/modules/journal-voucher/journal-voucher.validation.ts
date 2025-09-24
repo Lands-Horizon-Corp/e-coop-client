@@ -3,13 +3,12 @@ import z from 'zod'
 import { descriptionTransformerSanitizer } from '@/validation'
 
 export const JournalVoucherSchema = z.object({
-    cash_voucher_number: z.string().min(1, 'Cash voucher number is required'),
+    cash_voucher_number: z.string(),
     date: z.string().min(1, 'Date is required'),
-    reference: z.string().min(1, 'Reference is required'),
-    status: z.string().min(1, 'Reference is required'),
+    reference: z.string().optional(),
+    status: z.enum(['draft', 'posted', 'cancelled']),
     description: z
         .string()
-        .min(10, 'Min 10 character description')
         .optional()
         .transform(descriptionTransformerSanitizer),
 

@@ -27,13 +27,15 @@ export interface IJournalVoucherEntry extends IBaseEntityMeta {
 
 export interface IJournalVoucherEntryRequest {
     id?: TEntityId
-    account_id: TEntityId
-    member_profile_id?: TEntityId
     employee_user_id?: TEntityId
-    cash_check_voucher_number: string
+    cash_check_voucher_number?: string
     rowId?: string
 
-    description?: string
+    account?: IAccount
+    account_id?: TEntityId
+    member_profile?: IMemberProfile
+    member_profile_id?: TEntityId
+
     debit: number
     credit: number
 }

@@ -10,6 +10,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { IAccount } from '@/modules/account'
 import {
     EJournalVoucherStatus,
     IJournalVoucher,
@@ -27,6 +28,7 @@ import {
     IQRMemberProfile,
     IQRMemberProfileDecodedResult,
 } from '@/modules/qr-crypto'
+import { TransactionAmountField } from '@/modules/transaction'
 import { useJournalVoucherStore } from '@/store/journal-voucher-store'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -154,12 +156,29 @@ const JournalVoucherCreateUpdateForm = ({
             ...formData,
             date: new Date(formData.date).toISOString(),
         }
+
+        const filterSeledtedEntries = selectedJournalVoucherEntry.map(
+            (entry) => {
+                const member: IMemberProfile =
+                    entry.member_profile as IMemberProfile
+                const account: IAccount = entry.account as IAccount
+
+                return {
+                    cash_check_voucher_number: entry.cash_check_voucher_number,
+                    id: entry.id,
+                    credit: entry.credit,
+                    debit: entry.debit,
+                    member_profile_id: member?.id ?? undefined,
+                    account_id: account?.id ?? undefined,
+                }
+            }
+        )
         if (isUpdate) {
             updateJournalVoucher({
                 id: editJournalId,
                 payload: {
                     ...payload,
-                    journal_voucher_entries: selectedJournalVoucherEntry,
+                    journal_voucher_entries: filterSeledtedEntries,
                     journal_voucher_entries_deleted:
                         journalVoucherEntriesDeleted,
                 },
@@ -172,12 +191,13 @@ const JournalVoucherCreateUpdateForm = ({
     const isPending = isCreating || isUpdating
     const rawError = isUpdate ? updateError : createError
     const error = serverRequestErrExtractor({ error: rawError })
-
     const JournalEntries =
         defaultValues?.journal_voucher_entries?.map((entry) => ({
             id: entry.id,
             account_id: entry.account_id,
             member_profile_id: entry.member_profile_id,
+            member_profile: entry.member_profile,
+            account: entry.account,
             employee_user_id: entry.employee_user_id,
             cash_check_voucher_number: entry.cash_check_voucher_number,
             description: entry.description,
@@ -188,8 +208,8 @@ const JournalVoucherCreateUpdateForm = ({
     const selectedMember = form.watch('member_profile')
 
     const handleSetMemberProfile = useCallback(
-        (memberProfile: IMemberProfile | null) => {
-            form.setValue('member_profile_id', memberProfile?.id ?? '')
+        (memberProfile: IMemberProfile | undefined) => {
+            form.setValue('member_profile_id', memberProfile?.id)
             form.setValue('member_profile', memberProfile)
         },
         [form]
@@ -242,7 +262,7 @@ const JournalVoucherCreateUpdateForm = ({
     })
 
     const handleClearMember = useCallback(() => {
-        handleSetMemberProfile(null)
+        handleSetMemberProfile(undefined)
         setDecodedMemberProfile(undefined)
     }, [handleSetMemberProfile, setDecodedMemberProfile])
 
@@ -274,28 +294,6 @@ const JournalVoucherCreateUpdateForm = ({
                         isLoadingScanner={isLoadingScanner}
                         handleSuccessScan={handleScanSuccess}
                     />
-                    {/* <FormFieldWrapper
-                        control={form.control}
-                        name="member_profile_id"
-                        label="Member Profile"
-                        className="col-span-1 md:col-span-2"
-                        render={({ field }) => (
-                            <MemberPicker
-                                value={form.getValues('member_profile')}
-                                placeholder="Select Member"
-                                onSelect={(memberProfile) => {
-                                    field.onChange(memberProfile?.id)
-                                    form.setValue(
-                                        'member_profile',
-                                        memberProfile,
-                                        {
-                                            shouldDirty: true,
-                                        }
-                                    )
-                                }}
-                            />
-                        )}
-                    /> */}
                     <FormFieldWrapper
                         control={form.control}
                         name="cash_voucher_number"
@@ -387,6 +385,23 @@ const JournalVoucherCreateUpdateForm = ({
                         />
                     )}
                 </fieldset>
+                <div className="w-full flex justify-end gap-4">
+                    <div className="max-w-[130px] flex-col flex justify-end">
+                        <TransactionAmountField
+                            value={defaultValues?.total_debit || 0}
+                            readOnly
+                            className="text-primary font-bold text-left [&_.input]:text-right [&_.input]:font-bold"
+                            isDefault
+                        />
+                    </div>
+                    <div className="max-w-[130px]">
+                        <TransactionAmountField
+                            className="text-primary font-bold [&_.input]:text-right [&_.input]:font-bold"
+                            value={defaultValues?.total_credit || 0}
+                            isDefault
+                        />
+                    </div>
+                </div>
                 <FormFooterResetSubmit
                     error={error}
                     readOnly={formProps.readOnly}

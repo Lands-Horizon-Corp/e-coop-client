@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
 import { cn } from '@/helpers'
-import { useGetById } from '@/modules/account'
+import { IAccount } from '@/modules/account'
 import { AccountPicker } from '@/modules/account/components'
-import { useGetMemberProfileById } from '@/modules/member-profile'
+import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { TransactionAmountField } from '@/modules/transaction'
 import { CellContext, Row } from '@tanstack/react-table'
@@ -58,11 +58,6 @@ export const EditableCell = <T extends object>({
     useEffect(() => {
         setValue(initialValue)
     }, [initialValue])
-
-    const { data: account } = useGetById({ id: value as string })
-    const { data: member } = useGetMemberProfileById({
-        id: value as string,
-    })
 
     const handleBlur = () => {
         table.options.meta?.updateData(index, id as keyof T, value)
@@ -130,27 +125,29 @@ export const EditableCell = <T extends object>({
     if (inputType === 'account-picker') {
         return (
             <AccountPicker
-                value={account ?? undefined}
+                value={value as IAccount}
                 onSelect={(selectedAccount) => {
-                    handleChange(selectedAccount.id)
+                    handleChange(selectedAccount)
                 }}
-                triggerClassName={cn('max-w-xs', className)}
+                triggerClassName={cn('', className)}
                 nameOnly
                 placeholder="Select an Account"
+                allowClear
             />
         )
     }
     if (inputType === 'member-picker') {
         return (
             <MemberPicker
-                value={member}
+                value={value as IMemberProfile}
                 onSelect={(selectedMember) => {
-                    handleChange(selectedMember.id)
+                    handleChange(selectedMember)
                 }}
-                triggerClassName={cn('max-w-xs', className)}
+                triggerClassName={cn('!w-full', className)}
                 triggerVariant="outline"
                 placeholder="Select Member"
                 showPBNo={false}
+                allowClear
             />
         )
     }

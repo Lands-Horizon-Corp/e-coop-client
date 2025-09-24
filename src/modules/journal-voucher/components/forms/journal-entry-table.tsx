@@ -30,26 +30,44 @@ import { TEntityId } from '@/types'
 
 const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
-        accessorKey: 'account_id',
+        accessorKey: 'account',
         header: 'Account',
-        cell: (props) => <EditableCell inputType="account-picker" {...props} />,
+        cell: (props) => {
+            const hasValue = props.getValue()
+            return (
+                <EditableCell
+                    className={cn(hasValue ? '!min-w-[100px] !w-[200px]' : '')}
+                    inputType="account-picker"
+                    {...props}
+                />
+            )
+        },
     },
     {
-        accessorKey: 'member_profile_id',
+        accessorKey: 'member_profile',
         header: 'Member',
-        cell: (props) => <EditableCell inputType="member-picker" {...props} />,
+        cell: (props) => {
+            const hasValue = props.getValue()
+            return (
+                <EditableCell
+                    className={cn(hasValue ? '!min-w-[100px] !w-[200px]' : '')}
+                    inputType="member-picker"
+                    {...props}
+                />
+            )
+        },
     },
-    {
-        accessorKey: 'description',
-        header: 'Description',
-        cell: (props) => (
-            <EditableCell
-                className="min-w-[200px]"
-                inputType="text"
-                {...props}
-            />
-        ),
-    },
+    // {
+    //     accessorKey: 'description',
+    //     header: 'Description',
+    //     cell: (props) => (
+    //         <EditableCell
+    //             className="min-w-[200px]"
+    //             inputType="text"
+    //             {...props}
+    //         />
+    //     ),
+    // },
     {
         accessorKey: 'cash_check_voucher_number',
         header: 'CV Number',
@@ -107,11 +125,11 @@ type JournalEntryTableProps = {
     TableClassName?: string
 }
 export const JournalEntryTable = ({
-    defaultMemberProfileId,
     isUpdateMode = false,
     rowData,
     className,
     TableClassName,
+    defaultMemberProfileId,
 }: JournalEntryTableProps) => {
     const [journalEntries, setJournalEntries] = useState<
         IJournalVoucherEntryRequest[]
@@ -175,13 +193,11 @@ export const JournalEntryTable = ({
     ) => {
         e.preventDefault()
         const newRow: IJournalVoucherEntryRequest = {
-            account_id: '',
-            description: '',
-            member_profile_id: defaultMemberProfileId,
             debit: 0,
             credit: 0,
             rowId: crypto.randomUUID(),
             cash_check_voucher_number: '',
+            member_profile_id: defaultMemberProfileId,
         }
         setJournalEntries([...selectedJournalVoucherEntry, newRow])
     }
@@ -196,7 +212,6 @@ export const JournalEntryTable = ({
         },
         [selectedJournalVoucherEntry]
     )
-
     return (
         <div className={cn('', className)}>
             <div className="w-full flex justify-between">
@@ -253,7 +268,7 @@ export const JournalEntryTable = ({
                             )}
                         >
                             {row.getVisibleCells().map((cell) => (
-                                <TableCell key={cell.id} className="!p-2">
+                                <TableCell key={cell.id} className="!px-1">
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()

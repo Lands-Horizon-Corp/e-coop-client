@@ -14,6 +14,7 @@ import {
     BadgeCheckFillIcon,
     ChevronDownIcon,
     ScanLineIcon,
+    XIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
@@ -32,6 +33,7 @@ interface Props extends IPickerBaseProps<IMemberProfile> {
     defaultFilter?: TFilterObject
     allowShorcutCommand?: boolean
     showPBNo?: boolean
+    allowClear?: boolean
 }
 
 const MemberPicker = forwardRef<HTMLButtonElement, Props>(
@@ -46,11 +48,16 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             onSelect,
             triggerVariant = 'secondary',
             showPBNo = true,
+            allowClear = false,
         },
         ref
     ) => {
         const queryClient = useQueryClient()
         const qrScannerModal = useModalState()
+        const [memberValue, setMemberValue] = useState<
+            IMemberProfile | null | undefined
+        >(value)
+
         const [state, setState] = useInternalState(
             false,
             modalState?.open,
@@ -102,7 +109,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                 }
             },
             [
-                value,
+                memberValue,
                 disabled,
                 isPending,
                 isLoading,
@@ -133,9 +140,13 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                             </Button>
                         }
                         onSelect={(member) => {
-                            queryClient.setQueryData(['member', value], member)
+                            queryClient.setQueryData(
+                                ['member', memberValue],
+                                member
+                            )
                             onSelect?.(member)
                             setState(false)
+                            setMemberValue(member)
                         }}
                         onOpenChange={setState}
                         onSearchChange={(searchValue) => {
@@ -215,58 +226,84 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                             onSelectMemberProfile: (memberProfile) => {
                                 onSelect?.(memberProfile)
                                 setState(false)
+                                setMemberValue(memberProfile)
                             },
                         }}
                     />
-                    <Button
-                        ref={ref}
-                        type="button"
-                        variant={triggerVariant}
-                        disabled={disabled}
-                        onClick={() => setState(true)}
+                    <div
                         className={cn(
-                            'w-full items-center justify-between rounded-md border p-0 px-2',
-                            triggerClassName
+                            'flex items-center ',
+                            allowClear ? 'space-x-2' : ''
                         )}
                     >
-                        <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
-                            <span className="inline-flex w-full items-center gap-x-2">
-                                <div>
-                                    {isFetching ? (
-                                        <LoadingSpinner />
+                        <Button
+                            ref={ref}
+                            type="button"
+                            variant={triggerVariant}
+                            disabled={disabled}
+                            onClick={() => setState(true)}
+                            className={cn(
+                                'w-full items-center justify-between rounded-md border p-0 px-2',
+                                triggerClassName
+                            )}
+                        >
+                            <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
+                                <span className="inline-flex w-full items-center gap-x-2">
+                                    <div>
+                                        {isFetching ? (
+                                            <LoadingSpinner />
+                                        ) : (
+                                            <PreviewMediaWrapper
+                                                media={memberValue?.media}
+                                            >
+                                                <ImageDisplay
+                                                    src={
+                                                        memberValue?.media
+                                                            ?.download_url
+                                                    }
+                                                />
+                                            </PreviewMediaWrapper>
+                                        )}
+                                    </div>
+                                    {!memberValue ? (
+                                        <span className="text-foreground/70">
+                                            {memberValue ||
+                                                placeholder ||
+                                                'Select member'}
+                                        </span>
                                     ) : (
-                                        <PreviewMediaWrapper
-                                            media={value?.media}
-                                        >
-                                            <ImageDisplay
-                                                src={value?.media?.download_url}
-                                            />
-                                        </PreviewMediaWrapper>
+                                        <span className="truncate max-w-[120px] min-w-[30px]">
+                                            {memberValue.full_name}
+                                        </span>
                                     )}
-                                </div>
-                                {!value ? (
-                                    <span className="text-foreground/70">
-                                        {value ||
-                                            placeholder ||
-                                            'Select member'}
-                                    </span>
-                                ) : (
-                                    <span className="truncate max-w-[120px] min-w-[30px]">
-                                        {value.full_name}
+                                </span>
+                                {allowShorcutCommand && (
+                                    <span className="mr-2 text-sm">⌘ ↵ </span>
+                                )}
+                                {showPBNo && (
+                                    <span className="mr-1 font-mono text-sm text-muted-foreground">
+                                        {memberValue?.passbook || ''}
                                     </span>
                                 )}
                             </span>
-                            {allowShorcutCommand && (
-                                <span className="mr-2 text-sm">⌘ ↵ </span>
-                            )}
-                            {showPBNo && (
-                                <span className="mr-1 font-mono text-sm text-muted-foreground">
-                                    {value?.passbook || ''}
-                                </span>
-                            )}
-                        </span>
-                        <ChevronDownIcon />
-                    </Button>
+                            <ChevronDownIcon />
+                        </Button>
+                        {allowClear && memberValue && (
+                            <Button
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    setMemberValue(null)
+                                    onSelect?.(
+                                        undefined as unknown as IMemberProfile
+                                    )
+                                }}
+                                variant={'destructive'}
+                            >
+                                <XIcon className="inline" />
+                            </Button>
+                        )}
+                    </div>
                 </HotkeysProvider>
             </>
         )

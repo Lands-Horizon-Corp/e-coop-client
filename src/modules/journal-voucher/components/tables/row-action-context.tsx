@@ -77,6 +77,10 @@ export const JournalVoucherAction = ({
         handleEdit,
         handleDelete,
     } = useJournalVoucherActions({ row, onDeleteSuccess })
+    const isRealease =
+        !!journalVoucher.printed_date &&
+        !!journalVoucher.approved_date &&
+        !!journalVoucher.released_date
 
     return (
         <>
@@ -88,6 +92,7 @@ export const JournalVoucherAction = ({
                         journalVoucherId: journalVoucher.id,
                         defaultValues: { ...journalVoucher },
                         // onSuccess: () => updateModal.onOpenChange(false),
+                        readOnly: isRealease,
                     }}
                 />
             </div>

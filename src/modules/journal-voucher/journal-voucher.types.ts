@@ -37,7 +37,7 @@ export interface IJournalVoucherRequest {
     cash_voucher_number: string
     date: string
     description?: string
-    reference: string
+    reference?: string
     status: string
 
     journal_voucher_entries?: IJournalVoucherEntryRequest[]

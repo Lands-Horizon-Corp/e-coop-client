@@ -15,7 +15,7 @@ import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/gene
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
 
-import { ChevronDownIcon, RenderIcon, TIcon } from '@/components/icons'
+import { ChevronDownIcon, RenderIcon, TIcon, XIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import GenericPicker from '@/components/pickers/generic-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -34,6 +34,7 @@ interface Props extends IPickerBaseProps<IAccount> {
     mode?: TPaginatedAccountHookMode
     nameOnly?: boolean
     hideDescription?: boolean
+    allowClear?: boolean
 }
 
 const AccountPicker = ({
@@ -50,8 +51,13 @@ const AccountPicker = ({
     hideDescription = false,
     modalState,
     triggerClassName,
+    allowClear = false,
 }: Props) => {
     const queryClient = useQueryClient()
+    const [accountValue, setAccountValue] = useState<
+        IAccount | null | undefined
+    >(value)
+
     const [state, setState] = useInternalState(
         false,
         modalState?.open,
@@ -120,6 +126,7 @@ const AccountPicker = ({
                     queryClient.setQueryData(['account', value], account)
                     onSelect?.(account)
                     setState(false)
+                    setAccountValue(account) // Added this line
                 }}
                 onOpenChange={modalOnly ? onOpenChange : setState}
                 onSearchChange={(searchValue) => {
@@ -196,71 +203,106 @@ const AccountPicker = ({
                 />
             </GenericPicker>
             {!modalOnly && (
-                <Button
-                    type="button"
-                    role="combobox"
-                    tabIndex={0}
-                    variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setState((prev) => !prev)}
+                <div
                     className={cn(
-                        'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
-                        triggerClassName
+                        'flex items-center',
+                        allowClear ? 'space-x-2' : ''
                     )}
                 >
-                    <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
-                        <span className="inline-flex w-full items-center gap-x-2">
-                            <div>
-                                {isFetching && !value ? <LoadingSpinner /> : ''}
-                            </div>
-                            {value?.icon && value.icon.length > 0 && (
-                                <span className="bg-muted rounded-full p-0.5">
-                                    <RenderIcon icon={value.icon as TIcon} />
-                                </span>
-                            )}
-                            {!value ? (
-                                <span className="text-foreground/70">
-                                    {placeholder || 'Select Account'}
-                                </span>
-                            ) : (
-                                <span className="inline-flex gap-x-4 items-center">
-                                    <span>{value.name ?? placeholder}</span>
-                                    {!nameOnly && !hideDescription && (
-                                        <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
-                                            {value.description}
+                    <Button
+                        type="button"
+                        role="combobox"
+                        tabIndex={0}
+                        variant="secondary"
+                        disabled={disabled}
+                        onClick={() => setState((prev) => !prev)}
+                        className={cn(
+                            'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
+                            triggerClassName
+                        )}
+                    >
+                        <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
+                            <span className="inline-flex w-full items-center gap-x-2">
+                                <div>
+                                    {isFetching && !accountValue ? ( // Changed value to accountValue
+                                        <LoadingSpinner />
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
+                                {accountValue?.icon &&
+                                    accountValue.icon.length > 0 && (
+                                        <span className="bg-muted rounded-full p-0.5">
+                                            <RenderIcon
+                                                icon={
+                                                    accountValue.icon as TIcon
+                                                }
+                                            />
                                         </span>
+                                    )}
+                                {!accountValue ? ( // Changed value to accountValue
+                                    <span className="text-foreground/70">
+                                        {placeholder || 'Select Account'}
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex gap-x-4 items-center">
+                                        <span>
+                                            {accountValue.name ?? placeholder}
+                                        </span>
+                                        {!nameOnly && !hideDescription && (
+                                            <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
+                                                {accountValue.description}
+                                            </span>
+                                        )}
+                                    </span>
+                                )}
+                            </span>
+                            {allowShorcutCommand && (
+                                <span className="mr-2 text-sm">⌘ ↵ </span>
+                            )}
+                            {!nameOnly && (
+                                <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
+                                    {accountValue?.type && (
+                                        <AccountTypeBadge
+                                            type={accountValue.type}
+                                            description="(Type)"
+                                        />
+                                    )}
+                                    {accountValue?.general_ledger_type && (
+                                        <GeneralLedgerTypeBadge
+                                            type={
+                                                accountValue.general_ledger_type
+                                            }
+                                            description="(GL)"
+                                        />
+                                    )}
+                                    {accountValue?.financial_statement_type && (
+                                        <FinancialStatementTypeBadge
+                                            type={
+                                                accountValue.financial_statement_type
+                                            }
+                                            description=" (FS)"
+                                        />
                                     )}
                                 </span>
                             )}
                         </span>
-                        {allowShorcutCommand && (
-                            <span className="mr-2 text-sm">⌘ ↵ </span>
-                        )}
-                        {!nameOnly && (
-                            <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
-                                {value?.type && (
-                                    <AccountTypeBadge
-                                        type={value.type}
-                                        description="(Type)"
-                                    />
-                                )}
-                                {value?.general_ledger_type && (
-                                    <GeneralLedgerTypeBadge
-                                        type={value.general_ledger_type}
-                                        description="(GL)"
-                                    />
-                                )}
-                                {value?.financial_statement_type && (
-                                    <FinancialStatementTypeBadge
-                                        type={value.financial_statement_type}
-                                        description=" (FS)"
-                                    />
-                                )}
-                            </span>
-                        )}
-                    </span>
-                    <ChevronDownIcon />
-                </Button>
+                        <ChevronDownIcon />
+                    </Button>
+                    {allowClear && accountValue && (
+                        <Button
+                            onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                setAccountValue(null)
+                                onSelect?.(undefined as unknown as IAccount)
+                            }}
+                            variant={'destructive'}
+                        >
+                            <XIcon className="inline" />
+                        </Button>
+                    )}
+                </div>
             )}
         </>
     )
