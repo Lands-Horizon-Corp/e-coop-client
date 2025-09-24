@@ -1,6 +1,7 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Link } from '@tanstack/react-router'
+import Fuse from 'fuse.js'
 
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -25,6 +26,73 @@ interface Props {
 
 const AppSidebarQruickNavigate = ({ groups }: Props) => {
     const [open, setOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const commandListRef = useRef<HTMLDivElement>(null)
+
+    // Flatten all items from all groups for search
+    const allItems = useMemo(() => {
+        return groups.flatMap((group) =>
+            group.items.map((item) => ({
+                ...item,
+                groupTitle: group.title,
+            }))
+        )
+    }, [groups])
+
+    // Configure Fuse.js for fuzzy search
+    const fuse = useMemo(() => {
+        return new Fuse(allItems, {
+            keys: [
+                { name: 'title', weight: 0.7 },
+                { name: 'shortDescription', weight: 0.2 },
+                { name: 'longDescription', weight: 0.1 },
+                { name: 'groupTitle', weight: 0.1 },
+            ],
+            threshold: 0.4, // Lower = more strict matching
+            includeScore: true,
+            minMatchCharLength: 1,
+        })
+    }, [allItems])
+
+    // Get filtered and sorted results
+    const filteredGroups = useMemo(() => {
+        if (!searchQuery.trim()) {
+            return groups
+        }
+
+        const results = fuse.search(searchQuery)
+
+        // Group results by their original group
+        const groupedResults = results.reduce(
+            (acc, result) => {
+                const item = result.item
+                const groupTitle = item.groupTitle
+
+                if (!acc[groupTitle]) {
+                    acc[groupTitle] = {
+                        title: groupTitle,
+                        items: [],
+                    }
+                }
+
+                acc[groupTitle].items.push({
+                    ...item,
+                })
+
+                return acc
+            },
+            {} as Record<string, TQuickSearchGroup>
+        )
+
+        return Object.values(groupedResults)
+    }, [searchQuery, fuse, groups])
+
+    // Reset scroll position when search results change
+    useEffect(() => {
+        if (commandListRef.current) {
+            commandListRef.current.scrollTop = 0
+        }
+    }, [filteredGroups])
 
     useHotkeys(
         'control+Q, Alt+Q, meta+Q, command+Q',
@@ -53,14 +121,23 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
             </Button>
             <CommandDialog
                 open={open}
-                onOpenChange={setOpen}
+                onOpenChange={(open) => {
+                    setOpen(open)
+                    if (!open) {
+                        setSearchQuery('')
+                    }
+                }}
                 contentClassName="rounded-2xl"
                 overlayClassName="backdrop-blur-sm text-gray-400"
             >
-                <CommandInput placeholder="Search or navigate to..." />
-                <CommandList className="ecoop-scroll">
+                <CommandInput
+                    placeholder="Search or navigate to..."
+                    value={searchQuery}
+                    onValueChange={setSearchQuery}
+                />
+                <CommandList ref={commandListRef} className="ecoop-scroll">
                     <CommandEmpty>No results found.</CommandEmpty>
-                    {groups.map((group, index) => {
+                    {filteredGroups.map((group, index) => {
                         return (
                             <Fragment key={group.title}>
                                 <CommandGroup heading={group.title}>
@@ -95,8 +172,8 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>
-                                {groups.length > 0 &&
-                                    groups.length - 1 === index && (
+                                {filteredGroups.length > 0 &&
+                                    filteredGroups.length - 1 !== index && (
                                         <CommandSeparator />
                                     )}
                             </Fragment>
