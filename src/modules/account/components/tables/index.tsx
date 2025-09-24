@@ -68,7 +68,8 @@ const AccountsTable = ({
     const queryClient = useQueryClient()
 
     const { pagination, setPagination } = usePagination()
-    const { tableSorting, setTableSorting } = useDataTableSorting()
+    const { tableSorting, sortingStateBase64, setTableSorting } =
+        useDataTableSorting()
 
     const {
         currentAuth: {
@@ -109,7 +110,13 @@ const AccountsTable = ({
         isRefetching,
         data: paginatedData,
         refetch,
-    } = useGetPaginated({})
+    } = useGetPaginated({
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+    })
 
     const {
         data = [],
