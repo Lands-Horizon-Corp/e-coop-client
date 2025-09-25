@@ -5,7 +5,6 @@ import { useSignOut } from '@/modules/authentication'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { APIKeyGenModal } from '@/modules/developer/components/api-key-gen'
 import { useTheme } from '@/modules/settings/provider/theme-provider'
-import UserAvatar from '@/modules/user/components/user-avatar'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -20,6 +19,7 @@ import {
     SunIcon,
     SunMoonIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -76,13 +76,12 @@ const AppSidebarUser = () => {
                 <SidebarMenuItem>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <SidebarMenuButton className="size-fit p-4">
-                                <UserAvatar
+                            <SidebarMenuButton className="!py-6">
+                                <ImageDisplay
                                     src={user.media?.download_url ?? ''}
-                                    fallback={user.user_name?.charAt(0) ?? '-'}
-                                    className="size-9 rounded-[4rem] duration-150 ease-in-out"
+                                    className="size-5 rounded-[4rem] duration-150 ease-in-out"
                                 />
-                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                <div className="grid [[data-side=left][data-state=collapsed]_&]:hidden flex-1 text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">
                                         {`${user.first_name} ${user.middle_name} ${user.last_name}`}
                                     </span>

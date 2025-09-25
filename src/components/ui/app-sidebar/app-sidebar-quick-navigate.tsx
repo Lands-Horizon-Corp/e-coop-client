@@ -18,6 +18,7 @@ import {
     CommandShortcut,
 } from '@/components/ui/command'
 
+import { useSidebar } from '../sidebar'
 import { TQuickSearchGroup } from './types'
 
 interface Props {
@@ -25,6 +26,7 @@ interface Props {
 }
 
 const AppSidebarQruickNavigate = ({ groups }: Props) => {
+    const { open: sidebarOpen } = useSidebar()
     const [open, setOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const commandListRef = useRef<HTMLDivElement>(null)
@@ -109,15 +111,18 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
         <>
             <Button
                 size="sm"
-                variant="ghost"
                 onClick={() => setOpen((prev) => !prev)}
-                className="group/quick-search w-full gap-x-2 text-xs font-normal text-muted-foreground/80 hover:text-foreground"
+                className="group/quick-search w-full gap-x-2 text-xs font-normal text-primary-foreground/90 hover:text-primary-foreground"
             >
-                Quick Navigate
-                <MagnifyingGlassIcon className="inline text-muted-foreground/60 duration-500 ease-out group-hover/quick-search:text-foreground" />
-                <CommandShortcut className="rounded-md bg-secondary p-1">
-                    <span className="text-xs">⌘</span>Q
-                </CommandShortcut>
+                <MagnifyingGlassIcon className="inline duration-500 ease-out group-hover/quick-search:text-foreground" />
+                {sidebarOpen && (
+                    <>
+                        Quick Navigate
+                        <CommandShortcut className="rounded-md bg-secondary p-1">
+                            <span className="text-xs">⌘</span>Q
+                        </CommandShortcut>
+                    </>
+                )}
             </Button>
             <CommandDialog
                 open={open}

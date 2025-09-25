@@ -150,7 +150,6 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
                     <FlickeringGrid
                         gridGap={1}
                         squareSize={64}
-                        color="#02BEAA"
                         maxOpacity={0.5}
                         flickerChance={0.05}
                         className="absolute inset-0 z-0 opacity-80 [mask-image:radial-gradient(80vh_circle_at_center,white,transparent)] dark:opacity-20"

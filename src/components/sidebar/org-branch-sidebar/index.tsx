@@ -4,6 +4,7 @@ import { Link, useParams, useRouter } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { TUserType } from '@/modules/user'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import EcoopLogo from '@/components/ecoop-logo'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
@@ -12,6 +13,7 @@ import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-qu
 import AppSidebarUser from '@/components/ui/app-sidebar/app-sidebar-user'
 import { flatSidebarGroupItem } from '@/components/ui/app-sidebar/app-sidebar-utils'
 import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 import {
     Sidebar,
     SidebarContent,
@@ -24,6 +26,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarRail,
+    useSidebar,
 } from '@/components/ui/sidebar'
 
 import { IBaseProps } from '@/types'
@@ -31,6 +34,7 @@ import { IBaseProps } from '@/types'
 import { generateSidebarGroups } from './sidebar-routes'
 
 const OrgBranchSidebar = (props: IBaseProps) => {
+    const { toggleSidebar } = useSidebar()
     const router = useRouter()
     const { orgname, branchname } = useParams({
         strict: false,
@@ -66,10 +70,16 @@ const OrgBranchSidebar = (props: IBaseProps) => {
         [memoizedSidebarRouteGroup, router]
     )
 
+    useHotkeys('bracketleft, bracketright', (e) => {
+        e.preventDefault()
+        toggleSidebar()
+    })
+
     const orgLogo = user_organization.organization.media?.download_url
 
     return (
-        <Sidebar variant="inset" {...props}>
+        // <Sidebar collapsible='icon' variant="inset" {...props}>
+        <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -80,7 +90,7 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                     darkUrl={orgLogo}
                                     className="size-9 rounded-md"
                                 />
-                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                <div className="grid flex-1 [[data-side=left][data-state=collapsed]_&]:hidden text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">
                                         {user_organization.organization.name}
                                     </span>
@@ -124,15 +134,18 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                 </SidebarMenu>
                 <AppSidebarQruickNavigate groups={item} />
             </SidebarHeader>
-            <SidebarContent className="ecoop-scroll">
+            <SidebarContent className="ecoop-scroll group-data-[collapsible=icon]:overflow-y-auto ">
                 {memoizedSidebarRouteGroup.map((navGroupItem, i) => {
                     if (!navGroupItem.userType.includes(currentUserType))
                         return null
 
                     return (
                         <SidebarGroup key={`${navGroupItem.title}-${i}`}>
-                            <SidebarGroupLabel>
-                                {navGroupItem.title}
+                            <SidebarGroupLabel className="group-data-[collapsible=icon]:opacity-100">
+                                <span className="[[data-side=left][data-state=collapsed]_&]:hidden">
+                                    {navGroupItem.title}
+                                </span>
+                                <Separator className="[[data-side=left][data-state=expanded]_&]:hidden w-full" />
                             </SidebarGroupLabel>
                             <SidebarGroupContent>
                                 <SidebarMenu>
