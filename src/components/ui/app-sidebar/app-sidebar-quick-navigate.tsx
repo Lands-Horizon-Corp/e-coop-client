@@ -44,8 +44,8 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
         return new Fuse(allItems, {
             keys: [
                 { name: 'title', weight: 0.7 },
-                { name: 'shortDescription', weight: 0.2 },
-                { name: 'longDescription', weight: 0.1 },
+                // { name: 'shortDescription', weight: 0.2 },
+                // { name: 'longDescription', weight: 0.1 },
                 { name: 'groupTitle', weight: 0.1 },
             ],
             threshold: 0.4, // Lower = more strict matching
@@ -155,6 +155,10 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                             )}
                                             <div className="flex-1 space-y-1">
                                                 <p>{groupItem.title}</p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {groupItem.shortDescription ||
+                                                        'sa'}
+                                                </p>
                                             </div>
                                             <div className="w-fit">
                                                 <Link

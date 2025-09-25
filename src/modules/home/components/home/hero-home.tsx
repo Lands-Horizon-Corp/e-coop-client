@@ -46,7 +46,7 @@ const HeroHome = () => {
                                     variant="primary"
                                     size="6xl"
                                     animate="shimmer"
-                                    className="block "
+                                    className="block leading-relaxed"
                                     style={{
                                         fontFamily: "'Knewave', cursive",
                                     }}
