@@ -6,6 +6,7 @@ import TransactionBatchNavButton from '@/modules/transaction-batch/components/ba
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 
 import { BadgeCheckFillIcon } from '@/components/icons'
+import LiveToggle from '@/components/live-toggle'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
 import NavContainer from '@/components/nav/nav-container'
 import RootNav from '@/components/nav/root-nav'
@@ -60,10 +61,14 @@ const UserNav = ({
                         Approvals
                     </Button>
                 )}
+
                 {user && <TransactionBatchNavButton />}
                 {user && user_organization?.user_type === 'employee' && (
                     <NavTimeInBar />
                 )}
+
+                {user && <LiveToggle size="default" />}
+
                 <GeneralButtonShortcuts />
                 <NavProfileMenu />
                 <NavThemeToggle />

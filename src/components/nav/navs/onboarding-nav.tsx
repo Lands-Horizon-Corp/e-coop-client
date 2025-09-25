@@ -11,7 +11,6 @@ const OnboardingNav = () => {
             <NavEcoopLogo className="pointer-events-auto" />
             <NavContainer />
             <NavContainer className="pointer-events-auto">
-                {/* TODO: Add avatar dropdown current signed in user */}
                 <NavProfileMenu />
                 <NavThemeToggle />
             </NavContainer>

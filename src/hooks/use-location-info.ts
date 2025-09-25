@@ -68,7 +68,6 @@ export const useLocationInfo = () => {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
         if (!timezone) {
-            console.warn('Timezone could not be determined by browser.')
             setCountryName(null)
             setStateName(null)
             setCountryAlpha2Code(undefined)
@@ -92,15 +91,9 @@ export const useLocationInfo = () => {
                 setCountryName(selectedCountry.name)
                 detectedAlpha2 = selectedCountry.alpha2 as Country
             } else {
-                console.warn(
-                    `Country (alpha2: ${primaryCountryAlpha2FromTimezone}) found in timezone data but not in available country options.`
-                )
                 setCountryName(null)
             }
         } else {
-            console.warn(
-                `No valid country data found for timezone: ${timezone}`
-            )
             setCountryName(null)
         }
 

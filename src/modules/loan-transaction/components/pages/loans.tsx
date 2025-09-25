@@ -1,10 +1,13 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import LoanTransactionTable from '../loan-transaction-table'
@@ -16,15 +19,17 @@ const LoansPage = () => {
     const createModal = useModalState()
     const { data } = useTransactionBatchStore()
 
-    // const {
-    //     currentAuth: {
-    //         user_organization: { branch_id },
-    //     },
-    // } = useAuthUserWithOrgBranch()
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
 
-    // useSubscribe(`loan-transaction.update.branch.${branch_id}`, () => {
-    //     console.log('Yes')
-    // })
+    const queryClient = useQueryClient()
+
+    useSubscribe(`loan-transaction.update.branch.${branch_id}`, () => {
+        queryClient.invalidateQueries({ queryKey: ['loan-transaction'] })
+    })
 
     return (
         <PageContainer>

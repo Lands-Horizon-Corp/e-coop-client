@@ -17,13 +17,6 @@ const DebouncedInput = <T,>({
 }: DebouncedInputProps<T>) => {
     const [internalValue, setInternalValue] = useState<T>(initialValue)
 
-    // useEffect(() => {
-    //     if (initialValue !== internalValue) {
-    //         setInternalValue(initialValue)
-    //         // console.log('Setting ', initialValue)
-    //     }
-    // }, [initialValue, setInternalValue])
-
     useEffect(() => {
         setInternalValue(initialValue)
     }, [initialValue])

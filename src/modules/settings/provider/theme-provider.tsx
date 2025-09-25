@@ -201,9 +201,7 @@ export const ThemeProvider = ({
                 if (customTheme !== savedCustomTheme) {
                     setCustomThemeState(savedCustomTheme)
                 }
-            } catch (error) {
-                console.warn('Failed to parse saved theme colors:', error)
-
+            } catch {
                 localStorage.removeItem('ecoop-theme-colors')
                 localStorage.setItem('ecoop-custom-theme', 'Default')
                 setCustomThemeState('Default')
