@@ -59,7 +59,7 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
-    useHotkeys(
+    const ref = useHotkeys<HTMLDivElement>(
         'Enter',
         (e) => {
             e.preventDefault()
@@ -67,11 +67,15 @@ const DataTableToolbar = <TData,>({
                 createActionProps.onClick()
             }
         },
+
         [createActionProps, hideCreateButton]
     )
 
     return (
-        <div className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto">
+        <div
+            ref={ref}
+            className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto"
+        >
             <div className="flex items-center gap-x-2">
                 {globalSearchProps ? (
                     <DataTableGlobalSearch {...globalSearchProps} />

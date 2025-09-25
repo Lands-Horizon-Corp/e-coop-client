@@ -85,6 +85,7 @@ const ComputationSheetCreateUpdateForm = ({
     const { formRef, handleFocusError, isDisabled } =
         useFormHelper<TFormValues>({
             form,
+            autoSave: !!computationSheetId,
             ...formProps,
         })
 
@@ -303,6 +304,7 @@ const ComputationSheetCreateUpdateForm = ({
                     error={error}
                     readOnly={formProps.readOnly}
                     isLoading={isPending}
+                    className="sticky bottom-0"
                     disableSubmit={!form.formState.isDirty}
                     submitText={computationSheetId ? 'Update' : 'Create'}
                     onReset={() => {
