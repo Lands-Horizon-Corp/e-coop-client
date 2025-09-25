@@ -31,7 +31,7 @@ import EmployeesTableColumns, {
     IEmployeesTableColumnProps,
     employeesGlobalSearchTargets,
 } from './columns'
-import { EmployeesRowContext } from './row-action-context'
+import EmployeesAction, { EmployeesRowContext } from './row-action-context'
 
 export interface EmployeesTableProps
     extends TableProps<IUserOrganization>,
@@ -57,7 +57,7 @@ const EmployeesTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = EmployeesAction,
     RowContextComponent = EmployeesRowContext,
 }: EmployeesTableProps) => {
     const queryClient = useQueryClient()

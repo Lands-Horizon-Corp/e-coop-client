@@ -6,7 +6,6 @@ import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import TimesheetTable from '@/modules/timesheet/components/timesheet-table'
 import TransactionBatchTable from '@/modules/transaction-batch/components/transaction-batch-table'
-import TransactionBatchAction from '@/modules/transaction-batch/components/transaction-batch-table/row-action-context'
 import { TransactionsTable } from '@/modules/transactions'
 import { IUserOrganization } from '@/modules/user-organization'
 import { UserOrgPermissionUpdateFormModal } from '@/modules/user-organization/components/forms/user-org-permission-update-form'
@@ -251,9 +250,6 @@ export const EmployeesAction = ({
                 >
                     <TransactionBatchTable
                         mode="employee"
-                        actionComponent={(props) => (
-                            <TransactionBatchAction {...props} />
-                        )}
                         onRowClick={() => {}}
                         userOrganizationId={employee.id}
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
@@ -617,9 +613,6 @@ export const EmployeesRowContext = ({
             >
                 <TransactionBatchTable
                     mode="employee"
-                    actionComponent={(props) => (
-                        <TransactionBatchAction {...props} />
-                    )}
                     onRowClick={() => {}}
                     userOrganizationId={employee.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"

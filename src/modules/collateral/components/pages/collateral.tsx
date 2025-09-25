@@ -8,7 +8,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import CollateralTable from '../collateral-table'
-import CollateralAction from '../collateral-table/row-action-context'
 import { CollateralCreateUpdateFormModal } from '../forms/collateral-create-update-form'
 
 const CollateralPage = () => {
@@ -47,7 +46,6 @@ const CollateralPage = () => {
                 }}
             />
             <CollateralTable
-                actionComponent={(props) => <CollateralAction {...props} />}
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),

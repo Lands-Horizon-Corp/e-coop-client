@@ -2,7 +2,6 @@ import { ReactNode } from 'react'
 
 import { MemberTypeReferenceCreateUpdateFormModal } from '@/modules/member-type-reference/components/member-type-reference-create-update-form'
 import MemberTypeReferenceTable from '@/modules/member-type-reference/components/member-type-references-table'
-import MemberTypeReferenceAction from '@/modules/member-type-reference/components/member-type-references-table/row-action-context'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -119,9 +118,6 @@ export const MemberTypeAction = ({
                         mode="specific"
                         memberTypeId={memberType.id}
                         className="max-h-[90vh] min-h-[90vh] w-full"
-                        actionComponent={(props) => (
-                            <MemberTypeReferenceAction {...props} />
-                        )}
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () =>
@@ -211,9 +207,6 @@ export const MemberTypeRowContext = ({
                     mode="specific"
                     memberTypeId={memberType.id}
                     className="max-h-[90vh] min-h-[90vh] w-full"
-                    actionComponent={(props) => (
-                        <MemberTypeReferenceAction {...props} />
-                    )}
                     toolbarProps={{
                         createActionProps: {
                             onClick: () =>

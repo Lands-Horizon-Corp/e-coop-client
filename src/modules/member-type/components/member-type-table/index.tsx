@@ -31,7 +31,7 @@ import MemberTypeTableColumns, {
     IMemberTypeTableColumnProps,
     memberTypeGlobalSearchTargets,
 } from './columns'
-import { MemberTypeRowContext } from './row-action-context'
+import MemberTypeAction, { MemberTypeRowContext } from './row-action-context'
 
 export interface MemberTypeTableProps
     extends TableProps<IMemberType>,
@@ -57,7 +57,8 @@ const MemberTypeTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    RowContextComponent = MemberTypeRowContext,
+    actionComponent = MemberTypeAction,
 }: MemberTypeTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -181,8 +182,8 @@ const MemberTypeTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={MemberTypeRowContext}
                     setColumnOrder={setColumnOrder}
+                    RowContextComponent={RowContextComponent}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

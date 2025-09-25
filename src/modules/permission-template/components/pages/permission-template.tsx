@@ -9,7 +9,6 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { PermissionTemplateCreateUpdateFormModal } from '../permission-template-create-update-form'
 import PermissionTemplateTable from '../permission-template-table'
-import PermissionTemplateAction from '../permission-template-table/row-action-context'
 
 const PermissionTemplatePage = () => {
     const createModal = useModalState()
@@ -48,9 +47,6 @@ const PermissionTemplatePage = () => {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                actionComponent={(prop) => (
-                    <PermissionTemplateAction {...prop} />
-                )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>

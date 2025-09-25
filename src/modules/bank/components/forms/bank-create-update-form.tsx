@@ -66,11 +66,11 @@ const BankCreateUpdateForm = ({ className, ...formProps }: IBankFormProps) => {
     const { formRef, handleFocusError, isDisabled } =
         useFormHelper<TBankFormValues>({
             form,
+            autoSave: formProps.autoSave,
             readOnly: formProps.readOnly,
             hiddenFields: formProps.hiddenFields,
             disabledFields: formProps.disabledFields,
             defaultValues: formProps.defaultValues,
-            autoSave: false,
         })
 
     const onSubmit = form.handleSubmit((formData) => {

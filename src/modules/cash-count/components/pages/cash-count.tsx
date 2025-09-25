@@ -38,10 +38,7 @@ const CashCountPage = () => {
 
     return (
         <PageContainer>
-            <CashCountTable
-                actionComponent={(prop) => <CashCountAction {...prop} />}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-            />
+            <CashCountTable className="max-h-[90vh] min-h-[90vh] w-full" />
         </PageContainer>
     )
 }

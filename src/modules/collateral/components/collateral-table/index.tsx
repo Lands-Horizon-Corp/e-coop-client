@@ -28,7 +28,7 @@ import CollateralTableColumns, {
     ICollateralTableColumnProps,
     collateralGlobalSearchTargets,
 } from './columns'
-import { CollateralRowContext } from './row-action-context'
+import CollateralAction, { CollateralRowContext } from './row-action-context'
 
 export interface CollateralTableProps
     extends TableProps<ICollateral>,
@@ -54,7 +54,7 @@ const CollateralTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = CollateralAction,
     RowContextComponent = CollateralRowContext,
 }: CollateralTableProps) => {
     const queryClient = useQueryClient()
