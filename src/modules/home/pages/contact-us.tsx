@@ -6,6 +6,7 @@ import { Mail, MapPin, Phone } from 'lucide-react'
 import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { GradientText } from '@/components/ui/gradient-text'
 
 const ContactPage = () => {
     return (
@@ -29,7 +30,18 @@ const ContactPage = () => {
                 {/* Header */}
                 <div className="mb-12 text-center">
                     <h1 className="text-foreground mb-4 text-4xl font-bold">
-                        Get in <span className="text-primary">Touch</span>
+                        Get in{' '}
+                        <GradientText
+                            variant="primary"
+                            size="4xl"
+                            animate="shimmer"
+                            className="leading-relaxed ml-1"
+                            style={{
+                                fontFamily: "'Knewave', cursive",
+                            }}
+                        >
+                            <h1>Touch</h1>
+                        </GradientText>
                     </h1>
                     <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
                         Have questions about our cooperative platform?

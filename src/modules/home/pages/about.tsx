@@ -5,6 +5,7 @@ import { Link } from '@tanstack/react-router'
 import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import { ArrowRightIcon, UserIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { GradientText } from '@/components/ui/gradient-text'
 
 import TeamMemberCard from '../components/about/team-member-card'
 import OurServices from '../components/home/our-services'
@@ -79,7 +80,18 @@ export default function AboutUsPage() {
             <div className="container mx-auto px-4  max-w-6xl">
                 <div className="mx-auto max-w-3xl text-center">
                     <h1 className="text-foreground text-4xl font-extrabold">
-                        About <span className="text-primary"> e-coop</span>
+                        About
+                        <GradientText
+                            variant="primary"
+                            size="4xl"
+                            animate="shimmer"
+                            className="leading-relaxed ml-2"
+                            style={{
+                                fontFamily: "'Knewave', cursive",
+                            }}
+                        >
+                            <h1>E-coop</h1>
+                        </GradientText>
                     </h1>
                     <p className="text-muted-foreground mt-4 text-lg">
                         Lands Horizon Corp builds e-coop-suite to empower
