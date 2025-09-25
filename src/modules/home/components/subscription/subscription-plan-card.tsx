@@ -58,7 +58,7 @@ const PlanCard = ({
                                     : subscriptionPlan.yearly_price,
                                 2
                             )}
-                            <span className="w-full absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-muted-foreground rounded-full -rotate-6" />
+                            <span className="w-full absolute left-0 top-1/2 bg-primary -translate-y-1/2 h-0.5 rounded-full -rotate-6" />
                         </p>
                     )}
                     {discountPercent > 0 && (
