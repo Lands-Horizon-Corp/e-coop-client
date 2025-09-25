@@ -6,6 +6,7 @@ import { useGetUserOrganizationByUserId } from '@/modules/user-organization/user
 
 import { LandmarkIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { GradientText } from '@/components/ui/gradient-text'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
@@ -68,7 +69,19 @@ function RouteComponent() {
                 <span className="relative mr-5 before:absolute before:left-1/2 before:top-[50%] before:-z-10 before:size-[30px] before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-primary before:opacity-50 before:blur-lg before:content-['']">
                     <LandmarkIcon className="z-50" size={24} />
                 </span>
-                Welcome to E-Coop Onboarding
+                Welcome to
+                <GradientText
+                    variant="primary"
+                    size="4xl"
+                    animate="shimmer"
+                    className="leading-relaxed mx-2 "
+                    style={{
+                        fontFamily: "'Knewave', cursive",
+                    }}
+                >
+                    <h1>E-coop</h1>
+                </GradientText>
+                Onboarding
             </h1>
             {hasOrganization ? (
                 <WithOrganization
