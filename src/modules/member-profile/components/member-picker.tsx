@@ -54,9 +54,6 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
     ) => {
         const queryClient = useQueryClient()
         const qrScannerModal = useModalState()
-        const [memberValue, setMemberValue] = useState<
-            IMemberProfile | null | undefined
-        >(value)
 
         const [state, setState] = useInternalState(
             false,
@@ -109,7 +106,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                 }
             },
             [
-                memberValue,
+                value,
                 disabled,
                 isPending,
                 isLoading,
@@ -140,13 +137,9 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                             </Button>
                         }
                         onSelect={(member) => {
-                            queryClient.setQueryData(
-                                ['member', memberValue],
-                                member
-                            )
+                            queryClient.setQueryData(['member', value], member)
                             onSelect?.(member)
                             setState(false)
-                            setMemberValue(member)
                         }}
                         onOpenChange={setState}
                         onSearchChange={(searchValue) => {
@@ -226,14 +219,13 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                             onSelectMemberProfile: (memberProfile) => {
                                 onSelect?.(memberProfile)
                                 setState(false)
-                                setMemberValue(memberProfile)
                             },
                         }}
                     />
                     <div
                         className={cn(
                             'flex items-center ',
-                            allowClear ? 'space-x-2' : ''
+                            allowClear ? 'space-x-1' : ''
                         )}
                     >
                         <Button
@@ -254,26 +246,26 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                             <LoadingSpinner />
                                         ) : (
                                             <PreviewMediaWrapper
-                                                media={memberValue?.media}
+                                                media={value?.media}
                                             >
                                                 <ImageDisplay
                                                     src={
-                                                        memberValue?.media
+                                                        value?.media
                                                             ?.download_url
                                                     }
                                                 />
                                             </PreviewMediaWrapper>
                                         )}
                                     </div>
-                                    {!memberValue ? (
+                                    {!value ? (
                                         <span className="text-foreground/70">
-                                            {memberValue ||
+                                            {value ||
                                                 placeholder ||
                                                 'Select member'}
                                         </span>
                                     ) : (
                                         <span className="truncate max-w-[120px] min-w-[30px]">
-                                            {memberValue.full_name}
+                                            {value.full_name}
                                         </span>
                                     )}
                                 </span>
@@ -282,23 +274,24 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 )}
                                 {showPBNo && (
                                     <span className="mr-1 font-mono text-sm text-muted-foreground">
-                                        {memberValue?.passbook || ''}
+                                        {value?.passbook || ''}
                                     </span>
                                 )}
                             </span>
                             <ChevronDownIcon />
                         </Button>
-                        {allowClear && memberValue && (
+                        {allowClear && value && (
                             <Button
                                 onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()
-                                    setMemberValue(null)
                                     onSelect?.(
                                         undefined as unknown as IMemberProfile
                                     )
                                 }}
-                                variant={'destructive'}
+                                variant={'ghost'}
+                                size={'sm'}
+                                className="curpsor-pointer rounded-full !p-0 !px-0"
                             >
                                 <XIcon className="inline" />
                             </Button>

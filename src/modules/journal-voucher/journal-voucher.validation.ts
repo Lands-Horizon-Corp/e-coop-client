@@ -15,7 +15,10 @@ export const JournalVoucherSchema = z.object({
         .optional()
         .transform(descriptionTransformerSanitizer),
 
-    member_profile_id: z.string().optional(),
+    name: z.string().optional(),
+
+    company_id: z.string().optional(),
+    member_id: z.string().optional(),
     member_profile: z.any().optional(),
 })
 

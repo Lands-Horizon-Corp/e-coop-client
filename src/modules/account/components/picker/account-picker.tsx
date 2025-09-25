@@ -54,9 +54,6 @@ const AccountPicker = ({
     allowClear = false,
 }: Props) => {
     const queryClient = useQueryClient()
-    const [accountValue, setAccountValue] = useState<
-        IAccount | null | undefined
-    >(value)
 
     const [state, setState] = useInternalState(
         false,
@@ -126,7 +123,6 @@ const AccountPicker = ({
                     queryClient.setQueryData(['account', value], account)
                     onSelect?.(account)
                     setState(false)
-                    setAccountValue(account) // Added this line
                 }}
                 onOpenChange={modalOnly ? onOpenChange : setState}
                 onSearchChange={(searchValue) => {
@@ -224,34 +220,29 @@ const AccountPicker = ({
                         <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
                             <span className="inline-flex w-full items-center gap-x-2">
                                 <div>
-                                    {isFetching && !accountValue ? ( // Changed value to accountValue
+                                    {isFetching && !value ? (
                                         <LoadingSpinner />
                                     ) : (
                                         ''
                                     )}
                                 </div>
-                                {accountValue?.icon &&
-                                    accountValue.icon.length > 0 && (
-                                        <span className="bg-muted rounded-full p-0.5">
-                                            <RenderIcon
-                                                icon={
-                                                    accountValue.icon as TIcon
-                                                }
-                                            />
-                                        </span>
-                                    )}
-                                {!accountValue ? ( // Changed value to accountValue
+                                {value?.icon && value.icon.length > 0 && (
+                                    <span className="bg-muted rounded-full p-0.5">
+                                        <RenderIcon
+                                            icon={value.icon as TIcon}
+                                        />
+                                    </span>
+                                )}
+                                {!value ? (
                                     <span className="text-foreground/70">
                                         {placeholder || 'Select Account'}
                                     </span>
                                 ) : (
                                     <span className="inline-flex gap-x-4 items-center">
-                                        <span>
-                                            {accountValue.name ?? placeholder}
-                                        </span>
+                                        <span>{value.name ?? placeholder}</span>
                                         {!nameOnly && !hideDescription && (
                                             <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
-                                                {accountValue.description}
+                                                {value.description}
                                             </span>
                                         )}
                                     </span>
@@ -262,24 +253,22 @@ const AccountPicker = ({
                             )}
                             {!nameOnly && (
                                 <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
-                                    {accountValue?.type && (
+                                    {value?.type && (
                                         <AccountTypeBadge
-                                            type={accountValue.type}
+                                            type={value.type}
                                             description="(Type)"
                                         />
                                     )}
-                                    {accountValue?.general_ledger_type && (
+                                    {value?.general_ledger_type && (
                                         <GeneralLedgerTypeBadge
-                                            type={
-                                                accountValue.general_ledger_type
-                                            }
+                                            type={value.general_ledger_type}
                                             description="(GL)"
                                         />
                                     )}
-                                    {accountValue?.financial_statement_type && (
+                                    {value?.financial_statement_type && (
                                         <FinancialStatementTypeBadge
                                             type={
-                                                accountValue.financial_statement_type
+                                                value.financial_statement_type
                                             }
                                             description=" (FS)"
                                         />
@@ -289,15 +278,16 @@ const AccountPicker = ({
                         </span>
                         <ChevronDownIcon />
                     </Button>
-                    {allowClear && accountValue && (
+                    {allowClear && value && (
                         <Button
                             onClick={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()
-                                setAccountValue(null)
                                 onSelect?.(undefined as unknown as IAccount)
                             }}
-                            variant={'destructive'}
+                            variant={'ghost'}
+                            size={'sm'}
+                            className="cursor-pointer rounded-full !p-0 !px-0"
                         >
                             <XIcon className="inline" />
                         </Button>
