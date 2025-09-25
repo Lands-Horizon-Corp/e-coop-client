@@ -22,7 +22,7 @@ import {
     WEEKDAYS,
 } from './loan.constants'
 
-const WithWeekdays = z.discriminatedUnion(
+export const WithWeekdays = z.discriminatedUnion(
     'mode_of_payment',
     [
         z.object({
@@ -85,7 +85,7 @@ const WithWeekdays = z.discriminatedUnion(
     }
 )
 
-const WithComaker = z.discriminatedUnion(
+export const WithComaker = z.discriminatedUnion(
     'comaker_type',
     [
         z.object({
@@ -103,7 +103,6 @@ const WithComaker = z.discriminatedUnion(
             comaker_deposit_member_accounting_ledger_id: z.uuidv4(
                 'Invalid member accounting ledger'
             ),
-            comaker_deposit_member_accounting_ledger: z.any(),
         }),
         z.object({
             comaker_type: z.literal('others'),
@@ -114,7 +113,13 @@ const WithComaker = z.discriminatedUnion(
             comaker_collaterals_deleted: z.array(entityIdSchema).default([]),
         }),
         z.object({
-            comaker_type: z.literal('none'),
+            comaker_type: z
+                .enum(
+                    LOAN_COMAKER_TYPE.filter(
+                        (val) => !['others', 'deposit', 'member'].includes(val)
+                    )
+                )
+                .default('none'),
         }),
     ],
     { error: 'Invalid comaker' }
@@ -144,6 +149,9 @@ export const LoanTransactionSchema = z
             .array(entityIdSchema)
             .optional()
             .default([]),
+
+        comaker_deposit_member_accounting_ledger_id: entityIdSchema.optional(),
+        comaker_deposit_member_accounting_ledger: z.any().optional(),
 
         comaker_collaterals: z
             .array(ComakerCollateralSchema)

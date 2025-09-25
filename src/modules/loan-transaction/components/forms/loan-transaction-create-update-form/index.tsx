@@ -364,7 +364,7 @@ const LoanTransactionCreateUpdateForm = ({
                                 loan_terms_and_condition_suggested_payment_deleted:
                                     [],
                                 ...data,
-                            } as unknown as ILoanTransactionRequest),
+                            }),
                     }
                 )
             } else {
@@ -379,7 +379,7 @@ const LoanTransactionCreateUpdateForm = ({
                             loan_terms_and_condition_suggested_payment_deleted:
                                 [],
                             ...data,
-                        } as unknown as ILoanTransactionRequest),
+                        }),
                 })
             }
             if (promise)
