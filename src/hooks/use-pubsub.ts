@@ -24,7 +24,6 @@ export const useSubscribe = <T = unknown>(
     const isLiveEnabled = useLiveMonitoringStore((state) => state.isLiveEnabled)
 
     useEffect(() => {
-
         if (
             !connection ||
             !isLiveEnabled ||
