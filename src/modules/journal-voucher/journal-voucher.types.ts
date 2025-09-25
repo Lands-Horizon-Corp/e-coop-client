@@ -34,11 +34,11 @@ export interface IJournalVoucher extends IBaseEntityMeta {
 }
 
 export interface IJournalVoucherRequest {
-    cash_voucher_number: string
+    cash_voucher_number?: string
     date: string
     description?: string
     reference?: string
-    status: string
+    status?: string
 
     journal_voucher_entries?: IJournalVoucherEntryRequest[]
     journal_voucher_entries_deleted?: TEntityId[]
