@@ -2,6 +2,7 @@ import z from 'zod'
 
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
+import { ACCOUNT_INTEREST_STANDARD_COMPUTATION } from './account.constants'
 import {
     AccountExclusiveSettingTypeEnum,
     AccountTypeEnum,
@@ -42,8 +43,12 @@ export const IAccountRequestSchema = z.object({
     type: z.nativeEnum(AccountTypeEnum),
 
     account_exclusive_setting_type: z
-        .nativeEnum(AccountExclusiveSettingTypeEnum)
+        .enum(AccountExclusiveSettingTypeEnum)
         .default(AccountExclusiveSettingTypeEnum.None),
+
+    interest_standard_computation: z
+        .enum(ACCOUNT_INTEREST_STANDARD_COMPUTATION)
+        .default('None'),
 
     computation_type: z.preprocess(
         (val) => (val === '' || val === null ? undefined : val),
