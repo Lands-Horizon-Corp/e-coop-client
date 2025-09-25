@@ -40,7 +40,7 @@ export const IAccountRequestSchema = z.object({
         .number()
         .min(0, 'Index must be non-negative integer')
         .optional(),
-    type: z.nativeEnum(AccountTypeEnum),
+    type: z.enum(AccountTypeEnum),
 
     account_exclusive_setting_type: z
         .enum(AccountExclusiveSettingTypeEnum)
@@ -52,7 +52,7 @@ export const IAccountRequestSchema = z.object({
 
     computation_type: z.preprocess(
         (val) => (val === '' || val === null ? undefined : val),
-        z.nativeEnum(ComputationTypeEnum).optional()
+        z.enum(ComputationTypeEnum).optional()
     ),
     fines_amort: z
         .number()
@@ -131,8 +131,8 @@ export const IAccountRequestSchema = z.object({
         .min(0)
         .optional(),
 
-    financial_statement_type: z.nativeEnum(FinancialStatementTypeEnum),
-    general_ledger_type: z.nativeEnum(GeneralLedgerTypeEnum),
+    financial_statement_type: z.enum(FinancialStatementTypeEnum),
+    general_ledger_type: z.enum(GeneralLedgerTypeEnum),
 
     alternative_code: z.string().optional().default(''),
 
@@ -144,27 +144,27 @@ export const IAccountRequestSchema = z.object({
     loan_cut_off_days: z.number().int().min(0).optional(),
 
     lumpsum_computation_type: z
-        .nativeEnum(LumpsumComputationTypeEnum)
+        .enum(LumpsumComputationTypeEnum)
         .optional(),
     interest_fines_computation_diminishing: z
-        .nativeEnum(InterestFinesComputationDiminishingEnum)
+        .enum(InterestFinesComputationDiminishingEnum)
         .optional(),
     interest_fines_computation_diminishing_straight_diminishing_yearly: z
-        .nativeEnum(
+        .enum(
             InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
         )
         .optional(),
     earned_unearned_interest: z
-        .nativeEnum(EarnedUnearnedInterestEnum)
+        .enum(EarnedUnearnedInterestEnum)
         .optional(),
-    loan_saving_type: z.nativeEnum(LoanSavingTypeEnum).optional(),
-    interest_deduction: z.nativeEnum(InterestDeductionEnum).optional(),
-    other_deduction_entry: z.nativeEnum(OtherDeductionEntryEnum).optional(),
+    loan_saving_type: z.enum(LoanSavingTypeEnum).optional(),
+    interest_deduction: z.enum(InterestDeductionEnum).optional(),
+    other_deduction_entry: z.enum(OtherDeductionEntryEnum).optional(),
     interest_saving_type_diminishing_straight: z
-        .nativeEnum(InterestSavingTypeDiminishingStraightEnum)
+        .enum(InterestSavingTypeDiminishingStraightEnum)
         .optional(),
     other_information_of_an_account: z
-        .nativeEnum(OtherInformationOfAnAccountEnum)
+        .enum(OtherInformationOfAnAccountEnum)
         .optional(),
 
     header_row: z.number().int().optional(),
