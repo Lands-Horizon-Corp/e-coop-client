@@ -54,7 +54,6 @@ const CompanyCombobox = ({
 }: Props) => {
     const [open, setOpen] = React.useState(false)
     const [createModal, setCreateModal] = React.useState(false)
-
     const { data, isLoading } = useGetAllCompany({
         options: {
             enabled: !disabled,
