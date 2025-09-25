@@ -78,6 +78,7 @@ import { Route as OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesCashEntryRou
 import { Route as OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesAdjustmentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-general-ledger-entries/adjustment-entry'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/tag-template'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/company'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/collateral'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
@@ -537,6 +538,12 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute =
     path: '/maintenance/holidays',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRouteImport.update({
+    id: '/(maintenance)/maintenance/company',
+    path: '/maintenance/company',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute =
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRouteImport.update({
     id: '/(maintenance)/maintenance/collateral',
@@ -966,6 +973,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  '/org/$orgname/branch/$branchname/maintenance/company': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
   '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/my-general-ledger-entries/adjustment-entry': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesAdjustmentEntryRoute
@@ -1078,6 +1086,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  '/org/$orgname/branch/$branchname/maintenance/company': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
   '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/my-general-ledger-entries/adjustment-entry': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesAdjustmentEntryRoute
@@ -1196,6 +1205,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries/adjustment-entry': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesAdjustmentEntryRoute
@@ -1314,6 +1324,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/maintenance/collateral'
+    | '/org/$orgname/branch/$branchname/maintenance/company'
     | '/org/$orgname/branch/$branchname/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/my-general-ledger-entries/adjustment-entry'
@@ -1426,6 +1437,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/maintenance/collateral'
+    | '/org/$orgname/branch/$branchname/maintenance/company'
     | '/org/$orgname/branch/$branchname/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/my-general-ledger-entries/adjustment-entry'
@@ -1543,6 +1555,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template'
     | '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries/adjustment-entry'
@@ -2064,6 +2077,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company'
+      path: '/maintenance/company'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/company'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
       path: '/maintenance/collateral'
@@ -2577,6 +2597,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
   OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesAdjustmentEntryRoute: typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesAdjustmentEntryRoute
@@ -2691,6 +2712,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute:
