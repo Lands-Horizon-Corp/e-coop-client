@@ -36,7 +36,11 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const hasValue = props.getValue()
             return (
                 <EditableCell
-                    className={cn(hasValue ? '!min-w-[100px] !w-[220px]' : '')}
+                    inputProps={{
+                        className: cn(
+                            hasValue ? '!min-w-[100px] !w-[220px]' : ''
+                        ),
+                    }}
                     inputType="account-picker"
                     {...props}
                 />
@@ -50,7 +54,11 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const hasValue = props.getValue()
             return (
                 <EditableCell
-                    className={cn(hasValue ? '!min-w-[100px] !w-[200px]' : '')}
+                    inputProps={{
+                        className: cn(
+                            hasValue ? '!min-w-[100px] !w-[200px]' : ''
+                        ),
+                    }}
                     inputType="member-picker"
                     {...props}
                 />
@@ -65,24 +73,32 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
         accessorKey: 'debit',
         header: 'Debit',
-        cell: (props) => (
-            <EditableCell
-                className="min-w-[50px]"
-                inputType="number"
-                {...props}
-            />
-        ),
+        cell: (props) => {
+            return (
+                <EditableCell
+                    inputProps={{
+                        className: 'min-w-[50px]',
+                    }}
+                    inputType="number"
+                    {...props}
+                />
+            )
+        },
     },
     {
         accessorKey: 'credit',
         header: 'Credit',
-        cell: (props) => (
-            <EditableCell
-                className="min-w-[50px]"
-                inputType="number"
-                {...props}
-            />
-        ),
+        cell: (props) => {
+            return (
+                <EditableCell
+                    inputProps={{
+                        className: 'min-w-[49px]',
+                    }}
+                    inputType="number"
+                    {...props}
+                />
+            )
+        },
     },
     {
         accessorKey: 'action',
@@ -123,6 +139,7 @@ export const JournalEntryTable = ({
     const [journalEntries, setJournalEntries] = useState<
         IJournalVoucherEntryRequest[]
     >(rowData || [])
+
     const {
         selectedJournalVoucherEntry,
         setSelectedJournalVoucherEntry,
@@ -163,10 +180,13 @@ export const JournalEntryTable = ({
                 const updatedEntries = (journalEntries ?? []).map(
                     (entry, index) => {
                         if (index === rowIndex) {
-                            return {
-                                ...entry,
-                                [columnId]: value,
+                            const updatedEntry = { ...entry, [columnId]: value }
+                            if (columnId === 'debit') {
+                                updatedEntry.credit = 0
+                            } else if (columnId === 'credit') {
+                                updatedEntry.debit = 0
                             }
+                            return updatedEntry
                         }
                         return entry
                     }
@@ -201,6 +221,7 @@ export const JournalEntryTable = ({
         },
         [selectedJournalVoucherEntry]
     )
+
     return (
         <div className={cn('', className)}>
             <div className="w-full flex justify-between">

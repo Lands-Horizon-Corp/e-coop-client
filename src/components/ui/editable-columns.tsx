@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import * as SelectPrimitive from '@radix-ui/react-select'
+
 import { cn } from '@/helpers'
 import { IAccount } from '@/modules/account'
 import { AccountPicker } from '@/modules/account/components'
@@ -9,7 +11,7 @@ import { TransactionAmountField } from '@/modules/transaction'
 import { CellContext, Row } from '@tanstack/react-table'
 
 import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
+import { Input, InputProps } from '@/components/ui/input'
 import {
     Select,
     SelectContent,
@@ -18,16 +20,19 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
+import InputDate from './input-date'
+
 declare module '@tanstack/react-table' {
     interface TableMeta<TData> {
-        updateData: (
+        updateData: <TValue>(
             rowIndex: number,
             columnId: keyof TData,
-            value: unknown
+            value: TValue
         ) => void
         handleDeleteRow: (row: Row<TData>) => void
     }
 }
+
 interface CustomCellContext<TData extends object>
     extends CellContext<TData, unknown> {
     inputType?:
@@ -39,17 +44,21 @@ interface CustomCellContext<TData extends object>
         | 'account-picker'
         | 'member-picker'
     options?: { label: string; value: string }[]
-    className?: string
+    inputProps?: InputProps
+    selectTriggerProps?: React.ComponentProps<typeof SelectPrimitive.Trigger>
+    checkboxProps?: React.ComponentProps<typeof Checkbox>
 }
 
 export const EditableCell = <T extends object>({
     getValue,
     row: { index },
     column: { id },
-    table,
     inputType = 'text',
     options = [],
-    className,
+    inputProps,
+    selectTriggerProps,
+    checkboxProps,
+    table,
 }: CustomCellContext<T>) => {
     const initialValue = getValue()
     const [value, setValue] = useState(initialValue)
@@ -68,88 +77,94 @@ export const EditableCell = <T extends object>({
         table.options.meta?.updateData(index, id as keyof T, newValue)
     }
 
-    if (inputType === 'text') {
-        return (
-            <Input
-                value={value as string}
-                className={cn('text-left', className)}
-                onChange={(e) => setValue(e.target.value)}
-                onBlur={handleBlur}
-            />
-        )
+    switch (inputType) {
+        case 'text':
+            return (
+                <Input
+                    {...inputProps}
+                    value={value as string}
+                    className={cn('text-left', inputProps?.className)}
+                    onChange={(e) => setValue(e.target.value)}
+                    onBlur={handleBlur}
+                />
+            )
+        case 'number':
+            return (
+                <TransactionAmountField
+                    {...inputProps}
+                    className={cn('text-left', inputProps?.className)}
+                    value={value as number}
+                    onChange={(e) => {
+                        handleChange(Number(e.target.value))
+                    }}
+                    onBlur={handleBlur}
+                    isDefault
+                />
+            )
+        case 'select':
+            return (
+                <Select
+                    onValueChange={handleChange}
+                    value={value as string}
+                    defaultValue={value as string}
+                    open={open}
+                    onOpenChange={setOpen}
+                >
+                    <SelectTrigger
+                        className={cn(
+                            'max-w-xs',
+                            selectTriggerProps?.className
+                        )}
+                    >
+                        <SelectValue placeholder="select a value" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {options.map((option) => (
+                            <SelectItem value={option.value} key={option.value}>
+                                {option.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            )
+        case 'checkbox':
+            return (
+                <Checkbox
+                    className={cn('size-8', checkboxProps?.className)}
+                    checked={value as boolean}
+                    onCheckedChange={handleChange}
+                />
+            )
+        case 'account-picker':
+            return (
+                <AccountPicker
+                    value={value as IAccount}
+                    onSelect={(selectedAccount) => {
+                        handleChange(selectedAccount)
+                    }}
+                    triggerClassName={cn('', inputProps?.className)}
+                    nameOnly
+                    placeholder="Select an Account"
+                    allowClear
+                />
+            )
+        case 'member-picker':
+            return (
+                <MemberPicker
+                    value={value as IMemberProfile}
+                    onSelect={(selectedMember) => {
+                        handleChange(selectedMember)
+                    }}
+                    triggerClassName={cn('!w-full', inputProps?.className)}
+                    triggerVariant="outline"
+                    placeholder="Select Member"
+                    showPBNo={false}
+                    allowClear
+                />
+            )
+        case 'date':
+            return <InputDate value={value as string} onChange={handleChange} />
+        default:
+            return null
     }
-    if (inputType === 'number') {
-        return (
-            <TransactionAmountField
-                className={cn('text-left', className)}
-                value={value as number}
-                onChange={(e) => {
-                    handleChange(Number(e.target.value))
-                }}
-                onBlur={handleBlur}
-                isDefault
-            />
-        )
-    }
-    if (inputType === 'select') {
-        return (
-            <Select
-                onValueChange={handleChange}
-                value={value as string}
-                defaultValue={value as string}
-                open={open}
-                onOpenChange={setOpen}
-            >
-                <SelectTrigger className={cn('max-w-xs', className)}>
-                    <SelectValue placeholder="select a value" />
-                </SelectTrigger>
-                <SelectContent>
-                    {options.map((option) => (
-                        <SelectItem value={option.value} key={option.value}>
-                            {option.label}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-        )
-    }
-    if (inputType === 'checkbox') {
-        return (
-            <Checkbox
-                className={cn('size-8', className)}
-                checked={value as boolean}
-                onCheckedChange={handleChange}
-            />
-        )
-    }
-    if (inputType === 'account-picker') {
-        return (
-            <AccountPicker
-                value={value as IAccount}
-                onSelect={(selectedAccount) => {
-                    handleChange(selectedAccount)
-                }}
-                triggerClassName={cn('', className)}
-                nameOnly
-                placeholder="Select an Account"
-                allowClear
-            />
-        )
-    }
-    if (inputType === 'member-picker') {
-        return (
-            <MemberPicker
-                value={value as IMemberProfile}
-                onSelect={(selectedMember) => {
-                    handleChange(selectedMember)
-                }}
-                triggerClassName={cn('!w-full', className)}
-                triggerVariant="outline"
-                placeholder="Select Member"
-                showPBNo={false}
-                allowClear
-            />
-        )
-    }
-    return null
 }
