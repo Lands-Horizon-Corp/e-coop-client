@@ -27,10 +27,7 @@ import {
     useReprintLoanTransaction,
     useUndoPrintLoanTransaction,
 } from '../../loan-transaction.service'
-import {
-    ILoanTransaction,
-    ILoanTransactionRequest,
-} from '../../loan-transaction.types'
+import { ILoanTransaction } from '../../loan-transaction.types'
 import { resolveLoanDatesToStatus } from '../../loan.utils'
 import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
@@ -155,8 +152,7 @@ export const LoanTransactionAction = ({
                     {...updateModal}
                     formProps={{
                         loanTransactionId: loanTransaction.id,
-                        defaultValues:
-                            loanTransaction as ILoanTransactionRequest,
+                        defaultValues: loanTransaction,
                     }}
                 />
                 <LoanTransactionSignatureUpdateFormModal
@@ -371,7 +367,7 @@ export const LoanTransactionRowContext = ({
                 {...updateModal}
                 formProps={{
                     loanTransactionId: loanTransaction.id,
-                    defaultValues: loanTransaction as ILoanTransactionRequest,
+                    defaultValues: loanTransaction,
                 }}
             />
             <LoanTransactionSignatureUpdateFormModal

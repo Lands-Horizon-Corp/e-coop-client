@@ -3,10 +3,13 @@ import z from 'zod'
 import { descriptionTransformerSanitizer } from '@/validation'
 
 export const JournalVoucherSchema = z.object({
-    cash_voucher_number: z.string(),
+    cash_voucher_number: z.coerce.string<string>().optional(),
     date: z.string().min(1, 'Date is required'),
-    reference: z.string().optional(),
-    status: z.enum(['draft', 'posted', 'cancelled']),
+    reference: z.coerce.string<string>().optional(),
+    status: z
+        .enum(['draft', 'posted', 'cancelled'])
+        .default('draft')
+        .optional(),
     description: z
         .string()
         .optional()

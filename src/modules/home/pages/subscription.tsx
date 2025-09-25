@@ -12,6 +12,7 @@ import { PaperPlaneIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import { GradientText } from '@/components/ui/gradient-text'
 
 import PlanCard from '../components/subscription/subscription-plan-card'
 
@@ -38,7 +39,18 @@ const SubscriptionPage = () => {
             />
 
             <h1 className="text-foreground text-4xl font-extrabold">
-                <span className="text-primary"> e-coop</span> Pricing Plans
+                <GradientText
+                    variant="primary"
+                    size="5xl"
+                    animate="shimmer"
+                    className="leading-relaxed mr-2"
+                    style={{
+                        fontFamily: "'Knewave', cursive",
+                    }}
+                >
+                    <h1>E-coop</h1>
+                </GradientText>
+                Pricing Plans
             </h1>
 
             <p className="text-muted-foreground text-center mx-auto max-w-2xl text-xl">

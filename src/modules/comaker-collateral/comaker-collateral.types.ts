@@ -7,6 +7,7 @@ import { ComakerCollateralSchema } from './comaker-collateral.validation'
 
 export interface IComakerCollateral extends IBaseEntityMeta {
     loan_transaction_id: TEntityId
+    description: string | undefined
     collateral_id: TEntityId
     collateral: ICollateral
     amount: number
