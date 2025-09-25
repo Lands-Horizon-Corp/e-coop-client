@@ -71,6 +71,12 @@ export interface ILoanTransaction
     loan_status_id?: TEntityId
     loan_status?: ILoanStatus
 
+    count?: number
+    last_pay?: string
+    balance?: number
+    fines?: number
+    interest?: number
+
     mode_of_payment: TLoanModeOfPayment
     mode_of_payment_weekly: TWeekdays
     mode_of_payment_semi_monthly_pay_1: number
