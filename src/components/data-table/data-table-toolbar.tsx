@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import { Table } from '@tanstack/react-table'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -16,6 +17,7 @@ import { Separator } from '@/components/ui/separator'
 import { IClassProps } from '@/types'
 
 import RefreshButton, { IRefreshButtonProps } from '../buttons/refresh-button'
+import { useShortcutContext } from '../shorcuts/general-shortcuts-wrapper'
 import DatatableColumnVisibility from './data-table-actions/data-table-column-visibility'
 import DataTableCreateAction, {
     IDataTableCreateActionProps,
@@ -59,7 +61,9 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
-    const ref = useHotkeys<HTMLDivElement>(
+    const { setActiveScope, activeScope } = useShortcutContext()
+
+    useHotkeys(
         'Enter',
         (e) => {
             e.preventDefault()
@@ -67,13 +71,23 @@ const DataTableToolbar = <TData,>({
                 createActionProps.onClick()
             }
         },
-
+        {
+            scopes: [SHORTCUT_SCOPES.DATA_TABLE],
+        },
         [createActionProps, hideCreateButton]
     )
 
+    const hanldeSetScope = () => {
+        if (activeScope !== SHORTCUT_SCOPES.DATA_TABLE) {
+            setActiveScope(SHORTCUT_SCOPES.DATA_TABLE)
+        }
+    }
+
     return (
         <div
-            ref={ref}
+            onClick={hanldeSetScope}
+            onFocus={hanldeSetScope}
+            onMouseOver={hanldeSetScope}
             className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto"
         >
             <div className="flex items-center gap-x-2">
