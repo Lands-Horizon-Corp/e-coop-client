@@ -8,7 +8,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import TransactionBatchTable from '../transaction-batch-table'
-import TransactionBatchAction from '../transaction-batch-table/row-action-context'
 
 const TransactionBatchPage = () => {
     const createModal = useModalState()

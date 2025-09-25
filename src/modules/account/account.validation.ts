@@ -143,20 +143,14 @@ export const IAccountRequestSchema = z.object({
     yearly_subscription_fee: z.number().min(0).optional(),
     loan_cut_off_days: z.number().int().min(0).optional(),
 
-    lumpsum_computation_type: z
-        .enum(LumpsumComputationTypeEnum)
-        .optional(),
+    lumpsum_computation_type: z.enum(LumpsumComputationTypeEnum).optional(),
     interest_fines_computation_diminishing: z
         .enum(InterestFinesComputationDiminishingEnum)
         .optional(),
     interest_fines_computation_diminishing_straight_diminishing_yearly: z
-        .enum(
-            InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
-        )
+        .enum(InterestFinesComputationDiminishingStraightDiminishingYearlyEnum)
         .optional(),
-    earned_unearned_interest: z
-        .enum(EarnedUnearnedInterestEnum)
-        .optional(),
+    earned_unearned_interest: z.enum(EarnedUnearnedInterestEnum).optional(),
     loan_saving_type: z.enum(LoanSavingTypeEnum).optional(),
     interest_deduction: z.enum(InterestDeductionEnum).optional(),
     other_deduction_entry: z.enum(OtherDeductionEntryEnum).optional(),
