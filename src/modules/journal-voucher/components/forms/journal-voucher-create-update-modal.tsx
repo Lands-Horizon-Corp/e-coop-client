@@ -225,6 +225,21 @@ const JournalVoucherCreateUpdateForm = ({
         })
 
         if (isUpdate && validateResult.isValid) {
+            //check debit and credit total is same
+            const totalDebit = validateResult.validatedEntries.reduce(
+                (acc, entry) => acc + entry.debit,
+                0
+            )
+            const totalCredit = validateResult.validatedEntries.reduce(
+                (acc, entry) => acc + entry.credit,
+                0
+            )
+            if (totalDebit !== totalCredit) {
+                setJournalEntryError(
+                    'Total Debit and Total Credit must be the same.'
+                )
+                return
+            }
             updateJournalVoucher({
                 id: editJournalId,
                 payload: {

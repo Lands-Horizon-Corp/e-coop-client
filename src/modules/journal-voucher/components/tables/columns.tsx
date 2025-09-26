@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 export const journalVoucherGlobalSearchTargets: IGlobalSearchTargets<IJournalVoucher>[] =
     [
+        { field: 'name', displayText: 'Name' },
         { field: 'voucher_number', displayText: 'Voucher Number' },
         { field: 'description', displayText: 'Description' },
         { field: 'reference', displayText: 'Reference' },
@@ -59,6 +60,22 @@ const JournalVoucherTableColumns = (
         enableHiding: false,
         size: 80,
         minSize: 80,
+    },
+    {
+        id: 'name',
+        accessorKey: 'name',
+        header: (props) => <DataTableColumnHeader {...props} title="Name" />,
+        cell: ({
+            row: {
+                original: { name },
+            },
+        }) => (
+            <div className="flex min-w-0 flex-col">
+                <span className="truncate text-xs text-muted-foreground/70">
+                    {name || '-'}
+                </span>
+            </div>
+        ),
     },
     {
         id: 'voucher_number',

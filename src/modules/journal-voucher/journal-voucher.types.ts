@@ -14,6 +14,7 @@ export interface IJournalVoucher extends IBaseEntityMeta {
     description?: string
     reference: string
     status: TJournalVoucherStatus
+    name?: string
 
     posted_at?: string
     posted_by_id?: TEntityId
