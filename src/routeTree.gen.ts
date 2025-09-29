@@ -56,6 +56,7 @@ import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/or
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
 import { Route as OrgOrgnameBranchBranchnameDevDocumentationRouteImport } from './routes/org/$orgname/branch.$branchname/dev/documentation'
 import { Route as OrgOrgnameBranchBranchnameAccountingJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/journal-voucher'
+import { Route as OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/cash-check-journal-voucher'
 import { Route as OrgOrgnameBranchBranchnameAccountingAccountsRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/accounts'
 import { Route as OrgOrgnameBranchBranchnamemeMyTimesheetRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-timesheet'
 import { Route as OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-disbursement-transaction'
@@ -382,6 +383,14 @@ const OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute =
     path: '/accounting/journal-voucher',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute =
+  OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRouteImport.update(
+    {
+      id: '/accounting/cash-check-journal-voucher',
+      path: '/accounting/cash-check-journal-voucher',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnameAccountingAccountsRoute =
   OrgOrgnameBranchBranchnameAccountingAccountsRouteImport.update({
     id: '/accounting/accounts',
@@ -942,6 +951,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/my-timesheet': typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
   '/org/$orgname/branch/$branchname/accounting/journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
@@ -1055,6 +1065,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/my-timesheet': typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
   '/org/$orgname/branch/$branchname/accounting/journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
@@ -1174,6 +1185,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(me)/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
   '/org/$orgname/branch/$branchname/(me)/my-timesheet': typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
   '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
   '/org/$orgname/branch/$branchname/accounting/journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   '/org/$orgname/branch/$branchname/(common)/(settings)/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
@@ -1293,6 +1305,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/my-disbursement-transaction'
     | '/org/$orgname/branch/$branchname/my-timesheet'
     | '/org/$orgname/branch/$branchname/accounting/accounts'
+    | '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
     | '/org/$orgname/branch/$branchname/accounting/journal-voucher'
     | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/settings'
@@ -1406,6 +1419,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/my-disbursement-transaction'
     | '/org/$orgname/branch/$branchname/my-timesheet'
     | '/org/$orgname/branch/$branchname/accounting/accounts'
+    | '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
     | '/org/$orgname/branch/$branchname/accounting/journal-voucher'
     | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/settings'
@@ -1524,6 +1538,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(me)/my-disbursement-transaction'
     | '/org/$orgname/branch/$branchname/(me)/my-timesheet'
     | '/org/$orgname/branch/$branchname/accounting/accounts'
+    | '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
     | '/org/$orgname/branch/$branchname/accounting/journal-voucher'
     | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
@@ -1921,6 +1936,13 @@ declare module '@tanstack/react-router' {
       path: '/accounting/journal-voucher'
       fullPath: '/org/$orgname/branch/$branchname/accounting/journal-voucher'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': {
+      id: '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
+      path: '/accounting/cash-check-journal-voucher'
+      fullPath: '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/accounting/accounts': {
@@ -2566,6 +2588,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute: typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
   OrgOrgnameBranchBranchnamemeMyTimesheetRoute: typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
   OrgOrgnameBranchBranchnameAccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
+  OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute: typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
   OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute: typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
   OrgOrgnameBranchBranchnameDevDocumentationRoute: typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
@@ -2650,6 +2673,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemeMyTimesheetRoute,
     OrgOrgnameBranchBranchnameAccountingAccountsRoute:
       OrgOrgnameBranchBranchnameAccountingAccountsRoute,
+    OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute:
+      OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute,
     OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute:
       OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute,
     OrgOrgnameBranchBranchnameDevDocumentationRoute:
