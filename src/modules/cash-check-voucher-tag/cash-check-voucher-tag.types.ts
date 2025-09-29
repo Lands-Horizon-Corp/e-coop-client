@@ -1,6 +1,6 @@
 import { IAuditable, IOrgBranchIdentity, ITimeStamps, TEntityId } from '@/types'
 
-import { ICashCheckVoucherResponse } from '../cash-check-voucher/cash-check-voucher.types'
+import { ICashCheckVoucher } from '../cash-check-voucher/cash-check-voucher.types'
 
 export interface ICashCheckVoucherTagRequest {
     cash_check_voucher_id: TEntityId
@@ -11,13 +11,13 @@ export interface ICashCheckVoucherTagRequest {
     icon?: string
 }
 
-export interface ICashCheckVoucherTagResponse
+export interface ICashCheckVoucherTag
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
     id: TEntityId
     cash_check_voucher_id: TEntityId
-    cash_check_voucher?: ICashCheckVoucherResponse
+    cash_check_voucher?: ICashCheckVoucher
     name: string
     description: string
     category: string
