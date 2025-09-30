@@ -48,6 +48,7 @@ export interface IComputationSheetCalculatorRequest {
 export interface IComputationSheetCalculatorDeduction {
     account: IAccount
     name?: string
+    description?: string
     is_add_on: boolean
     type: 'static' | 'deduction' | 'add-on'
     credit: number

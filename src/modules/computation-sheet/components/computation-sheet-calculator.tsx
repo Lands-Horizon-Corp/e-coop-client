@@ -149,7 +149,9 @@ const DeductionTable = ({
                                         'Unknown'}
                                 </span>
                                 <span className="text-xs text-muted-foreground">
-                                    {entry.account?.description || '...'}
+                                    {entry.account?.description ||
+                                        entry.description ||
+                                        '...'}
                                 </span>
                                 <div className="flex gap-2 mt-1">
                                     {entry.type === 'add-on' && (
