@@ -144,7 +144,9 @@ const DeductionTable = ({
                                             icon={entry.account.icon as TIcon}
                                         />
                                     )}
-                                    {entry.account?.name || 'Unknown'}
+                                    {entry.account?.name ||
+                                        entry.name ||
+                                        'Unknown'}
                                 </span>
                                 <span className="text-xs text-muted-foreground">
                                     {entry.account?.description || '...'}
