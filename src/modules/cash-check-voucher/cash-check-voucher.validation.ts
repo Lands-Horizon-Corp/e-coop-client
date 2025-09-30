@@ -3,18 +3,19 @@ import z from 'zod'
 import { descriptionTransformerSanitizer } from '@/validation'
 
 export const CashCheckVoucherSchema = z.object({
-    cash_voucher_number: z.string().min(1, 'Cash voucher number is required'),
-    date: z.string().min(1, 'Date is required'),
+    name: z.string().optional(),
+    cash_voucher_number: z.string().optional(),
+    // date: z.string().min(1, 'Date is required'),
     status: z
         .enum(['pending', 'printed', 'approved', 'released'])
-        .default('pending'),
+        .default('pending')
+        .optional(),
     description: z
         .string()
-        .min(10, 'Min 10 character description')
         .optional()
         .transform(descriptionTransformerSanitizer),
     print_count: z.coerce.number<number>().min(0).optional(),
-    pay_to: z.string().min(1, 'Pay to is required'),
+    pay_to: z.string().optional(),
 
     // Totals - Added
     total_debit: z.coerce.number().optional(),
@@ -26,10 +27,11 @@ export const CashCheckVoucherSchema = z.object({
     released_by_user_id: z.string().optional(),
     released_by_user: z.any().optional(),
 
+    company_id: z.string().optional(),
     member_profile_id: z
         .string()
         .min(1, 'Member profile is required')
-        .optional(), 
+        .optional(),
     member_profile: z.any().optional(),
 
     printed_date: z.string().optional(),

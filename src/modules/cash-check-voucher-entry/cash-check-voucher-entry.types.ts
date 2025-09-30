@@ -1,5 +1,3 @@
-import z from 'zod'
-
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
@@ -31,15 +29,17 @@ export interface ICashCheckVoucherEntry extends IBaseEntityMeta {
 
 export interface ICashCheckVoucherEntryRequest {
     id?: TEntityId
-    account_id?: string
-    employee_user_id?: string
-    transaction_batch_id?: string
-
-    cash_check_voucher_id?: string
-    cash_check_voucher?: ICashCheckVoucher
     rowId?: string
 
-    description: string
+    member_profile?: IMemberProfile
+    member_profile_id?: TEntityId
+
+    account?: IAccount
+    account_id?: TEntityId
+
+    employee_user_id?: TEntityId
+
+    description?: string
     debit: number
     credit: number
 }

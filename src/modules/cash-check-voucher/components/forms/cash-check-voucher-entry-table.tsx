@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { cn } from '@/helpers'
 import { ICashCheckVoucherEntryRequest } from '@/modules/cash-check-voucher-entry'
+import { IMemberProfile } from '@/modules/member-profile'
 import { useCashCheckVoucherStore } from '@/store/cash-check-voucher-store'
 import { entityIdSchema } from '@/validation'
 import {
@@ -30,12 +31,12 @@ import { TEntityId } from '@/types'
 
 const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
-        accessorKey: 'account_id',
+        accessorKey: 'account',
         header: 'Account',
         cell: (props) => <EditableCell inputType="account-picker" {...props} />,
     },
     {
-        accessorKey: 'member_profile_id',
+        accessorKey: 'member_profile',
         header: 'Member',
         cell: (props) => <EditableCell inputType="member-picker" {...props} />,
     },
@@ -44,7 +45,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         header: 'Description',
         cell: (props) => (
             <EditableCell
-                className="min-w-[200px]"
+                inputProps={{ className: 'min-w-[200px]' }}
                 inputType="text"
                 {...props}
             />
@@ -60,7 +61,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         header: 'Debit',
         cell: (props) => (
             <EditableCell
-                className="min-w-[50px]"
+                inputProps={{ className: 'min-w-[50px]' }}
                 inputType="number"
                 {...props}
             />
@@ -71,7 +72,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         header: 'Credit',
         cell: (props) => (
             <EditableCell
-                className="min-w-[50px]"
+                inputProps={{ className: 'min-w-[50px]' }}
                 inputType="number"
                 {...props}
             />
@@ -100,7 +101,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
 ]
 
 type CashCheckJournalEntryTableProps = {
-    defaultMemberProfileId?: TEntityId
+    defaultMemberProfile?: IMemberProfile
     cashCheckVoucherId: TEntityId
     isUpdateMode?: boolean
     rowData?: ICashCheckVoucherEntryRequest[]
@@ -109,15 +110,12 @@ type CashCheckJournalEntryTableProps = {
 }
 
 export const CashCheckJournalEntryTable = ({
-    defaultMemberProfileId,
+    defaultMemberProfile,
     isUpdateMode = false,
     rowData,
     className,
     TableClassName,
 }: CashCheckJournalEntryTableProps) => {
-    const [cashCheckEntries, setCashCheckEntries] = useState<
-        ICashCheckVoucherEntryRequest[]
-    >(rowData || [])
     const {
         selectedCashCheckVoucherEntry,
         setSelectedCashCheckVoucherEntry,
@@ -125,10 +123,18 @@ export const CashCheckJournalEntryTable = ({
     } = useCashCheckVoucherStore()
 
     useEffect(() => {
-        if (cashCheckEntries) {
-            setSelectedCashCheckVoucherEntry(cashCheckEntries)
+        if (
+            rowData &&
+            rowData.length > 0 &&
+            selectedCashCheckVoucherEntry.length === 0
+        ) {
+            setSelectedCashCheckVoucherEntry(rowData)
         }
-    }, [cashCheckEntries, setSelectedCashCheckVoucherEntry])
+    }, [
+        rowData,
+        setSelectedCashCheckVoucherEntry,
+        selectedCashCheckVoucherEntry.length,
+    ])
 
     const handleDeleteRow = (row: Row<ICashCheckVoucherEntryRequest>) => {
         const id = row.original.id
@@ -140,39 +146,41 @@ export const CashCheckJournalEntryTable = ({
                 const updatedData = selectedCashCheckVoucherEntry.filter(
                     (data) => data.id !== id
                 )
-                setCashCheckEntries(updatedData)
+                setSelectedCashCheckVoucherEntry(updatedData)
             } else {
                 const updatedData = selectedCashCheckVoucherEntry.filter(
                     (data) => data.rowId !== rowId
                 )
-                setCashCheckEntries(updatedData)
+                setSelectedCashCheckVoucherEntry(updatedData)
             }
         }
     }
 
     const table = useReactTable({
-        data: cashCheckEntries,
+        data: selectedCashCheckVoucherEntry,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
             updateData: (rowIndex, columnId, value) => {
-                const updatedEntries = (cashCheckEntries ?? []).map(
-                    (entry, index) => {
-                        if (index === rowIndex) {
-                            return {
-                                ...entry,
-                                [columnId]: value,
-                            }
+                const updatedEntries = (
+                    selectedCashCheckVoucherEntry ?? []
+                ).map((entry, index) => {
+                    if (index === rowIndex) {
+                        const updatedEntry = { ...entry, [columnId]: value }
+                        if (columnId === 'debit') {
+                            updatedEntry.credit = 0
+                        } else if (columnId === 'credit') {
+                            updatedEntry.debit = 0
                         }
-                        return entry
+                        return updatedEntry
                     }
-                )
-                setCashCheckEntries(updatedEntries)
+                    return entry
+                })
+                setSelectedCashCheckVoucherEntry(updatedEntries)
             },
             handleDeleteRow: handleDeleteRow,
         },
     })
-
     const handleAddRow = (
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
@@ -180,12 +188,16 @@ export const CashCheckJournalEntryTable = ({
         const newRow: ICashCheckVoucherEntryRequest = {
             account_id: '',
             description: '',
-            employee_user_id: defaultMemberProfileId,
             debit: 0,
             credit: 0,
             rowId: crypto.randomUUID(),
+            member_profile_id: defaultMemberProfile?.id,
+            member_profile: defaultMemberProfile,
         }
-        setCashCheckEntries([...selectedCashCheckVoucherEntry, newRow])
+        setSelectedCashCheckVoucherEntry([
+            ...selectedCashCheckVoucherEntry,
+            newRow,
+        ])
     }
 
     useHotkeys(
