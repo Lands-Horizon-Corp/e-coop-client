@@ -2,6 +2,7 @@ import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { useRouter } from '@tanstack/react-router'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import SidePanelPoster from '@/modules/home/components/side-panel-poster'
 import AccountSettingsSidebar from '@/modules/user-profile/components/account-settings-sidebar'
 import VerifyNotice from '@/modules/user-profile/components/verify-notice'
 
@@ -79,14 +80,7 @@ function RouteComponent() {
                             <AuthFooter />
                         </div>
                     </div>
-                    <div className="hidden h-screen sm:block sm:w-1/3">
-                        <div
-                            className="size-full rounded-l-3xl bg-cover shadow-lg dark:shadow-none"
-                            style={{
-                                backgroundImage: "url('/auth-bg.webp')",
-                            }}
-                        />
-                    </div>
+                    <SidePanelPoster />
                 </main>
             </div>
         </AuthGuard>

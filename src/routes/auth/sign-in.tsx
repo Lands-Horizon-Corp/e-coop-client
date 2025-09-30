@@ -45,6 +45,7 @@ function SignInPage() {
     return (
         <GuestGuard>
             <div className="flex min-h-full w-full flex-col items-center justify-center">
+                <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
                 <AuthPageWrapper>
                     {authStatus !== 'authorized' && (
                         <SignInForm

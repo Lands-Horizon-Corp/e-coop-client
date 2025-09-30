@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
+import RandomDots from '@/components/backgrounds/random-dots'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     ArrowChevronRight,
@@ -21,13 +21,8 @@ const HeroHome = () => {
     return (
         <section className=" min-h-screen overflow-hidden">
             {/* Background gradients */}
-            <FlickeringGrid
-                gridGap={1}
-                squareSize={64}
-                maxOpacity={0.5}
-                flickerChance={0.05}
-                className="absolute inset-0 h-screen -top-5 w-full -z-10 opacity-50 mask-r-from-30% mask-b-to-50% dark:opacity-80"
-            />
+            <RandomDots count={50} />
+
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
 
             <div className="relative mx-auto max-w-7xl px-4 pt-20 sm:px-6 lg:px-8">
