@@ -19,6 +19,7 @@ import {
 import { IClassProps, TEntityId } from '@/types'
 
 import {
+    IComputationSheetCalculator,
     IComputationSheetCalculatorDeduction,
     useCalculateSchemeAmortization,
 } from '..'
@@ -26,21 +27,29 @@ import { TMockCloanInputSchema } from '../../calculator'
 
 interface ComputationSheetCalculatorProps extends IClassProps {
     computationSheetId?: TEntityId
+    defaultResult?: IComputationSheetCalculator
     defaultInput?: Partial<TMockCloanInputSchema>
     onSubmitData?: (data: TMockCloanInputSchema) => void
+    onCalculatorResult?: (data: IComputationSheetCalculator) => void
 }
 
 const ComputationSheetCalculator = ({
     className,
     defaultInput,
+    defaultResult,
     computationSheetId,
     onSubmitData,
+    onCalculatorResult,
 }: ComputationSheetCalculatorProps) => {
     const {
-        data: schemeCalculatorResponse,
+        data: schemeCalculatorResponse = defaultResult,
         mutateAsync,
         isPending,
-    } = useCalculateSchemeAmortization()
+    } = useCalculateSchemeAmortization({
+        options: {
+            onSuccess: onCalculatorResult,
+        },
+    })
 
     const handleCompute = async (data: TMockCloanInputSchema) => {
         onSubmitData?.(data)
