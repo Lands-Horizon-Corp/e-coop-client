@@ -34,6 +34,7 @@ export interface IModalProps
     title?: string | ReactNode
     description?: string | ReactNode
     footer?: React.ReactNode
+    hideOnSuccess?: boolean
 }
 
 const Modal = ({

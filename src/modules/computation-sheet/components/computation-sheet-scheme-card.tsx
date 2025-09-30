@@ -1,12 +1,25 @@
+import { useState } from 'react'
+
+import { TMockCloanInputSchema } from '@/modules/calculator'
+
 import YesNoBadge from '@/components/badges/yes-no-badge'
-import { BookOpenIcon, PencilFillIcon } from '@/components/icons'
+import { BookOpenIcon, CalculatorIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from '@/components/ui/sheet'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IComputationSheet } from '../computation-sheet.types'
+import ComputationSheetCalculator from './computation-sheet-calculator'
 import { ComputationSheetCreateUpdateFormModal } from './forms/computation-sheet-create-update-form'
 
 type Props = {
@@ -15,39 +28,70 @@ type Props = {
 
 const ComputationSheetSchemeCard = ({ computationSheet }: Props) => {
     const editModal = useModalState()
+    const calculatorModal = useModalState()
+    const [recentCalcData, setRecentCalcData] = useState<
+        TMockCloanInputSchema | undefined
+    >()
 
     return (
         <div className="w-full relative bg-card rounded-xl p-4 hover:shadow-md transition-shadow">
             <ComputationSheetCreateUpdateFormModal
                 {...editModal}
+                hideOnSuccess={false}
                 formProps={{
                     computationSheetId: computationSheet?.id,
                     defaultValues: computationSheet,
                 }}
             />
-            {computationSheet?.id && (
-                <Button
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => editModal.onOpenChange(true)}
-                    className="absolute size-fit p-2 rounded-xl text-muted-foreground/70 hober:text-foreground top-1 right-2"
-                >
-                    <PencilFillIcon />
-                </Button>
-            )}
+
             <div className="shrink-none space-y-2">
                 <div className="flex items-start justify-between">
                     <CardTitle className="text-lg font-semibold truncate pr-2 relative">
                         <BookOpenIcon className="text-muted-foreground inline mr-2" />
-                        <span className="text-sm mr-1 font-normal text-muted-foreground/70">
-                            Scheme Title :
-                        </span>
-                        {computationSheet?.name ?? (
-                            <span className="text-muted-foreground/70">
-                                ...
+                        {computationSheet?.name ? (
+                            <span>{computationSheet.name}</span>
+                        ) : (
+                            <span className="text-muted-foreground">
+                                No scheme name
                             </span>
                         )}
                     </CardTitle>
+
+                    <div className="space-x-2">
+                        <Sheet {...calculatorModal}>
+                            <SheetTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    className="rounded-xl"
+                                >
+                                    <CalculatorIcon /> Try in Calculator
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent className="!max-w-none w-fit rounded-2xl">
+                                <SheetHeader>
+                                    <SheetTitle>Scheme Calculator</SheetTitle>
+                                    <SheetDescription>
+                                        Test and compute loan computations based
+                                        on this scheme.
+                                    </SheetDescription>
+                                </SheetHeader>
+                                <ComputationSheetCalculator
+                                    defaultInput={recentCalcData}
+                                    onSubmitData={setRecentCalcData}
+                                    computationSheetId={computationSheet?.id}
+                                />
+                            </SheetContent>
+                        </Sheet>
+                        {computationSheet?.id && (
+                            <Button
+                                variant="outline"
+                                onClick={() => editModal.onOpenChange(true)}
+                                className="size-fit p-2 rounded-xl text-muted-foreground/70 hober:text-foreground"
+                            >
+                                Edit
+                            </Button>
+                        )}
+                    </div>
                 </div>
                 <p className="text-sm text-muted-foreground/70 line-clamp-2">
                     {computationSheet?.description &&

@@ -145,8 +145,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                 <span className="[[data-side=left][data-state=collapsed]_&]:hidden">
                                     {navGroupItem.title}
                                 </span>
-                                <Separator className="[[data-side=left][data-state=expanded]_&]:hidden w-full" />
                             </SidebarGroupLabel>
+                            <Separator className="[[data-side=left][data-state=expanded]_&]:hidden ml-1" />
                             <SidebarGroupContent>
                                 <SidebarMenu>
                                     {navGroupItem.navItems

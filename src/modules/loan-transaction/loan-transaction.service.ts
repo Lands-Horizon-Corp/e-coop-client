@@ -11,8 +11,8 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { IAmortizationSchedule } from '../amortization'
 import type {
-    IAmortizationSchedule,
     ILoanTransaction,
     ILoanTransactionPaginated,
     ILoanTransactionPrintRequest,

@@ -22,7 +22,7 @@ import {
     WEEKDAYS,
 } from './loan.constants'
 
-export const WithWeekdays = z.discriminatedUnion(
+export const WithModeOfPayment = z.discriminatedUnion(
     'mode_of_payment',
     [
         z.object({
@@ -316,7 +316,7 @@ export const LoanTransactionSchema = z
         paid_by_name: z.string().optional(),
         paid_by_position: z.string().optional(),
     })
-    .and(WithWeekdays)
+    .and(WithModeOfPayment)
     .and(WithComaker)
 
 export type TLoanTransactionSchema = z.infer<typeof LoanTransactionSchema>

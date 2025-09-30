@@ -14,7 +14,6 @@ import NumberFilter from '@/components/data-table/data-table-filters/number-filt
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
-import TextRenderer from '@/components/text-renderer'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { IAutomaticLoanDeduction } from '../../automatic-loan-deduction.types'
@@ -65,42 +64,6 @@ const AutomaticLoanDeductionColumns = (
         enableResizing: false,
         enableHiding: false,
         size: 80,
-    },
-    {
-        id: 'name',
-        accessorKey: 'name',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Name">
-                <ColumnActions {...props}>
-                    <TextFilter<IAutomaticLoanDeduction>
-                        displayText="Name"
-                        field="name"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({ row }) => <div>{row.original.name}</div>,
-        size: 200,
-    },
-    {
-        id: 'description',
-        accessorKey: 'description',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Description">
-                <ColumnActions {...props}>
-                    <TextFilter<IAutomaticLoanDeduction>
-                        displayText="Description"
-                        field="description"
-                    />
-                </ColumnActions>
-            </DataTableColumnHeader>
-        ),
-        cell: ({ row }) => (
-            <p className="text-muted-foreground">
-                <TextRenderer content={row.original.description} />
-            </p>
-        ),
-        size: 300,
     },
     {
         id: 'account',
