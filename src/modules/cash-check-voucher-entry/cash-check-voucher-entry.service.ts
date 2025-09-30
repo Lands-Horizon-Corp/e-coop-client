@@ -1,8 +1,15 @@
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import type { ICashCheckVoucherEntry, ICashCheckVoucherEntryRequest } from '../cash-check-voucher-entry'
+import type {
+    ICashCheckVoucherEntry,
+    ICashCheckVoucherEntryRequest,
+} from '../cash-check-voucher-entry'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey : cashCheckVoucherEntryBaseKey } = createDataLayerFactory<
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: cashCheckVoucherEntryBaseKey,
+} = createDataLayerFactory<
     ICashCheckVoucherEntry,
     ICashCheckVoucherEntryRequest
 >({

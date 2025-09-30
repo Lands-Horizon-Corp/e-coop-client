@@ -16,7 +16,6 @@ export const cashCheckVoucherGlobalSearchTargets: IGlobalSearchTargets<ICashChec
     [
         { field: 'cash_voucher_number', displayText: 'Cash Voucher Number' },
         { field: 'description', displayText: 'Description' },
-        { field: 'reference', displayText: 'Reference' },
         { field: 'status', displayText: 'Status' },
     ]
 
@@ -137,7 +136,7 @@ const CashCheckVoucherTableColumns = (
         cell: ({ row: { original: journalVoucher } }) => {
             const status = journalVoucher.status
 
-            return <CashCheckVoucherStatusBadge status={status} />
+            return status && <CashCheckVoucherStatusBadge status={status} />
         },
         enableMultiSort: true,
         enableSorting: true,
@@ -156,7 +155,9 @@ const CashCheckVoucherTableColumns = (
             row: {
                 original: { total_debit },
             },
-        }) => <div className="!text-wrap">{total_debit.toFixed(2)}</div>,
+        }) => (
+            <div className="!text-wrap">{total_debit?.toFixed(2) ?? '-'}</div>
+        ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -174,7 +175,9 @@ const CashCheckVoucherTableColumns = (
             row: {
                 original: { total_credit },
             },
-        }) => <div className="!text-wrap">{total_credit.toFixed(2)}</div>,
+        }) => (
+            <div className="!text-wrap">{total_credit?.toFixed(2) ?? '-'}</div>
+        ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,

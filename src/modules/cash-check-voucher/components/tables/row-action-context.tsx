@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
-import JournalVoucherCreateUpdateFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-update-modal'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -60,16 +59,16 @@ const useCashCheckVoucherActions = ({
     }
 }
 
-interface ICashCheckVoucherTableActionProps
+interface ICashCheckVoucherRowContextProps
     extends ICashCheckVoucherTableActionComponentProp {
-    onCashCheckJournalVoucherUpdate?: () => void
+    children?: ReactNode
     onDeleteSuccess?: () => void
 }
 
 export const CashCheckJournalVoucherAction = ({
     row,
     onDeleteSuccess,
-}: ICashCheckVoucherTableActionProps) => {
+}: ICashCheckVoucherRowContextProps) => {
     const {
         cashCheckVoucher,
         updateModal,
@@ -81,7 +80,7 @@ export const CashCheckJournalVoucherAction = ({
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                <JournalVoucherCreateUpdateFormModal
+                <CashCheckVoucherCreateUpdateFormModal
                     {...updateModal}
                     className="!min-w-[1200px]"
                     formProps={{
@@ -107,12 +106,6 @@ export const CashCheckJournalVoucherAction = ({
             />
         </>
     )
-}
-
-interface ICashCheckVoucherRowContextProps
-    extends ICashCheckVoucherTableActionComponentProp {
-    children?: ReactNode
-    onDeleteSuccess?: () => void
 }
 
 export const CashCheckVoucherRowContext = ({

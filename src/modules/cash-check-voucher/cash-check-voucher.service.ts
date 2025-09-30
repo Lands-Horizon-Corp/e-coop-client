@@ -19,7 +19,7 @@ import type {
     TCashCheckVoucherActionMode,
     TCashCheckVoucherPrintMode,
 } from '../cash-check-voucher'
-import { IJournalVoucher, getPaginatedJournalVoucher } from '../journal-voucher'
+import { getPaginatedJournalVoucher } from '../journal-voucher'
 
 const {
     apiCrudHooks,

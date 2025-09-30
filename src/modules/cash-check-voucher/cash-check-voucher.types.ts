@@ -1,7 +1,10 @@
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { ICashCheckVoucherEntry, ICashCheckVoucherEntryRequest } from '../cash-check-voucher-entry'
+import {
+    ICashCheckVoucherEntry,
+    ICashCheckVoucherEntryRequest,
+} from '../cash-check-voucher-entry'
 import { ICashCheckVoucherTag } from '../cash-check-voucher-tag'
 import { IMedia } from '../media'
 import { IMemberProfile } from '../member-profile'
@@ -21,6 +24,8 @@ export enum ECashCheckVoucherStatus {
     Approved = 'approved',
     Released = 'released',
 }
+export const CheckVoucherStatusValues: ECashCheckVoucherStatus[] =
+    Object.values(ECashCheckVoucherStatus)
 
 export interface ICashCheckVoucher extends IBaseEntityMeta {
     member_profile_id?: string
@@ -41,18 +46,18 @@ export interface ICashCheckVoucher extends IBaseEntityMeta {
     released_by_user_id?: string
     released_by_user?: IUser
 
-    pay_to: string
+    pay_to?: string
 
-    status: CashCheckVoucherStatus
-    description: string
-    cash_voucher_number: string
-    total_debit: number
-    total_credit: number
-    print_count: number
+    status?: CashCheckVoucherStatus
+    description?: string
+    cash_voucher_number?: string
+    total_debit?: number
+    total_credit?: number
+    print_count?: number
     printed_date?: string
     approved_date?: string
     released_date?: string
-    date?: string
+    date: string
 
     //signatories
     approved_by_signature_media_id?: string
@@ -108,6 +113,7 @@ export interface ICashCheckVoucher extends IBaseEntityMeta {
 
     cash_check_voucher_tags?: ICashCheckVoucherTag[]
     cash_check_voucher_entries?: ICashCheckVoucherEntry[]
+    reference?: string
 }
 
 export interface ICashCheckVoucherRequest {
@@ -118,15 +124,15 @@ export interface ICashCheckVoucherRequest {
     approved_by_user_id?: string
     released_by_user_id?: string
 
-    pay_to: string
-    status: CashCheckVoucherStatus
+    pay_to?: string
+    status?: CashCheckVoucherStatus
     description?: string
-    cash_voucher_number: string
+    cash_voucher_number?: string
     total_debit?: number
     total_credit?: number
     print_count?: number
 
-    date?: string // ADDED
+    // date?: string // ADDED
     printed_date?: string
     approved_date?: string
     released_date?: string
@@ -171,10 +177,10 @@ export interface ICashCheckVoucherRequest {
     // Check Entry Fields
     check_entry_amount?: number
     check_entry_check_number?: string
-    check_entry_check_date?: string 
+    check_entry_check_date?: string
     check_entry_account_id?: string
 
-    cash_check_voucher_entries?: ICashCheckVoucherEntryRequest[] 
+    cash_check_voucher_entries?: ICashCheckVoucherEntryRequest[]
     cash_check_voucher_entries_deleted?: TEntityId[]
 }
 export type TCashCheckVoucherStatus = 'draft' | 'posted' | 'cancelled'
