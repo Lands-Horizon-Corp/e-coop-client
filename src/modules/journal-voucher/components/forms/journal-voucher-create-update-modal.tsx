@@ -89,6 +89,12 @@ type TValidateJournalEntryProps = {
 const ValidateJournalEntry = ({
     data,
 }: TValidateJournalEntryProps): TValidateResult => {
+    if (data.length === 0) {
+        return {
+            isValid: true,
+            validatedEntries: [],
+        }
+    }
     const transformedEntries = data.map((entry) => {
         const memberProfile = entry.member_profile as
             | IMemberProfile
