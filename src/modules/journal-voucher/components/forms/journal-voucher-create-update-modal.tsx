@@ -27,6 +27,7 @@ import {
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { TransactionAmountField } from '@/modules/transaction'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useJournalVoucherStore } from '@/store/journal-voucher-store'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -89,12 +90,6 @@ type TValidateJournalEntryProps = {
 const ValidateJournalEntry = ({
     data,
 }: TValidateJournalEntryProps): TValidateResult => {
-    if (data.length === 0) {
-        return {
-            isValid: true,
-            validatedEntries: [],
-        }
-    }
     const transformedEntries = data.map((entry) => {
         const memberProfile = entry.member_profile as
             | IMemberProfile
@@ -147,6 +142,8 @@ const JournalVoucherCreateUpdateForm = ({
     ...formProps
 }: IJournalVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
+
+    const { data } = useTransactionBatchStore()
 
     const [journalEntryError, setJournalEntryError] = useState<string>('')
 
@@ -530,6 +527,7 @@ const JournalVoucherCreateUpdateForm = ({
                             journalVoucherId={journalVoucherId ?? ''}
                             isUpdateMode={isUpdate}
                             rowData={JournalEntries}
+                            transactionBatchId={data?.id}
                             defaultMemberProfile={defaultMemberProfile}
                         />
                     )}

@@ -28,16 +28,20 @@ export interface IJournalVoucherEntry extends IBaseEntityMeta {
 export interface IJournalVoucherEntryRequest {
     id?: TEntityId
     cash_check_voucher_number?: string
-    rowId?: string
 
+    transaction_batch_id?: TEntityId
     employee_user_id?: TEntityId
+
     account?: IAccount
     account_id?: TEntityId
+
     member_profile?: IMemberProfile
     member_profile_id?: TEntityId
 
     debit: number
     credit: number
+
+    rowId?: string
 }
 
 export interface IJournalVoucherEntryPaginated

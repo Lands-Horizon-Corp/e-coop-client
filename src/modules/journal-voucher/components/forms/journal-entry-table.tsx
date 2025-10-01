@@ -129,6 +129,7 @@ type JournalEntryTableProps = {
     rowData?: IJournalVoucherEntryRequest[]
     className?: string
     TableClassName?: string
+    transactionBatchId?: TEntityId
 }
 export const JournalEntryTable = ({
     isUpdateMode = false,
@@ -136,6 +137,7 @@ export const JournalEntryTable = ({
     className,
     TableClassName,
     defaultMemberProfile,
+    transactionBatchId,
 }: JournalEntryTableProps) => {
     const [journalVoucherEntry, setJournalVoucherEntry] = useState<
         IJournalVoucherEntryRequest[]
@@ -210,6 +212,7 @@ export const JournalEntryTable = ({
             cash_check_voucher_number: '',
             member_profile_id: defaultMemberProfile?.id,
             member_profile: defaultMemberProfile,
+            transaction_batch_id: transactionBatchId ?? undefined,
         }
         setJournalVoucherEntry([...journalVoucherEntry, newRow])
     }

@@ -26,6 +26,7 @@ import {
 import CompanyCombobox from '@/modules/company/components/combobox'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
+import { TransactionAmountField } from '@/modules/transaction'
 import { useCashCheckVoucherStore } from '@/store/cash-check-voucher-store'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -518,6 +519,23 @@ const CashCheckVoucherCreateUpdateForm = ({
                         />
                     )}
                 </fieldset>
+                <div className="w-full flex justify-end gap-4">
+                    <div className="max-w-[130px] flex-col flex justify-end">
+                        <TransactionAmountField
+                            value={defaultValues?.total_debit || 0}
+                            readOnly
+                            className="text-primary font-bold text-left [&_.input]:text-right [&_.input]:font-bold"
+                            isDefault
+                        />
+                    </div>
+                    <div className="max-w-[130px]">
+                        <TransactionAmountField
+                            className="text-primary font-bold [&_.input]:text-right [&_.input]:font-bold"
+                            value={defaultValues?.total_credit || 0}
+                            isDefault
+                        />
+                    </div>
+                </div>
                 <FormFooterResetSubmit
                     error={error}
                     readOnly={formProps.readOnly}
