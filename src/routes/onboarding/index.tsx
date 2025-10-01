@@ -56,7 +56,7 @@ function RouteComponent() {
             <div className="flex min-h-full w-full flex-col items-center justify-center gap-y-2">
                 <ImageMatch
                     src={LOADING_ARTWORK_GIF}
-                    className="block size-52 animate-pulse rounded-none !bg-transparent"
+                    className="block size-52 rounded-none !bg-transparent"
                     alt={'loading-gif'}
                 />
 
