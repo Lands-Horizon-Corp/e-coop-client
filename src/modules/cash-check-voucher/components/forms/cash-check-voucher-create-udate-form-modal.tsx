@@ -153,8 +153,11 @@ const CashCheckVoucherCreateUpdateForm = ({
     const isUpdate = !!editCashCheckVoucherId
 
     const { setSelectedMember } = useMemberPickerStore()
-    const { selectedCashCheckVoucherEntry, setSelectedCashCheckVoucherEntry } =
-        useCashCheckVoucherStore()
+    const {
+        selectedCashCheckVoucherEntry,
+        setSelectedCashCheckVoucherEntry,
+        cashCheckVoucherEntriesDeleted,
+    } = useCashCheckVoucherStore()
 
     const form = useForm<TCashCheckVoucherFormValues>({
         resolver: standardSchemaResolver(CashCheckVoucherSchema),
@@ -177,8 +180,6 @@ const CashCheckVoucherCreateUpdateForm = ({
                     formProps.onSuccess?.(data)
                     setEditCashCheckVoucherId(data.id)
                     setSelectedCashCheckVoucherEntry([])
-
-                    // setDefaultMember(defaultValues?.member_profile)
                 },
                 onError: formProps.onError,
             }),
@@ -231,6 +232,8 @@ const CashCheckVoucherCreateUpdateForm = ({
                         ...payload,
                         cash_check_voucher_entries:
                             validateResult.validatedEntries,
+                        cash_check_voucher_entries_deleted:
+                            cashCheckVoucherEntriesDeleted,
                     },
                 })
             } else {
