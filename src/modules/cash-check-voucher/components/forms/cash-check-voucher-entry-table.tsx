@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { cn } from '@/helpers'
 import { ICashCheckVoucherEntryRequest } from '@/modules/cash-check-voucher-entry'
@@ -116,72 +116,69 @@ export const CashCheckJournalEntryTable = ({
     className,
     TableClassName,
 }: CashCheckJournalEntryTableProps) => {
+    console.log({ rowData })
+    const [cashCheckVoucherEntry, setCashCheckVoucherEntry] = useState<
+        ICashCheckVoucherEntryRequest[]
+    >(() => {
+        // This function runs only once on initial render
+        if (rowData && rowData.length > 0 && isUpdateMode) {
+            return rowData
+        }
+        return []
+    })
     const {
-        selectedCashCheckVoucherEntry,
-        setSelectedCashCheckVoucherEntry,
         setCashCheckVoucherEntriesDeleted,
+        setSelectedCashCheckVoucherEntry,
     } = useCashCheckVoucherStore()
 
     useEffect(() => {
-        if (
-            rowData &&
-            rowData.length > 0 &&
-            selectedCashCheckVoucherEntry.length === 0
-        ) {
-            setSelectedCashCheckVoucherEntry(rowData)
+        if (isUpdateMode) {
+            setSelectedCashCheckVoucherEntry(cashCheckVoucherEntry)
         }
-        return () => {
-            if (selectedCashCheckVoucherEntry.length > 0) {
-                setSelectedCashCheckVoucherEntry([])
-            }
-        }
-    }, [
-        rowData,
-        setSelectedCashCheckVoucherEntry,
-        selectedCashCheckVoucherEntry.length,
-    ])
+    }, [isUpdateMode, cashCheckVoucherEntry, setSelectedCashCheckVoucherEntry])
 
     const handleDeleteRow = (row: Row<ICashCheckVoucherEntryRequest>) => {
         const id = row.original.id
         const rowId = row.original.rowId
+        console.log({ id, rowId })
         if (isUpdateMode) {
             const validation = entityIdSchema.safeParse(id)
             if (validation.success) {
                 setCashCheckVoucherEntriesDeleted(id as TEntityId)
-                const updatedData = selectedCashCheckVoucherEntry.filter(
+                const updatedData = cashCheckVoucherEntry.filter(
                     (data) => data.id !== id
                 )
-                setSelectedCashCheckVoucherEntry(updatedData)
+                setCashCheckVoucherEntry(updatedData)
             } else {
-                const updatedData = selectedCashCheckVoucherEntry.filter(
+                const updatedData = cashCheckVoucherEntry.filter(
                     (data) => data.rowId !== rowId
                 )
-                setSelectedCashCheckVoucherEntry(updatedData)
+                setCashCheckVoucherEntry(updatedData)
             }
         }
     }
 
     const table = useReactTable({
-        data: selectedCashCheckVoucherEntry,
+        data: cashCheckVoucherEntry,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
             updateData: (rowIndex, columnId, value) => {
-                const updatedEntries = (
-                    selectedCashCheckVoucherEntry ?? []
-                ).map((entry, index) => {
-                    if (index === rowIndex) {
-                        const updatedEntry = { ...entry, [columnId]: value }
-                        if (columnId === 'debit') {
-                            updatedEntry.credit = 0
-                        } else if (columnId === 'credit') {
-                            updatedEntry.debit = 0
+                const updatedEntries = (cashCheckVoucherEntry ?? []).map(
+                    (entry, index) => {
+                        if (index === rowIndex) {
+                            const updatedEntry = { ...entry, [columnId]: value }
+                            if (columnId === 'debit') {
+                                updatedEntry.credit = 0
+                            } else if (columnId === 'credit') {
+                                updatedEntry.debit = 0
+                            }
+                            return updatedEntry
                         }
-                        return updatedEntry
+                        return entry
                     }
-                    return entry
-                })
-                setSelectedCashCheckVoucherEntry(updatedEntries)
+                )
+                setCashCheckVoucherEntry(updatedEntries)
             },
             handleDeleteRow: handleDeleteRow,
         },
@@ -199,10 +196,7 @@ export const CashCheckJournalEntryTable = ({
             member_profile_id: defaultMemberProfile?.id,
             member_profile: defaultMemberProfile,
         }
-        setSelectedCashCheckVoucherEntry([
-            ...selectedCashCheckVoucherEntry,
-            newRow,
-        ])
+        setCashCheckVoucherEntry([...cashCheckVoucherEntry, newRow])
     }
 
     useHotkeys(
@@ -213,7 +207,7 @@ export const CashCheckJournalEntryTable = ({
                 e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
             )
         },
-        [selectedCashCheckVoucherEntry]
+        [cashCheckVoucherEntry]
     )
 
     return (

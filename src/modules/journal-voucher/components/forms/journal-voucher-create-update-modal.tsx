@@ -183,6 +183,7 @@ const JournalVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
                     setEditJournalId(data.id)
+                    setSelectedJournalVoucherEntry([])
                 },
                 onError: formProps.onError,
             }),

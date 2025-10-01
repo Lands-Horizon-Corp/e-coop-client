@@ -87,6 +87,13 @@ type TValidateResult =
 const ValidateCashCheckEntry = ({
     data,
 }: TValidateResultCashCheckVoucher): TValidateResult => {
+    if (data.length === 0) {
+        return {
+            isValid: true,
+            validatedEntries: [],
+        }
+    }
+
     const transformedEntries = data.map((entry) => {
         const memberProfile = entry.member_profile as IMemberProfile
         const account = entry.account as IAccount
@@ -146,7 +153,8 @@ const CashCheckVoucherCreateUpdateForm = ({
     const isUpdate = !!editCashCheckVoucherId
 
     const { setSelectedMember } = useMemberPickerStore()
-    const { selectedCashCheckVoucherEntry } = useCashCheckVoucherStore()
+    const { selectedCashCheckVoucherEntry, setSelectedCashCheckVoucherEntry } =
+        useCashCheckVoucherStore()
 
     const form = useForm<TCashCheckVoucherFormValues>({
         resolver: standardSchemaResolver(CashCheckVoucherSchema),
@@ -168,6 +176,8 @@ const CashCheckVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
                     setEditCashCheckVoucherId(data.id)
+                    setSelectedCashCheckVoucherEntry([])
+
                     // setDefaultMember(defaultValues?.member_profile)
                 },
                 onError: formProps.onError,
@@ -213,6 +223,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         const validateResult = ValidateCashCheckEntry({
             data: selectedCashCheckVoucherEntry,
         })
+        console.log(selectedCashCheckVoucherEntry)
         if (isUpdate) {
             if (validateResult.isValid) {
                 updateCashCheckVoucher({
