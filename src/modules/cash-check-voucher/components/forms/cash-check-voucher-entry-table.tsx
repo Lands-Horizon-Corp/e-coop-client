@@ -130,6 +130,11 @@ export const CashCheckJournalEntryTable = ({
         ) {
             setSelectedCashCheckVoucherEntry(rowData)
         }
+        return () => {
+            if (selectedCashCheckVoucherEntry.length > 0) {
+                setSelectedCashCheckVoucherEntry([])
+            }
+        }
     }, [
         rowData,
         setSelectedCashCheckVoucherEntry,

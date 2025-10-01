@@ -144,9 +144,9 @@ const JournalVoucherCreateUpdateForm = ({
 
     const [journalEntryError, setJournalEntryError] = useState<string>('')
 
-    const [defaultMemberId, setDefaultMemberId] = useState<
-        TEntityId | undefined
-    >(defaultValues?.member_profile?.id)
+    const [defaultMemberProfile, setDefaultMemberProfile] = useState<
+        IMemberProfile | undefined
+    >(defaultValues?.member_profile)
 
     const [editJournalId, setEditJournalId] = useState<TEntityId>(
         journalVoucherId ?? ''
@@ -183,7 +183,6 @@ const JournalVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
                     setEditJournalId(data.id)
-                    setDefaultMemberId(data.member_profile?.id)
                 },
                 onError: formProps.onError,
             }),
@@ -249,9 +248,11 @@ const JournalVoucherCreateUpdateForm = ({
                         journalVoucherEntriesDeleted,
                 },
             })
-            setJournalEntryError('')
         } else if (!validateResult.isValid) {
-            setJournalEntryError(validateResult.error)
+            form.setError('root', {
+                type: 'custom',
+                message: validateResult.error,
+            })
         } else {
             createJournalVoucher(payload)
         }
@@ -259,7 +260,10 @@ const JournalVoucherCreateUpdateForm = ({
 
     const isPending = isCreating || isUpdating
     const rawError = isUpdate ? updateError : createError
-    const error = serverRequestErrExtractor({ error: rawError })
+    const error =
+        serverRequestErrExtractor({ error: rawError }) ||
+        form.formState.errors?.root?.message
+
     const JournalEntries =
         defaultValues?.journal_voucher_entries?.map((entry) => ({
             id: entry.id,
@@ -377,6 +381,9 @@ const JournalVoucherCreateUpdateForm = ({
                                                             form.setValue(
                                                                 'company_id',
                                                                 undefined
+                                                            )
+                                                            setDefaultMemberProfile(
+                                                                selectedMember
                                                             )
                                                         }}
                                                         placeholder="Relative Member Profile"
@@ -516,7 +523,7 @@ const JournalVoucherCreateUpdateForm = ({
                             journalVoucherId={journalVoucherId ?? ''}
                             isUpdateMode={isUpdate}
                             rowData={JournalEntries}
-                            defaultMemberProfileId={defaultMemberId}
+                            defaultMemberProfile={defaultMemberProfile}
                         />
                     )}
                 </fieldset>
