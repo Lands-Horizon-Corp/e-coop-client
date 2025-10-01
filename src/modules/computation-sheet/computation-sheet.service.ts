@@ -8,6 +8,8 @@ import { TEntityId } from '@/types'
 
 import type {
     IComputationSheet,
+    IComputationSheetCalculator,
+    IComputationSheetCalculatorRequest,
     IComputationSheetRequest,
 } from '../computation-sheet'
 
@@ -64,5 +66,20 @@ export const useUpdateComputationSheetById = createMutationFactory<
     defaultInvalidates: [[computationSheetBaseKey, 'all']],
     invalidationFn: (args) => {
         updateMutationInvalidationFn(computationSheetBaseKey, args)
+    },
+})
+
+// Use for scheme calculator
+export const useCalculateSchemeAmortization = createMutationFactory<
+    IComputationSheetCalculator,
+    Error,
+    { id: TEntityId; data: IComputationSheetCalculatorRequest }
+>({
+    mutationFn: async ({ id, data }) => {
+        const response = await API.post<
+            IComputationSheetCalculatorRequest,
+            IComputationSheetCalculator
+        >(`${computationSheetAPIRoute}/${id}/calculator`, data)
+        return response.data
     },
 })

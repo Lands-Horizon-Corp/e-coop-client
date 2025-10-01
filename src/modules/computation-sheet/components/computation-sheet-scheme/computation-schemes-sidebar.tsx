@@ -15,7 +15,16 @@ import {
     TrashIcon,
 } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Button } from '@/components/ui/button'
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuLabel,
+    ContextMenuSeparator,
+    ContextMenuTrigger,
+} from '@/components/ui/context-menu'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -171,68 +180,108 @@ const LoanComputationSheet = ({
         })
 
     return (
-        <div
-            key={scheme.id}
-            onClick={() => handleSelect(scheme)}
-            className={cn(
-                'p-2 rounded-lg bg-card border relative space-y-2 duration-200 ease-in-out cursor-pointer hover:border-primary/40 hover:bg-primary/20',
-                selected && 'border-primary/60 bg-primary/10'
-            )}
-        >
-            <p>{scheme.name}</p>
-            <p className="text-xs text-muted-foreground/80">
-                {scheme.description}
-            </p>
-
-            <ComputationSheetCreateUpdateFormModal
-                {...editModal}
-                formProps={{
-                    computationSheetId: scheme?.id,
-                    defaultValues: scheme,
-                }}
-            />
-
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        className="absolute opacity-40 hover:opacity-100 top-0.5 right-1 size-fit p-1 rounded-full"
+        <ContextMenu>
+            <ContextMenuTrigger asChild>
+                <InfoTooltip
+                    side="right"
+                    content={
+                        <p className="text-pretty text-xs max-w-[400px]">
+                            {scheme.description || 'No description available'}
+                        </p>
+                    }
+                >
+                    <div
+                        key={scheme.id}
+                        onClick={() => handleSelect(scheme)}
+                        tabIndex={0}
+                        className={cn(
+                            'p-2 rounded-lg bg-card border flex focus:bg-primary focus:outline-none focus:ring focus:ring-ring focus:text-primary-foreground justify-between relative duration-200 ease-in-out cursor-pointer hover:border-primary/40 hover:bg-primary/20',
+                            selected &&
+                                'border-primary/60 text-primary-foreground bg-primary/80'
+                        )}
                     >
-                        <DotsVerticalIcon />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="space-y-1">
-                    <DropdownMenuLabel className="text-muted-foreground/80">
-                        Action
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                        onClick={() => editModal.onOpenChange(true)}
-                    >
-                        <PencilFillIcon className="opacity-60 mr-1" />
-                        Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        disabled={isDeleting}
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            e.preventDefault()
+                        <ComputationSheetCreateUpdateFormModal
+                            {...editModal}
+                            hideOnSuccess={false}
+                            formProps={{
+                                computationSheetId: scheme?.id,
+                                defaultValues: scheme,
+                            }}
+                        />
+                        <p>{scheme.name}</p>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="opacity-40 hover:opacity-100 size-fit p-1 rounded-full"
+                                >
+                                    <DotsVerticalIcon />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="space-y-1">
+                                <DropdownMenuLabel className="text-muted-foreground/80">
+                                    Action
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() => editModal.onOpenChange(true)}
+                                >
+                                    <PencilFillIcon className="opacity-60 mr-1" />
+                                    Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    disabled={isDeleting}
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        e.preventDefault()
 
-                            onOpen({
-                                title: 'Delete loan computation sheet cheme',
-                                description: `You are about to delete '${scheme.name}'. Are you sure to proceed?`,
-                                confirmString: 'Delete',
-                                onConfirm: () => deleteScheme(scheme.id),
-                            })
-                        }}
-                        className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                    >
-                        <TrashIcon className="opacity-60 mr-1" />
-                        Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
+                                        onOpen({
+                                            title: 'Delete loan computation sheet cheme',
+                                            description: `You are about to delete '${scheme.name}'. Are you sure to proceed?`,
+                                            confirmString: 'Delete',
+                                            onConfirm: () =>
+                                                deleteScheme(scheme.id),
+                                        })
+                                    }}
+                                    className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                                >
+                                    <TrashIcon className="opacity-60 mr-1" />
+                                    Delete
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </InfoTooltip>
+            </ContextMenuTrigger>
+            <ContextMenuContent>
+                <ContextMenuLabel className="text-muted-foreground/80">
+                    Action
+                </ContextMenuLabel>
+                <ContextMenuSeparator />
+                <ContextMenuItem onClick={() => editModal.onOpenChange(true)}>
+                    <PencilFillIcon className="opacity-60 mr-1" />
+                    Edit
+                </ContextMenuItem>
+                <ContextMenuItem
+                    disabled={isDeleting}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        onOpen({
+                            title: 'Delete loan computation sheet cheme',
+                            description: `You are about to delete '${scheme.name}'. Are you sure to proceed?`,
+                            confirmString: 'Delete',
+                            onConfirm: () => deleteScheme(scheme.id),
+                        })
+                    }}
+                    className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                >
+                    <TrashIcon className="opacity-60 mr-1" />
+                    Delete
+                </ContextMenuItem>
+            </ContextMenuContent>
+        </ContextMenu>
     )
 }
 

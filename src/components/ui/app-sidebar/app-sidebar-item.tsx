@@ -80,7 +80,7 @@ const AppSidebarButton = React.forwardRef<
                     item.icon && (
                         <item.icon
                             className={cn(
-                                'mr-2 inline size-[18px] text-muted-foreground/80 duration-500 group-hover/navself:text-foreground',
+                                ' [[data-state=collapsed]_&]:mr-0 mr-2 inline size-[18px] text-muted-foreground/80 duration-500 group-hover/navself:text-foreground',
                                 isRouteMatched && 'text-foreground',
                                 !item?.depth && 'text-muted-foreground/40'
                             )}
@@ -92,7 +92,7 @@ const AppSidebarButton = React.forwardRef<
                 </span>
             </span>
             {item.type === 'dropdown' && (
-                <ChevronRightIcon className="transition-transform" />
+                <ChevronRightIcon className="transition-transform [[data-state=collapsed]_&]:hidden" />
             )}
         </SidebarMenuButton>
     )
@@ -153,7 +153,7 @@ const AppSidebarItem = ({ navItem }: Props) => {
                         <p className="px-4 pb-2">
                             {' '}
                             {navItem?.icon && (
-                                <navItem.icon className="inline mr-1" />
+                                <navItem.icon className="inline [[data-state=collapsed]_&]:mr-0" />
                             )}{' '}
                             {navItem.title}
                         </p>

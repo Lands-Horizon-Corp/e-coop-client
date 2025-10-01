@@ -103,6 +103,15 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
                             </FormItem>
                         )}
                     />
+                    <Link
+                        className="mt-4 text-right text-sm text-muted-foreground hover:text-foreground hover:underline"
+                        to={'/auth/forgot-password' as string}
+                        search={{
+                            key: form.getValues('key'),
+                        }}
+                    >
+                        Forgot Password
+                    </Link>
                     <FormField
                         control={form.control}
                         name="password"
@@ -132,15 +141,18 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
                     >
                         {isPending ? <LoadingSpinner /> : 'Login'}
                     </Button>
-                    <Link
-                        className="mt-4 text-sm text-muted-foreground hover:text-foreground hover:underline"
-                        to={'/auth/forgot-password' as string}
-                        search={{
-                            key: form.getValues('key'),
-                        }}
-                    >
-                        Forgot Password
-                    </Link>
+
+                    <span className="my-5">
+                        New to Ecoop?{' '}
+                        <Link
+                            className="mt-2 hover:text-foreground hover:underline"
+                            to={'/auth/sign-up' as string}
+                        >
+                            <span className="text-primary">
+                                Sign up for an account
+                            </span>
+                        </Link>
+                    </span>
                 </div>
             </form>
         </Form>

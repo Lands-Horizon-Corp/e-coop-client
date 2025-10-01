@@ -5,6 +5,7 @@ import { Outlet } from '@tanstack/react-router'
 
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { useGetAll } from '@/modules/category/category.service'
+import SidePanelPoster from '@/modules/home/components/side-panel-poster'
 import { OnboardingBack } from '@/modules/organization'
 import OrganizationCategoryPicker from '@/modules/organization/components/organization-category-picker'
 import { useCategoryStore } from '@/store/onboarding/category-store'
@@ -54,9 +55,7 @@ export const Onboarding = () => {
                         </div>
                         <AuthFooter />
                     </div>
-                    <div className="hidden h-screen sm:block sm:w-1/3">
-                        <div className="size-full rounded-l-3xl bg-cover sm:bg-[url('/auth-bg.webp')]" />
-                    </div>
+                    <SidePanelPoster />
                 </main>
             </div>
         </AuthGuard>

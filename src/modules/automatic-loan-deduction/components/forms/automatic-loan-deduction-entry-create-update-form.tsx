@@ -10,11 +10,11 @@ import { AccountPicker } from '@/modules/account'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { MoonIcon, NotAllowedIcon, PlusIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
@@ -49,7 +49,6 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
     const form = useForm<TAutomaticLoanDeductionSchema>({
         resolver: standardSchemaResolver(AutomaticLoanDeductionSchema),
         defaultValues: {
-            name: '',
             description: '',
             charges_percentage_1: 0,
             charges_percentage_2: 0,
@@ -111,41 +110,14 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
             <form
                 ref={formRef}
                 onSubmit={onSubmit}
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn('w-full max-w-full space-y-4', className)}
             >
                 <fieldset
                     disabled={isPending || formProps.readOnly}
-                    className="gap-4 grid grid-cols-1 sm:grid-cols-2"
+                    className="gap-4 grid grid-cols-1"
                 >
-                    <div className="space-y-2">
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="name"
-                            label="Name"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    placeholder="Name"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="description"
-                            label="Description"
-                            render={({ field }) => (
-                                <Textarea
-                                    {...field}
-                                    content={field.value}
-                                    placeholder="A short description"
-                                    disabled={isDisabled(field.name)}
-                                />
-                            )}
-                        />
-
-                        <div className="space-y-2 border bg-background/40 p-4 rounded-xl">
+                    <div className="space-y-4">
+                        <div className="space-y-2 ">
                             <div className="space-y-1">
                                 <p>Account & References</p>
                                 <p className="text-xs text-muted-foreground/70">
@@ -154,11 +126,11 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 </p>
                             </div>
 
-                            <div className="grid">
+                            <div className="grid grid-cols-2 gap-2">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="account_id"
-                                    label="Account DESYU"
+                                    label="Account"
                                     render={({ field }) => (
                                         <AccountPicker
                                             {...field}
@@ -202,7 +174,7 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                             </div>
                         </div>
 
-                        <div className="space-y-2 border bg-background/40 p-4 rounded-xl">
+                        <div className="space-y-2">
                             <div className="space-y-1">
                                 <p>Charges Config</p>
                                 <p className="text-xs text-muted-foreground/70">
@@ -225,6 +197,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                         />
                                     )}
                                 />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    name="charges_amount"
+                                    label="Charges Amount"
+                                    render={({ field }) => (
+                                        <Input
+                                            type="number"
+                                            {...field}
+                                            disabled={isDisabled(field.name)}
+                                        />
+                                    )}
+                                />
 
                                 <FormFieldWrapper
                                     control={form.control}
@@ -234,19 +218,6 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                         <Input
                                             type="number"
                                             placeholder="%"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
-
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="charges_amount"
-                                    label="Charges Amount"
-                                    render={({ field }) => (
-                                        <Input
-                                            type="number"
                                             {...field}
                                             disabled={isDisabled(field.name)}
                                         />
@@ -269,83 +240,93 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <div className="space-y-2 border bg-background/40 p-4 rounded-xl">
-                            <div className="space-y-1">
-                                <p>Ammount Limits</p>
-                                <p className="text-xs text-muted-foreground/70">
-                                    Set up the charge percentages and amounts
-                                    for this deduction
-                                </p>
+                        <div className="grid grid-cols-2 gap-x-4">
+                            <div className="space-y-2 border bg-popover p-4 rounded-xl">
+                                <div className="space-y-1">
+                                    <p>Ammount Limits</p>
+                                    <p className="text-xs text-muted-foreground/70">
+                                        Set up the charge percentages and
+                                        amounts for this deduction
+                                    </p>
+                                </div>
+
+                                <div className="grid gap-x-2 sm:grid-cols-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="min_amount"
+                                        label="Min Amount"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="max_amount"
+                                        label="Max Amount"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
                             </div>
 
-                            <div className="grid gap-x-2 sm:grid-cols-2">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="min_amount"
-                                    label="Min Amount"
-                                    render={({ field }) => (
-                                        <Input
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
+                            <div className="space-y-2 border bg-popover p-4 rounded-xl">
+                                <div className="space-y-1">
+                                    <p>Terms Config</p>
+                                    <p className="text-xs text-muted-foreground/70">
+                                        Configure loan term and additional
+                                        parameters
+                                    </p>
+                                </div>
 
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="max_amount"
-                                    label="Max Amount"
-                                    render={({ field }) => (
-                                        <Input
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
+                                <div className="grid gap-x-2 sm:grid-cols-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="anum"
+                                        label="Number of Months (Anum)"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        name="ct"
+                                        label="CT"
+                                        render={({ field }) => (
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="space-y-2 border bg-background/40 p-4 rounded-xl">
-                            <div className="space-y-1">
-                                <p>Terms Config</p>
-                                <p className="text-xs text-muted-foreground/70">
-                                    Configure loan term and additional
-                                    parameters
-                                </p>
-                            </div>
-
-                            <div className="grid gap-x-2 sm:grid-cols-2">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="anum"
-                                    label="Number of Months (Anum)"
-                                    render={({ field }) => (
-                                        <Input
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
-
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="ct"
-                                    label="CT"
-                                    render={({ field }) => (
-                                        <Input
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
-                                    )}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2 border bg-background/40 p-4 rounded-xl">
+                        <div className="space-y-2">
                             <div className="space-y-1">
                                 <p>Others</p>
                                 <p className="text-xs text-muted-foreground/70">
@@ -353,41 +334,34 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 </p>
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="grid grid-cols-3 gap-2">
                                 <FormFieldWrapper
                                     control={form.control}
                                     name="add_on"
                                     render={({ field }) => (
-                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                            <Switch
+                                        <Label
+                                            htmlFor={field.name}
+                                            className="shadow-xs has-data-[state=checked]:bg-gradient-to-tl from-primary/70 to-popover relative has-data flex w-full items-center gap-2 rounded-lg border border-input p-2 outline-none duration-200 ease-out cursor-pointer"
+                                        >
+                                            <Checkbox
                                                 id={field.name}
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
-                                                className="order-1 after:absolute after:inset-0"
-                                                aria-describedby={`${field.name}-desc`}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                className="order-1"
+                                                aria-describedby={`${field.name}-desc`}
                                             />
                                             <div className="flex grow items-center gap-3">
-                                                <div className="size-fit rounded-full bg-secondary p-2">
-                                                    <PlusIcon />
+                                                <div className="size-fit rounded-full bg-secondary p-1">
+                                                    <PlusIcon className="size-3" />
                                                 </div>
                                                 <div className="grid gap-2">
-                                                    <Label htmlFor={field.name}>
-                                                        Add-On
-                                                    </Label>
-                                                    <p
-                                                        id={`${field.name}-desc`}
-                                                        className="text-xs text-muted-foreground"
-                                                    >
-                                                        Enables loan add-ons to
-                                                        complete or enhance the
-                                                        base loan package.
-                                                    </p>
+                                                    <span>Add-On</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </Label>
                                     )}
                                 />
 
@@ -395,36 +369,29 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     control={form.control}
                                     name="ao_rest"
                                     render={({ field }) => (
-                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                            <Switch
+                                        <Label
+                                            htmlFor={field.name}
+                                            className="shadow-xs has-data-[state=checked]:bg-gradient-to-tl from-primary/70 to-popover relative has-data flex w-full items-center gap-2 rounded-lg border border-input p-2 outline-none duration-200 ease-out cursor-pointer"
+                                        >
+                                            <Checkbox
                                                 id={field.name}
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
-                                                className="order-1 after:absolute after:inset-0"
-                                                aria-describedby={`${field.name}-desc`}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                className="order-1"
+                                                aria-describedby={`${field.name}-desc`}
                                             />
                                             <div className="flex grow items-center gap-3">
-                                                <div className="size-fit rounded-full bg-secondary p-2">
-                                                    <MoonIcon />
+                                                <div className="size-fit rounded-full bg-secondary p-1">
+                                                    <MoonIcon className="size-3" />
                                                 </div>
                                                 <div className="grid gap-2">
-                                                    <Label htmlFor={field.name}>
-                                                        AO Rest
-                                                    </Label>
-                                                    <p
-                                                        id={`${field.name}-desc`}
-                                                        className="text-xs text-muted-foreground"
-                                                    >
-                                                        Controls whether Add-On
-                                                        values reset or persist
-                                                        by default.
-                                                    </p>
+                                                    <span>AO Rest</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </Label>
                                     )}
                                 />
 
@@ -432,48 +399,53 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     control={form.control}
                                     name="exclude_renewal"
                                     render={({ field }) => (
-                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                            <Switch
+                                        <Label
+                                            htmlFor={field.name}
+                                            className="shadow-xs ease-in-out duration-100 transition-colors has-data-[state=checked]:bg-gradient-to-tl from-primary/70 bg-muted to-popover relative has-data flex w-full items-center gap-2 rounded-lg border border-input p-2 outline-none duration-500 ease-out cursor-pointer"
+                                        >
+                                            <Checkbox
                                                 id={field.name}
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
-                                                className="order-1 after:absolute after:inset-0"
-                                                aria-describedby={`${field.name}-desc`}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                className="order-1"
+                                                aria-describedby={`${field.name}-desc`}
                                             />
                                             <div className="flex grow items-center gap-3">
-                                                <div className="size-fit rounded-full bg-secondary p-2">
-                                                    <NotAllowedIcon />
+                                                <div className="size-fit rounded-full bg-secondary p-1">
+                                                    <NotAllowedIcon className="size-3" />
                                                 </div>
                                                 <div className="grid gap-2">
-                                                    <Label htmlFor={field.name}>
-                                                        Exclude Renewal
-                                                    </Label>
-                                                    <p
-                                                        id={`${field.name}-desc`}
-                                                        className="text-xs text-muted-foreground"
-                                                    >
-                                                        Prevents this loan from
-                                                        being included in
-                                                        renewal-related
-                                                        computations.
-                                                    </p>
+                                                    <span>Exclude Renewal</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </Label>
                                     )}
                                 />
                             </div>
                         </div>
                     </div>
-                </fieldset>
 
+                    <FormFieldWrapper
+                        control={form.control}
+                        name="description"
+                        label="Remrks / Description"
+                        render={({ field }) => (
+                            <Textarea
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                placeholder="Optional description or remarks"
+                            />
+                        )}
+                    />
+                </fieldset>
                 <FormFooterResetSubmit
                     error={error}
                     readOnly={formProps.readOnly}
                     isLoading={isPending}
+                    className="sticky bottom-0"
                     disableSubmit={!form.formState.isDirty}
                     submitText={automaticLoanDeductionId ? 'Update' : 'Create'}
                     onReset={() => {
@@ -499,7 +471,7 @@ export const AutomaticLoanDeductionCreateUpdateFormModal = ({
         <Modal
             title={title}
             description={description}
-            className={cn('!max-w-[95vw]', className)}
+            className={cn('!max-w-5xl', className)}
             {...props}
         >
             <AutomaticLoanDeductionCreateUpdateForm

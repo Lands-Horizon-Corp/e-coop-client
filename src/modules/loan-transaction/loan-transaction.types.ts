@@ -214,42 +214,6 @@ export type ILoanTransactionRequest = z.infer<typeof LoanTransactionSchema>
 export interface ILoanTransactionPaginated
     extends IPaginatedResult<ILoanTransaction> {}
 
-// Amortization Schedule Types
-export interface IAmortizationPayment {
-    date: string
-    principal: number
-    lr: number // Loan Receivable (remaining balance)
-    interest: number
-    service_fee: number
-    total: number
-}
-
-export interface IAmortizationSummary {
-    total_terms: number
-    total_principal: number
-    total_interest: number
-    total_service_fee: number
-    total_amount: number
-    loan_amount: number
-    monthly_payment: number
-    interest_rate: number
-    computation_type: string
-    mode_of_payment: string
-}
-
-export interface ILoanDetails {
-    due_date: string
-    account_applied: number
-    voucher: string
-}
-
-export interface IAmortizationSchedule {
-    loan_details: ILoanDetails
-    amortization_schedule: IAmortizationPayment[]
-    summary: IAmortizationSummary
-    generated_at: string
-}
-
 // Loan Transaction Signature
 export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema
 

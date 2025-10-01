@@ -552,6 +552,7 @@ export const ComputationSheetCreateUpdateFormModal = ({
     description = 'Fill out the form to create a new computation sheet.',
     className,
     formProps,
+    hideOnSuccess = true,
     ...props
 }: IModalProps & {
     formProps?: Omit<IComputationSheetFormProps, 'className'>
@@ -567,7 +568,7 @@ export const ComputationSheetCreateUpdateFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
+                    if (hideOnSuccess) props.onOpenChange?.(false)
                 }}
             />
         </Modal>
