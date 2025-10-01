@@ -1,38 +1,20 @@
 import z from 'zod'
 
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
-export interface ILoanGuaranteedFundPerMonthRequest {
-    month?: number
-    loan_guaranteed_fund?: number
+import { LoanLedgerSchema } from './loan-ledger.validation'
+
+export interface ILoanLedger extends IBaseEntityMeta {
+    //add here
+
+    reference_number: string
+    entry_date: string
+    debit: number
+    credit: number
+    balance: number
+    type: 'CASH'
 }
 
-export interface ILoanGuaranteedFundPerMonthResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    month: number
-    loan_guaranteed_fund: number
-}
+export type ILoanLedgerRequest = z.infer<typeof LoanLedgerSchema>
 
-export const loanGuaranteedFundPerMonthRequestSchema = z.object({
-    month: z.number().optional(),
-    loan_guaranteed_fund: z.number().optional(),
-})
-
-export type ILoanLedgerRequest = object
-
-export interface ILoanLedgerResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-}
-
-export const loanLedgerRequestSchema = z.object({})
+export interface ILoanLedgerPaginated extends IPaginatedResult<ILoanLedger> {}
