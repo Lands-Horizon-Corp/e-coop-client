@@ -33,23 +33,38 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
         accessorKey: 'account',
         header: 'Account',
-        cell: (props) => <EditableCell inputType="account-picker" {...props} />,
+        cell: (props) => {
+            const hasValue = props.getValue()
+            return (
+                <EditableCell
+                    inputProps={{
+                        className: cn(
+                            hasValue ? '!min-w-[100px] !w-[220px]' : ''
+                        ),
+                    }}
+                    inputType="account-picker"
+                    {...props}
+                />
+            )
+        },
     },
     {
         accessorKey: 'member_profile',
         header: 'Member',
-        cell: (props) => <EditableCell inputType="member-picker" {...props} />,
-    },
-    {
-        accessorKey: 'description',
-        header: 'Description',
-        cell: (props) => (
-            <EditableCell
-                inputProps={{ className: 'min-w-[200px]' }}
-                inputType="text"
-                {...props}
-            />
-        ),
+        cell: (props) => {
+            const hasValue = props.getValue()
+            return (
+                <EditableCell
+                    inputProps={{
+                        className: cn(
+                            hasValue ? '!min-w-[100px] !w-[200px]' : ''
+                        ),
+                    }}
+                    inputType="member-picker"
+                    {...props}
+                />
+            )
+        },
     },
     {
         accessorKey: 'cash_check_voucher_number',
@@ -263,7 +278,7 @@ export const CashCheckJournalEntryTable = ({
                             )}
                         >
                             {row.getVisibleCells().map((cell) => (
-                                <TableCell key={cell.id} className="!p-2">
+                                <TableCell key={cell.id} className="!p-1">
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()
