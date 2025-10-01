@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { cn } from '@/helpers'
 import { IJournalVoucherEntryRequest } from '@/modules/journal-voucher-entry'
+import { IMemberProfile } from '@/modules/member-profile'
 import { useJournalVoucherStore } from '@/store/journal-voucher-store'
 import { entityIdSchema } from '@/validation'
 import {
@@ -122,7 +123,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     },
 ]
 type JournalEntryTableProps = {
-    defaultMemberProfileId?: TEntityId
+    defaultMemberProfile?: IMemberProfile
     journalVoucherId: TEntityId
     isUpdateMode?: boolean
     rowData?: IJournalVoucherEntryRequest[]
@@ -134,12 +135,8 @@ export const JournalEntryTable = ({
     rowData,
     className,
     TableClassName,
-    defaultMemberProfileId,
+    defaultMemberProfile,
 }: JournalEntryTableProps) => {
-    const [journalEntries, setJournalEntries] = useState<
-        IJournalVoucherEntryRequest[]
-    >(rowData || [])
-
     const {
         selectedJournalVoucherEntry,
         setSelectedJournalVoucherEntry,
@@ -147,10 +144,18 @@ export const JournalEntryTable = ({
     } = useJournalVoucherStore()
 
     useEffect(() => {
-        if (journalEntries) {
-            setSelectedJournalVoucherEntry(journalEntries)
+        if (
+            rowData &&
+            rowData.length > 0 &&
+            selectedJournalVoucherEntry.length === 0
+        ) {
+            setSelectedJournalVoucherEntry(rowData)
         }
-    }, [journalEntries, setSelectedJournalVoucherEntry])
+    }, [
+        rowData,
+        setSelectedJournalVoucherEntry,
+        selectedJournalVoucherEntry.length,
+    ])
 
     const handleDeleteRow = (row: Row<IJournalVoucherEntryRequest>) => {
         const id = row.original.id
@@ -162,22 +167,22 @@ export const JournalEntryTable = ({
                 const updatedData = selectedJournalVoucherEntry.filter(
                     (data) => data.id !== id
                 )
-                setJournalEntries(updatedData)
+                setSelectedJournalVoucherEntry(updatedData)
             } else {
                 const updatedData = selectedJournalVoucherEntry.filter(
                     (data) => data.rowId !== rowId
                 )
-                setJournalEntries(updatedData)
+                setSelectedJournalVoucherEntry(updatedData)
             }
         }
     }
     const table = useReactTable({
-        data: journalEntries,
+        data: selectedJournalVoucherEntry,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
             updateData: (rowIndex, columnId, value) => {
-                const updatedEntries = (journalEntries ?? []).map(
+                const updatedEntries = (selectedJournalVoucherEntry ?? []).map(
                     (entry, index) => {
                         if (index === rowIndex) {
                             const updatedEntry = { ...entry, [columnId]: value }
@@ -191,7 +196,7 @@ export const JournalEntryTable = ({
                         return entry
                     }
                 )
-                setJournalEntries(updatedEntries)
+                setSelectedJournalVoucherEntry(updatedEntries)
             },
             handleDeleteRow: handleDeleteRow,
         },
@@ -206,9 +211,10 @@ export const JournalEntryTable = ({
             credit: 0,
             rowId: crypto.randomUUID(),
             cash_check_voucher_number: '',
-            member_profile_id: defaultMemberProfileId,
+            member_profile_id: defaultMemberProfile?.id,
+            member_profile: defaultMemberProfile,
         }
-        setJournalEntries([...selectedJournalVoucherEntry, newRow])
+        setSelectedJournalVoucherEntry([...selectedJournalVoucherEntry, newRow])
     }
 
     useHotkeys(
