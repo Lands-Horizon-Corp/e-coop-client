@@ -5,7 +5,7 @@ import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { useGetUserOrganizationByUserId } from '@/modules/user-organization/user-organization.service'
 
 import { LandmarkIcon } from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
+import ImageMatch from '@/components/image-match'
 import { GradientText } from '@/components/ui/gradient-text'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -54,11 +54,12 @@ function RouteComponent() {
     if (isPending || isLoading || isFetching) {
         return (
             <div className="flex min-h-full w-full flex-col items-center justify-center gap-y-2">
-                <ImageDisplay
+                <ImageMatch
                     src={LOADING_ARTWORK_GIF}
                     className="block size-52 animate-pulse rounded-none !bg-transparent"
-                    fallbackClassName="!bg-transparent rounded-none"
+                    alt={'loading-gif'}
                 />
+
                 <p className="animate-pulse text-xs "> Getting ready...</p>
             </div>
         )

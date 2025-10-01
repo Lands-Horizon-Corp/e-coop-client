@@ -23,7 +23,7 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 import { IBaseProps, TPageType } from '@/types'
 
 import { FlickeringGrid } from '../backgrounds/flickering-grid'
-import ImageDisplay from '../image-display'
+import ImageMatch from '../image-match'
 
 interface Props extends IBaseProps {
     pageType?: TPageType
@@ -105,10 +105,10 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
         if (authStatus === 'loading')
             return (
                 <div className="relative flex h-screen w-full flex-col items-center justify-center">
-                    <ImageDisplay
+                    <ImageMatch
                         src={LOADING_ARTWORK_GIF}
                         className="block size-48 rounded-none !bg-transparent"
-                        fallbackClassName="!bg-transparent rounded-none"
+                        alt={'loading-gif'}
                     />
                     <p className="mt-4 animate-pulse text-sm text-muted-foreground drop-shadow-lg">
                         {/* <LoadingSpinner className="mr-2 inline size-3" /> */}

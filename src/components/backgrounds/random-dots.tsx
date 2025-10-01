@@ -77,6 +77,35 @@ export function RandomDots({
             const hasFloat = enableFloat && Math.random() > 0.6 // 40% chance
             const floatDirection = Math.random() > 0.5 ? 'up' : 'down'
             const glowIntensity = Math.random() * 0.5 + 0.3 // 0.3 to 0.8
+            const floatDuration = 3 + Math.random() * 2 // Pre-calculate the random duration
+
+            // Convert Tailwind animation classes to CSS animation names
+            const getAnimationName = (tailwindClass: string) => {
+                const animationMap: Record<string, string> = {
+                    'animate-pulse': 'pulse',
+                    'animate-bounce': 'bounce',
+                    'animate-spin': 'spin',
+                    'hover:animate-bounce': 'bounce',
+                    '': '',
+                }
+                return animationMap[tailwindClass] || ''
+            }
+
+            // Convert Tailwind duration classes to CSS values
+            const getDurationValue = (durationClass: string) => {
+                const durationMap: Record<string, string> = {
+                    'duration-1000': '1s',
+                    'duration-2000': '2s',
+                    'duration-3000': '3s',
+                    'duration-[4s]': '4s',
+                    'duration-[5s]': '5s',
+                    '': '2s',
+                }
+                return durationMap[durationClass] || '2s'
+            }
+
+            const cssAnimationName = getAnimationName(randomAnimation)
+            const cssDuration = getDurationValue(randomDuration)
 
             return {
                 id: i,
@@ -84,13 +113,14 @@ export function RandomDots({
                 leftPercent,
                 size: randomSize,
                 opacity: randomOpacity,
-                animation: randomAnimation,
-                duration: randomDuration,
+                animationName: cssAnimationName,
+                animationDuration: cssDuration,
                 delay: randomDelay,
                 hasGlow,
                 hasFloat,
                 floatDirection,
                 glowIntensity,
+                floatDuration,
             }
         })
     }, [
@@ -111,7 +141,7 @@ export function RandomDots({
             {dots.map((dot) => (
                 <div
                     key={dot.id}
-                    className={`absolute ${dot.size} ${dot.opacity} rounded-full ${dot.animation} ${dot.duration} z-10 transition-all duration-300 hover:scale-125 hover:brightness-125 cursor-pointer ${
+                    className={`absolute ${dot.size} ${dot.opacity} rounded-full z-10 transition-all duration-300 hover:scale-125 hover:brightness-125 cursor-pointer ${
                         dot.hasGlow
                             ? 'dark:shadow-lg dark:shadow-primary/30 dark:brightness-125'
                             : ''
@@ -119,15 +149,19 @@ export function RandomDots({
                     style={{
                         top: `${dot.topPercent}%`,
                         left: `${dot.leftPercent}%`,
-                        animationDelay: `${dot.delay}s`,
-                        boxShadow: undefined,
-                        filter: undefined,
                         transform: dot.hasFloat
                             ? `translateY(${dot.floatDirection === 'up' ? '-2px' : '2px'})`
                             : undefined,
-                        animation: dot.hasFloat
-                            ? `${dot.floatDirection === 'up' ? 'bounce' : 'pulse'} ${3 + Math.random() * 2}s ease-in-out infinite`
-                            : undefined,
+                        animation: (() => {
+                            if (dot.hasFloat) {
+                                // Float animation takes priority
+                                return `${dot.floatDirection === 'up' ? 'bounce' : 'pulse'} ${dot.floatDuration}s ease-in-out ${dot.delay}s infinite`
+                            } else if (dot.animationName) {
+                                // Regular animation
+                                return `${dot.animationName} ${dot.animationDuration} ease-in-out ${dot.delay}s infinite`
+                            }
+                            return undefined
+                        })(),
                     }}
                 />
             ))}
