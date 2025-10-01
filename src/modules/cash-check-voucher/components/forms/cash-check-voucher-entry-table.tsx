@@ -116,11 +116,9 @@ export const CashCheckJournalEntryTable = ({
     className,
     TableClassName,
 }: CashCheckJournalEntryTableProps) => {
-    console.log({ rowData })
     const [cashCheckVoucherEntry, setCashCheckVoucherEntry] = useState<
         ICashCheckVoucherEntryRequest[]
     >(() => {
-        // This function runs only once on initial render
         if (rowData && rowData.length > 0 && isUpdateMode) {
             return rowData
         }
@@ -140,7 +138,6 @@ export const CashCheckJournalEntryTable = ({
     const handleDeleteRow = (row: Row<ICashCheckVoucherEntryRequest>) => {
         const id = row.original.id
         const rowId = row.original.rowId
-        console.log({ id, rowId })
         if (isUpdateMode) {
             const validation = entityIdSchema.safeParse(id)
             if (validation.success) {

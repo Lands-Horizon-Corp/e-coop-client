@@ -223,7 +223,6 @@ const CashCheckVoucherCreateUpdateForm = ({
         const validateResult = ValidateCashCheckEntry({
             data: selectedCashCheckVoucherEntry,
         })
-        console.log(selectedCashCheckVoucherEntry)
         if (isUpdate) {
             if (validateResult.isValid) {
                 updateCashCheckVoucher({
