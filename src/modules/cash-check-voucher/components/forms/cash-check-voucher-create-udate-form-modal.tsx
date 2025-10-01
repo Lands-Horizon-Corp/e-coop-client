@@ -135,9 +135,6 @@ const CashCheckVoucherCreateUpdateForm = ({
 }: ICashCheckVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
     const modalState = useModalState()
-    // const [journalEntryError, setJournalEntryError] = useState<string>('')
-
-    console.log('defaultValues', defaultValues)
 
     const [defaultMember, setDefaultMember] = useState<
         IMemberProfile | undefined

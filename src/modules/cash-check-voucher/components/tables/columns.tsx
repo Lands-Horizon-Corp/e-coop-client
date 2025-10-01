@@ -14,6 +14,7 @@ import { CashCheckVoucherStatusBadge } from '../cash-check-voucher-badge'
 
 export const cashCheckVoucherGlobalSearchTargets: IGlobalSearchTargets<ICashCheckVoucher>[] =
     [
+        { field: 'name', displayText: 'Name' },
         { field: 'cash_voucher_number', displayText: 'Cash Voucher Number' },
         { field: 'description', displayText: 'Description' },
         { field: 'status', displayText: 'Status' },
@@ -84,6 +85,24 @@ const CashCheckVoucherTableColumns = (
         enableHiding: false,
         size: 220,
         minSize: 180,
+    },
+    {
+        id: 'name',
+        accessorKey: 'name',
+        header: (props) => <DataTableColumnHeader {...props} title="Name" />,
+        cell: ({
+            row: {
+                original: { name },
+            },
+        }) => (
+            <div className="flex min-w-0 flex-col">
+                <span className="truncate text-xs text-muted-foreground/70">
+                    {name || '-'}
+                </span>
+            </div>
+        ),
+        size: 320,
+        minSize: 250,
     },
     {
         id: 'description',

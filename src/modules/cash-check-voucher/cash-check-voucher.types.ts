@@ -28,6 +28,7 @@ export const CheckVoucherStatusValues: ECashCheckVoucherStatus[] =
     Object.values(ECashCheckVoucherStatus)
 
 export interface ICashCheckVoucher extends IBaseEntityMeta {
+    name?: string
     member_profile_id?: string
     member_profile?: IMemberProfile
 

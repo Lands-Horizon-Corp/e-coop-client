@@ -97,7 +97,7 @@ export const JournalVoucherAction = ({
                 />
             </div>
             <RowActionsGroup
-                // canSelect
+                canSelect
                 row={row}
                 onDelete={{
                     text: 'Delete',

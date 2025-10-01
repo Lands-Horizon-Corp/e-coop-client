@@ -11,6 +11,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { ICashCheckVoucher, useDeleteCashCheckVoucherById } from '../..'
 import CashCheckVoucherCreateUpdateFormModal from '../forms/cash-check-voucher-create-udate-form-modal'
+import CashCheckVoucherOtherAction from './cash-check-other-voucher'
 import { ICashCheckVoucherTableActionComponentProp } from './columns'
 
 interface UseCashCheckVoucherActionsProps {
@@ -77,6 +78,10 @@ export const CashCheckJournalVoucherAction = ({
         handleDelete,
     } = useCashCheckVoucherActions({ row, onDeleteSuccess })
 
+    const isReleased =
+        !!cashCheckVoucher.printed_date &&
+        !!cashCheckVoucher.approved_date &&
+        !!cashCheckVoucher.released_date
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
@@ -86,11 +91,12 @@ export const CashCheckJournalVoucherAction = ({
                     formProps={{
                         cashCheckVoucherId: cashCheckVoucher.id,
                         defaultValues: { ...cashCheckVoucher },
+                        readOnly: isReleased,
                     }}
                 />
             </div>
             <RowActionsGroup
-                // canSelect
+                canSelect
                 row={row}
                 onDelete={{
                     text: 'Delete',
@@ -102,7 +108,7 @@ export const CashCheckJournalVoucherAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                // otherActions={<JournalVoucherOtherAction row={row} />}
+                otherActions={<CashCheckVoucherOtherAction row={row} />}
             />
         </>
     )
