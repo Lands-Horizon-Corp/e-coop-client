@@ -79,6 +79,7 @@ export interface ILoanTransaction
 
     mode_of_payment: TLoanModeOfPayment
     mode_of_payment_weekly: TWeekdays
+    mode_of_payment_fixed_days?: number
     mode_of_payment_semi_monthly_pay_1: number
     mode_of_payment_semi_monthly_pay_2: number
     mode_of_payment_monthly_exact_day: boolean
@@ -154,6 +155,40 @@ export interface ILoanTransaction
 
     appraised_value: number
     appraised_value_description: string
+
+    // Tel zalven to add these
+    due_date?: string
+    amount_granted?: number
+    add_on_amount?: number
+
+    deducted_interest?: number
+    advance_payment?: number
+
+    used_days?: number
+    unused_days?: number
+
+    arrears?: number
+
+    unpaid_principal_count?: number
+    unpaid_interest_count?: number
+
+    unpaid_principal_amount?: number
+    unpaid_interest_amount?: number
+
+    principal_paid_count?: number
+    interest_paid_count?: number
+
+    // for quick summary
+    principal_paid?: number
+    previous_interest_paid?: number
+    previous_fines_paid?: number
+    interest_paid?: number
+    fines_paid?: number
+    collection_progress?: number // percentage
+    interest_amortization?: number
+    total_amortization?: number
+    first_irr?: number
+    first_dq?: number
 }
 
 export interface ILoanTransactionStatusDates {

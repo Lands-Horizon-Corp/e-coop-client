@@ -13,6 +13,7 @@ const PageNavigator = () => {
             <ActionTooltip tooltipContent="Previous">
                 <Button
                     onClick={() => router.history.back()}
+                    size="icon"
                     className="size-fit rounded-full p-1"
                     variant="ghost"
                 >
@@ -21,6 +22,7 @@ const PageNavigator = () => {
             </ActionTooltip>
             <ActionTooltip tooltipContent="Forward">
                 <Button
+                    size="icon"
                     onClick={() => router.history.forward()}
                     className="size-fit rounded-full p-1"
                     variant="ghost"

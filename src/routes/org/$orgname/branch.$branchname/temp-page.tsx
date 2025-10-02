@@ -13,7 +13,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
     return (
         <PageContainer>
-            <LoanView />
+            <LoanView loanTransactionId={'87ee9c32-1faa-4285-b5d7-07fe4fab4ee2'}/>
         </PageContainer>
     )
 }

@@ -1,6 +1,17 @@
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
-import type { ILoanLedger, ILoanLedgerRequest } from '../loan-ledger'
+import { TEntityId } from '@/types'
+
+import type {
+    ILoanLedger,
+    ILoanLedgerChangeLineRequest,
+    ILoanLedgerRequest,
+} from '../loan-ledger'
+import { loanTransactionBaseKey } from '../loan-transaction'
 
 const {
     apiCrudHooks,
@@ -45,3 +56,28 @@ export const {
 } = apiCrudHooks
 
 // custom hooks can go here
+
+// update loan ledger print line number
+export const useChangeLoanLedgerLineNumber = createMutationFactory<
+    ILoanLedger,
+    Error,
+    { id: TEntityId; payload: ILoanLedgerChangeLineRequest }
+>({
+    mutationFn: async (variables) => {
+        const request = await API.post<
+            ILoanLedgerChangeLineRequest,
+            ILoanLedger
+        >(
+            `${loanLedgerAPIRoute}/${variables.id}/change-line`,
+            variables.payload
+        )
+
+        return request.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+        updateMutationInvalidationFn(loanLedgerBaseKey, args)
+    },
+})

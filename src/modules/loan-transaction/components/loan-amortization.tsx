@@ -12,6 +12,7 @@ import {
     TicketIcon,
     TrendingUpIcon,
 } from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
@@ -246,6 +247,28 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                 />
             </div>
         </div>
+    )
+}
+
+export const LoanAmortizationModal = ({
+    loanTransactionId,
+    ...props
+}: IModalProps & {
+    loanTransactionId: TEntityId
+}) => {
+    return (
+        <Modal
+            {...props}
+            closeButtonClassName="top-2 right-2"
+            titleClassName="sr-only"
+            descriptionClassName="sr-only"
+            className="!max-w-[90vw] p-0 shadow-none border-none bg-transparent gap-y-0"
+        >
+            <LoanAmortization
+                className="col-span-5 p-0 bg-transparent"
+                loanTransactionId={loanTransactionId}
+            />
+        </Modal>
     )
 }
 

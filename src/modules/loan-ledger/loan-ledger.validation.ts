@@ -13,3 +13,11 @@ export const LoanLedgerSchema = z.object({
 })
 
 export type TLoanLedgerSchema = z.infer<typeof LoanLedgerSchema>
+
+export const LoanLedgerChangeLineSchema = z.object({
+    line_number: z.coerce.number().int().min(1, 'Line number is required'),
+})
+
+export type TLoanLedgerChangeLineSchema = z.infer<
+    typeof LoanLedgerChangeLineSchema
+>

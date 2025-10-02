@@ -2,7 +2,10 @@ import z from 'zod'
 
 import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
-import { LoanLedgerSchema } from './loan-ledger.validation'
+import {
+    LoanLedgerSchema,
+    TLoanLedgerChangeLineSchema,
+} from './loan-ledger.validation'
 
 export interface ILoanLedger extends IBaseEntityMeta {
     //add here
@@ -18,3 +21,5 @@ export interface ILoanLedger extends IBaseEntityMeta {
 export type ILoanLedgerRequest = z.infer<typeof LoanLedgerSchema>
 
 export interface ILoanLedgerPaginated extends IPaginatedResult<ILoanLedger> {}
+
+export type ILoanLedgerChangeLineRequest = TLoanLedgerChangeLineSchema

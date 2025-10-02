@@ -1,11 +1,16 @@
 import { cn, formatNumber } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import AccountBadge from '@/modules/account/components/badges/account-badge'
 import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
 import LoanLedgerTable from '@/modules/loan-ledger/components/loan-ledger-table'
-import { TLoanModeOfPayment } from '@/modules/loan-transaction'
+import {
+    ILoanTransaction,
+    TLoanModeOfPayment,
+    useGetLoanTransactionById,
+} from '@/modules/loan-transaction'
 import LoanModeOfPaymentBadge from '@/modules/loan-transaction/components/loan-mode-of-payment-badge'
-import { IMedia } from '@/modules/media'
+import { IMemberProfile } from '@/modules/member-profile'
 
 import {
     CakeIcon,
@@ -13,7 +18,9 @@ import {
     CalendarNumberIcon,
     IdCardIcon,
     PhoneIcon,
+    PlusIcon,
     PrinterFillIcon,
+    TIcon,
     TicketIcon,
     TrashIcon,
     UndoIcon,
@@ -22,28 +29,82 @@ import {
 import ImageDisplay from '@/components/image-display'
 import TextDisplay from '@/components/text-display'
 import { Button } from '@/components/ui/button'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import { Separator } from '@/components/ui/separator'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { IClassProps } from '@/types'
+import { useModalState } from '@/hooks/use-modal-state'
 
-interface LoanLedgerViewProps extends IClassProps {}
+import { IClassProps, TEntityId } from '@/types'
 
-const LoanView = ({ className }: LoanLedgerViewProps) => {
+import { LoanInquireAdvanceInterestFinesModal } from './forms/loan-inquire-advance-interest-fines-form'
+import { LoanAmortizationModal } from './loan-amortization'
+import { LoanViewSkeleton } from './skeletons/loan-view-skeleton'
+
+interface LoanLedgerViewProps extends IClassProps {
+    loanTransactionId: TEntityId
+    defaultLoanTransaction?: ILoanTransaction
+}
+
+const LoanView = ({
+    className,
+    loanTransactionId,
+    defaultLoanTransaction,
+}: LoanLedgerViewProps) => {
+    const {
+        data = defaultLoanTransaction,
+        isPending,
+        isEnabled,
+        error,
+    } = useGetLoanTransactionById({
+        id: loanTransactionId,
+        options: {
+            enabled: !!loanTransactionId,
+            initialData: defaultLoanTransaction,
+        },
+    })
+
+    const errorMessage = !isEnabled
+        ? 'No valid loan transaction selected'
+        : serverRequestErrExtractor({ error })
+
     return (
         <div className={cn('space-y-4 p-4 w-full ', className)}>
-            <LoanLedgerHeader />
-            <LoanDetails />
-            {/* TODO: LOAN LEDGER */}
-            <LoanLedgerTable className="h-[50vh] w-full rounded-lg" />
-            <LoanQuickSummary />
+            {errorMessage && (
+                <FormErrorMessage
+                    className="w-fit mx-auto"
+                    errorMessage={errorMessage}
+                />
+            )}
+            {(isPending || !data) && isEnabled && <LoanViewSkeleton />}
+            {data && (
+                <>
+                    <>
+                        <LoanLedgerHeader loanTransaction={data} />
+                        <LoanDetails loanTransaction={data} />
+                        <LoanLedgerTable className="h-[50vh] w-full rounded-lg" />
+                        <LoanQuickSummary loanTransaction={data} />
+                    </>
+                </>
+            )}
         </div>
     )
 }
 
 // Header component
-const LoanLedgerHeader = ({ className }: IClassProps) => {
+const LoanLedgerHeader = ({
+    className,
+    loanTransaction,
+}: IClassProps & { loanTransaction: ILoanTransaction }) => {
     return (
         <div className={cn('', className)}>
             <div className="flex gap-2 w-full">
@@ -56,7 +117,7 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
                             withCopy
                             noValueText="no voucher number set"
                         >
-                            {'VCH-0001'}
+                            {loanTransaction.voucher}
                         </TextDisplay>
                     </div>
                     <div className="bg-secondary px-4 py-2 rounded-lg">
@@ -64,24 +125,22 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
                             Released <CalendarNumberIcon className="inline" />
                         </p>
                         <TextDisplay noValueText="no voucher number set">
-                            {toReadableDate(new Date())}
+                            {loanTransaction.released_date
+                                ? toReadableDate(loanTransaction.released_date)
+                                : undefined}
                         </TextDisplay>
                     </div>
                 </div>
                 <div className="flex grow justify-between gap-4 bg-gradient-to-r from-primary/20 to-card/10 ring-2 ring-card dark:ring-primary/40 rounded-xl p-4">
                     <div className="flex-shrink-0">
                         <PreviewMediaWrapper
-                            media={
-                                {
-                                    download_url:
-                                        'https://images.steamusercontent.com/ugc/782997563734263013/37F53DD1BE90A35F44F6235C2841D75FB58E54B3/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false',
-                                } as IMedia
-                            }
+                            media={loanTransaction.member_profile?.media}
                         >
                             <ImageDisplay
                                 className="size-14 rounded-lg"
                                 src={
-                                    'https://images.steamusercontent.com/ugc/782997563734263013/37F53DD1BE90A35F44F6235C2841D75FB58E54B3/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false'
+                                    loanTransaction.member_profile?.media
+                                        ?.download_url
                                 }
                                 // fallback={memberProfile.first_name.charAt(0) ?? '-'}
                                 fallback="S"
@@ -90,7 +149,10 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
                     </div>
                     <div className="space-y-2 grow">
                         <div className="flex gap-x-2">
-                            <p className="text-lg">Steve M Character</p>
+                            <p className="text-lg">
+                                {loanTransaction.member_profile?.full_name ||
+                                    '...'}
+                            </p>
                             <GeneralStatusBadge generalStatus="verified" />
                         </div>
                         <Separator />
@@ -102,7 +164,20 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
                                 <div className="flex items-center gap-2">
                                     <PhoneIcon className="400 size-3" />
                                     <span>
-                                        <CopyWrapper>+639123456789</CopyWrapper>
+                                        {loanTransaction.member_profile
+                                            ?.contact_number ? (
+                                            <CopyWrapper>
+                                                {
+                                                    loanTransaction
+                                                        .member_profile
+                                                        .contact_number
+                                                }
+                                            </CopyWrapper>
+                                        ) : (
+                                            <span className="text-xs text-muted-foreground">
+                                                ...
+                                            </span>
+                                        )}
                                     </span>
                                 </div>
                             </div>
@@ -113,7 +188,19 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
                                 <div className="flex items-center gap-2">
                                     <IdCardIcon className="size-3" />
                                     <span className="font-mono text-xs">
-                                        <CopyWrapper>MBR-0001</CopyWrapper>
+                                        {loanTransaction.member_profile
+                                            ?.passbook ? (
+                                            <CopyWrapper>
+                                                {
+                                                    loanTransaction
+                                                        .member_profile.passbook
+                                                }
+                                            </CopyWrapper>
+                                        ) : (
+                                            <span className="text-xs text-muted-foreground">
+                                                ...
+                                            </span>
+                                        )}
                                     </span>
                                 </div>
                             </div>
@@ -124,8 +211,15 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
                                 <div className="flex items-center gap-2">
                                     <UserIcon className="size-3" />
                                     <span>
-                                        {true ? (
-                                            <CopyWrapper>Regular</CopyWrapper>
+                                        {loanTransaction.member_profile
+                                            ?.member_type?.name ? (
+                                            <CopyWrapper>
+                                                {
+                                                    loanTransaction
+                                                        .member_profile
+                                                        .member_type.name
+                                                }
+                                            </CopyWrapper>
                                         ) : (
                                             <span className="text-xs text-muted-foreground">
                                                 ...
@@ -141,9 +235,14 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
                                 <div className="flex items-center gap-2">
                                     <CakeIcon className="size-3" />
                                     <span>
-                                        {new Date() ? (
+                                        {loanTransaction.member_profile
+                                            ?.birthdate ? (
                                             <CopyWrapper>
-                                                {toReadableDate(new Date())}
+                                                {toReadableDate(
+                                                    loanTransaction
+                                                        .member_profile
+                                                        .birthdate
+                                                )}
                                             </CopyWrapper>
                                         ) : (
                                             <span className="text-xs text-muted-foreground">
@@ -161,53 +260,49 @@ const LoanLedgerHeader = ({ className }: IClassProps) => {
     )
 }
 
-const mockLoanDetails = {
-    account: {
-        icon: 'Rocket',
-        name: 'Kaban Ng Bayan',
-    },
-    entryDate: new Date(),
-    dueDate: new Date(),
-    terms: 12,
-    amountApplied: 5000,
-    amountGranted: 5000,
-    amortization: 417,
-    addOnAmount: 0,
-    paymentStatus: {
-        unpaidPrincipalCount: 0,
-        unpaidPrincipalAmount: 0,
-        unpaidInterestCount: 0,
-        unpaidInterestAmount: 0,
-        paidCount: 0,
-    },
-    deductions: {
-        deductedInterest: 0,
-        advancePayment: 0,
-        usedDays: 0,
-        unusedDays: 0,
-    },
-    penalties: {
-        arrears: 0,
-        interest: 0,
-        fines: 0,
-        mode: 'monthly',
-    },
-}
-
 // Loan Details Component
-const LoanDetails = ({ className }: IClassProps) => {
+const LoanDetails = ({
+    className,
+    loanTransaction,
+}: IClassProps & { loanTransaction: ILoanTransaction }) => {
     const {
-        entryDate,
-        dueDate,
+        account,
+        created_at,
         terms,
-        amountApplied,
-        amountGranted,
-        amortization,
-        addOnAmount,
-        paymentStatus,
-        deductions,
-        penalties,
-    } = mockLoanDetails
+        applied_1,
+        due_date,
+        amount_granted,
+        amortization_amount,
+        add_on_amount,
+
+        deducted_interest,
+
+        unpaid_interest_amount,
+        unpaid_principal_amount,
+        unpaid_interest_count,
+        unpaid_principal_count,
+
+        principal_paid_count,
+        interest_paid_count,
+
+        advance_payment,
+        used_days,
+        unused_days,
+
+        interest,
+        arrears,
+        fines,
+
+        mode_of_payment,
+        mode_of_payment_fixed_days,
+        mode_of_payment_monthly_exact_day,
+        mode_of_payment_weekly,
+
+        mode_of_payment_semi_monthly_pay_1,
+        mode_of_payment_semi_monthly_pay_2,
+    } = loanTransaction
+
+    const loanAmortizationModalState = useModalState()
 
     return (
         <div
@@ -224,30 +319,54 @@ const LoanDetails = ({ className }: IClassProps) => {
                 <div className="space-y-2">
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Account :{' '}
-                        <AccountBadge
-                            size="sm"
-                            variant="primary"
-                            icon="Rocket"
-                            name="Kaban Ng Bayan"
-                        />
+                        {account?.icon && account?.name ? (
+                            <AccountBadge
+                                size="sm"
+                                variant="primary"
+                                icon={account.icon as TIcon}
+                                name={account.name}
+                            />
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Entry Date:{' '}
                         <span className="px-2 py-1 rounded-md bg-secondary border border-border">
-                            {entryDate ? toReadableDate(entryDate) : '...'}
+                            {created_at ? (
+                                toReadableDate(created_at)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Due Date:
                         <span className="px-2 py-1 rounded-md bg-secondary border border-border">
-                            {dueDate ? toReadableDate(dueDate) : '...'}
+                            {due_date ? (
+                                toReadableDate(due_date)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Terms:
                         <span className="px-2 py-1 bg-accent rounded-md border border-border">
                             <span className="text-accent-foreground">
-                                {terms ?? '...'}
+                                {typeof terms === 'number' ? (
+                                    terms
+                                ) : (
+                                    <span className="text-xs text-muted-foreground">
+                                        ...
+                                    </span>
+                                )}
                             </span>{' '}
                             Mos
                         </span>
@@ -260,31 +379,71 @@ const LoanDetails = ({ className }: IClassProps) => {
                 <p className="text-xs font-bold text-muted-foreground">
                     Loan Summary
                 </p>
+                <LoanAmortizationModal
+                    {...loanAmortizationModalState}
+                    loanTransactionId={loanTransaction.id}
+                />
                 <div className="space-y-2">
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Amount Applied:
                         <span className="px-2 py-1 rounded-md bg-primary/40 border border-primary text-primary-foreground font-mono text-xs">
-                            {formatNumber(amountApplied ?? 0, 2)}
+                            {typeof applied_1 === 'number' ? (
+                                formatNumber(applied_1, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Amount Granted:
                         <span className="px-2 py-1 rounded-md border border-green-400/40 bg-green-300/20 text-green-400 font-mono text-xs">
-                            {formatNumber(amountGranted ?? 0, 2)}
+                            {typeof amount_granted === 'number' ? (
+                                formatNumber(amount_granted, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Amortization:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(amortization ?? 0, 2)}
+                            {typeof amortization_amount === 'number' ? (
+                                formatNumber(amortization_amount, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Add-On Amount:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(addOnAmount ?? 0, 2)}
+                            {typeof add_on_amount === 'number' ? (
+                                formatNumber(add_on_amount, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        hoverVariant="primary"
+                        className="text-xs h-fit px-2 py-1 items-center"
+                        onClick={() =>
+                            loanAmortizationModalState.onOpenChange(true)
+                        }
+                    >
+                        <CalendarNumberIcon className="inline size-3" /> View
+                        Amort. Schedule
+                    </Button>
                 </div>
             </div>
 
@@ -310,15 +469,21 @@ const LoanDetails = ({ className }: IClassProps) => {
                         Count:
                     </span>
                     <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
-                        {formatNumber(
-                            paymentStatus.unpaidPrincipalCount ?? 0,
-                            0
+                        {typeof unpaid_principal_count === 'number' ? (
+                            formatNumber(unpaid_principal_count, 0)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
                         )}
                     </span>
                     <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
-                        {formatNumber(
-                            paymentStatus.unpaidInterestCount ?? 0,
-                            0
+                        {typeof unpaid_interest_count === 'number' ? (
+                            formatNumber(unpaid_interest_count, 0)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
                         )}
                     </span>
 
@@ -327,15 +492,21 @@ const LoanDetails = ({ className }: IClassProps) => {
                         Amount:
                     </span>
                     <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
-                        {formatNumber(
-                            paymentStatus.unpaidPrincipalAmount ?? 0,
-                            2
+                        {typeof unpaid_principal_amount === 'number' ? (
+                            formatNumber(unpaid_principal_amount, 2)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
                         )}
                     </span>
                     <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
-                        {formatNumber(
-                            paymentStatus.unpaidInterestAmount ?? 0,
-                            2
+                        {typeof unpaid_interest_amount === 'number' ? (
+                            formatNumber(unpaid_interest_amount, 2)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
                         )}
                     </span>
 
@@ -343,8 +514,23 @@ const LoanDetails = ({ className }: IClassProps) => {
                     <span className="font-medium text-xs text-muted-foreground col-span-1">
                         Paid Count:
                     </span>
-                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center col-span-2">
-                        {formatNumber(paymentStatus.paidCount ?? 0, 0)}
+                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center col-span-1">
+                        {typeof principal_paid_count === 'number' ? (
+                            formatNumber(principal_paid_count, 0)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </span>
+                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center col-span-1">
+                        {typeof interest_paid_count === 'number' ? (
+                            formatNumber(interest_paid_count, 0)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
                     </span>
                 </div>
             </div>
@@ -358,25 +544,49 @@ const LoanDetails = ({ className }: IClassProps) => {
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Deducted Interest:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(deductions.deductedInterest ?? 0, 2)}
+                            {typeof deducted_interest === 'number' ? (
+                                formatNumber(deducted_interest, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Advance Payment:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(deductions.advancePayment ?? 0, 2)}
+                            {typeof advance_payment === 'number' ? (
+                                formatNumber(advance_payment, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Used Days:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs font-mono">
-                            {formatNumber(deductions.usedDays ?? 0, 0)}
+                            {typeof used_days === 'number' ? (
+                                formatNumber(used_days, 0)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Unused Days:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(deductions.unusedDays ?? 0, 0)}
+                            {typeof unused_days === 'number' ? (
+                                formatNumber(unused_days, 0)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                 </div>
@@ -391,62 +601,158 @@ const LoanDetails = ({ className }: IClassProps) => {
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Arrears:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(penalties.arrears ?? 0, 2)}
+                            {typeof arrears === 'number' ? (
+                                formatNumber(arrears, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Interest:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(penalties.interest ?? 0, 2)}
+                            {typeof interest === 'number' ? (
+                                formatNumber(interest, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Fines:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {formatNumber(penalties.fines ?? 0, 2)}
+                            {typeof fines === 'number' ? (
+                                formatNumber(fines, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Mode:
-                        <LoanModeOfPaymentBadge
-                            mode={
-                                (penalties.mode as TLoanModeOfPayment) ?? '...'
-                            }
-                            size="sm"
-                        />
+                        {mode_of_payment ? (
+                            <LoanModeOfPaymentBadge
+                                mode={mode_of_payment as TLoanModeOfPayment}
+                                size="sm"
+                            />
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
                     </div>
+                    {mode_of_payment === 'day' && (
+                        <div className="flex items-center text-muted-foreground text-xs gap-1">
+                            Fixed Days :
+                            <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
+                                {typeof mode_of_payment_fixed_days ===
+                                'number' ? (
+                                    mode_of_payment_fixed_days
+                                ) : (
+                                    <span className="text-xs text-muted-foreground">
+                                        ...
+                                    </span>
+                                )}
+                            </span>
+                        </div>
+                    )}
+                    {mode_of_payment === 'monthly' && (
+                        <div className="flex items-center text-muted-foreground text-xs gap-1">
+                            Payment :
+                            <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
+                                {typeof mode_of_payment_monthly_exact_day ===
+                                'boolean' ? (
+                                    mode_of_payment_monthly_exact_day ? (
+                                        'Exact Day'
+                                    ) : (
+                                        'Every 30 Days'
+                                    )
+                                ) : (
+                                    <span className="text-xs text-muted-foreground">
+                                        ...
+                                    </span>
+                                )}
+                            </span>
+                        </div>
+                    )}
+                    {mode_of_payment === 'weekly' && (
+                        <div className="flex items-center text-muted-foreground text-xs gap-1">
+                            Payment :
+                            <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
+                                {typeof mode_of_payment_weekly === 'string' ? (
+                                    mode_of_payment_weekly
+                                ) : (
+                                    <span className="text-xs text-muted-foreground">
+                                        ...
+                                    </span>
+                                )}
+                            </span>
+                        </div>
+                    )}
+                    {mode_of_payment === 'semi-monthly' && (
+                        <>
+                            <div className="flex items-center text-muted-foreground text-xs gap-1">
+                                Payment 1:
+                                <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
+                                    {typeof mode_of_payment_semi_monthly_pay_1 ===
+                                    'string' ? (
+                                        `Day ${mode_of_payment_semi_monthly_pay_1}`
+                                    ) : (
+                                        <span className="text-xs text-muted-foreground">
+                                            ...
+                                        </span>
+                                    )}
+                                </span>
+                            </div>
+                            <div className="flex items-center text-muted-foreground text-xs gap-1">
+                                Payment 2:
+                                <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
+                                    {typeof mode_of_payment_semi_monthly_pay_2 ===
+                                    'string' ? (
+                                        `Day ${mode_of_payment_semi_monthly_pay_2}`
+                                    ) : (
+                                        <span className="text-xs text-muted-foreground">
+                                            ...
+                                        </span>
+                                    )}
+                                </span>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
     )
 }
 
-const quickSummaryMock = {
-    principalPaid: 500,
-    interestPaid: 0,
-    prevInterestPaid: 0,
-    prevFinesPaid: 0,
-    finesPaid: 0,
-    percentCollection: 0.1,
-    intAmort: 0,
-    totalAmort: 417,
-    firstIRR: '',
-    firstDQ: '',
-}
+// Quick Summary & Actions
+const LoanQuickSummary = ({
+    className,
+    loanTransaction,
+}: IClassProps & { loanTransaction: ILoanTransaction }) => {
+    const calculatorModalState = useModalState()
 
-const LoanQuickSummary = ({ className }: IClassProps) => {
     const {
-        principalPaid,
-        interestPaid,
-        prevInterestPaid,
-        prevFinesPaid,
-        finesPaid,
-        percentCollection,
-        intAmort,
-        totalAmort,
-        firstIRR,
-        firstDQ,
-    } = quickSummaryMock
+        principal_paid,
+        interest_paid,
+        previous_interest_paid,
+        previous_fines_paid,
+        fines_paid,
+        collection_progress,
+        interest_amortization,
+        total_amortization,
+        first_irr,
+        first_dq,
+    } = loanTransaction
+
+    const members_amount: { member_profile: IMemberProfile; amount: number }[] =
+        []
 
     return (
         <div
@@ -455,56 +761,157 @@ const LoanQuickSummary = ({ className }: IClassProps) => {
                 className
             )}
         >
+            {/* Members & Amount Table */}
+            <Table wrapperClassName="flex-1 max-h-[200px] bg-secondary rounded-lg ecoop-scroll">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-2/3">Member</TableHead>
+                        <TableHead className="w-1/3 text-right">
+                            Amount
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {members_amount.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={2}
+                                className="text-center text-xs text-muted-foreground h-24"
+                            >
+                                No data to display
+                            </TableCell>
+                        </TableRow>
+                    ) : (
+                        members_amount.map(
+                            ({ member_profile, amount }, idx) => (
+                                <TableRow key={member_profile?.id ?? idx}>
+                                    <TableCell className="w-2/3">
+                                        <div className="flex items-center gap-2">
+                                            <ImageDisplay
+                                                src={
+                                                    member_profile?.media
+                                                        ?.download_url
+                                                }
+                                                fallback={
+                                                    member_profile?.full_name?.charAt(
+                                                        0
+                                                    ) ?? '?'
+                                                }
+                                                className="size-6 rounded-full"
+                                            />
+                                            <span className="truncate">
+                                                {member_profile?.full_name ? (
+                                                    member_profile.full_name
+                                                ) : (
+                                                    <span className="text-xs text-muted-foreground">
+                                                        ...
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="w-1/3 text-right font-mono">
+                                        {typeof amount === 'number' ? (
+                                            formatNumber(amount, 2)
+                                        ) : (
+                                            <span className="text-xs text-muted-foreground">
+                                                ...
+                                            </span>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        )
+                    )}
+                </TableBody>
+            </Table>
+
             {/* Grouped Summary */}
-            <div className="flex justify-end gap-8 flex-1">
+            <div className="flex w-fit gap-8 overflow-clip">
                 {/* Paid Group */}
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Principal Paid:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(principalPaid ?? 0, 2)}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof principal_paid === 'number' ? (
+                                formatNumber(principal_paid, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Prev. Int. Paid:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(prevInterestPaid ?? 0, 2)}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof previous_interest_paid === 'number' ? (
+                                formatNumber(previous_interest_paid, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Prev. Fines Paid:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(prevFinesPaid ?? 0, 2)}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof previous_fines_paid === 'number' ? (
+                                formatNumber(previous_fines_paid, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Interest Paid:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(interestPaid ?? 0, 2)}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof interest_paid === 'number' ? (
+                                formatNumber(interest_paid, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Fines Paid:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(finesPaid ?? 0, 2)}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof fines_paid === 'number' ? (
+                                formatNumber(fines_paid, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             % Collection:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(percentCollection ?? 0, 2)}%
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof collection_progress === 'number' ? (
+                                `${formatNumber(collection_progress, 2)}%`
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                 </div>
@@ -515,36 +922,62 @@ const LoanQuickSummary = ({ className }: IClassProps) => {
                         <span className="text-xs text-muted-foreground font-semibold">
                             Int. Amort:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(intAmort ?? 0, 2)}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof interest_amortization === 'number' ? (
+                                formatNumber(interest_amortization, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Total Amort.:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs min-w-[80px] text-right">
-                            {formatNumber(totalAmort ?? 0, 2)}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
+                            {typeof total_amortization === 'number' ? (
+                                formatNumber(total_amortization, 2)
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             First IRR:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs min-w-[80px] text-right">
-                            {firstIRR || '...'}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs text-right">
+                            {first_irr ? (
+                                first_irr
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             First DQ:
                         </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs min-w-[80px] text-right">
-                            {firstDQ || '...'}
+                        <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs text-right">
+                            {first_dq ? (
+                                first_dq
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
                         </span>
                     </div>
                 </div>
             </div>
+
+            <LoanInquireAdvanceInterestFinesModal {...calculatorModalState} />
 
             {/* Actions */}
             <div className="flex flex-col gap-2 items-end justify-start min-w-[140px]">
@@ -552,8 +985,17 @@ const LoanQuickSummary = ({ className }: IClassProps) => {
                     size="sm"
                     variant="secondary"
                     className="w-full flex gap-2 items-center"
+                    onClick={() => calculatorModalState.onOpenChange(true)}
                 >
                     <CalculatorIcon className="size-4" />
+                    Inquire Advance Interest / Fines
+                </Button>
+                <Button
+                    size="sm"
+                    variant="secondary"
+                    className="w-full flex gap-2 items-center"
+                >
+                    <PlusIcon className="size-4" />
                     Add Interest
                 </Button>
                 <Button
