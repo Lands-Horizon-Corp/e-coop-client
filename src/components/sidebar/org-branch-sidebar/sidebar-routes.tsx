@@ -523,6 +523,14 @@ export const generateSidebarGroups = (
                     userType: ['employee', 'owner'],
                     shortDescription: 'Manage cash check vouchers',
                 },
+                {
+                    type: 'item',
+                    icon: MoneyIcon,
+                    title: 'Adjustment Entry',
+                    url: `${baseUrl}/accounting/adjustment-entry`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage cash adjustment entry',
+                },
             ],
         },
         {
