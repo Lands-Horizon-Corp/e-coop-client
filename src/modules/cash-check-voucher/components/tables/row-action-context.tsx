@@ -10,6 +10,7 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { ICashCheckVoucher, useDeleteCashCheckVoucherById } from '../..'
+import CashCheckEntryUpdateFormModal from '../forms/cash-check-entry-form-modal'
 import CashCheckVoucherCreateUpdateFormModal from '../forms/cash-check-voucher-create-udate-form-modal'
 import CashCheckVoucherOtherAction from './cash-check-other-voucher'
 import { ICashCheckVoucherTableActionComponentProp } from './columns'
@@ -24,6 +25,7 @@ const useCashCheckVoucherActions = ({
     onDeleteSuccess,
 }: UseCashCheckVoucherActionsProps) => {
     const updateModal = useModalState()
+    const checkEntry = useModalState()
     const cashCheckVoucher = row.original
     const { onOpen } = useConfirmModalStore()
     const {
@@ -41,6 +43,9 @@ const useCashCheckVoucherActions = ({
     const handleEdit = () => {
         updateModal.onOpenChange(true)
     }
+    const handleOpenCheckEntry = () => {
+        checkEntry.onOpenChange(true)
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -50,13 +55,14 @@ const useCashCheckVoucherActions = ({
             onConfirm: () => deleteCashCheckVoucher(cashCheckVoucher.id),
         })
     }
-
     return {
         cashCheckVoucher,
         updateModal,
         isDeletingCashCheckVoucher,
         handleEdit,
         handleDelete,
+        checkEntry,
+        handleOpenCheckEntry,
     }
 }
 
@@ -76,12 +82,15 @@ export const CashCheckJournalVoucherAction = ({
         isDeletingCashCheckVoucher,
         handleEdit,
         handleDelete,
+        checkEntry,
+        handleOpenCheckEntry,
     } = useCashCheckVoucherActions({ row, onDeleteSuccess })
 
     const isReleased =
         !!cashCheckVoucher.printed_date &&
         !!cashCheckVoucher.approved_date &&
         !!cashCheckVoucher.released_date
+
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
@@ -92,6 +101,24 @@ export const CashCheckJournalVoucherAction = ({
                         cashCheckVoucherId: cashCheckVoucher.id,
                         defaultValues: { ...cashCheckVoucher },
                         readOnly: isReleased,
+                    }}
+                />
+                <CashCheckEntryUpdateFormModal
+                    {...checkEntry}
+                    className="!min-w-[800px]"
+                    formProps={{
+                        cashCheckVoucherId: cashCheckVoucher.id,
+                        defaultValues: {
+                            ...cashCheckVoucher,
+                            check_entry_account_id:
+                                cashCheckVoucher.check_entry_account_id || '',
+                            check_entry_amount:
+                                cashCheckVoucher.check_entry_amount || 0,
+                            check_entry_check_date:
+                                cashCheckVoucher.check_entry_check_date || '',
+                            check_entry_check_number:
+                                cashCheckVoucher.check_entry_check_number || '',
+                        },
                     }}
                 />
             </div>
@@ -108,7 +135,12 @@ export const CashCheckJournalVoucherAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<CashCheckVoucherOtherAction row={row} />}
+                otherActions={
+                    <CashCheckVoucherOtherAction
+                        handleOpenCheckEntry={handleOpenCheckEntry}
+                        row={row}
+                    />
+                }
             />
         </>
     )

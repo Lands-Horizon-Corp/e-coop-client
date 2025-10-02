@@ -5,7 +5,6 @@ import { descriptionTransformerSanitizer } from '@/validation'
 export const CashCheckVoucherSchema = z.object({
     name: z.string().optional(),
     cash_voucher_number: z.string().optional(),
-    // date: z.string().min(1, 'Date is required'),
     status: z
         .enum(['pending', 'printed', 'approved', 'released'])
         .default('pending')
@@ -80,6 +79,8 @@ export const CashCheckVoucherSchema = z.object({
     check_entry_check_number: z.string().optional(),
     check_entry_check_date: z.string().optional(),
     check_entry_account_id: z.string().optional(),
+
+    check_entry_account: z.any().optional(),
 
     // Entries Arrays - Added
     cash_check_voucher_entries: z.array(z.any()).optional(),

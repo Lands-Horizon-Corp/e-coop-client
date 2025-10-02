@@ -20,10 +20,11 @@ import { ICashCheckVoucher } from '../../cash-check-voucher.types'
 
 type ICashCheckVoucherTableActionComponentProp = {
     row: Row<ICashCheckVoucher>
+    handleOpenCheckEntry: () => void
 }
-
 const CashCheckVoucherOtherAction = ({
     row,
+    handleOpenCheckEntry,
 }: ICashCheckVoucherTableActionComponentProp) => {
     const CashCheckVoucher = row.original
 
@@ -123,10 +124,18 @@ const CashCheckVoucherOtherAction = ({
             onSelect: handleCashCheckAction('release'),
             isVisible: showRelease,
         },
+        {
+            label: 'check entry',
+            icon: (
+                <SendHorizonalIcon className="mr-2 h-4 w-4 text-purple-500" />
+            ),
+            onSelect: handleOpenCheckEntry,
+            isVisible: true,
+        },
     ]
 
     return (
-        <div className="flex flex-col w-48 rounded-md  p-1">
+        <div className="flex flex-col w-48 rounded-md p-1">
             {menuActions
                 .filter((action) => action.isVisible)
                 .map((action) => (
