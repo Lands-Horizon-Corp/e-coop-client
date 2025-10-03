@@ -34,6 +34,7 @@ interface Props extends IPickerBaseProps<IMemberProfile> {
     allowShorcutCommand?: boolean
     showPBNo?: boolean
     allowClear?: boolean
+    mainTriggerClassName?: string
 }
 
 const MemberPicker = forwardRef<HTMLButtonElement, Props>(
@@ -49,6 +50,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             triggerVariant = 'secondary',
             showPBNo = true,
             allowClear = false,
+            mainTriggerClassName,
         },
         ref
     ) => {
@@ -224,8 +226,9 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     />
                     <div
                         className={cn(
-                            'flex items-center ',
-                            allowClear ? 'space-x-1' : ''
+                            // Use 'flex' here to align the main button and the clear button horizontally
+                            'flex items-center space-x-1',
+                            mainTriggerClassName
                         )}
                     >
                         <Button
@@ -235,13 +238,13 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                             disabled={disabled}
                             onClick={() => setState(true)}
                             className={cn(
-                                'w-full items-center justify-between rounded-md border p-0 px-2',
+                                'flex-1 items-center justify-between rounded-md border p-0 px-2',
                                 triggerClassName
                             )}
                         >
-                            <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
-                                <span className="inline-flex w-full items-center gap-x-2">
-                                    <div>
+                            <span className="flex flex-1 min-w-0 items-center justify-between text-sm text-foreground/90">
+                                <span className="inline-flex flex-1 min-w-0 items-center gap-x-2">
+                                    <div className="flex-shrink-0">
                                         {isFetching ? (
                                             <LoadingSpinner />
                                         ) : (
@@ -253,33 +256,45 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                                         value?.media
                                                             ?.download_url
                                                     }
+                                                    className="h-6 w-6 rounded-full object-cover"
                                                 />
                                             </PreviewMediaWrapper>
                                         )}
                                     </div>
+
+                                    {/* Text Display */}
                                     {!value ? (
-                                        <span className="text-foreground/70">
+                                        <span className="text-foreground/70 truncate">
+                                            {' '}
                                             {value ||
                                                 placeholder ||
                                                 'Select member'}
                                         </span>
                                     ) : (
-                                        <span className="truncate max-w-[120px] min-w-[30px]">
-                                            {value.full_name}
+                                        <span className="inline-flex flex-1 min-w-0 items-center gap-x-4">
+                                            <span className="truncate font-medium flex-shrink">
+                                                {' '}
+                                                {value.full_name}
+                                            </span>
+                                            {showPBNo && (
+                                                <span className="flex-shrink-0 font-mono text-sm text-muted-foreground ml-auto">
+                                                    {' '}
+                                                    {value?.passbook || ''}
+                                                </span>
+                                            )}
                                         </span>
                                     )}
                                 </span>
+
                                 {allowShorcutCommand && (
-                                    <span className="mr-2 text-sm">⌘ ↵ </span>
-                                )}
-                                {showPBNo && (
-                                    <span className="mr-1 font-mono text-sm text-muted-foreground">
-                                        {value?.passbook || ''}
+                                    <span className="ml-2 text-sm flex-shrink-0">
+                                        ⌘ ↵{' '}
                                     </span>
                                 )}
                             </span>
-                            <ChevronDownIcon />
+                            <ChevronDownIcon className="flex-shrink-0 ml-2" />{' '}
                         </Button>
+                        {/* Clear Button */}
                         {allowClear && value && (
                             <Button
                                 onClick={(e) => {
@@ -291,9 +306,9 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 }}
                                 variant={'ghost'}
                                 size={'sm'}
-                                className="curpsor-pointer rounded-full !p-0 !px-0"
+                                className="cursor-pointer rounded-full !p-0 !px-2 flex-shrink-0"
                             >
-                                <XIcon className="inline" />
+                                <XIcon className="inline h-4 w-4" />{' '}
                             </Button>
                         )}
                     </div>

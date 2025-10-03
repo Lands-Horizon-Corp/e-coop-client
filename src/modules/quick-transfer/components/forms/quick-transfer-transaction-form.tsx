@@ -371,9 +371,7 @@ export const QuickTransferTransactionForm = ({
                                         shouldDirty: true,
                                     })
                                 }}
-                                hideDescription
                                 placeholder="Select an account"
-                                triggerClassName="!min-w-fit"
                                 value={
                                     form.getValues('account') || selectedAccount
                                 }

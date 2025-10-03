@@ -217,8 +217,14 @@ const AccountPicker = ({
                             triggerClassName
                         )}
                     >
-                        <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
-                            <span className="inline-flex w-full items-center gap-x-2">
+                        {/* for future references how it fixed the issue */}
+                        {/* flex-1 min-w-0 makes content area responsive */}
+                        {/* flex-1 min-w-0 ensures proper space usage for truncation */}
+                        {/* flex-shrink-0 protects the icon */}
+                        {/* flex-shrink-0 protects the badges */}
+                        {/* flex-shrink-0 protects the shortcut command */}
+                        <div className="flex flex-1 items-center text-sm text-foreground/90 overflow-hidden">
+                            <span className="flex flex-1 min-w-0 items-center gap-x-2">
                                 <div>
                                     {isFetching && !value ? (
                                         <LoadingSpinner />
@@ -227,56 +233,65 @@ const AccountPicker = ({
                                     )}
                                 </div>
                                 {value?.icon && value.icon.length > 0 && (
-                                    <span className="bg-muted rounded-full p-0.5">
+                                    <span className="bg-muted border rounded-full p-0.5 flex-shrink-0">
                                         <RenderIcon
                                             icon={value.icon as TIcon}
                                         />
                                     </span>
                                 )}
                                 {!value ? (
-                                    <span className="text-foreground/70">
+                                    <span className="text-foreground/70 truncate">
                                         {placeholder || 'Select Account'}
                                     </span>
                                 ) : (
-                                    <span className="inline-flex gap-x-4 items-center">
-                                        <span>{value.name ?? placeholder}</span>
+                                    <span className="inline-flex flex-1 min-w-0 gap-x-4 items-center">
+                                        <span className="font-medium truncate min-w-fit flex-shrink">
+                                            {value.name ?? placeholder}
+                                        </span>
+
                                         {!nameOnly && !hideDescription && (
-                                            <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
+                                            <span className="text-xs text-foreground/70 truncate flex-shrink">
                                                 {value.description}
                                             </span>
                                         )}
                                     </span>
                                 )}
+                                {!nameOnly && (
+                                    <span className="ml-2 flex-none flex gap-x-1 items-center font-mono text-sm text-foreground/30 flex-shrink-0">
+                                        {value?.type && (
+                                            <AccountTypeBadge
+                                                type={value.type}
+                                                description="(Type)"
+                                            />
+                                        )}
+                                        {value?.general_ledger_type && (
+                                            <GeneralLedgerTypeBadge
+                                                type={value.general_ledger_type}
+                                                description="(GL)"
+                                            />
+                                        )}
+                                        {value?.financial_statement_type && (
+                                            <FinancialStatementTypeBadge
+                                                type={
+                                                    value.financial_statement_type
+                                                }
+                                                description=" (FS)"
+                                            />
+                                        )}
+                                    </span>
+                                )}
                             </span>
+
+                            {/* Shortcut Command */}
                             {allowShorcutCommand && (
-                                <span className="mr-2 text-sm">⌘ ↵ </span>
-                            )}
-                            {!nameOnly && (
-                                <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
-                                    {value?.type && (
-                                        <AccountTypeBadge
-                                            type={value.type}
-                                            description="(Type)"
-                                        />
-                                    )}
-                                    {value?.general_ledger_type && (
-                                        <GeneralLedgerTypeBadge
-                                            type={value.general_ledger_type}
-                                            description="(GL)"
-                                        />
-                                    )}
-                                    {value?.financial_statement_type && (
-                                        <FinancialStatementTypeBadge
-                                            type={
-                                                value.financial_statement_type
-                                            }
-                                            description=" (FS)"
-                                        />
-                                    )}
+                                <span className="ml-2 mr-1 text-sm text-foreground/40 flex-shrink-0">
+                                    ⌘ ↵
                                 </span>
                             )}
-                        </span>
-                        <ChevronDownIcon />
+                        </div>
+
+                        {/* Chevron Icon */}
+                        <ChevronDownIcon className="flex-shrink-0 ml-1" />
                     </Button>
                     {allowClear && value && (
                         <Button

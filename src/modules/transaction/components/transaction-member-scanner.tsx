@@ -94,7 +94,7 @@ const TransactionMemberScanner = ({
                 setActiveScope(SHORTCUT_SCOPES.PAYMENT)
             }}
             className={cn(
-                'flex flex-col xl:flex-row w-full h-fit bg-sidebar min-h-fit ecoop-scroll  rounded-2xl',
+                'flex flex-col xl:flex-row w-full h-fit min-h-fit ecoop-scroll rounded-2xl p-4',
                 className
             )}
         >
@@ -109,14 +109,17 @@ const TransactionMemberScanner = ({
                 }}
                 placeholder="Select Member"
             />
-            {/* Left: Scanner */}
+            {/* Left: Scanner Column */}
             <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
-                <div className="w-full xl:p-1 mr-1 mb-1 xl:mb-0 flex justify-center">
+                {/* Inner Scanner Wrapper: Removed mr-1/mb-1. Added consistent p-2 for spacing. */}
+                <div className="w-full xl:p-2 flex justify-center">
                     <div
                         className={cn(
+                            // Apply styles for the active scanner state
                             startScan && !selectedMember
-                                ? 'xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden '
-                                : 'p-4'
+                                ? 'xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden'
+                                : // Apply padding for the static placeholder state
+                                  'p-4'
                         )}
                     >
                         {startScan && !selectedMember ? (
@@ -132,7 +135,8 @@ const TransactionMemberScanner = ({
                                 }}
                             />
                         ) : (
-                            <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2 ">
+                            // Placeholder box: use size-full and flex-1 to occupy space consistently
+                            <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2">
                                 <ScanLineIcon
                                     size={50}
                                     className=" text-muted-foreground/70"
@@ -157,7 +161,10 @@ const TransactionMemberScanner = ({
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col flex-1 w-full h-full">
+
+            {/* Right: Content Column */}
+            {/* Use 'flex-1 min-w-0' to make it take up the rest of the space in xl:flex-row */}
+            <div className="flex flex-col flex-1 w-full h-full p-2">
                 {isPending && decodedMemberProfile !== undefined && (
                     <p className="text-muted-foreground/70 flex items-center">
                         <LoadingSpinner className="mr-2 h-4 w-4" />

@@ -33,14 +33,13 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
         accessorKey: 'account',
         header: 'Account',
+        minSize: 200,
+        size: 350,
         cell: (props) => {
-            const hasValue = props.getValue()
             return (
                 <EditableCell
                     inputProps={{
-                        className: cn(
-                            hasValue ? '!min-w-[100px] !w-[220px]' : ''
-                        ),
+                        className: '!w-full !min-w-0 flex-1',
                     }}
                     inputType="account-picker"
                     {...props}
@@ -51,14 +50,13 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
         accessorKey: 'member_profile',
         header: 'Member',
+        minSize: 200,
+        size: 350,
         cell: (props) => {
-            const hasValue = props.getValue()
             return (
                 <EditableCell
                     inputProps={{
-                        className: cn(
-                            hasValue ? '!min-w-[100px] !w-[200px]' : ''
-                        ),
+                        className: '!w-full !min-w-0 flex-1',
                     }}
                     inputType="member-picker"
                     {...props}
@@ -69,37 +67,47 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
         accessorKey: 'cash_check_voucher_number',
         header: 'CV Number',
-        cell: (props) => <EditableCell inputType="text" {...props} />,
+        minSize: 120,
+        size: 150,
+        cell: (props) => (
+            <EditableCell
+                inputProps={{
+                    className: '!w-full !min-w-0',
+                }}
+                inputType="text"
+                {...props}
+            />
+        ),
     },
     {
         accessorKey: 'debit',
         header: 'Debit',
-        cell: (props) => {
-            return (
-                <EditableCell
-                    inputProps={{
-                        className: 'min-w-[50px]',
-                    }}
-                    inputType="number"
-                    {...props}
-                />
-            )
-        },
+        minSize: 100,
+        size: 120,
+        cell: (props) => (
+            <EditableCell
+                inputProps={{
+                    className: '!w-full !min-w-0',
+                }}
+                inputType="number"
+                {...props}
+            />
+        ),
     },
     {
         accessorKey: 'credit',
         header: 'Credit',
-        cell: (props) => {
-            return (
-                <EditableCell
-                    inputProps={{
-                        className: 'min-w-[49px]',
-                    }}
-                    inputType="number"
-                    {...props}
-                />
-            )
-        },
+        minSize: 100,
+        size: 120,
+        cell: (props) => (
+            <EditableCell
+                inputProps={{
+                    className: '!w-full !min-w-0',
+                }}
+                inputType="number"
+                {...props}
+            />
+        ),
     },
     {
         accessorKey: 'action',
@@ -108,7 +116,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             <Button
                 variant="ghost"
                 size="icon"
-                className=" w-full hover:bg-primary/10 !p-0 text-destructive"
+                className="w-full hover:bg-primary/10 !p-0 text-destructive"
                 onClick={(e) => {
                     e.preventDefault()
                     row.table.options.meta?.handleDeleteRow(row.row)
@@ -248,7 +256,8 @@ export const JournalEntryTable = ({
                     </CommandShortcut>
                 </div>
             </div>
-            <Table wrapperClassName={cn('max-h-64', TableClassName)}>
+            {/* Increased max-height for better vertical space management */}
+            <Table wrapperClassName={cn('max-h-[400px]', TableClassName)}>
                 <TableHeader className={cn('sticky top-0 z-10')}>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow
@@ -264,6 +273,7 @@ export const JournalEntryTable = ({
                                         'first:!rounded-tl-2xl',
                                         'last:!rounded-tr-2xl'
                                     )}
+                                    style={{ width: header.getSize() }}
                                 >
                                     {!header.isPlaceholder &&
                                         flexRender(
@@ -284,7 +294,7 @@ export const JournalEntryTable = ({
                             )}
                         >
                             {row.getVisibleCells().map((cell) => (
-                                <TableCell key={cell.id} className="!px-1">
+                                <TableCell key={cell.id} className="!p-1">
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()

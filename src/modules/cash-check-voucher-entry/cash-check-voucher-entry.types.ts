@@ -1,7 +1,6 @@
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { ICashCheckVoucher } from '../cash-check-voucher/cash-check-voucher.types'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
@@ -20,7 +19,7 @@ export interface ICashCheckVoucherEntry extends IBaseEntityMeta {
     account?: IAccount
 
     cash_check_voucher_id?: string
-    cash_check_voucher?: ICashCheckVoucher
+    cash_check_voucher_number?: string
 
     description: string
     debit: number
@@ -33,6 +32,8 @@ export interface ICashCheckVoucherEntryRequest {
 
     member_profile?: IMemberProfile
     member_profile_id?: TEntityId
+
+    cash_check_voucher_number?: string
 
     account?: IAccount
     account_id?: TEntityId

@@ -33,14 +33,13 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
         accessorKey: 'account',
         header: 'Account',
+        minSize: 200,
+        size: 350,
         cell: (props) => {
-            const hasValue = props.getValue()
             return (
                 <EditableCell
                     inputProps={{
-                        className: cn(
-                            hasValue ? '!min-w-[100px] !w-[220px]' : ''
-                        ),
+                        className: '!w-full !min-w-0 flex-1',
                     }}
                     inputType="account-picker"
                     {...props}
@@ -51,14 +50,13 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
         accessorKey: 'member_profile',
         header: 'Member',
+        minSize: 200,
+        size: 350,
         cell: (props) => {
-            const hasValue = props.getValue()
             return (
                 <EditableCell
                     inputProps={{
-                        className: cn(
-                            hasValue ? '!min-w-[100px] !w-[200px]' : ''
-                        ),
+                        className: '!w-full !min-w-0 flex-1',
                     }}
                     inputType="member-picker"
                     {...props}
@@ -69,14 +67,28 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
         accessorKey: 'cash_check_voucher_number',
         header: 'CV Number',
-        cell: (props) => <EditableCell inputType="text" {...props} />,
+        minSize: 120,
+        size: 150,
+        cell: (props) => (
+            <EditableCell
+                inputProps={{
+                    className: '!w-full !min-w-0',
+                }}
+                inputType="text"
+                {...props}
+            />
+        ),
     },
     {
         accessorKey: 'debit',
         header: 'Debit',
+        minSize: 100,
+        size: 120,
         cell: (props) => (
             <EditableCell
-                inputProps={{ className: 'min-w-[50px]' }}
+                inputProps={{
+                    className: '!w-full !min-w-0',
+                }}
                 inputType="number"
                 {...props}
             />
@@ -85,9 +97,13 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
         accessorKey: 'credit',
         header: 'Credit',
+        minSize: 100,
+        size: 120,
         cell: (props) => (
             <EditableCell
-                inputProps={{ className: 'min-w-[50px]' }}
+                inputProps={{
+                    className: '!w-full !min-w-0',
+                }}
                 inputType="number"
                 {...props}
             />
@@ -242,7 +258,7 @@ export const CashCheckJournalEntryTable = ({
                     </CommandShortcut>
                 </div>
             </div>
-            <Table wrapperClassName={cn('max-h-64', TableClassName)}>
+            <Table wrapperClassName={cn('max-h-[400px]', TableClassName)}>
                 <TableHeader className={cn('sticky top-0 z-10')}>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow
@@ -258,6 +274,7 @@ export const CashCheckJournalEntryTable = ({
                                         'first:!rounded-tl-2xl',
                                         'last:!rounded-tr-2xl'
                                     )}
+                                    style={{ width: header.getSize() }}
                                 >
                                     {!header.isPlaceholder &&
                                         flexRender(

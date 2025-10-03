@@ -105,6 +105,7 @@ const ValidateCashCheckEntry = ({
             debit: entry.debit,
             member_profile_id: memberProfile?.id,
             account_id: account?.id,
+            cash_check_voucher_number: entry.cash_check_voucher_number,
         }
     })
     const parsedEntries = z
@@ -261,7 +262,7 @@ const CashCheckVoucherCreateUpdateForm = ({
             account_id: entry.account_id,
             member_profile_id: entry.member_profile_id,
             employee_user_id: entry.employee_user_id,
-            cash_check_voucher_number: entry.cash_check_voucher,
+            cash_check_voucher_number: entry.cash_check_voucher_number,
             description: entry.description,
             member_profile: entry.member_profile,
             account: entry.account,

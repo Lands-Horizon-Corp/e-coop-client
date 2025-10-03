@@ -134,14 +134,16 @@ const UserOrganizationsDashboard = ({
                                     className="border-secondary/50 border"
                                     imageBackgroundClassName=" size-74 "
                                 >
-                                    <AccordionTrigger className="relative flex  min-h-32 w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                        <div className="flex flex-col">
+                                    <AccordionTrigger className="relative flex min-h-32 w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
+                                        <div className="flex flex-col w-full">
                                             <p className="text-start text-2xl font-bold">
                                                 {org.name}
                                             </p>
-                                            <PlainTextEditor
-                                                content={org.description}
-                                            />
+                                            <span className="truncate text-sm line-clamp-2 text-wrap text-start w-fit">
+                                                <PlainTextEditor
+                                                    content={org.description}
+                                                />
+                                            </span>
                                             {(isUserOwner || isOrgCreator) && (
                                                 <span
                                                     onClick={(e) => {
