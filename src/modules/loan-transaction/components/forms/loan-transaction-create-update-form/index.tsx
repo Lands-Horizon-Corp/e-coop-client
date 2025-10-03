@@ -67,7 +67,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
-import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 

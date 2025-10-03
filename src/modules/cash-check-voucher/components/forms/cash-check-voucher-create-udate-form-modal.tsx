@@ -23,9 +23,7 @@ import {
     CashCheckVoucherEntrySchema,
     ICashCheckVoucherEntryRequest,
 } from '@/modules/cash-check-voucher-entry'
-import {
-    CashCheckVoucherTagsManagerPopover,
-} from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
+import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CompanyCombobox from '@/modules/company/components/combobox'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
