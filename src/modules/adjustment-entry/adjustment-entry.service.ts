@@ -1,4 +1,9 @@
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { useQuery } from '@tanstack/react-query'
+
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
 
 import type {
     IAdjustmentEntry,
@@ -47,4 +52,22 @@ export const {
     useDeleteMany: useDeleteManyAdjustmentEntry,
 } = apiCrudHooks
 
-// custom hooks can go here
+type AdjustmentEntryTotal = {
+    total_debit: number
+    total_credit: number
+}
+
+export const useAdjustmentEntryTotal = ({
+    options,
+}: {
+    options?: HookQueryOptions<AdjustmentEntryTotal, Error>
+}) => {
+    return useQuery<AdjustmentEntryTotal, Error>({
+        ...options,
+        queryKey: ['adjustment-entry', 'total'],
+        queryFn: async (): Promise<AdjustmentEntryTotal> => {
+            const res = await API.get('/api/v1/adjustment-entry/total')
+            return res.data as AdjustmentEntryTotal
+        },
+    })
+}

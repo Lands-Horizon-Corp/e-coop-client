@@ -1,44 +1,16 @@
-// src/modules/adjustment-entry/pages/AdjustmentEntryPage.tsx
 import { useQueryClient } from '@tanstack/react-query'
-
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
-import { useSubscribe } from '@/hooks/use-pubsub'
 
+import { AdjustmentEntryTotal } from '../components/adjustment-entry-total'
 import { AdjustmentEntryCreateUpdateFormModal } from '../components/forms/adjustment-entry-form-modal'
 import AdjustmentEntryTable from '../components/tables'
 
 const AdjustmentEntryPage = () => {
     const queryClient = useQueryClient()
     const createModal = useModalState(false)
-    const {
-        currentAuth: {
-            user_organization: { branch_id },
-        },
-    } = useAuthUserWithOrgBranch()
-
-    const queryKey = ['adjustment-entry', 'paginated']
-
-    useSubscribe(`adjustment-entry.created.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey,
-        })
-    )
-
-    useSubscribe(`adjustment-entry.updated.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey,
-        })
-    )
-
-    useSubscribe(`adjustment-entry.deleted.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey,
-        })
-    )
 
     return (
         <PageContainer>
@@ -46,16 +18,25 @@ const AdjustmentEntryPage = () => {
                 {...createModal}
                 title="Create Adjustment Entry"
                 description="Enter the details for the new adjustment entry."
+                formProps={{
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: ['adjustment-entry', 'total'],
+                        })
+                    },
+                }}
             />
-
             <AdjustmentEntryTable
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
+                className="max-h-[90vh] min-h-[80vh] w-full py-2"
             />
+            <div className="w-full justify-end flex mb-4">
+                <AdjustmentEntryTotal />
+            </div>
         </PageContainer>
     )
 }
