@@ -371,6 +371,7 @@ import {
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 import {
     TbBlockquote as BlockQuoteIcon,
+    TbClockCancel as ClockCancelIcon,
     TbCreditCard as CreditCardIcon2,
     TbSquareF1 as F1Icon,
     TbSquareF2 as F2Icon,
@@ -647,6 +648,7 @@ export {
     BarcodeScanIcon,
     AutoAwesomeIcon,
     JudgeHammerIcon,
+    ClockCancelIcon,
     TrendingDownIcon,
     HandsHelpingIcon,
     DoorExitFillIcon,
@@ -1096,6 +1098,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Focus Icon': FocusIcon,
     'Command Icon': CommandIcon,
     'Code Icon': CodeIcon,
+    'Clock Cancel': ClockCancelIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]
