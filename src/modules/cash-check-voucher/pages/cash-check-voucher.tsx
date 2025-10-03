@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import CancelledCashCheckVoucherButton from '@/modules/cancelled-cash-check-voucher/components/cancelled-button'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -20,7 +21,6 @@ const CashCheckJournalVoucherPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    // Subscribe to events to automatically refresh the data table
     useSubscribe(`cash_check_voucher.created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['cash-check-voucher', 'paginated'],
@@ -70,6 +70,7 @@ const CashCheckJournalVoucherPage = () => {
                             createModal.onOpenChange(true)
                         },
                     },
+                    otherActionLeft: <CancelledCashCheckVoucherButton />,
                 }}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
