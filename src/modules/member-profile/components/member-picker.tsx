@@ -226,7 +226,6 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     />
                     <div
                         className={cn(
-                            // Use 'flex' here to align the main button and the clear button horizontally
                             'flex items-center space-x-1',
                             mainTriggerClassName
                         )}
@@ -238,7 +237,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                             disabled={disabled}
                             onClick={() => setState(true)}
                             className={cn(
-                                'flex-1 items-center justify-between rounded-md border p-0 px-2',
+                                'flex-1 items-center justify-between rounded-md border p-0 px-2 h-10',
                                 triggerClassName
                             )}
                         >
@@ -246,7 +245,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 <span className="inline-flex flex-1 min-w-0 items-center gap-x-2">
                                     <div className="flex-shrink-0">
                                         {isFetching ? (
-                                            <LoadingSpinner />
+                                            <LoadingSpinner className="size-6" />
                                         ) : (
                                             <PreviewMediaWrapper
                                                 media={value?.media}
@@ -262,23 +261,17 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                         )}
                                     </div>
 
-                                    {/* Text Display */}
                                     {!value ? (
-                                        <span className="text-foreground/70 truncate">
-                                            {' '}
-                                            {value ||
-                                                placeholder ||
-                                                'Select member'}
+                                        <span className="truncate text-foreground/70">
+                                            {placeholder || 'Select member'}
                                         </span>
                                     ) : (
-                                        <span className="inline-flex flex-1 min-w-0 items-center gap-x-4">
-                                            <span className="truncate font-medium flex-shrink">
-                                                {' '}
+                                        <span className="inline-flex flex-1 w-0 max-w-fit items-center gap-x-4">
+                                            <span className="truncate font-medium flex-shrink min-w-0">
                                                 {value.full_name}
                                             </span>
                                             {showPBNo && (
                                                 <span className="flex-shrink-0 font-mono text-sm text-muted-foreground ml-auto">
-                                                    {' '}
                                                     {value?.passbook || ''}
                                                 </span>
                                             )}
@@ -287,14 +280,15 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 </span>
 
                                 {allowShorcutCommand && (
-                                    <span className="ml-2 text-sm flex-shrink-0">
-                                        ⌘ ↵{' '}
+                                    <span className="ml-2 text-sm flex-shrink-0 text-muted-foreground">
+                                        ⌘ ↵
                                     </span>
                                 )}
                             </span>
-                            <ChevronDownIcon className="flex-shrink-0 ml-2" />{' '}
+
+                            <ChevronDownIcon className="flex-shrink-0 ml-2 h-4 w-4 text-muted-foreground" />
                         </Button>
-                        {/* Clear Button */}
+
                         {allowClear && value && (
                             <Button
                                 onClick={(e) => {
@@ -308,7 +302,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 size={'sm'}
                                 className="cursor-pointer rounded-full !p-0 !px-2 flex-shrink-0"
                             >
-                                <XIcon className="inline h-4 w-4" />{' '}
+                                <XIcon className="inline h-4 w-4" />
                             </Button>
                         )}
                     </div>
