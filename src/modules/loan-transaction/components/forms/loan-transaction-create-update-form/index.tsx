@@ -413,7 +413,7 @@ const LoanTransactionCreateUpdateForm = ({
         }
     )
 
-    useSimpleShortcut(['Control', 'Enter'], () => {
+    useHotkeys('Ctrl + Enter', () => {
         memberPickerModal.onOpenChange(!memberPickerModal.open)
     })
 

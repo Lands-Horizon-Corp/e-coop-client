@@ -3,6 +3,7 @@ import z from 'zod'
 import { descriptionTransformerSanitizer } from '@/validation'
 
 export const CashCheckVoucherSchema = z.object({
+    id: z.string().optional(),
     name: z.string().optional(),
     cash_voucher_number: z.string().optional(),
     status: z
