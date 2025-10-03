@@ -21,15 +21,15 @@ import GeneralShortcutsWrapper, {
     useShortcutContext,
 } from '../shorcuts/general-shortcuts-wrapper'
 
-export interface IModalClassNames extends IClassProps {
+export interface ISheetClassNames extends IClassProps {
     titleClassName?: string
     descriptionClassName?: string
 }
 
-export interface IModalProps
+export interface ISheetProps
     extends IBaseProps,
         React.ComponentProps<typeof SheetPrimitive.Root>,
-        IModalClassNames {
+        ISheetClassNames {
     title?: string | ReactNode
     description?: string | ReactNode
     footer?: React.ReactNode
@@ -44,7 +44,7 @@ const SheetModal = ({
     titleClassName,
     descriptionClassName,
     ...other
-}: IModalProps) => {
+}: ISheetProps) => {
     const { setActiveScope } = useShortcutContext()
 
     useEffect(() => {

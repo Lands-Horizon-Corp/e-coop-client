@@ -10,6 +10,8 @@ import {
 export interface ILoanLedger extends IBaseEntityMeta {
     //add here
 
+    line_number?: number
+
     reference_number: string
     entry_date: string
     debit: number

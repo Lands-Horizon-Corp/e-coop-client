@@ -23,7 +23,7 @@ export interface FormFieldWrapperProps<
     hideFieldMessage?: boolean
 
     label?: string | ReactNode
-    description?: string
+    description?: string | ReactNode
 
     className?: string
     labelClassName?: string

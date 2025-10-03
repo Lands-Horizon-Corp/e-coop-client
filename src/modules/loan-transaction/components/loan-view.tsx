@@ -27,6 +27,7 @@ import {
     UserIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import Modal, { IModalProps } from '@/components/modals/modal'
 import TextDisplay from '@/components/text-display'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -46,6 +47,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
+import { LoanAddInterestFormModal } from './forms/loan-add-interest-form'
 import { LoanInquireAdvanceInterestFinesModal } from './forms/loan-inquire-advance-interest-fines-form'
 import { LoanAmortizationModal } from './loan-amortization'
 import { LoanViewSkeleton } from './skeletons/loan-view-skeleton'
@@ -79,22 +81,20 @@ const LoanView = ({
 
     return (
         <div className={cn('space-y-4 p-4 w-full ', className)}>
+            {(isPending || !data) && isEnabled && <LoanViewSkeleton />}
+            {data && (
+                <>
+                    <LoanLedgerHeader loanTransaction={data} />
+                    <LoanDetails loanTransaction={data} />
+                    <LoanLedgerTable className="h-[50vh] w-full rounded-lg" />
+                    <LoanQuickSummary loanTransaction={data} />
+                </>
+            )}
             {errorMessage && (
                 <FormErrorMessage
                     className="w-fit mx-auto"
                     errorMessage={errorMessage}
                 />
-            )}
-            {(isPending || !data) && isEnabled && <LoanViewSkeleton />}
-            {data && (
-                <>
-                    <>
-                        <LoanLedgerHeader loanTransaction={data} />
-                        <LoanDetails loanTransaction={data} />
-                        <LoanLedgerTable className="h-[50vh] w-full rounded-lg" />
-                        <LoanQuickSummary loanTransaction={data} />
-                    </>
-                </>
             )}
         </div>
     )
@@ -737,6 +737,7 @@ const LoanQuickSummary = ({
     loanTransaction,
 }: IClassProps & { loanTransaction: ILoanTransaction }) => {
     const calculatorModalState = useModalState()
+    const addInterestModalState = useModalState()
 
     const {
         principal_paid,
@@ -761,6 +762,14 @@ const LoanQuickSummary = ({
                 className
             )}
         >
+            <LoanInquireAdvanceInterestFinesModal {...calculatorModalState} />
+            <LoanAddInterestFormModal
+                {...addInterestModalState}
+                formProps={{
+                    loanTransactionId: loanTransaction.id,
+                }}
+            />
+
             {/* Members & Amount Table */}
             <Table wrapperClassName="flex-1 max-h-[200px] bg-secondary rounded-lg ecoop-scroll">
                 <TableHeader>
@@ -977,8 +986,6 @@ const LoanQuickSummary = ({
                 </div>
             </div>
 
-            <LoanInquireAdvanceInterestFinesModal {...calculatorModalState} />
-
             {/* Actions */}
             <div className="flex flex-col gap-2 items-end justify-start min-w-[140px]">
                 <Button
@@ -988,23 +995,16 @@ const LoanQuickSummary = ({
                     onClick={() => calculatorModalState.onOpenChange(true)}
                 >
                     <CalculatorIcon className="size-4" />
-                    Inquire Advance Interest / Fines
+                    Calc. Advance Interest/Fines
                 </Button>
                 <Button
                     size="sm"
                     variant="secondary"
                     className="w-full flex gap-2 items-center"
+                    onClick={() => addInterestModalState.onOpenChange(true)}
                 >
                     <PlusIcon className="size-4" />
                     Add Interest
-                </Button>
-                <Button
-                    size="sm"
-                    variant="secondary"
-                    className="w-full flex gap-2 items-center"
-                >
-                    <TrashIcon className="size-4" />
-                    Change Line#
                 </Button>
                 <Button
                     size="sm"
@@ -1024,6 +1024,33 @@ const LoanQuickSummary = ({
                 </Button>
             </div>
         </div>
+    )
+}
+
+export const LoanViewModal = ({
+    title = 'Loan Transaction Details',
+    description = 'View loan transaction details and ledger.',
+    className,
+    loanTransactionId,
+    defaultLoanTransaction,
+    ...props
+}: IModalProps & {
+    loanTransactionId: string
+    defaultLoanTransaction?: ILoanTransaction
+}) => {
+    return (
+        <Modal
+            title={title}
+            description={description}
+            className={cn('!max-w-[95vw]', className)}
+            {...props}
+        >
+            <LoanView
+                loanTransactionId={loanTransactionId}
+                defaultLoanTransaction={defaultLoanTransaction}
+                className="p-0"
+            />
+        </Modal>
     )
 }
 
