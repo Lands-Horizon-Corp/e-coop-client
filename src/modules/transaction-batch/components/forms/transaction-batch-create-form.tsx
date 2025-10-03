@@ -204,6 +204,7 @@ const TransactionBatchCreateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
+                    className="sticky bottom-0"
                     readOnly={formProps.readOnly}
                     isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}

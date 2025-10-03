@@ -180,6 +180,9 @@ const AccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <FormControl>
                                     <Select
+                                        disabled={
+                                            formProps.readOnly || isLoading
+                                        }
                                         onValueChange={(selectedValue) => {
                                             field.onChange(selectedValue)
                                             setSelectedItem(selectedValue)
@@ -1979,7 +1982,7 @@ const AccountCreateUpdateForm = ({
                 </div>
 
                 {!formProps.readOnly && (
-                    <div className="space-y-2">
+                    <div className="space-y-2 sticky bottom-0">
                         <div className="flex items-center justify-end gap-x-2">
                             <Button
                                 size="sm"

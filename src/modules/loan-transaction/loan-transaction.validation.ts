@@ -212,8 +212,11 @@ export const LoanTransactionSchema = z
         account_id: EntityIdSchema('Loan Account is required'),
         account: z.any(),
 
-        loan_transaction_entries: z.array(LoanTransactionEntrySchema),
-        loan_transaction_entries_deleted: z.array(entityIdSchema).optional(), // not saved in backend, just for indicator what to delete
+        loan_transaction_entries: z.array(z.any()), // FOR UI Only
+        total_debit: z.number().optional().default(0), // FOR UI Only
+        total_credit: z.number().optional().default(0), // FOR UI Only
+        total_add_on: z.number().optional().default(0), // FOR UI Only
+        total_deduction: z.number().optional().default(0), // FOR UI Only
 
         member_profile_id: EntityIdSchema('Member'),
         member_profile: z.any(), // just for member prorifle picker (client side)

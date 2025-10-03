@@ -61,6 +61,7 @@ const MemberLoanTableSummary = ({
     onSelectData,
     actionComponent,
     RowContextComponent,
+    onRowClick,
 }: TMemberLoanTableSummaryProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -189,6 +190,7 @@ const MemberLoanTableSummary = ({
                     isStickyHeader
                     isStickyFooter
                     className="mb-2"
+                    onRowClick={onRowClick}
                     isScrollable={isScrollable}
                     setColumnOrder={setColumnOrder}
                     RowContextComponent={RowContextComponent}

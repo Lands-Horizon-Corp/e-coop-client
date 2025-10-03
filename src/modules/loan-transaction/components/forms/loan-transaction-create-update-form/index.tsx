@@ -258,6 +258,7 @@ const LoanTransactionCreateUpdateForm = ({
     const [tab, setTab] = useState<TLoanFormTabs>('entries')
     const [tab2, setTab2] = useState<TLoanFormTabs2>('loan-details')
     const [startScan, setStartScan] = useState(false)
+    const [customLoading, setCustomLoading] = useState(false)
     const memberPickerModal = useModalState()
 
     const {
@@ -294,7 +295,6 @@ const LoanTransactionCreateUpdateForm = ({
             loan_clearance_analysis_deleted: [],
 
             loan_transaction_entries: [],
-            loan_transaction_entries_deleted: [],
 
             loan_terms_and_condition_amount_receipt: [],
             loan_clearance_analysis_institution_deleted: [],
@@ -423,10 +423,13 @@ const LoanTransactionCreateUpdateForm = ({
         reset,
     } = loanTransactionId ? updateMutation : createMutation
 
+    const isLoading = isPending || customLoading
     const error = firstError || serverRequestErrExtractor({ error: rawError })
 
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
+
+    console.log(form.formState.errors)
 
     return (
         <Form {...form}>
@@ -1249,6 +1252,12 @@ const LoanTransactionCreateUpdateForm = ({
                                     <LoanEntriesEditor
                                         {...field}
                                         form={form}
+                                        onUpdateLoading={setCustomLoading}
+                                        onUpdateAnything={(newData) => {
+                                            form.reset(newData)
+                                            updateMutation.reset()
+                                            createMutation.reset()
+                                        }}
                                         loanTransactionId={loanTransactionId}
                                         disabled={
                                             loanTransactionId === undefined ||
@@ -1320,7 +1329,7 @@ const LoanTransactionCreateUpdateForm = ({
                     className="grow min-w-0 max-w-full p-4 z-10 sticky bottom-0 mx-4 mb-4 bg-popover/70 rounded-xl"
                     error={error}
                     readOnly={isReadOnly}
-                    isLoading={isPending}
+                    isLoading={isLoading}
                     // disableSubmit={
                     //     formMode === 'create' && !areRequiredFieldsFilled
                     // }

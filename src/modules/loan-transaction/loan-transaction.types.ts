@@ -156,6 +156,11 @@ export interface ILoanTransaction
     appraised_value: number
     appraised_value_description: string
 
+    total_debit: number
+    total_credit: number
+    total_add_on: number
+    total_deduction: number
+
     // Tel zalven to add these
     due_date?: string
     amount_granted?: number

@@ -255,3 +255,20 @@ export const useReleaseLoanTransaction = createMutationFactory<
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })
+
+// Change Cash Account
+export const useLoanTransactionChangeCashEquivalenceAccount =
+    createMutationFactory<
+        ILoanTransaction,
+        Error,
+        { loanTransactionId: TEntityId; cashAccountId: TEntityId }
+    >({
+        mutationFn: async (data) => {
+            const response = await API.put<void, ILoanTransaction>(
+                `${loanTransactionAPIRoute}/${data.loanTransactionId}/cash-and-cash-equivalence-account/${data.cashAccountId}/change`
+            )
+            return response.data
+        },
+        invalidationFn: (args) =>
+            updateMutationInvalidationFn(loanTransactionBaseKey, args),
+    })
