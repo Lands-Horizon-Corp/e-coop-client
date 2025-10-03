@@ -23,6 +23,9 @@ import {
     CashCheckVoucherEntrySchema,
     ICashCheckVoucherEntryRequest,
 } from '@/modules/cash-check-voucher-entry'
+import {
+    CashCheckVoucherTagsManagerPopover,
+} from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CompanyCombobox from '@/modules/company/components/combobox'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
@@ -169,6 +172,8 @@ const CashCheckVoucherCreateUpdateForm = ({
             ...defaultValues,
         },
     })
+    const CashCheckVoucherTransactionId = form.watch('id') || cashCheckVoucherId
+
     const {
         mutate: createCashCheckVoucher,
         isPending: isCreating,
@@ -282,6 +287,14 @@ const CashCheckVoucherCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 className={cn('!w-full flex flex-col gap-y-4', className)}
             >
+                <div className="absolute top-4 right-10 z-10 flex gap-2">
+                    {CashCheckVoucherTransactionId && (
+                        <CashCheckVoucherTagsManagerPopover
+                            size="sm"
+                            cashCheckVoucherId={CashCheckVoucherTransactionId}
+                        />
+                    )}
+                </div>
                 <fieldset
                     disabled={isPending || formProps.readOnly}
                     className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4 sm:gap-y-3"
