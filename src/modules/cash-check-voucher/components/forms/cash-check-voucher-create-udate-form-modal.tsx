@@ -271,7 +271,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         e.preventDefault()
         modalState.onOpenChange(true)
     })
-    
+
     const isPrinted = !!defaultValues?.printed_date
     const isApproved = !!defaultValues?.approved_date
     const isReleased = !!defaultValues?.released_date

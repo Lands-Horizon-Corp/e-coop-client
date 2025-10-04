@@ -1,4 +1,3 @@
-import { cn } from '@/helpers'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -6,7 +5,6 @@ import { createUpdateColumns } from '@/components/data-table/data-table-common-c
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinIcon } from '@/components/icons'
-import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { ICashCheckVoucher } from '../../cash-check-voucher.types'
