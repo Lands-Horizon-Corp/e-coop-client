@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { ICashCheckVoucher } from '../../cash-check-voucher.types'
-import { CashCheckVoucherStatusBadge } from '../cash-check-voucher-badge'
+import CashCheckVoucherStatusIndicator from '../cash-check-status-indicator'
 
 export const cashCheckVoucherGlobalSearchTargets: IGlobalSearchTargets<ICashCheckVoucher>[] =
     [
@@ -149,22 +149,6 @@ const CashCheckVoucherTableColumns = (
         minSize: 120,
     },
     {
-        id: 'status',
-        accessorKey: 'status',
-        header: (props) => <DataTableColumnHeader {...props} title="Status" />,
-        cell: ({ row: { original: journalVoucher } }) => {
-            const status = journalVoucher.status
-
-            return status && <CashCheckVoucherStatusBadge status={status} />
-        },
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 150,
-        minSize: 80,
-    },
-    {
         id: 'total_debit',
         accessorKey: 'total_debit',
         header: (props) => (
@@ -214,29 +198,21 @@ const CashCheckVoucherTableColumns = (
             const isPrinted = !!journalVoucher.printed_date
             const isApproved = !!journalVoucher.approved_date
             const isReleased = !!journalVoucher.released_date
-            let statusLabel
-
-            if (isReleased) {
-                statusLabel = 'Released'
-            } else if (isApproved) {
-                statusLabel = 'Approved'
-            } else if (isPrinted) {
-                statusLabel = 'Printed'
-            } else {
-                statusLabel = 'Pending'
-            }
-
             return (
-                <Badge
-                    className={cn('!text-wrap', {
-                        'bg-green-500 text-white': isReleased,
-                        'bg-blue-500 text-white': isApproved && !isReleased,
-                        'bg-yellow-500 text-white': isPrinted && !isApproved,
-                        'bg-gray-500 text-white': !isPrinted,
-                    })}
-                >
-                    {statusLabel}
-                </Badge>
+                <CashCheckVoucherStatusIndicator
+                    voucherDates={{
+                        printed_date: isPrinted
+                            ? journalVoucher.printed_date
+                            : null,
+                        approved_date: isApproved
+                            ? journalVoucher.approved_date
+                            : null,
+                        released_date: isReleased
+                            ? journalVoucher.released_date
+                            : null,
+                    }}
+                    className="max-w-max"
+                />
             )
         },
         size: 150,

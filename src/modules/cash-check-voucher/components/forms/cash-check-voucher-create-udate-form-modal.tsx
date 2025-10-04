@@ -12,7 +12,6 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IAccount } from '@/modules/account'
 import {
     CashCheckVoucherSchema,
-    CheckVoucherStatusValues,
     ICashCheckVoucher,
     ICashCheckVoucherRequest,
     cashCheckVoucherBaseKey,
@@ -42,15 +41,9 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl } from '@/components/ui/form'
+import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
@@ -58,6 +51,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import CashCheckVoucherStatusIndicator from '../cash-check-status-indicator'
 import { CashCheckJournalEntryTable } from './cash-check-voucher-entry-table'
 
 type TCashCheckVoucherFormValues = z.infer<typeof CashCheckVoucherSchema>
@@ -277,6 +271,10 @@ const CashCheckVoucherCreateUpdateForm = ({
         e.preventDefault()
         modalState.onOpenChange(true)
     })
+    
+    const isPrinted = !!defaultValues?.printed_date
+    const isApproved = !!defaultValues?.approved_date
+    const isReleased = !!defaultValues?.released_date
 
     return (
         <Form {...form}>
@@ -286,6 +284,20 @@ const CashCheckVoucherCreateUpdateForm = ({
                 className={cn('!w-full flex flex-col gap-y-4', className)}
             >
                 <div className="absolute top-4 right-10 z-10 flex gap-2">
+                    <CashCheckVoucherStatusIndicator
+                        voucherDates={{
+                            printed_date: isPrinted
+                                ? defaultValues?.printed_date
+                                : null,
+                            approved_date: isApproved
+                                ? defaultValues?.approved_date
+                                : null,
+                            released_date: isReleased
+                                ? defaultValues?.released_date
+                                : null,
+                        }}
+                        className="max-w-max"
+                    />
                     {CashCheckVoucherTransactionId && (
                         <CashCheckVoucherTagsManagerPopover
                             size="sm"
@@ -431,7 +443,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                         control={form.control}
                         name="cash_voucher_number"
                         label="CV Number"
-                        className="col-span-1 md:col-span-3"
+                        className="col-span-1"
                         render={({ field }) => (
                             <Input
                                 {...field}
@@ -452,40 +464,6 @@ const CashCheckVoucherCreateUpdateForm = ({
                                 placeholder="Enter payee"
                                 disabled={isDisabled(field.name)}
                             />
-                        )}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Status"
-                        name="status"
-                        render={({ field }) => (
-                            <FormControl>
-                                <Select
-                                    disabled={isDisabled(field.name)}
-                                    onValueChange={(selectedValue) => {
-                                        field.onChange(selectedValue)
-                                    }}
-                                    defaultValue={field.value}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        {field.value || 'Select Status'}
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {CheckVoucherStatusValues.map(
-                                            (type) => {
-                                                return (
-                                                    <SelectItem
-                                                        key={type}
-                                                        value={type}
-                                                    >
-                                                        {type}
-                                                    </SelectItem>
-                                                )
-                                            }
-                                        )}
-                                    </SelectContent>
-                                </Select>
-                            </FormControl>
                         )}
                     />
                     <FormFieldWrapper
