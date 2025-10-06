@@ -8,6 +8,7 @@ import {
     IQRMemberProfile,
     IQRMemberProfileDecodedResult,
 } from '@/modules/qr-crypto'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { ChevronRightIcon, ScanLineIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -16,7 +17,6 @@ import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
-import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
 
 import { IBaseProps, TEntityId } from '@/types'
 
@@ -72,7 +72,7 @@ const MemberQrScanner = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    useSimpleShortcut(['Enter'], () => {
+    useHotkeys('enter', () => {
         if (!data) return
         onSelectMemberProfile(data)
     })
