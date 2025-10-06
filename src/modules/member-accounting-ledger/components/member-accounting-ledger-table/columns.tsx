@@ -68,7 +68,7 @@ const MemberAccountingLedgerTableColumns = (
         enableResizing: true,
         enableHiding: false,
         size: 400,
-        minSize: 400,
+        minSize: 200,
     },
     {
         id: 'balance',

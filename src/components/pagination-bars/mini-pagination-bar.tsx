@@ -36,7 +36,7 @@ const MiniPaginationBar = ({
     }
 
     const handlePrevious = () => {
-        if (pagination.pageIndex > 0) {
+        if (pagination.pageIndex >= 0) {
             onPrev({
                 ...pagination,
                 pageIndex: pagination.pageIndex - 1,
@@ -52,7 +52,7 @@ const MiniPaginationBar = ({
             )}
         >
             <p className="text-sm text-foreground/70">
-                {pagination.pageIndex} of {pagination.totalPage}
+                {pagination.pageIndex + 1} of {pagination.totalPage}
             </p>
             <div className="flex items-center justify-end gap-x-1">
                 <Button
@@ -60,7 +60,7 @@ const MiniPaginationBar = ({
                     variant="secondary"
                     className="size-fit p-1"
                     onClick={handlePrevious}
-                    disabled={pagination.pageIndex <= 1 || disablePageMove}
+                    disabled={pagination.pageIndex <= 0 || disablePageMove}
                 >
                     <ChevronLeftIcon />
                 </Button>
@@ -70,7 +70,7 @@ const MiniPaginationBar = ({
                     className="size-fit p-1"
                     onClick={handleNext}
                     disabled={
-                        pagination.pageIndex >= pagination.totalPage ||
+                        pagination.pageIndex >= pagination.totalPage - 1 ||
                         disablePageMove
                     }
                 >

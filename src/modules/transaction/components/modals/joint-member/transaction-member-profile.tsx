@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import { toast } from 'sonner'
-
 import { cn } from '@/helpers'
 import { IMedia } from '@/modules/media'
 import { IMemberJointAccount } from '@/modules/member-joint-account'
@@ -11,6 +9,7 @@ import MemberOverallInfo, {
 } from '@/modules/member-profile/components/member-infos/view-member-info'
 import HoveruserInfo from '@/modules/user/components/hover-user-info'
 import { useImagePreview } from '@/store/image-preview-store'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
     BadgeCheckIcon,
@@ -49,6 +48,8 @@ export type MemberProfileTransactionViewProps = {
     hasTransaction?: boolean
     viewOnly?: boolean
     className?: string
+    allowRemoveButton?: boolean
+    onRemove?: () => void
 }
 
 const TransactionMemberProfile = ({
@@ -57,6 +58,8 @@ const TransactionMemberProfile = ({
     hasTransaction,
     viewOnly = false,
     className,
+    allowRemoveButton = false,
+    onRemove,
 }: MemberProfileTransactionViewProps) => {
     const infoModal = useModalState(false)
     const { onOpen } = useImagePreview()
@@ -66,22 +69,13 @@ const TransactionMemberProfile = ({
 
     onSelectedJointMember?.(selectedJointMember?.id)
 
-    const handleMedia = (media: IMedia[] | undefined) => {
-        if (media) {
-            onOpen({
-                Images: media,
-            })
-        } else {
-            toast.warning('No media available for preview.')
-        }
-    }
-
+    useHotkeys('Alt+V', () => {
+        infoModal.onOpenChange(() => !infoModal.open)
+    })
     if (!memberInfo) return null
-    const memberMedias = [memberInfo.media, memberInfo.signature_media].filter(
-        (media): media is IMedia => !!media
-    )
+
     return (
-        <>
+        <div className="ecoop-scroll overflow-y-auto border size-full rounded-2xl bg-gradient-to-br from-primary/10 to-background border-primary/90">
             <MemberOverallInfoModal
                 {...infoModal}
                 overallInfoProps={{
@@ -90,17 +84,18 @@ const TransactionMemberProfile = ({
             />
             <div
                 className={cn(
-                    'w-full ecoop-scroll rounded-2xl overflow-x-auto h-fit flex-col space-y-2 min-w-[300px] overscroll-contain bg-card bg-gradient-to-br from-primary/10 to-background border-primary/40 p-5',
+                    'w-full ecoop-scroll md:min-w-2xl rounded-2xl overflow-y-auto h-fit flex flex-col md:justify-between space-y-2 overscroll-contain bg-gradient-to-br from-primary/10 to-background border-primary/40 p-5',
                     className
                 )}
             >
-                <div className="flex w-full  space-x-5 items-center h-fit ">
-                    <div className="flex items-center h-fit gap-y-1 flex-col min-w-[6vw] max-w-[5vw]">
+                {/* Main container: stacks on mobile, becomes a row on larger screens */}
+                <div className="flex w-full flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-5 items-center sm:items-start h-fit">
+                    {/* Left section: member image and profile button */}
+                    <div className="flex items-center h-fit gap-y-1 flex-col min-w-24 max-w-xs">
                         <div className="flex-shrink-0">
                             <PreviewMediaWrapper media={memberInfo.media}>
                                 <ImageDisplay
                                     className="size-16"
-                                    onClick={() => handleMedia(memberMedias)}
                                     src={memberInfo.media?.download_url}
                                     fallback={
                                         memberInfo.first_name.charAt(0) ?? '-'
@@ -109,11 +104,11 @@ const TransactionMemberProfile = ({
                             </PreviewMediaWrapper>
                         </div>
                         <Drawer>
-                            <DrawerTrigger asChild className="">
+                            <DrawerTrigger asChild>
                                 <Button
-                                    variant={'secondary'}
+                                    variant="outline"
                                     size="sm"
-                                    className="text-xs w-full h-7 min-w-24 cursor-pointer"
+                                    className="text-xs w-full h-7 min-w-24 cursor-pointer mt-2 sm:mt-0"
                                 >
                                     View Profile
                                 </Button>
@@ -125,12 +120,27 @@ const TransactionMemberProfile = ({
                                 />
                             </DrawerContent>
                         </Drawer>
+                        {allowRemoveButton && (
+                            <Button
+                                variant="destructive"
+                                size="sm"
+                                className="text-xs w-full h-7 min-w-24 cursor-pointer mt-2 sm:mt-0"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    onRemove?.()
+                                }}
+                            >
+                                remove
+                            </Button>
+                        )}
                     </div>
-                    <div className="h-full min-w-fit flex flex-col justify-start w-full">
-                        <div className="flex items-center justify-between">
+
+                    {/* Right section: member details */}
+                    <div className="h-full   w-full flex flex-col justify-start space-y-2">
+                        <div className="flex flex-wrap md:flex-nowrap md:items-center md:justify-between">
                             <div className="w-full flex items-center gap-x-2 justify-between">
                                 <div className="flex w-fit items-center gap-x-2">
-                                    <h2 className="truncate font-bold">
+                                    <h2 className="truncate font-bold text-lg sm:text-xl">
                                         {memberInfo.full_name}
                                     </h2>
                                     {memberInfo.status === 'verified' && (
@@ -139,17 +149,23 @@ const TransactionMemberProfile = ({
                                 </div>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button
-                                            variant={'ghost'}
-                                            size="icon"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                e.stopPropagation()
-                                                handleMedia(memberMedias)
-                                            }}
-                                        >
-                                            <SignatureLightIcon size={25} />
-                                        </Button>
+                                        {memberInfo.signature && (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    onOpen({
+                                                        Images: [
+                                                            memberInfo.signature_media,
+                                                        ] as IMedia[],
+                                                    })
+                                                }}
+                                            >
+                                                <SignatureLightIcon size={25} />
+                                            </Button>
+                                        )}
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         View Signature
@@ -180,13 +196,15 @@ const TransactionMemberProfile = ({
                         </div>
 
                         <Separator />
-                        <div className="flex  justify-between space-x-5 pr-5 pt-2 text-xs">
-                            <div>
+
+                        {/* Details section: stacks on mobile, becomes a row on larger screens */}
+                        <div className="flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-5 pt-2 text-xs">
+                            <div className="text-center sm:text-left">
                                 <h3 className="mb-1 font-medium text-muted-foreground">
                                     Contact Number
                                 </h3>
-                                <div className="flex items-center gap-2">
-                                    <PhoneIcon className="400 size-3" />
+                                <div className="flex items-center gap-2 justify-center sm:justify-start">
+                                    <PhoneIcon className="size-3" />
                                     <span>
                                         <CopyWrapper>
                                             {memberInfo.contact_number}
@@ -194,11 +212,11 @@ const TransactionMemberProfile = ({
                                     </span>
                                 </div>
                             </div>
-                            <div>
+                            <div className="text-center sm:text-left">
                                 <h3 className="mb-1 font-medium text-muted-foreground">
                                     Passbook Number
                                 </h3>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 justify-center sm:justify-start">
                                     <IdCardIcon className="size-3" />
                                     <span className="font-mono">
                                         <CopyWrapper>
@@ -207,11 +225,11 @@ const TransactionMemberProfile = ({
                                     </span>
                                 </div>
                             </div>
-                            <div>
+                            <div className="text-center sm:text-left">
                                 <h3 className="mb-1 font-medium text-muted-foreground">
                                     Member Type
                                 </h3>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 justify-center sm:justify-start">
                                     <UserIcon className="size-3" />
                                     <span>
                                         <CopyWrapper>
@@ -223,14 +241,13 @@ const TransactionMemberProfile = ({
                         </div>
                     </div>
                 </div>
+
                 {!viewOnly && (
                     <TransactionModalJointMember
-                        triggerProps={{
-                            disabled: hasTransaction,
-                        }}
-                        onSelect={(jointMember) => {
+                        triggerProps={{ disabled: hasTransaction }}
+                        onSelect={(jointMember) =>
                             setSelectedJointMember(jointMember || null)
-                        }}
+                        }
                         value={selectedJointMember?.id}
                         selectedMemberJointId={selectedJointMember?.id}
                         memberJointProfile={
@@ -239,7 +256,7 @@ const TransactionMemberProfile = ({
                     />
                 )}
             </div>
-        </>
+        </div>
     )
 }
 

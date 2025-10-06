@@ -142,7 +142,7 @@ export const PlainTextEditor = ({
     }, [content, textEditor])
 
     return (
-        <div className={cn('truncate', className)}>
+        <div className={cn('', className)}>
             <EditorContent editor={textEditor} />
         </div>
     )

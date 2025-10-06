@@ -1,7 +1,9 @@
 import { ReactNode } from 'react'
 
+import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import { Table } from '@tanstack/react-table'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import DataTableActiveFilters from '@/components/data-table/data-table-actions/data-table-active-filters'
 import DataTableDeleteSelected from '@/components/data-table/data-table-actions/data-table-delete-selected'
@@ -15,6 +17,7 @@ import { Separator } from '@/components/ui/separator'
 import { IClassProps } from '@/types'
 
 import RefreshButton, { IRefreshButtonProps } from '../buttons/refresh-button'
+import { useShortcutContext } from '../shorcuts/general-shortcuts-wrapper'
 import DatatableColumnVisibility from './data-table-actions/data-table-column-visibility'
 import DataTableCreateAction, {
     IDataTableCreateActionProps,
@@ -25,7 +28,7 @@ import DataTableGlobalSearch, {
     IGlobalSearchProps,
 } from './data-table-filters/data-table-global-search'
 
-export interface IDataTableToolbarProps<TData = unknown> extends IClassProps {
+export interface IDataTableToolbarProps<TData> extends IClassProps {
     table: Table<TData>
     refreshActionProps: IRefreshButtonProps
     globalSearchProps?: IGlobalSearchProps<TData>
@@ -58,8 +61,35 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
+    const { setActiveScope, activeScope } = useShortcutContext()
+
+    useHotkeys(
+        'Enter',
+        (e) => {
+            e.preventDefault()
+            if (createActionProps && !hideCreateButton) {
+                createActionProps.onClick()
+            }
+        },
+        {
+            scopes: [SHORTCUT_SCOPES.DATA_TABLE],
+        },
+        [createActionProps, hideCreateButton]
+    )
+
+    const hanldeSetScope = () => {
+        if (activeScope !== SHORTCUT_SCOPES.DATA_TABLE) {
+            setActiveScope(SHORTCUT_SCOPES.DATA_TABLE)
+        }
+    }
+
     return (
-        <div className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto">
+        <div
+            onClick={hanldeSetScope}
+            onFocus={hanldeSetScope}
+            onMouseOver={hanldeSetScope}
+            className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto"
+        >
             <div className="flex items-center gap-x-2">
                 {globalSearchProps ? (
                     <DataTableGlobalSearch {...globalSearchProps} />

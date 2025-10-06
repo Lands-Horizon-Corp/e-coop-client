@@ -1,6 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Knewave&family=Londrina+Solid:wght@100;300;400;900&display=swap');
 @import 'tailwindcss';
 @plugin "tailwindcss-animate";
+
+/* ProseMirror CSS - Required for TipTap editor */
+.ProseMirror {
+    white-space: pre-wrap;
+    outline: none;
+    word-wrap: break-word;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+.ProseMirror-focused {
+    outline: none;
+}
 
 /* @tailwind base; */
 
@@ -61,6 +76,8 @@ html {
     --color-border: var(--border);
     --color-destructive-foreground: var(--destructive-foreground);
     --color-destructive: var(--destructive);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-warning: var(--warning);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
@@ -98,6 +115,11 @@ html {
     --accent-foreground: oklch(0.3729 0.0306 259.7328);
     --destructive: oklch(0.6368 0.2078 25.3313);
     --destructive-foreground: oklch(1 0 0);
+
+    /* CUSTOM */
+    --warning: oklch(0.9869 0.0214 95.28);
+    --warning-foreground: oklch(0.478 0.1279 45.4);
+
     --border: oklch(0.9276 0.0058 264.5313);
     --input: oklch(0.9276 0.0058 264.5313);
     --ring: oklch(0.7227 0.192 149.5793);
@@ -160,6 +182,11 @@ html {
     --accent-foreground: oklch(0.7118 0.0129 286.0665);
     --destructive: oklch(0.6368 0.2078 25.3313);
     --destructive-foreground: oklch(0.2077 0.0398 265.7549);
+
+    /* CUSTOM */
+    --warning: oklch(0.4732 0.1247 46.2);
+    --warning-foreground: oklch(0.9043 0.1389 94.5);
+
     --border: oklch(0.4461 0.0263 256.8018);
     --input: oklch(0.4461 0.0263 256.8018);
     --ring: oklch(0.7729 0.1535 163.2231);
@@ -348,4 +375,52 @@ body[data-scroll-locked] {
 
 .PopoverContent {
     z-index: 1000; /* Ensure it’s above other elements */
+}
+
+/* Added gradient animation keyframes */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes gradient-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes gradient-slide {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes gradient-bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-4px);
+    }
+    60% {
+        transform: translateY(-2px);
+    }
 }

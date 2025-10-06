@@ -28,7 +28,9 @@ import {
     useGetAllBrowseExcludeIncludeAccounts,
 } from '../../browse-exclude-include-accounts.service'
 import { IBrowseExcludeIncludeAccounts } from '../../browse-exclude-include-accounts.types'
-import { BrowseExcludeIncludeAccountRowContext } from './action'
+import BrowseExcludeIncludeAccountAction, {
+    BrowseExcludeIncludeAccountRowContext,
+} from './action'
 import {
     IBrowseExcludeIncludeAccountTableColumnProps,
     browseExcludeIncludeAccountGlobalSearchTargets,
@@ -60,7 +62,7 @@ const BrowseExcludeIncludeAccountTable = ({
     toolbarProps,
     defaultFilter,
     onSelectData,
-    actionComponent,
+    actionComponent = BrowseExcludeIncludeAccountAction,
     RowContextComponent = BrowseExcludeIncludeAccountRowContext,
 }: BrowseExcludeIncludeAccountTableProps) => {
     const queryClient = useQueryClient()

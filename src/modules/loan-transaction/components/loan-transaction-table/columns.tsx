@@ -10,10 +10,16 @@ import { createUpdateColumns } from '@/components/data-table/data-table-common-c
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import { PushPinSlashIcon, RenderIcon, TIcon } from '@/components/icons'
+import {
+    PushPinSlashIcon,
+    RenderIcon,
+    TIcon,
+    TagIcon,
+} from '@/components/icons'
 import ImageNameDisplay from '@/components/image-name-display'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
@@ -22,6 +28,8 @@ import {
     TLoanCollectorPlace,
 } from '../../loan-transaction.types'
 import { LoanCollectorPlaceBadge } from '../loan-collector-place-badge'
+import LoanStatusIndicator from '../loan-status-indicator'
+import { LoanTagChip, LoanTagsManagerPopover } from '../loan-tag-manager'
 import { LoanTypeBadge } from '../loan-type-badge'
 
 export const loanStatusGlobalSearchTargets: IGlobalSearchTargets<ILoanTransaction>[] =
@@ -75,25 +83,25 @@ const LoanTransactionTableColumns = (
             minSize: 80,
         },
         {
-            id: 'voucher_no',
-            accessorKey: 'voucher_no',
+            id: 'voucher',
+            accessorKey: 'voucher',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Voucher No.">
+                <DataTableColumnHeader {...props} title="Voucher">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
-                            displayText="Voucher No."
-                            field="voucher_no"
+                            displayText="Voucher"
+                            field="voucher"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { voucher_no },
+                    original: { voucher },
                 },
             }) => (
                 <div>
-                    <CopyWrapper>{voucher_no}</CopyWrapper>
+                    <CopyWrapper>{voucher}</CopyWrapper>
                 </div>
             ),
             enableMultiSort: true,
@@ -152,14 +160,14 @@ const LoanTransactionTableColumns = (
                     original: { member_profile },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {member_profile && (
                         <ImageNameDisplay
                             src={member_profile.media_id}
                             name={member_profile.full_name}
                         />
                     )}
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -190,7 +198,10 @@ const LoanTransactionTableColumns = (
                 <p className="!text-wrap text-muted-foreground">
                     {account && (
                         <>
-                            <RenderIcon icon={account.icon as TIcon} />
+                            <RenderIcon
+                                icon={account.icon as TIcon}
+                                className="inline mr-1"
+                            />
                             <span>{account.name}</span>
                         </>
                     )}
@@ -205,31 +216,104 @@ const LoanTransactionTableColumns = (
             maxSize: 800,
         },
         {
-            id: 'processor',
-            accessorKey: 'employee_user',
+            id: 'application_status',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Processor">
+                <DataTableColumnHeader {...props} title="Application Status" />
+            ),
+            cell: ({ row: { original } }) => (
+                <LoanStatusIndicator loanTransactionDates={original} />
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 180,
+            minSize: 180,
+            maxSize: 300,
+        },
+        {
+            id: 'applied_1',
+            accessorKey: 'applied_1',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Aplied Amount">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
-                            displayText="Processor"
-                            field="employee_user.full_name"
+                            displayText="Applied Amount"
+                            field="applied_1"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { employee_user },
+                    original: { applied_1 },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
-                    {employee_user && (
-                        <ImageNameDisplay
-                            src={employee_user.media_id}
-                            name={employee_user.full_name}
-                        />
-                    )}
+                <p className="!text-wrap font-mono text-lg text-right text-muted-foreground">
+                    {formatNumber(applied_1, 0, 1)}
                 </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 200,
+            minSize: 200,
+            maxSize: 400,
+        },
+        // {
+        //     id: 'applied_2',
+        //     accessorKey: 'applied_2',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Aplied 2">
+        //             <ColumnActions {...props}>
+        //                 <TextFilter<ILoanTransaction>
+        //                     displayText="Applied 2"
+        //                     field="applied_2"
+        //                 />
+        //             </ColumnActions>
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { applied_2 },
+        //         },
+        //     }) => (
+        //         <p className="!text-wrap text-right text-muted-foreground">
+        //             {formatNumber(applied_2, 0, 1)}
+        //         </p>
+        //     ),
+        //     enableMultiSort: true,
+        //     enableSorting: true,
+        //     enableResizing: true,
+        //     enableHiding: true,
+        //     size: 300,
+        //     minSize: 300,
+        //     maxSize: 800,
+        // },
+        {
+            id: 'loan_type',
+            accessorKey: 'loan_type',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Loan Type">
+                    <ColumnActions {...props}>
+                        <TextFilter<ILoanTransaction>
+                            displayText="Loan Type"
+                            field="loan_type"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { loan_type },
+                },
+            }) => (
+                <div className="!text-wrap text-muted-foreground">
+                    {loan_type && (
+                        <LoanTypeBadge size="sm" loanType={loan_type} />
+                    )}
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -257,21 +341,22 @@ const LoanTransactionTableColumns = (
                     original: { loan_status },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {loan_status && (
                         <InfoTooltip content={loan_status.description}>
-                            <Badge>
-                                <span style={{ color: loan_status.color }}>
+                            <Badge variant="outline" className="font-normal">
+                                <span>
                                     <RenderIcon
                                         icon={loan_status.icon as TIcon}
-                                        className="mr-1 size-3"
+                                        className="mr-1 inline size-3"
+                                        style={{ color: loan_status.color }}
                                     />
                                     {loan_status.name}
                                 </span>
                             </Badge>
                         </InfoTooltip>
                     )}
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -282,56 +367,75 @@ const LoanTransactionTableColumns = (
             maxSize: 800,
         },
         {
-            id: 'applied_1',
-            accessorKey: 'applied_1',
+            id: 'loan_tags',
+            accessorKey: 'loan_tags',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Aplied 1">
-                    <ColumnActions {...props}>
-                        <TextFilter<ILoanTransaction>
-                            displayText="Applied 1"
-                            field="applied_1"
-                        />
-                    </ColumnActions>
+                <DataTableColumnHeader {...props} title="Loan Tags">
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { applied_1 },
+                    original: { loan_tags = [] },
                 },
             }) => (
-                <p className="!text-wrap text-right text-muted-foreground">
-                    {formatNumber(applied_1, 0, 1)}
-                </p>
+                <div className="flex gap-1.5 flex-wrap items-baseline">
+                    {loan_tags.slice(0, 3).map((tag) => (
+                        <LoanTagChip tag={tag} key={tag.id} size="sm" />
+                    ))}
+                    {loan_tags.length > 3 && (
+                        <LoanTagsManagerPopover
+                            readOnly
+                            loanTransactionId={''}
+                            defaultLoanTags={loan_tags}
+                        >
+                            <Button
+                                size="sm"
+                                type="button"
+                                variant="outline"
+                                className="size-fit !p-0 border-none cursor-pointer text-xs !bg-transparent !py-0.5 !px-1.5"
+                            >
+                                <TagIcon />{' '}
+                                <span>{loan_tags.length - 1} more...</span>
+                            </Button>
+                        </LoanTagsManagerPopover>
+                    )}
+                </div>
             ),
-            enableMultiSort: true,
-            enableSorting: true,
+            enableMultiSort: false,
+            enableSorting: false,
             enableResizing: true,
             enableHiding: true,
-            size: 300,
-            minSize: 300,
+            size: 500,
+            minSize: 500,
             maxSize: 800,
         },
         {
-            id: 'applied_2',
-            accessorKey: 'applied_2',
+            id: 'processor',
+            accessorKey: 'employee_user',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Aplied 2">
+                <DataTableColumnHeader {...props} title="Processor">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
-                            displayText="Applied 2"
-                            field="applied_2"
+                            displayText="Processor"
+                            field="employee_user.full_name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { applied_2 },
+                    original: { employee_user },
                 },
             }) => (
-                <p className="!text-wrap text-right text-muted-foreground">
-                    {formatNumber(applied_2, 0, 1)}
-                </p>
+                <div className="!text-wrap text-muted-foreground">
+                    {employee_user && (
+                        <ImageNameDisplay
+                            src={employee_user.media_id}
+                            name={employee_user.full_name}
+                        />
+                    )}
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -341,38 +445,6 @@ const LoanTransactionTableColumns = (
             minSize: 300,
             maxSize: 800,
         },
-
-        {
-            id: 'loan_type',
-            accessorKey: 'loan_type',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Loan Type">
-                    <ColumnActions {...props}>
-                        <TextFilter<ILoanTransaction>
-                            displayText="Loan Type"
-                            field="loan_type"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { loan_type },
-                },
-            }) => (
-                <p className="!text-wrap text-muted-foreground">
-                    {loan_type && <LoanTypeBadge loanType={loan_type} />}
-                </p>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 300,
-            minSize: 300,
-            maxSize: 800,
-        },
-
         {
             id: 'collector_place',
             accessorKey: 'collector_place',
@@ -391,14 +463,45 @@ const LoanTransactionTableColumns = (
                     original: { collector_place },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     {collector_place && (
                         <LoanCollectorPlaceBadge
+                            size="sm"
                             collectorPlace={
                                 collector_place as TLoanCollectorPlace
                             }
                         />
                     )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'printed_date',
+            accessorKey: 'printed_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Printed">
+                    <ColumnActions {...props}>
+                        <TextFilter<ILoanTransaction>
+                            displayText="Printed Date"
+                            field="printed_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { printed_date },
+                },
+            }) => (
+                <p className="!text-wrap text-muted-foreground">
+                    {printed_date && toReadableDateTime(printed_date)}
                 </p>
             ),
             enableMultiSort: true,
@@ -409,12 +512,11 @@ const LoanTransactionTableColumns = (
             minSize: 300,
             maxSize: 800,
         },
-
         {
             id: 'approved_date',
             accessorKey: 'approved_date',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Approved Date">
+                <DataTableColumnHeader {...props} title="Date Approved">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
                             displayText="Approved Date"
@@ -430,6 +532,36 @@ const LoanTransactionTableColumns = (
             }) => (
                 <p className="!text-wrap text-muted-foreground">
                     {approved_date && toReadableDateTime(approved_date)}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'released_date',
+            accessorKey: 'released_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Date Released">
+                    <ColumnActions {...props}>
+                        <TextFilter<ILoanTransaction>
+                            displayText="Released Date"
+                            field="released_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { released_date },
+                },
+            }) => (
+                <p className="!text-wrap text-muted-foreground">
+                    {released_date && toReadableDateTime(released_date)}
                 </p>
             ),
             enableMultiSort: true,

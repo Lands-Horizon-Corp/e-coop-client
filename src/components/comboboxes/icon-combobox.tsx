@@ -3,9 +3,8 @@ import { forwardRef, useMemo, useState } from 'react'
 import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers/tw-utils'
-import { Check } from 'lucide-react'
 
-import { ChevronDownIcon, IconMap, TIcon } from '@/components/icons'
+import { CheckIcon, ChevronDownIcon, IconMap, TIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -119,7 +118,7 @@ const IconCombobox = forwardRef<HTMLButtonElement, Props>(
                                         <span className="text-muted-foreground duration-200 group-hover:text-foreground">
                                             {name}
                                         </span>
-                                        <Check
+                                        <CheckIcon
                                             className={cn(
                                                 'ml-auto',
                                                 value === name

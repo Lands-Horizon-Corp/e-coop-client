@@ -4,7 +4,8 @@ import { createContext, useContext } from 'react'
 import { Slot } from '@radix-ui/react-slot'
 
 import { cn } from '@/helpers'
-import { CheckIcon, LoaderCircleIcon } from 'lucide-react'
+
+import { CheckIcon, LoadingCircleIcon } from '../icons'
 
 // Types
 type StepperContextValue = {
@@ -220,7 +221,7 @@ function StepperIndicator({
                     />
                     {isLoading && (
                         <span className="absolute transition-all">
-                            <LoaderCircleIcon
+                            <LoadingCircleIcon
                                 className="animate-spin"
                                 size={14}
                                 aria-hidden="true"

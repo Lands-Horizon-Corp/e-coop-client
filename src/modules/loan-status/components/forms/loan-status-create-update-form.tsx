@@ -10,10 +10,10 @@ import IconCombobox from '@/components/comboboxes/icon-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { TIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import TextEditor from '@/components/text-editor'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -155,12 +155,11 @@ const LoanStatusCreateUpdateForm = ({
                             name="description"
                             label="Description"
                             render={({ field }) => (
-                                <TextEditor
+                                <Textarea
                                     {...field}
                                     content={field.value}
                                     placeholder="Description"
                                     disabled={isDisabled(field.name)}
-                                    textEditorClassName="bg-background"
                                 />
                             )}
                         />

@@ -3,7 +3,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { MemberClassificationCreateUpdateFormModal } from '@/modules/member-classification/components/member-classification-create-update-form'
 import MemberClassificationTable from '@/modules/member-classification/components/tables/member-classification-table'
-import MemberClassificationAction from '@/modules/member-classification/components/tables/member-classification-table/row-action-context'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -47,9 +46,6 @@ const MemberClassificationPage = () => {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                actionComponent={(prop) => (
-                    <MemberClassificationAction {...prop} />
-                )}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>

@@ -18,10 +18,8 @@ const DebouncedInput = <T,>({
     const [internalValue, setInternalValue] = useState<T>(initialValue)
 
     useEffect(() => {
-        if (initialValue !== internalValue) {
-            setInternalValue(initialValue)
-        }
-    }, [initialValue, internalValue, setInternalValue])
+        setInternalValue(initialValue)
+    }, [initialValue])
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -40,7 +38,6 @@ const DebouncedInput = <T,>({
             newValue =
                 e.target.value === '' ? ('' as T) : (+e.target.value as T)
         }
-
         setInternalValue(newValue)
     }
 

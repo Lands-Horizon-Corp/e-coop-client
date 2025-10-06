@@ -4,20 +4,18 @@ import { forwardRef, useEffect, useRef, useState } from 'react'
 
 import { cn, formatBytes, formatDate } from '@/helpers'
 import useEmblaCarousel from 'embla-carousel-react'
+
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
     DownloadIcon,
-    FlipHorizontal,
-    FlipVertical,
-    ZoomIn,
-    ZoomOut,
-} from 'lucide-react'
-
-import {
+    FlipHorizontalIcon,
+    FlipVerticalIcon,
     PowerResetIcon,
     RotateLeftIcon,
     RotateRightIcon,
+    ZoomInIcon,
+    ZoomOutIcon,
 } from '@/components/icons'
 // Local Components
 import { useCarousel } from '@/components/ui/carousel'
@@ -107,9 +105,7 @@ export const DownloadButton = React.forwardRef<
 
     return (
         <ImagePreviewButtonAction
-            Icon={
-                <DownloadIcon className="size-full cursor-pointer dark:text-white" />
-            }
+            Icon={<DownloadIcon className="size-full cursor-pointer " />}
             name={name}
             ref={ref}
             className={className}
@@ -291,7 +287,7 @@ export const ImageContainer = ({
                     <a
                         target="_blank"
                         href={media.url}
-                        className="py-1 text-xs text-black dark:text-white"
+                        className="py-1 text-xs "
                     >
                         Open in Browser
                     </a>
@@ -312,8 +308,6 @@ export const ImagePreviewButtonAction = React.forwardRef<
     HTMLButtonElement,
     ImagePreviewButtonActionProps
 >(({ onClick, Icon, name, className, iconClassName, ...props }, ref) => {
-    const defaultIconStyles = '!size-4 dark:text-white'
-
     return (
         <Tooltip>
             <TooltipTrigger asChild>
@@ -330,8 +324,7 @@ export const ImagePreviewButtonAction = React.forwardRef<
                     {Icon && (
                         <span
                             className={cn(
-                                'mr-2',
-                                defaultIconStyles,
+                                'mr-2 !size-4 text-primary',
                                 iconClassName
                             )}
                         >
@@ -383,12 +376,12 @@ export const ImagePreviewActions = React.forwardRef<
                         onClick={handleResetActionState}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<ZoomIn />}
+                        Icon={<ZoomInIcon />}
                         name="zoom in"
                         onClick={handleZoomIn}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<ZoomOut />}
+                        Icon={<ZoomOutIcon />}
                         name="zoom out"
                         onClick={handleZoomOut}
                     />
@@ -405,12 +398,12 @@ export const ImagePreviewActions = React.forwardRef<
                         onClick={handleRotateRight}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<FlipHorizontal />}
+                        Icon={<FlipHorizontalIcon />}
                         name="flip horizontal"
                         onClick={handleFlipHorizontal}
                     />
                     <ImagePreviewButtonAction
-                        Icon={<FlipVertical />}
+                        Icon={<FlipVerticalIcon />}
                         name="flip vertical"
                         onClick={handleFlipVertical}
                     />

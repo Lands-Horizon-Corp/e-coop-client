@@ -5,6 +5,7 @@ import { useRouter } from '@tanstack/react-router'
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import LoanTransactionTable from '@/modules/loan-transaction/components/loan-transaction-table'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import { MemberProfileCloseFormModal } from '@/modules/member-close-remark/components/forms/member-profile-close-form'
 import { TransactionsTable } from '@/modules/transaction'
@@ -28,6 +29,7 @@ import {
     ReceiptIcon,
     SettingsIcon,
     UserClockFillIcon,
+    WalletIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Modal from '@/components/modals/modal'
@@ -68,6 +70,7 @@ const useMemberProfileActions = ({
     const { onOpen } = useInfoModalStore()
 
     const infoModal = useModalState(false)
+    const loanListModal = useModalState(false)
     const closeModal = useModalState(false)
     const historyModal = useModalState(false)
     const footstepModal = useModalState(false)
@@ -143,6 +146,7 @@ const useMemberProfileActions = ({
         infoModal,
         closeModal,
         historyModal,
+        loanListModal,
         footstepModal,
         transactionModal,
         ledgerTableModal,
@@ -172,6 +176,7 @@ export const MemberProfileAction = ({
         infoModal,
         closeModal,
         historyModal,
+        loanListModal,
         footstepModal,
         transactionModal,
         ledgerTableModal,
@@ -275,6 +280,18 @@ export const MemberProfileAction = ({
                                 mode="member"
                                 memberProfileId={member.id}
                                 className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                            />
+                        </Modal>
+
+                        <Modal
+                            {...loanListModal}
+                            title={`${member.first_name}'s Loans`}
+                            className="!max-w-[95vw]"
+                        >
+                            <LoanTransactionTable
+                                mode="member-profile"
+                                memberProfileId={member.id}
+                                className="min-h-[80vh] min-w-0 max-h-[80vh]"
                             />
                         </Modal>
                     </>
@@ -482,6 +499,13 @@ export const MemberProfileAction = ({
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
+                            onClick={() => loanListModal.onOpenChange(true)}
+                        >
+                            <WalletIcon className="mr-2" />
+                            Loans
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
                             className="focus:bg-destructive focus:text-destructive-foreground"
                             onClick={() => closeModal.onOpenChange(true)}
                         >
@@ -514,6 +538,7 @@ export const MemberProfileRowContext = ({
         infoModal,
         closeModal,
         historyModal,
+        loanListModal,
         footstepModal,
         transactionModal,
         ledgerTableModal,
@@ -616,6 +641,18 @@ export const MemberProfileRowContext = ({
                             onRowClick={() => {}}
                             memberProfileId={member.id}
                             className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        />
+                    </Modal>
+
+                    <Modal
+                        {...loanListModal}
+                        title={`${member.first_name}'s Loans`}
+                        className="!max-w-[95vw]"
+                    >
+                        <LoanTransactionTable
+                            mode="member-profile"
+                            memberProfileId={member.id}
+                            className="min-h-[80vh] min-w-0 max-h-[80vh]"
                         />
                     </Modal>
                 </>
@@ -818,6 +855,13 @@ export const MemberProfileRowContext = ({
                         <ContextMenuItem onClick={handleShowQR}>
                             <QrCodeIcon className="mr-2" />
                             Member Profile QR
+                        </ContextMenuItem>
+
+                        <ContextMenuItem
+                            onClick={() => loanListModal.onOpenChange(true)}
+                        >
+                            <WalletIcon className="mr-2" />
+                            Loans
                         </ContextMenuItem>
 
                         <ContextMenuItem

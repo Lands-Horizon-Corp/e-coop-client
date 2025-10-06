@@ -4,7 +4,6 @@ import { Link, useLocation } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 
-import { CurlyBracketIcon } from '@/components/icons'
 import NavAuthGroup from '@/components/nav/nav-components/nav-auth-group'
 import NavEcoopLogo from '@/components/nav/nav-components/nav-ecoop-logo'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
@@ -33,15 +32,6 @@ const navLinks: NavLink[] = [
     {
         name: 'Subscription',
         path: '/subscription',
-    },
-    {
-        name: 'FAQ',
-        path: '/frequently-asked-questions',
-    },
-    {
-        name: 'Developers',
-        path: '/developers',
-        icon: <CurlyBracketIcon />,
     },
 ]
 

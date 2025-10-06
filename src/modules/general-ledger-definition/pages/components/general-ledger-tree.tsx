@@ -28,9 +28,8 @@ import {
     useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { PlusIcon } from 'lucide-react'
 
-import { CollapseIcon, MagnifyingGlassIcon } from '@/components/icons'
+import { CollapseIcon, MagnifyingGlassIcon, PlusIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

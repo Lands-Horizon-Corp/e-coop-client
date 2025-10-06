@@ -98,12 +98,12 @@ const MapSearch = ({ onLocationFound, className, map }: TCustomSearchProps) => {
                 }}
                 placeholder="Search Google Maps"
                 className={cn(
-                    'rounded-lg border border-gray-300 px-4 py-2 focus:border-none focus:outline-none',
+                    'rounded-lg border px-4 py-2 focus:border-none focus:outline-none',
                     className ?? ''
                 )}
             />
             <div
-                className={`absolute z-[50] flex w-[90%] flex-col space-y-2 bg-white/90 dark:bg-secondary/90 dark:text-white ${!showSearchList ? 'hidden' : 'p-5'} rounded-lg`}
+                className={`absolute z-[50] flex w-[90%] flex-col space-y-2 bg-background/90 ${!showSearchList ? 'hidden' : 'p-5'} rounded-lg`}
             >
                 {isPending ? (
                     <div className="flex w-full justify-center">
@@ -116,7 +116,7 @@ const MapSearch = ({ onLocationFound, className, map }: TCustomSearchProps) => {
                                 {results.map((location, index) => (
                                     <div
                                         key={index}
-                                        className="cursor-pointer hover:rounded-lg hover:bg-slate-200/40 focus:rounded-lg focus:bg-slate-200/40 focus:outline-none focus:ring-0"
+                                        className="cursor-pointer hover:rounded-lg hover:bg-accent focus:rounded-lg focus:bg-accent focus:outline-none focus:ring-0"
                                         onClick={() => {
                                             handleOnLocationFound(
                                                 parseFloat(location.lat),
@@ -136,9 +136,9 @@ const MapSearch = ({ onLocationFound, className, map }: TCustomSearchProps) => {
                                     >
                                         <div className="flex p-2">
                                             <div className="w-9">
-                                                <LocationPinOutlineIcon className="size-6 text-slate-600 dark:text-destructive-foreground" />
+                                                <LocationPinOutlineIcon className="size-6 text-muted-foreground" />
                                             </div>
-                                            <p className="truncate text-sm">
+                                            <p className="truncate text-sm text-foreground">
                                                 {location.desc}
                                             </p>
                                         </div>

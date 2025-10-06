@@ -6,11 +6,10 @@ import {
     useDeleteById,
     useGetAll,
 } from '@/modules/account-tag'
-import { PencilIcon } from 'lucide-react'
 
 import CopyTextButton from '@/components/copy-text-button'
 import { IconContainer } from '@/components/icon-container'
-import { TrashIcon } from '@/components/icons'
+import { EditPencilIcon, TrashIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     ContextMenu,
@@ -174,7 +173,7 @@ const AccountTag = () => {
                                                             )
                                                         }}
                                                     >
-                                                        <PencilIcon className="mr-2 h-4 w-4" />
+                                                        <EditPencilIcon className="mr-2 h-4 w-4" />
                                                         Edit
                                                     </ContextMenuItem>
                                                     <ContextMenuItem

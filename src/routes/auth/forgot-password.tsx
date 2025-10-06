@@ -83,5 +83,3 @@ const ForgotPasswordPage = () => {
 export const Route = createFileRoute('/auth/forgot-password')({
     component: ForgotPasswordPage,
 })
-
-export default ForgotPasswordPage

@@ -336,7 +336,7 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                             }
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="underline underline-offset-4 text-teal-600"
+                                            className="underline underline-offset-4 text-primary/70"
                                         >
                                             terms and condition
                                         </Link>
@@ -347,7 +347,7 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                             }
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="underline underline-offset-4 text-teal-600"
+                                            className="underline underline-offset-4 text-primary/70"
                                         >
                                             privacy policy and data privacy.
                                         </Link>

@@ -1,31 +1,26 @@
-import { z } from 'zod'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-import { entityIdSchema } from '@/validation'
+import { IAdjustmentEntry } from '../adjustment-entry'
 
-export type IAdjustmentEntryTag = {
-    id: string
-    adjustment_entry_id: string
-    name?: string
+export interface IAdjustmentEntryTag extends IBaseEntityMeta {
+    adjustment_entry_id: TEntityId
+    adjustment_entry: IAdjustmentEntry
+
+    name: string
     description?: string
-    category?: string
-    color?: string
-    icon?: string
+    category: string
+    color: string
+    icon: string
 }
 
-export type IAdjustmentEntryTagRequest = {
-    adjustment_entry_id: string
-    name?: string
+export interface IAdjustmentEntryTagRequest {
+    adjustment_entry_id: TEntityId
+    name: string
     description?: string
-    category?: string
-    color?: string
-    icon?: string
+    category: string
+    color: string
+    icon: string
 }
 
-export const AdjustmentEntryTagRequestSchema = z.object({
-    adjustment_entry_id: entityIdSchema,
-    name: z.string().max(50).optional(),
-    description: z.string().optional(),
-    category: z.string().max(50).optional(),
-    color: z.string().max(20).optional(),
-    icon: z.string().max(20).optional(),
-})
+export interface IAdjustmentEntryTagPaginated
+    extends IPaginatedResult<IAdjustmentEntryTag> {}

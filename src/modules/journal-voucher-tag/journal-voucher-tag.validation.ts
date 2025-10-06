@@ -1,15 +1,15 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const journalVoucherTagSchema = z.object({
-    journal_voucher_id: entityIdSchema,
-    name: z.string().max(50).optional(),
-    description: z.string().optional(),
-    category: z.string().max(50).optional(),
-    color: z.string().max(20).optional(),
-    icon: z.string().max(20).optional(),
+export const JournalVoucherTagSchema = z.object({
+    id: entityIdSchema.optional(),
+    name: z.string().min(1, 'JournalVoucherTag name is required'),
+    description: z
+        .string()
+        .min(10, 'Min 10 character description')
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
-export type TJournalVoucherTagFormValues = z.infer<
-    typeof journalVoucherTagSchema
->
+
+export type TJournalVoucherTagSchema = z.infer<typeof JournalVoucherTagSchema>

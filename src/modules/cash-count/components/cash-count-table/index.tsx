@@ -27,7 +27,7 @@ import CashCountTableColumns, {
     ICashCountTableColumnProps,
     cashCountGlobalSearchTargets,
 } from './columns'
-import { CashCountRowContext } from './row-action-context'
+import CashCountAction, { CashCountRowContext } from './row-action-context'
 
 export interface CashCountTableProps
     extends TableProps<ICashCount>,
@@ -52,7 +52,7 @@ const CashCountTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = CashCountAction,
     RowContextComponent = CashCountRowContext,
 }: CashCountTableProps) => {
     const { pagination, setPagination } = usePagination()
@@ -166,9 +166,7 @@ const CashCountTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

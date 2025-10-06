@@ -134,9 +134,9 @@ const LoanStatusTableColumns = (
                     original: { description },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
+                <div className="!text-wrap text-muted-foreground">
                     <TextRenderer content={description} />
-                </p>
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,

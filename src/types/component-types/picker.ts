@@ -12,4 +12,14 @@ export interface IPickerBaseProps<T = unknown> {
     modalState?: ReturnType<typeof useModalState>
 
     customComponent?: ReactNode
+    triggerVariant?:
+        | 'ghost'
+        | 'secondary'
+        | 'outline'
+        | 'link'
+        | 'nostyle'
+        | 'default'
+        | 'destructive'
+        | null
+        | undefined
 }

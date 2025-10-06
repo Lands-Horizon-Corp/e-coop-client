@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 
 import { NATS_CLIENT } from '@/constants'
-import logger from '@/helpers/loggers/logger'
+import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
+// import logger from '@/helpers/loggers/logger'
 import { type INatsConnectOpts, useNatsStore } from '@/store/nats-pubsub-store'
 import { StringCodec, type Subscription } from 'nats.ws'
 
@@ -20,24 +21,22 @@ export const useSubscribe = <T = unknown>(
     onReceive?: (data: T) => void
 ) => {
     const connection = useNatsStore((state) => state.connection)
+    const isLiveEnabled = useLiveMonitoringStore((state) => state.isLiveEnabled)
 
     useEffect(() => {
         if (
             !connection ||
+            !isLiveEnabled ||
             subject.includes('undefined') ||
             subject.includes('null') ||
             subject === undefined ||
             subject === null
-        )
+        ) {
             return
-
+        }
         let sub: Subscription
         const subHandler = async () => {
             sub = connection.subscribe(`${NATS_CLIENT}${subject}`)
-
-            if (sub) {
-                logger.log('👂: Subscribed to ', subject)
-            }
 
             for await (const msg of sub) {
                 const decodedData = sc.decode(msg.data)
@@ -49,7 +48,9 @@ export const useSubscribe = <T = unknown>(
         subHandler()
 
         return () => {
-            sub?.unsubscribe()
+            if (sub) {
+                sub.unsubscribe()
+            }
         }
-    }, [connection, subject, onReceive])
+    }, [connection, subject, onReceive, isLiveEnabled])
 }

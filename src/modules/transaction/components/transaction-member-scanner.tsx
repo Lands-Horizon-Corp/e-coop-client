@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { toast } from 'sonner'
 
+import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
@@ -15,6 +16,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { EyeIcon } from '@/components/icons'
 import QrCodeScanner from '@/components/qrcode-scanner'
+import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -38,6 +40,7 @@ const TransactionMemberScanner = ({
     transactionId,
 }: MemberQrScannerProps) => {
     const [startScan, setStartScan] = useState(false)
+    const { setActiveScope } = useShortcutContext()
 
     const {
         setSelectedMember,
@@ -78,36 +81,48 @@ const TransactionMemberScanner = ({
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    useHotkeys('s', () => {
+    useHotkeys('s', (e) => {
+        e.preventDefault()
         if (!transactionId) {
             setStartScan((start) => !start)
         }
     })
-
     return (
         <div
+            onClick={(e) => {
+                e.preventDefault()
+                setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+            }}
             className={cn(
-                'flex flex-col lg:flex-row w-full h-fit bg-secondary/20 rounded-2xl p-5',
+                'flex flex-col xl:flex-row w-full h-fit min-h-fit ecoop-scroll rounded-2xl p-4',
                 className
             )}
         >
-            <div className="hidden">
-                <MemberPicker
-                    modalState={{
-                        open: openMemberPicker,
-                        onOpenChange: setOpenMemberPicker,
-                    }}
-                    onSelect={(selectedMember) => {
-                        setSelectedMember(selectedMember)
-                    }}
-                    placeholder="Select Member"
-                />
-            </div>
-            {/* Left: Scanner */}
-            <div className="flex flex-col flex-shrink-0 lg:w-[15rem] justify-center items-center w-full">
-                <div className="w-fit">
-                    {startScan && !selectedMember ? (
-                        <div className="w-full aspect-square max-w-[90%] rounded-xl overflow-hidden ">
+            <MemberPicker
+                triggerClassName="hidden"
+                modalState={{
+                    open: openMemberPicker,
+                    onOpenChange: setOpenMemberPicker,
+                }}
+                onSelect={(selectedMember) => {
+                    setSelectedMember(selectedMember)
+                }}
+                placeholder="Select Member"
+            />
+            {/* Left: Scanner Column */}
+            <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
+                {/* Inner Scanner Wrapper: Removed mr-1/mb-1. Added consistent p-2 for spacing. */}
+                <div className="w-full xl:p-2 flex justify-center">
+                    <div
+                        className={cn(
+                            // Apply styles for the active scanner state
+                            startScan && !selectedMember
+                                ? 'xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden'
+                                : // Apply padding for the static placeholder state
+                                  'p-4'
+                        )}
+                    >
+                        {startScan && !selectedMember ? (
                             <QrCodeScanner<IQRMemberProfileDecodedResult>
                                 allowMultiple
                                 onSuccessDecode={(data) => {
@@ -119,28 +134,37 @@ const TransactionMemberScanner = ({
                                     setDecodedMemberProfile(data.data)
                                 }}
                             />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col h-full items-center justify-center text-center py-8">
-                            <ScanLineIcon className="mx-auto h-16 w-16 text-muted-foreground/70" />
-                            <Button
-                                disabled={!!transactionId || !!selectedMember}
-                                onClick={() => setStartScan((start) => !start)}
-                                size="sm"
-                                variant="outline"
-                            >
-                                <EyeIcon className="mr-1 h-4 w-4" />
-                                Start
-                            </Button>
-                            <p className="text-muted-foreground/70 text-sm mt-4">
-                                Click start to scan member QR
-                            </p>
-                        </div>
-                    )}
+                        ) : (
+                            // Placeholder box: use size-full and flex-1 to occupy space consistently
+                            <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2">
+                                <ScanLineIcon
+                                    size={50}
+                                    className=" text-muted-foreground/70"
+                                />
+                                <Button
+                                    disabled={
+                                        !!transactionId || !!selectedMember
+                                    }
+                                    onClick={() =>
+                                        setStartScan((start) => !start)
+                                    }
+                                    size="sm"
+                                >
+                                    <EyeIcon className="mr-1 h-4 w-4" />
+                                    Start
+                                </Button>
+                                <p className="text-muted-foreground/70 text-xs">
+                                    Click start to scan member QR
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
-            <div className="flex flex-col flex-1 w-full space-y-4">
+            {/* Right: Content Column */}
+            {/* Use 'flex-1 min-w-0' to make it take up the rest of the space in xl:flex-row */}
+            <div className="flex flex-col flex-1 w-full h-full p-2">
                 {isPending && decodedMemberProfile !== undefined && (
                     <p className="text-muted-foreground/70 flex items-center">
                         <LoadingSpinner className="mr-2 h-4 w-4" />
@@ -149,8 +173,9 @@ const TransactionMemberScanner = ({
                 )}
                 {error && <FormErrorMessage errorMessage={error} />}
                 {selectedMember ? (
-                    <div className="space-y-4">
+                    <div className="h-full">
                         <TransactionMemberProfile
+                            className="h-full"
                             memberInfo={selectedMember}
                             hasTransaction={false}
                         />

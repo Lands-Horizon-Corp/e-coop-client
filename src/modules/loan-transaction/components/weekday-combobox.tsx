@@ -39,7 +39,7 @@ const WeekdayCombobox = ({
     value,
     className,
     disabled = false,
-    placeholder = 'Select Relationship...',
+    placeholder = 'Select Weekday...',
     weekdays = WEEKDAYS as unknown as TWeekdays[],
     onChange,
     ...other
@@ -75,7 +75,7 @@ const WeekdayCombobox = ({
                         className="h-9"
                     />
                     <CommandList className="ecoop-scroll">
-                        <CommandEmpty>No relationship found.</CommandEmpty>
+                        <CommandEmpty>No weekdays found.</CommandEmpty>
                         <CommandGroup>
                             {weekdays.map((weekday) => (
                                 <CommandItem

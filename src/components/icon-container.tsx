@@ -1,6 +1,4 @@
-import { HelpCircle } from 'lucide-react'
-
-import { IconMap } from './icons'
+import { HandsHelpingIcon, IconMap } from './icons'
 
 export const IconContainer = ({
     name,
@@ -10,7 +8,7 @@ export const IconContainer = ({
     className?: string
 }) => {
     if (!name || !(name in IconMap)) {
-        return <HelpCircle className={className} />
+        return <HandsHelpingIcon className={className} />
     }
 
     const Icon = IconMap[name as keyof typeof IconMap]

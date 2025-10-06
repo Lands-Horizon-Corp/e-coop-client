@@ -7,20 +7,26 @@ import { VariantProps } from 'class-variance-authority'
 
 import { ChevronRightIcon } from '@/components/icons'
 
+import { useModalState } from '@/hooks/use-modal-state'
+
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from '../collapsible'
+import { Popover, PopoverContent, PopoverTrigger } from '../popover'
 import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarMenuSub,
     sidebarMenuButtonVariants,
+    useSidebar,
 } from '../sidebar'
 import { TooltipContent } from '../tooltip'
 import { sidebarRouteMatcher } from './app-sidebar-utils'
 import { INavItem } from './types'
+
+// adjust import path as needed
 
 interface Props {
     navItem: INavItem
@@ -67,29 +73,38 @@ const AppSidebarButton = React.forwardRef<
                     item.isSub && '-left-3'
                 )}
             />
-            <span className="truncate">
-                {(item.depth === 1 || item.type === 'dropdown') &&
+            <span className="data-[state=collapsed]:hidden">
+                {
+                    // SINCE OUR SIDEBAR IS ICON MODE NOW WHEN COLLAPSED, NEED TO SHOW ICON ON POPEVER VERSION
+                    /*(item.depth === 1 || item.type === 'dropdown') && */
                     item.icon && (
                         <item.icon
                             className={cn(
-                                'mr-2 inline size-[18px] text-muted-foreground/80 duration-500 group-hover/navself:text-foreground',
-                                isRouteMatched && 'text-foreground'
+                                ' [[data-state=collapsed]_&]:mr-0 mr-2 inline size-[18px] text-muted-foreground/80 duration-500 group-hover/navself:text-foreground',
+                                isRouteMatched && 'text-foreground',
+                                !item?.depth && 'text-muted-foreground/40'
                             )}
                         />
-                    )}
-                {item.title}
+                    )
+                }
+                <span className="[[data-state=collapsed]_&]:hidden">
+                    {item.title}
+                </span>
             </span>
             {item.type === 'dropdown' && (
-                <ChevronRightIcon className="transition-transform" />
+                <ChevronRightIcon className="transition-transform [[data-state=collapsed]_&]:hidden" />
             )}
         </SidebarMenuButton>
     )
 })
 
 const AppSidebarItem = ({ navItem }: Props) => {
+    const { open } = useSidebar()
+    const popoverState = useModalState(false)
+
     if (navItem.type === 'item') return <AppSidebarButton item={navItem} />
 
-    if (navItem.type === 'dropdown')
+    if (navItem.type === 'dropdown' && open)
         return (
             <SidebarMenuItem className="my-0">
                 <Collapsible className="group/collapsible [&[data-state=open]>button>svg:last-child]:rotate-90">
@@ -113,6 +128,51 @@ const AppSidebarItem = ({ navItem }: Props) => {
                         </SidebarMenuSub>
                     </CollapsibleContent>
                 </Collapsible>
+            </SidebarMenuItem>
+        )
+
+    if (navItem.type === 'dropdown' && !open)
+        return (
+            <SidebarMenuItem className="my-0">
+                <Popover
+                    open={popoverState.open}
+                    onOpenChange={popoverState.onOpenChange}
+                >
+                    <PopoverTrigger asChild>
+                        <AppSidebarButton
+                            item={{ ...navItem }}
+                            onClick={() => popoverState.onOpenChange(true)}
+                        />
+                    </PopoverTrigger>
+                    <PopoverContent
+                        align="start"
+                        data-popovered="yes"
+                        className="px-0 shadow-lg bg-popover/90 backdrop-blur-xs"
+                        onClick={() => popoverState.onOpenChange(false)}
+                    >
+                        <p className="px-4 pb-2">
+                            {' '}
+                            {navItem?.icon && (
+                                <navItem.icon className="inline [[data-state=collapsed]_&]:mr-0" />
+                            )}{' '}
+                            {navItem.title}
+                        </p>
+                        <SidebarMenuSub className="gap-y-2 px-4 mx-5">
+                            {navItem.items.map((subItem, index) => (
+                                <AppSidebarItem
+                                    key={index}
+                                    navItem={
+                                        {
+                                            ...subItem,
+                                            isSub: true,
+                                            url: `${navItem.url}${subItem.url}`,
+                                        } as INavItem
+                                    }
+                                />
+                            ))}
+                        </SidebarMenuSub>
+                    </PopoverContent>
+                </Popover>
             </SidebarMenuItem>
         )
 }

@@ -84,7 +84,7 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
                     ref={ref}
                     value={formattedValue}
                     className={cn(
-                        'border !border-primary',
+                        'border !border-primary/20',
                         isDefault
                             ? ''
                             : 'h-16 rounded-2xl pl-8 pr-10 text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',
@@ -96,7 +96,7 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
                     placeholder="Enter the payment amount"
                 />
                 {!isDefault && (
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary after:content-['₱']" />
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary after:content-['']" />
                 )}
             </div>
         )

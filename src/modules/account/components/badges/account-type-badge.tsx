@@ -34,7 +34,7 @@ const AccoutTTypeStyles: Record<
     },
     [AccountTypeEnum.ARAging]: {
         label: 'A/R-Aging',
-        bgColor: 'bg-red-500',
+        bgColor: 'bg-destructive',
         textColor: 'text-red-50',
     },
     [AccountTypeEnum.Fines]: {

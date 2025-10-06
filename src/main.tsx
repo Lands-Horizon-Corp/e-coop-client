@@ -1,18 +1,15 @@
 import { StrictMode } from 'react';
 
-// import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 import { createRoot } from 'react-dom/client';
 
 import App from './app';
+import { APP_ENV } from './constants';
 import './index.css';
 
-// const isDevelopment =
-//     typeof import.meta.env !== "undefined" &&
-//     import.meta.env.APP_ENV === "development";
-
-// if (!isDevelopment) {
-//     disableReactDevTools();
-// }
+if (APP_ENV !== 'development') {
+    disableReactDevTools();
+}
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>

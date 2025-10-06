@@ -3,7 +3,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { MemberTypeCreateUpdateFormModal } from '@/modules/member-type/components/forms/member-type-create-update-form'
 import MemberTypeTable from '@/modules/member-type/components/member-type-table'
-import MemberTypeAction from '@/modules/member-type/components/member-type-table/row-action-context'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -46,7 +45,6 @@ const MemberTypePage = () => {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                actionComponent={(prop) => <MemberTypeAction {...prop} />}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>

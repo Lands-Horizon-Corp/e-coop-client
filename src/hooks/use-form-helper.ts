@@ -34,7 +34,7 @@ export const useFormHelper = <T extends FieldValues>({
     form,
     defaultValues,
     autoSave = false,
-    autoSaveDelay = 400,
+    autoSaveDelay = 1000,
     // onNewDefaulValueNotice,
     resetOnDefaultChange = false,
     focusOnError = true,
@@ -63,10 +63,7 @@ export const useFormHelper = <T extends FieldValues>({
         }
     }, [form, onOpen, defaultValues, resetOnDefaultChange])
 
-    const isDisabled = useCallback(
-        (field: Path<T>) => readOnly || disabledFields.includes(field),
-        [readOnly, disabledFields]
-    )
+    const { isDisabled } = useFormDisabled<T>({ readOnly, disabledFields })
 
     const isHidden = useCallback(
         (field: Path<T>) => hiddenFields.includes(field),
@@ -87,10 +84,10 @@ export const useFormHelper = <T extends FieldValues>({
 
     const firstError = Object.values(form.formState.errors)[0]?.message
 
-    const formRef = useFormAutosave({
+    const formRef = useFormAutoSave<T>({
         form,
-        autoSave: autoSave,
         delay: autoSaveDelay,
+        enabled: autoSave,
     })
 
     const handleFocusError = useFocusOnErrorField({
@@ -108,6 +105,21 @@ export const useFormHelper = <T extends FieldValues>({
         handleFocusError,
         getDisableHideFieldProps,
     }
+}
+
+export const useFormDisabled = <T extends FieldValues>({
+    readOnly = false,
+    disabledFields = [],
+}: {
+    readOnly?: boolean
+    disabledFields?: Path<T>[]
+}) => {
+    const isDisabled = useCallback(
+        (field: Path<T>) => readOnly || disabledFields.includes(field),
+        [readOnly, disabledFields]
+    )
+
+    return { isDisabled }
 }
 
 export const useFocusOnErrorField = <T extends FieldValues>({
@@ -130,58 +142,6 @@ export const useFocusOnErrorField = <T extends FieldValues>({
             form.setFocus(firstErrorField)
         }
     }, [form, enabled])
-}
-
-export const useFormAutosave = <T extends FieldValues>({
-    form,
-    delay = 500,
-    autoSave = false,
-}: {
-    form: UseFormReturn<T>
-    delay?: number
-    autoSave?: boolean
-}) => {
-    const formRef = useRef<HTMLFormElement | null>(null)
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-    const mountedRef = useRef(false)
-    const isSubmittingRef = useRef(false)
-
-    useEffect(() => {
-        if (!autoSave) return
-
-        const subscription = form.watch(() => {
-            if (
-                !mountedRef.current ||
-                !form.formState.isDirty ||
-                isSubmittingRef.current
-            )
-                return
-
-            if (timeoutRef.current) clearTimeout(timeoutRef.current)
-
-            timeoutRef.current = setTimeout(async () => {
-                if (!form.formState.isDirty || isSubmittingRef.current) return
-
-                isSubmittingRef.current = true
-                try {
-                    formRef.current?.requestSubmit()
-                } finally {
-                    setTimeout(() => {
-                        isSubmittingRef.current = false
-                    }, 100)
-                }
-            }, delay)
-        })
-
-        mountedRef.current = true
-
-        return () => {
-            subscription.unsubscribe()
-            if (timeoutRef.current) clearTimeout(timeoutRef.current)
-        }
-    }, [form, delay, autoSave])
-
-    return formRef
 }
 
 export const useFormPreventExit = <T extends FieldValues>({
@@ -210,4 +170,54 @@ export const useFormPreventExit = <T extends FieldValues>({
         shouldPrevent: hasDirtyFields && enabled,
         onExitPrevented,
     })
+}
+
+type AutoSaveProps<T extends FieldValues> = {
+    delay?: number
+    enabled?: boolean
+    form: UseFormReturn<T>
+}
+
+// EXPERIMENTAL - SUBMITTED DISCUSSION SINCE WITHOUTUSING USECALLBACK WILL CAUSE A BUG
+// https://github.com/orgs/react-hook-form/discussions/13062
+export const useFormAutoSave = <T extends FieldValues>({
+    delay = 1000,
+    form,
+    enabled,
+    // onSave,
+}: AutoSaveProps<T>) => {
+    const formRef = useRef<HTMLFormElement | null>(null)
+    const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    // const handleSave = useCallback(() => {
+    // onSave()
+    // }, []) // illegal
+
+    useEffect(() => {
+        const subscription = form.watch(() => {
+            if (!enabled) return
+
+            if (timer.current) clearTimeout(timer.current)
+
+            timer.current = setTimeout(() => {
+                const { dirtyFields } = form.formState
+
+                const hasNoChanges = Object.keys(dirtyFields).length === 0
+
+                if (hasNoChanges) return
+
+                // handleSave()
+                formRef.current?.requestSubmit()
+            }, delay)
+        })
+
+        return () => {
+            subscription.unsubscribe()
+            if (timer.current) {
+                clearTimeout(timer.current)
+            }
+        }
+    }, [delay, form, enabled])
+
+    return formRef
 }

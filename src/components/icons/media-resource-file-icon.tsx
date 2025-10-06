@@ -56,7 +56,11 @@ const MediaResourceFileIcon = ({
         case 'pdf':
             return (
                 <span
-                    className={cn('text-red-400', commonIconClass, className)}
+                    className={cn(
+                        'text-destructive',
+                        commonIconClass,
+                        className
+                    )}
                 >
                     <PDFFileFillIcon className={iconClassName} />
                 </span>
@@ -76,7 +80,11 @@ const MediaResourceFileIcon = ({
         case 'video':
             return (
                 <span
-                    className={cn('text-red-400', commonIconClass, className)}
+                    className={cn(
+                        'text-destructive',
+                        commonIconClass,
+                        className
+                    )}
                 >
                     <VideoFileFillIcon className={iconClassName} />
                 </span>

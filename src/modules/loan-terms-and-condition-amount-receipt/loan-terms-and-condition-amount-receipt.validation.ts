@@ -2,12 +2,14 @@ import z from 'zod'
 
 import { entityIdSchema } from '@/validation'
 
-export const loanTermsAndConditionAmountReceiptSchema = z.object({
-    loan_transaction_id: entityIdSchema,
+export const LoanTermsAndConditionAmountReceiptSchema = z.object({
+    id: entityIdSchema.optional(),
+    loan_transaction_id: entityIdSchema.optional(), // auto inserted by server
     account_id: entityIdSchema,
-    amount: z.number().optional(),
+    account: z.any(), // for front end picker only
+    amount: z.coerce.number(),
 })
 
-export type TLoanTermsAndConditionAmountFormValues = z.infer<
-    typeof loanTermsAndConditionAmountReceiptSchema
+export type TLoanTermsAndConditionAmountReceiptSchema = z.infer<
+    typeof LoanTermsAndConditionAmountReceiptSchema
 >

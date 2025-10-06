@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react'
+
 import { cn } from '@/helpers'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
@@ -13,15 +15,22 @@ interface IFormResetSubmitFooterProps extends IClassProps {
     isLoading?: boolean
     disableSubmit?: boolean
     showSeparator?: boolean
+    disableReset?: boolean
+
+    hideReset?: boolean
 
     showConfirmOnReset?: boolean
 
-    submitText?: string
+    submitText?: React.ReactNode | string
     resetText?: string
 
-    error?: Error | string | null
+    error?: string
+
+    resetButtonType?: 'button' | 'reset'
+    submitButtonType?: 'button' | 'submit'
 
     onReset?: () => void
+    onSubmit?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
 const FormFooterResetSubmit = ({
@@ -33,46 +42,53 @@ const FormFooterResetSubmit = ({
     disableSubmit,
     error,
     showSeparator = false,
+    hideReset = false,
     showConfirmOnReset = true,
+    disableReset,
+
+    resetButtonType = 'button',
+    submitButtonType = 'submit',
+
+    onSubmit,
     onReset,
 }: IFormResetSubmitFooterProps) => {
     const { onOpen } = useConfirmModalStore()
-
-    const errorMessage =
-        error instanceof Error
-            ? error.message
-            : error
-              ? String(error)
-              : undefined
-
     return (
         <div className={cn('space-y-2 py-1 px-0', className)}>
-            <FormErrorMessage errorMessage={errorMessage} />
+            <FormErrorMessage errorMessage={error} />
             {showSeparator && <Separator className="my-2 sm:my-4" />}
             <div className="flex items-center justify-end gap-x-2">
-                <Button
-                    size="sm"
-                    type="button"
-                    variant="secondary"
-                    onClick={() => {
-                        if (showConfirmOnReset) {
-                            return onOpen({
-                                title: 'Reset Changes',
-                                description:
-                                    'You might have unsave changes, are you sure to proceed?',
-                                onConfirm: () => onReset?.(),
-                            })
+                {!hideReset && (
+                    <Button
+                        size="sm"
+                        type={resetButtonType}
+                        variant="secondary"
+                        onClick={() => {
+                            if (showConfirmOnReset) {
+                                return onOpen({
+                                    title: 'Reset Changes',
+                                    description:
+                                        'You might have unsave changes, are you sure to proceed?',
+                                    onConfirm: () => onReset?.(),
+                                })
+                            }
+                            onReset?.()
+                        }}
+                        disabled={
+                            disableSubmit ||
+                            readOnly ||
+                            isLoading ||
+                            disableReset
                         }
-                        onReset?.()
-                    }}
-                    disabled={disableSubmit || readOnly || isLoading}
-                    className="w-full self-end px-8 sm:w-fit"
-                >
-                    {resetText}
-                </Button>
+                        className="w-full self-end px-8 sm:w-fit"
+                    >
+                        {resetText}
+                    </Button>
+                )}
                 <Button
                     size="sm"
-                    type="submit"
+                    type={onSubmit !== undefined ? 'button' : submitButtonType}
+                    onClick={onSubmit}
                     disabled={isLoading || readOnly || disableSubmit}
                     className="w-full self-end px-8 sm:w-fit"
                 >

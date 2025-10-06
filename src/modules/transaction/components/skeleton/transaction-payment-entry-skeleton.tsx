@@ -1,26 +1,32 @@
-import { cn } from '@/helpers'
-
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const PaymentsEntryListSkeleton = () => {
+const PaymentsEntryListSkeleton = ({ itemNumber }: { itemNumber: number }) => {
     return (
         <div className="h-full space-y-2">
-            {[...Array(5)].map((_, idx) => (
+            {[...Array(itemNumber)].map((_, idx) => (
                 <Card
                     key={idx}
-                    className="!bg-background/90 text-secondary border-0 p-2"
+                    className="w-full rounded-2xl border border-border bg-background/90 p-0"
                 >
-                    <CardContent className={cn('w-full p-0 pr-1')}>
-                        <div className="flex px-2 w-full items-center gap-x-2">
-                            <Skeleton className="size-8 bg-sidebar dark:bg-secondary rounded-full" />
-                            <div className="w-full space-y-1">
-                                <div className="mt-2 flex flex-col w-full items-start space-y-2">
-                                    <Skeleton className="h-4 w-1/2 bg-sidebar dark:bg-secondary rounded" />
-                                    <Skeleton className="h-4 w-1/4 bg-sidebar dark:bg-secondary rounded" />
-                                </div>
-                                <div className="h-3 w-1/3 rounded" />
+                    <CardContent className="flex items-center justify-between p-4">
+                        {/* Left: Avatar + text */}
+                        <div className="flex items-start gap-3">
+                            {/* Avatar */}
+                            <Skeleton className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-sidebar dark:bg-secondary" />
+
+                            {/* Text placeholders */}
+                            <div className="flex flex-col space-y-2">
+                                <Skeleton className="h-4 w-32 sm:w-40 bg-sidebar dark:bg-secondary rounded" />
+                                <Skeleton className="h-3 w-20 sm:w-28 bg-sidebar dark:bg-secondary rounded" />
+                                <Skeleton className="h-3 w-16 sm:w-20 bg-sidebar dark:bg-secondary rounded" />
                             </div>
+                        </div>
+
+                        {/* Right: Amount + chevron */}
+                        <div className="flex flex-col items-end space-y-2">
+                            <Skeleton className="h-4 w-16 sm:w-20 bg-sidebar dark:bg-secondary rounded" />
+                            <Skeleton className="h-3 w-4 bg-sidebar dark:bg-secondary rounded" />
                         </div>
                     </CardContent>
                 </Card>

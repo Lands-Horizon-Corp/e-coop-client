@@ -1,31 +1,16 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import z from 'zod'
 
-import { ILoanTransaction } from '../loan-transaction'
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
-export interface ILoanTagRequest {
-    loan_transaction_id: TEntityId
-    name: string
-    description?: string
-    category?: string
-    color?: string
-    icon?: string
-}
+import { LoanTagSchema } from './loan-tag.validation'
 
-export interface ILoanTagResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    loan_transaction_id: TEntityId
-    loan_transaction?: ILoanTransaction
+export interface ILoanTag extends IBaseEntityMeta {
     name: string
     description: string
-    category: string
     color: string
     icon: string
 }
+
+export type ILoanTagRequest = z.infer<typeof LoanTagSchema>
+
+export interface ILoanTagPaginated extends IPaginatedResult<ILoanTag> {}

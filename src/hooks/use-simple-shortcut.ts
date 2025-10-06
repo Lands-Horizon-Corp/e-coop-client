@@ -205,6 +205,9 @@ export type Keys = KeyboardKey
 type UseShortcutOptions = {
     passive?: boolean
     disabled?: boolean
+    element?: HTMLElement | null
+    disableTextInputs?: boolean
+    disableActiveButton?: boolean
 }
 
 export const useSimpleShortcut = (
@@ -213,33 +216,79 @@ export const useSimpleShortcut = (
     options: UseShortcutOptions = {}
 ) => {
     const pressedKeysRef = useRef<Set<string>>(new Set())
-    const { passive = false, disabled = false } = options
+    const {
+        passive = false,
+        disabled = false,
+        element = window,
+        disableTextInputs = true,
+        disableActiveButton = false,
+    } = options
 
     useEffect(() => {
         if (disabled) return
 
-        const handleKeyDown = (e: KeyboardEvent) => {
-            pressedKeysRef.current.add(e.key)
+        const handleKeyDown = (e: Event) => {
+            const keyboardEvent = e as KeyboardEvent
+
+            const isTextInput =
+                keyboardEvent.target instanceof HTMLTextAreaElement ||
+                (keyboardEvent.target instanceof HTMLInputElement &&
+                    (!keyboardEvent.target.type ||
+                        keyboardEvent.target.type === 'text' ||
+                        keyboardEvent.target.type === 'password' ||
+                        keyboardEvent.target.type === 'email' ||
+                        keyboardEvent.target.type === 'number' ||
+                        keyboardEvent.target.type === 'search' ||
+                        keyboardEvent.target.type === 'tel' ||
+                        keyboardEvent.target.type === 'url')) ||
+                (keyboardEvent.target as HTMLElement)?.isContentEditable ||
+                (keyboardEvent.target as HTMLElement)?.contentEditable ===
+                    'true'
+
+            const isButtonActive =
+                disableActiveButton &&
+                ((document.activeElement instanceof HTMLButtonElement &&
+                    document.activeElement.disabled) ||
+                    (keyboardEvent.target instanceof HTMLButtonElement &&
+                        (keyboardEvent.target as HTMLButtonElement).disabled))
+
+            if (keyboardEvent.repeat) return
+
+            if ((disableTextInputs && isTextInput) || isButtonActive) {
+                return keyboardEvent.stopPropagation()
+            }
+
+            pressedKeysRef.current.add(keyboardEvent.key)
 
             const allPressed = keys.every((key) =>
                 pressedKeysRef.current.has(key)
             )
 
-            if (allPressed) {
-                callback(e)
+            if (allPressed && keyboardEvent.key === keys[keys.length - 1]) {
+                keyboardEvent.preventDefault()
+                keyboardEvent.stopPropagation()
+                callback(keyboardEvent)
             }
         }
 
-        const handleKeyUp = (e: KeyboardEvent) => {
-            pressedKeysRef.current.delete(e.key)
+        const handleKeyUp = (_e: Event) => {
+            pressedKeysRef.current.clear()
         }
 
-        window.addEventListener('keydown', handleKeyDown, { passive })
-        window.addEventListener('keyup', handleKeyUp, { passive })
+        element?.addEventListener('keydown', handleKeyDown, { passive })
+        element?.addEventListener('keyup', handleKeyUp, { passive })
 
         return () => {
-            window.removeEventListener('keydown', handleKeyDown)
-            window.removeEventListener('keyup', handleKeyUp)
+            element?.removeEventListener('keydown', handleKeyDown)
+            element?.removeEventListener('keyup', handleKeyUp)
         }
-    }, [keys, callback, passive, disabled])
+    }, [
+        keys,
+        callback,
+        passive,
+        disabled,
+        element,
+        disableTextInputs,
+        disableActiveButton,
+    ])
 }

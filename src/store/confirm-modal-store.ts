@@ -16,6 +16,8 @@ interface IConfirmModalOnOpenData extends Partial<ISharedConfirmModalProperty> {
     description?: string | ReactNode
     content?: ReactNode
 
+    modalClassName?: string
+
     confirmString?: string | ReactNode
     cancelString?: string | ReactNode
     onClose?: () => void

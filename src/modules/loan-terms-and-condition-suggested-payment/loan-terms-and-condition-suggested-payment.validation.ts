@@ -1,11 +1,18 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const loanTermsAndConditionSuggestedPaymentSchema = z.object({
-    loan_transaction_id: entityIdSchema,
+export const LoanTermsAndConditionSuggestedPaymentSchema = z.object({
+    id: entityIdSchema.optional(),
+    loan_transaction_id: entityIdSchema.optional(), // optional since server will auto set
+    name: z.string().min(1, 'Name is required'),
+    description: z
+        .string()
+        .min(10, 'Min 10 character description')
+        .optional()
+        .transform(descriptionTransformerSanitizer),
 })
 
-export type TLoanTermsAndConditionSuggestedPaymentFormValues = z.infer<
-    typeof loanTermsAndConditionSuggestedPaymentSchema
+export type TLoanTermsAndConditionSuggestedPaymentSchema = z.infer<
+    typeof LoanTermsAndConditionSuggestedPaymentSchema
 >

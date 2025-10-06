@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import {
     IPaymentType,
@@ -105,7 +106,10 @@ const PaymentTypeCreateUpdateForm = ({
     }, handleFocusError)
 
     const isPending = isCreating || isUpdating
-    const error = createError || updateError
+
+    const errorMessage = serverRequestErrExtractor({
+        error: createError || updateError,
+    })
 
     const isPaymentTypeOnChanged =
         JSON.stringify(form.watch()) !== JSON.stringify(formProps.defaultValues)
@@ -209,9 +213,7 @@ const PaymentTypeCreateUpdateForm = ({
                 </fieldset>
                 <Separator />
                 <div className="space-y-2">
-                    <FormErrorMessage
-                        errorMessage={error ? error.message : null}
-                    />
+                    <FormErrorMessage errorMessage={errorMessage} />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
                             size="sm"

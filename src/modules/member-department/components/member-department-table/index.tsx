@@ -31,7 +31,9 @@ import MemberDepartmentTableColumns, {
     IMemberDepartmentTableColumnProps,
     memberDepartmentGlobalSearchTargets,
 } from './columns'
-import { MemberDepartmentRowContext } from './row-action-context'
+import MemberDepartmentAction, {
+    MemberDepartmentRowContext,
+} from './row-action-context'
 
 export interface MemberDepartmentTableProps
     extends TableProps<IMemberDepartment>,
@@ -57,7 +59,7 @@ const MemberDepartmentTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = MemberDepartmentAction,
     RowContextComponent = MemberDepartmentRowContext,
 }: MemberDepartmentTableProps) => {
     const queryClient = useQueryClient()

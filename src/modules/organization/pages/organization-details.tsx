@@ -95,7 +95,7 @@ const OrganizationHeader = ({
                     </div>
                 </div>
                 <div className="flex items-center gap-x-2">
-                    <PushPinIcon className="text-red-400" />
+                    <PushPinIcon className="text-destructive" />
                     <p className="text-xs">{organization?.address}</p>
                 </div>
                 <div className="flex items-center gap-x-2">

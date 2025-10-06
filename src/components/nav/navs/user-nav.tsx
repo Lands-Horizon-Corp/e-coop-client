@@ -6,10 +6,12 @@ import TransactionBatchNavButton from '@/modules/transaction-batch/components/ba
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 
 import { BadgeCheckFillIcon } from '@/components/icons'
+import LiveToggle from '@/components/live-toggle'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
 import NavContainer from '@/components/nav/nav-container'
 import RootNav from '@/components/nav/root-nav'
 import PageBreadCrumb from '@/components/pages-breadcrumbs'
+import GeneralButtonShortcuts from '@/components/shorcuts/general-button-shorcuts'
 import AppSidebarToggle from '@/components/ui/app-sidebar/app-sidebar-toggle'
 import { Button } from '@/components/ui/button'
 
@@ -48,7 +50,7 @@ const UserNav = ({
                     <Button
                         variant="secondary"
                         hoverVariant="primary"
-                        className="rounded-full group text-muted-foreground"
+                        className="rounded-full group"
                         onClick={() =>
                             router.navigate({
                                 to: '/org/$orgname/branch/$branchname/approvals' as string,
@@ -59,10 +61,15 @@ const UserNav = ({
                         Approvals
                     </Button>
                 )}
+
                 {user && <TransactionBatchNavButton />}
                 {user && user_organization?.user_type === 'employee' && (
                     <NavTimeInBar />
                 )}
+
+                {user && <LiveToggle size="default" />}
+
+                <GeneralButtonShortcuts />
                 <NavProfileMenu />
                 <NavThemeToggle />
             </NavContainer>

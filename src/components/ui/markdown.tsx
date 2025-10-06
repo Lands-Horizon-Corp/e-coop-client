@@ -10,7 +10,6 @@ import React, {
 } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { Check, Copy } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -23,6 +22,7 @@ import remarkGfm from 'remark-gfm'
 
 import { Button } from '@/components/ui/button'
 
+import { CheckIcon, CopyIcon } from '../icons'
 import Image from '../image'
 
 // Define remark and rehype plugins
@@ -82,9 +82,9 @@ const CopyButton = memo(function CopyButton({ text }: { text: string }) {
             aria-label="Copy code block"
         >
             {copied ? (
-                <Check className="h-4 w-4 text-primary" />
+                <CheckIcon className="h-4 w-4 text-primary" />
             ) : (
-                <Copy className="h-4 w-4" />
+                <CopyIcon className="h-4 w-4" />
             )}
         </Button>
     )
@@ -227,7 +227,7 @@ class ErrorBoundary extends React.Component<
     render() {
         if (this.state.hasError) {
             return (
-                <div className="text-red-500">
+                <div className="text-destructive">
                     Error rendering markdown content.
                 </div>
             )

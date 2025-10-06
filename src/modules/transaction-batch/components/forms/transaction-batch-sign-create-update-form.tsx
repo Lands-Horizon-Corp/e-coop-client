@@ -467,7 +467,7 @@ export const TransactionBatchSignCreateUpdateFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
+                    // props.onOpenChange?.(false)
                 }}
             />
         </Modal>

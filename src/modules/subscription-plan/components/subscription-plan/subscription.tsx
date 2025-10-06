@@ -63,7 +63,7 @@ const SubscriptionPlanPicker = ({
                                 </CardHeader>
                                 <CardContent>
                                     <span className="text-3xl font-semibold">
-                                        ₱ {item.cost} {''}
+                                        {item.cost} {''}
                                         <span className="text-lg text-card-foreground/50">
                                             /month
                                         </span>

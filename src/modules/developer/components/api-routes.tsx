@@ -7,7 +7,6 @@ import { cn } from '@/helpers'
 import APIRequestMethodBadge, {
     REQUEST_METHOD,
 } from '@/modules/developer/components/api-request-method-badge'
-import { SearchIcon } from 'lucide-react'
 
 import {
     ArrowRightIcon,
@@ -174,7 +173,7 @@ const RouteDetailsSheet = ({
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>
-                <SearchIcon className="p-1 m-3 cursor-pointer hover:text-primary" />
+                <MagnifyingGlassIcon className="p-1 m-3 cursor-pointer hover:text-primary" />
             </SheetTrigger>
             <SheetContent
                 side="right"

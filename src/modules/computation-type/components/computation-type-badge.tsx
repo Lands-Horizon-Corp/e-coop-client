@@ -20,7 +20,7 @@ const computationTypeStyles: Record<
     },
     [ComputationTypeEnum.Diminishing]: {
         label: 'Diminishing',
-        bgColor: 'bg-red-600',
+        bgColor: 'bg-destructive',
         textColor: 'text-red-50',
     },
     [ComputationTypeEnum.DiminishingAddOn]: {

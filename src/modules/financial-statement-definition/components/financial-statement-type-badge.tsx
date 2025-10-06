@@ -34,8 +34,8 @@ const financialStatementTypeStyles: Record<
     },
     [FinancialStatementTypeEnum.Revenue]: {
         label: 'Revenue',
-        bgColor: 'bg-teal-500',
-        textColor: 'text-teal-50',
+        bgColor: 'bg-primary',
+        textColor: 'text-primary',
     },
     [FinancialStatementTypeEnum.Expenses]: {
         label: 'Expenses',

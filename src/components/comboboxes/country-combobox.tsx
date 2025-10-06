@@ -2,7 +2,6 @@ import React, { forwardRef, useCallback, useEffect, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import { countries } from 'country-data-list'
-import { CheckIcon, ChevronDown, Globe } from 'lucide-react'
 import { CircleFlag } from 'react-circle-flags'
 
 import {
@@ -18,6 +17,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
+
+import { ArrowChevronDown, CheckIcon, GlobeIcon } from '../icons'
 
 export interface Country {
     alpha2: string
@@ -127,11 +128,11 @@ const CountryComboboxComponent = (
                                 setSelectedCountry.name
                             )
                         ) : (
-                            <Globe size={20} />
+                            <GlobeIcon size={20} />
                         )}
                     </span>
                 )}
-                <ChevronDown size={16} />
+                <ArrowChevronDown size={16} />
             </PopoverTrigger>
             <PopoverContent
                 collisionPadding={10}

@@ -2,9 +2,8 @@ import * as React from 'react'
 
 import { CIVIL_STATUS } from '@/constants'
 import { cn } from '@/helpers'
-import { Check } from 'lucide-react'
 
-import { ChevronDownIcon } from '@/components/icons'
+import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -39,7 +38,7 @@ const CivilStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
             className,
             disabled = false,
             placeholder = 'Select Civil Status...',
-            civilStatuses = CIVIL_STATUS as unknown as TCivilStatus[],
+            civilStatuses = CIVIL_STATUS,
             onChange,
             ...other
         },
@@ -91,7 +90,7 @@ const CivilStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         <span className="capitalize">
                                             {status}
                                         </span>
-                                        <Check
+                                        <CheckIcon
                                             className={cn(
                                                 'ml-auto',
                                                 value === status

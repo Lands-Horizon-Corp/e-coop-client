@@ -31,7 +31,9 @@ import PermissionTemplateTableColumns, {
     IPermissionTemplateTableColumnProps,
     permissionTemplateGlobalSearchTargets,
 } from './columns'
-import { PermissionTemplateRowContext } from './row-action-context'
+import PermissionTemplateAction, {
+    PermissionTemplateRowContext,
+} from './row-action-context'
 
 export interface PermissionTemplateTableProps
     extends TableProps<IPermissionTemplate>,
@@ -57,7 +59,7 @@ const PermissionTemplateTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = PermissionTemplateAction,
     RowContextComponent = PermissionTemplateRowContext,
 }: PermissionTemplateTableProps) => {
     const queryClient = useQueryClient()
@@ -193,9 +195,7 @@ const PermissionTemplateTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

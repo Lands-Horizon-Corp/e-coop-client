@@ -172,3 +172,16 @@ export const SignUpSchema = z.object({
             }
         ),
 })
+
+// validation for verify with admin
+
+export const VerificationPasswordAdminSchema = z.object({
+    user_organization_id: entityIdSchema,
+    password: z.string().min(1, 'Password is required'),
+
+    user_organization: z.any().optional(),
+})
+
+export type TVerificationPasswordAdminSchema = z.infer<
+    typeof VerificationPasswordAdminSchema
+>

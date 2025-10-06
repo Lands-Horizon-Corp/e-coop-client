@@ -8,6 +8,7 @@ export interface DepositWithdrawStore {
     selectedMember: IMemberProfile | null
     openMemberPicker: boolean
     selectedAccount?: IAccount
+    handleReset: () => void
     setOpenMemberPicker: Dispatch<SetStateAction<boolean>>
     setSelectedMember: (member: IMemberProfile | null) => void
     setSelectedAccount: (accountId?: IAccount) => void
@@ -30,5 +31,8 @@ export const useDepositWithdrawStore = create<DepositWithdrawStore>(
             set({
                 selectedAccount: account,
             }),
+        handleReset: () => {
+            set({ selectedMember: null, selectedAccount: undefined })
+        },
     })
 )

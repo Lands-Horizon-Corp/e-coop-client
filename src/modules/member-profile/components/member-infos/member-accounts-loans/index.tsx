@@ -7,6 +7,7 @@ import { IBaseProps, TEntityId } from '@/types'
 
 import SectionTitle from '../section-title'
 import MemberAccountingLedger from './member-accounting-ledger'
+import MemberLoanSummary from './member-loan-summary'
 
 interface Props extends IBaseProps {
     memberProfileId: TEntityId
@@ -30,6 +31,7 @@ const MemberAccountsLoans = ({ className, memberProfileId }: Props) => {
             </div>
             <div className="space-y-4">
                 <SectionTitle title="Loan Summary" Icon={WalletIcon} />
+                <MemberLoanSummary memberProfileId={memberProfileId} />
                 {/* <MemberAccountingLedger
                     memberProfileId={memberProfileId}
                     className="h-[500px]"

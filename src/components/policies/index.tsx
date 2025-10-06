@@ -163,7 +163,7 @@ const PolicyItems = ({
                     )}
                 </div>
                 <DialogContent className="w-full max-w-[800px] border-0 dark:bg-transparent dark:backdrop-blur-lg p-4">
-                    <span className="font-bold text-xl  text-accent-foreground mb-2 block">
+                    <span className="font-bold text-xl   mb-2 block">
                         {organazationName} {policyName}
                     </span>
                     <ScrollArea className="max-h-[30rem] text-sm overflow-y-auto pr-2">

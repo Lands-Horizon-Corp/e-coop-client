@@ -15,7 +15,7 @@ export default defineConfig({
     plugins: [
         UnheadVite(),
         manifestSRI(),
-        tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+        tanstackRouter({ target: 'react',autoCodeSplitting: true  }),
         react(),
         tsconfigPaths(),
         tailwindcss(),
@@ -50,7 +50,4 @@ export default defineConfig({
         }
       }
     },
-    // define: {
-    //     "process.env": process.env,
-    // },
 });

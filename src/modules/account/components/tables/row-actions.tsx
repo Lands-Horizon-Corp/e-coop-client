@@ -8,6 +8,7 @@ import {
     useDeleteById,
 } from '@/modules/account'
 import { TEntryType } from '@/modules/general-ledger'
+import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -131,7 +132,7 @@ export const AccountAction = ({
         account,
         updateModal,
         ledgerTableModal,
-        // selectedEntryType,
+        selectedEntryType,
         isDeletingAccount,
         handleEdit,
         handleDelete,
@@ -144,16 +145,16 @@ export const AccountAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <Modal
                     {...ledgerTableModal}
-                    className="max-w-[95vw]"
+                    className="!max-w-[95vw]"
                     title={getModalTitle()}
                     description={`You are viewing account (${account.name}) ${getModalTitle().toLowerCase()}`}
                 >
-                    {/* <GeneralLedgerTable
+                    <GeneralLedgerTable
                         mode="account"
                         TEntryType={selectedEntryType}
                         accountId={account.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    /> */}
+                        className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
+                    />
                 </Modal>
                 <AccountCreateUpdateFormModal
                     {...updateModal}
@@ -347,7 +348,7 @@ export const AccountRowContext = ({
         account,
         updateModal,
         ledgerTableModal,
-        // selectedEntryType,
+        selectedEntryType,
         isDeletingAccount,
         handleEdit,
         handleDelete,
@@ -359,16 +360,16 @@ export const AccountRowContext = ({
         <>
             <Modal
                 {...ledgerTableModal}
-                className="max-w-[95vw]"
+                className="!max-w-[95vw]"
                 title={getModalTitle()}
                 description={`You are viewing account (${account.name}) ${getModalTitle().toLowerCase()}`}
             >
-                {/* <GeneralLedgerTable
+                <GeneralLedgerTable
                     mode="account"
                     TEntryType={selectedEntryType}
                     accountId={account.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                /> */}
+                />
             </Modal>
             <AccountCreateUpdateFormModal
                 {...updateModal}

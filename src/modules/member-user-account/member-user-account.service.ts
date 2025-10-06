@@ -22,7 +22,7 @@ export const connectMemberProfileToUserAccount = async (
     userId: TEntityId
 ) => {
     const response = await API.put<void, IMemberProfile>(
-        `${route}/${memberProfileId}/connect-user-account/${userId}`
+        `${route}/${memberProfileId}/connect-user/${userId}`
     )
     return response.data
 }

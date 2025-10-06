@@ -18,6 +18,7 @@ import {
     ISignInRequest,
     ISignUpRequest,
     IVerification,
+    IVerificationPasswordAdminRequest,
     IVerificationPasswordRequest,
     IVerifyContactNumberRequest,
     IVerifyEmailRequest,
@@ -70,6 +71,16 @@ export const verifyWithPassword = async (
         IVerificationPasswordRequest,
         IVerification
     >(`${authenticationAPIRoute}/verify-with-password`, verificationData)
+    return response.data
+}
+
+export const verifyWithPasswordAdmin = async (
+    verificationData: IVerificationPasswordAdminRequest
+) => {
+    const response = await API.post<
+        IVerificationPasswordAdminRequest,
+        IVerification
+    >(`${authenticationAPIRoute}/verify-with-password/owner`, verificationData)
     return response.data
 }
 
@@ -154,7 +165,6 @@ export const useCurrentUser = ({
     })
 }
 
-// Sign In
 export const useSignIn = ({
     options,
 }: {
@@ -327,3 +337,11 @@ export const useCurrentLoggedInUserLogout = ({
         mutationFn: async () => await signOutLoggedInUsers(),
     })
 }
+
+export const useRequestReverseTransaction = createMutationFactory<
+    IVerification,
+    Error,
+    IVerificationPasswordAdminRequest
+>({
+    mutationFn: async (data) => await verifyWithPasswordAdmin(data),
+})

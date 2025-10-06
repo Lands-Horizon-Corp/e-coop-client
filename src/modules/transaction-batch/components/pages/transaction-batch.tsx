@@ -8,7 +8,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import TransactionBatchTable from '../transaction-batch-table'
-import TransactionBatchAction from '../transaction-batch-table/row-action-context'
 
 const TransactionBatchPage = () => {
     const createModal = useModalState()
@@ -47,7 +46,6 @@ const TransactionBatchPage = () => {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                actionComponent={(prop) => <TransactionBatchAction {...prop} />}
                 className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>

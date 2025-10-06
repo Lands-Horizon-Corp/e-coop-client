@@ -23,9 +23,7 @@ const NavTimeInBar = () => {
                         variant="secondary"
                         disabled={isLoading && !timesheet}
                         hoverVariant="primary"
-                        className={cn(
-                            'group relative gap-x-2 rounded-full text-foreground/70'
-                        )}
+                        className={cn('group relative gap-x-2 rounded-full')}
                     >
                         {!!timesheet && (
                             <div className="absolute -right-1 -top-1">

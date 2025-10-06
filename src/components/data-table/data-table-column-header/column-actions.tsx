@@ -40,7 +40,7 @@ const ColumnActions = <TData, TValue>({
                     size="icon"
                     className="group-hover size-fit gap-x-2 p-1 data-[state=open]:bg-accent"
                 >
-                    {column.getCanSort() && (
+                    {
                         <>
                             {column.getIsSorted() === 'desc' ? (
                                 <ArrowUpIcon className="size-3 opacity-55 group-hover:opacity-100" />
@@ -50,7 +50,7 @@ const ColumnActions = <TData, TValue>({
                                 <DotsVerticalIcon className="size-3 opacity-55 group-hover:opacity-100" />
                             )}
                         </>
-                    )}
+                    }
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent

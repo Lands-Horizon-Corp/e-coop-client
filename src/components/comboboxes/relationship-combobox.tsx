@@ -1,10 +1,12 @@
 import * as React from 'react'
 
-import { FAMILY_RELATIONSHIP } from '@/constants'
 import { cn } from '@/helpers'
-import { Check } from 'lucide-react'
+import {
+    FAMILY_RELATIONSHIP,
+    TRelationship,
+} from '@/modules/member-relative-account'
 
-import { ChevronDownIcon } from '@/components/icons'
+import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -19,8 +21,6 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-
-import { TRelationship } from '@/types'
 
 // Assuming this is where your type and const are
 
@@ -40,7 +40,7 @@ const RelationshipCombobox = ({
     className,
     disabled = false,
     placeholder = 'Select Relationship...',
-    relationships = FAMILY_RELATIONSHIP as unknown as TRelationship[],
+    relationships = [...FAMILY_RELATIONSHIP],
     onChange,
     ...other
 }: Props) => {
@@ -89,7 +89,7 @@ const RelationshipCombobox = ({
                                     <span className="capitalize">
                                         {relationship}
                                     </span>
-                                    <Check
+                                    <CheckIcon
                                         className={cn(
                                             'ml-auto',
                                             value === relationship

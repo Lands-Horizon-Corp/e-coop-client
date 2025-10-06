@@ -1,26 +1,19 @@
-import { IAuditable, IOrgBranchIdentity, ITimeStamps, TEntityId } from '@/types'
+import z from 'zod'
 
-import { ICashCheckVoucherResponse } from '../cash-check-voucher/cash-check-voucher.types'
+import { IBaseEntityMeta, IPaginatedResult } from '@/types'
 
-export interface ICashCheckVoucherTagRequest {
-    cash_check_voucher_id: TEntityId
-    name?: string
-    description?: string
-    category?: string
-    color?: string
-    icon?: string
-}
+import { CashCheckVoucherTagSchema } from './cash-check-voucher-tag.validation'
 
-export interface ICashCheckVoucherTagResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    cash_check_voucher_id: TEntityId
-    cash_check_voucher?: ICashCheckVoucherResponse
+export interface ICashCheckVoucherTag extends IBaseEntityMeta {
     name: string
     description: string
-    category: string
     color: string
     icon: string
 }
+
+export type ICashCheckVoucherTagRequest = z.infer<
+    typeof CashCheckVoucherTagSchema
+>
+
+export interface ICashCheckVoucherTagPaginated
+    extends IPaginatedResult<ICashCheckVoucherTag> {}

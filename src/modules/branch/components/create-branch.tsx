@@ -31,6 +31,7 @@ import {
     TrashIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import MapPicker from '@/components/map/map-picker/map-picker'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -205,7 +206,7 @@ function OrganizationHeader({
                         content={organization?.description ?? ''}
                     />
                     <div className="flex items-center gap-x-2">
-                        <PushPinIcon className="text-red-400" />
+                        <PushPinIcon className="text-destructive" />
                         <p className="text-xs">{organization?.address}</p>
                     </div>
                     <div className="flex items-center gap-x-2">
@@ -295,7 +296,7 @@ function BranchesList({
                 List of Branches
             </p>
             <ScrollArea className="ecoop-scroll mb-10">
-                <div className="flex max-h-96 flex-col gap-y-3 overflow-y-auto">
+                <div className="flex  flex-col gap-y-3 overflow-y-auto">
                     {branches.map((branch) => (
                         <BranchBar
                             key={branch.id}
@@ -377,7 +378,7 @@ export const BranchBar = ({
                 mediaUrl={branch.media?.url ?? ''}
                 className="border-[0.5px] border-secondary/50"
             >
-                <div className="relative flex min-h-10 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
+                <div className="relative flex min-h-0 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
                     <ImageDisplay
                         className="size-16 rounded-lg"
                         src={branch?.media?.url}
@@ -394,28 +395,52 @@ export const BranchBar = ({
                             <AddressCardIcon className="mr-2" />
                             {branch.address}
                         </p>
-                        <div className="absolute bottom-4 right-2 z-50 flex gap-1 text-xs">
-                            <Button
-                                size={'sm'}
-                                onClick={() => updateModal.onOpenChange(true)}
-                                variant={'secondary'}
-                                disabled={isSeeding}
-                                className={cn('flex max-h-7 space-x-2 text-xs')}
-                            >
-                                <span>edit</span>
-                                <EditPencilIcon />
-                            </Button>
-                            <Button
-                                size={'sm'}
-                                disabled={isSeeding}
-                                onClick={handleDelete}
-                                variant={'destructive'}
-                                className={cn('flex max-h-7 space-x-2 text-xs')}
-                            >
-                                <span> delete</span>
-                                <TrashIcon />
-                            </Button>
-                        </div>
+                        {/* Map Picker for viewing location if coordinates exist */}
+                        {branch.latitude && branch.longitude && (
+                            <div className="mt-2">
+                                <MapPicker
+                                    value={{
+                                        lat: branch.latitude,
+                                        lng: branch.longitude,
+                                    }}
+                                    onChange={() => {}} // Read-only, no changes allowed
+                                    variant="outline"
+                                    size="sm"
+                                    placeholder="View Branch Location"
+                                    title={`${branch.name} Location`}
+                                    hideButtonCoordinates={true}
+                                    disabled={false}
+                                    viewOnly={true}
+                                    className="text-xs"
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex flex-col gap-1 text-xs">
+                        <Button
+                            size={'sm'}
+                            onClick={() => updateModal.onOpenChange(true)}
+                            variant={'default'}
+                            disabled={isSeeding}
+                            className={cn(
+                                'flex max-h-7 space-x-2 text-xs cursor-pointer '
+                            )}
+                        >
+                            <span>edit</span>
+                            <EditPencilIcon />
+                        </Button>
+                        <Button
+                            size={'sm'}
+                            disabled={isSeeding}
+                            onClick={handleDelete}
+                            variant={'ghost'}
+                            className={cn(
+                                'flex max-h-7 space-x-2 text-xs cursor-pointer'
+                            )}
+                        >
+                            <span> delete</span>
+                            <TrashIcon />
+                        </Button>
                     </div>
                 </div>
             </GradientBackground>

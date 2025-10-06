@@ -31,6 +31,9 @@ import membersColumns, {
     IMemberProfilesTableColumnProps,
     memberGlobalSearchTargets,
 } from './columns'
+import MemberProfileAction, {
+    MemberProfileRowContext,
+} from './row-action-context'
 
 // import { MemberProfileRowContext } from './row-action-context'
 
@@ -58,8 +61,8 @@ const MemberProfileTable = ({
         row.toggleSelected()
     },
     onSelectData,
-    actionComponent,
-    RowContextComponent,
+    actionComponent = MemberProfileAction,
+    RowContextComponent = MemberProfileRowContext,
 }: MemberProfileTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()

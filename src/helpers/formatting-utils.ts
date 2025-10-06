@@ -18,20 +18,16 @@ export const imageCompressed = async (file: File): Promise<File> => {
 
     if (isImage) {
         const options = {
-            maxSizeMB: 1, // Maximum size 1MB
-            maxWidthOrHeight: 1920, // Maximum width or height
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
             useWebWorker: true,
             fileType: file.type,
-            initialQuality: 0.8, // Initial quality
+            initialQuality: 0.8,
         }
 
         try {
             processedFile = await imageCompression(file, options)
-        } catch (error) {
-            console.warn(
-                'Image compression failed, using original file:',
-                error
-            )
+        } catch {
             processedFile = file
         }
     }

@@ -81,6 +81,14 @@ const NeonFooter = () => {
             label: 'Risk Management Policy',
             to: '/risk-management-policy',
         },
+        {
+            label: 'FAQ',
+            onClick: () => navigate({ to: '/frequently-asked-questions' }),
+        },
+        {
+            label: 'Developers',
+            onClick: () => navigate({ to: '/developers' }),
+        },
     ]
     const contacts = [
         {
@@ -118,10 +126,10 @@ const NeonFooter = () => {
     const linkClass =
         'text-gray-500 hover:text-primary transition-colors duration-200 cursor-pointer'
     const socialLinkClass =
-        'flex items-center text-accent-foreground hover:text-primary transition-colors duration-200'
+        'flex items-center  hover:text-primary transition-colors duration-200'
 
     return (
-        <footer className="bg-background border-t-[.2px] border-gray-600/20 text-accent-foreground py-12 px-4 md:px-8 lg:px-16">
+        <footer className="bg-background border-t-[.2px] border-gray-600/20  py-12 px-4 md:px-8 lg:px-16">
             <div className="max-w-[100rem] mx-auto flex flex-col lg:flex-row justify-between gap-10">
                 <div className="flex flex-col gap-6 w-full md:w-1/8 lg:w-[40%]">
                     <div className="mb-4">
@@ -138,9 +146,7 @@ const NeonFooter = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 lg:gap-16 w-full md:w-full lg:w-4/5">
                     <div className="flex flex-col gap-3 text-sm">
-                        <h3 className="font-semibold dark:text-white text-black mb-2">
-                            Quick Links
-                        </h3>
+                        <h3 className="font-semibold  mb-2">Quick Links</h3>
                         {quickLinks.map((item, index) =>
                             item.to ? (
                                 <Link
@@ -162,9 +168,7 @@ const NeonFooter = () => {
                         )}
                     </div>
                     <div className="flex flex-col gap-3 text-sm">
-                        <h3 className="font-semibold dark:text-white text-black mb-2">
-                            Policies
-                        </h3>
+                        <h3 className="font-semibold k mb-2">Policies</h3>
                         {policies.map((item) => (
                             <Link
                                 key={item.to}
@@ -176,13 +180,11 @@ const NeonFooter = () => {
                         ))}
                     </div>
                     <div className="flex flex-col gap-3  text-sm">
-                        <h3 className="font-semibold dark:text-white text-black mb-2">
-                            Contacts
-                        </h3>
+                        <h3 className="font-semibold  mb-2">Contacts</h3>
                         {contacts.map((item, index) => (
                             <p
                                 key={index}
-                                className=" text-wrap min-w-5 text-accent-foreground flex items-center cursor-pointer"
+                                className=" text-wrap min-w-5  flex items-center cursor-pointer"
                             >
                                 <span className="flex items-center p-1.5">
                                     {item.icon}
@@ -195,9 +197,7 @@ const NeonFooter = () => {
                         ))}
                     </div>
                     <div className="flex flex-col gap-3 text-sm">
-                        <h3 className="font-semibold text-accent-foreground mb-2">
-                            Follow Us
-                        </h3>
+                        <h3 className="font-semibold  mb-2">Follow Us</h3>
                         {socialLinks.map((item, idx) => (
                             <a
                                 key={idx}

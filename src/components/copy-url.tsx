@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { Check, Copy } from 'lucide-react'
+
+import { CheckIcon, CopyIcon } from './icons'
 
 type Props = {
     url: string
@@ -27,8 +28,7 @@ const CopyURL = ({
             toast.success('Coppied')
             setCoppied(true)
             setTimeout(() => setCoppied(false), duration * 1000)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
+        } catch {
             toast.error("Sorry, Couldn't copy link")
         }
     }
@@ -44,9 +44,9 @@ const CopyURL = ({
         >
             <p>{displayText}</p>
             {coppied ? (
-                <Check className="size-4 text-primary/80" strokeWidth={1} />
+                <CheckIcon className="size-4 text-primary/80" strokeWidth={1} />
             ) : (
-                <Copy className="h-4 w-4" strokeWidth={1} />
+                <CopyIcon className="h-4 w-4" strokeWidth={1} />
             )}
         </div>
     )

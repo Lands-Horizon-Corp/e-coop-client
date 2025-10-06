@@ -28,8 +28,8 @@ const userOrganizationApplicationStatusVariants = cva(
                     'dark:bg-green-950 dark:text-primary dark:border-primary/70 dark:hover:bg-primary/10'
                 ),
                 ban: cn(
-                    'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',
-                    'dark:bg-red-950 dark:text-red-300 dark:border-red-800 dark:hover:bg-red-900'
+                    'bg-destructive/40 text-destructive/70 border-red-200 hover:bg-destructive/70',
+                    'dark:bg-destructive/40 dark:text-destructive dark:border-red-800 dark:hover:bg-destructive/40'
                 ),
                 default: cn(
                     'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',

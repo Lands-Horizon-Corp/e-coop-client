@@ -8,7 +8,6 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { cashCountBaseKey } from '../../cash-count.service'
 import CashCountTable from '../cash-count-table'
-import CashCountAction from '../cash-count-table/row-action-context'
 
 const CashCountPage = () => {
     const {
@@ -38,10 +37,7 @@ const CashCountPage = () => {
 
     return (
         <PageContainer>
-            <CashCountTable
-                actionComponent={(prop) => <CashCountAction {...prop} />}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-            />
+            <CashCountTable className="max-h-[90vh] min-h-[90vh] w-full" />
         </PageContainer>
     )
 }

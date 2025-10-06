@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { IMedia } from '@/modules/media'
 import {
@@ -169,6 +170,8 @@ const OrganizationForm = () => {
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
+
+    const errorMessage = serverRequestErrExtractor({ error })
 
     return (
         <Form {...form}>
@@ -402,9 +405,7 @@ const OrganizationForm = () => {
                         )}
                     </CardContent>
                     <CardFooter className="flex flex-col gap-2">
-                        <FormErrorMessage
-                            errorMessage={error ? error.message : null}
-                        />
+                        <FormErrorMessage errorMessage={errorMessage} />
                         <div className="flex w-full items-center justify-end gap-x-2">
                             <Button
                                 variant="ghost"
@@ -416,11 +417,8 @@ const OrganizationForm = () => {
                                 reset
                             </Button>
                             <div className="flex items-center gap-x-2 text-card-foreground/70">
-                                <span className="text-accent-foreground">
-                                    {' '}
-                                    {activeStep + 1}
-                                </span>{' '}
-                                of {steps.length}
+                                <span className=""> {activeStep + 1}</span> of{' '}
+                                {steps.length}
                             </div>
                             <Button
                                 variant="ghost"

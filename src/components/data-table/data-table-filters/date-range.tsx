@@ -2,10 +2,10 @@ import { useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import { format, isAfter } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
 import { type DateRange } from 'react-day-picker'
 
 import DateRangePicker from '@/components/date-time-pickers/date-range-picker'
+import { CalendarIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Popover,

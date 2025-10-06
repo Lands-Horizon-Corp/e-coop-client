@@ -10,6 +10,7 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { IconMap, PushPinSlashIcon, TIcon } from '@/components/icons'
+import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { ITagTemplate } from '../../tag-template.types'
@@ -75,11 +76,18 @@ const TagTemplateTableColumns = (
                 original: { name, description },
             },
         }) => (
-            <div className="flex min-w-0 flex-col">
-                <span className="truncate font-semibold">{name || '-'}</span>
-                <span className="truncate text-xs text-muted-foreground/70">
-                    {description || '-'}
-                </span>
+            <div className="min-w-0">
+                <InfoTooltip
+                    content={
+                        <p className="max-w-[250px] text-pretty p-1">
+                            {description || 'No description'}
+                        </p>
+                    }
+                >
+                    <span className="truncate font-semibold">
+                        {name || '-'}
+                    </span>
+                </InfoTooltip>
             </div>
         ),
         enableMultiSort: true,
@@ -162,12 +170,16 @@ const TagTemplateTableColumns = (
         ),
         cell: ({
             row: {
-                original: { icon },
+                original: { icon, color },
             },
         }) => {
             const Icon = IconMap[icon as TIcon]
 
-            return <div>{Icon ? <Icon /> : ''}</div>
+            return (
+                <div>
+                    {Icon ? <Icon className="size-4" style={{ color }} /> : ''}
+                </div>
+            )
         },
         enableMultiSort: true,
         enableSorting: true,

@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router'
 import z from 'zod'
 
+import SidePanelPoster from '@/modules/home/components/side-panel-poster'
 import { emailSchema } from '@/validation'
 import { zodValidator } from '@tanstack/zod-adapter'
 
@@ -35,21 +36,15 @@ function RouteComponent() {
         <GuestGuard allowAuthenticatedUser={false}>
             <div className="flex">
                 <AuthNav />
-                <main className="flex w-full flex-1 items-center">
+                <main className="flex flex-col sm:flex-row w-full flex-1 items-center">
                     <div className="ecoop-scroll flex h-screen max-h-screen w-full flex-col overflow-y-auto">
-                        <div className="flex w-full flex-1 items-center justify-center py-8">
+                        <div className="flex w-full flex-1 items-center justify-center py-4 sm:py-8">
                             <Outlet />
                         </div>
                         <AuthFooter />
                     </div>
-                    <div className="hidden h-screen sm:block sm:w-1/3">
-                        <div
-                            className="size-full rounded-l-3xl bg-cover shadow-lg dark:shadow-none sm:bg-[]"
-                            style={{
-                                backgroundImage: "url('/auth-bg.webp')",
-                            }}
-                        />
-                    </div>
+
+                    <SidePanelPoster />
                 </main>
             </div>
         </GuestGuard>

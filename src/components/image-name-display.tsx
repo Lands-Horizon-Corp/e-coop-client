@@ -29,7 +29,7 @@ const ImageNameDisplay = ({
                         nameClassName
                     )}
                 >
-                    {name ? name : 'unknown'}
+                    {name ? name : 'No name'}
                 </p>
             </div>
         </div>

@@ -1,6 +1,8 @@
 import { IPaginatedResult } from '@/types/common'
 import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
 
+export type TPricingPlanMode = 'monthly' | 'yearly'
+
 export interface ISubscriptionPlan extends ITimeStamps, IAuditable {
     id: TEntityId
     name: string

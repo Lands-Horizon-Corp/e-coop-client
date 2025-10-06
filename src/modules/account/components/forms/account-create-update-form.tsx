@@ -7,6 +7,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
+    ACCOUNT_INTEREST_STANDARD_COMPUTATION,
     AccountExclusiveSettingTypeEnum,
     AccountTypeEnum,
     ComputationTypeEnum,
@@ -149,9 +150,7 @@ const AccountCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 className={cn('w-full', className)}
             >
-                <FormErrorMessage
-                    errorMessage={error ? error.toString() : null}
-                />
+                <FormErrorMessage errorMessage={error} />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
                         disabled={formProps.readOnly}
@@ -181,6 +180,9 @@ const AccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <FormControl>
                                     <Select
+                                        disabled={
+                                            formProps.readOnly || isLoading
+                                        }
                                         onValueChange={(selectedValue) => {
                                             field.onChange(selectedValue)
                                             setSelectedItem(selectedValue)
@@ -818,7 +820,6 @@ const AccountCreateUpdateForm = ({
                                             </div>
                                         )}
                                     />
-
                                     <FormFieldWrapper
                                         control={form.control}
                                         label="Interest Standard"
@@ -851,7 +852,6 @@ const AccountCreateUpdateForm = ({
                                             </div>
                                         )}
                                     />
-
                                     <FormFieldWrapper
                                         control={form.control}
                                         label="Interest Secured"
@@ -884,13 +884,11 @@ const AccountCreateUpdateForm = ({
                                             </div>
                                         )}
                                     />
-                                </div>
-                                <div className="flex flex-col gap-x-2 md:flex-row">
                                     <FormFieldWrapper
                                         control={form.control}
                                         label="Fines Grace Period Maturity (Days)"
                                         name="fines_grace_period_maturity"
-                                        className="w-[120%]"
+                                        className="col-span-2"
                                         disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
@@ -980,6 +978,60 @@ const AccountCreateUpdateForm = ({
                                                     placeholder="Loan Cut-Off Days"
                                                 />
                                             </div>
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Interest Standard Computation"
+                                        name="interest_standard_computation"
+                                        className="col-span-4"
+                                        render={({ field }) => (
+                                            <FormControl>
+                                                <Select
+                                                    disabled={
+                                                        isDisabled(
+                                                            field.name
+                                                        ) || isLoading
+                                                    }
+                                                    onValueChange={(
+                                                        selectedValue
+                                                    ) => {
+                                                        field.onChange(
+                                                            selectedValue
+                                                        )
+                                                    }}
+                                                    defaultValue={
+                                                        field.value || undefined
+                                                    }
+                                                >
+                                                    <SelectTrigger className="w-full">
+                                                        {field.value ||
+                                                            'select Computation Type'}
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {ACCOUNT_INTEREST_STANDARD_COMPUTATION.map(
+                                                            (
+                                                                interestComputation
+                                                            ) => {
+                                                                return (
+                                                                    <SelectItem
+                                                                        key={
+                                                                            interestComputation
+                                                                        }
+                                                                        value={
+                                                                            interestComputation
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            interestComputation
+                                                                        }
+                                                                    </SelectItem>
+                                                                )
+                                                            }
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
                                         )}
                                     />
                                 </div>
@@ -1930,7 +1982,7 @@ const AccountCreateUpdateForm = ({
                 </div>
 
                 {!formProps.readOnly && (
-                    <div className="space-y-2">
+                    <div className="space-y-2 sticky bottom-0">
                         <div className="flex items-center justify-end gap-x-2">
                             <Button
                                 size="sm"
@@ -1982,7 +2034,7 @@ export const AccountCreateUpdateFormModal = ({
         <Modal
             title={title}
             description={description}
-            className={cn('', className)}
+            className={cn('!max-w-[95vw]', className)}
             {...props}
         >
             <AccountCreateUpdateForm

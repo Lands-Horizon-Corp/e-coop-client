@@ -1,8 +1,11 @@
+import { TUserType } from '@/modules/user'
+
 import {
     AccountSetupIcon,
     BankDuoToneIcon,
     BankIcon,
     BillIcon,
+    BookIcon,
     BookOpenIcon,
     BookStackIcon,
     BriefCaseIcon,
@@ -20,7 +23,9 @@ import {
     LayersIcon,
     MaintenanceIcon,
     MoneyCheckIcon,
-    PlusIcon,
+    MoneyIcon,
+    PeopleGroupIcon,
+    // PlusIcon,
     PriceTagIcon,
     QrCodeIcon,
     SettingsIcon,
@@ -40,8 +45,6 @@ import {
     INavItemDropdown,
     INavItemSingle,
 } from '@/components/ui/app-sidebar/types'
-
-import { TUserType } from '@/types'
 
 const filterNavItemsByUserType = (
     items: INavItem[],
@@ -91,13 +94,13 @@ export const generateSidebarGroups = (
                 {
                     type: 'item',
                     icon: HandCoinsIcon,
-                    title: 'Transaction',
+                    title: 'Payment',
                     url: `${baseUrl}/transaction/`,
                     userType: ['employee', 'owner'],
                     shortDescription: 'Manage fund transfers and movements',
                 },
                 {
-                    title: 'Quick Transfer',
+                    title: 'Quick Payment',
                     userType: ['employee', 'owner'],
                     url: `${baseUrl}/transaction/quick-transfer`,
                     type: 'dropdown',
@@ -178,14 +181,14 @@ export const generateSidebarGroups = (
             title: 'Loan',
             userType: ['employee'],
             navItems: [
-                {
-                    type: 'item',
-                    icon: PlusIcon,
-                    title: 'Loan Application',
-                    url: `${baseUrl}/loan/loan-application`,
-                    userType: ['employee', 'owner'],
-                    shortDescription: 'Create/Add Loan Application',
-                },
+                // {
+                //     type: 'item',
+                //     icon: PlusIcon,
+                //     title: 'Loan Application',
+                //     url: `${baseUrl}/loan/loan-application`,
+                //     userType: ['employee', 'owner'],
+                //     shortDescription: 'Create/Add Loan Application',
+                // },
                 {
                     type: 'item',
                     icon: MoneyCheckIcon,
@@ -362,7 +365,7 @@ export const generateSidebarGroups = (
                     type: 'item',
                     icon: UserListIcon,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Browse all cooperative members',
+                    shortDescription: 'Browse all members/member profile',
                 },
                 {
                     title: 'Member Accounting Ledger',
@@ -504,6 +507,30 @@ export const generateSidebarGroups = (
                     userType: ['employee', 'owner'],
                     shortDescription: 'Configure computation types',
                 },
+                {
+                    type: 'item',
+                    icon: BookIcon,
+                    title: 'Journal Voucher',
+                    url: `${baseUrl}/accounting/journal-voucher`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage journal vouchers',
+                },
+                {
+                    type: 'item',
+                    icon: MoneyIcon,
+                    title: 'Cash Check Voucher',
+                    url: `${baseUrl}/accounting/cash-check-journal-voucher`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage cash check vouchers',
+                },
+                {
+                    type: 'item',
+                    icon: MoneyIcon,
+                    title: 'Adjustment Entry',
+                    url: `${baseUrl}/accounting/adjustment-entry`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage cash adjustment entry',
+                },
             ],
         },
         {
@@ -524,7 +551,7 @@ export const generateSidebarGroups = (
                     title: 'Tag Templates',
                     url: `${baseUrl}/maintenance/tag-template`,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Manage bills and coins',
+                    shortDescription: 'Manage Tag Templates',
                 },
                 {
                     type: 'item',
@@ -532,7 +559,7 @@ export const generateSidebarGroups = (
                     title: 'Collateral',
                     url: `${baseUrl}/maintenance/collateral`,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Manage bills and coins',
+                    shortDescription: 'Manage common collaterals for loans',
                 },
                 {
                     type: 'item',
@@ -611,6 +638,14 @@ export const generateSidebarGroups = (
                             shortDescription: 'Group negative net surplus',
                         },
                     ],
+                },
+                {
+                    type: 'item',
+                    icon: PeopleGroupIcon,
+                    title: 'Company',
+                    url: `${baseUrl}/maintenance/company`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Manage company settings',
                 },
             ],
         },

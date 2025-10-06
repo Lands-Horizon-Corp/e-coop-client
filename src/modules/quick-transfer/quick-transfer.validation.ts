@@ -5,7 +5,7 @@ import { EntityIdSchema, entityIdSchema } from '@/validation'
 import { PaymentWithTransactionSchema } from '../transaction'
 
 export const QuickWithdrawSchema = PaymentWithTransactionSchema.extend({
-    member_profile_id: EntityIdSchema('Account').min(1),
+    member_profile_id: EntityIdSchema('Member').min(1),
     member_joint_account_id: entityIdSchema.optional(),
     reference_number: z
         .string({ error: 'Reference number is required' })

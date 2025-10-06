@@ -5,6 +5,8 @@ import {
     TEntityId,
 } from '@/types/common'
 
+import { ACCOUNT_INTEREST_STANDARD_COMPUTATION } from './account.constants'
+
 export enum AccountTypeEnum {
     Other = 'Other',
     Deposit = 'Deposit',
@@ -99,6 +101,9 @@ export enum OtherInformationOfAnAccountEnum {
     CashInBankCashInCheckAccount = 'Cash in Bank / Cash in Check Account',
     CashOnHand = 'Cash on Hand',
 }
+
+export type TInterestStandardComputation =
+    (typeof ACCOUNT_INTEREST_STANDARD_COMPUTATION)[number]
 
 export interface IAccount extends IAuditable, ITimeStamps {
     id: TEntityId
@@ -309,6 +314,7 @@ export type TPaginatedAccountHookMode =
     | 'journal-voucher'
     | 'check-voucher'
     | 'loan'
+    | 'cash-and-cash-equivalence'
 
 export type TDeleteAccountFromGLFSType = {
     id: TEntityId

@@ -1,14 +1,13 @@
+import { IUserBase, TUserType } from '@/modules/user'
 import {
     IAuditable,
     IPaginatedResult,
     ITimeStamps,
     TEntityId,
-    TUserType,
 } from '@/types/common'
 
 import { IBranch } from '../branch'
 import { IOrganization } from '../organization'
-import { IUserBase } from '../user/user.types'
 
 export interface IFootstep extends ITimeStamps, IAuditable {
     id: TEntityId

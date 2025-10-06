@@ -1,25 +1,18 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import z from 'zod'
 
-import { ILoanTransaction } from '../loan-transaction'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-export interface ILoanClearanceAnalysisInstitutionRequest {
-    loan_transaction_id: TEntityId
-    name: string
-    description?: string
-}
+import { LoanClearanceAnalysisInstitutionSchema } from './loan-clearance-analysis-institution.validation'
 
-export interface ILoanClearanceAnalysisInstitutionResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    loan_transaction_id: TEntityId
-    loan_transaction?: ILoanTransaction
+export interface ILoanClearanceAnalysisInstitution extends IBaseEntityMeta {
+    loan_transaction_id?: TEntityId
     name: string
     description: string
 }
+
+export type ILoanClearanceAnalysisInstitutionRequest = z.infer<
+    typeof LoanClearanceAnalysisInstitutionSchema
+>
+
+export interface ILoanClearanceAnalysisInstitutionPaginated
+    extends IPaginatedResult<ILoanClearanceAnalysisInstitution> {}

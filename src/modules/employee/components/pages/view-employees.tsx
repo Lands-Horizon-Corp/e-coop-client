@@ -1,7 +1,6 @@
 import PageContainer from '@/components/containers/page-container'
 
 import EmployeesTable from '../employees-table'
-import EmployeesAction from '../employees-table/row-action-context'
 
 const ViewEmployeePage = () => {
     // const [createModal, setCreateModal] = useState(false)
@@ -18,10 +17,7 @@ const ViewEmployeePage = () => {
                     onSuccess: () => {},
                 }}
             /> */}
-            <EmployeesTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                actionComponent={(props) => <EmployeesAction {...props} />}
-            />
+            <EmployeesTable className="max-h-[90vh] min-h-[90vh] w-full" />
         </PageContainer>
     )
 }

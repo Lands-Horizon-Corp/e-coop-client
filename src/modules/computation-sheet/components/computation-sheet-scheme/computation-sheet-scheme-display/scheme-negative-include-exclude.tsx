@@ -2,11 +2,9 @@ import { forwardRef } from 'react'
 
 import { cn } from '@/helpers'
 import BrowseExcludeIncludeAccountTable from '@/modules/browse-exclude-include-accounts/components/browse-exclude-include-accounts-table'
-import BrowseExcludeIncludeAccountAction from '@/modules/browse-exclude-include-accounts/components/browse-exclude-include-accounts-table/action'
 import { BrowseExcludeIncludeAccountsCreateUpdateFormModal } from '@/modules/browse-exclude-include-accounts/components/forms/browse-exclude-include-account-create-update-form'
 import { IncludeNegativeAccountCreateUpdateFormModal } from '@/modules/include-negative-accounts/components/forms/include-negative-account-create-update-form'
 import IncludeNegativeAccountTable from '@/modules/include-negative-accounts/components/include-negative-accounts-table'
-import IncludeNegativeAccountAction from '@/modules/include-negative-accounts/components/include-negative-accounts-table/action'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -34,9 +32,6 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                         }}
                     />
                     <IncludeNegativeAccountTable
-                        actionComponent={(props) => (
-                            <IncludeNegativeAccountAction {...props} />
-                        )}
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () =>
@@ -60,9 +55,6 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                         }}
                     />
                     <BrowseExcludeIncludeAccountTable
-                        actionComponent={(props) => (
-                            <BrowseExcludeIncludeAccountAction {...props} />
-                        )}
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () =>

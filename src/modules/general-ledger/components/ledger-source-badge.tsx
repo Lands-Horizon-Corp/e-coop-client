@@ -42,8 +42,8 @@ const ledgerSourceVariants = cva(
                     'dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800 dark:hover:bg-indigo-900'
                 ),
                 'check voucher': cn(
-                    'bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-200',
-                    'dark:bg-teal-950 dark:text-teal-300 dark:border-teal-800 dark:hover:bg-teal-900'
+                    'bg-background text-primary/60 border-teal-200 hover:bg-teal-200',
+                    'dark:bg-teal-950 dark:text-primary dark:border-teal-800 dark:hover:bg-teal-900'
                 ),
                 default: cn(
                     'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200',

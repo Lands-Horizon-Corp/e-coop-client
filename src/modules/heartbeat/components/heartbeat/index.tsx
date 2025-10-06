@@ -3,16 +3,17 @@ import { toast } from 'sonner'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { MemberQrScannerModal } from '@/modules/member-profile/components/member-qr-scanner'
-import {
-    Activity,
-    Building2,
-    MessagesSquare,
-    RefreshCw,
-    Settings,
-    Users,
-} from 'lucide-react'
 
-import { ScanQrIcon } from '@/components/icons'
+import {
+    BuildingIcon,
+    MessagesIcon,
+    PulseIcon,
+    RefreshIcon,
+    ScanQrIcon,
+    SettingsIcon,
+    UserIcon,
+    Users3Icon,
+} from '@/components/icons'
 import Modal from '@/components/modals/modal'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -39,7 +40,7 @@ const Heartbeat = () => {
         return (
             <div className="flex items-center justify-center h-48">
                 <div className="flex items-center gap-2 text-muted-foreground">
-                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    <RefreshIcon className="h-4 w-4 animate-spin" />
                     Loading dashboard...
                 </div>
             </div>
@@ -72,7 +73,7 @@ const Heartbeat = () => {
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-primary/10 rounded-lg">
-                        <Activity className="h-6 w-6 text-primary" />
+                        <PulseIcon className="h-6 w-6 text-primary" />
                     </div>
                     <div>
                         <h1 className="text-xl font-semibold">
@@ -93,7 +94,7 @@ const Heartbeat = () => {
                         size="sm"
                         onClick={() => refetch()}
                     >
-                        <RefreshCw className="h-4 w-4" />
+                        <RefreshIcon className="h-4 w-4" />
                     </Button>
                 </div>
             </div>
@@ -107,7 +108,7 @@ const Heartbeat = () => {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
-                                            <Users className="h-4 w-4 text-blue-500 dark:text-blue-400" />
+                                            <UserIcon className="h-4 w-4 text-blue-500 dark:text-blue-400" />
                                             Total Members
                                         </div>
                                         <div className="text-2xl font-bold text-foreground">
@@ -156,7 +157,7 @@ const Heartbeat = () => {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
-                                            <Building2 className="h-4 w-4 text-orange-500 dark:text-orange-400" />
+                                            <BuildingIcon className="h-4 w-4 text-orange-500 dark:text-orange-400" />
                                             Active Employees
                                         </div>
                                         <div className="text-2xl font-bold text-foreground">
@@ -188,31 +189,31 @@ const Heartbeat = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
-                                        <Users className="h-4 w-4" />
+                                        <Users3Icon className="h-4 w-4" />
                                         Online ({data.online_members})
                                     </Button>
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
-                                        <MessagesSquare className="h-4 w-4" />
+                                        <MessagesIcon className="h-4 w-4" />
                                         New Message
                                     </Button>
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
-                                        <Settings className="h-4 w-4" />
+                                        <SettingsIcon className="h-4 w-4" />
                                         Settings
                                     </Button>
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
                                         <div className="w-2 h-2 bg-primary dark:bg-primary rounded-full"></div>
                                         System Online
@@ -224,7 +225,7 @@ const Heartbeat = () => {
                                             // modalState.onOpenChange(true)
                                             qrScannerModal.onOpenChange(true)
                                         }
-                                        className="gap-2 border-border hover:bg-accent hover:text-accent-foreground"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                     >
                                         <ScanQrIcon />
                                         Quick Search Member

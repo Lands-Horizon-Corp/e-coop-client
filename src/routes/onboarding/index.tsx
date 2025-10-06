@@ -5,17 +5,14 @@ import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { useGetUserOrganizationByUserId } from '@/modules/user-organization/user-organization.service'
 
 import { LandmarkIcon } from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
+import ImageMatch from '@/components/image-match'
+import { GradientText } from '@/components/ui/gradient-text'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import ErrorPage from '../-common-pages/error-page'
 import NoOrganizationView from '../../modules/organization/components/no-organization-view'
 import WithOrganization from '../../modules/organization/components/with-organization'
-
-export const Route = createFileRoute('/onboarding/')({
-    component: RouteComponent,
-})
 
 function RouteComponent() {
     const {
@@ -57,15 +54,13 @@ function RouteComponent() {
     if (isPending || isLoading || isFetching) {
         return (
             <div className="flex min-h-full w-full flex-col items-center justify-center gap-y-2">
-                <ImageDisplay
+                <ImageMatch
                     src={LOADING_ARTWORK_GIF}
-                    className="block size-52 animate-pulse rounded-none !bg-transparent"
-                    fallbackClassName="!bg-transparent rounded-none"
+                    className="block size-52 rounded-none !bg-transparent"
+                    alt={'loading-gif'}
                 />
-                <p className="animate-pulse text-xs text-accent-foreground">
-                    {' '}
-                    Getting ready...
-                </p>
+
+                <p className="animate-pulse text-xs "> Getting ready...</p>
             </div>
         )
     }
@@ -75,7 +70,19 @@ function RouteComponent() {
                 <span className="relative mr-5 before:absolute before:left-1/2 before:top-[50%] before:-z-10 before:size-[30px] before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-primary before:opacity-50 before:blur-lg before:content-['']">
                     <LandmarkIcon className="z-50" size={24} />
                 </span>
-                Welcome to E-Coop Onboarding
+                Welcome to
+                <GradientText
+                    variant="primary"
+                    size="4xl"
+                    animate="shimmer"
+                    className="leading-relaxed mx-2 "
+                    style={{
+                        fontFamily: "'Knewave', cursive",
+                    }}
+                >
+                    <h1>E-coop</h1>
+                </GradientText>
+                Onboarding
             </h1>
             {hasOrganization ? (
                 <WithOrganization
@@ -88,4 +95,6 @@ function RouteComponent() {
     )
 }
 
-export default RouteComponent
+export const Route = createFileRoute('/onboarding/')({
+    component: RouteComponent,
+})

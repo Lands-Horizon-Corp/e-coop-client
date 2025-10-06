@@ -3,7 +3,8 @@ import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import { cn } from '@/helpers/tw-utils'
-import { XIcon } from 'lucide-react'
+
+import { XIcon } from '../icons'
 
 function Dialog({
     ...props

@@ -1,10 +1,13 @@
-import { IAuditable, ITimeStamps, TEntityId, TUserType } from '@/types/common'
+import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
 
 import { IFootstep } from '../footstep'
 import { IMedia } from '../media/media.types'
 import { INotification } from '../notification'
 import { IQrScanResult } from '../qr-crypto'
 import { IUserOrganization } from '../user-organization'
+import { USER_TYPE } from './user.constants'
+
+export type TUserType = (typeof USER_TYPE)[number] // move User module
 
 // api/v1/authentication/current/user
 export interface IUserBase extends ITimeStamps, IAuditable {

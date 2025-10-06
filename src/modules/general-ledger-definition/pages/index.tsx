@@ -188,55 +188,13 @@ const GeneralLedgerDefinition = () => {
                                 value={grouping.id}
                                 className="shadow-md w-full bg-sidebar/50 p-5 rounded-xl"
                             >
-                                <AccordionTrigger
-                                    onClick={() =>
-                                        handleAccountTrigger(grouping)
-                                    }
-                                    className="w-full hover:no-underline text-left text-accent-foreground/80"
-                                >
-                                    <div className="flex items-center gap-2">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger>
-                                                <SettingsIcon
-                                                    size={30}
-                                                    className="hover:text-accent-foreground cursor-pointer"
-                                                />
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                <DropdownMenuItem
-                                                    className="flex items-center gap-2"
-                                                    onClick={(e) => {
-                                                        e.preventDefault()
-                                                        handleEditGLGrouping(
-                                                            grouping
-                                                        )
-                                                    }}
-                                                >
-                                                    <EditPencilIcon />
-                                                    Edit
-                                                    <DropdownMenuShortcut>
-                                                        e
-                                                    </DropdownMenuShortcut>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={(e) => {
-                                                        e.preventDefault()
-                                                        handleViewGLGrouping(
-                                                            grouping,
-                                                            true
-                                                        )
-                                                    }}
-                                                    className="flex items-center gap-2"
-                                                >
-                                                    <ViewIcon />
-                                                    View
-                                                    <DropdownMenuShortcut>
-                                                        v
-                                                    </DropdownMenuShortcut>
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-
+                                <div className="flex items-center justify-between">
+                                    <AccordionTrigger
+                                        onClick={() =>
+                                            handleAccountTrigger(grouping)
+                                        }
+                                        className="flex-1 hover:no-underline text-left"
+                                    >
                                         <div className="flex flex-col">
                                             <h1 className="font-bold text-2xl">
                                                 {grouping.name}
@@ -245,8 +203,50 @@ const GeneralLedgerDefinition = () => {
                                                 {grouping.description}
                                             </p>
                                         </div>
-                                    </div>
-                                </AccordionTrigger>
+                                    </AccordionTrigger>
+
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <SettingsIcon
+                                                size={30}
+                                                className="hover:cursor-pointer"
+                                            />
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuItem
+                                                className="flex items-center gap-2"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    handleEditGLGrouping(
+                                                        grouping
+                                                    )
+                                                }}
+                                            >
+                                                <EditPencilIcon />
+                                                Edit
+                                                <DropdownMenuShortcut>
+                                                    e
+                                                </DropdownMenuShortcut>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    handleViewGLGrouping(
+                                                        grouping,
+                                                        true
+                                                    )
+                                                }}
+                                                className="flex items-center gap-2"
+                                            >
+                                                <ViewIcon />
+                                                View
+                                                <DropdownMenuShortcut>
+                                                    v
+                                                </DropdownMenuShortcut>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
                                 <AccordionContent className="w-full shadow-none">
                                     {hasGeneralLedgerGropings && (
                                         <GeneralLedgerDefinitionTreeViewer

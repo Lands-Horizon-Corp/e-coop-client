@@ -55,7 +55,7 @@ const RowActionsGroup = <TData,>({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
-                <DropdownMenuLabel>Action</DropdownMenuLabel>
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {canSelect && (
                     <DropdownMenuItem

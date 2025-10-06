@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 
@@ -50,6 +50,15 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
         const [hasError, setHasError] = useState(false)
         const [currentSrc, setCurrentSrc] = useState(src || '')
 
+        // Update currentSrc when src prop changes
+        useEffect(() => {
+            if (src !== currentSrc) {
+                setCurrentSrc(src || '')
+                setIsLoaded(false)
+                setHasError(false)
+            }
+        }, [src, currentSrc])
+
         const handleLoad = useCallback(
             (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
                 setIsLoaded(true)
@@ -88,7 +97,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
                 {/* Placeholder/Blur background */}
                 {isPlaceholderVisible && (
                     <div
-                        className="absolute inset-0 bg-gray-200 dark:bg-gray-800"
+                        className="absolute inset-0"
                         style={{
                             backgroundImage: placeholder
                                 ? `url(${placeholder})`
@@ -107,7 +116,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
                 {/* Loading skeleton */}
                 {!isLoaded && !isPlaceholderVisible && (
                     <div
-                        className="absolute inset-0 animate-pulse bg-gray-200 dark:bg-gray-800"
+                        className="absolute inset-0 animate-pulse"
                         aria-hidden="true" // Hide from screen readers
                     />
                 )}
@@ -126,12 +135,15 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
                     onLoad={handleLoad}
                     onError={handleError}
                     className={cn(
-                        'h-full w-full transition-opacity duration-300',
+                        'h-full w-full transition-opacity duration-300 select-none pointer-events-none',
                         isLoaded ? 'opacity-100' : 'opacity-0',
                         hasError && 'opacity-50'
                     )}
                     style={imageStyle}
                     decoding="async"
+                    draggable={false}
+                    onContextMenu={(e) => e.preventDefault()}
+                    onDragStart={(e) => e.preventDefault()}
                 />
             </div>
         )

@@ -1,0 +1,170 @@
+import { useEffect, useState } from 'react'
+
+import * as SelectPrimitive from '@radix-ui/react-select'
+
+import { cn } from '@/helpers'
+import { IAccount } from '@/modules/account'
+import { AccountPicker } from '@/modules/account/components'
+import { IMemberProfile } from '@/modules/member-profile'
+import MemberPicker from '@/modules/member-profile/components/member-picker'
+import { TransactionAmountField } from '@/modules/transaction'
+import { CellContext, Row } from '@tanstack/react-table'
+
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input, InputProps } from '@/components/ui/input'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
+
+import InputDate from './input-date'
+
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData> {
+        updateData: <TValue>(
+            rowIndex: number,
+            columnId: keyof TData,
+            value: TValue
+        ) => void
+        handleDeleteRow: (row: Row<TData>) => void
+    }
+}
+
+interface CustomCellContext<TData extends object>
+    extends CellContext<TData, unknown> {
+    inputType?:
+        | 'text'
+        | 'checkbox'
+        | 'select'
+        | 'number'
+        | 'date'
+        | 'account-picker'
+        | 'member-picker'
+    options?: { label: string; value: string }[]
+    inputProps?: InputProps
+    selectTriggerProps?: React.ComponentProps<typeof SelectPrimitive.Trigger>
+    checkboxProps?: React.ComponentProps<typeof Checkbox>
+}
+
+export const EditableCell = <T extends object>({
+    getValue,
+    row: { index },
+    column: { id },
+    inputType = 'text',
+    options = [],
+    inputProps,
+    selectTriggerProps,
+    checkboxProps,
+    table,
+}: CustomCellContext<T>) => {
+    const initialValue = getValue()
+    const [value, setValue] = useState(initialValue)
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        setValue(initialValue)
+    }, [initialValue])
+
+    const handleBlur = () => {
+        table.options.meta?.updateData(index, id as keyof T, value)
+    }
+
+    const handleChange = (newValue: unknown) => {
+        setValue(newValue)
+        table.options.meta?.updateData(index, id as keyof T, newValue)
+    }
+
+    switch (inputType) {
+        case 'text':
+            return (
+                <Input
+                    {...inputProps}
+                    value={value as string}
+                    className={cn('text-left', inputProps?.className)}
+                    onChange={(e) => setValue(e.target.value)}
+                    onBlur={handleBlur}
+                />
+            )
+        case 'number':
+            return (
+                <TransactionAmountField
+                    {...inputProps}
+                    className={cn('text-left', inputProps?.className)}
+                    value={value as number}
+                    onChange={(e) => {
+                        handleChange(Number(e.target.value))
+                    }}
+                    onBlur={handleBlur}
+                    isDefault
+                />
+            )
+        case 'select':
+            return (
+                <Select
+                    onValueChange={handleChange}
+                    value={value as string}
+                    defaultValue={value as string}
+                    open={open}
+                    onOpenChange={setOpen}
+                >
+                    <SelectTrigger
+                        className={cn(
+                            'max-w-xs',
+                            selectTriggerProps?.className
+                        )}
+                    >
+                        <SelectValue placeholder="select a value" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {options.map((option) => (
+                            <SelectItem value={option.value} key={option.value}>
+                                {option.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            )
+        case 'checkbox':
+            return (
+                <Checkbox
+                    className={cn('size-8', checkboxProps?.className)}
+                    checked={value as boolean}
+                    onCheckedChange={handleChange}
+                />
+            )
+        case 'account-picker':
+            return (
+                <AccountPicker
+                    value={value as IAccount}
+                    onSelect={(selectedAccount) => {
+                        handleChange(selectedAccount)
+                    }}
+                    triggerClassName={cn('', inputProps?.className)}
+                    nameOnly
+                    placeholder="Select an Account"
+                    allowClear
+                />
+            )
+        case 'member-picker':
+            return (
+                <MemberPicker
+                    value={value as IMemberProfile}
+                    onSelect={(selectedMember) => {
+                        handleChange(selectedMember)
+                    }}
+                    triggerClassName={cn('!w-full', inputProps?.className)}
+                    triggerVariant="outline"
+                    placeholder="Select Member"
+                    showPBNo={false}
+                    allowClear
+                />
+            )
+        case 'date':
+            return <InputDate value={value as string} onChange={handleChange} />
+        default:
+            return null
+    }
+}

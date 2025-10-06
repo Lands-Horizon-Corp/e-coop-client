@@ -29,8 +29,8 @@ const generalLedgerTypeStyles: Record<
     },
     [GeneralLedgerTypeEnum.Income]: {
         label: 'Income',
-        bgColor: 'bg-teal-500',
-        textColor: 'text-teal-50',
+        bgColor: 'bg-primary',
+        textColor: 'text-primary',
     },
     [GeneralLedgerTypeEnum.Expenses]: {
         label: 'Expenses',

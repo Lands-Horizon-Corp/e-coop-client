@@ -3,15 +3,26 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { ICollateral } from '../collateral'
+import { IComakerCollateral } from '../comaker-collateral'
+import { IComakerMemberProfile } from '../comaker-member-profile'
+import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
+import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
 import { ILoanPurpose } from '../loan-purpose'
 import { ILoanStatus } from '../loan-status'
+import { ILoanTag } from '../loan-tag'
+import { ILoanTermsAndConditionAmountReceipt } from '../loan-terms-and-condition-amount-receipt'
+import { ILoanTermsAndConditionSuggestedPayment } from '../loan-terms-and-condition-suggested-payment'
+import { ILoanTransactionEntry } from '../loan-transaction-entry'
 import { IMedia } from '../media'
 import { IMemberAccountingLedger } from '../member-account-ledger'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
-import { LoanTransactionSchema } from './loan-transaction.validation'
+import {
+    LoanTransactionPrintSchema,
+    LoanTransactionSchema,
+    TLoanTransactionSignatureSchema,
+} from './loan-transaction.validation'
 import {
     COMPUTATION_TYPE,
     LOAN_AMORTIZATION_TYPE,
@@ -36,14 +47,20 @@ export type TLoanAmortizationType = (typeof LOAN_AMORTIZATION_TYPE)[number]
 
 export type TComputationType = (typeof COMPUTATION_TYPE)[number]
 
-export interface ILoanTransaction extends IBaseEntityMeta {
-    //add here
+// NOT SERVER/ONLY CLIENT GENERATED
+export type TLoanStatusType = 'draft' | 'printed' | 'approved' | 'released'
 
-    voucher_no?: string
+export interface ILoanTransaction
+    extends IBaseEntityMeta,
+        ILoanTransactionSignatures,
+        ILoanTransactionStatusDates {
+    voucher?: string
 
     transaction_batch_id?: TEntityId
     transaction_batch?: ITransactionBatch
     official_receipt_number: string
+
+    print_number: number
 
     employee_user_id?: TEntityId
     employee_user?: IUser
@@ -54,17 +71,27 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     loan_status_id?: TEntityId
     loan_status?: ILoanStatus
 
+    count?: number
+    last_pay?: string
+    balance?: number
+    fines?: number
+    interest?: number
+
     mode_of_payment: TLoanModeOfPayment
     mode_of_payment_weekly: TWeekdays
+    mode_of_payment_fixed_days?: number
     mode_of_payment_semi_monthly_pay_1: number
     mode_of_payment_semi_monthly_pay_2: number
+    mode_of_payment_monthly_exact_day: boolean
 
     comaker_type: TLoanComakerType
+
+    // Pag comaker type ay deposit
     comaker_deposit_member_accounting_ledger_id?: TEntityId
     comaker_deposit_member_accounting_ledger?: IMemberAccountingLedger
-    comaker_collateral_id?: TEntityId
-    comaker_collateral?: ICollateral
-    comaker_collateral_description: string
+
+    comaker_collaterals?: IComakerCollateral[] // pag comaker ay collaterals
+    comaker_member_profiles: IComakerMemberProfile[] // pag comaker ay member
 
     collector_place: TLoanCollectorPlace
 
@@ -95,6 +122,26 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     share_capital: number
     length_of_service: string
 
+    check_number?: string
+    check_date?: string
+
+    loan_transaction_entries: ILoanTransactionEntry[]
+    loan_transaction_entries_deleted: TEntityId[] // nothing, just for type
+
+    //Loan Clearance Analysis
+    loan_clearance_analysis: ILoanClearanceAnalysis[]
+    loan_clearance_analysis_deleted?: TEntityId[] // nothing, just for type
+
+    loan_clearance_analysis_institution: ILoanClearanceAnalysisInstitution[]
+    loan_clearance_analysis_institution_deleted?: TEntityId[] // nothing, just for type
+
+    // Terms and Condition / Receipt
+    loan_terms_and_condition_amount_receipt: ILoanTermsAndConditionAmountReceipt[]
+    loan_terms_and_condition_amount_receipt_deleted?: TEntityId[] // nothing, just for type
+
+    loan_terms_and_condition_suggested_payment: ILoanTermsAndConditionSuggestedPayment[]
+    loan_terms_and_condition_suggested_payment_deleted?: TEntityId[] // nothing, just for type
+
     exclude_sunday: boolean
     exclude_holiday: boolean
     exclude_saturday: boolean
@@ -104,13 +151,58 @@ export interface ILoanTransaction extends IBaseEntityMeta {
     record_of_loan_payments_or_loan_status: string
     collateral_offered: string
 
+    loan_tags: ILoanTag[]
+
     appraised_value: number
     appraised_value_description: string
 
-    printed_date?: string
-    approved_date?: string
-    released_date?: string
+    total_debit: number
+    total_credit: number
+    total_add_on: number
+    total_deduction: number
 
+    // Tel zalven to add these
+    due_date?: string
+    amount_granted?: number
+    add_on_amount?: number
+
+    deducted_interest?: number
+    advance_payment?: number
+
+    used_days?: number
+    unused_days?: number
+
+    arrears?: number
+
+    unpaid_principal_count?: number
+    unpaid_interest_count?: number
+
+    unpaid_principal_amount?: number
+    unpaid_interest_amount?: number
+
+    principal_paid_count?: number
+    interest_paid_count?: number
+
+    // for quick summary
+    principal_paid?: number
+    previous_interest_paid?: number
+    previous_fines_paid?: number
+    interest_paid?: number
+    fines_paid?: number
+    collection_progress?: number // percentage
+    interest_amortization?: number
+    total_amortization?: number
+    first_irr?: number
+    first_dq?: number
+}
+
+export interface ILoanTransactionStatusDates {
+    printed_date?: string // Printed
+    approved_date?: string //
+    released_date?: string // Not editable anymore
+}
+
+export interface ILoanTransactionSignatures {
     approved_by_signature_media_id?: TEntityId
     approved_by_signature_media?: IMedia
     approved_by_name: string
@@ -161,3 +253,10 @@ export type ILoanTransactionRequest = z.infer<typeof LoanTransactionSchema>
 
 export interface ILoanTransactionPaginated
     extends IPaginatedResult<ILoanTransaction> {}
+
+// Loan Transaction Signature
+export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema
+
+// Loan Transaction Print Request
+
+export type ILoanTransactionPrintRequest = LoanTransactionPrintSchema

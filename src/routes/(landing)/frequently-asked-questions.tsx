@@ -63,7 +63,7 @@ const FAQ_ITEMS: {
                     to={'/' as string}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-teal-600"
+                    className="underline underline-offset-4 text-primary/70"
                 >
                     ecoop
                 </Link>{' '}
@@ -72,7 +72,7 @@ const FAQ_ITEMS: {
                     to={'/auth/sign-up' as string}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-teal-600"
+                    className="underline underline-offset-4 text-primary/70"
                 >
                     Sign-Up Page
                 </Link>{' '}
@@ -94,7 +94,7 @@ const FAQ_ITEMS: {
                     to={'/subscription-plan' as string}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-teal-600"
+                    className="underline underline-offset-4 text-primary/70"
                 >
                     Subscription Plans
                 </Link>{' '}
@@ -135,7 +135,7 @@ const FAQ_ITEMS: {
                     target="_blank"
                     to={'/policy/kyc-policy' as string}
                     rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-teal-600"
+                    className="underline underline-offset-4 text-primary/70"
                 >
                     KYC Policy
                 </Link>{' '}
@@ -155,7 +155,7 @@ const FAQ_ITEMS: {
                     to={'/policy/data-protection' as string}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-teal-600"
+                    className="underline underline-offset-4 text-primary/70"
                 >
                     Data Protection Policy
                 </Link>
@@ -175,7 +175,7 @@ const FAQ_ITEMS: {
                     to={'/policy/fee-and-charges-policy' as string}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-teal-600"
+                    className="underline underline-offset-4 text-primary/70"
                 >
                     Fee and Charges Policy
                 </Link>{' '}
@@ -197,7 +197,7 @@ const FAQ_ITEMS: {
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-teal-600"
+                    className="underline underline-offset-4 text-primary/70"
                 >
                     Complaint Handling and Dispute Resolution Policy
                 </Link>{' '}
@@ -211,11 +211,11 @@ const FAQ_ITEMS: {
         content: (
             <>
                 For support, you can email us at{' '}
-                <CopyWrapper className="ml-1 text-teal-600 underline-offset-4 underline hover:text-teal-400">
+                <CopyWrapper className="ml-1 text-primary/70 underline-offset-4 underline hover:text-primary">
                     lands.horizon.corp@gmail.com
                 </CopyWrapper>{' '}
                 or call
-                <CopyWrapper className="ml-1 text-teal-600 underline-offset-4 underline hover:text-teal-400">
+                <CopyWrapper className="ml-1 text-primary/70 underline-offset-4 underline hover:text-primary">
                     +63 991 617 1081
                 </CopyWrapper>
                 . Our team is ready to assist you with any inquiries or
@@ -252,7 +252,9 @@ function RouteComponent() {
     }, [searchTerm, fuse])
 
     return (
-        <PageContainer className="relative bg-background/80 dark:bg-background/90">
+        <PageContainer className="relative  mt-16">
+            <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
+
             <div className="py-4 z-10 max-w-4xl px-4 md:px-8 w-full space-y-6">
                 <ImageDisplay
                     className="size-40 mx-auto rounded-xl !bg-transparent"
@@ -268,7 +270,7 @@ function RouteComponent() {
                     <Link
                         resetScroll
                         to="/contact"
-                        className="underline underline-offset-4 text-teal-600"
+                        className="underline underline-offset-4 text-primary/70"
                     >
                         send us a message
                     </Link>

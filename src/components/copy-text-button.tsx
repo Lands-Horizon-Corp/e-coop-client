@@ -6,7 +6,7 @@ import { cn } from '@/helpers/tw-utils'
 
 import { CheckIcon, CopyIcon } from './icons'
 
-interface Props<TErr = unknown> {
+interface Props<TErr = Error> {
     textContent: string
     copyInterval?: number
     className?: string
@@ -16,7 +16,7 @@ interface Props<TErr = unknown> {
     onCopyError?: (error: TErr) => void
 }
 
-const CopyTextButton = <TErr = unknown,>({
+const CopyTextButton = <TErr = Error,>({
     className,
     textContent,
     successText,

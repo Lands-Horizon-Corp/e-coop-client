@@ -33,8 +33,7 @@ const APIKeyGen = ({ className }: Props) => {
                 try {
                     navigator.clipboard.writeText(data.developer_secret_key)
                     toast.success('API Secret Key Copied!')
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (e) {
+                } catch {
                     toast.error('Failed to copy API Secret Key')
                 }
             },
@@ -49,8 +48,7 @@ const APIKeyGen = ({ className }: Props) => {
 
             toast.success('API Key copied')
             return true
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (err) {
+        } catch {
             toast.error('Failed to copy')
             return false
         }
@@ -76,7 +74,7 @@ const APIKeyGen = ({ className }: Props) => {
                     to={'/developers' as string}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline font-medium hover:text-teal-400 underline-offset-4 text-teal-600"
+                    className="underline font-medium hover:text-primary underline-offset-4 text-primary/70"
                 >
                     Developer Policy.
                 </Link>

@@ -59,7 +59,7 @@ const getStatusConfig = (status: string) => {
                 label: 'Not Allowed',
                 variant: 'destructive' as const,
                 className:
-                    'border-red-500/20 bg-red-500/10 text-red-700 hover:bg-red-500/20 dark:text-red-400 dark:bg-red-500/10 dark:hover:bg-red-500/20',
+                    'border-red-500/20 bg-destructive/10 text-destructive/90 hover:bg-destructive/20 dark:text-destructive dark:bg-destructive/10 dark:hover:bg-destructive/20',
                 icon: <XIcon className="h-3 w-3" />,
             }
         default:

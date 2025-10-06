@@ -21,9 +21,7 @@ export const useIncognitoDetector = ({
                 else onNotAllowed?.()
 
                 setIsAllowed(res)
-
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (e) {
+            } catch {
                 setIsChecking(false)
             } finally {
                 setIsChecking(false)

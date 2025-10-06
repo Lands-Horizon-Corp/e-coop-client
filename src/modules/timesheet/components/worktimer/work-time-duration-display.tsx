@@ -8,7 +8,7 @@ const WorkTimeDurationDisplay = ({ hours, minutes, seconds }: Props) => {
     return (
         <div className="flex items-center justify-center gap-x-2">
             <div className="min-w-[50px] space-y-2">
-                <p className="rounded-sm bg-background py-2 text-center text-lg text-accent-foreground dark:bg-accent">
+                <p className="rounded-sm bg-background py-2 text-center text-lg  dark:bg-accent">
                     {`${hours}`.padStart(2, '0')}
                 </p>
                 <p className="text-center text-xs font-light text-muted-foreground">
@@ -16,7 +16,7 @@ const WorkTimeDurationDisplay = ({ hours, minutes, seconds }: Props) => {
                 </p>
             </div>
             <div className="min-w-[50px] space-y-2">
-                <p className="rounded-sm bg-background py-2 text-center text-lg text-accent-foreground dark:bg-accent">
+                <p className="rounded-sm bg-background py-2 text-center text-lg  dark:bg-accent">
                     {`${minutes}`.padStart(2, '0')}
                 </p>
                 <p className="text-center text-xs font-light text-muted-foreground">
@@ -24,7 +24,7 @@ const WorkTimeDurationDisplay = ({ hours, minutes, seconds }: Props) => {
                 </p>
             </div>
             <div className="min-w-[50px] space-y-2">
-                <p className="rounded-sm bg-background py-2 text-center text-lg text-accent-foreground dark:bg-accent">
+                <p className="rounded-sm bg-background py-2 text-center text-lg  dark:bg-accent">
                     {`${seconds}`.padStart(2, '0')}
                 </p>
                 <p className="text-center text-xs font-light text-muted-foreground">

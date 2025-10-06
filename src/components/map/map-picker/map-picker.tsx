@@ -1,9 +1,22 @@
+'use client'
+
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { GOOGLE_MAPS_API_KEY } from '@/constants'
+import { cn } from '@/helpers'
+import { useTheme } from '@/modules/settings/provider/theme-provider'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
-import { Building, Globe, MapPin, Navigation, Search, X } from 'lucide-react'
 
+import CopyTextButton from '@/components/copy-text-button'
+import {
+    BuildingIcon,
+    CloseIcon,
+    GlobeIcon,
+    MagnifyingGlassIcon,
+    NavigationIcon,
+    PinLocationIcon,
+} from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -33,8 +46,12 @@ export interface PlaceSuggestion {
     structured_formatting: {
         main_text: string
         secondary_text: string
+        main_text_matched_substrings?: google.maps.places.PredictionSubstring[]
+        secondary_text_matched_substrings?: google.maps.places.PredictionSubstring[]
     }
     types: string[]
+    terms: google.maps.places.PredictionTerm[]
+    matched_substrings: google.maps.places.PredictionSubstring[]
 }
 
 export interface GoogleMapsEvent {
@@ -49,15 +66,13 @@ export interface GoogleGeocodeResult {
 }
 
 export interface GooglePlaceDetails {
-    place_id: string
-    geometry: {
-        location: {
-            lat(): number
-            lng(): number
-        }
+    id: string
+    location: {
+        lat(): number
+        lng(): number
     }
-    name?: string
-    formatted_address?: string
+    displayName?: string
+    formattedAddress?: string
     types: string[]
 }
 
@@ -82,6 +97,7 @@ export interface MapPickerProps {
     _mapContainerStyle?: React.CSSProperties
     /** Button text when no location is selected */
     placeholder?: string
+    viewOnly?: boolean
     /** Button variant */
     variant?:
         | 'default'
@@ -100,12 +116,6 @@ export interface MapPickerProps {
 }
 
 const defaultCenter: LatLng = { lat: 37.7749, lng: -122.4194 }
-// const defaultMapContainerStyle: React.CSSProperties = {
-//     width: '100%',
-//     height: '400px',
-//     borderRadius: '8px',
-// }
-const libraries: ('places' | 'geometry')[] = ['places', 'geometry']
 
 export const MapPicker: React.FC<MapPickerProps> = ({
     value,
@@ -122,14 +132,13 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     size = 'default',
     disabled = false,
     className,
+    viewOnly = false,
     hideButtonCoordinates = true,
 }) => {
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-maps-script',
-        googleMapsApiKey: apiKey ?? '',
-        libraries,
+        googleMapsApiKey: GOOGLE_MAPS_API_KEY ?? '',
+        // libraries: GOOGLE_MAPS_LIBRARIES,
     })
 
     // Internal modal state
@@ -149,23 +158,21 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     const [isLoadingSuggestions, setIsLoadingSuggestions] =
         useState<boolean>(false)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mapRef = useRef<any | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const geocoderRef = useRef<any | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const markerRef = useRef<any | null>(null)
+    const mapRef = useRef<google.maps.Map | null>(null)
+    const geocoderRef = useRef<google.maps.Geocoder | null>(null)
+    const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(
+        null
+    )
+    const theme = useRef<google.maps.ColorScheme | null>(null)
     const searchInputRef = useRef<HTMLInputElement | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const placesServiceRef = useRef<any | null>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const autocompleteServiceRef = useRef<any | null>(null)
     const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const justOpenedRef = useRef(false)
 
     const formatLocation = (location: LatLng): string => {
         return `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`
     }
+
+    const { resolvedTheme } = useTheme()
 
     const reverseGeocode = useCallback(
         (loc: LatLng) => {
@@ -191,37 +198,58 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         [showAddress]
     )
     const createOrMoveMarker = useCallback(
-        (location: LatLng) => {
+        async (location: LatLng) => {
             if (!mapRef.current || !window.google?.maps) return
 
+            // Remove existing marker
             if (markerRef.current) {
-                markerRef.current.setMap(null)
+                markerRef.current.map = null
                 markerRef.current = null
             }
 
-            if (window.google.maps.Marker) {
-                markerRef.current = new window.google.maps.Marker({
+            try {
+                // Import the marker library dynamically like your example
+                const { AdvancedMarkerElement } =
+                    (await window.google.maps.importLibrary(
+                        'marker'
+                    )) as google.maps.MarkerLibrary
+
+                // Create new advanced marker
+                markerRef.current = new AdvancedMarkerElement({
                     map: mapRef.current,
                     position: location,
-                    draggable: true,
+                    gmpDraggable: true,
+                    gmpClickable: true,
+                    title: 'Selected Location', // Add title like your example
                 })
+                const { ColorScheme } = (await google.maps.importLibrary(
+                    'core'
+                )) as google.maps.CoreLibrary
+                theme.current =
+                    resolvedTheme === 'dark'
+                        ? ColorScheme.DARK
+                        : ColorScheme.LIGHT
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                markerRef.current.addListener('dragend', (e: any) => {
-                    const newLoc: LatLng = {
-                        lat: e.latLng.lat(),
-                        lng: e.latLng.lng(),
+                markerRef.current.addListener(
+                    'dragend',
+                    (e: google.maps.MapMouseEvent) => {
+                        const newLoc: LatLng = {
+                            lat: e.latLng?.lat() || 0,
+                            lng: e.latLng?.lng() || 0,
+                        }
+                        setSelectedLocation(newLoc)
+                        reverseGeocode(newLoc)
                     }
-                    setSelectedLocation(newLoc)
-                    reverseGeocode(newLoc)
-                })
+                )
+            } catch (error) {
+                console.error('Error creating advanced marker:', error)
             }
         },
-        [reverseGeocode]
+        [reverseGeocode, resolvedTheme]
     )
 
-    const searchPlaces = useCallback((query: string) => {
-        if (!autocompleteServiceRef.current || !query.trim()) {
+    const searchPlaces = useCallback(async (query: string) => {
+        if (!query.trim()) {
             setSuggestions([])
             setShowSuggestions(false)
             return
@@ -229,68 +257,95 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
         setIsLoadingSuggestions(true)
 
-        const request = {
-            input: query,
-        }
+        try {
+            // Load the new Places library
+            const { AutocompleteSuggestion } =
+                (await window.google.maps.importLibrary(
+                    'places'
+                )) as google.maps.PlacesLibrary
 
-        autocompleteServiceRef.current.getPlacePredictions(
-            request,
-            (
-                predictions: PlaceSuggestion[],
-                status: google.maps.places.PlacesServiceStatus
-            ) => {
-                setIsLoadingSuggestions(false)
-
-                if (
-                    status ===
-                        window.google.maps.places.PlacesServiceStatus.OK &&
-                    predictions
-                ) {
-                    setSuggestions(predictions.slice(0, 5))
-                    setShowSuggestions(true)
-                } else {
-                    setSuggestions([])
-                    setShowSuggestions(false)
-                }
+            const request = {
+                input: query,
             }
-        )
+
+            const { suggestions: predictions } =
+                await AutocompleteSuggestion.fetchAutocompleteSuggestions(
+                    request
+                )
+
+            if (predictions && predictions.length > 0) {
+                // Convert the new format to our existing interface
+                const convertedSuggestions = predictions
+                    .slice(0, 5)
+                    .map(
+                        (
+                            prediction: google.maps.places.AutocompleteSuggestion
+                        ) => ({
+                            place_id: prediction.placePrediction?.placeId || '',
+                            description:
+                                prediction.placePrediction?.text?.text || '',
+                            structured_formatting: {
+                                main_text:
+                                    prediction.placePrediction?.text?.text ||
+                                    '',
+                                secondary_text:
+                                    prediction.placePrediction?.secondaryText
+                                        ?.text || '',
+                            },
+                            types: prediction.placePrediction?.types || [],
+                            terms: [],
+                            matched_substrings: [],
+                        })
+                    )
+
+                setSuggestions(convertedSuggestions)
+                setShowSuggestions(true)
+            } else {
+                setSuggestions([])
+                setShowSuggestions(false)
+            }
+        } catch (error) {
+            console.error('Error fetching autocomplete suggestions:', error)
+            setSuggestions([])
+            setShowSuggestions(false)
+        } finally {
+            setIsLoadingSuggestions(false)
+        }
     }, [])
 
     const selectPlace = useCallback(
         (placeId: string, description: string) => {
-            if (!placesServiceRef.current) {
+            if (!window.google?.maps?.places?.Place) {
                 return
             }
 
             setIsLoadingSuggestions(true)
 
+            // Use the new Place API
+            const place = new window.google.maps.places.Place({
+                id: placeId,
+            })
+
             const request = {
-                placeId: placeId,
                 fields: [
-                    'place_id',
-                    'geometry',
-                    'name',
-                    'formatted_address',
+                    'id',
+                    'location',
+                    'displayName',
+                    'formattedAddress',
                     'types',
                 ],
             }
 
-            placesServiceRef.current.getDetails(
-                request,
-                (
-                    place: GooglePlaceDetails,
-                    status: google.maps.places.PlacesServiceStatus
-                ) => {
+            place
+                .fetchFields(request)
+                .then((response: { place: google.maps.places.Place }) => {
                     setIsLoadingSuggestions(false)
 
-                    if (
-                        status ===
-                            window.google.maps.places.PlacesServiceStatus.OK &&
-                        place.geometry
-                    ) {
+                    const placeResult = response.place
+                    if (placeResult?.location) {
                         const newLoc: LatLng = {
-                            lat: place.geometry.location.lat(),
-                            lng: place.geometry.location.lng(),
+                            lat: placeResult.location.lat(),
+                            lng: placeResult.location.lng(),
                         }
 
                         setSelectedLocation(newLoc)
@@ -311,8 +366,8 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
                         if (showAddress) {
                             setAddress(
-                                place.formatted_address ||
-                                    place.name ||
+                                placeResult.formattedAddress ||
+                                    placeResult.displayName ||
                                     description
                             )
                         }
@@ -321,8 +376,14 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                         setShowSuggestions(false)
                         setSuggestions([])
                     }
-                }
-            )
+                })
+                .catch((error: Error) => {
+                    setIsLoadingSuggestions(false)
+                    console.error('Error fetching place details:', error)
+                    setSearchValue(description)
+                    setShowSuggestions(false)
+                    setSuggestions([])
+                })
         },
         [createOrMoveMarker, showAddress]
     )
@@ -353,33 +414,28 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             types.includes('establishment') ||
             types.includes('point_of_interest')
         ) {
-            return <Building className="h-4 w-4 text-blue-500" />
+            return <BuildingIcon className="h-4 w-4 text-blue-500" />
         }
         if (
             types.includes('locality') ||
             types.includes('administrative_area_level_1')
         ) {
-            return <Globe className="h-4 w-4 text-primary" />
+            return <GlobeIcon className="h-4 w-4 text-primary" />
         }
-        return <Navigation className="text-muted-foreground h-4 w-4" />
+        return <NavigationIcon className="text-muted-foreground h-4 w-4" />
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const onMapLoad = useCallback((map: any) => {
+    const onMapLoad = useCallback((map: google.maps.Map) => {
         mapRef.current = map
 
         if (window.google?.maps) {
             geocoderRef.current = new window.google.maps.Geocoder()
-            placesServiceRef.current =
-                new window.google.maps.places.PlacesService(map)
-            autocompleteServiceRef.current =
-                new window.google.maps.places.AutocompleteService()
         }
     }, [])
 
     const onMapClick = useCallback(
         (e: google.maps.MapMouseEvent) => {
-            if (e.latLng) {
+            if (e.latLng && viewOnly === false) {
                 const loc: LatLng = { lat: e.latLng.lat(), lng: e.latLng.lng() }
                 setSelectedLocation(loc)
                 createOrMoveMarker(loc)
@@ -387,7 +443,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                 setShowSuggestions(false)
             }
         },
-        [createOrMoveMarker, reverseGeocode]
+        [createOrMoveMarker, reverseGeocode, viewOnly]
     )
 
     // Sync internal state with external value
@@ -421,7 +477,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             }
         } else {
             if (markerRef.current) {
-                markerRef.current.setMap(null)
+                markerRef.current.map = null
                 markerRef.current = null
             }
             if (searchTimeoutRef.current) {
@@ -455,6 +511,15 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         }
     }, [showSuggestions])
 
+    // Update map theme when resolvedTheme changes
+    useEffect(() => {
+        if (mapRef.current && isLoaded) {
+            mapRef.current.setOptions({
+                colorScheme: resolvedTheme === 'dark' ? 'DARK' : 'LIGHT',
+            })
+        }
+    }, [resolvedTheme, isLoaded])
+
     // Auto-close modal and call onChange when location is selected
     const handleConfirm = () => {
         onChange(selectedLocation)
@@ -473,39 +538,22 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         setSuggestions([])
         setShowSuggestions(false)
         if (markerRef.current) {
-            markerRef.current.setMap(null)
+            markerRef.current.map = null
             markerRef.current = null
         }
     }
 
-    // Quick select - automatically confirm when location is selected via search or click
-    const handleQuickSelect = (location: LatLng) => {
-        onChange(location)
-        setIsOpen(false)
-    }
-
-    const mapOptions = {
-        mapId,
-        disableDefaultUI: false,
-        zoomControl: true,
-        streetViewControl: false,
-        mapTypeControl: false,
-        fullscreenControl: false,
-        gestureHandling: 'cooperative' as const,
-        clickableIcons: true,
-    }
-
-    if (!apiKey) {
+    if (!GOOGLE_MAPS_API_KEY) {
         return (
-            <div className="rounded border border-red-200 p-2 text-sm text-red-600">
-                NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is missing
+            <div className="rounded border border-red-200 p-2 text-sm text-destructive">
+                GOOGLE_MAPS_API_KEY is missing
             </div>
         )
     }
 
     if (loadError) {
         return (
-            <div className="rounded border border-red-200 p-2 text-sm text-red-600">
+            <div className="rounded border border-red-200 p-2 text-sm text-destructive">
                 Failed to load Google Maps
             </div>
         )
@@ -522,7 +570,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                 variant={variant}
                 onClick={() => setIsOpen(true)}
             >
-                <MapPin className="mr-2 h-4 w-4" />
+                <PinLocationIcon className="mr-2 h-4 w-4" />
                 {value ? (
                     <>
                         {!hideButtonCoordinates
@@ -533,13 +581,12 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                     placeholder
                 )}
             </Button>
-
             {/* Modal */}
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogContent className="max-h-[96vh] min-w-7xl overflow-hidden p-0">
+                <DialogContent className="max-h-[100vh] min-w-7xl overflow-hidden p-0">
                     <DialogHeader className="p-6 pb-4">
                         <DialogTitle className="flex items-center gap-2">
-                            <MapPin className="h-5 w-5" /> {title}
+                            <PinLocationIcon className="h-5 w-5" /> {title}
                         </DialogTitle>
                         <DialogDescription>
                             Search or click on the map to pick a location. Drag
@@ -548,7 +595,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                     </DialogHeader>
 
                     {/* Two Column Layout */}
-                    <div className="flex flex-col lg:h-[600px] lg:flex-row">
+                    <div className="flex flex-col lg:h-[700px] lg:flex-row">
                         {/* Left Column - Map */}
                         <div className="w-full lg:w-2/3 lg:border-r">
                             <div className="h-[300px] lg:h-full">
@@ -559,7 +606,23 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                             width: '100%',
                                             height: '100%',
                                         }}
-                                        options={mapOptions}
+                                        options={{
+                                            mapId:
+                                                mapId ||
+                                                '7315fed6ff6d5145e4c926ff',
+                                            disableDefaultUI: false,
+                                            zoomControl: true,
+                                            streetViewControl: false,
+                                            mapTypeControl: false,
+                                            fullscreenControl: false,
+                                            gestureHandling:
+                                                'cooperative' as const,
+                                            clickableIcons: true,
+                                            colorScheme:
+                                                resolvedTheme === 'dark'
+                                                    ? 'DARK'
+                                                    : 'LIGHT',
+                                        }}
                                         zoom={mapZoom}
                                         onClick={onMapClick}
                                         onLoad={onMapLoad}
@@ -577,12 +640,17 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                             <div className="flex h-full flex-col">
                                 <div className="flex-1 space-y-4 overflow-y-auto p-6">
                                     {/* Search Section */}
-                                    <div className="space-y-2">
+                                    <div
+                                        className={cn(
+                                            'space-y-2',
+                                            viewOnly && 'hidden'
+                                        )}
+                                    >
                                         <Label htmlFor="location-search">
                                             Search Location
                                         </Label>
                                         <div className="relative">
-                                            <Search className="text-muted-foreground absolute top-1/2 left-3 z-10 h-4 w-4 -translate-y-1/2" />
+                                            <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 left-3 z-10 h-4 w-4 -translate-y-1/2" />
 
                                             <Input
                                                 autoComplete="off"
@@ -625,7 +693,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                         }
                                                     }}
                                                 >
-                                                    <X className="h-4 w-4" />
+                                                    <CloseIcon className="h-4 w-4" />
                                                 </Button>
                                             )}
 
@@ -700,10 +768,8 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
                                         <div className="text-muted-foreground text-xs">
                                             Status: Maps {isLoaded ? '✓' : '⏳'}{' '}
-                                            | Places Service{' '}
-                                            {placesServiceRef.current
-                                                ? '✓'
-                                                : '⏳'}
+                                            | New Places API{' '}
+                                            {isLoaded ? '✓' : '⏳'}
                                         </div>
                                     </div>
 
@@ -767,18 +833,28 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                     </div>
                                                 )}
                                             </div>
-
+                                            <p className="text-xs">
+                                                <CopyTextButton
+                                                    textContent={`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`}
+                                                    className="inline mr-2"
+                                                />
+                                                share direction
+                                            </p>
                                             <Button
-                                                className="w-full"
+                                                className="w-full bg-transparent"
                                                 size="sm"
                                                 type="button"
-                                                onClick={() =>
-                                                    handleQuickSelect(
-                                                        selectedLocation
+                                                variant="outline"
+                                                onClick={() => {
+                                                    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`
+                                                    window.open(
+                                                        googleMapsUrl,
+                                                        '_blank'
                                                     )
-                                                }
+                                                }}
                                             >
-                                                Use This Location
+                                                <NavigationIcon className="mr-2 h-4 w-4" />
+                                                Get Directions
                                             </Button>
                                         </div>
                                     )}
@@ -795,18 +871,22 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                             <li>• Click anywhere on the map</li>
                                             <li>• Drag the marker to adjust</li>
                                             <li>
-                                                • Use &quot;Use This
-                                                Location&quot; for quick
-                                                selection
+                                                • Use &quot;Get Directions&quot;
+                                                for quick selection
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
 
                                 {/* Footer Actions */}
-                                <div className="flex gap-2 border-t p-4">
+                                <div
+                                    className={cn(
+                                        'flex gap-2 border-t p-4',
+                                        viewOnly && 'hidden'
+                                    )}
+                                >
                                     <Button
-                                        className="flex-1"
+                                        className="flex-1 bg-transparent"
                                         type="button"
                                         variant="outline"
                                         onClick={handleCancel}
@@ -820,6 +900,21 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                         onClick={handleConfirm}
                                     >
                                         Confirm Location
+                                    </Button>
+                                </div>
+                                <div
+                                    className={cn(
+                                        'flex gap-2 border-t p-4',
+                                        !viewOnly && 'hidden'
+                                    )}
+                                >
+                                    <Button
+                                        className="flex-1 bg-transparent"
+                                        type="button"
+                                        variant="outline"
+                                        onClick={handleCancel}
+                                    >
+                                        Close
                                     </Button>
                                 </div>
                             </div>

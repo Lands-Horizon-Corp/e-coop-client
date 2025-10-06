@@ -64,7 +64,7 @@ const MainSettingsPage = () => {
 
     return (
         <PageContainer className="relative flex-row items-start gap-x-4">
-            <div className="space-y-0 p-1 flex flex-col">
+            <div className="space-y-0 p-1 sticky top-18 flex flex-col">
                 {settingsNavItems.map((item) => {
                     const Icon = item.icon
                     return (

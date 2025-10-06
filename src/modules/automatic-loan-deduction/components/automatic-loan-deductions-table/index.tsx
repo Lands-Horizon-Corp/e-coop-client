@@ -33,7 +33,9 @@ import {
     automaticLoanDeductionGlobalSearchTargets,
 } from './columns'
 import AutomaticLoanDeductionColumns from './columns'
-import { AutomaticLoanDeductionRowContext } from './row-action-context'
+import AutomaticLoanDeductionAction, {
+    AutomaticLoanDeductionRowContext,
+} from './row-action-context'
 
 export interface Props
     extends TableProps<IAutomaticLoanDeduction>,
@@ -64,7 +66,7 @@ const AutomaticLoanDeductionTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = AutomaticLoanDeductionAction,
     RowContextComponent = AutomaticLoanDeductionRowContext,
 }: AutomaticLoanDeductionTableProps) => {
     const queryClient = useQueryClient()
@@ -187,9 +189,7 @@ const AutomaticLoanDeductionTable = ({
                     onRowClick={onRowClick}
                     onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    RowContextComponent={(props) => (
-                        <RowContextComponent {...props} />
-                    )}
+                    RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
                 />
                 {/* <DataTablePagination table={table} totalSize={totalSize} /> */}

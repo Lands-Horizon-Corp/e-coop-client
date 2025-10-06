@@ -205,7 +205,7 @@ const FinancialStatementDefinition = () => {
                         >
                             <AccordionTrigger
                                 onClick={() => handleAccountTrigger(grouping)}
-                                className="w-full hover:no-underline  text-left text-accent-foreground/80"
+                                className="w-full hover:no-underline  text-left /80"
                             >
                                 <div className="flex items-center gap-2">
                                     <DropdownMenu>
@@ -213,7 +213,7 @@ const FinancialStatementDefinition = () => {
                                             <span className="cursor-pointer">
                                                 <SettingsIcon
                                                     size={30}
-                                                    className="hover:text-accent-foreground cursor-pointer"
+                                                    className="hover: cursor-pointer"
                                                 />
                                             </span>
                                         </DropdownMenuTrigger>

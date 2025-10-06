@@ -1,6 +1,12 @@
 import { cn } from '@/helpers'
 
-import { HashIcon, RefreshIcon, TextFileFillIcon } from '@/components/icons'
+import {
+    HashIcon,
+    RefreshIcon,
+    RenderIcon,
+    TIcon,
+    TextFileFillIcon,
+} from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -38,6 +44,12 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
                             className="font-semibold text-primary text-lg leading-tight truncate"
                             title={data?.name ?? '...'}
                         >
+                            {data?.icon && (
+                                <RenderIcon
+                                    icon={data.icon as TIcon}
+                                    className="inline mr-1"
+                                />
+                            )}
                             {data?.name ?? '...'}
                         </h3>
                         {data?.alternative_code && (
@@ -74,8 +86,8 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
             <CardContent className="pt-0">
                 <div className="space-y-3">
                     <div className="flex items-start gap-2">
-                        <TextFileFillIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <TextFileFillIcon className="size-4 text-muted-foreground/80 mt-0.5 flex-shrink-0" />
+                        <p className="text-sm text-muted-foreground/90 leading-relaxed">
                             {data?.description}
                         </p>
                     </div>

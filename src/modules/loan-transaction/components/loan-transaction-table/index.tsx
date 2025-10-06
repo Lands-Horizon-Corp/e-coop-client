@@ -49,14 +49,15 @@ export interface LoanTransactionTableProps
         | 'deleteActionProps'
     >
 
-    mode: TLoanTransactionHookMode
+    memberProfileId?: TEntityId
+    mode?: TLoanTransactionHookMode
 }
 
 export type TLoanTransactionTableProps = LoanTransactionTableProps &
     (
         | { mode: 'branch' }
         | {
-              mode: 'member-account'
+              mode: 'member-profile'
               memberProfileId: TEntityId
           }
     )
@@ -71,9 +72,7 @@ const LoanTransactionTable = ({
     onSelectData,
     actionComponent,
     RowContextComponent,
-}: TLoanTransactionTableProps & {
-    memberProfileId?: TEntityId
-}) => {
+}: TLoanTransactionTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =

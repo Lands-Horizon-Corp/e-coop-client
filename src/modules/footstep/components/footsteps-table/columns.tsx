@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { toReadableDateTime } from '@/helpers/date-utils'
 import { UserTypeBadge } from '@/modules/authentication/components/user-type-badge'
+import { TUserType } from '@/modules/user'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -23,8 +24,6 @@ import {
 } from '@/components/ui/sheet'
 
 import { useModalState } from '@/hooks/use-modal-state'
-
-import { TUserType } from '@/types'
 
 import { IFootstep } from '../../footstep.types'
 import FootstepDetail from '../footstep-detail'
@@ -310,9 +309,9 @@ const ViewFootstepDetailCell = ({ footstep }: { footstep: IFootstep }) => {
     return (
         <div onClick={(e) => e.stopPropagation()}>
             <Sheet {...footstepModal}>
-                <SheetHeader>
-                    <SheetTitle className="hidden" />
-                    <SheetDescription className="hidden" />
+                <SheetHeader className="sr-only">
+                    <SheetTitle />
+                    <SheetDescription />
                 </SheetHeader>
                 <SheetContent
                     side="right"

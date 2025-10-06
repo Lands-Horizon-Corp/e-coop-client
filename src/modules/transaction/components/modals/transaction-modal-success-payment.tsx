@@ -1,15 +1,16 @@
 import { toast } from 'sonner'
 
+import { SHORTCUT_SCOPES } from '@/constants'
 import { toReadableDate } from '@/helpers/date-utils'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
-
-import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
 
@@ -25,6 +26,8 @@ const TransactionModalSuccessPayment = ({
     isOpen,
     ...props
 }: PaymentSuccessModalProps) => {
+    const { setActiveScope } = useShortcutContext()
+
     const { mutate: printGeneralLedgerTransaction } =
         usePrintGeneralLedgerTransaction({
             options: {
@@ -44,14 +47,18 @@ const TransactionModalSuccessPayment = ({
         printGeneralLedgerTransaction({ id: generalLedgerId })
     }
 
-    useShortcut(
+    useHotkeys(
         'enter',
-        () => {
+        (e) => {
+            e.preventDefault()
             if (!transaction || !isOpen) return
             handlePrintGeneralLedgerTransaction(transaction.id)
             onClose?.()
         },
-        { disableTextInputs: true }
+        {
+            scopes: [SHORTCUT_SCOPES.MODAL],
+        },
+        [transaction, isOpen, onClose, setActiveScope]
     )
 
     const paymentType =
@@ -102,7 +109,7 @@ const TransactionModalSuccessPayment = ({
                     </p>
                     <p className="text-muted-foreground text-sm">
                         <span className="text-primary font-extrabold ">
-                            {memberName}
+                            {memberName}{' '}
                         </span>
                         Successfully added {paymentType}
                         <span>

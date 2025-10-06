@@ -62,6 +62,11 @@ export interface IVerificationPasswordRequest {
     password: string
 }
 
+export type IVerificationPasswordAdminRequest = {
+    user_organization_id: string
+    password: string
+}
+
 export interface IVerification {
     success: boolean
     message: string

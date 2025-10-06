@@ -77,8 +77,9 @@ const DataTableGlobalSearch = <T,>({
                             }}
                         />
                         <Button
+                            size="icon"
                             variant="ghost"
-                            className="p-.5 absolute right-2 top-1/2 size-fit -translate-y-1/2 rounded-full"
+                            className="p-1 absolute right-2 top-1/2 size-fit -translate-y-1/2 rounded-full"
                             onClick={() => setVisible(false)}
                         >
                             <ChevronLeftIcon className="size-4" />

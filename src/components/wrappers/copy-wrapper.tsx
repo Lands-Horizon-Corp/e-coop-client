@@ -49,8 +49,7 @@ export const CopyWrapper: React.FC<CopyToClipboardProps> = ({
             setCopied(true)
             setTimeout(() => setCopied(false), cooldown)
             toast.success(copyMsg)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (err) {
+        } catch {
             toast.error('Copy Failed')
         }
     }

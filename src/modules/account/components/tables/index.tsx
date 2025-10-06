@@ -36,7 +36,7 @@ import accountTableColumns, {
     IAccountsTableColumnProps,
     accountsGlobalSearchTargets,
 } from './columns'
-import { AccountRowContext } from './row-actions'
+import { AccountAction, AccountRowContext } from './row-actions'
 
 export interface AccountsTableProps
     extends TableProps<IAccount>,
@@ -62,13 +62,14 @@ const AccountsTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent,
+    actionComponent = AccountAction,
     RowContextComponent = AccountRowContext,
 }: AccountsTableProps) => {
     const queryClient = useQueryClient()
 
     const { pagination, setPagination } = usePagination()
-    const { tableSorting, setTableSorting } = useDataTableSorting()
+    const { tableSorting, sortingStateBase64, setTableSorting } =
+        useDataTableSorting()
 
     const {
         currentAuth: {
@@ -109,7 +110,13 @@ const AccountsTable = ({
         isRefetching,
         data: paginatedData,
         refetch,
-    } = useGetPaginated({})
+    } = useGetPaginated({
+        query: {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+    })
 
     const {
         data = [],
@@ -148,6 +155,7 @@ const AccountsTable = ({
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
+        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
     useSubscribe(`account.create.branch.${branch_id}`, refetch)

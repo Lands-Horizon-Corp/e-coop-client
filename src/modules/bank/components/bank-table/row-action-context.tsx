@@ -70,9 +70,9 @@ export const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
                 <BankCreateUpdateFormModal
                     {...updateModal}
                     formProps={{
+                        autoSave: true,
                         bankId: bank.id,
                         defaultValues: { ...bank },
-                        onSuccess: () => updateModal.onOpenChange(false),
                     }}
                 />
             </div>

@@ -1,10 +1,11 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Link } from '@tanstack/react-router'
+import Fuse from 'fuse.js'
 
-import { ArrowRight } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
-import { MagnifyingGlassIcon } from '@/components/icons'
+import { ArrowRightIcon, MagnifyingGlassIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     CommandDialog,
@@ -17,6 +18,7 @@ import {
     CommandShortcut,
 } from '@/components/ui/command'
 
+import { useSidebar } from '../sidebar'
 import { TQuickSearchGroup } from './types'
 
 interface Props {
@@ -24,44 +26,123 @@ interface Props {
 }
 
 const AppSidebarQruickNavigate = ({ groups }: Props) => {
+    const { open: sidebarOpen } = useSidebar()
     const [open, setOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const commandListRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key === 'q' && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault()
-                setOpen((open) => !open)
-            }
+    // Flatten all items from all groups for search
+    const allItems = useMemo(() => {
+        return groups.flatMap((group) =>
+            group.items.map((item) => ({
+                ...item,
+                groupTitle: group.title,
+            }))
+        )
+    }, [groups])
+
+    // Configure Fuse.js for fuzzy search
+    const fuse = useMemo(() => {
+        return new Fuse(allItems, {
+            keys: [
+                { name: 'title', weight: 0.7 },
+                // { name: 'shortDescription', weight: 0.2 },
+                // { name: 'longDescription', weight: 0.1 },
+                { name: 'groupTitle', weight: 0.1 },
+            ],
+            threshold: 0.4, // Lower = more strict matching
+            includeScore: true,
+            minMatchCharLength: 1,
+        })
+    }, [allItems])
+
+    // Get filtered and sorted results
+    const filteredGroups = useMemo(() => {
+        if (!searchQuery.trim()) {
+            return groups
         }
 
-        document.addEventListener('keydown', down)
-        return () => document.removeEventListener('keydown', down)
-    }, [])
+        const results = fuse.search(searchQuery)
+
+        // Group results by their original group
+        const groupedResults = results.reduce(
+            (acc, result) => {
+                const item = result.item
+                const groupTitle = item.groupTitle
+
+                if (!acc[groupTitle]) {
+                    acc[groupTitle] = {
+                        title: groupTitle,
+                        items: [],
+                    }
+                }
+
+                acc[groupTitle].items.push({
+                    ...item,
+                })
+
+                return acc
+            },
+            {} as Record<string, TQuickSearchGroup>
+        )
+
+        return Object.values(groupedResults)
+    }, [searchQuery, fuse, groups])
+
+    // Reset scroll position when search results change
+    useEffect(() => {
+        if (commandListRef.current) {
+            commandListRef.current.scrollTop = 0
+        }
+    }, [filteredGroups])
+
+    useHotkeys(
+        'control+Q, Alt+Q, meta+Q, command+Q',
+        (e) => {
+            e.preventDefault()
+            setOpen((open) => !open)
+        },
+        {
+            keydown: true,
+        }
+    )
 
     return (
         <>
             <Button
                 size="sm"
-                variant="ghost"
                 onClick={() => setOpen((prev) => !prev)}
-                className="group/quick-search w-full gap-x-2 text-xs font-normal text-muted-foreground/80 hover:text-foreground"
+                className="group/quick-search w-full gap-x-2 text-xs font-normal text-primary-foreground/90 hover:text-primary-foreground"
             >
-                Quick Navigate
-                <MagnifyingGlassIcon className="inline text-muted-foreground/60 duration-500 ease-out group-hover/quick-search:text-foreground" />
-                <CommandShortcut className="rounded-md bg-secondary p-1">
-                    <span className="text-xs">⌘</span>Q
-                </CommandShortcut>
+                <MagnifyingGlassIcon className="inline duration-500 ease-out group-hover/quick-search:text-foreground" />
+                {sidebarOpen && (
+                    <>
+                        Quick Navigate
+                        <CommandShortcut className="rounded-md bg-secondary p-1">
+                            <span className="text-xs">⌘</span>Q
+                        </CommandShortcut>
+                    </>
+                )}
             </Button>
             <CommandDialog
                 open={open}
-                onOpenChange={setOpen}
+                onOpenChange={(open) => {
+                    setOpen(open)
+                    if (!open) {
+                        setSearchQuery('')
+                    }
+                }}
                 contentClassName="rounded-2xl"
                 overlayClassName="backdrop-blur-sm text-gray-400"
             >
-                <CommandInput placeholder="Search or navigate to..." />
-                <CommandList className="ecoop-scroll">
+                <CommandInput
+                    placeholder="Search or navigate to..."
+                    value={searchQuery}
+                    onValueChange={setSearchQuery}
+                />
+                <CommandList ref={commandListRef} className="ecoop-scroll">
                     <CommandEmpty>No results found.</CommandEmpty>
-                    {groups.map((group, index) => {
+                    {filteredGroups.map((group, index) => {
                         return (
                             <Fragment key={group.title}>
                                 <CommandGroup heading={group.title}>
@@ -79,8 +160,9 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                             )}
                                             <div className="flex-1 space-y-1">
                                                 <p>{groupItem.title}</p>
-                                                <p className="text-xs text-muted-foreground/70">
-                                                    {groupItem.shortDescription}
+                                                <p className="text-xs text-muted-foreground">
+                                                    {groupItem.shortDescription ||
+                                                        'sa'}
                                                 </p>
                                             </div>
                                             <div className="w-fit">
@@ -93,14 +175,14 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                                     className="text-xs text-muted-foreground duration-200 hover:text-foreground"
                                                 >
                                                     Open new tab{' '}
-                                                    <ArrowRight className="inline !size-3 -rotate-45" />
+                                                    <ArrowRightIcon className="inline !size-3 -rotate-45" />
                                                 </Link>
                                             </div>
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>
-                                {groups.length > 0 &&
-                                    groups.length - 1 === index && (
+                                {filteredGroups.length > 0 &&
+                                    filteredGroups.length - 1 !== index && (
                                         <CommandSeparator />
                                     )}
                             </Fragment>

@@ -85,6 +85,7 @@ const ComputationSheetCreateUpdateForm = ({
     const { formRef, handleFocusError, isDisabled } =
         useFormHelper<TFormValues>({
             form,
+            autoSave: !!computationSheetId,
             ...formProps,
         })
 
@@ -303,6 +304,7 @@ const ComputationSheetCreateUpdateForm = ({
                     error={error}
                     readOnly={formProps.readOnly}
                     isLoading={isPending}
+                    className="sticky bottom-0"
                     disableSubmit={!form.formState.isDirty}
                     submitText={computationSheetId ? 'Update' : 'Create'}
                     onReset={() => {
@@ -550,6 +552,7 @@ export const ComputationSheetCreateUpdateFormModal = ({
     description = 'Fill out the form to create a new computation sheet.',
     className,
     formProps,
+    hideOnSuccess = true,
     ...props
 }: IModalProps & {
     formProps?: Omit<IComputationSheetFormProps, 'className'>
@@ -565,7 +568,7 @@ export const ComputationSheetCreateUpdateFormModal = ({
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
-                    props.onOpenChange?.(false)
+                    if (hideOnSuccess) props.onOpenChange?.(false)
                 }}
             />
         </Modal>

@@ -61,6 +61,10 @@ export const useGetPaginatedBatchFunding = ({
     return useQuery<IBatchFundingPaginated, Error>({
         ...options,
         queryKey: [baseQueryKey, 'paginated', transactionBatchId, query],
-        queryFn: async () => getPaginatedBatchFundings({ query }),
+        queryFn: async () =>
+            getPaginatedBatchFundings({
+                query,
+                url: `${batchFundingAPIRoute}/transaction-batch/${transactionBatchId}/search`,
+            }),
     })
 }

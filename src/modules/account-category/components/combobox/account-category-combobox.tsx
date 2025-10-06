@@ -2,9 +2,8 @@ import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import { IAccountCategory, useGetAll } from '@/modules/account-category'
-import { Check } from 'lucide-react'
 
-import { ChevronDownIcon } from '@/components/icons'
+import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
@@ -92,7 +91,7 @@ const AccountCategoryComboBox = ({
                                             }}
                                         >
                                             {option.name}
-                                            <Check
+                                            <CheckIcon
                                                 className={cn(
                                                     'ml-auto',
                                                     value === option.id

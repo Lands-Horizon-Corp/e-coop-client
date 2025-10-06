@@ -120,13 +120,13 @@ const DEVELOPER_POLICY: {
                 </div>
                 <p className="text-muted-foreground text-xs">
                     Email:{' '}
-                    <CopyWrapper className="text-teal-700 hover:text-teal-500">
+                    <CopyWrapper className="text-primary/70 hover:text-primary">
                         zalvendayao888@gmail.com
                     </CopyWrapper>
                 </p>
                 <p className="text-muted-foreground text-xs">
                     Phone:{' '}
-                    <CopyWrapper className="text-teal-700 hover:text-teal-500">
+                    <CopyWrapper className="text-primary/70 hover:text-primary">
                         +63 991 617 1081
                     </CopyWrapper>
                 </p>
@@ -146,7 +146,7 @@ function RouteComponent() {
                 />
                 <h1 className="text-3xl font-medium text-center !mb-12">
                     Developer API Access Policy
-                    <CurlyBracketIcon className="size-9 ml-2 inline mx-auto text-teal-600" />
+                    <CurlyBracketIcon className="size-9 ml-2 inline mx-auto text-primary/70" />
                 </h1>
                 <p className="text-sm text-muted-foreground">
                     Effective Date: January 1, 2026
@@ -159,12 +159,12 @@ function RouteComponent() {
                         to={'/' as string}
                         target="_blank"
                         referrerPolicy="no-referrer"
-                        className="underline underline-offset-4 text-teal-600"
+                        className="underline underline-offset-4 text-primary/70"
                     >
                         ecoop-suite.netlify.app.com
                     </Link>
                 </p>
-                <div className="space-y-8 prose !max-w-none prose-a:text-teal-600 prose-a:underline-offset-4 prose-li:text-muted-foreground dark:prose-invert">
+                <div className="space-y-8 prose !max-w-none prose-a:text-primary/70 prose-a:underline-offset-4 prose-li:text-muted-foreground dark:prose-invert">
                     {DEVELOPER_POLICY.map((policy) => {
                         const policyContent = (() => {
                             if (Array.isArray(policy.lists)) {

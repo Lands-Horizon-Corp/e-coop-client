@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
+import { cn } from '@/helpers'
 import {
     IAccount,
     TPaginatedAccountHookMode,
@@ -14,13 +15,14 @@ import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/gene
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
 
-import { ChevronDownIcon, RenderIcon, TIcon } from '@/components/icons'
+import { ChevronDownIcon, RenderIcon, TIcon, XIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import GenericPicker from '@/components/pickers/generic-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
 import useFilterState from '@/hooks/use-filter-state'
+import { useInternalState } from '@/hooks/use-internal-state'
 import { useShortcut } from '@/hooks/use-shorcuts'
 
 interface Props extends IPickerBaseProps<IAccount> {
@@ -32,6 +34,7 @@ interface Props extends IPickerBaseProps<IAccount> {
     mode?: TPaginatedAccountHookMode
     nameOnly?: boolean
     hideDescription?: boolean
+    allowClear?: boolean
 }
 
 const AccountPicker = ({
@@ -46,9 +49,17 @@ const AccountPicker = ({
     open,
     nameOnly = false,
     hideDescription = false,
+    modalState,
+    triggerClassName,
+    allowClear = false,
 }: Props) => {
     const queryClient = useQueryClient()
-    const [state, setState] = useState(false)
+
+    const [state, setState] = useInternalState(
+        false,
+        modalState?.open,
+        modalState?.onOpenChange
+    )
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
@@ -73,9 +84,11 @@ const AccountPicker = ({
         mode,
         query: {
             pagination,
-            enabled: !disabled,
             showMessage: false,
             filterPayload: finalFilterPayload,
+        },
+        options: {
+            enabled: !disabled,
         },
     })
     const { data = [], totalPage = 0, totalSize = 0 } = AccountData || {}
@@ -186,66 +199,115 @@ const AccountPicker = ({
                 />
             </GenericPicker>
             {!modalOnly && (
-                <Button
-                    type="button"
-                    variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setState((prev) => !prev)}
-                    className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
+                <div
+                    className={cn(
+                        'flex items-center',
+                        allowClear ? 'space-x-2' : ''
+                    )}
                 >
-                    <span className="justify-between text-sm inline-flex w-full items-center text-foreground/90">
-                        <span className="inline-flex w-full items-center gap-x-2">
-                            <div>
-                                {isFetching && !value ? <LoadingSpinner /> : ''}
-                            </div>
-                            {value?.icon && value.icon.length > 0 && (
-                                <span className="bg-muted rounded-full p-0.5">
-                                    <RenderIcon icon={value.icon as TIcon} />
-                                </span>
-                            )}
-                            {!value ? (
-                                <span className="text-foreground/70">
-                                    {placeholder || 'Select Account'}
-                                </span>
-                            ) : (
-                                <span className="inline-flex gap-x-4 items-center">
-                                    <span>{value.name}</span>
-                                    {!nameOnly && !hideDescription && (
-                                        <span className="text-xs truncate max-w-72 w-fit text-muted-foreground/70">
-                                            {value.description}
-                                        </span>
-                                    )}
-                                </span>
-                            )}
-                        </span>
-                        {allowShorcutCommand && (
-                            <span className="mr-2 text-sm">⌘ ↵ </span>
+                    <Button
+                        type="button"
+                        role="combobox"
+                        tabIndex={0}
+                        variant="secondary"
+                        disabled={disabled}
+                        onClick={() => setState((prev) => !prev)}
+                        className={cn(
+                            'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
+                            triggerClassName
                         )}
-                        {!nameOnly && (
-                            <span className="mr-1 flex gap-x-1 items-center font-mono text-sm text-foreground/30">
-                                {value?.type && (
-                                    <AccountTypeBadge
-                                        type={value.type}
-                                        description="(Type)"
-                                    />
+                    >
+                        {/* for future references how it fixed the issue */}
+                        {/* flex-1 min-w-0 makes content area responsive */}
+                        {/* flex-1 min-w-0 ensures proper space usage for truncation */}
+                        {/* flex-shrink-0 protects the icon */}
+                        {/* flex-shrink-0 protects the badges */}
+                        {/* flex-shrink-0 protects the shortcut command */}
+                        <div className="flex flex-1 items-center text-sm text-foreground/90 overflow-hidden">
+                            <span className="flex flex-1 min-w-0 items-center gap-x-2">
+                                <div>
+                                    {isFetching && !value ? (
+                                        <LoadingSpinner />
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
+                                {value?.icon && value.icon.length > 0 && (
+                                    <span className="bg-muted border rounded-full p-0.5 flex-shrink-0">
+                                        <RenderIcon
+                                            icon={value.icon as TIcon}
+                                        />
+                                    </span>
                                 )}
-                                {value?.general_ledger_type && (
-                                    <GeneralLedgerTypeBadge
-                                        type={value.general_ledger_type}
-                                        description="(GL)"
-                                    />
+                                {!value ? (
+                                    <span className="text-foreground/70 truncate">
+                                        {placeholder || 'Select Account'}
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex flex-1 min-w-0 gap-x-4 items-center">
+                                        <span className="font-medium truncate min-w-fit flex-shrink">
+                                            {value.name ?? placeholder}
+                                        </span>
+
+                                        {!nameOnly && !hideDescription && (
+                                            <span className="text-xs text-foreground/70 truncate flex-shrink">
+                                                {value.description}
+                                            </span>
+                                        )}
+                                    </span>
                                 )}
-                                {value?.financial_statement_type && (
-                                    <FinancialStatementTypeBadge
-                                        type={value.financial_statement_type}
-                                        description=" (FS)"
-                                    />
+                                {!nameOnly && (
+                                    <span className="ml-2 flex-none flex gap-x-1 items-center font-mono text-sm text-foreground/30 flex-shrink-0">
+                                        {value?.type && (
+                                            <AccountTypeBadge
+                                                type={value.type}
+                                                description="(Type)"
+                                            />
+                                        )}
+                                        {value?.general_ledger_type && (
+                                            <GeneralLedgerTypeBadge
+                                                type={value.general_ledger_type}
+                                                description="(GL)"
+                                            />
+                                        )}
+                                        {value?.financial_statement_type && (
+                                            <FinancialStatementTypeBadge
+                                                type={
+                                                    value.financial_statement_type
+                                                }
+                                                description=" (FS)"
+                                            />
+                                        )}
+                                    </span>
                                 )}
                             </span>
-                        )}
-                    </span>
-                    <ChevronDownIcon />
-                </Button>
+
+                            {/* Shortcut Command */}
+                            {allowShorcutCommand && (
+                                <span className="ml-2 mr-1 text-sm text-foreground/40 flex-shrink-0">
+                                    ⌘ ↵
+                                </span>
+                            )}
+                        </div>
+
+                        {/* Chevron Icon */}
+                        <ChevronDownIcon className="flex-shrink-0 ml-1" />
+                    </Button>
+                    {allowClear && value && (
+                        <Button
+                            onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                onSelect?.(undefined as unknown as IAccount)
+                            }}
+                            variant={'ghost'}
+                            size={'sm'}
+                            className="cursor-pointer rounded-full !p-0 !px-0"
+                        >
+                            <XIcon className="inline" />
+                        </Button>
+                    )}
+                </div>
             )}
         </>
     )

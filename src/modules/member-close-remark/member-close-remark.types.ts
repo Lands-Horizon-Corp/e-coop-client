@@ -1,11 +1,9 @@
-import {
-    IAuditable,
-    ITimeStamps,
-    TAccountClosureReasonType,
-    TEntityId,
-} from '@/types/common'
+import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
 
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { ACCOUNT_CLOSURE_REASONS } from './member-close-remark.constants'
+
+export type TAccountClosureReasonType = (typeof ACCOUNT_CLOSURE_REASONS)[number]
 
 // LATEST FROM ERD
 export interface IMemberCloseRemarkRequest {

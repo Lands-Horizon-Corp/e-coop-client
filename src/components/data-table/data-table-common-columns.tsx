@@ -1,4 +1,4 @@
-import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { ColumnDef } from '@tanstack/react-table'
 
 import { ITimeStamps } from '@/types'
@@ -30,9 +30,10 @@ export const createUpdateColumns = <
                 },
             }) => (
                 <div>
-                    <p>{created_at ? toReadableDateTime(created_at) : ''} </p>
+                    <p>{created_at ? toReadableDate(created_at) : ''} </p>
                     {created_at ? (
                         <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(created_at, 'h:mm a -')}{' '}
                             {dateAgo(created_at)}
                         </p>
                     ) : (
@@ -64,9 +65,10 @@ export const createUpdateColumns = <
                 },
             }) => (
                 <div>
-                    <p>{updated_at ? toReadableDateTime(updated_at) : ''} </p>
+                    <p>{updated_at ? toReadableDate(updated_at) : ''} </p>
                     {updated_at ? (
                         <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(updated_at, 'h:mm a -')}{' '}
                             {dateAgo(updated_at)}
                         </p>
                     ) : (

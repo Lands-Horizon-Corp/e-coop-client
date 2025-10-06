@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
-import { IOrganizationWithPolicies, StatusBadge } from '@/modules/organization'
+import { IOrganizationWithPolicies } from '@/modules/organization'
 import {
     IOrgUserOrganizationGroup,
     IUserOrganization,
@@ -17,11 +17,13 @@ import { useCategoryStore } from '@/store/onboarding/category-store'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     BuildingIcon,
+    DotBigIcon,
     GearIcon,
     LoadingCircleIcon,
     PinLocationIcon,
     PlusIcon,
 } from '@/components/icons'
+import MapPicker from '@/components/map/map-picker/map-picker'
 import OrganizationPolicies from '@/components/policies'
 import {
     Accordion,
@@ -109,11 +111,6 @@ const UserOrganizationsDashboard = ({
                     Join an Organization
                 </Button>
             </div>
-            <div className="mt-5 w-full px-10">
-                <h4>
-                    You have existing organizations. Choose where to operate.
-                </h4>
-            </div>
             <ScrollArea className="w-full overflow-auto p-10">
                 <Accordion
                     type="single"
@@ -137,14 +134,16 @@ const UserOrganizationsDashboard = ({
                                     className="border-secondary/50 border"
                                     imageBackgroundClassName=" size-74 "
                                 >
-                                    <AccordionTrigger className="relative flex  min-h-32 w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                        <div className="flex flex-col">
+                                    <AccordionTrigger className="relative flex min-h-32 w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
+                                        <div className="flex flex-col w-full">
                                             <p className="text-start text-2xl font-bold">
                                                 {org.name}
                                             </p>
-                                            <PlainTextEditor
-                                                content={org.description}
-                                            />
+                                            <span className="truncate text-sm line-clamp-2 text-wrap text-start w-fit">
+                                                <PlainTextEditor
+                                                    content={org.description}
+                                                />
+                                            </span>
                                             {(isUserOwner || isOrgCreator) && (
                                                 <span
                                                     onClick={(e) => {
@@ -258,32 +257,68 @@ const ListOfBranches = ({
                             <PinLocationIcon className="mr-2 text-destructive/60" />
                             {userOrg.branch?.address}
                         </span>
-                    </div>
-                    <StatusBadge status={userOrg.application_status} />
-                    {!isPending && (
-                        <Button
-                            disabled={
-                                userOrg.application_status === 'pending' ||
-                                isLoading
-                            }
-                            onClick={onClick}
-                            size={'sm'}
-                            variant={isCurrent ? 'default' : 'outline'}
-                        >
-                            {isLoading ? (
-                                <>
-                                    {isCurrent ? (
-                                        <LoadingCircleIcon className=" animate-spin" />
-                                    ) : (
-                                        'Switching...'
-                                    )}
-                                </>
-                            ) : isCurrent ? (
-                                'Current'
-                            ) : (
-                                `visit as ${userOrg.user_type}`
+
+                        {userOrg.branch.latitude &&
+                            userOrg.branch.longitude && (
+                                <div className="mt-2">
+                                    <MapPicker
+                                        value={{
+                                            lat: userOrg.branch.latitude,
+                                            lng: userOrg.branch.longitude,
+                                        }}
+                                        onChange={() => {}} // Read-only, no changes allowed
+                                        variant="outline"
+                                        size="sm"
+                                        placeholder="View Branch Location"
+                                        title={`${userOrg.branch.name} Location`}
+                                        hideButtonCoordinates={true}
+                                        disabled={false}
+                                        viewOnly={true}
+                                        className="text-xs"
+                                    />
+                                </div>
                             )}
-                        </Button>
+                    </div>
+
+                    {!isPending && (
+                        <>
+                            <Button
+                                disabled={
+                                    userOrg.application_status === 'pending' ||
+                                    isLoading
+                                }
+                                onClick={onClick}
+                                size={'sm'}
+                                variant={isCurrent ? 'default' : 'outline'}
+                            >
+                                {isLoading ? (
+                                    <>
+                                        {isCurrent ? (
+                                            <LoadingCircleIcon className=" animate-spin" />
+                                        ) : (
+                                            'Switching...'
+                                        )}
+                                    </>
+                                ) : isCurrent ? (
+                                    'Current'
+                                ) : (
+                                    `visit as ${userOrg.user_type}`
+                                )}
+                            </Button>
+                            <br />
+                            <div className="block">
+                                <DotBigIcon
+                                    className={cn(
+                                        'inline',
+                                        userOrg.application_status ===
+                                            'accepted'
+                                            ? 'text-green-400'
+                                            : 'text-destructive'
+                                    )}
+                                />
+                                {userOrg.application_status}
+                            </div>
+                        </>
                     )}
                 </div>
             </GradientBackground>

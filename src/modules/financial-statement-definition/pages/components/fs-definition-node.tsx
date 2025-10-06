@@ -198,7 +198,7 @@ const FinancialStatementDefinitionNode = ({
                                 {node.name}
                             </h1>
                             {!isFirstLevel && (
-                                <span className="text-xs text-accent-foreground/50">
+                                <span className="text-xs /50">
                                     {node?.financial_statement_type && (
                                         <FinancialStatementTypeBadge
                                             type={node.financial_statement_type}
@@ -209,13 +209,13 @@ const FinancialStatementDefinitionNode = ({
                         </div>
                     </span>
                     {node.description && (
-                        <span className="text-xs text-accent-foreground/70">
+                        <span className="text-xs /70">
                             <PlainTextEditor content={node.description} />
                         </span>
                     )}
 
                     {isFirstLevel && (
-                        <p className="text-xs text-accent-foreground/30">
+                        <p className="text-xs /30">
                             {firstLevelItemLabel}
                             {childLength && hasAccountNode ? ' • ' : ''}
                             {firstLevelAccountsLabel}

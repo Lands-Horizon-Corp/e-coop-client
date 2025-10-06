@@ -1,112 +1,62 @@
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
+
 import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
-
-import { IMedia } from '../media/media.types'
+    IJournalVoucherEntry,
+    IJournalVoucherEntryRequest,
+} from '../journal-voucher-entry'
+import { IJournalVoucherTag } from '../journal-voucher-tag'
 import { IMemberProfile } from '../member-profile'
-import { IUser } from '../user/user.types'
+import { IUser } from '../user'
 
-export interface IJournalVoucherRequest {
-    employee_user_id?: TEntityId | null
-    member_profile_id?: TEntityId | null
-    printed_by_user_id?: TEntityId | null
-    approved_by_user_id?: TEntityId | null
-    released_by_user_id?: TEntityId | null
-    total_debit?: number
-    total_credit?: number
-    print_count?: number
+export interface IJournalVoucher extends IBaseEntityMeta {
+    cash_voucher_number: string
+    date: string
     description?: string
-    printed_date?: string | null
-    approved_date?: string | null
-    released_date?: string | null
-    approved_by_signature_media_id?: TEntityId | null
-    approved_by_name?: string
-    approved_by_position?: string
-    prepared_by_signature_media_id?: TEntityId | null
-    prepared_by_name?: string
-    prepared_by_position?: string
-    certified_by_signature_media_id?: TEntityId | null
-    certified_by_name?: string
-    certified_by_position?: string
-    verified_by_signature_media_id?: TEntityId | null
-    verified_by_name?: string
-    verified_by_position?: string
-    check_by_signature_media_id?: TEntityId | null
-    check_by_name?: string
-    check_by_position?: string
-    acknowledge_by_signature_media_id?: TEntityId | null
-    acknowledge_by_name?: string
-    acknowledge_by_position?: string
-    noted_by_signature_media_id?: TEntityId | null
-    noted_by_name?: string
-    noted_by_position?: string
-    posted_by_signature_media_id?: TEntityId | null
-    posted_by_name?: string
-    posted_by_position?: string
-    paid_by_signature_media_id?: TEntityId | null
-    paid_by_name?: string
-    paid_by_position?: string
-}
+    reference: string
+    status: TJournalVoucherStatus
+    name?: string
 
-export interface IJournalVoucherResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
-    id: TEntityId
-    employee_user_id?: TEntityId | null
-    employee_user?: IUser
-    member_profile_id?: TEntityId | null
+    posted_at?: string
+    posted_by_id?: TEntityId
+    posted_by?: IUser
+
+    printed_date?: string
+    print_number?: number
+
+    approved_date?: string
+    released_date?: string
     member_profile?: IMemberProfile
-    printed_by_user_id?: TEntityId | null
-    printed_by_user?: IUser
-    approved_by_user_id?: TEntityId | null
-    approved_by_user?: IUser
-    released_by_user_id?: TEntityId | null
-    released_by_user?: IUser
+
+    journal_voucher_tags?: IJournalVoucherTag[]
+    journal_voucher_entries?: IJournalVoucherEntry[]
+
     total_debit: number
     total_credit: number
-    print_count: number
-    description: string
-    printed_date?: string | null
-    approved_date?: string | null
-    released_date?: string | null
-    approved_by_signature_media_id?: TEntityId | null
-    approved_by_signature_media?: IMedia
-    approved_by_name: string
-    approved_by_position: string
-    prepared_by_signature_media_id?: TEntityId | null
-    prepared_by_signature_media?: IMedia
-    prepared_by_name: string
-    prepared_by_position: string
-    certified_by_signature_media_id?: TEntityId | null
-    certified_by_signature_media?: IMedia
-    certified_by_name: string
-    certified_by_position: string
-    verified_by_signature_media_id?: TEntityId | null
-    verified_by_signature_media?: IMedia
-    verified_by_name: string
-    verified_by_position: string
-    check_by_signature_media_id?: TEntityId | null
-    check_by_signature_media?: IMedia
-    check_by_name: string
-    check_by_position: string
-    acknowledge_by_signature_media_id?: TEntityId | null
-    acknowledge_by_signature_media?: IMedia
-    acknowledge_by_name: string
-    acknowledge_by_position: string
-    noted_by_signature_media_id?: TEntityId | null
-    noted_by_signature_media?: IMedia
-    noted_by_name: string
-    noted_by_position: string
-    posted_by_signature_media_id?: TEntityId | null
-    posted_by_signature_media?: IMedia
-    posted_by_name: string
-    posted_by_position: string
-    paid_by_signature_media_id?: TEntityId | null
-    paid_by_signature_media?: IMedia
-    paid_by_name: string
-    paid_by_position: string
 }
+
+export interface IJournalVoucherRequest {
+    cash_voucher_number?: string
+    date: string
+    description?: string
+    reference?: string
+    status?: string
+
+    journal_voucher_entries?: IJournalVoucherEntryRequest[]
+    journal_voucher_entries_deleted?: TEntityId[]
+}
+
+export interface IJournalVoucherPrintRequest {
+    cash_voucher_number: string
+}
+
+export type TJournalVoucherStatus = 'draft' | 'posted' | 'cancelled'
+export enum EJournalVoucherStatus {
+    Draft = 'draft',
+    Posted = 'posted',
+    Cancelled = 'cancelled',
+}
+export type TPrintMode = 'print' | 'print-undo' | 'approve'
+export type TJournalActionMode = 'approve-undo' | 'release' | 'print-only'
+
+export interface IJournalVoucherPaginated
+    extends IPaginatedResult<IJournalVoucher> {}
