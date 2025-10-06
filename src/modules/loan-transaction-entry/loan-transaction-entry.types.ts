@@ -24,6 +24,8 @@ export interface ILoanTransactionEntry extends IBaseEntityMeta {
     credit: number
     debit: number
 
+    amount: number
+
     is_add_on: boolean //
     type: TLoanTransactionEntryType //
 }

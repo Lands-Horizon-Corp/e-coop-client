@@ -9,6 +9,7 @@ export const ICONS = [
     'Circle',
     'Pipette',
     'Headset',
+    'Heading',
     'Code Icon',
     'X',
     'F1',

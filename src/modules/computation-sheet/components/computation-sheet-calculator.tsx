@@ -71,16 +71,22 @@ const ComputationSheetCalculator = ({
             )}
         >
             <div className="grid grid-cols-2 gap-4">
-                <MockLoanInputForm
-                    autoSubmit
-                    loading={isPending}
-                    onSubmit={handleCompute}
-                    initialData={defaultInput}
-                    className="max-h-[60vh] overflow-y-auto ecoop-scroll"
-                />
-                <div className="space-y-2">
+                <div className="space-y-2 bg-secondary dark:bg-transparent p-4 dark:p-0 rounded">
+                    <p>Mock Loan Input</p>
+                    <MockLoanInputForm
+                        loading={isPending}
+                        onSubmit={handleCompute}
+                        initialData={defaultInput}
+                        className="max-h-[60vh] overflow-y-auto ecoop-scroll"
+                    />
+                </div>
+                <div className="space-y-2 rounded">
                     <p>Deductions</p>
                     <DeductionTable
+                        totalCredit={
+                            schemeCalculatorResponse?.total_credit || 0
+                        }
+                        totalDebit={schemeCalculatorResponse?.total_debit || 0}
                         deductionEntries={
                             schemeCalculatorResponse?.entries || []
                         }
@@ -106,17 +112,13 @@ const ComputationSheetCalculator = ({
 
 const DeductionTable = ({
     deductionEntries,
+    totalCredit = 0,
+    totalDebit = 0,
 }: {
     deductionEntries: IComputationSheetCalculatorDeduction[]
+    totalCredit: number
+    totalDebit: number
 }) => {
-    const totalDebit = deductionEntries.reduce(
-        (acc, entry) => acc + (entry.debit || 0),
-        0
-    )
-    const totalCredit = deductionEntries.reduce(
-        (acc, entry) => acc + (entry.credit || 0),
-        0
-    )
     return (
         <Table
             tabIndex={0}
@@ -197,10 +199,10 @@ const DeductionTable = ({
                 <TableRow className="bg-muted/50 text-xl">
                     <TableCell className="font-semibold" />
                     <TableCell className="text-right font-semibold">
-                        {formatNumber(totalDebit)}
+                        {formatNumber(totalDebit, 2)}
                     </TableCell>
                     <TableCell className="text-right font-semibold">
-                        {formatNumber(totalCredit)}
+                        {formatNumber(totalCredit, 2)}
                     </TableCell>
                 </TableRow>
             </TableFooter>

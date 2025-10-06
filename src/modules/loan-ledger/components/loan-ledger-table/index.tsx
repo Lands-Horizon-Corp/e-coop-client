@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 
-import { useQueryClient } from '@tanstack/react-query'
+// import { useQueryClient } from '@tanstack/react-query'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
-import { cn } from '@/helpers'
+import { cn } from '@/helpers/tw-utils'
+import { ILoanLedger, useGetPaginatedLoanLedger } from '@/modules/loan-ledger'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -22,24 +23,17 @@ import useDataTableState from '@/components/data-table/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { TEntityId } from '@/types'
-
-import {
-    deleteManyLoanTransaction,
-    useGetPaginatedLoanTransaction,
-} from '../../loan-transaction.service'
-import { ILoanTransaction } from '../../loan-transaction.types'
-import {
-    IMemberLoanTableSummaryColumnProps,
-    memberLoanTableSummaryGlobalSearchTargets,
+import LoanLedgerTableColumns, {
+    ILoanLedgerTableColumnProps,
+    loanLedgerGlobalSearchTargets,
 } from './columns'
-import MemberLoanTableSummaryColumns from './columns'
+import LoanLedgerAction, { LoanLedgerRowContext } from './row-action-context'
 
-export interface TMemberLoanTableSummaryProps
-    extends TableProps<ILoanTransaction>,
-        IMemberLoanTableSummaryColumnProps {
+export interface LoanLedgerTableProps
+    extends TableProps<ILoanLedger>,
+        ILoanLedgerTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<ILoanTransaction>,
+        IDataTableToolbarProps<ILoanLedger>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -48,29 +42,28 @@ export interface TMemberLoanTableSummaryProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
-
-    memberProfileId: TEntityId
 }
 
-const MemberLoanTableSummary = ({
-    memberProfileId,
-
+const LoanLedgerTable = ({
     className,
     toolbarProps,
     defaultFilter,
     onSelectData,
-    actionComponent,
-    RowContextComponent,
     onRowClick,
-}: TMemberLoanTableSummaryProps) => {
-    const queryClient = useQueryClient()
+    onDoubleClick = (row) => {
+        row.toggleSelected()
+    },
+    actionComponent = LoanLedgerAction,
+    RowContextComponent = LoanLedgerRowContext,
+}: LoanLedgerTableProps) => {
+    // const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
 
     const columns = useMemo(
         () =>
-            MemberLoanTableSummaryColumns({
+            LoanLedgerTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -86,7 +79,7 @@ const MemberLoanTableSummary = ({
         setColumnVisibility,
         rowSelectionState,
         createHandleRowSelectionChange,
-    } = useDataTableState<ILoanTransaction>({
+    } = useDataTableState<ILoanLedger>({
         defaultColumnOrder: columns.map((c) => c.id!),
         onSelectData,
     })
@@ -99,16 +92,58 @@ const MemberLoanTableSummary = ({
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data: {
+            // TODO: Remove mocks
+            data = [
+                {
+                    id: '1',
+                    line_number: 1,
+                    reference_number: 'LN-0001',
+                    entry_date: '2025-10-01',
+                    debit: 5000,
+                    credit: 0,
+                    balance: 5000,
+                    type: 'CASH',
+                    created_at: '2025-10-01T08:00:00Z',
+                    updated_at: '2025-10-01T08:00:00Z',
+                },
+                {
+                    id: '2',
+                    line_number: 2,
+                    reference_number: 'LN-0002',
+                    entry_date: '2025-10-02',
+                    debit: 0,
+                    credit: 1000,
+                    balance: 4000,
+                    type: 'CASH',
+                    created_at: '2025-10-02T08:00:00Z',
+                    updated_at: '2025-10-02T08:00:00Z',
+                },
+                {
+                    id: '3',
+                    line_number: 3,
+                    reference_number: 'LN-0003',
+                    entry_date: '2025-10-03',
+                    debit: 0,
+                    credit: 500,
+                    balance: 3500,
+                    type: 'CASH',
+                    created_at: '2025-10-03T08:00:00Z',
+                    updated_at: '2025-10-03T08:00:00Z',
+                },
+            ],
+            totalPage = 1,
+            pageSize = 10,
+            totalSize = 0,
+        } = {},
         refetch,
-    } = useGetPaginatedLoanTransaction({
-        mode: 'member-profile',
-        memberProfileId,
+    } = useGetPaginatedLoanLedger({
         query: {
             ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
+        options: { enabled: false },
     })
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
@@ -155,23 +190,14 @@ const MemberLoanTableSummary = ({
                 <DataTableToolbar
                     globalSearchProps={{
                         defaultMode: 'equal',
-                        targets: memberLoanTableSummaryGlobalSearchTargets,
+                        targets: loanLedgerGlobalSearchTargets,
                     }}
                     table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['loan-transaction', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyLoanTransaction({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
+                    // No delete/export actions for loan ledger
                     scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
                         pagination,
@@ -192,6 +218,7 @@ const MemberLoanTableSummary = ({
                     className="mb-2"
                     onRowClick={onRowClick}
                     isScrollable={isScrollable}
+                    onDoubleClick={onDoubleClick}
                     setColumnOrder={setColumnOrder}
                     RowContextComponent={RowContextComponent}
                 />
@@ -201,4 +228,4 @@ const MemberLoanTableSummary = ({
     )
 }
 
-export default MemberLoanTableSummary
+export default LoanLedgerTable

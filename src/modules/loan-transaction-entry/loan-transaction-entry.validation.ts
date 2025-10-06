@@ -19,6 +19,8 @@ export const LoanTransactionEntrySchema = z.object({
         .default('empty description')
         .transform(descriptionTransformerSanitizer), // Just Copy of account name so incase account has been deleted, this still exist
 
+    amount: z.coerce.number().min(0, 'Amount must be positive'),
+
     credit: z.coerce.number().min(0, 'Credit must be positive').optional(),
     debit: z.coerce.number().min(0, 'Debit must be positive').optional(),
 

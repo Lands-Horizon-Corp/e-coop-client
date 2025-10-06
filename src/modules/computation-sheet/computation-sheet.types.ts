@@ -57,6 +57,8 @@ export interface IComputationSheetCalculatorDeduction {
 
 export interface IComputationSheetCalculator {
     entries: IComputationSheetCalculatorDeduction[]
+    total_debit: number
+    total_credit: number
     amortization: {
         amortizations: IAmortizationPayment[]
         amortization_summary: IAmortizationSummary

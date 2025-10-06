@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
-import { AccountPicker } from '@/modules/account'
+import { AccountCreateUpdateFormModal, AccountPicker } from '@/modules/account'
 import WeekdayCombobox from '@/modules/loan-transaction/components/weekday-combobox'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 
-import { CheckIcon, ShapesIcon } from '@/components/icons'
+import { CheckIcon, EyeIcon, ShapesIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Form, FormItem } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 
@@ -42,6 +43,7 @@ const MockLoanInputForm = ({
     initialData,
     autoSubmit = false,
 }: Props) => {
+    const viewAccountModal = useModalState()
     const inputForm = useForm<TMockCloanInputSchema>({
         resolver: standardSchemaResolver(MockLoanInputSchema),
         mode: 'onChange',
@@ -61,6 +63,8 @@ const MockLoanInputForm = ({
         },
     })
 
+    const selectedAccount = inputForm.watch('account')
+
     const mode_of_payment = inputForm.watch('mode_of_payment')
 
     const { firstError, formRef } = useFormHelper({
@@ -75,6 +79,15 @@ const MockLoanInputForm = ({
                 onSubmit={inputForm.handleSubmit(onSubmit)}
                 className={cn('space-y-4', className)}
             >
+                <AccountCreateUpdateFormModal
+                    {...viewAccountModal}
+                    title="View Account"
+                    description="See full account details."
+                    formProps={{
+                        readOnly: true,
+                        defaultValues: selectedAccount,
+                    }}
+                />
                 <fieldset
                     disabled={disabled || loading}
                     className="grid gap-4 group"
@@ -95,7 +108,22 @@ const MockLoanInputForm = ({
                     <FormFieldWrapper
                         control={inputForm.control}
                         name="account_id"
-                        label="Loan Account"
+                        label={
+                            <span className="flex justify-between items-center">
+                                <span>Loan Account</span>
+                                {selectedAccount && (
+                                    <span
+                                        onClick={() =>
+                                            viewAccountModal.onOpenChange(true)
+                                        }
+                                        className="text-xs text-muted-foreground hover:underline ease-in-out duration-200 hover:text-foreground cursor-pointer"
+                                    >
+                                        <EyeIcon className="inline size-2.5" />{' '}
+                                        View
+                                    </span>
+                                )}
+                            </span>
+                        }
                         render={({ field }) => (
                             <AccountPicker
                                 mode="loan"

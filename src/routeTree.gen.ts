@@ -54,6 +54,7 @@ import { Route as landingPolicyCodeOfConductEthicsPolicyRouteImport } from './ro
 import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing)/policy/aml-ctf-policy'
 import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
+import { Route as OrgOrgnameBranchBranchnameTempPageRouteImport } from './routes/org/$orgname/branch.$branchname/temp-page'
 import { Route as OrgOrgnameBranchBranchnameDevDocumentationRouteImport } from './routes/org/$orgname/branch.$branchname/dev/documentation'
 import { Route as OrgOrgnameBranchBranchnameAccountingJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/journal-voucher'
 import { Route as OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/cash-check-journal-voucher'
@@ -370,6 +371,12 @@ const OrgOrgnameBranchBranchnameIndexRoute =
   OrgOrgnameBranchBranchnameIndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameTempPageRoute =
+  OrgOrgnameBranchBranchnameTempPageRouteImport.update({
+    id: '/temp-page',
+    path: '/temp-page',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnameDevDocumentationRoute =
@@ -950,6 +957,7 @@ export interface FileRoutesByFullPath {
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
+  '/org/$orgname/branch/$branchname/temp-page': typeof OrgOrgnameBranchBranchnameTempPageRoute
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
@@ -1065,6 +1073,7 @@ export interface FileRoutesByTo {
   '/onboarding/create-branch/$organization_id': typeof OnboardingCreateBranchOrganization_idRoute
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
+  '/org/$orgname/branch/$branchname/temp-page': typeof OrgOrgnameBranchBranchnameTempPageRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
@@ -1186,6 +1195,7 @@ export interface FileRoutesById {
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
+  '/org/$orgname/branch/$branchname/temp-page': typeof OrgOrgnameBranchBranchnameTempPageRoute
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   '/org/$orgname/branch/$branchname/(employee)/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
@@ -1307,6 +1317,7 @@ export interface FileRouteTypes {
     | '/onboarding/organization/$organization_id'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
+    | '/org/$orgname/branch/$branchname/temp-page'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/timesheets'
@@ -1422,6 +1433,7 @@ export interface FileRouteTypes {
     | '/onboarding/create-branch/$organization_id'
     | '/onboarding/organization/$organization_id'
     | '/onboarding/organization'
+    | '/org/$orgname/branch/$branchname/temp-page'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/dashboard'
     | '/org/$orgname/branch/$branchname/timesheets'
@@ -1542,6 +1554,7 @@ export interface FileRouteTypes {
     | '/onboarding/organization/$organization_id'
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
+    | '/org/$orgname/branch/$branchname/temp-page'
     | '/org/$orgname/branch/$branchname/'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
     | '/org/$orgname/branch/$branchname/(employee)/timesheets'
@@ -1935,6 +1948,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/org/$orgname/branch/$branchname/'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameIndexRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/temp-page': {
+      id: '/org/$orgname/branch/$branchname/temp-page'
+      path: '/temp-page'
+      fullPath: '/org/$orgname/branch/$branchname/temp-page'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameTempPageRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/dev/documentation': {
@@ -2600,6 +2620,7 @@ const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
 )
 
 interface OrgOrgnameBranchBranchnameRouteRouteChildren {
+  OrgOrgnameBranchBranchnameTempPageRoute: typeof OrgOrgnameBranchBranchnameTempPageRoute
   OrgOrgnameBranchBranchnameIndexRoute: typeof OrgOrgnameBranchBranchnameIndexRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
   OrgOrgnameBranchBranchnameemployeeTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
@@ -2679,6 +2700,8 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
   {
+    OrgOrgnameBranchBranchnameTempPageRoute:
+      OrgOrgnameBranchBranchnameTempPageRoute,
     OrgOrgnameBranchBranchnameIndexRoute: OrgOrgnameBranchBranchnameIndexRoute,
     OrgOrgnameBranchBranchnamecommonDashboardRoute:
       OrgOrgnameBranchBranchnamecommonDashboardRoute,

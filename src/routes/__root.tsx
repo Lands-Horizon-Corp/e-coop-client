@@ -77,7 +77,6 @@ function RootLayout() {
                 <div className="relative">
                     <DndProvider backend={HTML5Backend}>
                         <Toaster
-                            expand
                             richColors
                             closeButton
                             theme="system"
