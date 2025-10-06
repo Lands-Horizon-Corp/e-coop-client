@@ -39,6 +39,7 @@ import {
     TextFileFillIcon,
     TransactionListIcon,
     UserIcon,
+    UserPlusIcon,
     Users3FillIcon,
     WandSparkleIcon,
 } from '@/components/icons'
@@ -466,7 +467,14 @@ const LoanTransactionCreateUpdateForm = ({
                                 {printedDate === undefined && (
                                     <p className="text-xs p-1 px-2 bg-muted text-muted-foreground/70 rounded-sm">
                                         Select or Replace Member
-                                        <CommandShortcut className="bg-accent p-0.5 px-1 text-primary rounded-sm ml-1">
+                                        <CommandShortcut
+                                            onClick={() =>
+                                                memberPickerModal.onOpenChange(
+                                                    true
+                                                )
+                                            }
+                                            className="bg-accent p-0.5 cursor-pointer hover:text-primary px-1 text-primary/80 hover:bg-popover duration-300 outline rounded-sm ml-1"
+                                        >
                                             CTRL + Enter
                                         </CommandShortcut>
                                     </p>
@@ -511,18 +519,28 @@ const LoanTransactionCreateUpdateForm = ({
                                                     />
                                                 </>
                                             ) : (
-                                                <div className="p-4 flex-col items-center justify-center">
-                                                    <UserIcon className="size-12 mx-auto text-muted-foreground" />
-                                                    <p className="text-center text-muted-foreground">
-                                                        Please Select Member
-                                                    </p>
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        memberPickerModal.onOpenChange(
+                                                            true
+                                                        )
+                                                    }
+                                                    className="p-4  flex-col items-center w-full gap-y-4 justify-center"
+                                                >
+                                                    <div className="border cursor-pointer hover:bg-popover text-primary/70  hover:text-primary ease-in-out duration-300 border-dashed bg-muted/40 border-primary p-4 mb-2 space-y-2 mx-auto rounded-xl">
+                                                        <UserPlusIcon className="size-7 mx-auto " />
+                                                        <p className="text-center text-xs">
+                                                            Please Select Member
+                                                        </p>
+                                                    </div>
                                                     <p className="text-center text-muted-foreground/80 text-xs">
                                                         select member or press
                                                         'CTRL + Enter' to show
                                                         picker | or press 'Shit
                                                         + S' to scan QR Code
                                                     </p>
-                                                </div>
+                                                </button>
                                             )}
                                             <MemberPicker
                                                 disabled={isDisabled(

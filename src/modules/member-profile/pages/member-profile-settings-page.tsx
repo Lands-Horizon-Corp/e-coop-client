@@ -1,9 +1,9 @@
 import { useParams } from '@tanstack/react-router'
 import { useRouter } from '@tanstack/react-router'
 
-import PageContainer from '@/components/containers/page-container'
+import { useHotkeys } from 'react-hotkeys-hook'
 
-import { useSimpleShortcut } from '@/hooks/use-simple-shortcut'
+import PageContainer from '@/components/containers/page-container'
 
 import MemberProfileSettings from '../components/member-profile-settings'
 
@@ -13,7 +13,7 @@ function MemberProfileSettingsPage() {
         from: '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/',
     })
 
-    useSimpleShortcut(['Escape'], () => history.back())
+    useHotkeys('escape', () => history.back())
 
     return (
         <PageContainer>
