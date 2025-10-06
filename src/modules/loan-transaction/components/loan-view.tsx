@@ -22,7 +22,6 @@ import {
     PrinterFillIcon,
     TIcon,
     TicketIcon,
-    TrashIcon,
     UndoIcon,
     UserIcon,
 } from '@/components/icons'

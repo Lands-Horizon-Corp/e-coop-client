@@ -429,8 +429,6 @@ const LoanTransactionCreateUpdateForm = ({
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
 
-    console.log(form.formState.errors)
-
     return (
         <Form {...form}>
             <form
@@ -1326,6 +1324,7 @@ const LoanTransactionCreateUpdateForm = ({
                     </Tabs>
                 </div>
                 <FormFooterResetSubmit
+                    hideReset={loanTransactionId !== undefined}
                     className="grow min-w-0 max-w-full p-4 z-10 sticky bottom-0 mx-4 mb-4 bg-popover/70 rounded-xl"
                     error={error}
                     readOnly={isReadOnly}
