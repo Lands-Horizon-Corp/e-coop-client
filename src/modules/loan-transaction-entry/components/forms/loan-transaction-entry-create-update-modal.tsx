@@ -1,12 +1,18 @@
 import { useForm } from 'react-hook-form'
-import z from 'zod'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
-import { ILoanTransactionEntry } from '@/modules/loan-transaction-entry'
-import { entityIdSchema } from '@/validation'
+import {
+    ILoanTransactionEntry,
+    LoanTransactionEntrySchema,
+    TLoanTransactionEntrySchema,
+    useCreateLoanTransactionEntry,
+    useUpdateLoanTransactionEntryById,
+} from '@/modules/loan-transaction-entry'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -19,37 +25,30 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IClassProps, IForm } from '@/types'
-
-const ChargeSchema = z.object({
-    account_id: entityIdSchema,
-    account: z.any(),
-    amount: z.coerce.number().min(0, 'Amount must be positive'),
-    description: z.coerce.string().optional(),
-    editable: z.boolean().default(false),
-    is_add_on: z.boolean().default(false),
-})
-
-type TChargeFormValues = z.infer<typeof ChargeSchema>
-type ICharge = TChargeFormValues
+import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface IChargeFormProps
     extends IClassProps,
         IForm<
             Partial<ILoanTransactionEntry>,
-            ICharge,
+            ILoanTransactionEntry,
             Error,
-            TChargeFormValues
-        > {}
+            TLoanTransactionEntrySchema
+        > {
+    id?: TEntityId
+    loanTransactionId: TEntityId
+}
 
-const LoanChargeCreateForm = ({
+const LoanTransactionEntryCreateUpdate = ({
     className,
     onSuccess,
+    id,
     readOnly,
+    loanTransactionId,
     ...formProps
 }: IChargeFormProps) => {
-    const form = useForm<TChargeFormValues>({
-        resolver: standardSchemaResolver(ChargeSchema),
+    const form = useForm<TLoanTransactionEntrySchema>({
+        resolver: standardSchemaResolver(LoanTransactionEntrySchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -59,17 +58,46 @@ const LoanChargeCreateForm = ({
         },
     })
 
-    const { formRef, isDisabled } = useFormHelper<TChargeFormValues>({
-        form,
-        readOnly,
-        autoSave: false,
+    const { firstError, formRef, isDisabled } =
+        useFormHelper<TLoanTransactionEntrySchema>({
+            form,
+            readOnly,
+            autoSave: false,
+        })
+
+    const createMutation = useCreateLoanTransactionEntry({
+        options: {
+            onSuccess: onSuccess,
+            onError: formProps.onError,
+        },
+    })
+    const updateMutation = useUpdateLoanTransactionEntryById({
+        options: {
+            onSuccess: onSuccess,
+            onError: formProps.onError,
+        },
     })
 
-    const onSubmit = form.handleSubmit((formData, e) => {
+    const { error: rawError, isPending } = id ? updateMutation : createMutation
+
+    const error = firstError || serverRequestErrExtractor({ error: rawError })
+
+    const onSubmit = form.handleSubmit(async (formData, e) => {
         e?.stopPropagation()
         e?.preventDefault()
-        onSuccess?.(formData)
-        form.reset()
+
+        const requestFn = id
+            ? updateMutation.mutateAsync({ id, payload: formData })
+            : createMutation.mutateAsync({
+                  loanTransactionId,
+                  payload: formData,
+              })
+
+        toast.promise(requestFn, {
+            loading: 'Saving deduction...',
+            success: 'Deduction Saved',
+            error: `Something went wrong, please try again. ${error || ''}`,
+        })
     })
 
     return (
@@ -180,7 +208,9 @@ const LoanChargeCreateForm = ({
                 </div>
 
                 <FormFooterResetSubmit
+                    error={error}
                     readOnly={readOnly}
+                    isLoading={isPending}
                     resetButtonType="button"
                     submitButtonType="button"
                     disableSubmit={!form.formState.isDirty}
@@ -197,9 +227,9 @@ const LoanChargeCreateForm = ({
     )
 }
 
-export const LoanChargeCreateModal = ({
-    title = 'Add Charge',
-    description = 'Add a new charge to this loan transaction.',
+export const LoanTransactionEntryCreateUpdateModal = ({
+    title = 'Add/Edit Charge',
+    description = 'Edit or Add a new deduction.',
     className,
     formProps,
     ...props
@@ -213,7 +243,7 @@ export const LoanChargeCreateModal = ({
             className={cn('!max-w-xl', className)}
             {...props}
         >
-            <LoanChargeCreateForm
+            <LoanTransactionEntryCreateUpdate
                 {...formProps}
                 onSuccess={(charge) => {
                     formProps.onSuccess?.(charge)
@@ -224,4 +254,4 @@ export const LoanChargeCreateModal = ({
     )
 }
 
-export default LoanChargeCreateForm
+export default LoanTransactionEntryCreateUpdate

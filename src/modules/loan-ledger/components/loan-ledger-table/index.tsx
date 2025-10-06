@@ -92,50 +92,7 @@ const LoanLedgerTable = ({
     const {
         isPending,
         isRefetching,
-        data: {
-            // TODO: Remove mocks
-            data = [
-                {
-                    id: '1',
-                    line_number: 1,
-                    reference_number: 'LN-0001',
-                    entry_date: '2025-10-01',
-                    debit: 5000,
-                    credit: 0,
-                    balance: 5000,
-                    type: 'CASH',
-                    created_at: '2025-10-01T08:00:00Z',
-                    updated_at: '2025-10-01T08:00:00Z',
-                },
-                {
-                    id: '2',
-                    line_number: 2,
-                    reference_number: 'LN-0002',
-                    entry_date: '2025-10-02',
-                    debit: 0,
-                    credit: 1000,
-                    balance: 4000,
-                    type: 'CASH',
-                    created_at: '2025-10-02T08:00:00Z',
-                    updated_at: '2025-10-02T08:00:00Z',
-                },
-                {
-                    id: '3',
-                    line_number: 3,
-                    reference_number: 'LN-0003',
-                    entry_date: '2025-10-03',
-                    debit: 0,
-                    credit: 500,
-                    balance: 3500,
-                    type: 'CASH',
-                    created_at: '2025-10-03T08:00:00Z',
-                    updated_at: '2025-10-03T08:00:00Z',
-                },
-            ],
-            totalPage = 1,
-            pageSize = 10,
-            totalSize = 0,
-        } = {},
+        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
     } = useGetPaginatedLoanLedger({
         query: {

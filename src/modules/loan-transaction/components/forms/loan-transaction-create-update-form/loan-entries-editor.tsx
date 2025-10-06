@@ -9,9 +9,13 @@ import { AccountPicker, IAccount } from '@/modules/account'
 import AccountMiniCard from '@/modules/account/components/account-mini-card'
 import {
     ILoanTransactionEntry,
-    ILoanTransactionEntryRequest,
+    useDeleteLoanTransactionEntryById,
 } from '@/modules/loan-transaction-entry'
-import { useLoanTransactionChangeCashEquivalenceAccount } from '@/modules/loan-transaction/loan-transaction.service'
+import { LoanTransactionEntryCreateUpdateModal } from '@/modules/loan-transaction-entry/components/forms/loan-transaction-entry-create-update-modal'
+import {
+    getLoanTransactionById,
+    useLoanTransactionChangeCashEquivalenceAccount,
+} from '@/modules/loan-transaction/loan-transaction.service'
 import { ILoanTransaction } from '@/modules/loan-transaction/loan-transaction.types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -24,6 +28,7 @@ import {
     RenderIcon,
     ShapesIcon,
     SwapArrowIcon,
+    TIcon,
     TrashIcon,
 } from '@/components/icons'
 import Modal from '@/components/modals/modal'
@@ -46,7 +51,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
-import { LoanChargeCreateModal } from '../../../../loan-transaction-entry/components/forms/loan-charge-create-modal'
 import { TLoanTransactionSchema } from '../../../loan-transaction.validation'
 import LoanAmortization from '../../loan-amortization'
 
@@ -110,16 +114,6 @@ const LoanEntriesEditor = forwardRef<
             enabled: !isDisabled,
         })
 
-        const handleRemoveEntry = (index: number) => {
-            const entry = loanEntries[index]
-            if (entry?.type === 'deduction') {
-                // remove(index)
-            }
-            if (entry.id) {
-                // addToDeletedField(entry.id)
-            }
-        }
-
         const handleKeyDown = (e: KeyboardEvent<HTMLTableElement>) => {
             if (e.key === 'ArrowDown') {
                 e.preventDefault()
@@ -135,6 +129,21 @@ const LoanEntriesEditor = forwardRef<
                 setFocusedIndex(prevIndex)
                 rowRefs.current[prevIndex]?.focus()
             }
+        }
+
+        const handleGetLoanTransactionEntry = () => {
+            toast.promise(
+                getLoanTransactionById({ id: loanTransactionId as TEntityId }),
+                {
+                    loading: 'Fetching latest loan transaction data...',
+                    success: (data) => {
+                        form.reset(data)
+                        return 'Loan transaction data updated'
+                    },
+                    error: (err) =>
+                        `Failed to fetch latest loan transaction data ${serverRequestErrExtractor({ error: err })}`,
+                }
+            )
         }
 
         const changeCashEquivalenceMutation =
@@ -322,24 +331,16 @@ const LoanEntriesEditor = forwardRef<
                     tabIndex={0}
                     wrapperClassName="max-h-[95vh] bg-secondary rounded-xl ecoop-scroll"
                 >
-                    {/* <LoanChargeCreateModal
-                        {...addChargeModalState}
-                        formProps={{
-                            onSuccess: (charge) => {
-                                append({
-                                    account_id: charge.account_id,
-                                    account: charge.account,
-                                    name: charge.account?.name || '',
-                                    debit: 0,
-                                    credit: charge.amount,
-                                    index: 2 + deductionEntries.length,
-                                    description: charge.description || '',
-                                    is_add_on: charge.is_add_on,
-                                    type: 'deduction',
-                                })
-                            },
-                        }}
-                    /> */}
+                    {loanTransactionId && (
+                        <LoanTransactionEntryCreateUpdateModal
+                            {...addChargeModalState}
+                            formProps={{
+                                onSuccess: (newLoanTransaction) =>
+                                    form.reset(newLoanTransaction),
+                                loanTransactionId,
+                            }}
+                        />
+                    )}
                     <TableHeader>
                         <TableRow className="bg-secondary/40">
                             <TableHead>Description</TableHead>
@@ -349,20 +350,15 @@ const LoanEntriesEditor = forwardRef<
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {loanEntries.map((field, index) => (
+                        {loanEntries.map((loanEntry, index) => (
                             <LoanEntryRow
-                                disabled={isReadOnly || disabled}
-                                key={`${field.id}-${index}`}
-                                entry={field}
-                                index={index}
+                                onDelete={() => handleGetLoanTransactionEntry()}
+                                entry={loanEntry}
+                                key={`${loanEntry.id}`}
                                 form={form}
                                 ref={(el) => {
                                     rowRefs.current[index] = el
                                 }}
-                                onRemove={handleRemoveEntry}
-                                // onUpdate={(index, updatedData) =>
-                                //     update(index, updatedData)
-                                // }
                             />
                         ))}
                         {loanEntries.length === 0 && (
@@ -406,23 +402,46 @@ const LoanEntriesEditor = forwardRef<
 )
 
 interface ILoanEntryRowProps {
-    entry: ILoanTransactionEntryRequest
-    index: number
+    entry: ILoanTransactionEntry
     form: UseFormReturn<TLoanTransactionSchema>
     disabled?: boolean
-    onRemove: (index: number) => void
-    // onUpdate: (index: number, updatedData: ILoanTransactionEntryRequest) => void
+    onDelete?: () => void
 }
 
 const LoanEntryRow = memo(
     forwardRef<HTMLTableRowElement, ILoanEntryRowProps>(
-        ({ entry, index, disabled, onRemove }, ref) => {
+        ({ entry, disabled, form, onDelete }, ref) => {
             const rowRef = useRef<HTMLTableRowElement>(null)
+            const { onOpen } = useConfirmModalStore()
 
             const editModalState = useModalState()
 
-            const isEditable = entry.type === 'deduction'
-            const isRemovable = entry.type === 'deduction'
+            const isEditable = entry.type.includes('deduction')
+            const isRemovable = entry.type.includes('deduction')
+
+            const deleteMutation = useDeleteLoanTransactionEntryById()
+
+            const handleDelete = () => {
+                onOpen({
+                    title: 'Remove Entry',
+                    content: `Are you sure you want to remove entry?`,
+                    confirmString: 'Remove',
+                    onConfirm: () => {
+                        toast.promise(
+                            deleteMutation.mutateAsync(entry.id as TEntityId),
+                            {
+                                loading: 'Removing entry...',
+                                success: () => {
+                                    onDelete?.()
+                                    return 'Entry removed'
+                                },
+                                error: (err) =>
+                                    `Failed to remove entry ${serverRequestErrExtractor({ error: err })}`,
+                            }
+                        )
+                    },
+                })
+            }
 
             const handleRowKeyDown = (
                 e: KeyboardEvent<HTMLTableRowElement>
@@ -432,13 +451,13 @@ const LoanEntryRow = memo(
                     e.stopPropagation()
                     return
                 }
-
                 if (e.key === 'Delete') {
                     if (!isRemovable)
                         return toast.info(`Entry ${entry.name} not removable`)
                     e.preventDefault()
                     e.stopPropagation()
-                    onRemove(index)
+
+                    handleDelete()
                 } else if (e.key === 'F2') {
                     if (!isEditable)
                         return toast.info(`Entry ${entry.name} not editable`)
@@ -471,7 +490,9 @@ const LoanEntryRow = memo(
                             <div className="flex flex-col">
                                 <span className="font-medium flex gap-x-1 items-center">
                                     {entry.account?.icon && (
-                                        <RenderIcon icon={entry.account.icon} />
+                                        <RenderIcon
+                                            icon={entry.account.icon as TIcon}
+                                        />
                                     )}
                                     {entry.name || 'Unknown'}
                                 </span>
@@ -531,7 +552,7 @@ const LoanEntryRow = memo(
                                         type="button"
                                         variant="ghost"
                                         disabled={disabled}
-                                        onClick={() => onRemove(index)}
+                                        onClick={() => handleDelete()}
                                         className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                     >
                                         <TrashIcon className="h-4 w-4" />
@@ -543,7 +564,7 @@ const LoanEntryRow = memo(
                             </div>
                         </TableCell>
                     </TableRow>
-                    <LoanChargeCreateModal
+                    <LoanTransactionEntryCreateUpdateModal
                         {...editModalState}
                         onOpenChange={(state) => {
                             if (!state) {
@@ -555,15 +576,11 @@ const LoanEntryRow = memo(
                         description="Update the deduction details."
                         formProps={{
                             defaultValues: entry,
-                            // onSuccess: (updatedData) => {
-                            //     onUpdate(index, {
-                            //         ...entry,
-                            //         account_id: updatedData.account_id,
-                            //         account: updatedData.account,
-                            //         credit: updatedData.amount,
-                            //         is_add_on: updatedData.is_add_on,
-                            //     })
-                            // },
+                            loanTransactionId: entry.loan_transaction_id,
+                            id: entry.id,
+                            onSuccess: (updatedData) => {
+                                form.reset(updatedData)
+                            },
                         }}
                     />
                 </>
@@ -629,239 +646,3 @@ const AmortizationView = ({
 }
 
 export default LoanEntriesEditor
-
-/*
-        // // Pang Display Computation totals
-        // const {
-        //     totalDebit,
-        //     totalCredit,
-        //     difference,
-        //     deductionsTotal,
-        //     netCashAmount,
-        //     addOnTotal,
-        // } = useMemo(() => {
-        //     const debitTotal = loanEntries.reduce(
-        //         (sum, field) => sum + (Number(field.debit) || 0),
-        //         0
-        //     )
-        //     const creditTotal = loanEntries.reduce(
-        //         (sum, field) => sum + (Number(field.credit) || 0),
-        //         0
-        //     )
-
-        //     const regularDeductions = loanEntries
-        //         .filter(
-        //             (field) => field.type === 'deduction' && !field.is_add_on
-        //         )
-        //         .reduce((sum, field) => sum + (Number(field.credit) || 0), 0)
-
-        //     const addOnCharges = loanEntries
-        //         .filter(
-        //             (field) => field.type === 'deduction' && field.is_add_on
-        //         )
-        //         .reduce((sum, field) => sum + (Number(field.credit) || 0), 0)
-
-        //     const netCash = (applied_1 || 0) - regularDeductions
-
-        //     return {
-        //         totalDebit: debitTotal,
-        //         totalCredit: creditTotal,
-        //         difference: Math.abs(debitTotal - creditTotal),
-        //         deductionsTotal: regularDeductions,
-        //         netCashAmount: netCash,
-        //         addOnTotal: addOnCharges,
-        //     }
-        // }, [loanEntries, applied_1])
-
-        // // Para sa Computed/Generated Entries (Pang display lang)
-        // const computedLoanEntries = useMemo(() => {
-        //     const cash_on_hand = loanEntries[0]
-        //     const found_account_entry = loanEntries[1]
-
-        //     const account_entry: ILoanTransactionEntryRequest = {
-        //         ...found_account_entry,
-        //         type: 'static',
-        //         index: 1,
-        //         account,
-        //         account_id: account?.id,
-        //         name: account?.name || 'No account name',
-        //         description: account?.description || 'No Description',
-        //     }
-
-        //     const add_on_entry = loanEntries.find(
-        //         (entry) => entry.type === 'add-on' && !!entry.id
-        //     )
-
-        //     if (!cash_on_hand || !account_entry || !applied_1) return []
-
-        //     const deductionEntries = loanEntries.filter(
-        //         (entry) => entry.type === 'deduction'
-        //     )
-
-        //     const addOnCharges = deductionEntries
-        //         .filter((entry) => entry.is_add_on)
-        //         .reduce((sum, entry) => sum + (Number(entry.credit) || 0), 0)
-
-        //     let allEntries = []
-
-        //     const addOnEntry: ILoanTransactionEntryRequest[] =
-        //         addOnCharges > 0 && is_add_on
-        //             ? [
-        //                   {
-        //                       ...add_on_entry,
-        //                       account_id: undefined,
-        //                       account: undefined,
-        //                       debit: addOnCharges || 0,
-        //                       credit: 0,
-        //                       index: 1 + deductionEntries.length,
-        //                       name: 'Add-On',
-        //                       description: 'Add on Interest',
-        //                       is_add_on: false,
-        //                       type: 'add-on',
-        //                   },
-        //               ]
-        //             : []
-
-        //     allEntries = [
-        //         ...loanEntries.slice(0, 2),
-        //         ...deductionEntries,
-        //         ...addOnEntry,
-        //     ]
-
-        //     return allEntries
-        // }, [account, applied_1, is_add_on, loanEntries])
-
-        // // Pang stable deduction tracking
-        // const deductionEntries = useMemo(() => {
-        //     return loanEntries.filter((entry) => entry.type === 'deduction')
-        // }, [loanEntries])
-
-        // // Pang stable entry signature dependency
-        // // need to para di mag unexpected reupdate sa pang updat eng COH
-        // const deductionsSignature = useMemo(() => {
-        //     return deductionEntries
-        //         .map(
-        //             (entry) =>
-        //                 `${entry.id || 'new'}:${entry.account_id}:${entry.credit}:${entry.is_add_on}`
-        //         )
-        //         .join('|')
-        // }, [deductionEntries])
-
-        // // Pang update ng COH, ADD_ON entry
-        // useEffect(() => {
-        //     if (!applied_1 || !account) return
-
-        //     const entries = form.getValues('loan_transaction_entries')
-
-        //     // Totals
-        //     const regularDeductions = deductionEntries
-        //         .filter((entry) => !entry.is_add_on)
-        //         .reduce((sum, entry) => sum + (Number(entry.credit) || 0), 0)
-
-        //     const addOnCharges = deductionEntries
-        //         .filter((entry) => entry.is_add_on)
-        //         .reduce((sum, entry) => sum + (Number(entry.credit) || 0), 0)
-
-        //     const cashEntry = entries[0]
-
-        //     // Update (Cash on Hand) Entry
-        //     if (cashEntry) {
-        //         const newCashCredit = is_add_on
-        //             ? applied_1 - regularDeductions
-        //             : applied_1 - (regularDeductions + addOnCharges)
-
-        //         if (cashEntry.credit !== newCashCredit) {
-        //             update(0, {
-        //                 ...cashEntry,
-        //                 credit: newCashCredit,
-        //                 debit: 0,
-        //             })
-        //         }
-        //     }
-
-        //     // Update (Loan Account)
-        //     const loanAccountEntry = entries[1]
-        //     if (loanAccountEntry && account) {
-        //         const shouldUpdate =
-        //             loanAccountEntry.account_id !== account.id ||
-        //             loanAccountEntry.debit !== applied_1
-
-        //         if (shouldUpdate) {
-        //             update(1, {
-        //                 ...loanAccountEntry,
-        //                 account_id: account.id,
-        //                 account: account,
-        //                 name: account.name,
-        //                 description: account.description || 'Loan account',
-        //                 debit: applied_1,
-        //                 credit: 0,
-        //             })
-        //         }
-        //     }
-
-        //     // Add/Update/Remove add-on entry
-        //     const currentAddOnIndex = entries.findIndex(
-        //         (entry) => entry.type === 'add-on'
-        //     )
-        //     const shouldHaveAddOn = is_add_on && addOnCharges > 0
-        //     const expectedAddOnIndex = 2 + deductionEntries.length // nilagay ko sa pang last na index
-
-        //     if (shouldHaveAddOn) {
-        //         const addOnEntryData = {
-        //             id:
-        //                 currentAddOnIndex !== -1
-        //                     ? entries[currentAddOnIndex].id
-        //                     : undefined,
-        //             account_id: undefined,
-        //             account: undefined,
-        //             debit: addOnCharges,
-        //             credit: 0,
-        //             index: expectedAddOnIndex,
-        //             name: 'Add-On',
-        //             description: 'Add on Interest',
-        //             is_add_on: false,
-        //             type: 'add-on' as const,
-        //         }
-
-        //         if (currentAddOnIndex === -1) {
-        //             // Add add on entry
-        //             append(addOnEntryData)
-        //         } else if (currentAddOnIndex !== expectedAddOnIndex) {
-        //             // Modify existing add on index since may na add/naremove sa deductions
-        //             const currentAddOn = entries[currentAddOnIndex]
-        //             remove(currentAddOnIndex)
-        //             append({
-        //                 ...addOnEntryData,
-        //                 id: currentAddOn.id,
-        //             })
-        //         } else {
-        //             // Update sa existing add-on entry
-        //             const currentAddOn = entries[currentAddOnIndex]
-        //             if (currentAddOn.debit !== addOnCharges) {
-        //                 update(currentAddOnIndex, addOnEntryData)
-        //             }
-        //         }
-        //     } else {
-        //         // Remove if not need add on entry
-        //         if (currentAddOnIndex !== -1) {
-        //             const addOnToRemove = entries[currentAddOnIndex]
-        //             if (addOnToRemove.id) {
-        //                 addToDeletedField(addOnToRemove.id)
-        //             }
-        //             remove(currentAddOnIndex)
-        //         }
-        //     }
-        // }, [
-        //     is_add_on,
-        //     applied_1,
-        //     account,
-        //     deductionEntries,
-        //     deductionsSignature,
-        //     append,
-        //     update,
-        //     remove,
-        //     addToDeletedField,
-        //     form,
-        // ])
-
-*/

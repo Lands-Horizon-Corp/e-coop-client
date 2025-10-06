@@ -12,7 +12,6 @@ import { LoanClearanceAnalysisSchema } from '../loan-clearance-analysis'
 import { LoanClearanceAnalysisInstitutionSchema } from '../loan-clearance-analysis-institution'
 import { LoanTermsAndConditionAmountReceiptSchema } from '../loan-terms-and-condition-amount-receipt'
 import { LoanTermsAndConditionSuggestedPaymentSchema } from '../loan-terms-and-condition-suggested-payment'
-import { LoanTransactionEntrySchema } from '../loan-transaction-entry'
 import {
     LOAN_COLLECTOR_PLACE,
     LOAN_COMAKER_TYPE,
