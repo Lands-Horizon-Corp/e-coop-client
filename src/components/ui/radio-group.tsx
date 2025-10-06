@@ -4,8 +4,6 @@ import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 
 import { cn } from '@/helpers/tw-utils'
 
-import { CircleIcon } from '../icons'
-
 const RadioGroup = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
@@ -34,7 +32,7 @@ const RadioGroupItem = React.forwardRef<
             {...props}
         >
             <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-                <CircleIcon className="h-2.5 w-2.5 fill-current text-current" />
+                <div className="h-2.5 w-2.5 fill-current rounded-full bg-primary text-current" />
             </RadioGroupPrimitive.Indicator>
         </RadioGroupPrimitive.Item>
     )
