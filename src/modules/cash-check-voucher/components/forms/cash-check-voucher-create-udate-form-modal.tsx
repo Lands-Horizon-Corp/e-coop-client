@@ -275,10 +275,6 @@ const CashCheckVoucherCreateUpdateForm = ({
         modalState.onOpenChange(true)
     })
 
-    const isPrinted = !!defaultValues?.printed_date
-    const isApproved = !!defaultValues?.approved_date
-    const isReleased = !!defaultValues?.released_date
-
     return (
         <Form {...form}>
             <form
@@ -287,6 +283,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                 className={cn('!w-full flex flex-col gap-y-4', className)}
             >
                 <div className="absolute top-4 right-10 z-10 flex gap-2">
+<<<<<<< Updated upstream
                     <CashCheckVoucherStatusIndicator
                         voucherDates={{
                             printed_date: isPrinted
@@ -301,12 +298,23 @@ const CashCheckVoucherCreateUpdateForm = ({
                         }}
                         className="max-w-max"
                     />
+=======
+>>>>>>> Stashed changes
                     {CashCheckVoucherTransactionId && (
                         <CashCheckVoucherTagsManagerPopover
                             size="sm"
                             cashCheckVoucherId={CashCheckVoucherTransactionId}
                         />
                     )}
+<<<<<<< Updated upstream
+=======
+                    {defaultValues && (
+                        <CashCheckVoucherStatusIndicator
+                            cashCheckVoucher={defaultValues}
+                            className="max-w-max"
+                        />
+                    )}
+>>>>>>> Stashed changes
                 </div>
                 <fieldset
                     disabled={isPending || formProps.readOnly}

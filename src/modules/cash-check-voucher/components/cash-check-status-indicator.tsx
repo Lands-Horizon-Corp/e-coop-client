@@ -27,6 +27,7 @@ import {
 
 import { IClassProps } from '@/types'
 
+import { ICashCheckVoucher } from '../cash-check-voucher.types'
 import CashCheckVoucherStatusBadge from './cash-check-voucher-status-badge'
 
 export type CashCheckVoucherStatus =
@@ -135,16 +136,29 @@ export const CashCheckVoucherStatusIndicatorDetails = ({
 }
 
 interface Props extends IClassProps {
-    voucherDates: ICashCheckVoucherStatusDates
+    cashCheckVoucher?: ICashCheckVoucher
+    voucherDates?: {
+        printed_date?: string | null
+        approved_date?: string | null
+        released_date?: string | null
+    }
     title?: string
 }
 
 const CashCheckVoucherStatusIndicator = ({
     className,
+    cashCheckVoucher,
     voucherDates,
     title = 'Cash Check Voucher Status',
 }: Props) => {
-    const resolvedStatus = resolveCashCheckVoucherDatesToStatus(voucherDates)
+
+    const finalDates: ICashCheckVoucherStatusDates = voucherDates ?? {
+        printed_date: cashCheckVoucher?.printed_date,
+        approved_date: cashCheckVoucher?.approved_date,
+        released_date: cashCheckVoucher?.released_date,
+    }
+
+    const resolvedStatus = resolveCashCheckVoucherDatesToStatus(finalDates)
 
     return (
         <Popover>

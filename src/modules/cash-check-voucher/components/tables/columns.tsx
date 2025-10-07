@@ -192,23 +192,10 @@ const CashCheckVoucherTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Action Status" />
         ),
-        cell: ({ row: { original: journalVoucher } }) => {
-            const isPrinted = !!journalVoucher.printed_date
-            const isApproved = !!journalVoucher.approved_date
-            const isReleased = !!journalVoucher.released_date
+        cell: ({ row: { original: cashCheckVoucher } }) => {
             return (
                 <CashCheckVoucherStatusIndicator
-                    voucherDates={{
-                        printed_date: isPrinted
-                            ? journalVoucher.printed_date
-                            : null,
-                        approved_date: isApproved
-                            ? journalVoucher.approved_date
-                            : null,
-                        released_date: isReleased
-                            ? journalVoucher.released_date
-                            : null,
-                    }}
+                    cashCheckVoucher={cashCheckVoucher}
                     className="max-w-max"
                 />
             )

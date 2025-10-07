@@ -346,4 +346,9 @@ export const ICONS = [
     'Focus Icon',
     'Command Icon',
     'Clock Cancel',
+<<<<<<< Updated upstream
+=======
+    'Wrench Icon',
+    'Draft Icon',
+>>>>>>> Stashed changes
 ] as const
