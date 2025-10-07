@@ -12,7 +12,6 @@ import {
 } from '@/modules/user-organization'
 import UserAvatar from '@/modules/user/components/user-avatar'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { classNames } from 'node_modules/react-easy-crop/helpers'
 
 import {
     ArrowRightIcon,
