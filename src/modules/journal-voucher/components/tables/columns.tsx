@@ -1,4 +1,4 @@
-import { cn } from '@/helpers'
+import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
 import { IJournalVoucher } from '@/modules/journal-voucher'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -7,7 +7,6 @@ import { createUpdateColumns } from '@/components/data-table/data-table-common-c
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinIcon } from '@/components/icons'
-import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 
 export const journalVoucherGlobalSearchTargets: IGlobalSearchTargets<IJournalVoucher>[] =
@@ -146,35 +145,31 @@ const JournalVoucherTableColumns = (
         minSize: 120,
     },
     {
-        id: 'status',
-        accessorKey: 'status',
-        header: (props) => <DataTableColumnHeader {...props} title="Status" />,
+        id: 'action-status',
+        accessorKey: 'action-status',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Action Status" />
+        ),
         cell: ({ row: { original: journalVoucher } }) => {
-            const status = journalVoucher.status
-            let badgeColorClass = ''
-
-            switch (status) {
-                case 'posted':
-                    badgeColorClass = 'bg-green-500 text-white'
-                    break
-                case 'cancelled':
-                    badgeColorClass = 'bg-red-500 text-white'
-                    break
-                case 'draft':
-                default:
-                    badgeColorClass = 'bg-gray-500 text-white'
-                    break
-            }
-
+            const isPrinted = !!journalVoucher.printed_date
+            const isApproved = !!journalVoucher.approved_date
+            const isReleased = !!journalVoucher.released_date
             return (
-                <Badge
-                    className={cn(
-                        '!text-wrap hover:bg-primary/20',
-                        badgeColorClass
-                    )}
-                >
-                    {status}
-                </Badge>
+                <CashCheckVoucherStatusIndicator
+                    voucherDates={{
+                        printed_date: isPrinted
+                            ? journalVoucher.printed_date
+                            : null,
+                        approved_date: isApproved
+                            ? journalVoucher.approved_date
+                            : null,
+                        released_date: isReleased
+                            ? journalVoucher.released_date
+                            : null,
+                    }}
+                    title="Journal Voucher Status"
+                    className="max-w-max"
+                />
             )
         },
         enableMultiSort: true,
@@ -217,44 +212,6 @@ const JournalVoucherTableColumns = (
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
-        size: 150,
-        minSize: 120,
-    },
-    {
-        id: 'action-status',
-        accessorKey: 'action-status',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Action Status" />
-        ),
-        cell: ({ row: { original: journalVoucher } }) => {
-            const isPrinted = !!journalVoucher.printed_date
-            const isApproved = !!journalVoucher.approved_date
-            const isReleased = !!journalVoucher.released_date
-            let statusLabel
-
-            if (isReleased) {
-                statusLabel = 'Released'
-            } else if (isApproved) {
-                statusLabel = 'Approved'
-            } else if (isPrinted) {
-                statusLabel = 'Printed'
-            } else {
-                statusLabel = 'Pending'
-            }
-
-            return (
-                <Badge
-                    className={cn('!text-wrap', {
-                        'bg-green-500 text-white': isReleased,
-                        'bg-blue-500 text-white': isApproved && !isReleased,
-                        'bg-yellow-500 text-white': isPrinted && !isApproved,
-                        'bg-gray-500 text-white': !isPrinted,
-                    })}
-                >
-                    {statusLabel}
-                </Badge>
-            )
-        },
         size: 150,
         minSize: 120,
     },

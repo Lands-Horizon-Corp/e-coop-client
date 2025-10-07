@@ -5,8 +5,6 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-// Assuming these come from the index file one level up
-
 import TagTemplatePicker from '@/modules/tag-template/components/tag-template-picker'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { type VariantProps, cva } from 'class-variance-authority'
@@ -27,15 +25,15 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IBaseProps, IClassProps, TEntityId } from '@/types'
 
 import {
-    ICashCheckVoucherTag,
-    useCreateCashCheckVoucherTag,
-    useDeleteCashCheckVoucherTagById,
-    useGetAllCashCheckVoucherTag,
-} from '..'
+    useCreateJournalVoucherTag,
+    useDeleteJournalVoucherTagById,
+    useGetAllJournalVoucherTag,
+} from '../journal-voucher-tag.service'
+import { IJournalVoucherTag } from '../journal-voucher-tag.types'
 
-type CashCheckVoucherTagManagerSize = 'sm' | 'default' | 'lg'
+type JournalVoucherTagManagerSize = 'sm' | 'default' | 'lg'
 
-const cashCheckVoucherTagChipVariants = cva(
+const journalVoucherTagChipVariants = cva(
     'flex items-center gap-x-1 rounded border bg-accent/50 text-accent-foreground',
     {
         variants: {
@@ -51,19 +49,19 @@ const cashCheckVoucherTagChipVariants = cva(
     }
 )
 
-type CashCheckVoucherTagChipProps = {
-    tag: ICashCheckVoucherTag
+type JournalVoucherTagChipProps = {
+    tag: IJournalVoucherTag
     onRemove?: () => void
-    size?: CashCheckVoucherTagManagerSize
-} & VariantProps<typeof cashCheckVoucherTagChipVariants>
+    size?: JournalVoucherTagManagerSize
+} & VariantProps<typeof journalVoucherTagChipVariants>
 
-export const CashCheckVoucherTagChip = ({
+export const JournalVoucherTagChip = ({
     tag,
     onRemove,
     size = 'default',
-}: CashCheckVoucherTagChipProps) => {
+}: JournalVoucherTagChipProps) => {
     const { onOpen } = useConfirmModalStore()
-    const deleteMutation = useDeleteCashCheckVoucherTagById({
+    const deleteMutation = useDeleteJournalVoucherTagById({
         options: { onSuccess: onRemove },
     })
 
@@ -83,7 +81,7 @@ export const CashCheckVoucherTagChip = ({
             }
             delayDuration={700}
         >
-            <div className={cashCheckVoucherTagChipVariants({ size })}>
+            <div className={journalVoucherTagChipVariants({ size })}>
                 {tag.icon && (
                     <RenderIcon
                         icon={tag.icon as TIcon}
@@ -100,7 +98,7 @@ export const CashCheckVoucherTagChip = ({
                             onOpen({
                                 title: 'Remove Tag',
                                 description:
-                                    'Are you sure to remove this tag from this cash check voucher?',
+                                    'Are you sure to remove this tag from this journal voucher?',
                                 confirmString: 'Remove',
                                 onConfirm: () =>
                                     toast.promise(
@@ -126,19 +124,19 @@ export const CashCheckVoucherTagChip = ({
     )
 }
 
-export function CashCheckVoucherTagsManager({
+export function JournalVoucherTagsManager({
     readOnly,
     className,
-    cashCheckVoucherId,
+    journalVoucherId,
     defaultTags,
     onSuccess,
     size = 'default',
 }: {
     readOnly?: boolean
-    cashCheckVoucherId: TEntityId
-    defaultTags?: ICashCheckVoucherTag[]
+    journalVoucherId: TEntityId
+    defaultTags?: IJournalVoucherTag[]
     onSuccess?: () => void
-    size?: CashCheckVoucherTagManagerSize
+    size?: JournalVoucherTagManagerSize
 } & IClassProps) {
     const tagPickerModal = useModalState()
 
@@ -146,13 +144,13 @@ export function CashCheckVoucherTagsManager({
         data: voucherTags = [],
         isPending,
         refetch,
-    } = useGetAllCashCheckVoucherTag({
-        mode: 'cash-check-voucher',
-        cashCheckVoucherId,
+    } = useGetAllJournalVoucherTag({
+        mode: 'journal-voucher',
+        journalVoucherId,
         options: { initialData: defaultTags, retry: 0 },
     })
 
-    const createTagMutation = useCreateCashCheckVoucherTag({
+    const createTagMutation = useCreateJournalVoucherTag({
         options: { onSuccess: onSuccess ?? (() => refetch()) },
     })
 
@@ -168,7 +166,7 @@ export function CashCheckVoucherTagsManager({
                             icon,
                             color,
                             description,
-                            loan_transaction_id: cashCheckVoucherId,
+                            journal_voucher_id: journalVoucherId,
                         }),
                         {
                             loading: 'Adding tag...',
@@ -187,7 +185,7 @@ export function CashCheckVoucherTagsManager({
                     )}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                    Tags provide a quick context about this cash check voucher.
+                    Tags provide a quick context about this journal voucher.
                 </p>
             </div>
             <Separator />
@@ -204,7 +202,7 @@ export function CashCheckVoucherTagsManager({
                     </Button>
                 )}
                 {voucherTags.map((tag) => (
-                    <CashCheckVoucherTagChip
+                    <JournalVoucherTagChip
                         key={tag.id}
                         tag={tag}
                         size={size}
@@ -219,26 +217,26 @@ export function CashCheckVoucherTagsManager({
     )
 }
 
-export const CashCheckVoucherTagsManagerPopover = ({
-    cashCheckVoucherId,
+export const JournalVoucherTagsManagerPopover = ({
+    journalVoucherId,
     defaultTags,
     size = 'default',
     readOnly,
     className,
     children,
 }: {
-    cashCheckVoucherId: TEntityId
-    defaultTags?: ICashCheckVoucherTag[]
-    size?: CashCheckVoucherTagManagerSize
+    journalVoucherId: TEntityId
+    defaultTags?: IJournalVoucherTag[]
+    size?: JournalVoucherTagManagerSize
     readOnly?: boolean
 } & IBaseProps & { children?: ReactNode }) => {
-    const { data: voucherTags = [], isPending } = useGetAllCashCheckVoucherTag({
-        mode: 'cash-check-voucher',
-        cashCheckVoucherId,
+    const { data: voucherTags = [], isPending } = useGetAllJournalVoucherTag({
+        mode: 'journal-voucher',
+        journalVoucherId,
         options: {
             initialData: defaultTags,
             retry: 0,
-            enabled: !!cashCheckVoucherId,
+            enabled: !!journalVoucherId,
         },
     })
 
@@ -265,8 +263,8 @@ export const CashCheckVoucherTagsManagerPopover = ({
                 )}
             </PopoverTrigger>
             <PopoverContent className="w-auto min-w-[220px] rounded-xl max-w-[340px]">
-                <CashCheckVoucherTagsManager
-                    cashCheckVoucherId={cashCheckVoucherId}
+                <JournalVoucherTagsManager
+                    journalVoucherId={journalVoucherId}
                     defaultTags={defaultTags}
                     size={size}
                     readOnly={readOnly}

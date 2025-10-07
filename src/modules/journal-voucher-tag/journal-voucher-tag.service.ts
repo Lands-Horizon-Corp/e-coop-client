@@ -1,4 +1,11 @@
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { useQuery } from '@tanstack/react-query'
+
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
+
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
     IJournalVoucherTag,
@@ -30,16 +37,13 @@ export const {
     getPaginated: getPaginatedJournalVoucherTag,
 } = apiCrudService
 
-// custom service functions can go here
-
-// 🪝 HOOK STARTS HERE
-export { journalVoucherTagBaseKey } // Exported in case it's needed outside
+export { journalVoucherTagBaseKey }
 
 export const {
     useCreate: useCreateJournalVoucherTag,
     useUpdateById: useUpdateJournalVoucherTagById,
 
-    useGetAll: useGetAllJournalVoucherTag,
+    // useGetAll: useGetAllJournalVoucherTag,
     useGetById: useGetJournalVoucherTagById,
     useGetPaginated: useGetPaginatedJournalVoucherTag,
 
@@ -47,4 +51,38 @@ export const {
     useDeleteMany: useDeleteManyJournalVoucherTag,
 } = apiCrudHooks
 
-// custom hooks can go here
+export type TGellAllCashCheckVoucherTagHookMode = 'all' | 'journal-voucher'
+
+export const useGetAllJournalVoucherTag = ({
+    mode = 'all',
+    journalVoucherId,
+    query,
+    options,
+}: {
+    mode: TGellAllCashCheckVoucherTagHookMode
+    journalVoucherId?: TEntityId
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IJournalVoucherTag[], Error>
+}) => {
+    return useQuery<IJournalVoucherTag[], Error>({
+        ...options,
+        queryKey: [
+            journalVoucherTagBaseKey,
+            'all',
+            query,
+            mode,
+            journalVoucherId,
+        ].filter(Boolean),
+        queryFn: async () => {
+            let url = journalVoucherTagAPIRoute
+
+            if (mode === 'journal-voucher' && journalVoucherId)
+                url = `${journalVoucherTagAPIRoute}/journal-voucher/${journalVoucherId}`
+
+            return await getAllJournalVoucherTag({
+                query,
+                url,
+            })
+        },
+    })
+}

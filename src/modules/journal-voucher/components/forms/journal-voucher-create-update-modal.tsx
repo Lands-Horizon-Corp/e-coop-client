@@ -10,9 +10,9 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IAccount } from '@/modules/account'
+import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
 import CompanyCombobox from '@/modules/company/components/combobox'
 import {
-    EJournalVoucherStatus,
     IJournalVoucher,
     IJournalVoucherRequest,
     JournalVoucherSchema,
@@ -24,6 +24,7 @@ import {
     IJournalVoucherEntryRequest,
     JournalVoucherEntrySchema,
 } from '@/modules/journal-voucher-entry'
+import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { TransactionAmountField } from '@/modules/transaction'
@@ -42,17 +43,11 @@ import {
     AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl } from '@/components/ui/form'
+import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
@@ -145,8 +140,6 @@ const JournalVoucherCreateUpdateForm = ({
 
     const { data } = useTransactionBatchStore()
 
-    const [journalEntryError, setJournalEntryError] = useState<string>('')
-
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
@@ -228,21 +221,6 @@ const JournalVoucherCreateUpdateForm = ({
         })
 
         if (isUpdate && validateResult.isValid) {
-            //check debit and credit total is same
-            const totalDebit = validateResult.validatedEntries.reduce(
-                (acc, entry) => acc + entry.debit,
-                0
-            )
-            const totalCredit = validateResult.validatedEntries.reduce(
-                (acc, entry) => acc + entry.credit,
-                0
-            )
-            if (totalDebit !== totalCredit) {
-                setJournalEntryError(
-                    'Total Debit and Total Credit must be the same.'
-                )
-                return
-            }
             updateJournalVoucher({
                 id: editJournalId,
                 payload: {
@@ -264,6 +242,7 @@ const JournalVoucherCreateUpdateForm = ({
 
     const isPending = isCreating || isUpdating
     const rawError = isUpdate ? updateError : createError
+
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
         form.formState.errors?.root?.message
@@ -299,6 +278,10 @@ const JournalVoucherCreateUpdateForm = ({
         handleClearMember()
     })
 
+    const isPrinted = !!defaultValues?.printed_date
+    const isApproved = !!defaultValues?.approved_date
+    const isReleased = !!defaultValues?.released_date
+
     return (
         <Form {...form}>
             <form
@@ -310,6 +293,31 @@ const JournalVoucherCreateUpdateForm = ({
                     disabled={isPending || formProps.readOnly}
                     className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3"
                 >
+                    <div className="absolute top-4 right-10 z-10 flex gap-2">
+                        <JournalVoucherTagsManagerPopover
+                            size="sm"
+                            journalVoucherId={editJournalId}
+                            readOnly={isReleased}
+                        />
+                        {editJournalId && (
+                            <div className="">
+                                <CashCheckVoucherStatusIndicator
+                                    voucherDates={{
+                                        printed_date: isPrinted
+                                            ? defaultValues?.printed_date
+                                            : null,
+                                        approved_date: isApproved
+                                            ? defaultValues?.approved_date
+                                            : null,
+                                        released_date: isReleased
+                                            ? defaultValues?.released_date
+                                            : null,
+                                    }}
+                                    className="max-w-max"
+                                />
+                            </div>
+                        )}
+                    </div>
                     <div className="col-span-1 md:col-span-4 flex flex-col">
                         <FormFieldWrapper
                             className="w-full "
@@ -479,35 +487,6 @@ const JournalVoucherCreateUpdateForm = ({
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        label="Status"
-                        name="status"
-                        render={({ field }) => (
-                            <FormControl>
-                                <Select
-                                    disabled={isDisabled(field.name)}
-                                    onValueChange={(selectedValue) => {
-                                        field.onChange(selectedValue)
-                                    }}
-                                    defaultValue={field.value}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        {field.value || 'Select Status'}
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {Object.values(
-                                            EJournalVoucherStatus
-                                        ).map((type) => (
-                                            <SelectItem key={type} value={type}>
-                                                {type}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </FormControl>
-                        )}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
                         name="description"
                         label="Particulars"
                         className="col-span-1 md:col-span-4 !max-h-xs"
@@ -549,7 +528,7 @@ const JournalVoucherCreateUpdateForm = ({
                         />
                     </div>
                 </div>
-                <FormErrorMessage errorMessage={journalEntryError} />
+                <FormErrorMessage errorMessage={error} />
                 <FormFooterResetSubmit
                     error={error}
                     readOnly={formProps.readOnly}

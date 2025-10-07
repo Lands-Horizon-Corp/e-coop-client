@@ -1,8 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import CancelledCashCheckVoucherButton from '@/modules/cancelled-cash-check-voucher/components/cancelled-button'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -15,6 +17,8 @@ import CashCheckJournalVoucherTable from '../components/tables'
 const CashCheckJournalVoucherPage = () => {
     const queryClient = useQueryClient()
     const createModal = useModalState(false)
+    const { hasNoTransactionBatch } = useTransactionBatchStore()
+
     const {
         currentAuth: {
             user_organization: { branch_id },
@@ -67,6 +71,11 @@ const CashCheckJournalVoucherPage = () => {
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => {
+                            if (!hasNoTransactionBatch) {
+                                return toast.warning(
+                                    'Please create transaction batch first before making any cash/check voucher.'
+                                )
+                            }
                             createModal.onOpenChange(true)
                         },
                     },

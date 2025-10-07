@@ -136,11 +136,13 @@ export const CashCheckVoucherStatusIndicatorDetails = ({
 
 interface Props extends IClassProps {
     voucherDates: ICashCheckVoucherStatusDates
+    title?: string
 }
 
 const CashCheckVoucherStatusIndicator = ({
     className,
     voucherDates,
+    title = 'Cash Check Voucher Status',
 }: Props) => {
     const resolvedStatus = resolveCashCheckVoucherDatesToStatus(voucherDates)
 
@@ -160,9 +162,7 @@ const CashCheckVoucherStatusIndicator = ({
                 )}
             >
                 <div className="space-y-2 px-3 py-2">
-                    <p className="text-sm font-semibold">
-                        Cash Check Voucher Status
-                    </p>
+                    <p className="text-sm font-semibold">{title}</p>
                     <p className="text-xs text-muted-foreground">
                         This is an auto generated status by system.
                     </p>

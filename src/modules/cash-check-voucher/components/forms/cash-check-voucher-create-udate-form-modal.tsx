@@ -27,6 +27,7 @@ import CompanyCombobox from '@/modules/company/components/combobox'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { TransactionAmountField } from '@/modules/transaction'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useCashCheckVoucherStore } from '@/store/cash-check-voucher-store'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -139,6 +140,7 @@ const CashCheckVoucherCreateUpdateForm = ({
 }: ICashCheckVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
     const modalState = useModalState()
+    const { data } = useTransactionBatchStore()
 
     const [defaultMember, setDefaultMember] = useState<
         IMemberProfile | undefined
@@ -219,6 +221,7 @@ const CashCheckVoucherCreateUpdateForm = ({
             printed_date: handleDate(formData.printed_date),
             approved_date: handleDate(formData.approved_date),
             released_date: handleDate(formData.released_date),
+            transaction_batch_id: data?.id,
         }
         const validateResult = ValidateCashCheckEntry({
             data: selectedCashCheckVoucherEntry,

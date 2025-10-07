@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { Navigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import {
@@ -40,6 +41,7 @@ const UserOrgGuard = ({ children }: Props) => {
     }, [])
 
     if (!user_organization) {
+        toast.error('No organization found. Please complete onboarding.')
         return <Navigate to={'/onboarding' as string} />
     }
 
