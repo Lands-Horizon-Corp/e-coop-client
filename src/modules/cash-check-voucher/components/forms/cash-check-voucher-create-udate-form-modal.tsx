@@ -287,6 +287,12 @@ const CashCheckVoucherCreateUpdateForm = ({
                 className={cn('!w-full flex flex-col gap-y-4', className)}
             >
                 <div className="absolute top-4 right-10 z-10 flex gap-2">
+                    {CashCheckVoucherTransactionId && (
+                        <CashCheckVoucherTagsManagerPopover
+                            size="sm"
+                            cashCheckVoucherId={CashCheckVoucherTransactionId}
+                        />
+                    )}
                     <CashCheckVoucherStatusIndicator
                         voucherDates={{
                             printed_date: isPrinted
@@ -301,12 +307,6 @@ const CashCheckVoucherCreateUpdateForm = ({
                         }}
                         className="max-w-max"
                     />
-                    {CashCheckVoucherTransactionId && (
-                        <CashCheckVoucherTagsManagerPopover
-                            size="sm"
-                            cashCheckVoucherId={CashCheckVoucherTransactionId}
-                        />
-                    )}
                 </div>
                 <fieldset
                     disabled={isPending || formProps.readOnly}

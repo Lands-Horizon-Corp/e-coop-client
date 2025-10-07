@@ -202,6 +202,7 @@ import {
     HiSparkles as SparkleIcon,
     HiOutlineSun as SunIcon,
     HiTag as TagIcon,
+    HiMiniWrenchScrewdriver as WrenchIcon,
 } from 'react-icons/hi2'
 import { ImHammer2 as JudgeHammerIcon } from 'react-icons/im'
 import {
@@ -492,6 +493,7 @@ export {
     Image2Icon,
     IdCardIcon,
     EyeOffIcon,
+    WrenchIcon,
     CommandIcon,
     TwitterIcon,
     EyeViewIcon,
@@ -1102,6 +1104,7 @@ export const IconMap: Record<TIcon, IconType> = {
     'Command Icon': CommandIcon,
     'Code Icon': CodeIcon,
     'Clock Cancel': ClockCancelIcon,
+    'Wrench Icon': WrenchIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

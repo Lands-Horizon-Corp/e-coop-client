@@ -346,4 +346,5 @@ export const ICONS = [
     'Focus Icon',
     'Command Icon',
     'Clock Cancel',
+    'Wrench Icon',
 ] as const
