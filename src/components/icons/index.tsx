@@ -37,6 +37,7 @@ import {
     BsFileEarmarkFill as FileFillIcon,
     BsImage as Image2Icon,
     BsFileEarmarkImageFill as ImageFileFillIcon,
+    BsFillInfoCircleFill as InfoFillCircleIcon,
     BsInfo as InfoIcon,
     BsInstagram as InstagramIcon,
     BsFileEarmarkMusicFill as MusicFileFillIcon,
@@ -101,7 +102,6 @@ import {
     FaArrowUpLong as ArrowUpLong,
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
-    FaCheck as CheckFillIcon,
     FaCircleCheck as FaCheckIcon,
     FaVenusMars as GendersIcon,
     FaHeadset as HeadsetIcon,
@@ -206,6 +206,7 @@ import {
 } from 'react-icons/hi2'
 import { ImHammer2 as JudgeHammerIcon } from 'react-icons/im'
 import {
+    IoIosCheckmarkCircle as CheckFillIcon,
     IoIosFunnel as FunnelFilledIcon,
     IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
@@ -607,6 +608,7 @@ export {
     RowSpacingIcon,
     PowerResetIcon,
     BlockQuoteIcon,
+    InfoFillCircleIcon,
     DragHandleIcon,
     CameraFillIcon,
     EditPencilIcon,

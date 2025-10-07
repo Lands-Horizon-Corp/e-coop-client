@@ -56,39 +56,33 @@ const UserOrganizationsDashboard = ({
     const handleVisit = async (userOrganization: IUserOrganization) => {
         setSwitchingOrgId(userOrganization.id)
 
-        try {
-            const response = await switchOrganization(userOrganization.id)
+        const response = await switchOrganization(userOrganization.id)
 
-            if (response) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['auth', 'context'],
-                })
+        if (response) {
+            await queryClient.invalidateQueries({
+                queryKey: ['auth', 'context'],
+            })
 
-                updateCurrentAuth({
-                    user_organization: userOrganization,
-                    user: userOrganization.user,
-                })
+            updateCurrentAuth({
+                user_organization: userOrganization,
+                user: userOrganization.user,
+            })
 
-                const orgName = userOrganization.organization.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '')
+            const orgName = userOrganization.organization.name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
 
-                const branchName = userOrganization.branch.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '')
+            const branchName = userOrganization.branch.name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
 
-                navigate({
-                    to: `/org/${orgName}/branch/${branchName}`,
-                })
-            } else {
-                toast.error("Can't switch branch")
-            }
-        } catch (error) {
-            toast.error(`Failed to switch branch ${error}`)
-        } finally {
-            setSwitchingOrgId(null)
+            navigate({
+                to: `/org/${orgName}/branch/${branchName}`,
+            })
+        } else {
+            throw new Error('Server failed to switch organization')
         }
     }
 
@@ -187,8 +181,20 @@ const UserOrganizationsDashboard = ({
                                                             key={userOrg.id}
                                                             userOrg={userOrg}
                                                             onClick={() =>
-                                                                handleVisit(
-                                                                    userOrg
+                                                                toast.promise(
+                                                                    handleVisit(
+                                                                        userOrg
+                                                                    ),
+                                                                    {
+                                                                        loading: `Switching to ${userOrg.branch?.name}...`,
+                                                                        success: `Switched to ${userOrg.branch?.name}`,
+                                                                        error: `Failed to switch to ${userOrg.branch?.name}`,
+                                                                        finally:
+                                                                            () =>
+                                                                                setSwitchingOrgId(
+                                                                                    null
+                                                                                ),
+                                                                    }
                                                                 )
                                                             }
                                                             isCurrent={
